@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../../../core/extension/datetime_extension.dart';
 import '../../../core/extension/easy_context.dart';
@@ -22,7 +23,7 @@ class _ChainedHabitItemState extends State<ChainedHabitItem> {
   @override
   Widget build(BuildContext context) {
     final isFirstCompleted = widget.chainedHabit.firstHabit?.isCompleted ?? true;
-    final isMainCompleted = widget.chainedHabit.mainHabit.isCompleted;
+    final isMainAndFirstCompleted = widget.chainedHabit.mainHabit.isCompleted && isFirstCompleted;
     return Card(
       elevation: 0,
       child: IntrinsicHeight(
@@ -46,7 +47,7 @@ class _ChainedHabitItemState extends State<ChainedHabitItem> {
             ),
             _buildSecondHabit(
               widget.chainedHabit.secondHabit,
-              isMainCompleted: isMainCompleted,
+              isMainCompleted: isMainAndFirstCompleted,
             ),
           ],
         ),
@@ -58,11 +59,11 @@ class _ChainedHabitItemState extends State<ChainedHabitItem> {
     return Padding(
       padding: const EdgeInsets.only(left: 40.0),
       child: SizedBox(
-        height: 20,
+        height: 24,
         child: VerticalDivider(
-          color: context.cupertinoTextTheme.color?.withAlpha(150),
+          color: context.cupertinoTextTheme.color?.withAlpha(100),
           width: 0,
-          thickness: .5,
+          thickness: 1,
         ),
       ),
     );
@@ -99,8 +100,12 @@ class _ChainedHabitItemState extends State<ChainedHabitItem> {
               value: firstHabit.isCompleted,
               onChanged: (val) {
                 setState(() {
-                  if (val != null) {
+                  if (val == false && widget.chainedHabit.mainHabit.isCompleted) {
+                    // Eğer ikinci alışkanlık işaretliyse birinci iptal edilemez
+                    _showWarningDialog("You need to uncheck the second habit first.");
+                  } else if (val != null) {
                     firstHabit.isCompleted = val;
+                    HapticFeedback.heavyImpact();
                   }
                 });
               },
@@ -108,7 +113,7 @@ class _ChainedHabitItemState extends State<ChainedHabitItem> {
           ),
         ),
         Opacity(
-          opacity: firstHabit.isCompleted ? 1 : .5,
+          opacity: firstHabit.isCompleted ? 1 : .65,
           child: _verticalDivider(),
         ),
       ],
@@ -149,12 +154,15 @@ class _ChainedHabitItemState extends State<ChainedHabitItem> {
               value: mainHabit.isCompleted,
               onChanged: (val) {
                 setState(() {
-                  if (isFirstCompleted) {
-                    if (val != null) {
-                      mainHabit.isCompleted = val;
-                    }
-                  } else {
-                    _showWarningDialog();
+                  if (val == false && widget.chainedHabit.secondHabit?.isCompleted == true) {
+                    // Eğer üçüncü alışkanlık işaretliyse ikinci iptal edilemez
+                    _showWarningDialog("You need to uncheck the third habit first.");
+                  } else if (val == true && !isFirstCompleted) {
+                    // Eğer birinci alışkanlık tamamlanmamışsa ikinci işaretlenemez
+                    _showWarningDialog("You need to complete the first habit to proceed.");
+                  } else if (val != null) {
+                    mainHabit.isCompleted = val;
+                    HapticFeedback.heavyImpact();
                   }
                 });
               },
@@ -163,7 +171,7 @@ class _ChainedHabitItemState extends State<ChainedHabitItem> {
         ),
         if (isSecondVisible != null)
           Opacity(
-            opacity: mainHabit.isCompleted ? 1 : .5,
+            opacity: mainHabit.isCompleted ? 1 : .65,
             child: _verticalDivider(),
           ),
       ],
@@ -201,12 +209,12 @@ class _ChainedHabitItemState extends State<ChainedHabitItem> {
           value: secondHabit.isCompleted,
           onChanged: (val) {
             setState(() {
-              if (isMainCompleted) {
-                if (val != null) {
-                  secondHabit.isCompleted = val;
-                }
-              } else {
-                _showWarningDialog();
+              if (val == true && !isMainCompleted) {
+                // Eğer birinci ve ikinci alışkanlık tamamlanmamışsa üçüncü işaretlenemez
+                _showWarningDialog("You need to complete the first and second habits to proceed.");
+              } else if (val != null) {
+                secondHabit.isCompleted = val;
+                HapticFeedback.heavyImpact();
               }
             });
           },
@@ -215,15 +223,13 @@ class _ChainedHabitItemState extends State<ChainedHabitItem> {
     );
   }
 
-  Future<dynamic> _showWarningDialog() {
+  Future<dynamic> _showWarningDialog(String message) {
     return context.cupertinoDialog(
       widget: CupertinoAlertDialog(
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(
-              "You need to complete previous habit chain to complete current one",
-            ),
+            Text(message),
             SizedBox(height: 10),
             Card(
               clipBehavior: Clip.antiAlias,
