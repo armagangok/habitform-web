@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -133,16 +132,8 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
 
               return Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
-                child: Card(
-                  surfaceTintColor: Colors.transparent,
-                  elevation: .5,
-                  child: Column(
-                    children: [
-                      ChainedHabitItem(
-                        chainedHabit: chainedHabit,
-                      ),
-                    ],
-                  ),
+                child: ChainedHabitItem(
+                  chainedHabit: chainedHabit,
                 ),
               );
             },

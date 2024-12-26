@@ -2,18 +2,6 @@ import '../models/chained_habit_model.dart';
 import '../models/habit_model.dart';
 
 class ChainHabitService {
-  final List<String> chainNames = ["Morning Routine", "Midday Routine", "Night Routine"];
-  final List<String> habitNames = [
-    "Time to Wake Up!",
-    "Wash your face",
-    "Drink some water",
-    "Brush your teeth",
-    "Stretch your body",
-    "Prepare your breakfast",
-    "Take a short walk",
-    "Meditate for 5 minutes",
-  ];
-
   Future<List<ChainedHabit>> fetchChainedHabits() async {
     await Future.delayed(Duration(seconds: 2)); // Simulate network delay
 
@@ -76,8 +64,8 @@ class ChainHabitService {
         ),
         secondHabit: Habit(
           id: "9",
-          habitName: "Sleep",
-          icon: "😴🛌",
+          habitName: "It's time to sleep. Are you ready for it?",
+          icon: "🛌",
           completeTime: DateTime(2024, 12, 25, 23, 0), // December 25, 2024, 11:00 PM
         ),
       ),

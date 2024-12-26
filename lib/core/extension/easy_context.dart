@@ -128,8 +128,9 @@ extension EasyText on BuildContext {
   TextStyle get bodyLarge => theme.textTheme.bodyLarge!;
   TextStyle get bodyMedium => theme.textTheme.bodyMedium!;
   TextStyle get bodySmall => theme.textTheme.bodySmall!;
+  TextStyle get headlineLarge => theme.textTheme.headlineLarge!;
   TextStyle get headlineMedium => theme.textTheme.headlineMedium!;
-  TextStyle get headlineSmall => theme.textTheme.headlineMedium!;
+  TextStyle get headlineSmall => theme.textTheme.headlineSmall!;
   TextStyle get displayLarge => theme.textTheme.displayLarge!;
   TextStyle get displayMedium => theme.textTheme.displayMedium!;
   TextStyle get displaySmall => theme.textTheme.displaySmall!;

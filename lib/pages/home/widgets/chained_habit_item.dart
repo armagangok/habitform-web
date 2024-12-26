@@ -24,40 +24,53 @@ class _ChainedHabitItemState extends State<ChainedHabitItem> {
   Widget build(BuildContext context) {
     final isFirstCompleted = widget.chainedHabit.firstHabit?.isCompleted ?? true;
     final isMainAndFirstCompleted = widget.chainedHabit.mainHabit.isCompleted && isFirstCompleted;
-    return Card(
-      elevation: 0,
-      child: IntrinsicHeight(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 20.0, top: 8.0),
-              child: Text(
-                widget.chainedHabit.chainName,
-                style: context.cupertinoTextTheme.copyWith(fontWeight: FontWeight.bold),
-              ),
-            ),
-            _buildFirstHabit(
-              widget.chainedHabit.firstHabit,
-            ),
-            _buildMainHabit(
-              widget.chainedHabit.mainHabit,
-              widget.chainedHabit.secondHabit?.isCompleted,
-              isFirstCompleted: isFirstCompleted,
-            ),
-            _buildSecondHabit(
-              widget.chainedHabit.secondHabit,
-              isMainCompleted: isMainAndFirstCompleted,
-            ),
-          ],
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(left: 10.0),
+          child: Text(
+            widget.chainedHabit.chainName,
+            style: context.cupertinoTextTheme.copyWith(fontWeight: FontWeight.bold),
+          ),
         ),
-      ),
+        Card(
+          elevation: 0,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15),
+            side: BorderSide(
+              color: context.theme.dividerColor.withAlpha(40),
+            ),
+          ),
+          surfaceTintColor: Colors.transparent,
+          shadowColor: Colors.transparent,
+          child: IntrinsicHeight(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildFirstHabit(
+                  widget.chainedHabit.firstHabit,
+                ),
+                _buildMainHabit(
+                  widget.chainedHabit.mainHabit,
+                  widget.chainedHabit.secondHabit?.isCompleted,
+                  isFirstCompleted: isFirstCompleted,
+                ),
+                _buildSecondHabit(
+                  widget.chainedHabit.secondHabit,
+                  isMainCompleted: isMainAndFirstCompleted,
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
     );
   }
 
   Widget _verticalDivider() {
     return Padding(
-      padding: const EdgeInsets.only(left: 40.0),
+      padding: const EdgeInsets.only(left: 30.0),
       child: SizedBox(
         height: 24,
         child: VerticalDivider(
@@ -77,7 +90,8 @@ class _ChainedHabitItemState extends State<ChainedHabitItem> {
         Opacity(
           opacity: firstHabit.isCompleted ? 1 : .65,
           child: CupertinoListTile(
-            leadingSize: 40,
+            leadingSize: 38,
+            leadingToTitle: 10,
             leading: firstHabit.icon != null
                 ? Text(
                     firstHabit.icon ?? "",
@@ -96,19 +110,22 @@ class _ChainedHabitItemState extends State<ChainedHabitItem> {
                 decoration: firstHabit.isCompleted ? TextDecoration.lineThrough : null,
               ),
             ),
-            trailing: CupertinoCheckbox(
-              value: firstHabit.isCompleted,
-              onChanged: (val) {
-                setState(() {
-                  if (val == false && widget.chainedHabit.mainHabit.isCompleted) {
-                    // Eğer ikinci alışkanlık işaretliyse birinci iptal edilemez
-                    _showWarningDialog("You need to uncheck the second habit first.");
-                  } else if (val != null) {
-                    firstHabit.isCompleted = val;
-                    HapticFeedback.heavyImpact();
-                  }
-                });
-              },
+            trailing: Transform.scale(
+              scale: 1.5,
+              child: CupertinoCheckbox(
+                value: firstHabit.isCompleted,
+                onChanged: (val) {
+                  setState(() {
+                    if (val == false && widget.chainedHabit.mainHabit.isCompleted) {
+                      // Eğer ikinci alışkanlık işaretliyse birinci iptal edilemez
+                      _showWarningDialog("You need to uncheck the second habit first.");
+                    } else if (val != null) {
+                      firstHabit.isCompleted = val;
+                      HapticFeedback.heavyImpact();
+                    }
+                  });
+                },
+              ),
             ),
           ),
         ),
@@ -131,7 +148,8 @@ class _ChainedHabitItemState extends State<ChainedHabitItem> {
         Opacity(
           opacity: mainHabit.isCompleted ? 1 : .65,
           child: CupertinoListTile(
-            leadingSize: 40,
+            leadingSize: 38,
+            leadingToTitle: 10,
             leading: mainHabit.icon != null
                 ? Text(
                     mainHabit.icon ?? "",
@@ -150,22 +168,25 @@ class _ChainedHabitItemState extends State<ChainedHabitItem> {
                 decoration: mainHabit.isCompleted ? TextDecoration.lineThrough : null,
               ),
             ),
-            trailing: CupertinoCheckbox(
-              value: mainHabit.isCompleted,
-              onChanged: (val) {
-                setState(() {
-                  if (val == false && widget.chainedHabit.secondHabit?.isCompleted == true) {
-                    // Eğer üçüncü alışkanlık işaretliyse ikinci iptal edilemez
-                    _showWarningDialog("You need to uncheck the third habit first.");
-                  } else if (val == true && !isFirstCompleted) {
-                    // Eğer birinci alışkanlık tamamlanmamışsa ikinci işaretlenemez
-                    _showWarningDialog("You need to complete the first habit to proceed.");
-                  } else if (val != null) {
-                    mainHabit.isCompleted = val;
-                    HapticFeedback.heavyImpact();
-                  }
-                });
-              },
+            trailing: Transform.scale(
+              scale: 1.5,
+              child: CupertinoCheckbox(
+                value: mainHabit.isCompleted,
+                onChanged: (val) {
+                  setState(() {
+                    if (val == false && widget.chainedHabit.secondHabit?.isCompleted == true) {
+                      // Eğer üçüncü alışkanlık işaretliyse ikinci iptal edilemez
+                      _showWarningDialog("You need to uncheck the third habit first.");
+                    } else if (val == true && !isFirstCompleted) {
+                      // Eğer birinci alışkanlık tamamlanmamışsa ikinci işaretlenemez
+                      _showWarningDialog("You need to complete the first habit to proceed.");
+                    } else if (val != null) {
+                      mainHabit.isCompleted = val;
+                      HapticFeedback.heavyImpact();
+                    }
+                  });
+                },
+              ),
             ),
           ),
         ),
@@ -186,7 +207,8 @@ class _ChainedHabitItemState extends State<ChainedHabitItem> {
     return Opacity(
       opacity: secondHabit.isCompleted ? 1 : .65,
       child: CupertinoListTile(
-        leadingSize: 40,
+        leadingSize: 38,
+        leadingToTitle: 10,
         leading: secondHabit.icon != null
             ? Text(
                 secondHabit.icon ?? "",
@@ -198,6 +220,7 @@ class _ChainedHabitItemState extends State<ChainedHabitItem> {
           style: TextStyle(
             decoration: secondHabit.isCompleted ? TextDecoration.lineThrough : null,
           ),
+          maxLines: 2,
         ),
         subtitle: Text(
           secondHabit.completeTime.toHHMM(),
@@ -205,19 +228,22 @@ class _ChainedHabitItemState extends State<ChainedHabitItem> {
             decoration: secondHabit.isCompleted ? TextDecoration.lineThrough : null,
           ),
         ),
-        trailing: CupertinoCheckbox(
-          value: secondHabit.isCompleted,
-          onChanged: (val) {
-            setState(() {
-              if (val == true && !isMainCompleted) {
-                // Eğer birinci ve ikinci alışkanlık tamamlanmamışsa üçüncü işaretlenemez
-                _showWarningDialog("You need to complete the first and second habits to proceed.");
-              } else if (val != null) {
-                secondHabit.isCompleted = val;
-                HapticFeedback.heavyImpact();
-              }
-            });
-          },
+        trailing: Transform.scale(
+          scale: 1.5,
+          child: CupertinoCheckbox(
+            value: secondHabit.isCompleted,
+            onChanged: (val) {
+              setState(() {
+                if (val == true && !isMainCompleted) {
+                  // Eğer birinci ve ikinci alışkanlık tamamlanmamışsa üçüncü işaretlenemez
+                  _showWarningDialog("You need to complete the first and second habits to proceed.");
+                } else if (val != null) {
+                  secondHabit.isCompleted = val;
+                  HapticFeedback.heavyImpact();
+                }
+              });
+            },
+          ),
         ),
       ),
     );

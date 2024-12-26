@@ -1,9 +1,12 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'core/constants/debug_constants.dart';
+import 'core/navigation/navigation.dart';
 import 'pages/home/bloc/basic_habit/habit_bloc.dart';
 import 'pages/home/bloc/chain_habit/chain_habit_bloc.dart';
-import 'pages/home/home_page.dart';
+import 'pages/onboarding/bloc/onboarding_bloc.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -19,21 +22,28 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider(create: (_) => HabitBloc()),
         BlocProvider(create: (_) => ChainHabitBloc()),
+        BlocProvider(create: (_) => OnboardingBloc()),
       ],
       child: CupertinoApp(
+        debugShowCheckedModeBanner: KDebug.debugModeEnabled,
+        navigatorKey: NavigationService.shared.navigatorKey,
+        // navigatorObservers: [
+        //   customObserver,
+        // ],
+        initialRoute: KRoute.onboardingGreeting,
+        onGenerateRoute: NavigationRoute.shared.generateRoute,
         theme: CupertinoThemeData(
           brightness: Brightness.light,
-          primaryColor: Color(0xff3E5879),
+          primaryColor: Colors.grey.shade900,
           barBackgroundColor: Color(0xffF5EFE7).withAlpha(100),
           scaffoldBackgroundColor: Color(
             0xffF5EFE7,
           ),
           applyThemeToAll: true,
           textTheme: CupertinoTextThemeData(
-            primaryColor: Color(0xff3E5879),
+            primaryColor: Colors.grey.shade900,
           ),
         ),
-        home: HomePage(),
       ),
     );
   }
