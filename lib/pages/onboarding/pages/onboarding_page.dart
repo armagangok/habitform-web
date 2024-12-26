@@ -1,13 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:habitrise/pages/onboarding/bloc/onboarding_bloc.dart';
-import 'package:habitrise/pages/onboarding/pages/views/goal_view.dart';
-import 'package:habitrise/pages/onboarding/pages/views/name_view.dart';
 
-import '../../../core/extension/easy_context.dart';
+import '/core/core.dart';
+import '../bloc/onboarding_bloc.dart';
 import '../widgets/onboarding_button.dart';
+import 'views/goal_view.dart';
+import 'views/name_view.dart';
 
 class OnboardingPage extends StatefulWidget {
   const OnboardingPage({super.key});
@@ -54,15 +53,20 @@ class _OnboardingPageState extends State<OnboardingPage> {
                       child: BlocBuilder(
                         bloc: context.read<OnboardingBloc>(),
                         builder: (context, state) {
-                          print(state);
+                          debugPrint(state.toString());
                           return OnboardingButton(
                             onPressed: (state is NameValid || state is GoalValid)
                                 ? () {
-                                    _pageController.nextPage(duration: 500.ms, curve: Curves.easeIn);
-                                    context.read<OnboardingBloc>().add(OnboardingInitialEvent());
+                                    if (state is NameValid) {
+                                      _pageController.nextPage(duration: 500.ms, curve: Curves.easeIn);
+                                      context.read<OnboardingBloc>().add(OnboardingInitialEvent());
+                                    }
+
+                                    if (state is GoalValid) {
+                                      navigator.navigateAndClear(path: KRoute.onboardingFinalPage);
+                                    }
 
                                     // context.read<OnboardingBloc>().add();
-                                    // navigator.navigateAndClear(path: KRoute.homePage);
                                   }
                                 : null,
                             buttonText: "Next",

@@ -4,9 +4,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'core/constants/debug_constants.dart';
 import 'core/navigation/navigation.dart';
-import 'pages/home/bloc/basic_habit/habit_bloc.dart';
-import 'pages/home/bloc/chain_habit/chain_habit_bloc.dart';
+import 'pages/habits/bloc/basic_habit/habit_bloc.dart';
+import 'pages/habits/bloc/chain_habit/chain_habit_bloc.dart';
 import 'pages/onboarding/bloc/onboarding_bloc.dart';
+import 'pages/tab_bar/hom_tab_bar_page.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,11 +28,9 @@ class MyApp extends StatelessWidget {
       child: CupertinoApp(
         debugShowCheckedModeBanner: KDebug.debugModeEnabled,
         navigatorKey: NavigationService.shared.navigatorKey,
-        // navigatorObservers: [
-        //   customObserver,
-        // ],
-        initialRoute: KRoute.onboardingGreeting,
+        // initialRoute: KRoute.homeTabScaffoldPage,
         onGenerateRoute: NavigationRoute.shared.generateRoute,
+        home: HomeTabScaffoldPage(),
         theme: CupertinoThemeData(
           brightness: Brightness.light,
           primaryColor: Colors.grey.shade900,

@@ -36,14 +36,15 @@ class _ChainedHabitItemState extends State<ChainedHabitItem> {
         ),
         Card(
           elevation: 0,
+          surfaceTintColor: Colors.transparent,
+          shadowColor: Colors.transparent,
+          color: Colors.white,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15),
             side: BorderSide(
               color: context.theme.dividerColor.withAlpha(40),
             ),
           ),
-          surfaceTintColor: Colors.transparent,
-          shadowColor: Colors.transparent,
           child: IntrinsicHeight(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,

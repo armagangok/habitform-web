@@ -54,7 +54,10 @@ class OnboardingTitle extends StatelessWidget {
   const OnboardingTitle({
     super.key,
     required this.data,
+    this.textAlign,
   });
+
+  final TextAlign? textAlign;
 
   @override
   Widget build(BuildContext context) {
@@ -64,7 +67,7 @@ class OnboardingTitle extends StatelessWidget {
         fontSize: 20,
         fontWeight: FontWeight.bold,
       ),
-      textAlign: TextAlign.start,
+      textAlign: textAlign ?? TextAlign.start,
     );
   }
 }

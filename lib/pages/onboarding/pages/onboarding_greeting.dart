@@ -22,7 +22,7 @@ class OnboardingGreeting extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               SizedBox(
-                height: context.height(.35),
+                height: context.height(.45),
                 width: double.infinity,
                 child: Card(
                   shape: RoundedRectangleBorder(

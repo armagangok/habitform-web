@@ -24,6 +24,10 @@ class HabitTypeSegmentedControl extends StatelessWidget {
             padding: const EdgeInsets.all(8.0),
             child: Text('Chained Habits'),
           ),
+          'HabitsToBreak': Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text('Break Habits'),
+          ),
         },
         onValueChanged: (value) {
           onSegmentChanged(value!);

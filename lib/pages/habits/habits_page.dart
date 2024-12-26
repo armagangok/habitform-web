@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:habitrise/core/widgets/trailing_button.dart';
 
 import '../../core/extension/datetime_extension.dart';
 import 'bloc/basic_habit/habit_bloc.dart';
@@ -9,14 +10,14 @@ import 'widgets/chained_habit_item.dart';
 import 'widgets/habit_item.dart';
 import 'widgets/habit_type_widget.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class HabitsPage extends StatefulWidget {
+  const HabitsPage({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<HabitsPage> createState() => _HabitsPageState();
 }
 
-class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin {
+class _HabitsPageState extends State<HabitsPage> with SingleTickerProviderStateMixin {
   String _selectedSegment = 'BasicHabits';
 
   late final AnimationController controller;
@@ -43,10 +44,15 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
     return CupertinoPageScaffold(
       child: CustomScrollView(
         slivers: <Widget>[
-          const CupertinoSliverNavigationBar(
-            leading: Icon(CupertinoIcons.person_2),
-            largeTitle: Text('Home'),
-            trailing: Icon(CupertinoIcons.add_circled),
+          CupertinoSliverNavigationBar(
+            largeTitle: Text('Habits'),
+            trailing: TrailingActionButton(
+              onPressed: () {},
+              child: Icon(
+                CupertinoIcons.add_circled,
+                size: 32,
+              ),
+            ),
           ),
           SliverList(
             delegate: SliverChildListDelegate([
@@ -60,8 +66,10 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                       controller.forward(from: 0);
                     },
                   ),
-                  SizedBox(height: 15),
-                  (_selectedSegment == 'BasicHabits' ? _buildBasicHabits() : _buildChainedHabits()).animate(controller: controller).fadeIn(),
+                  SizedBox(height: 10),
+                  if (_selectedSegment == 'BasicHabits') _buildBasicHabits().animate(controller: controller),
+                  if (_selectedSegment == 'ChainedHabits') _buildChainedHabits().animate(controller: controller),
+                  if (_selectedSegment == 'HabitsToBreak') _buildBasicHabits().animate(controller: controller),
                 ],
               ),
             ]),
