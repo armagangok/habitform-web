@@ -1,9 +1,4 @@
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
 import '/core/core.dart';
-import '../category_picker.dart';
-import '../sheet_header.dart';
-import '../trailing_button.dart';
 
 class IconPickerSheet extends StatefulWidget {
   final Function(IconData) onIconSelected;
@@ -36,6 +31,8 @@ class IconPickerSheetState extends State<IconPickerSheet> with SingleTickerProvi
       Icons.sports_baseball, // Beyzbol
       Icons.sports_baseball_outlined, // Beyzbol
       CupertinoIcons.sportscourt, // Genel spor alanı ikonu
+      FontAwesomeIcons.dumbbell,
+      FontAwesomeIcons.football,
       Icons.sports_tennis, // Tenis
       Icons.sports_volleyball, // Voleybol
       Icons.sports_football, // Amerikan futbolu
@@ -430,13 +427,14 @@ class IconPickerSheetState extends State<IconPickerSheet> with SingleTickerProvi
                               widget.onIconSelected(iconData);
                             },
                             child: Card(
-                              color: index == selectedIconIndex ? context.primary.withValues(alpha: .25) : Colors.transparent,
+                              elevation: .2,
+                              color: index == selectedIconIndex ? CupertinoColors.systemBlue : Colors.white,
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Icon(
                                   iconData,
                                   size: 44,
-                                  color: context.theme.iconTheme.color?.withValues(alpha: .75),
+                                  color: index == selectedIconIndex ? Colors.white : context.theme.iconTheme.color?.withValues(alpha: .75),
                                 ),
                               ),
                             ),

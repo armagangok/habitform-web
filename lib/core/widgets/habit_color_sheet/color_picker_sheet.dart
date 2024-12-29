@@ -1,7 +1,7 @@
+
+
 import '/core/core.dart';
-import '../category_picker.dart';
-import '../sheet_header.dart';
-import '../trailing_button.dart';
+
 
 class ColorPickerSheet extends StatefulWidget {
   final Function(Color) onColorSelected;

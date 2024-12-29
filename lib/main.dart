@@ -1,5 +1,7 @@
 import 'core/constants/debug_constants.dart';
 import 'core/core.dart';
+import 'core/widgets/habit_color_sheet/cubit/habit_color_cubit.dart';
+import 'core/widgets/habit_icon/cubit/habit_icon_cubit.dart';
 import 'features/add_habit/bloc/cubit/reminder_time_cubit.dart';
 import 'features/habits/bloc/chain_habit/chain_habit_bloc.dart';
 import 'features/habits/bloc/single_habit/habit_bloc.dart';
@@ -22,6 +24,8 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (_) => ChainHabitBloc()),
         BlocProvider(create: (_) => OnboardingBloc()),
         BlocProvider(create: (_) => ReminderCubit()),
+        BlocProvider(create: (_) => HabitIconCubit()),
+        BlocProvider(create: (_) => HabitColorCubit()),
       ],
       child: CupertinoApp(
         debugShowCheckedModeBanner: KDebug.debugModeEnabled,

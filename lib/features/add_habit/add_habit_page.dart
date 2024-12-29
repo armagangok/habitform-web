@@ -1,8 +1,8 @@
-import 'package:habitrise/core/widgets/trailing_button.dart';
+import 'package:habitrise/core/widgets/habit_color_sheet/cubit/habit_color_cubit.dart';
+import 'package:habitrise/core/widgets/habit_icon/cubit/habit_icon_cubit.dart';
+import 'package:habitrise/core/widgets/habit_icon/icon_picker_sheet.dart';
 
 import '/core/core.dart';
-import '/core/widgets/habit_color_sheet/color_picker_sheet.dart';
-import '/core/widgets/sheet_header.dart';
 import '../habits/widgets/habit_type_widget.dart';
 import 'bloc/cubit/reminder_time_cubit.dart';
 import 'widgets/add_reminder.dart';
@@ -16,6 +16,18 @@ class AddHabitPage extends StatefulWidget {
 
 class _AddHabitPageState extends State<AddHabitPage> {
   String _selectedSegment = 'BasicHabits';
+
+  final FocusNode _focusNode = FocusNode();
+
+  void openKeyboard() {
+    FocusScope.of(context).requestFocus(_focusNode);
+  }
+
+  @override
+  void dispose() {
+    _focusNode.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -126,129 +138,156 @@ class _AddHabitPageState extends State<AddHabitPage> {
                         ],
                       ),
                     ),
-                    SizedBox(width: 20),
+
+                    // SizedBox(width: 20),
+                    // Expanded(
+                    //   child: SizedBox(
+                    //     width: context.width(.4),
+                    //     child: Column(
+                    //       crossAxisAlignment: CrossAxisAlignment.start,
+                    //       mainAxisAlignment: MainAxisAlignment.center,
+                    //       children: [
+                    //         Text(
+                    //           "Streak Goal",
+                    //           style: context.bodySmall,
+                    //         ),
+                    //         CustomButton(
+                    //           onTap: () {},
+                    //           child: SizedBox(
+                    //             width: double.infinity,
+                    //             child: Card.filled(
+                    //               margin: EdgeInsets.zero,
+                    //               color: Colors.white,
+                    //               child: Padding(
+                    //                 padding: const EdgeInsets.all(8.0),
+                    //                 child: Row(
+                    //                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    //                   children: [
+                    //                     Text(
+                    //                       "None",
+                    //                       textAlign: TextAlign.center,
+                    //                     ),
+                    //                     CupertinoListTileChevron(),
+                    //                   ],
+                    //                 ),
+                    //               ),
+                    //             ),
+                    //           ),
+                    //         ),
+                    //       ],
+                    //     ),
+                    //   ),
+                    // ),
+                  ],
+                ),
+                Row(
+                  children: [
                     Expanded(
-                      child: SizedBox(
-                        width: context.width(.4),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              "Streak Goal",
-                              style: context.bodySmall,
-                            ),
-                            CustomButton(
-                              onTap: () {},
-                              child: SizedBox(
-                                width: double.infinity,
-                                child: Card.filled(
-                                  margin: EdgeInsets.zero,
-                                  color: Colors.white,
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                          "None",
-                                          textAlign: TextAlign.center,
-                                        ),
-                                        CupertinoListTileChevron(),
-                                      ],
-                                    ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Icon",
+                            style: context.bodySmall,
+                          ),
+                          CustomButton(
+                            onTap: () {
+                              showCupertinoModalBottomSheet(
+                                enableDrag: false,
+                                context: context,
+                                builder: (context) {
+                                  return IconPickerSheet(
+                                    onIconSelected: (icon) {
+                                      context.read<HabitIconCubit>().pickIcon(icon);
+                                    },
+                                  );
+                                },
+                              );
+                            },
+                            child: SizedBox(
+                              width: double.infinity,
+                              child: Card.filled(
+                                margin: EdgeInsets.zero,
+                                color: Colors.white,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      BlocBuilder<HabitIconCubit, HabitIconState>(
+                                        builder: (context, state) {
+                                          return state.iconData == null
+                                              ? Text(
+                                                  "None",
+                                                  textAlign: TextAlign.center,
+                                                )
+                                              : Icon(state.iconData);
+                                        },
+                                      ),
+                                      CupertinoListTileChevron(),
+                                    ],
                                   ),
                                 ),
                               ),
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ),
-                  ],
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      "Streak Goal",
-                      style: context.bodySmall,
-                    ),
-                    CustomButton(
-                      onTap: () {
-                        showCupertinoModalBottomSheet(
-                          context: context,
-                          builder: (context) {
-                            return CupertinoPageScaffold(
-                              child: ListView(
-                                children: [],
+                    SizedBox(width: 20),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Color",
+                            style: context.bodySmall,
+                          ),
+                          CustomButton(
+                            onTap: () {
+                              showCupertinoModalBottomSheet(
+                                context: context,
+                                builder: (context) {
+                                  return ColorPickerSheet(onColorSelected: (color) {
+                                    context.read<HabitColorCubit>().pickColor(color);
+                                  });
+                                },
+                              );
+                            },
+                            child: SizedBox(
+                              width: double.infinity,
+                              child: BlocBuilder<HabitColorCubit, HabitColorState>(
+                                builder: (context, state) {
+                                  return Card.filled(
+                                    margin: EdgeInsets.zero,
+                                    color: state.color ?? CupertinoColors.activeBlue,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          BlocBuilder<HabitColorCubit, HabitColorState>(
+                                            builder: (context, state) {
+                                              return state.color == null
+                                                  ? Text(
+                                                      "None",
+                                                      textAlign: TextAlign.center,
+                                                    )
+                                                  : SizedBox.shrink();
+                                            },
+                                          ),
+                                          CupertinoListTileChevron(),
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                },
                               ),
-                            );
-                          },
-                        );
-                      },
-                      child: SizedBox(
-                        width: double.infinity,
-                        child: Card.filled(
-                          margin: EdgeInsets.zero,
-                          color: Colors.white,
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  "None",
-                                  textAlign: TextAlign.center,
-                                ),
-                                CupertinoListTileChevron(),
-                              ],
                             ),
                           ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      "Color",
-                      style: context.bodySmall,
-                    ),
-                    CustomButton(
-                      onTap: () {
-                        showCupertinoModalBottomSheet(
-                          context: context,
-                          builder: (context) {
-                            return ColorPickerSheet(onColorSelected: (color) {
-                              debugPrint(color.toString());
-                            });
-                          },
-                        );
-                      },
-                      child: SizedBox(
-                        width: double.infinity,
-                        child: Card.filled(
-                          margin: EdgeInsets.zero,
-                          color: Colors.white,
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  "None",
-                                  textAlign: TextAlign.center,
-                                ),
-                                CupertinoListTileChevron(),
-                              ],
-                            ),
-                          ),
-                        ),
+                        ],
                       ),
                     ),
                   ],

@@ -1,8 +1,6 @@
-import 'package:habitrise/core/widgets/sheet_header.dart';
-import 'package:habitrise/features/habits/widgets/chained_habit_item.dart';
-
 import '/core/core.dart';
 import '../habits/bloc/chain_habit/chain_habit_bloc.dart';
+import '../habits/widgets/chained_habit_item.dart';
 import 'widgets/grid_habit_widget.dart';
 
 class OverviewPage extends StatefulWidget {

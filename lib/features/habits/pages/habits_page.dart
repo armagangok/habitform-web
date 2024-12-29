@@ -1,6 +1,4 @@
-import 'package:habitrise/core/core.dart';
-import 'package:habitrise/core/widgets/trailing_button.dart';
-
+import '/core/core.dart';
 import '../../add_habit/add_habit_page.dart';
 import '../bloc/chain_habit/chain_habit_bloc.dart';
 import '../bloc/single_habit/habit_bloc.dart';

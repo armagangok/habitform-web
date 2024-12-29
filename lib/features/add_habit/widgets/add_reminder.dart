@@ -1,9 +1,7 @@
 import 'dart:math';
 
-import 'package:habitrise/core/core.dart';
-import 'package:habitrise/core/widgets/sheet_header.dart';
-import 'package:habitrise/core/widgets/trailing_button.dart';
-import 'package:habitrise/features/add_habit/bloc/cubit/reminder_time_cubit.dart';
+import '/core/core.dart';
+import '../bloc/cubit/reminder_time_cubit.dart';
 
 enum Days { mon, tue, wed, thu, fri, sat, sun }
 
