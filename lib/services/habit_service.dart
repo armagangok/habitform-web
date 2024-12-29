@@ -3,7 +3,7 @@ import '../models/habit_model.dart';
 
 class HabitService {
   Future<List<Habit>> fetchHabits() async {
-    await Future.delayed(Duration(seconds: 2));
+    await Future.delayed(Duration(milliseconds: 250));
     return [
       Habit(
         id: UuidHelper.uid,

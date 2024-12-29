@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
-import 'package:habitrise/pages/overview/overview_page.dart';
-import 'package:habitrise/pages/tab_bar/hom_tab_bar_page.dart';
+import 'package:habitrise/features/overview/overview_page.dart';
+import 'package:habitrise/features/tab_bar/hom_tab_bar_page.dart';
 
-import '../../pages/habits/habits_page.dart';
-import '../../pages/onboarding/pages/onboarding_final/onboarding_final_page.dart';
-import '../../pages/onboarding/pages/onboarding_greeting.dart';
-import '../../pages/onboarding/pages/onboarding_page.dart';
+import '../../features/habits/pages/habits_page.dart';
+import '../../features/onboarding/pages/onboarding_final/onboarding_final_page.dart';
+import '../../features/onboarding/pages/onboarding_greeting.dart';
+import '../../features/onboarding/pages/onboarding_page.dart';
 import '../extension/easy_context.dart';
 import 'constant/routes.dart';
 

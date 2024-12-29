@@ -94,8 +94,8 @@ class CategoryWidgetState extends State<CategoryWidget> {
   @override
   Widget build(BuildContext context) {
     return Wrap(
-      spacing: 5.0, // Kategoriler arasındaki yatay boşluk
-      runSpacing: 5.0, // Satırlar arasındaki dikey boşluk
+      spacing: 0, // Kategoriler arasındaki yatay boşluk
+      runSpacing: 0, // Satırlar arasındaki dikey boşluk
       children: List.generate(
         widget.categories.length,
         (index) {

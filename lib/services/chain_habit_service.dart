@@ -3,7 +3,7 @@ import '../models/habit_model.dart';
 
 class ChainHabitService {
   Future<List<ChainedHabit>> fetchChainedHabits() async {
-    await Future.delayed(Duration(seconds: 2)); // Simulate network delay
+    await Future.delayed(Duration(milliseconds: 250));
 
     final chainedHabit = [
       ChainedHabit(
@@ -13,7 +13,14 @@ class ChainHabitService {
           habitName: "Drink Water",
           icon: "💦",
           completeTime: DateTime(2024, 12, 25, 6, 30), // December 25, 2024, 06:30 AM
+          isCompletedToday: true,
         ),
+        completionDates: [
+          DateTime.now(),
+          DateTime.now().subtract(Duration(days: 1)),
+          DateTime.now().subtract(Duration(days: 2)),
+          DateTime.now().subtract(Duration(days: 3)),
+        ],
         mainHabit: Habit(
           id: "2",
           habitName: "Morning Workout",
@@ -29,6 +36,12 @@ class ChainHabitService {
       ),
       ChainedHabit(
         chainName: "Evening Habits",
+        completionDates: [
+          DateTime.now(),
+          DateTime.now().subtract(Duration(days: 1)),
+          DateTime.now().subtract(Duration(days: 2)),
+          DateTime.now().subtract(Duration(days: 3)),
+        ],
         firstHabit: Habit(
           id: "4",
           habitName: "Dinner",
@@ -49,6 +62,12 @@ class ChainHabitService {
         ),
       ),
       ChainedHabit(
+        completionDates: [
+          DateTime.now(),
+          DateTime.now().subtract(Duration(days: 1)),
+          DateTime.now().subtract(Duration(days: 2)),
+          DateTime.now().subtract(Duration(days: 3)),
+        ],
         chainName: "Night Habits",
         firstHabit: Habit(
           id: "7",
@@ -71,6 +90,12 @@ class ChainHabitService {
       ),
       ChainedHabit(
         chainName: "Evening Habits",
+        completionDates: [
+          DateTime.now(),
+          DateTime.now().subtract(Duration(days: 1)),
+          DateTime.now().subtract(Duration(days: 2)),
+          DateTime.now().subtract(Duration(days: 3)),
+        ],
         firstHabit: Habit(
           id: "4",
           habitName: "Dinner",
@@ -81,6 +106,7 @@ class ChainHabitService {
           habitName: "Relaxation",
           completeTime: DateTime(2024, 12, 25, 20, 0), // December 25, 2024, 08:00 PM
         ),
+
         // secondHabit: Habit(
         //   id: "6",
         //   habitName: "Night Walk",

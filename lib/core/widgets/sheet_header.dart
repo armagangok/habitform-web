@@ -1,4 +1,4 @@
-
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:habitrise/core/core.dart';
 
 enum CloseButtonPosition { left, right, none }
@@ -6,11 +6,14 @@ enum CloseButtonPosition { left, right, none }
 class SheetHeader extends StatelessWidget implements ObstructingPreferredSizeWidget {
   const SheetHeader({
     super.key,
+    this.onClose,
     required this.title,
     this.closeButtonPosition = CloseButtonPosition.right,
     this.leading,
     this.trailing,
   });
+
+  final Function()? onClose;
 
   final String title;
   final CloseButtonPosition closeButtonPosition;
@@ -55,9 +58,13 @@ class SheetHeader extends StatelessWidget implements ObstructingPreferredSizeWid
           color: context.iconTheme.color?.withValues(alpha: .1),
           borderRadius: BorderRadius.circular(90),
           padding: EdgeInsets.zero,
-          onPressed: navigator.pop,
+          onPressed: () {
+            onClose?.call();
+            navigator.pop();
+          },
           child: FittedBox(
             child: Card(
+              elevation: 0,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(360),
               ),
@@ -66,7 +73,8 @@ class SheetHeader extends StatelessWidget implements ObstructingPreferredSizeWid
                 padding: const EdgeInsets.all(12.0),
                 child: Icon(
                   CupertinoIcons.xmark,
-                  color: context.iconTheme.color,
+                  color: context.iconTheme.color?.withAlpha(250),
+                  size: 40,
                 ),
               ),
             ),

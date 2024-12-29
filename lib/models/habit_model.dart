@@ -5,7 +5,7 @@ class Habit {
     this.habitDescription,
     required this.completeTime,
     this.icon,
-    this.isCompleted = false,
+    this.isCompletedToday = false,
   });
 
   final String id;
@@ -13,7 +13,7 @@ class Habit {
   final String? habitDescription;
   final DateTime completeTime;
   final String? icon;
-  bool isCompleted;
+  bool isCompletedToday;
 
   Habit copyWith({
     String? id,
@@ -28,7 +28,7 @@ class Habit {
       habitName: habitName ?? this.habitName,
       habitDescription: habitDescription ?? this.habitDescription,
       completeTime: completeTime ?? this.completeTime,
-      isCompleted: isCompleted ?? this.isCompleted,
+      isCompletedToday: isCompleted ?? isCompletedToday,
       icon: icon ?? this.icon,
     );
   }

@@ -19,6 +19,7 @@ class CustomButton extends StatelessWidget {
       onLongPress: onLongPressed,
       child: CupertinoButton(
         padding: EdgeInsets.zero,
+        minSize: 0,
         alignment: Alignment.center,
         onPressed: onTap,
         child: child,
