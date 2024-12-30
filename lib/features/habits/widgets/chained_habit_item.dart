@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import '/core/extension/datetime_extension.dart';
 import '/core/extension/easy_context.dart';
 import '/models/chained_habit_model.dart';
 import '/models/habit_model.dart';
@@ -106,7 +105,7 @@ class _ChainedHabitItemState extends State<ChainedHabitItem> {
               ),
             ),
             subtitle: Text(
-              firstHabit.completeTime.toHHMM(),
+              firstHabit.completeTime ?? "None",
               style: TextStyle(
                 decoration: firstHabit.isCompletedToday ? TextDecoration.lineThrough : null,
               ),
@@ -164,7 +163,7 @@ class _ChainedHabitItemState extends State<ChainedHabitItem> {
               ),
             ),
             subtitle: Text(
-              mainHabit.completeTime.toHHMM(),
+              mainHabit.completeTime ?? "None",
               style: TextStyle(
                 decoration: mainHabit.isCompletedToday ? TextDecoration.lineThrough : null,
               ),
@@ -224,7 +223,7 @@ class _ChainedHabitItemState extends State<ChainedHabitItem> {
           maxLines: 2,
         ),
         subtitle: Text(
-          secondHabit.completeTime.toHHMM(),
+          secondHabit.completeTime ?? "None",
           style: TextStyle(
             decoration: secondHabit.isCompletedToday ? TextDecoration.lineThrough : null,
           ),

@@ -3,9 +3,9 @@ part of 'habit_bloc.dart';
 @immutable
 sealed class SingleHabitState {}
 
-final class HabitInitial extends SingleHabitState {}
+final class SingleHabitInitial extends SingleHabitState {}
 
-final class HabitsLoading extends SingleHabitState {}
+final class SingleHabitLoading extends SingleHabitState {}
 
 final class HabitsFetched extends SingleHabitState {
   final List<Habit> habits;
@@ -13,8 +13,19 @@ final class HabitsFetched extends SingleHabitState {
   HabitsFetched(this.habits);
 }
 
-final class HabitsFetchError extends SingleHabitState {
+final class SingleHabitFetchError extends SingleHabitState {
   final String message;
 
-  HabitsFetchError(this.message);
+  SingleHabitFetchError(this.message);
+}
+
+final class SingleHabitSaveError extends SingleHabitState {
+  final String message;
+
+  SingleHabitSaveError(this.message);
+}
+final class SingleHabitSaveSuccess extends SingleHabitState {
+  final String message;
+
+  SingleHabitSaveSuccess(this.message);
 }

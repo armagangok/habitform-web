@@ -1,8 +1,10 @@
-import 'package:habitrise/core/widgets/habit_color_sheet/cubit/habit_color_cubit.dart';
-import 'package:habitrise/core/widgets/habit_icon/cubit/habit_icon_cubit.dart';
-import 'package:habitrise/core/widgets/habit_icon/icon_picker_sheet.dart';
+import 'package:habitrise/features/habits/bloc/single_habit/habit_bloc.dart';
 
 import '/core/core.dart';
+import '../../core/widgets/habit_color_sheet/cubit/habit_color_cubit.dart';
+import '../../core/widgets/habit_icon/cubit/habit_icon_cubit.dart';
+import '../../core/widgets/habit_icon/icon_picker_sheet.dart';
+import '../../models/models.dart';
 import '../habits/widgets/habit_type_widget.dart';
 import 'bloc/cubit/reminder_time_cubit.dart';
 import 'widgets/add_reminder.dart';
@@ -29,6 +31,9 @@ class _AddHabitPageState extends State<AddHabitPage> {
     super.dispose();
   }
 
+  final TextEditingController _habitNameController = TextEditingController();
+  final TextEditingController _habitDescriptionController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
@@ -37,7 +42,18 @@ class _AddHabitPageState extends State<AddHabitPage> {
         closeButtonPosition: CloseButtonPosition.left,
         trailing: TrailingActionButton(
           title: "Save",
-          onPressed: () {},
+          onPressed: () {
+            final ReminderModel? reminderModel = context.read<ReminderCubit>().state.reminderModel;
+            final Habit habit = Habit(
+              id: UuidHelper.uid,
+              habitName: _habitNameController.text.trim(),
+              habitDescription: _habitDescriptionController.text,
+              completeTime: reminderModel?.reminderTime,
+              reminderModel: reminderModel,
+            );
+
+            context.read<SingleHabitBloc>().add(SaveSingleHabitEvent(habit: habit));
+          },
         ),
       ),
       child: ListView(
@@ -55,8 +71,8 @@ class _AddHabitPageState extends State<AddHabitPage> {
             Column(
               spacing: 15,
               children: [
-                _buildHabitTextField(text: "Name"),
-                _buildHabitTextField(text: "Description"),
+                _buildHabitTextField(text: "Name", controller: _habitNameController),
+                _buildHabitTextField(text: "Description", controller: _habitDescriptionController),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -92,15 +108,13 @@ class _AddHabitPageState extends State<AddHabitPage> {
                                           Expanded(
                                             child: BlocBuilder<ReminderCubit, ReminderTimeState>(
                                               builder: (context, state) {
-                                                // print(state.reminderModel?.days);
-                                                // print(state.reminderModel?.reminderTime);
                                                 return SizedBox(
                                                   width: context.width(.4),
                                                   child: Column(
                                                     crossAxisAlignment: CrossAxisAlignment.start,
                                                     children: [
                                                       Text(
-                                                        state.reminderModel?.reminderTime?.toHHMM() ?? "None",
+                                                        state.reminderModel?.reminderTime ?? "None",
                                                         textAlign: TextAlign.center,
                                                       ),
                                                       if (state.reminderModel?.days != null)
@@ -112,7 +126,7 @@ class _AddHabitPageState extends State<AddHabitPage> {
                                                             (index) {
                                                               final day = state.reminderModel!.days!.toList()[index];
                                                               return Text(
-                                                                day.capitalized,
+                                                                day,
                                                                 style: context.bodySmall.copyWith(
                                                                   color: CupertinoColors.systemBlue,
                                                                 ),
@@ -138,46 +152,6 @@ class _AddHabitPageState extends State<AddHabitPage> {
                         ],
                       ),
                     ),
-
-                    // SizedBox(width: 20),
-                    // Expanded(
-                    //   child: SizedBox(
-                    //     width: context.width(.4),
-                    //     child: Column(
-                    //       crossAxisAlignment: CrossAxisAlignment.start,
-                    //       mainAxisAlignment: MainAxisAlignment.center,
-                    //       children: [
-                    //         Text(
-                    //           "Streak Goal",
-                    //           style: context.bodySmall,
-                    //         ),
-                    //         CustomButton(
-                    //           onTap: () {},
-                    //           child: SizedBox(
-                    //             width: double.infinity,
-                    //             child: Card.filled(
-                    //               margin: EdgeInsets.zero,
-                    //               color: Colors.white,
-                    //               child: Padding(
-                    //                 padding: const EdgeInsets.all(8.0),
-                    //                 child: Row(
-                    //                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    //                   children: [
-                    //                     Text(
-                    //                       "None",
-                    //                       textAlign: TextAlign.center,
-                    //                     ),
-                    //                     CupertinoListTileChevron(),
-                    //                   ],
-                    //                 ),
-                    //               ),
-                    //             ),
-                    //           ),
-                    //         ),
-                    //       ],
-                    //     ),
-                    //   ),
-                    // ),
                   ],
                 ),
                 Row(
@@ -300,7 +274,7 @@ class _AddHabitPageState extends State<AddHabitPage> {
     );
   }
 
-  Widget _buildHabitTextField({required String text}) {
+  Widget _buildHabitTextField({required String text, required TextEditingController controller}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
@@ -309,7 +283,9 @@ class _AddHabitPageState extends State<AddHabitPage> {
           text,
           style: context.bodySmall,
         ),
-        CupertinoTextField(),
+        CupertinoTextField(
+          controller: controller,
+        ),
       ],
     );
   }

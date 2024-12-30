@@ -7,9 +7,12 @@ import 'features/habits/bloc/chain_habit/chain_habit_bloc.dart';
 import 'features/habits/bloc/single_habit/habit_bloc.dart';
 import 'features/onboarding/bloc/onboarding_bloc.dart';
 import 'features/tab_bar/hom_tab_bar_page.dart';
+import 'services/single_habit/single_habit_service.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await SingleHabitService.shared.getDatabase();
+
   runApp(const MyApp());
 }
 
@@ -17,10 +20,11 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
+  @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (_) => SingleHabitBloc()),
+        BlocProvider(create: (_) => SingleHabitBloc(habitService: SingleHabitService.shared)),
         BlocProvider(create: (_) => ChainHabitBloc()),
         BlocProvider(create: (_) => OnboardingBloc()),
         BlocProvider(create: (_) => ReminderCubit()),

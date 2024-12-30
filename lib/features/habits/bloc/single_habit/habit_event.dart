@@ -1,13 +1,19 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 part of 'habit_bloc.dart';
 
 @immutable
 sealed class SingleHabitEvent {}
 
 @immutable
-class IdleHabitEvent extends SingleHabitEvent {}
+class IdleSingleHabitEvent extends SingleHabitEvent {}
 
 @immutable
-class FetchHabitsEvent extends SingleHabitEvent {}
+class FetchSingleHabitEvent extends SingleHabitEvent {}
 
 @immutable
-class SaveHabitsEvent extends SingleHabitEvent {}
+class SaveSingleHabitEvent extends SingleHabitEvent {
+  final Habit habit;
+  SaveSingleHabitEvent({
+    required this.habit,
+  });
+}

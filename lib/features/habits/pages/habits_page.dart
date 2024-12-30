@@ -28,8 +28,8 @@ class _HabitsPageState extends State<HabitsPage> with SingleTickerProviderStateM
   void initState() {
     controller = AnimationController(vsync: this, duration: Duration(milliseconds: 250));
 
-    context.read<SingleHabitBloc>().add(FetchHabitsEvent());
-    context.read<SingleHabitBloc>().add(IdleHabitEvent());
+    context.read<SingleHabitBloc>().add(FetchSingleHabitEvent());
+    context.read<SingleHabitBloc>().add(IdleSingleHabitEvent());
     context.read<ChainHabitBloc>().add((FetchChainedHabitEvent()));
 
     super.initState();
@@ -75,9 +75,9 @@ class _HabitsPageState extends State<HabitsPage> with SingleTickerProviderStateM
                         },
                       ),
                       SizedBox(height: 10),
-                      if (_selectedSegment == 'BasicHabits') _buildBasicHabits().animate(controller: controller),
+                      if (_selectedSegment == 'BasicHabits') _buildSingleHabits().animate(controller: controller),
                       if (_selectedSegment == 'ChainedHabits') _buildChainedHabits().animate(controller: controller),
-                      if (_selectedSegment == 'HabitsToBreak') _buildBasicHabits().animate(controller: controller),
+                      if (_selectedSegment == 'HabitsToBreak') _buildSingleHabits().animate(controller: controller),
                     ],
                   ),
                 ],
@@ -90,13 +90,14 @@ class _HabitsPageState extends State<HabitsPage> with SingleTickerProviderStateM
   }
 
   // Normal Alışkanlıklar için içerik
-  Widget _buildBasicHabits() {
+  Widget _buildSingleHabits() {
     return BlocBuilder<SingleHabitBloc, SingleHabitState>(
       builder: (context, state) {
+        print(state);
         switch (state.runtimeType) {
-          case const (HabitInitial):
+          case const (SingleHabitInitial):
             return SizedBox.shrink();
-          case const (HabitsLoading):
+          case const (SingleHabitLoading):
             return Center(child: CupertinoActivityIndicator());
           case const (HabitsFetched):
             state as HabitsFetched;
@@ -110,14 +111,14 @@ class _HabitsPageState extends State<HabitsPage> with SingleTickerProviderStateM
 
                 return HabitItem(
                   habitName: habit.habitName,
-                  subtitle: habit.completeTime.toHHMM(),
-                  value: habit.isCompletedToday,
+                  subtitle: habit.completeTime,
+                  value: true,
                 );
               },
             );
 
-          case const (HabitsFetchError):
-            state as HabitsFetchError;
+          case const (SingleHabitFetchError):
+            state as SingleHabitFetchError;
             return Center(
               child: Text(state.message),
             );

@@ -2,7 +2,7 @@ import 'dart:core';
 
 import '/core/core.dart';
 import '/models/models.dart';
-import '../../widgets/add_reminder.dart';
+import '../../enum/days_enum.dart';
 
 part 'reminder_time_state.dart';
 

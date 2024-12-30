@@ -2,8 +2,7 @@ import 'dart:math';
 
 import '/core/core.dart';
 import '../bloc/cubit/reminder_time_cubit.dart';
-
-enum Days { mon, tue, wed, thu, fri, sat, sun }
+import '../enum/days_enum.dart';
 
 enum DaySelection { empty, selected, allSelected }
 
@@ -87,9 +86,7 @@ class _AddReminderPageState extends State<AddReminderPage> {
                                   padding: EdgeInsets.zero,
                                   onPressed: () {
                                     context.read<ReminderCubit>().updateReminderModel(
-                                          state.reminderModel?.copyWith(
-                                            days: selectedDays,
-                                          ),
+                                          state.reminderModel?.copyWith(),
                                         );
                                     setState(
                                       () {
@@ -213,7 +210,7 @@ class _AddReminderPageState extends State<AddReminderPage> {
                                   subtitle: BlocBuilder<ReminderCubit, ReminderTimeState>(
                                     builder: (context, state) {
                                       return Text(
-                                        state.reminderModel?.reminderTime?.toHHMM() ?? "None",
+                                        state.reminderModel?.reminderTime ?? "None",
                                         style: TextStyle(
                                           color: CupertinoColors.systemBlue,
                                           fontWeight: FontWeight.normal,
@@ -243,11 +240,13 @@ class _AddReminderPageState extends State<AddReminderPage> {
                               builder: (context, state) {
                                 return CupertinoDatePicker(
                                   mode: CupertinoDatePickerMode.time,
-                                  initialDateTime: state.reminderModel?.reminderTime ?? DateTime.now(),
+                                  initialDateTime: DateTime.now(),
                                   use24hFormat: true, // Change to false for AM/PM format
                                   onDateTimeChanged: (DateTime remindTime) {
                                     context.read<ReminderCubit>().updateReminderModel(
-                                          state.reminderModel?.copyWith(reminderTime: remindTime),
+                                          state.reminderModel?.copyWith(
+                                            reminderTime: remindTime.toIso8601String(),
+                                          ),
                                         );
                                   },
                                 );
@@ -265,11 +264,6 @@ class _AddReminderPageState extends State<AddReminderPage> {
     );
   }
 }
-
-
-
-
-
 
 //  showCupertinoModalPopup(
 //                                 context: context,
@@ -290,43 +284,39 @@ class _AddReminderPageState extends State<AddReminderPage> {
 //                                             ),
 //                                           ),
 //                                         ),
-                                        
+
 //                                       ],
 //                                     ),
 //                                   );
 //                                 },
 //                               );
 
-
-
-
-
-                              // Positioned.fill(
-          //   child: Align(
-          //     alignment: Alignment.bottomCenter,
-          //     child: SafeArea(
-          //       top: false,
-          //       child: Padding(
-          //         padding: const EdgeInsets.symmetric(horizontal: 20.0),
-          //         child: SizedBox(
-          //           width: double.infinity,
-          //           child: CupertinoButton.filled(
-          //             sizeStyle: CupertinoButtonSize.large,
-          //             onPressed: () {
-          //               // Seçilen günleri kaydetme işlemini burada yapabilirsiniz.
-          //               debugPrint(
-          //                 "Selected days: ${selectedDays.map((e) => e.capitalized).join(', ')}",
-          //               );
-          //             },
-          //             child: const Text(
-          //               "Save",
-          //               style: TextStyle(
-          //                 fontWeight: FontWeight.bold,
-          //               ),
-          //             ),
-          //           ),
-          //         ),
-          //       ),
-          //     ),
-          //   ),
-          // ),
+// Positioned.fill(
+//   child: Align(
+//     alignment: Alignment.bottomCenter,
+//     child: SafeArea(
+//       top: false,
+//       child: Padding(
+//         padding: const EdgeInsets.symmetric(horizontal: 20.0),
+//         child: SizedBox(
+//           width: double.infinity,
+//           child: CupertinoButton.filled(
+//             sizeStyle: CupertinoButtonSize.large,
+//             onPressed: () {
+//               // Seçilen günleri kaydetme işlemini burada yapabilirsiniz.
+//               debugPrint(
+//                 "Selected days: ${selectedDays.map((e) => e.capitalized).join(', ')}",
+//               );
+//             },
+//             child: const Text(
+//               "Save",
+//               style: TextStyle(
+//                 fontWeight: FontWeight.bold,
+//               ),
+//             ),
+//           ),
+//         ),
+//       ),
+//     ),
+//   ),
+// ),
