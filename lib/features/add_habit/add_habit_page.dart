@@ -1,3 +1,4 @@
+import 'package:habitrise/core/widgets/flushbar_widget.dart';
 import 'package:habitrise/features/habits/bloc/single_habit/habit_bloc.dart';
 
 import '/core/core.dart';
@@ -43,6 +44,9 @@ class _AddHabitPageState extends State<AddHabitPage> {
         trailing: TrailingActionButton(
           title: "Save",
           onPressed: () {
+            if (_habitNameController.text.isEmpty) {
+              AppFlushbar.shared.warningFlushbar("message");
+            }
             final ReminderModel? reminderModel = context.read<ReminderCubit>().state.reminderModel;
             final Habit habit = Habit(
               id: UuidHelper.uid,

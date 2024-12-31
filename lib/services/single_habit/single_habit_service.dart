@@ -31,11 +31,11 @@ class SingleHabitService extends IHabitService {
             id TEXT PRIMARY KEY,
             habitName TEXT NOT NULL,
             habitDescription TEXT,
-            completeTime INTEGER NOT NULL,
-            icon TEXT,
+            completeTime INTEGER NULL,
+            icon TEXT NULL,
             isCompletedToday INTEGER DEFAULT 0,
-            completionDates TEXT,
-            reminderModel TEXT
+            completionDates TEXT NULL,
+            reminderModel TEXT NULL
           )
         ''');
         },
@@ -44,6 +44,7 @@ class SingleHabitService extends IHabitService {
       LogHelper.shared.debugPrint('$e'); // Log any errors
     }
   }
+
   // Future<void> initializePathAndDatabaseObject() async {
   //   final databaseDirectoryPath = await getDatabasesPath();
   //   final databasePath = join(databaseDirectoryPath, "SingleHabit.gb");
