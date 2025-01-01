@@ -1,7 +1,7 @@
 import '/core/core.dart';
 import '../../add_habit/add_habit_page.dart';
 import '../bloc/chain_habit/chain_habit_bloc.dart';
-import '../bloc/single_habit/habit_bloc.dart';
+import '../bloc/single_habit/single_habit_bloc.dart';
 import '../widgets/chained_habit_item.dart';
 import '../widgets/habit_item.dart';
 import '../widgets/habit_type_widget.dart';
@@ -75,9 +75,9 @@ class _HabitsPageState extends State<HabitsPage> with SingleTickerProviderStateM
                         },
                       ),
                       SizedBox(height: 10),
-                      if (_selectedSegment == 'BasicHabits') _buildSingleHabits().animate(controller: controller),
-                      if (_selectedSegment == 'ChainedHabits') _buildChainedHabits().animate(controller: controller),
-                      if (_selectedSegment == 'HabitsToBreak') _buildSingleHabits().animate(controller: controller),
+                      // if (_selectedSegment == 'BasicHabits') _buildSingleHabits().animate(controller: controller),
+                      // if (_selectedSegment == 'ChainedHabits') _buildChainedHabits().animate(controller: controller),
+                      // if (_selectedSegment == 'HabitsToBreak') _buildSingleHabits().animate(controller: controller),
                     ],
                   ),
                 ],
@@ -90,76 +90,85 @@ class _HabitsPageState extends State<HabitsPage> with SingleTickerProviderStateM
   }
 
   // Normal Alışkanlıklar için içerik
-  Widget _buildSingleHabits() {
-    return BlocBuilder<SingleHabitBloc, SingleHabitState>(
-      builder: (context, state) {
-        print(state);
-        switch (state.runtimeType) {
-          case const (SingleHabitInitial):
-            return SizedBox.shrink();
-          case const (SingleHabitLoading):
-            return Center(child: CupertinoActivityIndicator());
-          case const (HabitsFetched):
-            state as HabitsFetched;
-            return ListView.builder(
-              itemCount: state.habits.length,
-              padding: EdgeInsets.zero,
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-              itemBuilder: (context, index) {
-                final habit = state.habits[index];
+  // Widget _buildSingleHabits() {
+  //   return BlocBuilder<SingleHabitBloc, SingleHabitState>(
+  //     builder: (context, state) {
+  //       switch (state.runtimeType) {
+  //         case const (SingleHabitInitial):
+  //           return SizedBox.shrink();
+  //         case const (SingleHabitLoading):
+  //           return Center(child: CupertinoActivityIndicator());
+  //         case const (SingleHabitsFetched):
+  //           state as SingleHabitsFetched;
 
-                return HabitItem(
-                  habitName: habit.habitName,
-                  subtitle: habit.completeTime,
-                  value: true,
-                );
-              },
-            );
+  //           if (state.habits.isEmpty) {
+  //             return Column(
+  //               mainAxisSize: MainAxisSize.max,
+  //               children: [
+  //                 Text("You do not have any habits"),
+  //               ],
+  //             );
+  //           }
 
-          case const (SingleHabitFetchError):
-            state as SingleHabitFetchError;
-            return Center(
-              child: Text(state.message),
-            );
+  //           return ListView.builder(
+  //             itemCount: state.habits.length,
+  //             padding: EdgeInsets.zero,
+  //             shrinkWrap: true,
+  //             physics: NeverScrollableScrollPhysics(),
+  //             itemBuilder: (context, index) {
+  //               final habit = state.habits[index];
 
-          default:
-            return Text("");
-        }
-      },
-    );
-  }
+  //               return HabitItem(
+  //                 habitName: habit.habitName,
+  //                 subtitle: habit.completeTime,
+  //                 value: true,
+  //               );
+  //             },
+  //           );
+
+  //         case const (SingleHabitFetchError):
+  //           state as SingleHabitFetchError;
+  //           return Center(
+  //             child: Text(state.message),
+  //           );
+
+  //         default:
+  //           return Text("");
+  //       }
+  //     },
+  //   );
+  // }
 
   // Zincirlenmiş Alışkanlıklar için içerik
-  Widget _buildChainedHabits() {
-    return BlocBuilder<ChainHabitBloc, ChainHabitState>(
-      builder: (context, state) {
-        if (state is ChainHabitInitial) {
-          return SizedBox.shrink();
-        } else if (state is ChainHabitsLoading) {
-          return Center(
-            child: CupertinoActivityIndicator(),
-          );
-        } else if (state is ChainHabitsFetched) {
-          return ListView.builder(
-            itemCount: state.habits.length,
-            padding: EdgeInsets.zero,
-            shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
-            itemBuilder: (context, index) {
-              final chainedHabit = state.habits[index];
+  // Widget _buildChainedHabits() {
+  //   return BlocBuilder<ChainHabitBloc, ChainHabitState>(
+  //     builder: (context, state) {
+  //       if (state is ChainHabitInitial) {
+  //         return SizedBox.shrink();
+  //       } else if (state is ChainHabitsLoading) {
+  //         return Center(
+  //           child: CupertinoActivityIndicator(),
+  //         );
+  //       } else if (state is ChainHabitsFetched) {
+  //         return ListView.builder(
+  //           itemCount: state.habits.length,
+  //           padding: EdgeInsets.zero,
+  //           shrinkWrap: true,
+  //           physics: NeverScrollableScrollPhysics(),
+  //           itemBuilder: (context, index) {
+  //             final chainedHabit = state.habits[index];
 
-              return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
-                child: ChainedHabitItem(
-                  chainedHabit: chainedHabit,
-                ),
-              );
-            },
-          );
-        } else if (state is ChainHabitsFetchError) {}
-        return SizedBox.shrink();
-      },
-    );
-  }
+  //             return Padding(
+  //               padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
+  //               child: ChainedHabitItem(
+  //                 chainedHabit: chainedHabit,
+  //               ),
+  //             );
+  //           },
+  //         );
+  //       } else if (state is ChainHabitsFetchError) {}
+  //       return SizedBox.shrink();
+  //     },
+  //   );
+  // }
 }

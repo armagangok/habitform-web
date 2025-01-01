@@ -1,10 +1,20 @@
+import 'package:hive_flutter/hive_flutter.dart';
+
 import 'habit_model.dart';
 
-class ChainedHabit {
+part 'chained_habit_model.g.dart';
+
+@HiveType(typeId: 1)
+class ChainedHabit extends HiveObject {
+  @HiveField(0)
   final String chainName;
+  @HiveField(1)
   final String? description;
+  @HiveField(2)
   final Habit? firstHabit;
+  @HiveField(3)
   final Habit mainHabit;
+  @HiveField(4)
   final Habit? secondHabit;
 
   bool isAllCompleted;

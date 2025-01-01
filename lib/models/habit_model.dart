@@ -1,43 +1,55 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:habitrise/models/models.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
-class Habit {
+part 'habit_model.g.dart';
+
+@HiveType(typeId: 2)
+class Habit extends HiveObject {
+  @HiveField(0)
+  final String id;
+
+  @HiveField(1)
+  final String habitName;
+
+  @HiveField(2)
+  final String? habitDescription;
+
+  @HiveField(3)
+  final String? icon;
+
+  @HiveField(4)
+  final ReminderModel? reminderModel;
+
+  @HiveField(5)
+  List<String>? completionDates;
+
   Habit({
     required this.id,
     required this.habitName,
     this.habitDescription,
-    required this.completeTime,
     this.icon,
     this.reminderModel,
-    this.isCompletedToday = false,
+    this.completionDates,
   });
-
-  final String id;
-  final String habitName;
-  final String? habitDescription;
-  final String? completeTime;
-  final String? icon;
-  bool isCompletedToday;
-  final ReminderModel? reminderModel;
-  List<String>? completionDates;
 
   Habit copyWith({
     String? id,
     String? habitName,
     String? habitDescription,
-    String? completeTime,
     String? icon,
     ReminderModel? reminderModel,
+    List<String>? completionDates,
   }) {
     return Habit(
       id: id ?? this.id,
       habitName: habitName ?? this.habitName,
       habitDescription: habitDescription ?? this.habitDescription,
-      completeTime: completeTime ?? this.completeTime,
       icon: icon ?? this.icon,
       reminderModel: reminderModel ?? this.reminderModel,
+      completionDates: completionDates ?? this.completionDates,
     );
   }
 
@@ -46,21 +58,39 @@ class Habit {
       'id': id,
       'habitName': habitName,
       'habitDescription': habitDescription,
-      'completeTime': completeTime,
       'icon': icon,
-      'reminderModel': reminderModel?.toJson(),
+      'reminderModel': reminderModel?.toMap(),
+      'completionDates': completionDates,
     };
   }
 
   factory Habit.fromMap(Map<String, dynamic> map) {
-    print(map["reminderModel"].runtimeType);
+    // Handle completionDates
+    List<String>? completionDates;
+    if (map['completionDates'] != null) {
+      if (map['completionDates'] is List) {
+        // If it's already a List, cast it to List<String>
+        for (var element in map['completionDates']) {
+          print(element.runtimeType);
+        }
+        completionDates = List<String>.from(map['completionDates'] as List);
+      } else if (map['completionDates'] is Uint8List) {
+        // If it's a byte array, decode it into a String and split into a List
+        completionDates = utf8.decode(map['completionDates'] as Uint8List).split(',');
+      } else {
+        // Handle unexpected types (e.g., log an error or throw an exception)
+        debugPrint('Unexpected type for completionDates: ${map['completionDates'].runtimeType}');
+        completionDates = null;
+      }
+    }
+
     return Habit(
       id: map['id'] as String,
       habitName: map['habitName'] as String,
       habitDescription: map['habitDescription'] != null ? map['habitDescription'] as String : null,
-      completeTime: map['completeTime'],
       icon: map['icon'] != null ? map['icon'] as String : null,
-      reminderModel: map['reminderModel'] != null ? ReminderModel.fromMap(jsonDecode(map['reminderModel'])) : null,
+      reminderModel: map['reminderModel'] != null ? ReminderModel.fromMap(map['reminderModel'] as Map<String, dynamic>) : null,
+      completionDates: completionDates,
     );
   }
 
@@ -70,18 +100,18 @@ class Habit {
 
   @override
   String toString() {
-    return 'Habit(id: $id, habitName: $habitName, habitDescription: $habitDescription, completeTime: $completeTime, icon: $icon, reminderModel: $reminderModel)';
+    return 'Habit(id: $id, habitName: $habitName, habitDescription: $habitDescription, icon: $icon, reminderModel: $reminderModel, completionDates: $completionDates)';
   }
 
   @override
   bool operator ==(covariant Habit other) {
     if (identical(this, other)) return true;
 
-    return other.id == id && other.habitName == habitName && other.habitDescription == habitDescription && other.completeTime == completeTime && other.icon == icon && other.reminderModel == reminderModel;
+    return other.id == id && other.habitName == habitName && other.habitDescription == habitDescription && other.icon == icon && other.reminderModel == reminderModel && listEquals(other.completionDates, completionDates);
   }
 
   @override
   int get hashCode {
-    return id.hashCode ^ habitName.hashCode ^ habitDescription.hashCode ^ completeTime.hashCode ^ icon.hashCode ^ reminderModel.hashCode;
+    return id.hashCode ^ habitName.hashCode ^ habitDescription.hashCode ^ icon.hashCode ^ reminderModel.hashCode ^ completionDates.hashCode;
   }
 }

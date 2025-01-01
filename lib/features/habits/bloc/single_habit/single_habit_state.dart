@@ -1,4 +1,4 @@
-part of 'habit_bloc.dart';
+part of 'single_habit_bloc.dart';
 
 @immutable
 sealed class SingleHabitState {}
@@ -7,10 +7,10 @@ final class SingleHabitInitial extends SingleHabitState {}
 
 final class SingleHabitLoading extends SingleHabitState {}
 
-final class HabitsFetched extends SingleHabitState {
+final class SingleHabitsFetched extends SingleHabitState {
   final List<Habit> habits;
 
-  HabitsFetched(this.habits);
+  SingleHabitsFetched(this.habits);
 }
 
 final class SingleHabitFetchError extends SingleHabitState {
@@ -24,8 +24,10 @@ final class SingleHabitSaveError extends SingleHabitState {
 
   SingleHabitSaveError(this.message);
 }
+
 final class SingleHabitSaveSuccess extends SingleHabitState {
   final String message;
 
   SingleHabitSaveSuccess(this.message);
 }
+

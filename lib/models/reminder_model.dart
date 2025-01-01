@@ -1,12 +1,17 @@
 import 'dart:convert';
 
-import 'package:flutter/foundation.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
+part 'reminder_model.g.dart';
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 
-class ReminderModel {
+@HiveType(typeId: 3)
+class ReminderModel extends HiveObject {
+  @HiveField(0)
   final String? reminderTime;
-  final Set<String>? days;
+
+  @HiveField(1)
+  final List<String>? days;
 
   ReminderModel({
     this.reminderTime,
@@ -15,7 +20,7 @@ class ReminderModel {
 
   ReminderModel copyWith({
     String? reminderTime,
-    Set<String>? days,
+    List<String>? days,
   }) {
     return ReminderModel(
       reminderTime: reminderTime ?? this.reminderTime,
@@ -33,7 +38,7 @@ class ReminderModel {
   factory ReminderModel.fromMap(Map<String, dynamic> map) {
     return ReminderModel(
       reminderTime: map['reminderTime'] != null ? map['reminderTime'] as String : null,
-      days: map['days'] != null ? Set<String>.from((map['days'] as Set<String>)) : null,
+      days: map['days'] != null ? List<String>.from((map['days'] as List<String>)) : null,
     );
   }
 
@@ -43,14 +48,4 @@ class ReminderModel {
 
   @override
   String toString() => 'ReminderModel(reminderTime: $reminderTime, days: $days)';
-
-  @override
-  bool operator ==(covariant ReminderModel other) {
-    if (identical(this, other)) return true;
-
-    return other.reminderTime == reminderTime && setEquals(other.days, days);
-  }
-
-  @override
-  int get hashCode => reminderTime.hashCode ^ days.hashCode;
 }

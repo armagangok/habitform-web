@@ -1,11 +1,10 @@
-import 'package:habitrise/core/widgets/flushbar_widget.dart';
-import 'package:habitrise/features/habits/bloc/single_habit/habit_bloc.dart';
-
 import '/core/core.dart';
+import '../../core/widgets/flushbar_widget.dart';
 import '../../core/widgets/habit_color_sheet/cubit/habit_color_cubit.dart';
 import '../../core/widgets/habit_icon/cubit/habit_icon_cubit.dart';
 import '../../core/widgets/habit_icon/icon_picker_sheet.dart';
 import '../../models/models.dart';
+import '../habits/bloc/single_habit/single_habit_bloc.dart';
 import '../habits/widgets/habit_type_widget.dart';
 import 'bloc/cubit/reminder_time_cubit.dart';
 import 'widgets/add_reminder.dart';
@@ -45,18 +44,20 @@ class _AddHabitPageState extends State<AddHabitPage> {
           title: "Save",
           onPressed: () {
             if (_habitNameController.text.isEmpty) {
-              AppFlushbar.shared.warningFlushbar("message");
+              AppFlushbar.shared.warningFlushbar("Habit name can't be empty");
+              return;
             }
             final ReminderModel? reminderModel = context.read<ReminderCubit>().state.reminderModel;
             final Habit habit = Habit(
               id: UuidHelper.uid,
               habitName: _habitNameController.text.trim(),
               habitDescription: _habitDescriptionController.text,
-              completeTime: reminderModel?.reminderTime,
               reminderModel: reminderModel,
             );
 
             context.read<SingleHabitBloc>().add(SaveSingleHabitEvent(habit: habit));
+
+            navigator.pop();
           },
         ),
       ),

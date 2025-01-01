@@ -5,7 +5,7 @@ import '../../models/habit_model.dart';
 
 class DummyHabitService extends IHabitService {
   @override
-  Future<int> deleteHabit(String id) {
+  Future<int> deleteHabit(dynamic key) {
     // TODO: implement deleteHabit
     throw UnimplementedError();
   }
@@ -18,33 +18,21 @@ class DummyHabitService extends IHabitService {
         id: UuidHelper.uid,
         habitName: "Wake up fella!",
         icon: "🛌",
-        completeTime: DateTime(2024, 12, 21, 7, 15).toIso8601String(),
       ),
       Habit(
         id: UuidHelper.uid,
         habitName: "Watch your face",
         icon: "🧼",
-        completeTime: DateTime.now().toIso8601String(),
       ),
       Habit(
         id: UuidHelper.uid,
         habitName: "Drink some water",
         icon: "💧",
-        completeTime: DateTime.now()
-            .add(
-              Duration(minutes: 5),
-            )
-            .toIso8601String(),
       ),
       Habit(
         id: UuidHelper.uid,
         habitName: "Make Your Bed",
         icon: "🛌",
-        completeTime: DateTime.now()
-            .add(
-              Duration(minutes: 10),
-            )
-            .toIso8601String(),
       ),
     ];
   }
@@ -68,7 +56,7 @@ class DummyHabitService extends IHabitService {
   }
 
   @override
-  Future<int> insertHabit(Habit habit) {
+  Future<int> addData(Habit habit) {
     // TODO: implement insertHabit
     throw UnimplementedError();
   }
