@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:habitrise/services/chain_habit_service.dart';
 
-import '/models/chained_habit_model.dart';
+import '../../../../models/chained_habit/chained_habit_model.dart';
 
 part 'chain_habit_event.dart';
 part 'chain_habit_state.dart';

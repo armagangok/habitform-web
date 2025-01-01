@@ -2,8 +2,6 @@ import '/core/core.dart';
 import '../../add_habit/add_habit_page.dart';
 import '../bloc/chain_habit/chain_habit_bloc.dart';
 import '../bloc/single_habit/single_habit_bloc.dart';
-import '../widgets/chained_habit_item.dart';
-import '../widgets/habit_item.dart';
 import '../widgets/habit_type_widget.dart';
 
 class HabitsPage extends StatefulWidget {

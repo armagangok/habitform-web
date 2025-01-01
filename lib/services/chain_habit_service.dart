@@ -1,5 +1,5 @@
-import '../models/chained_habit_model.dart';
-import '../models/habit_model.dart';
+import '../models/chained_habit/chained_habit_model.dart';
+import '../models/single_habit/habit_model.dart';
 
 class ChainHabitService {
   Future<List<ChainedHabit>> fetchChainedHabits() async {

@@ -1,38 +1,50 @@
-import 'package:habitrise/core/core.dart';
-import 'package:habitrise/features/habits/bloc/single_habit/single_habit_bloc.dart';
-import 'package:habitrise/models/models.dart';
+import '/core/core.dart';
+import '/models/models.dart';
+import '../../habits/bloc/single_habit/single_habit_bloc.dart';
 
-class SingleHabitGrid extends StatelessWidget {
+class SingleHabitGrid extends StatefulWidget {
   final Habit habit;
 
   const SingleHabitGrid({super.key, required this.habit});
 
   @override
-  Widget build(BuildContext context) {
-    // Takvim tarihlerini belirleyelim (örneğin, 1 ay için):
-    final today = DateTime.now();
-    final startOfMonth = DateTime(today.year, today.month, 1);
-    final daysInMonth = DateTime(today.year, today.month + 1, 0).day;
+  State<SingleHabitGrid> createState() => _SingleHabitGridState();
+}
 
-    // Ayın günlerini liste olarak oluştur
-    final monthDays = List.generate(daysInMonth, (index) {
-      return startOfMonth.add(Duration(days: index));
+class _SingleHabitGridState extends State<SingleHabitGrid> {
+  late final DateTime today;
+  late final List<DateTime> days;
+
+  @override
+  void initState() {
+    // Bugünü al
+    today = DateTime.now();
+
+// Bugün dahil, bugünden önceki 90 günü ve sonraki 7 günü kapsayan tarihleri oluştur
+    days = List.generate(35, (index) {
+      // 90 gün geriye giderek başlayın, bugüne ve 7 güne kadar ekleyin
+      return today.subtract(Duration(days: 90)).add(Duration(days: index));
     });
 
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return GridView.builder(
       shrinkWrap: true,
       physics: NeverScrollableScrollPhysics(),
       padding: EdgeInsets.zero,
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 14, // Haftalık grid için 7 sütun
+        crossAxisCount: 7, // Haftalık grid için 7 sütun
         crossAxisSpacing: 2.5,
         mainAxisSpacing: 2.5,
       ),
-      itemCount: monthDays.length,
+      itemCount: days.length,
       itemBuilder: (context, index) {
-        final day = monthDays[index];
+        final day = days[index];
 
-        final result = convertStringListToDateTimeList(habit.completionDates);
+        final result = convertStringListToDateTimeList(widget.habit.completionDates);
 
         // Tarih tamamlanmış mı kontrol et
         final isCompleted = result?.any((date) => date.year == day.year && date.month == day.month && date.day == day.day) ?? false;
@@ -40,21 +52,21 @@ class SingleHabitGrid extends StatelessWidget {
         return CustomButton(
           onTap: () {
             // Şu anki tarihi ISO 8601 formatında al
-            final currentDate = monthDays[index];
+            final currentDate = days[index];
 
             // Güncelleme olayını tetikle
             context.read<SingleHabitBloc>().add(
                   UpdateHabitForSelectedDayEvent(
-                    habit: habit,
+                    habit: widget.habit,
                     selectedDate: currentDate,
-                    datesSelected: monthDays,
+                    days: days,
                   ),
                 );
           },
           child: Container(
             alignment: Alignment.center,
             decoration: BoxDecoration(
-              color: isCompleted ? Colors.green : context.primary.withOpacity(.25), // Tamamlanmış tarihler yeşil
+              color: isCompleted ? Colors.green : context.primary.withValues(alpha: .2), // Tamamlanmış tarihler yeşil
               borderRadius: BorderRadius.circular(4),
             ),
           ),

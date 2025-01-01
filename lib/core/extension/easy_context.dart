@@ -29,7 +29,7 @@ extension EasyContext on BuildContext {
       barrierDismissible: barrierDismissible,
       context: this,
       builder: (_) => BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+        filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
         child: widget,
       ),
     );

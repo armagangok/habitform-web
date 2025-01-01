@@ -1,6 +1,6 @@
 import 'package:hive_flutter/hive_flutter.dart';
 
-import 'habit_model.dart';
+import '../single_habit/habit_model.dart';
 
 part 'chained_habit_model.g.dart';
 

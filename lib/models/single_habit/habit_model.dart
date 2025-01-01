@@ -70,9 +70,7 @@ class Habit extends HiveObject {
     if (map['completionDates'] != null) {
       if (map['completionDates'] is List) {
         // If it's already a List, cast it to List<String>
-        for (var element in map['completionDates']) {
-          print(element.runtimeType);
-        }
+
         completionDates = List<String>.from(map['completionDates'] as List);
       } else if (map['completionDates'] is Uint8List) {
         // If it's a byte array, decode it into a String and split into a List

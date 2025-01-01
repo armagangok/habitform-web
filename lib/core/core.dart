@@ -4,7 +4,7 @@ export 'package:flutter/material.dart' hide RefreshIndicator, RefreshCallback;
 export 'package:flutter_animate/flutter_animate.dart';
 export 'package:flutter_bloc/flutter_bloc.dart';
 export 'package:font_awesome_flutter/font_awesome_flutter.dart';
-export 'package:habitrise/core/widgets/my_spring_button.dart';
+export 'package:habitrise/core/widgets/custom_button.dart';
 export 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 export '/core/widgets/trailing_button.dart';

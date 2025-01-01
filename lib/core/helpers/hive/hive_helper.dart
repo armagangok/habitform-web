@@ -1,7 +1,6 @@
-import 'package:habitrise/models/chained_habit_model.dart';
-import 'package:habitrise/models/habit_model.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
+import '/models/models.dart';
 import '../../core.dart';
 import 'hive_keys.dart';
 
@@ -18,6 +17,7 @@ class HiveHelper {
     try {
       Hive.registerAdapter(HabitAdapter());
       Hive.registerAdapter(ChainedHabitAdapter());
+      Hive.registerAdapter(ReminderModelAdapter());
 
       await Hive.openBox<Habit>(HiveBoxes.singleHabitBox);
       await Hive.openBox<ChainedHabit>(HiveBoxes.chainedHabitBox);
