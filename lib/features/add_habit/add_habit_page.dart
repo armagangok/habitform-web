@@ -132,7 +132,7 @@ class _AddHabitPageState extends State<AddHabitPage> {
                                                               final day = state.reminderModel!.days!.toList()[index];
                                                               return Text(
                                                                 day,
-                                                                style: context.bodySmall.copyWith(
+                                                                style: context.bodySmall?.copyWith(
                                                                   color: CupertinoColors.systemBlue,
                                                                 ),
                                                               );

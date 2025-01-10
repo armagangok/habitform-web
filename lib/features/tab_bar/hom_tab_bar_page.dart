@@ -13,9 +13,9 @@ class HomeTabScaffoldPage extends StatefulWidget {
 
 class _HomeTabScaffoldPageState extends State<HomeTabScaffoldPage> {
   final List<Widget> _pages = [
-    OverviewPage(),
-    HabitsPage(),
-    SettingsPage(),
+    const OverviewPage(),
+    const HabitsPage(),
+    const SettingsPage(),
   ];
 
   @override

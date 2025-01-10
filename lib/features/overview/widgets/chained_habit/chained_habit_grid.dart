@@ -1,6 +1,5 @@
-import 'package:habitrise/core/core.dart';
-
-import '../../../models/chained_habit/chained_habit_model.dart';
+import '/core/core.dart';
+import '/models/chained_habit/chained_habit_model.dart';
 
 class ChainedHabitGrid extends StatelessWidget {
   final ChainedHabit chainedHabit;

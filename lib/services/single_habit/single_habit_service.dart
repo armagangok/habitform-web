@@ -1,13 +1,9 @@
-import 'package:habitrise/core/helpers/hive/hive_helper.dart';
-import 'package:habitrise/core/helpers/hive/hive_keys.dart';
-
 import '../../core/core.dart';
 import '../../models/models.dart';
 import 'i_single_habit_service.dart';
 
 class SingleHabitService extends IHabitService {
-  static final shared = SingleHabitService._();
-  SingleHabitService._();
+  
 
   @override
   Future<void> addData(Habit habit) async {

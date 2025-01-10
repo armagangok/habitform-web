@@ -8,6 +8,28 @@ enum Days {
   sun,
 }
 
+// Function to map DateTime.weekday to Days enum
+Days getDayEnum(int weekday) {
+  switch (weekday) {
+    case DateTime.monday:
+      return Days.mon;
+    case DateTime.tuesday:
+      return Days.tue;
+    case DateTime.wednesday:
+      return Days.wed;
+    case DateTime.thursday:
+      return Days.thu;
+    case DateTime.friday:
+      return Days.fri;
+    case DateTime.saturday:
+      return Days.sat;
+    case DateTime.sunday:
+      return Days.sun;
+    default:
+      throw Exception('Invalid weekday: $weekday');
+  }
+}
+
 extension EasyDaysExtension on Days {
   /// Converts the enum value to a human-readable string
   String toMap() {

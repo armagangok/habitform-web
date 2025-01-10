@@ -25,22 +25,12 @@ class DeleteSingleHabitEvent extends SingleHabitEvent {
   });
 }
 
-// @immutable
-// class UpdateHabitForTodayEvent extends SingleHabitEvent {
-//   final Habit habit;
-//   UpdateHabitForTodayEvent({
-//     required this.habit,
-//   });
-// }
-
-@immutable
 class UpdateHabitForSelectedDayEvent extends SingleHabitEvent {
-  final Habit habit;
-  final List<DateTime> days;
-  final DateTime selectedDate;
+  Habit habit;
+  DateTime dateToSaveOrRemove;
+
   UpdateHabitForSelectedDayEvent({
     required this.habit,
-    required this.days,
-    required this.selectedDate,
+    required this.dateToSaveOrRemove,
   });
 }

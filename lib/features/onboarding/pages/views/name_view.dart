@@ -52,7 +52,7 @@ class OnboardingTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       data,
-      style: context.displayLarge.copyWith(
+      style: context.displayLarge?.copyWith(
         fontSize: 20,
         fontWeight: FontWeight.bold,
       ),

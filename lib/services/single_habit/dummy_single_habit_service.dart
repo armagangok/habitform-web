@@ -3,7 +3,7 @@ import 'package:habitrise/services/single_habit/i_single_habit_service.dart';
 import '../../core/helpers/unique_id/unique_id.dart';
 import '../../models/single_habit/habit_model.dart';
 
-class DummyHabitService extends IHabitService {
+class MockHabitService extends IHabitService {
   @override
   Future<int> deleteHabit(dynamic key) {
     // TODO: implement deleteHabit
@@ -17,21 +17,25 @@ class DummyHabitService extends IHabitService {
       Habit(
         id: UuidHelper.uid,
         habitName: "Wake up fella!",
+        habitDescription: "Some test description goes here",
         icon: "🛌",
       ),
       Habit(
         id: UuidHelper.uid,
         habitName: "Watch your face",
+        habitDescription: "Some test description goes here",
         icon: "🧼",
       ),
       Habit(
         id: UuidHelper.uid,
         habitName: "Drink some water",
+        habitDescription: "Some test description goes here",
         icon: "💧",
       ),
       Habit(
         id: UuidHelper.uid,
         habitName: "Make Your Bed",
+        habitDescription: "Some test description goes here",
         icon: "🛌",
       ),
     ];

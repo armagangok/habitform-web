@@ -41,7 +41,7 @@ class OnboardingGreeting extends StatelessWidget {
                 children: [
                   Text(
                     "Welcome to HabitRise,",
-                    style: context.headlineMedium.copyWith(
+                    style: context.headlineMedium?.copyWith(
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -67,17 +67,17 @@ class OnboardingGreeting extends StatelessWidget {
                                 RotateAnimatedText(
                                   "Minimalist.",
                                   duration: Duration(seconds: 2),
-                                  textStyle: context.headlineSmall.copyWith(fontWeight: FontWeight.bold),
+                                  textStyle: context.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
                                 ),
                                 RotateAnimatedText(
                                   "Easy to Use.",
                                   duration: Duration(seconds: 2),
-                                  textStyle: context.headlineSmall.copyWith(fontWeight: FontWeight.bold),
+                                  textStyle: context.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
                                 ),
                                 RotateAnimatedText(
                                   "Sicence-Based.",
                                   duration: Duration(seconds: 2),
-                                  textStyle: context.headlineSmall.copyWith(fontWeight: FontWeight.bold),
+                                  textStyle: context.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
                                 ),
                               ],
                             ),

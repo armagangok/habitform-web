@@ -12,7 +12,7 @@ class OnboardingMessage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       data,
-      style: context.bodyLarge.copyWith(
+      style: context.bodyLarge?.copyWith(
         fontWeight: FontWeight.normal,
       ),
     );

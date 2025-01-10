@@ -58,8 +58,8 @@ class MultiCategoryWidgetState extends State<MultiCategoryWidget> {
                 padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 8),
                 child: Text(
                   widget.categories[index],
-                  style: context.bodySmall.copyWith(
-                    color: isSelected ? Colors.white : context.bodySmall.color?.withValues(alpha: .72),
+                  style: context.bodySmall?.copyWith(
+                    color: isSelected ? Colors.white : context.bodySmall?.color?.withValues(alpha: .72),
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -121,8 +121,8 @@ class CategoryWidgetState extends State<CategoryWidget> {
                 padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 8),
                 child: Text(
                   widget.categories[index],
-                  style: context.bodySmall.copyWith(
-                    color: selectedIndex == index ? Colors.white : context.bodySmall.color?.withValues(alpha: .72),
+                  style: context.bodySmall?.copyWith(
+                    color: selectedIndex == index ? Colors.white : context.bodySmall?.color?.withValues(alpha: .72),
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -196,8 +196,8 @@ class CustomCategoryWidgetState<T> extends State<CustomCategoryWidget<T>> {
               padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 8),
               child: Text(
                 widget.categoryLabelBuilder(category),
-                style: context.bodySmall.copyWith(
-                  color: isSelected ? Colors.white : context.bodySmall.color?.withValues(alpha: .72),
+                style: context.bodySmall?.copyWith(
+                  color: isSelected ? Colors.white : context.bodySmall?.color?.withValues(alpha: .72),
                   fontWeight: FontWeight.bold,
                 ),
               ),

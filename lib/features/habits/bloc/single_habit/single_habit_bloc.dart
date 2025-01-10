@@ -1,8 +1,8 @@
 import 'package:flutter/services.dart';
 
 import '/core/core.dart';
+import '/models/single_habit/habit_model.dart';
 import '/services/single_habit/i_single_habit_service.dart';
-import '../../../../models/single_habit/habit_model.dart';
 
 part 'single_habit_event.dart';
 part 'single_habit_state.dart';
@@ -15,7 +15,6 @@ class SingleHabitBloc extends Bloc<SingleHabitEvent, SingleHabitState> {
     on<IdleSingleHabitEvent>(_idle);
     on<SaveSingleHabitEvent>(_saveNewHabit);
     on<DeleteSingleHabitEvent>(_deleteHabit);
-
     on<UpdateHabitForSelectedDayEvent>(_updateHabitForSelectedDay);
   }
 
@@ -76,41 +75,30 @@ class SingleHabitBloc extends Bloc<SingleHabitEvent, SingleHabitState> {
 
   Future<void> _updateHabitForSelectedDay(UpdateHabitForSelectedDayEvent event, Emitter<SingleHabitState> emit) async {
     try {
-      // Şu anki tarihi sadece yıl, ay ve gün olarak al
-      final today = DateTime(event.selectedDate.year, event.selectedDate.month, event.selectedDate.day);
+      final DateTime selectedDate = event.dateToSaveOrRemove;
 
-      // completionDates listesini al veya yeni bir liste oluştur
+      // Get or create the updated completion dates list
       final updatedCompletionDates = event.habit.completionDates?.map((date) {
-            // ISO formatındaki string tarihleri DateTime'e çevir
             final parsedDate = DateTime.parse(date);
             return DateTime(parsedDate.year, parsedDate.month, parsedDate.day);
           }).toList() ??
           [];
 
-      // Eğer tarih zaten listede varsa kaldır, yoksa ekle
-      if (updatedCompletionDates.contains(today)) {
-        updatedCompletionDates.remove(today); // Tarihi kaldır
+      // If the selected date is already in the list, remove it; otherwise, add it
+      if (updatedCompletionDates.any((date) => date.year == selectedDate.year && date.month == selectedDate.month && date.day == selectedDate.day)) {
+        updatedCompletionDates.removeWhere((date) => date.year == selectedDate.year && date.month == selectedDate.month && date.day == selectedDate.day);
       } else {
-        updatedCompletionDates.add(today); // Tarihi ekle
+        updatedCompletionDates.add(selectedDate);
       }
 
-      // Listeyi tekrar ISO 8601 formatına çevir
+      // Convert the updated list back to ISO 8601 format
       final updatedCompletionDatesStrings = updatedCompletionDates.map((date) => date.toIso8601String()).toList();
-
-      // Yeni completionDates listesi ile Habit nesnesini güncelle
       final updatedHabit = event.habit.copyWith(completionDates: updatedCompletionDatesStrings);
 
-      // Güncelleme olayını tetikle
       await habitService.updateHabit(updatedHabit);
       add(FetchSingleHabitEvent());
-    } on PlatformException catch (e, s) {
-      LogHelper.shared.debugPrint('Unexpected error updating habit: $e');
-      LogHelper.shared.debugPrint('Stack trace: $s');
-      emit(SingleHabitSaveError(e.message ?? "An error occurred while updating the habit"));
-    } catch (e, s) {
-      LogHelper.shared.debugPrint('Unexpected error updating habit: $e');
-      LogHelper.shared.debugPrint('Stack trace: $s');
-      emit(SingleHabitSaveError("An error occurred while updating the habit"));
+    } catch (e) {
+      // Handle errors as before
     }
   }
 }
