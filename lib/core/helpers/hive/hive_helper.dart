@@ -15,11 +15,10 @@ class HiveHelper {
   Future<void> _initBoxes() async {
     try {
       Hive.registerAdapter(HabitAdapter());
-      Hive.registerAdapter(ChainedHabitAdapter());
+
       Hive.registerAdapter(ReminderModelAdapter());
 
       await Hive.openBox<Habit>(HiveBoxes.singleHabitBox);
-      await Hive.openBox<ChainedHabit>(HiveBoxes.chainedHabitBox);
     } catch (e) {
       LogHelper.shared.debugPrint('$e');
     }

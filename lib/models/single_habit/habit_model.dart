@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
@@ -26,6 +27,9 @@ class Habit extends HiveObject {
   @HiveField(5)
   List<String>? completionDates;
 
+  @HiveField(6)
+  bool isCompletedToday;
+
   Habit({
     required this.id,
     required this.habitName,
@@ -33,6 +37,7 @@ class Habit extends HiveObject {
     this.icon,
     this.reminderModel,
     this.completionDates,
+    this.isCompletedToday = false,
   });
 
   Habit copyWith({
@@ -42,6 +47,7 @@ class Habit extends HiveObject {
     String? icon,
     ReminderModel? reminderModel,
     List<String>? completionDates,
+    bool? isCompletedToday,
   }) {
     return Habit(
       id: id ?? this.id,
@@ -50,6 +56,7 @@ class Habit extends HiveObject {
       icon: icon ?? this.icon,
       reminderModel: reminderModel ?? this.reminderModel,
       completionDates: completionDates ?? this.completionDates,
+      isCompletedToday: isCompletedToday ?? this.isCompletedToday,
     );
   }
 
@@ -61,34 +68,19 @@ class Habit extends HiveObject {
       'icon': icon,
       'reminderModel': reminderModel?.toMap(),
       'completionDates': completionDates,
+      'isCompletedToday': isCompletedToday,
     };
   }
 
   factory Habit.fromMap(Map<String, dynamic> map) {
-    // Handle completionDates
-    List<String>? completionDates;
-    if (map['completionDates'] != null) {
-      if (map['completionDates'] is List) {
-        // If it's already a List, cast it to List<String>
-
-        completionDates = List<String>.from(map['completionDates'] as List);
-      } else if (map['completionDates'] is Uint8List) {
-        // If it's a byte array, decode it into a String and split into a List
-        completionDates = utf8.decode(map['completionDates'] as Uint8List).split(',');
-      } else {
-        // Handle unexpected types (e.g., log an error or throw an exception)
-        debugPrint('Unexpected type for completionDates: ${map['completionDates'].runtimeType}');
-        completionDates = null;
-      }
-    }
-
     return Habit(
       id: map['id'] as String,
       habitName: map['habitName'] as String,
       habitDescription: map['habitDescription'] != null ? map['habitDescription'] as String : null,
       icon: map['icon'] != null ? map['icon'] as String : null,
       reminderModel: map['reminderModel'] != null ? ReminderModel.fromMap(map['reminderModel'] as Map<String, dynamic>) : null,
-      completionDates: completionDates,
+      completionDates: map['completionDates'] != null ? List<String>.from((map['completionDates'] as List<String>)) : null,
+      isCompletedToday: map['isCompletedToday'] as bool,
     );
   }
 
@@ -98,18 +90,18 @@ class Habit extends HiveObject {
 
   @override
   String toString() {
-    return 'Habit(id: $id, habitName: $habitName, habitDescription: $habitDescription, icon: $icon, reminderModel: $reminderModel, completionDates: $completionDates)';
+    return 'Habit(id: $id, habitName: $habitName, habitDescription: $habitDescription, icon: $icon, reminderModel: $reminderModel, completionDates: $completionDates, isCompletedToday: $isCompletedToday)';
   }
 
   @override
   bool operator ==(covariant Habit other) {
     if (identical(this, other)) return true;
 
-    return other.id == id && other.habitName == habitName && other.habitDescription == habitDescription && other.icon == icon && other.reminderModel == reminderModel && listEquals(other.completionDates, completionDates);
+    return other.id == id && other.habitName == habitName && other.habitDescription == habitDescription && other.icon == icon && other.reminderModel == reminderModel && listEquals(other.completionDates, completionDates) && other.isCompletedToday == isCompletedToday;
   }
 
   @override
   int get hashCode {
-    return id.hashCode ^ habitName.hashCode ^ habitDescription.hashCode ^ icon.hashCode ^ reminderModel.hashCode ^ completionDates.hashCode;
+    return id.hashCode ^ habitName.hashCode ^ habitDescription.hashCode ^ icon.hashCode ^ reminderModel.hashCode ^ completionDates.hashCode ^ isCompletedToday.hashCode;
   }
 }

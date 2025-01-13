@@ -1,6 +1,6 @@
 import '/core/core.dart';
 import '/models/models.dart';
-import '../../../habits/bloc/single_habit/single_habit_bloc.dart';
+import '../../bloc/single_habit/single_habit_bloc.dart';
 import 'single_habit_detail_grid.dart';
 
 class SingleHabitDetailPage extends StatefulWidget {
@@ -22,18 +22,17 @@ class _SingleHabitDetailPageState extends State<SingleHabitDetailPage> {
       children: [
         CupertinoPageScaffold(
           navigationBar: SheetHeader(title: "Habit Detail"),
-          child: Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: ListView(
-              children: [
-                item(
+          child: ListView(
+            padding: EdgeInsets.all(10),
+            children: [
+              SafeArea(
+                child: item(
                   widget.habit,
                 ),
-                SizedBox(height: 10),
-                SingleHabitDetailGrid(habit: widget.habit),
-                SizedBox(height: 40)
-              ],
-            ),
+              ),
+              SizedBox(height: 10),
+              SingleHabitDetailGrid(habit: widget.habit),
+            ],
           ),
         ),
         Positioned.fill(
@@ -101,6 +100,7 @@ class _SingleHabitDetailPageState extends State<SingleHabitDetailPage> {
                     ),
                     Expanded(
                       child: CupertinoButton.tinted(
+                        color: CupertinoColors.activeBlue,
                         padding: EdgeInsets.zero,
                         sizeStyle: CupertinoButtonSize.small,
                         onPressed: () {},
@@ -111,10 +111,14 @@ class _SingleHabitDetailPageState extends State<SingleHabitDetailPage> {
                               "Share",
                               style: TextStyle(
                                 fontWeight: FontWeight.w500,
+                                color: CupertinoColors.activeBlue,
                               ),
                             ),
                             SizedBox(width: 5),
-                            Icon(FontAwesomeIcons.share),
+                            Icon(
+                              FontAwesomeIcons.share,
+                              color: CupertinoColors.activeBlue,
+                            ),
                           ],
                         ),
                       ),
@@ -131,8 +135,6 @@ class _SingleHabitDetailPageState extends State<SingleHabitDetailPage> {
 
   Widget item(Habit habit) {
     return Card(
-      color: Colors.black38,
-      elevation: 0,
       child: Padding(
         padding: EdgeInsets.all(10),
         child: Column(
@@ -141,7 +143,6 @@ class _SingleHabitDetailPageState extends State<SingleHabitDetailPage> {
             Text(
               habit.habitName,
               style: context.bodyLarge?.copyWith(
-                color: Colors.white,
                 fontWeight: FontWeight.bold,
               ),
             ),

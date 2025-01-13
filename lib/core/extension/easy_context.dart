@@ -135,6 +135,7 @@ extension EasyText on BuildContext {
   TextStyle? get displayMedium => theme.textTheme.displayMedium;
   TextStyle? get displaySmall => theme.textTheme.displaySmall;
 
-  TextStyle get cupertinoTextTheme => CupertinoTheme.of(this).textTheme.textStyle;
+  TextStyle get cupertinoTextStyle => CupertinoTheme.of(this).textTheme.textStyle;
+  CupertinoTextThemeData get cupertinoTextTheme => CupertinoTheme.of(this).textTheme;
   CupertinoThemeData get cupertinoTheme => CupertinoTheme.of(this);
 }

@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:habitrise/features/overview/overview_page.dart';
-import 'package:habitrise/features/tab_bar/hom_tab_bar_page.dart';
 
 import '../../features/habits/pages/habits_page.dart';
 import '../../features/onboarding/pages/onboarding_final/onboarding_final_page.dart';
@@ -28,9 +27,6 @@ class NavigationRoute {
 
       case KRoute.onboardingFinalPage:
         return _getRoute(page: const OnboardingFinalPage(), settings: args);
-
-      case KRoute.homeTabScaffoldPage:
-        return _getRoute(page: const HomeTabScaffoldPage(), settings: args);
 
       case KRoute.overviewPage:
         return _getRoute(page: const OverviewPage(), settings: args);

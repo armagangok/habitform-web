@@ -17,6 +17,7 @@ class SingleHabitDetailGrid extends StatefulWidget {
 
 class _SingleHabitDetailGridState extends State<SingleHabitDetailGrid> {
   final List<Last7DaysModel> last90Days = [];
+  final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
@@ -33,6 +34,11 @@ class _SingleHabitDetailGridState extends State<SingleHabitDetailGrid> {
         ),
       );
     }
+
+    // Scroll to the end after the first frame is rendered
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+    });
   }
 
   @override
@@ -41,6 +47,7 @@ class _SingleHabitDetailGridState extends State<SingleHabitDetailGrid> {
       height: 200,
       width: context.width(1),
       child: GridView.builder(
+        controller: _scrollController, // Add the controller here
         scrollDirection: Axis.horizontal,
         itemCount: last90Days.length,
         shrinkWrap: true,
@@ -73,9 +80,12 @@ class _SingleHabitDetailGridState extends State<SingleHabitDetailGrid> {
 
           return Container(
             decoration: BoxDecoration(
-              color: isCompletedDate ? Colors.green : context.colors.background,
+              color: isCompletedDate ? Colors.green : context.theme.cardColor,
               borderRadius: BorderRadius.circular(4),
-              border: Border.all(color: isToday ? Colors.white : Colors.transparent, width: 1.5),
+              border: Border.all(
+                color: isToday ? context.primary : Colors.transparent,
+                width: 2,
+              ),
             ),
           );
         },

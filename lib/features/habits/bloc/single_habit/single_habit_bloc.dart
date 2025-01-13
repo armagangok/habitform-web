@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import '/core/core.dart';
 import '/models/single_habit/habit_model.dart';
 import '/services/single_habit/i_single_habit_service.dart';
+import '../../helper/habit_sorter.dart';
 
 part 'single_habit_event.dart';
 part 'single_habit_state.dart';
@@ -22,6 +23,7 @@ class SingleHabitBloc extends Bloc<SingleHabitEvent, SingleHabitState> {
     try {
       emit(SingleHabitLoading());
       final habits = await habitService.getAllHabits();
+      sortHabitsByReminderTime(habits);
       emit(SingleHabitsFetched(habits));
     } on PlatformException catch (e, s) {
       debugPrint('Error fetching habits: $e\nStack trace: $s');

@@ -1,8 +1,7 @@
 import '/core/core.dart';
 import '../../add_habit/add_habit_page.dart';
-import '../bloc/chain_habit/chain_habit_bloc.dart';
 import '../bloc/single_habit/single_habit_bloc.dart';
-import '../widgets/habit_type_widget.dart';
+import '../widgets/habit_item.dart';
 
 class HabitsPage extends StatefulWidget {
   const HabitsPage({super.key});
@@ -12,7 +11,7 @@ class HabitsPage extends StatefulWidget {
 }
 
 class _HabitsPageState extends State<HabitsPage> with SingleTickerProviderStateMixin {
-  String _selectedSegment = 'BasicHabits';
+  final String _selectedSegment = 'SingleHabits';
 
   late final AnimationController controller;
 
@@ -28,7 +27,7 @@ class _HabitsPageState extends State<HabitsPage> with SingleTickerProviderStateM
 
     context.read<SingleHabitBloc>().add(FetchSingleHabitEvent());
     context.read<SingleHabitBloc>().add(IdleSingleHabitEvent());
-    context.read<ChainHabitBloc>().add((FetchChainedHabitEvent()));
+    // context.read<ChainedHabitBloc>().add((FetchChainedHabitEvent()));
 
     super.initState();
   }
@@ -65,13 +64,6 @@ class _HabitsPageState extends State<HabitsPage> with SingleTickerProviderStateM
                   Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
-                      HabitTypeSegmentedControl(
-                        selectedSegment: _selectedSegment,
-                        onSegmentChanged: (value) {
-                          setState(() => _selectedSegment = value);
-                          controller.forward(from: 0);
-                        },
-                      ),
                       SizedBox(height: 10),
                       // if (_selectedSegment == 'BasicHabits') _buildSingleHabits().animate(controller: controller),
                       // if (_selectedSegment == 'ChainedHabits') _buildChainedHabits().animate(controller: controller),
@@ -88,56 +80,55 @@ class _HabitsPageState extends State<HabitsPage> with SingleTickerProviderStateM
   }
 
   // Normal Alışkanlıklar için içerik
-  // Widget _buildSingleHabits() {
-  //   return BlocBuilder<SingleHabitBloc, SingleHabitState>(
-  //     builder: (context, state) {
-  //       switch (state.runtimeType) {
-  //         case const (SingleHabitInitial):
-  //           return SizedBox.shrink();
-  //         case const (SingleHabitLoading):
-  //           return Center(child: CupertinoActivityIndicator());
-  //         case const (SingleHabitsFetched):
-  //           state as SingleHabitsFetched;
+  Widget _buildSingleHabits() {
+    return BlocBuilder<SingleHabitBloc, SingleHabitState>(
+      builder: (context, state) {
+        switch (state.runtimeType) {
+          case const (SingleHabitInitial):
+            return SizedBox.shrink();
+          case const (SingleHabitLoading):
+            return Center(child: CupertinoActivityIndicator());
+          case const (SingleHabitsFetched):
+            state as SingleHabitsFetched;
 
-  //           if (state.habits.isEmpty) {
-  //             return Column(
-  //               mainAxisSize: MainAxisSize.max,
-  //               children: [
-  //                 Text("You do not have any habits"),
-  //               ],
-  //             );
-  //           }
+            if (state.habits.isEmpty) {
+              return Column(
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  Text("You do not have any habits"),
+                ],
+              );
+            }
 
-  //           return ListView.builder(
-  //             itemCount: state.habits.length,
-  //             padding: EdgeInsets.zero,
-  //             shrinkWrap: true,
-  //             physics: NeverScrollableScrollPhysics(),
-  //             itemBuilder: (context, index) {
-  //               final habit = state.habits[index];
+            return ListView.builder(
+              itemCount: state.habits.length,
+              padding: EdgeInsets.zero,
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              itemBuilder: (context, index) {
+                final habit = state.habits[index];
 
-  //               return HabitItem(
-  //                 habitName: habit.habitName,
-  //                 subtitle: habit.completeTime,
-  //                 value: true,
-  //               );
-  //             },
-  //           );
+                return HabitItem(
+                  habitName: habit.habitName,
+                  value: true,
+                );
+              },
+            );
 
-  //         case const (SingleHabitFetchError):
-  //           state as SingleHabitFetchError;
-  //           return Center(
-  //             child: Text(state.message),
-  //           );
+          case const (SingleHabitFetchError):
+            state as SingleHabitFetchError;
+            return Center(
+              child: Text(state.message),
+            );
 
-  //         default:
-  //           return Text("");
-  //       }
-  //     },
-  //   );
-  // }
+          default:
+            return Text("");
+        }
+      },
+    );
+  }
 
-  // Zincirlenmiş Alışkanlıklar için içerik
+  // // Zincirlenmiş Alışkanlıklar için içerik
   // Widget _buildChainedHabits() {
   //   return BlocBuilder<ChainHabitBloc, ChainHabitState>(
   //     builder: (context, state) {
@@ -159,7 +150,7 @@ class _HabitsPageState extends State<HabitsPage> with SingleTickerProviderStateM
   //             return Padding(
   //               padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
   //               child: ChainedHabitItem(
-  //                 chainedHabit: chainedHabit,
+  //                 chainedHabit: chainedHabit
   //               ),
   //             );
   //           },

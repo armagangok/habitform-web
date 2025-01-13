@@ -1,6 +1,6 @@
 import '/core/core.dart';
 import '/models/models.dart';
-import '../../../habits/bloc/single_habit/single_habit_bloc.dart';
+import '../../bloc/single_habit/single_habit_bloc.dart';
 
 class SingleHabitDialog extends StatefulWidget {
   const SingleHabitDialog({
