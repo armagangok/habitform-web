@@ -2,7 +2,7 @@
 import '/core/core.dart';
 import '../../../../models/models.dart';
 import '../../../add_habit/enum/days_enum.dart';
-import 'single_habit_grid.dart';
+import 'weekly_habit_grid.dart';
 
 class SingleHabitDetailGrid extends StatefulWidget {
   final Habit habit;

@@ -25,7 +25,7 @@ final class Themes {
       surfaceTintColor: Colors.transparent,
       color: const Color(0XFF1C1C1E),
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: BorderRadius.circular(12),
       ),
       elevation: 0,
     ),
@@ -35,7 +35,7 @@ final class Themes {
       primaryColor: Color(0xff0A84FF),
       scaffoldBackgroundColor: Colors.black,
       brightness: Brightness.dark,
-      barBackgroundColor: Colors.black.withOpacity(.0),
+      barBackgroundColor: Colors.transparent.withAlpha(0),
       textTheme: CupertinoTextThemeData(
         primaryColor: Color(0xff0A84FF),
       ),
@@ -66,13 +66,13 @@ final class Themes {
       surfaceTintColor: Colors.transparent,
       color: Colors.white,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: BorderRadius.circular(12),
       ),
       elevation: 0,
     ),
     cupertinoOverrideTheme: CupertinoThemeData(
       applyThemeToAll: true,
-      barBackgroundColor: Color(0xffF2F2F7).withOpacity(.0),
+      barBackgroundColor: Color(0xffF2F2F7).withAlpha(0),
       scaffoldBackgroundColor: Color(0xffF2F2F7),
       brightness: Brightness.light,
       primaryColor: Color(0xff007AFF),

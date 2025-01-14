@@ -1,9 +1,7 @@
-import 'package:habitrise/features/habits/widgets/single_habit/habit_detail.dart';
-
 import '/core/core.dart';
-import '/models/single_habit/habit_model.dart';
 import '../../bloc/single_habit/single_habit_bloc.dart';
-import 'single_habit_grid.dart';
+import 'habit_detail.dart';
+import 'weekly_habit_grid.dart';
 
 class SingleHabitBuilder extends StatelessWidget {
   const SingleHabitBuilder({super.key});
@@ -15,97 +13,25 @@ class SingleHabitBuilder extends StatelessWidget {
         if (state is SingleHabitInitial) return SizedBox.shrink();
 
         if (state is SingleHabitsFetched) {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              state.habits.isEmpty
-                  ? _noDataWidget()
-                  : Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(
-                          width: double.infinity,
-                          child: ListView.separated(
-                            padding: EdgeInsets.all(20),
-                            shrinkWrap: true,
-                            physics: ClampingScrollPhysics(),
-                            itemCount: state.habits.length,
-                            itemBuilder: (context, index) {
-                              final habit = state.habits[index];
-                              return Column(
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                children: [
-                                  Row(
-                                    children: [
-                                      Expanded(
-                                        child: Card(
-                                          child: Padding(
-                                            padding: const EdgeInsets.all(10.0),
-                                            child: SizedBox(
-                                              width: double.infinity,
-                                              child: Row(
-                                                children: [
-                                                  Text(
-                                                    "🚀",
-                                                    style: context.headlineMedium,
-                                                  ),
-                                                  SizedBox(width: 8),
-                                                  Column(
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                                    children: [
-                                                      Text(
-                                                        habit.habitName,
-                                                        style: context.bodyMedium?.copyWith(
-                                                          fontWeight: FontWeight.bold,
-                                                        ),
-                                                      ),
-                                                      Text(
-                                                        habit.habitName,
-                                                        style: context.bodySmall?.copyWith(
-                                                          fontWeight: FontWeight.w500,
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      SizedBox(width: 10),
-                                      Text(
-                                        DateTime.parse(habit.reminderModel?.reminderTime ?? DateTime.now().toString()).toHHMM() ?? "",
-                                        style: context.bodySmall,
-                                        textAlign: TextAlign.end,
-                                      )
-                                    ],
-                                  ),
-                                ],
-                              );
-                            },
-                            separatorBuilder: (context, index) => Align(
-                              alignment: Alignment.centerRight,
-                              child: Padding(
-                                padding: const EdgeInsets.all(10.0),
-                                child: SizedBox(
-                                  height: 30,
-                                  child: VerticalDivider(),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-            ],
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                state.habits.isEmpty ? _noDataWidget() : _item(state),
+              ],
+            ),
           );
         }
 
         if (state is SingleHabitLoading) return Center(child: CupertinoActivityIndicator());
 
         if (state is SingleHabitFetchError) {
-          return Text(state.message);
+          return Text(
+            state.message,
+            style: context.bodySmall,
+          );
         } else {
           return SizedBox.shrink();
         }
@@ -113,88 +39,123 @@ class SingleHabitBuilder extends StatelessWidget {
     );
   }
 
-  Widget _singleHabitItem(Habit habit, int index) {
-    return Builder(
-      builder: (context) {
-        return CupertinoButton(
-          padding: EdgeInsets.zero,
-          minSize: 0,
-          onPressed: () {
-            CupertinoScaffold.showCupertinoModalBottomSheet(
-              enableDrag: false,
-              context: context,
-              builder: (context) {
-                return SingleHabitDetailPage(habit: habit);
-              },
-            );
-          },
-          child: Card(
-            elevation: 0,
-            child: Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  SizedBox(
-                    width: double.infinity,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            Icon(
-                              Icons.water_drop_outlined,
-                            ),
-                            SizedBox(width: 5),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
+  Widget _item(SingleHabitsFetched state) {
+    return Builder(builder: (context) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(
+            width: double.infinity,
+            child: ListView.separated(
+              shrinkWrap: true,
+              padding: EdgeInsets.zero,
+              physics: ClampingScrollPhysics(),
+              itemCount: state.habits.length,
+              itemBuilder: (context, index) {
+                final habit = state.habits[index];
+                final habitIcon = habit.emoji;
+                final reminderTime = habit.reminderModel?.reminderTime;
+                final habitDescription = habit.habitDescription;
+
+                return CustomButton(
+                  onTap: () {
+                    CupertinoScaffold.showCupertinoModalBottomSheet(
+                      enableDrag: false,
+                      context: context,
+                      builder: (contextFromSheet) {
+                        return SingleHabitDetailPage(habit: habit);
+                      },
+                    );
+                  },
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Row(
+                        children: [
+                          Expanded(
+                            child: SizedBox(
+                              child: Row(
                                 children: [
-                                  Text(
-                                    habit.habitName,
-                                    style: context.bodyLarge?.copyWith(fontWeight: FontWeight.bold),
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                  if (habit.habitDescription != null && habit.habitDescription!.isNotEmpty)
+                                  if (habitIcon != null)
                                     Text(
-                                      habit.habitDescription!,
-                                      style: context.bodySmall,
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
+                                      habitIcon,
+                                      style: context.headlineMedium,
                                     ),
+                                  if (habitIcon != null) SizedBox(width: 8),
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        habit.habitName,
+                                        style: context.bodyMedium?.copyWith(
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      if (habitDescription != null && habitDescription.isNotEmpty)
+                                        Text(
+                                          habitDescription,
+                                          style: context.bodySmall?.copyWith(
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                    ],
+                                  ),
                                 ],
                               ),
                             ),
-                          ],
-                        ),
-                      ],
+                          ),
+                          SizedBox(width: 10),
+                          if (reminderTime != null)
+                            Text(
+                              reminderTime.toHHMM(),
+                              style: context.bodySmall,
+                              textAlign: TextAlign.end,
+                            ),
+                        ],
+                      ),
+                      SizedBox(height: 10),
+                      WeeklyHabitGrid(habit: habit),
+                    ],
+                  ),
+                );
+              },
+              separatorBuilder: (context, index) {
+                return Align(
+                  alignment: Alignment.center,
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(vertical: 15),
+                    child: SizedBox(
+                      height: 30,
+                      child: VerticalDivider(),
                     ),
                   ),
-                  SizedBox(height: 10),
-                  SingleHabitGrid(habit: habit),
-                ],
-              ),
+                );
+              },
             ),
           ),
-        );
-      },
-    );
+        ],
+      );
+    });
   }
 
-  SizedBox _noDataWidget() {
-    return SizedBox(
-      width: double.infinity,
-      child: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text("You have not created habit yet"),
-          ],
+  Widget _noDataWidget() => SizedBox(
+        width: double.infinity,
+        child: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Builder(
+                builder: (context) {
+                  return Text(
+                    "You have not created habit yet",
+                    style: context.bodySmall,
+                  );
+                },
+              ),
+            ],
+          ),
         ),
-      ),
-    );
-  }
+      );
 }

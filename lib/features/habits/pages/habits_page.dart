@@ -1,7 +1,6 @@
 import '/core/core.dart';
 import '../../add_habit/add_habit_page.dart';
 import '../bloc/single_habit/single_habit_bloc.dart';
-import '../widgets/habit_item.dart';
 
 class HabitsPage extends StatefulWidget {
   const HabitsPage({super.key});
@@ -11,7 +10,7 @@ class HabitsPage extends StatefulWidget {
 }
 
 class _HabitsPageState extends State<HabitsPage> with SingleTickerProviderStateMixin {
-  final String _selectedSegment = 'SingleHabits';
+  // final String _selectedSegment = 'SingleHabits';
 
   late final AnimationController controller;
 
@@ -80,53 +79,53 @@ class _HabitsPageState extends State<HabitsPage> with SingleTickerProviderStateM
   }
 
   // Normal Alışkanlıklar için içerik
-  Widget _buildSingleHabits() {
-    return BlocBuilder<SingleHabitBloc, SingleHabitState>(
-      builder: (context, state) {
-        switch (state.runtimeType) {
-          case const (SingleHabitInitial):
-            return SizedBox.shrink();
-          case const (SingleHabitLoading):
-            return Center(child: CupertinoActivityIndicator());
-          case const (SingleHabitsFetched):
-            state as SingleHabitsFetched;
+  // Widget _buildSingleHabits() {
+  //   return BlocBuilder<SingleHabitBloc, SingleHabitState>(
+  //     builder: (context, state) {
+  //       switch (state.runtimeType) {
+  //         case const (SingleHabitInitial):
+  //           return SizedBox.shrink();
+  //         case const (SingleHabitLoading):
+  //           return Center(child: CupertinoActivityIndicator());
+  //         case const (SingleHabitsFetched):
+  //           state as SingleHabitsFetched;
 
-            if (state.habits.isEmpty) {
-              return Column(
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  Text("You do not have any habits"),
-                ],
-              );
-            }
+  //           if (state.habits.isEmpty) {
+  //             return Column(
+  //               mainAxisSize: MainAxisSize.max,
+  //               children: [
+  //                 Text("You do not have any habits"),
+  //               ],
+  //             );
+  //           }
 
-            return ListView.builder(
-              itemCount: state.habits.length,
-              padding: EdgeInsets.zero,
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-              itemBuilder: (context, index) {
-                final habit = state.habits[index];
+  //           return ListView.builder(
+  //             itemCount: state.habits.length,
+  //             padding: EdgeInsets.zero,
+  //             shrinkWrap: true,
+  //             physics: NeverScrollableScrollPhysics(),
+  //             itemBuilder: (context, index) {
+  //               final habit = state.habits[index];
 
-                return HabitItem(
-                  habitName: habit.habitName,
-                  value: true,
-                );
-              },
-            );
+  //               return HabitItem(
+  //                 habitName: habit.habitName,
+  //                 value: true,
+  //               );
+  //             },
+  //           );
 
-          case const (SingleHabitFetchError):
-            state as SingleHabitFetchError;
-            return Center(
-              child: Text(state.message),
-            );
+  //         case const (SingleHabitFetchError):
+  //           state as SingleHabitFetchError;
+  //           return Center(
+  //             child: Text(state.message),
+  //           );
 
-          default:
-            return Text("");
-        }
-      },
-    );
-  }
+  //         default:
+  //           return Text("");
+  //       }
+  //     },
+  //   );
+  // }
 
   // // Zincirlenmiş Alışkanlıklar için içerik
   // Widget _buildChainedHabits() {

@@ -1,6 +1,8 @@
+import 'package:habitrise/features/reminder/models/days/days_enum.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 import '/models/models.dart';
+import '../../../features/reminder/models/reminder/reminder_model.dart';
 import '../../core.dart';
 
 class HiveHelper {
@@ -14,9 +16,9 @@ class HiveHelper {
 
   Future<void> _initBoxes() async {
     try {
-      Hive.registerAdapter(HabitAdapter());
-
+      Hive.registerAdapter(DaysAdapter());
       Hive.registerAdapter(ReminderModelAdapter());
+      Hive.registerAdapter(HabitAdapter());
 
       await Hive.openBox<Habit>(HiveBoxes.singleHabitBox);
     } catch (e) {

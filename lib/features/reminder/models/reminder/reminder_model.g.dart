@@ -8,7 +8,7 @@ part of 'reminder_model.dart';
 
 class ReminderModelAdapter extends TypeAdapter<ReminderModel> {
   @override
-  final int typeId = 3;
+  final int typeId = 9;
 
   @override
   ReminderModel read(BinaryReader reader) {
@@ -17,18 +17,21 @@ class ReminderModelAdapter extends TypeAdapter<ReminderModel> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return ReminderModel(
-      reminderTime: fields[0] as String?,
-      days: (fields[1] as List?)?.cast<String>(),
+      id: fields[0] as int,
+      reminderTime: fields[1] as DateTime?,
+      days: (fields[2] as List?)?.cast<Days>(),
     );
   }
 
   @override
   void write(BinaryWriter writer, ReminderModel obj) {
     writer
-      ..writeByte(2)
+      ..writeByte(3)
       ..writeByte(0)
-      ..write(obj.reminderTime)
+      ..write(obj.id)
       ..writeByte(1)
+      ..write(obj.reminderTime)
+      ..writeByte(2)
       ..write(obj.days);
   }
 

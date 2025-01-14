@@ -13,18 +13,18 @@ class Last7DaysModel {
   });
 }
 
-class SingleHabitGrid extends StatefulWidget {
+class WeeklyHabitGrid extends StatefulWidget {
   final Habit habit;
-  const SingleHabitGrid({
+  const WeeklyHabitGrid({
     super.key,
     required this.habit,
   });
 
   @override
-  State<SingleHabitGrid> createState() => _SingleHabitGridState();
+  State<WeeklyHabitGrid> createState() => _WeeklyHabitGridState();
 }
 
-class _SingleHabitGridState extends State<SingleHabitGrid> {
+class _WeeklyHabitGridState extends State<WeeklyHabitGrid> {
   final List<Last7DaysModel> last7Days = [];
 
   @override
@@ -46,22 +46,16 @@ class _SingleHabitGridState extends State<SingleHabitGrid> {
 
   @override
   Widget build(BuildContext context) {
+    final habitColor = widget.habit.colorCode;
     return BlocBuilder<SingleHabitBloc, SingleHabitState>(
       builder: (context, state) {
         if (state is SingleHabitsFetched) {
           return SizedBox(
-            child: GridView.builder(
-              physics: const NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-              padding: EdgeInsets.zero,
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: last7Days.length, // Number of columns (7 for days)
-                crossAxisSpacing: 0,
-                mainAxisSpacing: 10, // Spacing between rows
-                childAspectRatio: .75, // Aspect ratio of the widget
-              ),
-              itemCount: last7Days.length,
-              itemBuilder: (context, index) {
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              spacing: 0,
+              children: List.generate(last7Days.length, (index) {
                 final day = last7Days[index].day;
                 final dateTimeIn7Days = last7Days[index].dateTime;
 
@@ -84,8 +78,10 @@ class _SingleHabitGridState extends State<SingleHabitGrid> {
                   }, // Null döndürüyoruz
                 );
 
-                return CustomButton(
-                  onTap: () {
+                return CupertinoButton(
+                  padding: EdgeInsets.zero,
+                  minSize: 0,
+                  onPressed: () {
                     final event = UpdateHabitForSelectedDayEvent(
                       habit: widget.habit,
                       dateToSaveOrRemove: dateTimeIn7Days,
@@ -94,43 +90,44 @@ class _SingleHabitGridState extends State<SingleHabitGrid> {
                     context.read<SingleHabitBloc>().add(event);
                   },
                   child: Column(
+                    mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Container(
-                        padding: EdgeInsets.zero,
-                        width: 24,
-                        height: 24,
-                        decoration: BoxDecoration(
-                          color: isCompletedDate ? CupertinoColors.activeGreen : Colors.white,
-                          borderRadius: BorderRadius.circular(4),
-                          border: Border.all(
-                            color: isToday ? context.cupertinoTheme.textTheme.actionTextStyle.color ?? Colors.transparent : Colors.transparent,
-                            width: 1.5,
-                            strokeAlign: BorderSide.strokeAlignOutside,
+                      Card(
+                        margin: EdgeInsets.zero,
+                        shape: RoundedRectangleBorder(
+                          side: BorderSide(
+                            color: isToday ? context.primary : Colors.transparent,
+                            width: 2,
                           ),
+                          borderRadius: BorderRadius.circular(5),
                         ),
-                        child: isCompletedDate
-                            ? Icon(
-                                CupertinoIcons.check_mark_circled,
-                                color: Colors.white,
-                                size: 14,
-                              )
-                            : null,
+                        color: isCompletedDate ? Color(habitColor ?? CupertinoColors.activeGreen.value) : null,
+                        child: SizedBox(
+                          width: 32,
+                          height: 32,
+                          child: isCompletedDate
+                              ? Icon(
+                                  CupertinoIcons.check_mark_circled,
+                                  color: Colors.white,
+                                  size: 14,
+                                )
+                              : null,
+                        ),
                       ),
-                      SizedBox(height: 1),
+                      SizedBox(height: 2),
                       Text(
                         _capitalize(day.toString().split('.').last),
                         maxLines: 1,
-                        overflow: TextOverflow.ellipsis, // Ellipsis for overflow
+                        overflow: TextOverflow.ellipsis,
                         textAlign: TextAlign.center,
-                        style: context.bodySmall?.copyWith(
-                          fontSize: 11, // Font size
-                        ),
+                        style: context.bodySmall?.copyWith(fontSize: 11),
                       ),
                     ],
                   ),
                 );
-              },
+              }),
             ),
           );
         }

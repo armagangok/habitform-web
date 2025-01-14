@@ -2,19 +2,19 @@ part of 'habit_icon_cubit.dart';
 
 @immutable
 sealed class HabitIconState {
-  late final IconData? iconData;
+  late final String? emoji;
 }
 
 final class HabitIconInitial extends HabitIconState {
   @override
-  final IconData? iconData;
+  final String? emoji;
 
-  HabitIconInitial({this.iconData});
+  HabitIconInitial({this.emoji});
 }
 
 final class HabitIconPicked extends HabitIconState {
   @override
-  final IconData? iconData;
+  final String? emoji;
 
-  HabitIconPicked({this.iconData});
+  HabitIconPicked({this.emoji});
 }

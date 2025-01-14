@@ -1,8 +1,9 @@
-import 'package:habitrise/features/habits/bloc/single_habit/single_habit_bloc.dart';
-import 'package:habitrise/features/habits/widgets/single_habit/single_habit_builder.dart';
+import 'package:habitrise/features/settings/settings_home/settings_home_page.dart';
 
 import '/core/core.dart';
 import '../add_habit/add_habit_page.dart';
+import '../habits/bloc/single_habit/single_habit_bloc.dart';
+import '../habits/widgets/single_habit/single_habit_builder.dart';
 
 class OverviewPage extends StatefulWidget {
   const OverviewPage({super.key});
@@ -41,18 +42,31 @@ class _OverviewPageState extends State<OverviewPage> with SingleTickerProviderSt
         child: CustomScrollView(
           slivers: <Widget>[
             CupertinoSliverNavigationBar(
-              leading: Align(
-                widthFactor: 1,
-                child: CupertinoButton(
-                  padding: EdgeInsets.zero,
-                  child: Icon(
-                    CupertinoIcons.gear,
-                    size: 32,
+              leading: Builder(builder: (context) {
+                return Align(
+                  widthFactor: 1,
+                  child: CupertinoButton(
+                    padding: EdgeInsets.zero,
+                    child: Icon(
+                      CupertinoIcons.gear,
+                      size: 32,
+                    ),
+                    onPressed: () {
+                      CupertinoScaffold.showCupertinoModalBottomSheet(
+                        context: context,
+                        builder: (contextFromSheet) {
+                          return SettingsPage();
+                        },
+                      );
+                    },
+                  ).animate().fadeIn(
+                        duration: Duration(milliseconds: 300),
+                      ),
+                );
+              }),
+              largeTitle: Text('HabitRise').animate().fadeIn(
+                    duration: Duration(milliseconds: 300),
                   ),
-                  onPressed: () {},
-                ),
-              ),
-              largeTitle: Text('HabitRise'),
               trailing: Align(
                 widthFactor: 1,
                 child: Builder(builder: (context) {
@@ -73,7 +87,7 @@ class _OverviewPageState extends State<OverviewPage> with SingleTickerProviderSt
                     },
                   );
                 }),
-              ),
+              ).animate().fadeIn(duration: Duration(milliseconds: 300)),
             ),
             SliverList(
               delegate: SliverChildListDelegate(
@@ -81,9 +95,11 @@ class _OverviewPageState extends State<OverviewPage> with SingleTickerProviderSt
                   Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
+                      SizedBox(height: 15),
                       SingleHabitBuilder().animate().fadeIn(
-                            duration: Duration(milliseconds: 400),
+                            duration: Duration(milliseconds: 300),
                           ),
+                      SizedBox(height: 40),
                     ],
                   ),
                 ],

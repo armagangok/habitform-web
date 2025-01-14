@@ -17,6 +17,7 @@ class SingleHabitBloc extends Bloc<SingleHabitEvent, SingleHabitState> {
     on<SaveSingleHabitEvent>(_saveNewHabit);
     on<DeleteSingleHabitEvent>(_deleteHabit);
     on<UpdateHabitForSelectedDayEvent>(_updateHabitForSelectedDay);
+    on<UpdateSingleHabitEvent>(_onUpdateHabit);
   }
 
   Future<void> _onFetchHabits(FetchSingleHabitEvent event, Emitter<SingleHabitState> emit) async {
@@ -101,6 +102,16 @@ class SingleHabitBloc extends Bloc<SingleHabitEvent, SingleHabitState> {
       add(FetchSingleHabitEvent());
     } catch (e) {
       // Handle errors as before
+    }
+  }
+
+  Future<void> _onUpdateHabit(UpdateSingleHabitEvent event, Emitter<SingleHabitState> emit) async {
+    try {
+      emit(SingleHabitLoading());
+      await habitService.updateHabit(event.habit);
+      add(FetchSingleHabitEvent());
+    } catch (e) {
+      emit(SingleHabitSaveError(e.toString()));
     }
   }
 }

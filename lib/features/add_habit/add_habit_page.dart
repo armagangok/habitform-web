@@ -1,12 +1,13 @@
 import '/core/core.dart';
-import '../../core/widgets/flushbar_widget.dart';
-import '../../core/widgets/habit_color_sheet/cubit/habit_color_cubit.dart';
-import '../../core/widgets/habit_icon/cubit/habit_icon_cubit.dart';
-import '../../core/widgets/habit_icon/icon_picker_sheet.dart';
-import '../../models/models.dart';
+import '/core/widgets/flushbar_widget.dart';
+import '/core/widgets/habit_color_sheet/cubit/habit_color_cubit.dart';
+import '/core/widgets/habit_icon/cubit/habit_icon_cubit.dart';
+import '/core/widgets/habit_icon/icon_picker_sheet.dart';
+import '/models/models.dart';
 import '../habits/bloc/single_habit/single_habit_bloc.dart';
-import 'bloc/cubit/reminder_time_cubit.dart';
-import 'widgets/add_reminder.dart';
+import '../reminder/bloc/reminder/reminder_bloc.dart';
+import '../reminder/models/reminder/reminder_model.dart';
+import 'widget/add_reminder_widget.dart';
 
 class AddHabitPage extends StatefulWidget {
   const AddHabitPage({super.key});
@@ -44,12 +45,16 @@ class _AddHabitPageState extends State<AddHabitPage> {
               AppFlushbar.shared.warningFlushbar("Habit name can't be empty");
               return;
             }
-            final ReminderModel? reminderModel = context.read<ReminderCubit>().state.reminderModel;
+            final ReminderModel? reminderModel = context.read<ReminderBloc>().state.reminder;
+            final String? emoji = context.read<HabitEmojiCubit>().state.emoji;
+            final int colorCode = context.read<HabitColorCubit>().state.color?.value ?? CupertinoColors.activeGreen.value;
             final Habit habit = Habit(
               id: UuidHelper.uid,
               habitName: _habitNameController.text.trim(),
               habitDescription: _habitDescriptionController.text,
               reminderModel: reminderModel,
+              emoji: emoji,
+              colorCode: colorCode,
             );
 
             context.read<SingleHabitBloc>().add(SaveSingleHabitEvent(habit: habit));
@@ -64,89 +69,12 @@ class _AddHabitPageState extends State<AddHabitPage> {
           Column(
             spacing: 15,
             children: [
-              _buildHabitTextField(text: "Name", controller: _habitNameController),
-              _buildHabitTextField(text: "Description", controller: _habitDescriptionController),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          "Reminder",
-                          style: context.bodySmall,
-                        ),
-                        BlocBuilder<ReminderCubit, ReminderTimeState>(
-                          builder: (context, state) {
-                            return CustomButton(
-                              onTap: () {
-                                showCupertinoModalBottomSheet(
-                                  enableDrag: false,
-                                  context: context,
-                                  builder: (contextFromSheet) => AddReminderPage(),
-                                );
-                              },
-                              child: SizedBox(
-                                width: double.infinity,
-                                child: Card.filled(
-                                  margin: EdgeInsets.zero,
-                                  color: Colors.white,
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Expanded(
-                                          child: BlocBuilder<ReminderCubit, ReminderTimeState>(
-                                            builder: (context, state) {
-                                              return SizedBox(
-                                                width: context.width(.4),
-                                                child: Column(
-                                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                                  children: [
-                                                    Text(
-                                                      state.reminderModel?.reminderTime ?? "None",
-                                                      textAlign: TextAlign.center,
-                                                    ),
-                                                    if (state.reminderModel?.days != null)
-                                                      Wrap(
-                                                        runSpacing: 0,
-                                                        spacing: 5,
-                                                        children: List.generate(
-                                                          state.reminderModel?.days?.length ?? 0,
-                                                          (index) {
-                                                            final day = state.reminderModel!.days!.toList()[index];
-                                                            return Text(
-                                                              day,
-                                                              style: context.bodySmall?.copyWith(
-                                                                color: CupertinoColors.systemBlue,
-                                                              ),
-                                                            );
-                                                          },
-                                                        ),
-                                                      ),
-                                                  ],
-                                                ),
-                                              );
-                                            },
-                                          ),
-                                        ),
-                                        CupertinoListTileChevron(),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            );
-                          },
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
+              SafeArea(
+                bottom: false,
+                child: _buildHabitTextField(text: "Name", controller: _habitNameController),
               ),
+              _buildHabitTextField(text: "Description", controller: _habitDescriptionController),
+              AddReminderWidget(),
               Row(
                 children: [
                   Expanded(
@@ -166,7 +94,7 @@ class _AddHabitPageState extends State<AddHabitPage> {
                               builder: (context) {
                                 return IconPickerSheet(
                                   onIconSelected: (icon) {
-                                    context.read<HabitIconCubit>().pickIcon(icon);
+                                    context.read<HabitEmojiCubit>().pickIcon(icon);
                                   },
                                 );
                               },
@@ -176,20 +104,19 @@ class _AddHabitPageState extends State<AddHabitPage> {
                             width: double.infinity,
                             child: Card.filled(
                               margin: EdgeInsets.zero,
-                              color: Colors.white,
                               child: Padding(
-                                padding: const EdgeInsets.all(8.0),
+                                padding: const EdgeInsets.all(10),
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
-                                    BlocBuilder<HabitIconCubit, HabitIconState>(
+                                    BlocBuilder<HabitEmojiCubit, HabitIconState>(
                                       builder: (context, state) {
-                                        return state.iconData == null
+                                        return state.emoji == null
                                             ? Text(
                                                 "None",
                                                 textAlign: TextAlign.center,
                                               )
-                                            : Icon(state.iconData);
+                                            : Text(state.emoji ?? "");
                                       },
                                     ),
                                     CupertinoListTileChevron(),
@@ -231,7 +158,7 @@ class _AddHabitPageState extends State<AddHabitPage> {
                                   margin: EdgeInsets.zero,
                                   color: state.color ?? CupertinoColors.activeBlue,
                                   child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
+                                    padding: const EdgeInsets.all(10),
                                     child: Row(
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
@@ -275,8 +202,14 @@ class _AddHabitPageState extends State<AddHabitPage> {
           text,
           style: context.bodySmall,
         ),
-        CupertinoTextField(
-          controller: controller,
+        Card(
+          child: CupertinoTextField(
+            padding: EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+            ),
+            controller: controller,
+          ),
         ),
       ],
     );

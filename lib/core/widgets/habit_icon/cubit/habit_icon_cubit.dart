@@ -2,10 +2,10 @@ import '../../../core.dart';
 
 part 'habit_icon_state.dart';
 
-class HabitIconCubit extends Cubit<HabitIconState> {
-  HabitIconCubit() : super(HabitIconInitial(iconData: null));
+class HabitEmojiCubit extends Cubit<HabitIconState> {
+  HabitEmojiCubit() : super(HabitIconInitial(emoji: null));
 
-  void pickIcon(IconData? iconData) {
-    emit(HabitIconPicked(iconData: iconData));
+  void pickIcon(String? iconData) {
+    emit(HabitIconPicked(emoji: iconData));
   }
 }

@@ -34,3 +34,9 @@ class UpdateHabitForSelectedDayEvent extends SingleHabitEvent {
     required this.dateToSaveOrRemove,
   });
 }
+
+class UpdateSingleHabitEvent extends SingleHabitEvent {
+  final Habit habit;
+  
+  UpdateSingleHabitEvent({required this.habit});
+}

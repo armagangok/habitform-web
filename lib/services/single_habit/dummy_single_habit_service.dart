@@ -1,6 +1,6 @@
 import 'package:habitrise/services/single_habit/i_single_habit_service.dart';
 
-import '../../core/helpers/unique_id/unique_id.dart';
+import '../../core/core.dart';
 import '../../models/single_habit/habit_model.dart';
 
 class MockHabitService extends IHabitService {
@@ -18,25 +18,29 @@ class MockHabitService extends IHabitService {
         id: UuidHelper.uid,
         habitName: "Wake up fella!",
         habitDescription: "Some test description goes here",
-        icon: "🛌",
+        emoji: "🛌",
+        colorCode: Colors.red.value,
       ),
       Habit(
         id: UuidHelper.uid,
         habitName: "Watch your face",
         habitDescription: "Some test description goes here",
-        icon: "🧼",
+        emoji: "🧼",
+        colorCode: Colors.green.value,
       ),
       Habit(
         id: UuidHelper.uid,
         habitName: "Drink some water",
         habitDescription: "Some test description goes here",
-        icon: "💧",
+        emoji: "💧",
+        colorCode: Colors.orange.value,
       ),
       Habit(
         id: UuidHelper.uid,
         habitName: "Make Your Bed",
         habitDescription: "Some test description goes here",
-        icon: "🛌",
+        emoji: "🛌",
+        colorCode: Colors.cyan.value,
       ),
     ];
   }

@@ -1,9 +1,8 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'dart:convert';
-
 import 'package:flutter/foundation.dart';
-import 'package:habitrise/models/models.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+
+import '../../features/reminder/models/reminder/reminder_model.dart';
 
 part 'habit_model.g.dart';
 
@@ -19,7 +18,7 @@ class Habit extends HiveObject {
   final String? habitDescription;
 
   @HiveField(3)
-  final String? icon;
+  final String? emoji;
 
   @HiveField(4)
   final ReminderModel? reminderModel;
@@ -30,78 +29,56 @@ class Habit extends HiveObject {
   @HiveField(6)
   bool isCompletedToday;
 
+  @HiveField(7)
+  final int colorCode;
+
   Habit({
     required this.id,
     required this.habitName,
     this.habitDescription,
-    this.icon,
+    this.emoji,
     this.reminderModel,
     this.completionDates,
     this.isCompletedToday = false,
+    required this.colorCode,
   });
 
   Habit copyWith({
     String? id,
     String? habitName,
     String? habitDescription,
-    String? icon,
+    String? emoji,
     ReminderModel? reminderModel,
     List<String>? completionDates,
     bool? isCompletedToday,
+    int? colorCode,
   }) {
     return Habit(
       id: id ?? this.id,
       habitName: habitName ?? this.habitName,
       habitDescription: habitDescription ?? this.habitDescription,
-      icon: icon ?? this.icon,
+      emoji: emoji ?? this.emoji,
       reminderModel: reminderModel ?? this.reminderModel,
       completionDates: completionDates ?? this.completionDates,
       isCompletedToday: isCompletedToday ?? this.isCompletedToday,
+      colorCode: colorCode ?? this.colorCode,
     );
-  }
-
-  Map<String, dynamic> toMap() {
-    return <String, dynamic>{
-      'id': id,
-      'habitName': habitName,
-      'habitDescription': habitDescription,
-      'icon': icon,
-      'reminderModel': reminderModel?.toMap(),
-      'completionDates': completionDates,
-      'isCompletedToday': isCompletedToday,
-    };
-  }
-
-  factory Habit.fromMap(Map<String, dynamic> map) {
-    return Habit(
-      id: map['id'] as String,
-      habitName: map['habitName'] as String,
-      habitDescription: map['habitDescription'] != null ? map['habitDescription'] as String : null,
-      icon: map['icon'] != null ? map['icon'] as String : null,
-      reminderModel: map['reminderModel'] != null ? ReminderModel.fromMap(map['reminderModel'] as Map<String, dynamic>) : null,
-      completionDates: map['completionDates'] != null ? List<String>.from((map['completionDates'] as List<String>)) : null,
-      isCompletedToday: map['isCompletedToday'] as bool,
-    );
-  }
-
-  String toJson() => json.encode(toMap());
-
-  factory Habit.fromJson(String source) => Habit.fromMap(json.decode(source) as Map<String, dynamic>);
-
-  @override
-  String toString() {
-    return 'Habit(id: $id, habitName: $habitName, habitDescription: $habitDescription, icon: $icon, reminderModel: $reminderModel, completionDates: $completionDates, isCompletedToday: $isCompletedToday)';
   }
 
   @override
   bool operator ==(covariant Habit other) {
     if (identical(this, other)) return true;
 
-    return other.id == id && other.habitName == habitName && other.habitDescription == habitDescription && other.icon == icon && other.reminderModel == reminderModel && listEquals(other.completionDates, completionDates) && other.isCompletedToday == isCompletedToday;
+    return other.id == id && other.habitName == habitName && other.habitDescription == habitDescription && other.emoji == emoji && other.reminderModel == reminderModel && listEquals(other.completionDates, completionDates) && other.isCompletedToday == isCompletedToday;
   }
 
   @override
   int get hashCode {
-    return id.hashCode ^ habitName.hashCode ^ habitDescription.hashCode ^ icon.hashCode ^ reminderModel.hashCode ^ completionDates.hashCode ^ isCompletedToday.hashCode;
+    return id.hashCode ^ habitName.hashCode ^ habitDescription.hashCode ^ emoji.hashCode ^ reminderModel.hashCode ^ completionDates.hashCode ^ isCompletedToday.hashCode;
+  }
+
+  @override
+  String toString() {
+    return 'Habit(id: $id, habitName: $habitName, habitDescription: $habitDescription, emoji: $emoji, reminderModel: $reminderModel, completionDates: $completionDates, isCompletedToday: $isCompletedToday, colorCode: $colorCode)';
   }
 }
