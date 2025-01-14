@@ -14,4 +14,4 @@ class UpdateHabitEvent extends EditHabitEvent {
 
   @override
   List<Object> get props => [habit];
-} 
+}

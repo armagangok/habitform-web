@@ -7,6 +7,6 @@ class UpdateReminderTime extends ReminderEvent {}
 
 class SetReminderEvent extends ReminderEvent {
   final ReminderModel reminder;
-  
+
   SetReminderEvent({required this.reminder});
 }

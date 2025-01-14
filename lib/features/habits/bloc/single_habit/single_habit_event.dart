@@ -37,6 +37,6 @@ class UpdateHabitForSelectedDayEvent extends SingleHabitEvent {
 
 class UpdateSingleHabitEvent extends SingleHabitEvent {
   final Habit habit;
-  
+
   UpdateSingleHabitEvent({required this.habit});
 }

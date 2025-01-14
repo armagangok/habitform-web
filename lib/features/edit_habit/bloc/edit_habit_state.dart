@@ -2,7 +2,7 @@ part of 'edit_habit_bloc.dart';
 
 abstract class EditHabitState extends Equatable {
   const EditHabitState();
-  
+
   @override
   List<Object> get props => [];
 }
@@ -20,4 +20,4 @@ class EditHabitFailure extends EditHabitState {
 
   @override
   List<Object> get props => [error];
-} 
+}

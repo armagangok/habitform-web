@@ -1,5 +1,6 @@
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
 import '../../../models/single_habit/habit_model.dart';
 import '../../habits/bloc/single_habit/single_habit_bloc.dart';
 
@@ -25,4 +26,4 @@ class EditHabitBloc extends Bloc<EditHabitEvent, EditHabitState> {
       emit(EditHabitFailure(error: e.toString()));
     }
   }
-} 
+}

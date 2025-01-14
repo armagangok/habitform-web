@@ -23,8 +23,7 @@ class HabitAdapter extends TypeAdapter<Habit> {
       emoji: fields[3] as String?,
       reminderModel: fields[4] as ReminderModel?,
       completionDates: (fields[5] as List?)?.cast<String>(),
-      isCompletedToday: fields[6] as bool,
-      colorCode: fields[7] as int,
+      colorCode: fields[6] as int,
     );
   }
 
@@ -45,8 +44,6 @@ class HabitAdapter extends TypeAdapter<Habit> {
       ..writeByte(5)
       ..write(obj.completionDates)
       ..writeByte(6)
-      ..write(obj.isCompletedToday)
-      ..writeByte(7)
       ..write(obj.colorCode);
   }
 
@@ -54,9 +51,5 @@ class HabitAdapter extends TypeAdapter<Habit> {
   int get hashCode => typeId.hashCode;
 
   @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is HabitAdapter &&
-          runtimeType == other.runtimeType &&
-          typeId == other.typeId;
+  bool operator ==(Object other) => identical(this, other) || other is HabitAdapter && runtimeType == other.runtimeType && typeId == other.typeId;
 }

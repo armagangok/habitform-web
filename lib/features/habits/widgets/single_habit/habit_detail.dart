@@ -18,14 +18,32 @@ class SingleHabitDetailPage extends StatefulWidget {
 }
 
 class _SingleHabitDetailPageState extends State<SingleHabitDetailPage> {
+  late Habit currentHabit;
+
+  @override
+  void initState() {
+    super.initState();
+    currentHabit = widget.habit;
+  }
+
   @override
   Widget build(BuildContext context) {
-    final days = widget.habit.reminderModel?.days;
-    final remindTime = widget.habit.reminderModel?.reminderTime?.toHHMM();
-
-    return BlocBuilder<SingleHabitBloc, SingleHabitState>(
+    return BlocConsumer<SingleHabitBloc, SingleHabitState>(
+      listener: (context, state) {
+        if (state is SingleHabitsFetched) {
+          final updatedHabit = state.habits.firstWhere(
+            (habit) => habit.id == currentHabit.id,
+            orElse: () => currentHabit,
+          );
+          setState(() {
+            currentHabit = updatedHabit;
+          });
+        }
+      },
       builder: (context, state) {
-        print(state);
+        final days = currentHabit.reminderModel?.days;
+        final remindTime = currentHabit.reminderModel?.reminderTime?.toHHMM();
+
         return Stack(
           children: [
             CupertinoPageScaffold(
@@ -38,8 +56,8 @@ class _SingleHabitDetailPageState extends State<SingleHabitDetailPage> {
                     child: CustomHeader(
                       text: "INFORMATION",
                       child: item(
-                        widget.habit.habitName,
-                        widget.habit.habitDescription,
+                        currentHabit.habitName,
+                        currentHabit.habitDescription,
                       ),
                     ),
                   ),
@@ -55,24 +73,38 @@ class _SingleHabitDetailPageState extends State<SingleHabitDetailPage> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      SingleHabitDetailGrid(habit: widget.habit),
+                      SingleHabitDetailGrid(habit: currentHabit),
                       SizedBox(height: 10),
                       CupertinoButton.tinted(
                         sizeStyle: CupertinoButtonSize.small,
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text("Complete Today"),
-                            SizedBox(width: 5),
-                            Icon(
-                              CupertinoIcons.calendar_today,
-                            )
-                          ],
+                        child: AnimatedCrossFade(
+                          alignment: Alignment.center,
+                          firstCurve: Curves.easeIn,
+                          secondCurve: Curves.easeIn,
+                          sizeCurve: Curves.easeIn,
+                          firstChild: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text("Complete Today"),
+                              SizedBox(width: 5),
+                              Icon(CupertinoIcons.calendar_badge_plus),
+                            ],
+                          ),
+                          secondChild: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text("Uncomplete Today"),
+                              SizedBox(width: 5),
+                              Icon(CupertinoIcons.calendar_badge_minus),
+                            ],
+                          ),
+                          crossFadeState: currentHabit.isCompletedToday ? CrossFadeState.showSecond : CrossFadeState.showFirst,
+                          duration: Duration(milliseconds: 400),
                         ),
                         onPressed: () {
                           final event = UpdateHabitForSelectedDayEvent(
                             dateToSaveOrRemove: DateTime.now(),
-                            habit: widget.habit,
+                            habit: currentHabit,
                           );
 
                           context.read<SingleHabitBloc>().add(event);
@@ -99,7 +131,7 @@ class _SingleHabitDetailPageState extends State<SingleHabitDetailPage> {
                             sizeStyle: CupertinoButtonSize.small,
                             padding: EdgeInsets.zero,
                             onPressed: () {
-                              context.read<SingleHabitBloc>().add(DeleteSingleHabitEvent(habit: widget.habit));
+                              context.read<SingleHabitBloc>().add(DeleteSingleHabitEvent(habit: currentHabit));
                               navigator.pop();
                             },
                             child: Row(
@@ -132,7 +164,7 @@ class _SingleHabitDetailPageState extends State<SingleHabitDetailPage> {
                                   enableDrag: false,
                                   context: context,
                                   builder: (context) {
-                                    return EditHabitPage(habit: widget.habit);
+                                    return EditHabitPage(habit: currentHabit);
                                   },
                                 );
                               },

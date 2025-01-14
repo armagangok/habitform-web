@@ -27,9 +27,6 @@ class Habit extends HiveObject {
   List<String>? completionDates;
 
   @HiveField(6)
-  bool isCompletedToday;
-
-  @HiveField(7)
   final int colorCode;
 
   Habit({
@@ -39,7 +36,6 @@ class Habit extends HiveObject {
     this.emoji,
     this.reminderModel,
     this.completionDates,
-    this.isCompletedToday = false,
     required this.colorCode,
   });
 
@@ -60,7 +56,6 @@ class Habit extends HiveObject {
       emoji: emoji ?? this.emoji,
       reminderModel: reminderModel ?? this.reminderModel,
       completionDates: completionDates ?? this.completionDates,
-      isCompletedToday: isCompletedToday ?? this.isCompletedToday,
       colorCode: colorCode ?? this.colorCode,
     );
   }
@@ -69,16 +64,26 @@ class Habit extends HiveObject {
   bool operator ==(covariant Habit other) {
     if (identical(this, other)) return true;
 
-    return other.id == id && other.habitName == habitName && other.habitDescription == habitDescription && other.emoji == emoji && other.reminderModel == reminderModel && listEquals(other.completionDates, completionDates) && other.isCompletedToday == isCompletedToday;
+    return other.id == id && other.habitName == habitName && other.habitDescription == habitDescription && other.emoji == emoji && other.reminderModel == reminderModel && listEquals(other.completionDates, completionDates);
   }
 
   @override
   int get hashCode {
-    return id.hashCode ^ habitName.hashCode ^ habitDescription.hashCode ^ emoji.hashCode ^ reminderModel.hashCode ^ completionDates.hashCode ^ isCompletedToday.hashCode;
+    return id.hashCode ^ habitName.hashCode ^ habitDescription.hashCode ^ emoji.hashCode ^ reminderModel.hashCode ^ completionDates.hashCode;
   }
 
   @override
   String toString() {
-    return 'Habit(id: $id, habitName: $habitName, habitDescription: $habitDescription, emoji: $emoji, reminderModel: $reminderModel, completionDates: $completionDates, isCompletedToday: $isCompletedToday, colorCode: $colorCode)';
+    return 'Habit(id: $id, habitName: $habitName, habitDescription: $habitDescription, emoji: $emoji, reminderModel: $reminderModel, completionDates: $completionDates, colorCode: $colorCode)';
+  }
+
+  bool get isCompletedToday {
+    if (completionDates == null || completionDates!.isEmpty) return false;
+
+    final today = DateTime.now();
+    return completionDates!.any((dateStr) {
+      final date = DateTime.parse(dateStr);
+      return date.year == today.year && date.month == today.month && date.day == today.day;
+    });
   }
 }
