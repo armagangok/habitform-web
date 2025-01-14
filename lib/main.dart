@@ -41,7 +41,7 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
         darkTheme: Themes.darkTheme,
-        theme: Themes.darkTheme,
+        theme: Themes.lightTheme,
         themeMode: ThemeMode.light,
         debugShowCheckedModeBanner: KDebug.debugModeEnabled,
         navigatorKey: NavigationService.shared.navigatorKey,

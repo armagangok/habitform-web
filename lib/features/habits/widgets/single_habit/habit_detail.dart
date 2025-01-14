@@ -47,9 +47,12 @@ class _SingleHabitDetailPageState extends State<SingleHabitDetailPage> {
         return Stack(
           children: [
             CupertinoPageScaffold(
-              navigationBar: SheetHeader(title: "Habit Detail"),
+              navigationBar: SheetHeader(
+                title: "Habit Detail",
+                closeButtonPosition: CloseButtonPosition.left,
+              ),
               child: ListView(
-                padding: EdgeInsets.all(10),
+                padding: EdgeInsets.all(20),
                 children: [
                   SafeArea(
                     bottom: false,
@@ -61,7 +64,7 @@ class _SingleHabitDetailPageState extends State<SingleHabitDetailPage> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 20),
+                  SizedBox(height: 25),
                   CustomHeader(
                     text: "REMINDER",
                     child: item(
@@ -69,48 +72,95 @@ class _SingleHabitDetailPageState extends State<SingleHabitDetailPage> {
                       days?.toString(),
                     ),
                   ),
-                  SizedBox(height: 20),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      SingleHabitDetailGrid(habit: currentHabit),
-                      SizedBox(height: 10),
-                      CupertinoButton.tinted(
-                        sizeStyle: CupertinoButtonSize.small,
-                        child: AnimatedCrossFade(
-                          alignment: Alignment.center,
-                          firstCurve: Curves.easeIn,
-                          secondCurve: Curves.easeIn,
-                          sizeCurve: Curves.easeIn,
-                          firstChild: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text("Complete Today"),
-                              SizedBox(width: 5),
-                              Icon(CupertinoIcons.calendar_badge_plus),
-                            ],
-                          ),
-                          secondChild: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text("Uncomplete Today"),
-                              SizedBox(width: 5),
-                              Icon(CupertinoIcons.calendar_badge_minus),
-                            ],
-                          ),
-                          crossFadeState: currentHabit.isCompletedToday ? CrossFadeState.showSecond : CrossFadeState.showFirst,
-                          duration: Duration(milliseconds: 400),
-                        ),
-                        onPressed: () {
-                          final event = UpdateHabitForSelectedDayEvent(
-                            dateToSaveOrRemove: DateTime.now(),
-                            habit: currentHabit,
-                          );
+                  SizedBox(height: 25),
+                  CustomHeader(
+                    text: "HABIT DATA",
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        SingleHabitDetailGrid(habit: currentHabit),
+                        SizedBox(height: 10),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          spacing: 10,
+                          children: [
+                            CupertinoButton.tinted(
+                              sizeStyle: CupertinoButtonSize.small,
+                              onPressed: () {},
+                              child: Row(
+                                spacing: 5,
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text("Calendar"),
+                                  Icon(CupertinoIcons.calendar),
+                                ],
+                              ),
+                            ),
+                            CupertinoButton.tinted(
+                              color: currentHabit.isCompletedToday ? Color(currentHabit.colorCode) : Colors.grey.shade500,
+                              sizeStyle: CupertinoButtonSize.small,
+                              child: AnimatedSwitcher(
+                                duration: Duration(milliseconds: 400),
+                                transitionBuilder: (Widget child, Animation<double> animation) {
+                                  return FadeTransition(
+                                    opacity: animation,
+                                    child: SizeTransition(
+                                      sizeFactor: animation,
+                                      axis: Axis.horizontal, // Yatay eksende animasyon
+                                      axisAlignment: -1, // Soldan hizala
+                                      child: child,
+                                    ),
+                                  );
+                                },
+                                child: currentHabit.isCompletedToday
+                                    ? Row(
+                                        key: ValueKey('completed'),
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Text(
+                                            "Uncomplete Today",
+                                            style: TextStyle(
+                                              color: currentHabit.isCompletedToday ? Color(currentHabit.colorCode) : Colors.grey.shade500,
+                                            ),
+                                          ),
+                                          SizedBox(width: 5),
+                                          Icon(
+                                            CupertinoIcons.calendar_badge_minus,
+                                            color: currentHabit.isCompletedToday ? Color(currentHabit.colorCode) : Colors.grey.shade500,
+                                          ),
+                                        ],
+                                      )
+                                    : Row(
+                                        key: ValueKey('uncompleted'),
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Text(
+                                            "Complete Today",
+                                            style: TextStyle(
+                                              color: currentHabit.isCompletedToday ? Color(currentHabit.colorCode) : Colors.grey.shade500,
+                                            ),
+                                          ),
+                                          SizedBox(width: 5),
+                                          Icon(
+                                            CupertinoIcons.calendar_badge_plus,
+                                            color: currentHabit.isCompletedToday ? Color(currentHabit.colorCode) : Colors.grey.shade500,
+                                          ),
+                                        ],
+                                      ),
+                              ),
+                              onPressed: () {
+                                final event = UpdateHabitForSelectedDayEvent(
+                                  dateToSaveOrRemove: DateTime.now(),
+                                  habit: currentHabit,
+                                );
 
-                          context.read<SingleHabitBloc>().add(event);
-                        },
-                      ),
-                    ],
+                                context.read<SingleHabitBloc>().add(event);
+                              },
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),
@@ -138,7 +188,7 @@ class _SingleHabitDetailPageState extends State<SingleHabitDetailPage> {
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 Text(
-                                  "Archive",
+                                  "Delete",
                                   style: TextStyle(
                                     color: CupertinoColors.destructiveRed,
                                     fontWeight: FontWeight.w500,
@@ -146,7 +196,7 @@ class _SingleHabitDetailPageState extends State<SingleHabitDetailPage> {
                                 ),
                                 SizedBox(width: 5),
                                 Icon(
-                                  FontAwesomeIcons.boxArchive,
+                                  FontAwesomeIcons.solidTrashCan,
                                   color: CupertinoColors.destructiveRed,
                                 ),
                               ],

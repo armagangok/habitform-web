@@ -1,8 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import '/core/core.dart';
 import '../../../../models/models.dart';
-import '../../../add_habit/enum/days_enum.dart';
-import 'weekly_habit_grid.dart';
+import '../../bloc/single_habit/single_habit_bloc.dart';
 
 class SingleHabitDetailGrid extends StatefulWidget {
   final Habit habit;
@@ -16,26 +15,19 @@ class SingleHabitDetailGrid extends StatefulWidget {
 }
 
 class _SingleHabitDetailGridState extends State<SingleHabitDetailGrid> {
-  final List<Last7DaysModel> last90Days = [];
+  final List<DateTime> last90Days = [];
   final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
     super.initState();
-    // Initialize habits for the last 6 days and today
+    // Son 90 günü oluştur
     DateTime today = DateTime.now();
     for (int i = 180; i >= 0; i--) {
-      DateTime day = today.subtract(Duration(days: i));
-
-      last90Days.add(
-        Last7DaysModel(
-          day: getDayEnum(day.weekday),
-          dateTime: day,
-        ),
-      );
+      last90Days.add(today.subtract(Duration(days: i)));
     }
 
-    // Scroll to the end after the first frame is rendered
+    // Scroll'u sona ayarla
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
     });
@@ -43,48 +35,74 @@ class _SingleHabitDetailGridState extends State<SingleHabitDetailGrid> {
 
   @override
   Widget build(BuildContext context) {
+    // Tamamlanmış tarihleri sırala
+    final completionDates = widget.habit.completionDates?..sort();
+
+    DateTime? startDate;
+    DateTime? endDate;
+
+    // Eğer en az iki tamamlanmış tarih varsa başlangıç ve bitiş tarihlerini belirle
+    if (completionDates != null && completionDates.length > 1) {
+      startDate = completionDates.first;
+      endDate = completionDates.last;
+    }
+
     return SizedBox(
       height: 200,
       width: context.width(1),
       child: GridView.builder(
-        controller: _scrollController, // Add the controller here
+        controller: _scrollController,
         scrollDirection: Axis.horizontal,
         itemCount: last90Days.length,
         shrinkWrap: true,
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 7, // Number of columns (7 for days)
+          crossAxisCount: 7, // Haftalık kolon sayısı
           crossAxisSpacing: 6,
-          mainAxisSpacing: 11, // Spacing between rows
-          childAspectRatio: 1, // Aspect ratio of the widget
+          mainAxisSpacing: 11, // Satırlar arası boşluk
+          childAspectRatio: 1, // Widget oranı
         ),
         itemBuilder: (context, index) {
-          final dateTimeIn90Days = last90Days[index].dateTime;
-          final isToday = last90Days[index].dateTime.isToday;
-          bool isCompletedDate = false;
+          final dateTimeIn90Days = last90Days[index];
+          final isToday = dateTimeIn90Days.isToday;
 
-          final completionDates = widget.habit.completionDates;
+          bool isCompletedDate = completionDates?.any((d) => d.isSameDayWith(dateTimeIn90Days)) ?? false;
 
-          completionDates?.firstWhere(
-            (d) {
-              final completedDate = DateTime.parse(d);
+          // İki tarih arasındaki öğe mi?
+          bool isBetweenDates = false;
+          if (startDate != null && endDate != null) {
+            isBetweenDates = dateTimeIn90Days.isAfter(startDate) && dateTimeIn90Days.isBefore(endDate);
+          }
 
-              isCompletedDate = completedDate.isSameDayWith(dateTimeIn90Days);
+          final habitColor = widget.habit.colorCode;
 
-              return isCompletedDate;
+          return CustomButton(
+            onTap: () {
+              final event = UpdateHabitForSelectedDayEvent(
+                dateToSaveOrRemove: dateTimeIn90Days,
+                habit: widget.habit,
+              );
+
+              context.read<SingleHabitBloc>().add(event);
             },
-            orElse: () {
-              isCompletedDate = false;
-              return "";
-            }, // Null döndürüyoruz
-          );
-
-          return Container(
-            decoration: BoxDecoration(
-              color: isCompletedDate ? Colors.green : context.theme.cardColor,
-              borderRadius: BorderRadius.circular(4),
-              border: Border.all(
-                color: isToday ? context.primary : Colors.transparent,
-                width: 2,
+            child: Card(
+              elevation: 0.1,
+              surfaceTintColor: Colors.transparent,
+              shadowColor: Colors.white.withAlpha(50),
+              color: isCompletedDate
+                  ? Color(habitColor)
+                  : isBetweenDates
+                      ? Color(habitColor).withOpacity(.1) // İki tarih arası
+                      : context.theme.cardColor, // Diğer öğeler
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(6),
+                side: BorderSide(
+                  color: isToday ? context.primary : context.theme.dividerColor.withAlpha(100),
+                  width: isToday ? 2.5 : .75,
+                ),
+              ),
+              child: SizedBox(
+                height: 24,
+                width: 24,
               ),
             ),
           );

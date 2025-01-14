@@ -32,7 +32,7 @@ class _WeeklyHabitGridState extends State<WeeklyHabitGrid> {
     super.initState();
     // Initialize habits for the last 6 days and today
     DateTime today = DateTime.now();
-    for (int i = 6; i >= 0; i--) {
+    for (int i = 9; i >= 0; i--) {
       DateTime day = today.subtract(Duration(days: i));
 
       last7Days.add(
@@ -66,15 +66,13 @@ class _WeeklyHabitGridState extends State<WeeklyHabitGrid> {
 
                 completionDates?.firstWhere(
                   (d) {
-                    final completedDate = DateTime.parse(d);
-
-                    isCompletedDate = completedDate.isSameDayWith(dateTimeIn7Days);
+                    isCompletedDate = d.isSameDayWith(dateTimeIn7Days);
 
                     return isCompletedDate;
                   },
                   orElse: () {
                     isCompletedDate = false;
-                    return "";
+                    return DateTime.now();
                   }, // Null döndürüyoruz
                 );
 
@@ -103,7 +101,7 @@ class _WeeklyHabitGridState extends State<WeeklyHabitGrid> {
                           ),
                           borderRadius: BorderRadius.circular(5),
                         ),
-                        color: isCompletedDate ? Color(habitColor ?? CupertinoColors.activeGreen.value) : null,
+                        color: isCompletedDate ? Color(habitColor) : null,
                         child: SizedBox(
                           width: 32,
                           height: 32,

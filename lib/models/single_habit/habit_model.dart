@@ -24,7 +24,7 @@ class Habit extends HiveObject {
   final ReminderModel? reminderModel;
 
   @HiveField(5)
-  List<String>? completionDates;
+  List<DateTime>? completionDates;
 
   @HiveField(6)
   final int colorCode;
@@ -45,7 +45,7 @@ class Habit extends HiveObject {
     String? habitDescription,
     String? emoji,
     ReminderModel? reminderModel,
-    List<String>? completionDates,
+    List<DateTime>? completionDates,
     bool? isCompletedToday,
     int? colorCode,
   }) {
@@ -82,7 +82,7 @@ class Habit extends HiveObject {
 
     final today = DateTime.now();
     return completionDates!.any((dateStr) {
-      final date = DateTime.parse(dateStr);
+      final date = dateStr;
       return date.year == today.year && date.month == today.month && date.day == today.day;
     });
   }

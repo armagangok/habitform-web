@@ -89,7 +89,7 @@ class _EditHabitPageState extends State<EditHabitPage> {
           padding: EdgeInsets.all(20),
           children: [
             Column(
-              spacing: 15,
+              spacing: 25,
               children: [
                 SafeArea(
                   bottom: false,

@@ -1,6 +1,6 @@
-import '../../../../core/core.dart';
-import '../../../../core/helpers/notifications/notification_helper.dart';
-import '../../../../core/widgets/flushbar_widget.dart';
+import '/core/core.dart';
+import '/core/helpers/notifications/notification_helper.dart';
+import '/core/widgets/flushbar_widget.dart';
 import '../../models/days/days_enum.dart';
 import '../../models/reminder/reminder_model.dart';
 import '../../service/reminder_service.dart';
@@ -13,10 +13,6 @@ part 'reminder_state.dart';
 
 class ReminderBloc extends Bloc<ReminderEvent, ReminderState> {
   ReminderBloc() : super(ReminderStateInitial()) {
-    on<ReminderEvent>((event, emit) {
-      // TODO: implement event handler
-    });
-
     on<SetReminderEvent>((event, emit) {
       emit(ReminderSelectionState(reminder: event.reminder));
     });
@@ -24,10 +20,6 @@ class ReminderBloc extends Bloc<ReminderEvent, ReminderState> {
 
   void initializeReminderData(ReminderModel? initialReminder, BuildContext context) {
     final timeFromPicker = context.read<RemindTimeCubit>().state;
-
-    print("object");
-    print(initialReminder.toString());
-    print("object");
 
     if (initialReminder != null) {
       final selectedDays = initialReminder.days ?? [];

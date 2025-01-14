@@ -82,8 +82,7 @@ class SingleHabitBloc extends Bloc<SingleHabitEvent, SingleHabitState> {
 
       // Get or create the updated completion dates list
       final updatedCompletionDates = event.habit.completionDates?.map((date) {
-            final parsedDate = DateTime.parse(date);
-            return DateTime(parsedDate.year, parsedDate.month, parsedDate.day);
+            return DateTime(date.year, date.month, date.day);
           }).toList() ??
           [];
 
@@ -94,9 +93,7 @@ class SingleHabitBloc extends Bloc<SingleHabitEvent, SingleHabitState> {
         updatedCompletionDates.add(selectedDate);
       }
 
-      // Convert the updated list back to ISO 8601 format
-      final updatedCompletionDatesStrings = updatedCompletionDates.map((date) => date.toIso8601String()).toList();
-      final updatedHabit = event.habit.copyWith(completionDates: updatedCompletionDatesStrings);
+      final updatedHabit = event.habit.copyWith(completionDates: updatedCompletionDates);
 
       await habitService.updateHabit(updatedHabit);
       add(FetchSingleHabitEvent());

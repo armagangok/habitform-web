@@ -22,7 +22,7 @@ class HabitAdapter extends TypeAdapter<Habit> {
       habitDescription: fields[2] as String?,
       emoji: fields[3] as String?,
       reminderModel: fields[4] as ReminderModel?,
-      completionDates: (fields[5] as List?)?.cast<String>(),
+      completionDates: (fields[5] as List?)?.cast<DateTime>(),
       colorCode: fields[6] as int,
     );
   }
@@ -30,7 +30,7 @@ class HabitAdapter extends TypeAdapter<Habit> {
   @override
   void write(BinaryWriter writer, Habit obj) {
     writer
-      ..writeByte(8)
+      ..writeByte(7)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -51,5 +51,9 @@ class HabitAdapter extends TypeAdapter<Habit> {
   int get hashCode => typeId.hashCode;
 
   @override
-  bool operator ==(Object other) => identical(this, other) || other is HabitAdapter && runtimeType == other.runtimeType && typeId == other.typeId;
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is HabitAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
 }
