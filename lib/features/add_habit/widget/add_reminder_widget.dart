@@ -1,5 +1,5 @@
 import '/core/core.dart';
-import '../../habits/widgets/single_habit/habit_detail.dart';
+import '../../habit_detail/page/habit_detail.dart';
 import '../../reminder/bloc/reminder/reminder_bloc.dart';
 import '../../reminder/widget/reminder_widget.dart';
 

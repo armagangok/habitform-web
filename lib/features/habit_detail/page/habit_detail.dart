@@ -2,9 +2,10 @@ import 'package:habitrise/features/reminder/widget/reminder_widget.dart';
 
 import '/core/core.dart';
 import '/models/models.dart';
-import '../../../edit_habit/edit_habit_page.dart';
-import '../../bloc/single_habit/single_habit_bloc.dart';
-import 'single_habit_detail_grid.dart';
+import '../../edit_habit/edit_habit_page.dart';
+import '../../habits/bloc/single_habit/single_habit_bloc.dart';
+import '../../habits/widgets/single_habit/single_habit_detail_grid.dart';
+import '../widget/share_habit_button.dart';
 
 class SingleHabitDetailPage extends StatefulWidget {
   const SingleHabitDetailPage({
@@ -116,10 +117,6 @@ class _SingleHabitDetailPageState extends State<SingleHabitDetailPage> {
                           ),
                         ),
                       ),
-                      // item(
-                      //   ,
-                      //   days?.toString(),
-                      // ),
                     ),
                   ),
                   SizedBox(height: 25),
@@ -136,18 +133,6 @@ class _SingleHabitDetailPageState extends State<SingleHabitDetailPage> {
                             mainAxisAlignment: MainAxisAlignment.end,
                             spacing: 10,
                             children: [
-                              // CupertinoButton.tinted(
-                              //   sizeStyle: CupertinoButtonSize.small,
-                              //   onPressed: () {},
-                              //   child: Row(
-                              //     spacing: 5,
-                              //     mainAxisSize: MainAxisSize.min,
-                              //     children: [
-                              //       Text("Calendar"),
-                              //       Icon(CupertinoIcons.calendar),
-                              //     ],
-                              //   ),
-                              // ),
                               CompleteTodayButton(currentHabit: currentHabit),
                             ],
                           ),
@@ -231,31 +216,7 @@ class _SingleHabitDetailPageState extends State<SingleHabitDetailPage> {
                             );
                           }),
                         ),
-                        Expanded(
-                          child: CupertinoButton.tinted(
-                            color: CupertinoColors.activeBlue,
-                            padding: EdgeInsets.zero,
-                            sizeStyle: CupertinoButtonSize.small,
-                            onPressed: () {},
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Text(
-                                  "Share",
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w500,
-                                    color: CupertinoColors.activeBlue,
-                                  ),
-                                ),
-                                SizedBox(width: 5),
-                                Icon(
-                                  FontAwesomeIcons.share,
-                                  color: CupertinoColors.activeBlue,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
+                        ShareHabitButton(habit: currentHabit),
                       ],
                     ),
                   ),
@@ -348,13 +309,13 @@ class CompleteTodayButton extends StatelessWidget {
                   Text(
                     "Completed",
                     style: TextStyle(
-                      color: currentHabit.isCompletedToday ? Color(currentHabit.colorCode) : Colors.grey.shade900,
+                      color: currentHabit.isCompletedToday ? Color(currentHabit.colorCode) : null,
                     ),
                   ),
                   SizedBox(width: 5),
                   Icon(
                     CupertinoIcons.checkmark_alt,
-                    color: currentHabit.isCompletedToday ? Color(currentHabit.colorCode) : Colors.grey.shade900,
+                    color: currentHabit.isCompletedToday ? Color(currentHabit.colorCode) : null,
                   ),
                 ],
               )
@@ -365,13 +326,13 @@ class CompleteTodayButton extends StatelessWidget {
                   Text(
                     "Complete",
                     style: TextStyle(
-                      color: currentHabit.isCompletedToday ? Color(currentHabit.colorCode) : Colors.grey.shade500,
+                      color: currentHabit.isCompletedToday ? Color(currentHabit.colorCode) : null,
                     ),
                   ),
                   SizedBox(width: 5),
                   Icon(
                     CupertinoIcons.calendar_today,
-                    color: currentHabit.isCompletedToday ? Color(currentHabit.colorCode) : Colors.grey.shade500,
+                    color: currentHabit.isCompletedToday ? Color(currentHabit.colorCode) : null,
                   ),
                 ],
               ),

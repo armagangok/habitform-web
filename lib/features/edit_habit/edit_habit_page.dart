@@ -5,7 +5,7 @@ import '/core/widgets/habit_icon/cubit/habit_icon_cubit.dart';
 import '/core/widgets/habit_icon/icon_picker_sheet.dart';
 import '/models/models.dart';
 import '../add_habit/widget/add_reminder_widget.dart';
-import '../habits/widgets/single_habit/habit_detail.dart';
+import '../habit_detail/page/habit_detail.dart';
 import '../reminder/bloc/reminder/reminder_bloc.dart';
 import '../reminder/models/reminder/reminder_model.dart';
 import 'bloc/edit_habit_bloc.dart';

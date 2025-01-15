@@ -4,16 +4,16 @@ import '../habits/bloc/single_habit/single_habit_bloc.dart';
 import '../habits/widgets/single_habit/single_habit_builder.dart';
 import '../settings/settings_home/settings_home_page.dart';
 
-class OverviewPage extends StatefulWidget {
-  const OverviewPage({super.key});
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
 
   @override
-  State<OverviewPage> createState() => _OverviewPageState();
+  State<HomePage> createState() => _HomePageState();
 }
 
 enum HabitSelection { today, allTime }
 
-class _OverviewPageState extends State<OverviewPage> with SingleTickerProviderStateMixin {
+class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin {
   late final AnimationController controller;
 
   @override
@@ -112,13 +112,13 @@ class _OverviewPageState extends State<OverviewPage> with SingleTickerProviderSt
   }
 }
 
-const Color kHeaderFooterColor = CupertinoDynamicColor(
-  color: Color.fromRGBO(108, 108, 108, 1.0),
-  darkColor: Color.fromRGBO(142, 142, 146, 1.0),
-  highContrastColor: Color.fromRGBO(74, 74, 77, 1.0),
-  darkHighContrastColor: Color.fromRGBO(176, 176, 183, 1.0),
-  elevatedColor: Color.fromRGBO(108, 108, 108, 1.0),
-  darkElevatedColor: Color.fromRGBO(142, 142, 146, 1.0),
-  highContrastElevatedColor: Color.fromRGBO(108, 108, 108, 1.0),
-  darkHighContrastElevatedColor: Color.fromRGBO(142, 142, 146, 1.0),
-);
+// const Color kHeaderFooterColor = CupertinoDynamicColor(
+//   color: Color.fromRGBO(108, 108, 108, 1.0),
+//   darkColor: Color.fromRGBO(142, 142, 146, 1.0),
+//   highContrastColor: Color.fromRGBO(74, 74, 77, 1.0),
+//   darkHighContrastColor: Color.fromRGBO(176, 176, 183, 1.0),
+//   elevatedColor: Color.fromRGBO(108, 108, 108, 1.0),
+//   darkElevatedColor: Color.fromRGBO(142, 142, 146, 1.0),
+//   highContrastElevatedColor: Color.fromRGBO(108, 108, 108, 1.0),
+//   darkHighContrastElevatedColor: Color.fromRGBO(142, 142, 146, 1.0),
+// );

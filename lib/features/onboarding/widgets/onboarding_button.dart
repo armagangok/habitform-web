@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+import '../../../core/core.dart';
 
 class OnboardingButton extends StatefulWidget {
   const OnboardingButton({
@@ -25,6 +25,7 @@ class _OnboardingButtonState extends State<OnboardingButton> {
         widget.buttonText,
         style: TextStyle(
           fontWeight: FontWeight.bold,
+          color: Colors.white,
         ),
       ),
     );

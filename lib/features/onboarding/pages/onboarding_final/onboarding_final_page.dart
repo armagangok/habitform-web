@@ -1,7 +1,6 @@
 import 'package:lottie/lottie.dart';
 
 import '/core/core.dart';
-
 import '../../widgets/onboarding_button.dart';
 import '../../widgets/onboarding_message.dart';
 import '../views/goal_view.dart';
@@ -75,7 +74,7 @@ class _OnboardingFinalPageState extends State<OnboardingFinalPage> with SingleTi
                     onPressed: isLoading
                         ? null
                         : () {
-                            navigator.navigateAndClear(path: KRoute.homeTabScaffoldPage);
+                            navigator.navigateAndClear(path: KRoute.home);
                           },
                     buttonText: "Start Using HabitRise",
                   ).animate().fadeIn(
@@ -103,26 +102,32 @@ class LoadingToSuccessWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return isLoading
-        ? Lottie.asset(
-            Assets.lottie.rocketAnimation, // Update with your Lottie asset path
-            key: const ValueKey('loading'),
-            height: 150,
+    final brightness = context.theme.brightness;
+    if (isLoading) {
+      return Lottie.asset(
+        Assets.lottie.rocketAnimation, // Update with your Lottie asset path
+        key: const ValueKey('loading'),
+        height: 150,
 
-            fit: BoxFit.cover,
-            alignment: Alignment.center,
-          )
-        : SizedBox(
-            height: 150,
-            width: 150,
-            child: FittedBox(
-              fit: BoxFit.contain,
-              child: Icon(
-                CupertinoIcons.check_mark_circled,
-                key: const ValueKey('success'),
-                color: context.primary,
-              ),
-            ),
-          ).animate().fadeIn();
+        fit: BoxFit.cover,
+        alignment: Alignment.center,
+      );
+    } else {
+      return SizedBox(
+        height: 150,
+        width: 150,
+        child: Image.asset(
+          brightness == Brightness.dark ? Assets.app.habitriseDarkTransparent.path : Assets.app.habitriseLightTransparent.path,
+        ),
+        // FittedBox(
+        //   fit: BoxFit.contain,
+        //   child: Icon(
+        //     CupertinoIcons.check_mark_circled,
+        //     key: const ValueKey('success'),
+        //     color: context.primary,
+        //   ),
+        // ),
+      ).animate().fadeIn();
+    }
   }
 }

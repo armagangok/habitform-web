@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
-import 'package:habitrise/features/overview/overview_page.dart';
 
-import '../../features/habits/pages/habits_page.dart';
+import '../../features/home/overview_page.dart';
 import '../../features/onboarding/pages/onboarding_final/onboarding_final_page.dart';
 import '../../features/onboarding/pages/onboarding_greeting.dart';
 import '../../features/onboarding/pages/onboarding_page.dart';
@@ -16,8 +15,7 @@ class NavigationRoute {
 
   Route<dynamic> generateRoute(RouteSettings args) {
     switch (args.name) {
-      case KRoute.habitsPage:
-        return _getRoute(page: const HabitsPage(), settings: args);
+
 
       case KRoute.onboardingPage:
         return _getRoute(page: const OnboardingPage(), settings: args);
@@ -28,8 +26,8 @@ class NavigationRoute {
       case KRoute.onboardingFinalPage:
         return _getRoute(page: const OnboardingFinalPage(), settings: args);
 
-      case KRoute.overviewPage:
-        return _getRoute(page: const OverviewPage(), settings: args);
+      case KRoute.home:
+        return _getRoute(page: const HomePage(), settings: args);
 
       default:
         return CupertinoPageRoute(

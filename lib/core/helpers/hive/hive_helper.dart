@@ -1,7 +1,7 @@
-import 'package:habitrise/features/reminder/models/days/days_enum.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 import '/models/models.dart';
+import '../../../features/reminder/models/days/days_enum.dart';
 import '../../../features/reminder/models/reminder/reminder_model.dart';
 import '../../core.dart';
 
@@ -20,7 +20,8 @@ class HiveHelper {
       Hive.registerAdapter(ReminderModelAdapter());
       Hive.registerAdapter(HabitAdapter());
 
-      await Hive.openBox<Habit>(HiveBoxes.singleHabitBox);
+      await Hive.openBox<Habit>(HiveBoxes.habitBox);
+      await Hive.openBox<String?>(HiveBoxes.themeBox);
     } catch (e) {
       LogHelper.shared.debugPrint('$e');
     }

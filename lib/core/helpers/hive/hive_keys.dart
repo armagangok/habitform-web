@@ -1,13 +1,13 @@
 final class HiveBoxes {
   const HiveBoxes._();
 
-  static const String singleHabitBox = "singleHabitBox";
-  static const String chainedHabitBox = "chainedHabitBox";
+  static const String habitBox = "singleHabitBoxHabitRise";
+  static const String themeBox = "themeBoxHabitRise";
 }
 
 final class HiveKeys {
   const HiveKeys._();
 
-  static const String singleHabitBoxKey = "singleHabitBoxKey";
-  static const String chainedHabitBoxKey = "chainedHabitBoxKey";
+  static const String habitBoxKey = "singleHabitBoxKey";
+  static const String themeKey = "themeKeyHabitRise";
 }

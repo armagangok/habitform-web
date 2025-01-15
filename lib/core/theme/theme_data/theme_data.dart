@@ -1,4 +1,4 @@
-import '../core.dart';
+import '../../core.dart';
 
 final class Themes {
   static final darkTheme = ThemeData.dark().copyWith(
@@ -24,6 +24,7 @@ final class Themes {
       margin: EdgeInsets.zero,
       surfaceTintColor: Colors.transparent,
       color: const Color(0XFF1C1C1E),
+      shadowColor: Colors.transparent,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
       ),
@@ -43,10 +44,10 @@ final class Themes {
   );
 
   static final lightTheme = ThemeData.light().copyWith(
-    primaryColor: Colors.orange.shade700,
+    primaryColor: Colors.deepOrange.shade500,
     // platform: TargetPlatform.iOS,
     colorScheme: ColorScheme.dark(
-      primary: Colors.orange.shade700,
+      primary: Colors.deepOrange.shade500,
     ),
     dividerTheme: const DividerThemeData(
       color: Color(0xffC6C6C8),
@@ -56,7 +57,7 @@ final class Themes {
       fillColor: Color.fromARGB(255, 231, 231, 231),
     ),
     appBarTheme: AppBarTheme(
-      foregroundColor: Colors.orange.shade700,
+      foregroundColor: Colors.deepOrange.shade500,
       backgroundColor: Colors.transparent,
     ),
     iconTheme: IconThemeData(color: CupertinoColors.black.withValues(alpha: .5)),
@@ -65,6 +66,7 @@ final class Themes {
       margin: EdgeInsets.zero,
       surfaceTintColor: Colors.transparent,
       color: Colors.white,
+      shadowColor: Colors.transparent,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
       ),
@@ -75,9 +77,9 @@ final class Themes {
       barBackgroundColor: Color(0xffF2F2F7).withAlpha(0),
       scaffoldBackgroundColor: Color(0xffF2F2F7),
       brightness: Brightness.light,
-      primaryColor: Colors.orange.shade700,
+      primaryColor: Colors.deepOrange.shade500,
       textTheme: CupertinoTextThemeData(
-        primaryColor: Colors.orange.shade700,
+        primaryColor: Colors.deepOrange.shade500,
       ),
     ),
     scaffoldBackgroundColor: const Color(0xffF2F2F7),

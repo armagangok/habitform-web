@@ -1,4 +1,5 @@
 import '../../../../core/core.dart';
+import '../../../../core/theme/bloc/theme_bloc.dart';
 
 class SubscribeButton extends StatelessWidget {
   const SubscribeButton({super.key});
@@ -6,6 +7,8 @@ class SubscribeButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // final isSubscriptionActive = false;
+
+    final brightness = Theme.of(context).brightness;
     return CustomButton(
       onTap: () async {
         // if (isSubscriptionActive) {
@@ -40,19 +43,18 @@ class SubscribeButton extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Card(
-                  clipBehavior: Clip.antiAliasWithSaveLayer,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    side: BorderSide(
-                      width: .5,
-                      color: context.colors.inverseSurface.withValues(alpha: .2),
-                    ),
-                  ),
-                  child: Assets.app.appLogo.image(
-                    width: 48,
-                    height: 48,
-                  ),
+                BlocBuilder<ThemeBloc, ThemeState>(
+                  builder: (context, state) {
+                    return state.themeMode == ThemeMode.dark
+                        ? Assets.app.habitriseDarkTransparent.image(
+                            width: 40,
+                            height: 40,
+                          )
+                        : Assets.app.habitriseLightTransparent.image(
+                            width: 40,
+                            height: 40,
+                          );
+                  },
                 ),
                 SizedBox(width: 12),
                 Column(
@@ -70,13 +72,13 @@ class SubscribeButton extends StatelessWidget {
                         ),
                         RichText(
                           text: TextSpan(
-                            text: 'Pomo',
+                            text: 'Habit',
                             style: context.titleMedium?.copyWith(
                               fontWeight: FontWeight.bold,
                             ),
                             children: [
                               TextSpan(
-                                text: 'Done ',
+                                text: 'Rise ',
                                 style: context.titleMedium?.copyWith(
                                   color: context.primary,
                                   fontWeight: FontWeight.bold,

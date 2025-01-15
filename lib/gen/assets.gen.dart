@@ -12,11 +12,29 @@ import 'package:flutter/widgets.dart';
 class $AssetsAppGen {
   const $AssetsAppGen();
 
-  /// File path: assets/app/app_logo.png
-  AssetGenImage get appLogo => const AssetGenImage('assets/app/app_logo.png');
+  /// File path: assets/app/app_logo_dark.png
+  AssetGenImage get appLogoDark =>
+      const AssetGenImage('assets/app/app_logo_dark.png');
+
+  /// File path: assets/app/app_logo_light.png
+  AssetGenImage get appLogoLight =>
+      const AssetGenImage('assets/app/app_logo_light.png');
+
+  /// File path: assets/app/habitrise_dark_transparent.png
+  AssetGenImage get habitriseDarkTransparent =>
+      const AssetGenImage('assets/app/habitrise_dark_transparent.png');
+
+  /// File path: assets/app/habitrise_light_transparent.png
+  AssetGenImage get habitriseLightTransparent =>
+      const AssetGenImage('assets/app/habitrise_light_transparent.png');
 
   /// List of all assets
-  List<AssetGenImage> get values => [appLogo];
+  List<AssetGenImage> get values => [
+        appLogoDark,
+        appLogoLight,
+        habitriseDarkTransparent,
+        habitriseLightTransparent
+      ];
 }
 
 class $AssetsIllustrationsGen {

@@ -1,4 +1,4 @@
-import 'package:habitrise/features/habits/widgets/single_habit/habit_detail.dart';
+import 'package:habitrise/features/habit_detail/page/habit_detail.dart';
 
 import '/core/core.dart';
 import '/core/widgets/flushbar_widget.dart';

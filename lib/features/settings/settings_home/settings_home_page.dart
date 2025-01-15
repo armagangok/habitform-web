@@ -1,9 +1,9 @@
-import 'package:habitrise/core/helpers/url_laucher/url_launcher.dart';
-import 'package:habitrise/features/habits/widgets/single_habit/habit_detail.dart';
-import 'package:habitrise/features/settings/settings_home/widgets/subscribe_button.dart';
-
-import '../../../core/core.dart';
+import '/core/core.dart';
+import '/core/helpers/url_laucher/url_launcher.dart';
+import '/core/theme/widget/theme_mode_widget.dart';
+import '../../habit_detail/page/habit_detail.dart';
 import 'widgets/setting_item.dart';
+import 'widgets/subscribe_button.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
@@ -47,17 +47,7 @@ class _SettingsPageState extends State<SettingsPage> with SingleTickerProviderSt
                 child: Card(
                   child: Column(
                     children: [
-                      CustomDivider(),
-                      CupertinoListTile(
-                        leading: const SettingLeadingWidget(
-                          iconData: CupertinoIcons.paintbrush_fill,
-                          cardColor: Colors.deepOrange,
-                        ),
-                        backgroundColor: Colors.transparent,
-                        title: Text("Theme"),
-                        onTap: () {},
-                        trailing: CupertinoListTileChevron(),
-                      ),
+                      ThemeModeFeature(),
                       CustomDivider(),
                       CupertinoListTile(
                         leading: const SettingLeadingWidget(
@@ -188,7 +178,7 @@ class CustomDivider extends StatelessWidget {
     super.key,
     this.color = CupertinoColors.separator,
     this.thickness = .5,
-    this.indent = 20.0,
+    this.indent = 28.0,
     this.endIndent = 0.0,
   });
 

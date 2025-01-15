@@ -26,15 +26,27 @@ class _SingleHabitDetailGridState extends State<SingleHabitDetailGrid> {
     for (int i = 180; i >= 0; i--) {
       last90Days.add(today.subtract(Duration(days: i)));
     }
+  }
 
-    // Scroll'u sona ayarla
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _scrollToEnd() {
+    if (_scrollController.hasClients) {
       _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
-    });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    // Add post frame callback here instead of initState
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _scrollToEnd();
+    });
+
     // Tamamlanmış tarihleri sırala
     final completionDates = widget.habit.completionDates?..sort();
 
@@ -49,7 +61,6 @@ class _SingleHabitDetailGridState extends State<SingleHabitDetailGrid> {
 
     return SizedBox(
       height: 200,
-      width: context.width(1),
       child: GridView.builder(
         controller: _scrollController,
         scrollDirection: Axis.horizontal,
@@ -96,8 +107,8 @@ class _SingleHabitDetailGridState extends State<SingleHabitDetailGrid> {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(6),
                 side: BorderSide(
-                  color: isToday ? context.primary : context.theme.dividerColor.withAlpha(100),
-                  width: isToday ? 2.5 : .75,
+                  color: isToday ? context.primary : context.theme.dividerColor.withAlpha(50),
+                  width: isToday ? 2.5 : .5,
                 ),
               ),
               child: SizedBox(
