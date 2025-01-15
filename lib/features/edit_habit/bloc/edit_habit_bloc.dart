@@ -20,6 +20,7 @@ class EditHabitBloc extends Bloc<EditHabitEvent, EditHabitState> {
   ) async {
     emit(EditHabitLoading());
     try {
+      
       _singleHabitBloc.add(UpdateSingleHabitEvent(habit: event.habit));
       emit(EditHabitSuccess());
     } catch (e) {

@@ -52,15 +52,14 @@ class ReminderBloc extends Bloc<ReminderEvent, ReminderState> {
     }
   }
 
-  Future<void> scheduleReminder(String taskName, String body) async {
-    final ReminderModel? reminderModel = state.reminder;
+    Future<void> scheduleReminder(String habitName, String body) async {
+    final ReminderModel? reminder = state.reminder;
     try {
-      if (reminderModel != null) {
-        final uuid = UuidHelper.uidInt;
-        final reminder = reminderModel.copyWith(id: uuid);
+      if (reminder != null) {
+        ReminderService.cancelReminderNotification(reminder.id);
         await ReminderService.createReminderNotification(
           reminder,
-          taskName,
+          habitName,
           body,
         );
       }

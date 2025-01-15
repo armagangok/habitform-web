@@ -1,5 +1,9 @@
-import 'package:habitrise/core/core.dart';
-import 'package:habitrise/features/settings/settings_home/widgets/setting_item.dart';
+import 'package:habitrise/core/helpers/url_laucher/url_launcher.dart';
+import 'package:habitrise/features/habits/widgets/single_habit/habit_detail.dart';
+import 'package:habitrise/features/settings/settings_home/widgets/subscribe_button.dart';
+
+import '../../../core/core.dart';
+import 'widgets/setting_item.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
@@ -31,69 +35,144 @@ class _SettingsPageState extends State<SettingsPage> with SingleTickerProviderSt
         title: "Settings",
         closeButtonPosition: CloseButtonPosition.left,
       ),
-      child: ListView(
-        padding: EdgeInsets.all(15),
-        children: [
-          SafeArea(
-            bottom: false,
-            child: Card(
+      child: SafeArea(
+        child: ListView(
+          padding: EdgeInsets.all(15),
+          children: [
+            SubscribeButton(),
+            SizedBox(height: 20),
+            SafeArea(
+              child: CustomHeader(
+                text: "APP",
+                child: Card(
+                  child: Column(
+                    children: [
+                      CustomDivider(),
+                      CupertinoListTile(
+                        leading: const SettingLeadingWidget(
+                          iconData: CupertinoIcons.paintbrush_fill,
+                          cardColor: Colors.deepOrange,
+                        ),
+                        backgroundColor: Colors.transparent,
+                        title: Text("Theme"),
+                        onTap: () {},
+                        trailing: CupertinoListTileChevron(),
+                      ),
+                      CustomDivider(),
+                      CupertinoListTile(
+                        leading: const SettingLeadingWidget(
+                          iconData: CupertinoIcons.bell_fill,
+                          cardColor: Colors.indigoAccent,
+                        ),
+                        title: Text("Notification"),
+                        onTap: () {},
+                        trailing: CupertinoListTileChevron(),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(height: 20),
+            CustomHeader(
+              text: "GENERAL",
+              child: Card(
+                child: Column(
+                  children: [
+                    CupertinoListTile(
+                      backgroundColor: Colors.transparent,
+                      leading: const SettingLeadingWidget(
+                        iconData: CupertinoIcons.heart_fill,
+                        cardColor: Colors.pinkAccent,
+                      ),
+                      title: Text("Support HabitRise"),
+                      subtitle: Text("Loved HabitRise? Rate and help us grow!"),
+                      onTap: () {},
+                      trailing: CupertinoListTileChevron(),
+                    ),
+                    CustomDivider(),
+                    CupertinoListTile(
+                      leading: const SettingLeadingWidget(
+                        iconData: CupertinoIcons.mail_solid,
+                        cardColor: CupertinoColors.activeBlue,
+                      ),
+                      title: Text("Send Feedback"),
+                      onTap: () {},
+                      trailing: CupertinoListTileChevron(),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            SizedBox(height: 20),
+            Card(
               child: Column(
                 children: [
                   CupertinoListTile(
                     backgroundColor: Colors.transparent,
-                    title: Text("Settings"),
+                    leading: const SettingLeadingWidget(
+                      iconData: CupertinoIcons.hand_raised_fill,
+                      cardColor: CupertinoColors.activeBlue,
+                    ),
+                    title: Text("Privacy"),
                     onTap: () {},
                     trailing: CupertinoListTileChevron(),
                   ),
                   CustomDivider(),
                   CupertinoListTile(
-                    backgroundColor: Colors.transparent,
-                    title: Text("Settings"),
-                    onTap: () {},
-                    trailing: CupertinoListTileChevron(),
-                  ),
-                  CustomDivider(),
-                  CupertinoListTile(
-                    title: Text("Settings"),
+                    leading: const SettingLeadingWidget(
+                      iconData: CupertinoIcons.hand_point_right_fill,
+                      cardColor: CupertinoColors.activeBlue,
+                    ),
+                    title: Text("Terms"),
                     onTap: () {},
                     trailing: CupertinoListTileChevron(),
                   ),
                 ],
               ),
             ),
-          ),
-          SizedBox(height: 30),
-          Card(
-            child: CupertinoListSection(
-              topMargin: 0,
-              footer: null,
-              margin: EdgeInsets.zero,
-              additionalDividerMargin: 0,
-              backgroundColor: context.theme.cardColor,
+            SizedBox(height: 30),
+            Column(
               children: [
-                CupertinoListTile(
-                  backgroundColor: Colors.transparent,
-                  leading: const SettingLeadingWidget(
-                    iconData: CupertinoIcons.hand_raised_fill,
-                    cardColor: CupertinoColors.activeBlue,
-                  ),
-                  title: Text("Privacy"),
-                  onTap: () {},
-                  trailing: CupertinoListTileChevron(),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text.rich(
+                      TextSpan(
+                        children: [
+                          TextSpan(
+                            text: 'Habit',
+                            style: context.bodyLarge?.copyWith(
+                              color: context.bodyLarge?.color?.withOpacity(1),
+                            ),
+                          ),
+                          TextSpan(
+                            text: 'Rise',
+                            style: context.bodyLarge?.copyWith(color: context.primary),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Text(
+                      " 1.0.0",
+                      style: context.bodyMedium?.copyWith(
+                        color: context.textTheme.bodySmall?.color?.withOpacity(.75),
+                      ),
+                    )
+                  ],
                 ),
-                CupertinoListTile(
-                  leading: const SettingLeadingWidget(
-                    iconData: CupertinoIcons.hand_point_right_fill,
-                    cardColor: CupertinoColors.activeBlue,
+                CustomButton(
+                  onTap: UrlLauncherHelper.openTwitter,
+                  child: Text(
+                    "Made with ☕️ and ❤️ by Armağan Gök",
+                    style: context.bodySmall,
                   ),
-                  title: Text("Terms"),
-                  onTap: () {},
-                  trailing: CupertinoListTileChevron(),
-                ),
+                )
               ],
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -108,7 +187,7 @@ class CustomDivider extends StatelessWidget {
   const CustomDivider({
     super.key,
     this.color = CupertinoColors.separator,
-    this.thickness = .4,
+    this.thickness = .5,
     this.indent = 20.0,
     this.endIndent = 0.0,
   });

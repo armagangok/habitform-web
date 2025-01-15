@@ -21,4 +21,8 @@ final class ReminderService {
       );
     }
   }
+
+  static void cancelReminderNotification(int id) {
+    NotificationHelper.shared.cancelNotificationWithId(id);
+  }
 }

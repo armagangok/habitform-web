@@ -48,6 +48,18 @@ class ColorPickerSheetState extends State<ColorPickerSheet> with SingleTickerPro
       Colors.orange.shade800,
       Colors.orange.shade900,
     ],
+    "Deep Orange": [
+      Colors.deepOrange.shade50,
+      Colors.deepOrange.shade100,
+      Colors.deepOrange.shade200,
+      Colors.deepOrange.shade300,
+      Colors.deepOrange.shade400,
+      Colors.deepOrange.shade500,
+      Colors.deepOrange.shade600,
+      Colors.deepOrange.shade700,
+      Colors.deepOrange.shade800,
+      Colors.deepOrange.shade900,
+    ],
     "Amber": [
       Colors.amber.shade50,
       Colors.amber.shade100,

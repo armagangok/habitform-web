@@ -59,6 +59,11 @@ class _AddHabitPageState extends State<AddHabitPage> {
               colorCode: colorCode,
             );
 
+            context.read<ReminderBloc>().scheduleReminder(
+                  habit.habitName,
+                  "Some message goes here",
+                );
+
             context.read<SingleHabitBloc>().add(SaveSingleHabitEvent(habit: habit));
 
             navigator.pop();
@@ -110,6 +115,7 @@ class _AddHabitPageState extends State<AddHabitPage> {
     return Card(
       child: CupertinoTextField(
         padding: EdgeInsets.all(10),
+        maxLines: null,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
         ),

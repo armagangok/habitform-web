@@ -97,7 +97,7 @@ class SettingLeadingWidget extends StatelessWidget {
       color: cardColor,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
       child: Padding(
-        padding: EdgeInsets.all(padding ?? 3),
+        padding: EdgeInsets.all(padding ?? 2.5),
         child: Icon(
           iconData,
           color: Colors.white.withValues(alpha: .9),

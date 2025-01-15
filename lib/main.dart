@@ -1,5 +1,7 @@
 import 'core/constants/debug_constants.dart';
 import 'core/core.dart';
+import 'core/helpers/notifications/notification_helper.dart';
+import 'core/helpers/notifications/timezone.dart';
 import 'core/theme/theme.dart';
 import 'core/widgets/habit_color_sheet/cubit/habit_color_cubit.dart';
 import 'core/widgets/habit_icon/cubit/habit_icon_cubit.dart';
@@ -16,6 +18,8 @@ import 'services/services.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await HiveHelper.shared.initializeHive();
+  await TimeZoneHelper.initializeTimeZone();
+  await NotificationHelper.shared.initializeNotificationPlugin;
 
   runApp(const MyApp());
 }
@@ -41,7 +45,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         darkTheme: Themes.darkTheme,
         theme: Themes.lightTheme,
-        themeMode: ThemeMode.dark,
+        themeMode: ThemeMode.light,
         debugShowCheckedModeBanner: KDebug.debugModeEnabled,
         navigatorKey: NavigationService.shared.navigatorKey,
         onGenerateRoute: NavigationRoute.shared.generateRoute,

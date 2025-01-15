@@ -82,6 +82,11 @@ class _EditHabitPageState extends State<EditHabitPage> {
                 colorCode: colorCode,
               );
 
+              context.read<ReminderBloc>().scheduleReminder(
+                    updatedHabit.habitName,
+                    "Some message goes here",
+                  );
+
               context.read<EditHabitBloc>().add(UpdateHabitEvent(habit: updatedHabit));
             },
           ),
@@ -132,6 +137,7 @@ class _EditHabitPageState extends State<EditHabitPage> {
     return Card(
       child: CupertinoTextField(
         padding: EdgeInsets.all(10),
+        maxLines: null,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
         ),
