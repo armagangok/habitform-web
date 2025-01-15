@@ -42,7 +42,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         darkTheme: Themes.darkTheme,
         theme: Themes.lightTheme,
-        themeMode: ThemeMode.light,
+        themeMode: ThemeMode.dark,
         debugShowCheckedModeBanner: KDebug.debugModeEnabled,
         navigatorKey: NavigationService.shared.navigatorKey,
         onGenerateRoute: NavigationRoute.shared.generateRoute,

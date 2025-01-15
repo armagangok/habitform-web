@@ -57,78 +57,84 @@ class SingleHabitBuilder extends StatelessWidget {
                 final reminderTime = habit.reminderModel?.reminderTime;
                 final habitDescription = habit.habitDescription;
 
-                return CustomButton(
-                  onTap: () {
-                    CupertinoScaffold.showCupertinoModalBottomSheet(
-                      enableDrag: false,
-                      context: context,
-                      builder: (contextFromSheet) {
-                        return SingleHabitDetailPage(habit: habit);
-                      },
-                    );
-                  },
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Row(
-                        children: [
-                          Expanded(
-                            child: SizedBox(
+                final isTodayCompleted = habit.isCompletedToday;
+
+                return AnimatedOpacity(
+                  duration: Duration(milliseconds: 350),
+                  opacity: isTodayCompleted ? .75 : 1,
+                  child: CustomButton(
+                    onTap: () {
+                      CupertinoScaffold.showCupertinoModalBottomSheet(
+                        enableDrag: false,
+                        context: context,
+                        builder: (contextFromSheet) {
+                          return SingleHabitDetailPage(habit: habit);
+                        },
+                      );
+                    },
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Row(
+                          children: [
+                            Expanded(
                               child: Row(
                                 children: [
                                   if (habitIcon != null)
                                     Text(
                                       habitIcon,
                                       style: context.headlineMedium,
+                                      maxLines: 1,
                                     ),
                                   if (habitIcon != null) SizedBox(width: 8),
-                                  Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        habit.habitName,
-                                        style: context.bodyMedium?.copyWith(
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                      if (habitDescription != null && habitDescription.isNotEmpty)
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
                                         Text(
-                                          habitDescription,
-                                          style: context.bodySmall?.copyWith(
-                                            fontWeight: FontWeight.w500,
+                                          habit.habitName,
+                                          style: context.bodyMedium?.copyWith(
+                                            fontWeight: FontWeight.bold,
                                           ),
+                                          overflow: TextOverflow.ellipsis,
+                                          maxLines: 1,
                                         ),
-                                    ],
+                                        if (habitDescription != null && habitDescription.isNotEmpty)
+                                          Text(
+                                            habitDescription,
+                                            style: context.bodySmall?.copyWith(
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                            overflow: TextOverflow.ellipsis,
+                                            maxLines: 1,
+                                          ),
+                                      ],
+                                    ),
                                   ),
                                 ],
                               ),
                             ),
-                          ),
-                          SizedBox(width: 10),
-                          if (reminderTime != null)
-                            Text(
-                              reminderTime.toHHMM(),
-                              style: context.bodySmall,
-                              textAlign: TextAlign.end,
-                            ),
-                        ],
-                      ),
-                      SizedBox(height: 10),
-                      WeeklyHabitGrid(habit: habit),
-                    ],
+                            SizedBox(width: 10),
+                            if (reminderTime != null)
+                              Text(
+                                reminderTime.toHHMM(),
+                                style: context.bodySmall,
+                                textAlign: TextAlign.end,
+                              ),
+                          ],
+                        ),
+                        SizedBox(height: 10),
+                        WeeklyHabitGrid(habit: habit),
+                        SizedBox(height: 5),
+                        CompleteTodayButton(currentHabit: habit),
+                      ],
+                    ),
                   ),
                 );
               },
               separatorBuilder: (context, index) {
-                return Align(
-                  alignment: Alignment.center,
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(vertical: 15),
-                    child: SizedBox(
-                      height: 30,
-                      child: VerticalDivider(),
-                    ),
-                  ),
+                return Padding(
+                  padding: EdgeInsets.symmetric(vertical: 10),
                 );
               },
             ),

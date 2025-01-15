@@ -1,7 +1,4 @@
-
-
 import '/core/core.dart';
-
 
 class ColorPickerSheet extends StatefulWidget {
   final Function(Color) onColorSelected;
@@ -111,6 +108,18 @@ class ColorPickerSheetState extends State<ColorPickerSheet> with SingleTickerPro
       Colors.blue.shade800,
       Colors.blue.shade900,
     ],
+    "Light Blue": [
+      Colors.lightBlue.shade50,
+      Colors.lightBlue.shade100,
+      Colors.lightBlue.shade200,
+      Colors.lightBlue.shade300,
+      Colors.lightBlue.shade400,
+      Colors.lightBlue.shade500,
+      Colors.lightBlue.shade600,
+      Colors.lightBlue.shade700,
+      Colors.lightBlue.shade800,
+      Colors.lightBlue.shade900,
+    ],
     "Indigo": [
       Colors.indigo.shade50,
       Colors.indigo.shade100,
@@ -147,18 +156,6 @@ class ColorPickerSheetState extends State<ColorPickerSheet> with SingleTickerPro
       Colors.teal.shade800,
       Colors.teal.shade900,
     ],
-    "Purple": [
-      Colors.purple.shade50,
-      Colors.purple.shade100,
-      Colors.purple.shade200,
-      Colors.purple.shade300,
-      Colors.purple.shade400,
-      Colors.purple.shade500,
-      Colors.purple.shade600,
-      Colors.purple.shade700,
-      Colors.purple.shade800,
-      Colors.purple.shade900,
-    ],
     "BlueGrey": [
       Colors.blueGrey.shade50,
       Colors.blueGrey.shade100,
@@ -182,6 +179,30 @@ class ColorPickerSheetState extends State<ColorPickerSheet> with SingleTickerPro
       Colors.grey.shade700,
       Colors.grey.shade800,
       Colors.grey.shade900,
+    ],
+    "Purple": [
+      Colors.purple.shade50,
+      Colors.purple.shade100,
+      Colors.purple.shade200,
+      Colors.purple.shade300,
+      Colors.purple.shade400,
+      Colors.purple.shade500,
+      Colors.purple.shade600,
+      Colors.purple.shade700,
+      Colors.purple.shade800,
+      Colors.purple.shade900,
+    ],
+    "Deep Purple": [
+      Colors.deepPurple.shade50,
+      Colors.deepPurple.shade100,
+      Colors.deepPurple.shade200,
+      Colors.deepPurple.shade300,
+      Colors.deepPurple.shade400,
+      Colors.deepPurple.shade500,
+      Colors.deepPurple.shade600,
+      Colors.deepPurple.shade700,
+      Colors.deepPurple.shade800,
+      Colors.deepPurple.shade900,
     ],
     "Brown": [
       Colors.brown.shade50,
@@ -215,81 +236,59 @@ class ColorPickerSheetState extends State<ColorPickerSheet> with SingleTickerPro
     // Extract the keys as category names
     List<String> categoryNames = colorCategories.keys.toList();
 
-    return SizedBox(
-      // height: context.height(.5),
-      child: CupertinoPageScaffold(
-        resizeToAvoidBottomInset: false,
-        navigationBar: SheetHeader(
-          title: "Color",
-          closeButtonPosition: CloseButtonPosition.left,
-          trailing: TrailingActionButton(
-            title: "Save",
-            onPressed: navigator.pop,
-          ),
-        ),
-        child: Stack(
-          children: [
-            ListView(
-              shrinkWrap: true,
-              children: [
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20) + EdgeInsets.only(top: 20),
-                  child: CategoryWidget(
-                    customColor: customColorForPicker,
-                    categories: categoryNames,
-                    onCategorySelected: (val) {
-                      controller.forward(from: 0);
-                      setState(() {
-                        selectedCategoryIndex = val;
-                        selectedColorIndex = null;
+    return ListView(
+      shrinkWrap: true,
+      physics: ClampingScrollPhysics(),
+      padding: EdgeInsets.zero,
+      children: [
+        CategoryWidget(
+          customColor: customColorForPicker,
+          categories: categoryNames,
+          onCategorySelected: (val) {
+            controller.forward(from: 0);
+            setState(() {
+              selectedCategoryIndex = val;
+              selectedColorIndex = null;
 
-                        customColorForPicker = colorCategories[categoryNames[selectedCategoryIndex]]![7];
-                      });
-                    },
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20) + EdgeInsets.only(top: 20),
-                  child: SafeArea(
-                    top: false,
-                    child: GridView.builder(
-                      physics: NeverScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      itemCount: colorCategories[categoryNames[selectedCategoryIndex]]!.length,
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 5,
-                        crossAxisSpacing: 10,
-                        mainAxisSpacing: 10,
-                      ),
-                      itemBuilder: (context, index) {
-                        Color color = colorCategories[categoryNames[selectedCategoryIndex]]![index];
-                        return GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              selectedColorIndex = index;
-                              widget.onColorSelected(color);
-                            });
-                          },
-                          child: Card(
-                            color: color,
-                            child: index == selectedColorIndex
-                                ? Icon(
-                                    CupertinoIcons.checkmark_circle,
-                                    size: 32,
-                                    color: index == selectedColorIndex ? getIconColor(color) : Colors.transparent,
-                                  )
-                                : null,
-                          ),
-                        );
-                      },
-                    ).animate(controller: controller).fadeIn(duration: 500.ms),
-                  ),
-                ),
-              ],
-            ),
-          ],
+              customColorForPicker = colorCategories[categoryNames[selectedCategoryIndex]]![7];
+            });
+          },
         ),
-      ),
+        SizedBox(height: 10),
+        GridView.builder(
+          physics: ClampingScrollPhysics(),
+          shrinkWrap: true,
+          padding: EdgeInsets.zero,
+          itemCount: colorCategories[categoryNames[selectedCategoryIndex]]!.length,
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 5,
+            crossAxisSpacing: 10,
+            mainAxisSpacing: 10,
+          ),
+          itemBuilder: (context, index) {
+            Color color = colorCategories[categoryNames[selectedCategoryIndex]]![index];
+            return GestureDetector(
+              onTap: () {
+                setState(() {
+                  selectedColorIndex = index;
+                  widget.onColorSelected(color);
+                });
+              },
+              child: Card(
+                color: color,
+                child: index == selectedColorIndex
+                    ? Icon(
+                        CupertinoIcons.checkmark_circle,
+                        size: 32,
+                        color: index == selectedColorIndex ? getIconColor(color) : Colors.transparent,
+                      )
+                    : null,
+              ),
+            );
+          },
+        ).animate(controller: controller).fadeIn(duration: 500.ms),
+        SizedBox(height: 20),
+      ],
     );
   }
 }

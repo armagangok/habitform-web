@@ -1,7 +1,6 @@
-import 'package:habitrise/features/edit_habit/edit_habit_page.dart';
-
 import '/core/core.dart';
 import '/models/models.dart';
+import '../../../edit_habit/edit_habit_page.dart';
 import '../../bloc/single_habit/single_habit_bloc.dart';
 import 'single_habit_detail_grid.dart';
 
@@ -43,6 +42,9 @@ class _SingleHabitDetailPageState extends State<SingleHabitDetailPage> {
       builder: (context, state) {
         final days = currentHabit.reminderModel?.days;
         final remindTime = currentHabit.reminderModel?.reminderTime?.toHHMM();
+        print("currentHabit");
+        print(currentHabit);
+        print("currentHabit");
 
         return Stack(
           children: [
@@ -52,114 +54,93 @@ class _SingleHabitDetailPageState extends State<SingleHabitDetailPage> {
                 closeButtonPosition: CloseButtonPosition.left,
               ),
               child: ListView(
-                padding: EdgeInsets.all(20),
                 children: [
-                  SafeArea(
-                    bottom: false,
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 20) + EdgeInsets.only(top: 10),
                     child: CustomHeader(
                       text: "INFORMATION",
                       child: item(
                         currentHabit.habitName,
-                        currentHabit.habitDescription,
+                        subtitle: currentHabit.habitDescription,
+                        emoji: currentHabit.emoji,
                       ),
                     ),
                   ),
                   SizedBox(height: 25),
-                  CustomHeader(
-                    text: "REMINDER",
-                    child: item(
-                      remindTime ?? "None",
-                      days?.toString(),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    child: CustomHeader(
+                      text: "REMINDER",
+                      child: SizedBox(
+                        width: double.infinity,
+                        child: Card(
+                          child: Padding(
+                            padding: EdgeInsets.all(10),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  remindTime ?? "None",
+                                  style: context.bodyLarge?.copyWith(fontWeight: FontWeight.bold),
+                                ),
+                                if (remindTime != null)
+                                  SizedBox(
+                                    height: 20,
+                                    child: ListView.separated(
+                                      scrollDirection: Axis.horizontal,
+                                      shrinkWrap: true,
+                                      itemCount: days?.length ?? 0,
+                                      separatorBuilder: (context, index) {
+                                        return Text(", ");
+                                      },
+                                      itemBuilder: (context, index) {
+                                        final dayName = days?[index].name ?? "None";
+                                        return Text(dayName);
+                                      },
+                                    ),
+                                  ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                      // item(
+                      //   ,
+                      //   days?.toString(),
+                      // ),
                     ),
                   ),
                   SizedBox(height: 25),
-                  CustomHeader(
-                    text: "HABIT DATA",
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        SingleHabitDetailGrid(habit: currentHabit),
-                        SizedBox(height: 10),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          spacing: 10,
-                          children: [
-                            CupertinoButton.tinted(
-                              sizeStyle: CupertinoButtonSize.small,
-                              onPressed: () {},
-                              child: Row(
-                                spacing: 5,
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Text("Calendar"),
-                                  Icon(CupertinoIcons.calendar),
-                                ],
-                              ),
-                            ),
-                            CupertinoButton.tinted(
-                              color: currentHabit.isCompletedToday ? Color(currentHabit.colorCode) : Colors.grey.shade500,
-                              sizeStyle: CupertinoButtonSize.small,
-                              child: AnimatedSwitcher(
-                                duration: Duration(milliseconds: 400),
-                                transitionBuilder: (Widget child, Animation<double> animation) {
-                                  return FadeTransition(
-                                    opacity: animation,
-                                    child: SizeTransition(
-                                      sizeFactor: animation,
-                                      axis: Axis.horizontal, // Yatay eksende animasyon
-                                      axisAlignment: -1, // Soldan hizala
-                                      child: child,
-                                    ),
-                                  );
-                                },
-                                child: currentHabit.isCompletedToday
-                                    ? Row(
-                                        key: ValueKey('completed'),
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          Text(
-                                            "Uncomplete Today",
-                                            style: TextStyle(
-                                              color: currentHabit.isCompletedToday ? Color(currentHabit.colorCode) : Colors.grey.shade500,
-                                            ),
-                                          ),
-                                          SizedBox(width: 5),
-                                          Icon(
-                                            CupertinoIcons.calendar_badge_minus,
-                                            color: currentHabit.isCompletedToday ? Color(currentHabit.colorCode) : Colors.grey.shade500,
-                                          ),
-                                        ],
-                                      )
-                                    : Row(
-                                        key: ValueKey('uncompleted'),
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          Text(
-                                            "Complete Today",
-                                            style: TextStyle(
-                                              color: currentHabit.isCompletedToday ? Color(currentHabit.colorCode) : Colors.grey.shade500,
-                                            ),
-                                          ),
-                                          SizedBox(width: 5),
-                                          Icon(
-                                            CupertinoIcons.calendar_badge_plus,
-                                            color: currentHabit.isCompletedToday ? Color(currentHabit.colorCode) : Colors.grey.shade500,
-                                          ),
-                                        ],
-                                      ),
-                              ),
-                              onPressed: () {
-                                final event = UpdateHabitForSelectedDayEvent(
-                                  dateToSaveOrRemove: DateTime.now(),
-                                  habit: currentHabit,
-                                );
-
-                                context.read<SingleHabitBloc>().add(event);
-                              },
-                            ),
-                          ],
-                        ),
-                      ],
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    child: CustomHeader(
+                      text: "HABIT DATA",
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          SingleHabitDetailGrid(habit: currentHabit),
+                          SizedBox(height: 10),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            spacing: 10,
+                            children: [
+                              // CupertinoButton.tinted(
+                              //   sizeStyle: CupertinoButtonSize.small,
+                              //   onPressed: () {},
+                              //   child: Row(
+                              //     spacing: 5,
+                              //     mainAxisSize: MainAxisSize.min,
+                              //     children: [
+                              //       Text("Calendar"),
+                              //       Icon(CupertinoIcons.calendar),
+                              //     ],
+                              //   ),
+                              // ),
+                              CompleteTodayButton(currentHabit: currentHabit),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ],
@@ -275,7 +256,7 @@ class _SingleHabitDetailPageState extends State<SingleHabitDetailPage> {
     );
   }
 
-  Widget item(String title, String? subtitle) {
+  Widget item(String title, {String? emoji, String? subtitle}) {
     return title.isEmpty && subtitle == null
         ? SizedBox.shrink()
         : Card(
@@ -283,28 +264,115 @@ class _SingleHabitDetailPageState extends State<SingleHabitDetailPage> {
               padding: EdgeInsets.all(10),
               child: SizedBox(
                 width: double.infinity,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                child: Row(
                   children: [
-                    if (title.isNotEmpty)
+                    if (emoji != null)
                       Text(
-                        title,
-                        style: context.bodyLarge?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
+                        emoji,
+                        style: TextStyle(fontSize: 30),
                       ),
-                    if (subtitle != null && subtitle.isNotEmpty)
-                      Text(
-                        subtitle,
-                        style: context.bodyMedium?.copyWith(
-                          color: context.cupertinoTextStyle.color?.withAlpha(170),
-                        ),
+                    if (emoji != null) SizedBox(width: 10),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          if (title.isNotEmpty)
+                            Text(
+                              title,
+                              style: context.bodyLarge?.copyWith(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          if (subtitle != null && subtitle.isNotEmpty)
+                            Text(
+                              subtitle,
+                              style: context.bodyMedium?.copyWith(
+                                color: context.cupertinoTextStyle.color?.withAlpha(170),
+                              ),
+                              maxLines: 2,
+                            ),
+                        ],
                       ),
+                    ),
                   ],
                 ),
               ),
             ),
           );
+  }
+}
+
+class CompleteTodayButton extends StatelessWidget {
+  const CompleteTodayButton({
+    super.key,
+    required this.currentHabit,
+  });
+
+  final Habit currentHabit;
+
+  @override
+  Widget build(BuildContext context) {
+    return CupertinoButton.tinted(
+      color: currentHabit.isCompletedToday ? Color(currentHabit.colorCode) : Colors.grey.shade500,
+      sizeStyle: CupertinoButtonSize.small,
+      child: AnimatedSwitcher(
+        duration: Duration(milliseconds: 400),
+        transitionBuilder: (Widget child, Animation<double> animation) {
+          return FadeTransition(
+            opacity: animation,
+            child: SizeTransition(
+              sizeFactor: animation,
+              axis: Axis.horizontal, // Yatay eksende animasyon
+              axisAlignment: -1, // Soldan hizala
+              child: child,
+            ),
+          );
+        },
+        child: currentHabit.isCompletedToday
+            ? Row(
+                key: ValueKey('completed'),
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    "Completed",
+                    style: TextStyle(
+                      color: currentHabit.isCompletedToday ? Color(currentHabit.colorCode) : Colors.grey.shade900,
+                    ),
+                  ),
+                  SizedBox(width: 5),
+                  Icon(
+                    CupertinoIcons.checkmark_alt,
+                    color: currentHabit.isCompletedToday ? Color(currentHabit.colorCode) : Colors.grey.shade900,
+                  ),
+                ],
+              )
+            : Row(
+                key: ValueKey('uncompleted'),
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    "Complete",
+                    style: TextStyle(
+                      color: currentHabit.isCompletedToday ? Color(currentHabit.colorCode) : Colors.grey.shade500,
+                    ),
+                  ),
+                  SizedBox(width: 5),
+                  Icon(
+                    CupertinoIcons.calendar_today,
+                    color: currentHabit.isCompletedToday ? Color(currentHabit.colorCode) : Colors.grey.shade500,
+                  ),
+                ],
+              ),
+      ),
+      onPressed: () {
+        final event = UpdateHabitForSelectedDayEvent(
+          dateToSaveOrRemove: DateTime.now(),
+          habit: currentHabit,
+        );
+
+        context.read<SingleHabitBloc>().add(event);
+      },
+    );
   }
 }
 
@@ -330,7 +398,10 @@ class CustomHeader extends StatelessWidget {
                 width: double.infinity,
                 child: Text(
                   text,
-                  style: context.bodyMedium?.copyWith(color: context.bodyMedium?.color?.withAlpha(170)),
+                  style: context.bodyMedium?.copyWith(
+                    color: context.bodyMedium?.color?.withAlpha(170),
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
               ),
               if (child != null) child!,

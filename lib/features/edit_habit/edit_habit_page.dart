@@ -5,6 +5,7 @@ import '/core/widgets/habit_icon/cubit/habit_icon_cubit.dart';
 import '/core/widgets/habit_icon/icon_picker_sheet.dart';
 import '/models/models.dart';
 import '../add_habit/widget/add_reminder_widget.dart';
+import '../habits/widgets/single_habit/habit_detail.dart';
 import '../reminder/bloc/reminder/reminder_bloc.dart';
 import '../reminder/models/reminder/reminder_model.dart';
 import 'bloc/edit_habit_bloc.dart';
@@ -89,30 +90,35 @@ class _EditHabitPageState extends State<EditHabitPage> {
           padding: EdgeInsets.all(20),
           children: [
             Column(
-              spacing: 25,
+              spacing: 30,
               children: [
                 SafeArea(
                   bottom: false,
-                  child: _buildHabitTextField(
-                    text: "Name",
-                    controller: _habitNameController,
+                  child: CustomHeader(
+                    text: "NAME",
+                    child: _buildHabitTextField(controller: _habitNameController),
                   ),
                 ),
-                _buildHabitTextField(
-                  text: "Description",
-                  controller: _habitDescriptionController,
+                CustomHeader(
+                  text: "DESCRIPTION",
+                  child: _buildHabitTextField(controller: _habitDescriptionController),
                 ),
                 AddReminderWidget(),
-                Row(
-                  children: [
-                    Expanded(
-                      child: _buildIconPicker(),
-                    ),
-                    SizedBox(width: 20),
-                    Expanded(
-                      child: _buildColorPicker(),
-                    ),
-                  ],
+                CustomHeader(
+                  text: "ICON",
+                  child: IconPickerSheet(
+                    onIconSelected: (icon) {
+                      context.read<HabitEmojiCubit>().pickIcon(icon);
+                    },
+                  ),
+                ),
+                CustomHeader(
+                  text: "COLOR",
+                  child: ColorPickerSheet(
+                    onColorSelected: (color) {
+                      context.read<HabitColorCubit>().pickColor(color);
+                    },
+                  ),
                 ),
               ],
             ),
@@ -122,119 +128,106 @@ class _EditHabitPageState extends State<EditHabitPage> {
     );
   }
 
-  Widget _buildHabitTextField({
-    required String text,
-    required TextEditingController controller,
-  }) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Text(
-          text,
-          style: context.bodySmall,
+  Widget _buildHabitTextField({required TextEditingController controller}) {
+    return Card(
+      child: CupertinoTextField(
+        padding: EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12),
         ),
-        Card(
-          child: CupertinoTextField(
-            padding: EdgeInsets.all(10),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
-            ),
-            controller: controller,
-          ),
-        ),
-      ],
+        controller: controller,
+      ),
     );
   }
 
-  // Reuse the icon and color picker widgets from AddHabitPage
-  Widget _buildIconPicker() => Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text("Icon", style: context.bodySmall),
-          CustomButton(
-            onTap: () {
-              showCupertinoModalBottomSheet(
-                enableDrag: false,
-                context: context,
-                builder: (context) => IconPickerSheet(
-                  onIconSelected: (icon) {
-                    context.read<HabitEmojiCubit>().pickIcon(icon);
-                  },
-                ),
-              );
-            },
-            child: _buildIconPickerContent(),
-          ),
-        ],
-      );
+  // // Reuse the icon and color picker widgets from AddHabitPage
+  // Widget _buildIconPicker() => Column(
+  //       crossAxisAlignment: CrossAxisAlignment.start,
+  //       mainAxisAlignment: MainAxisAlignment.center,
+  //       children: [
+  //         Text("Icon", style: context.bodySmall),
+  //         CustomButton(
+  //           onTap: () {
+  //             showCupertinoModalBottomSheet(
+  //               enableDrag: false,
+  //               context: context,
+  //               builder: (context) => IconPickerSheet(
+  //                 onIconSelected: (icon) {
+  //                   context.read<HabitEmojiCubit>().pickIcon(icon);
+  //                 },
+  //               ),
+  //             );
+  //           },
+  //           child: _buildIconPickerContent(),
+  //         ),
+  //       ],
+  //     );
 
-  Widget _buildColorPicker() => Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text("Color", style: context.bodySmall),
-          CustomButton(
-            onTap: () {
-              showCupertinoModalBottomSheet(
-                context: context,
-                builder: (context) => ColorPickerSheet(
-                  onColorSelected: (color) {
-                    context.read<HabitColorCubit>().pickColor(color);
-                  },
-                ),
-              );
-            },
-            child: _buildColorPickerContent(),
-          ),
-        ],
-      );
+  // Widget _buildColorPicker() => Column(
+  //       crossAxisAlignment: CrossAxisAlignment.start,
+  //       mainAxisAlignment: MainAxisAlignment.center,
+  //       children: [
+  //         Text("Color", style: context.bodySmall),
+  //         CustomButton(
+  //           onTap: () {
+  //             showCupertinoModalBottomSheet(
+  //               context: context,
+  //               builder: (context) => ColorPickerSheet(
+  //                 onColorSelected: (color) {
+  //                   context.read<HabitColorCubit>().pickColor(color);
+  //                 },
+  //               ),
+  //             );
+  //           },
+  //           child: _buildColorPickerContent(),
+  //         ),
+  //       ],
+  //     );
 
-  Widget _buildIconPickerContent() => SizedBox(
-        width: double.infinity,
-        child: Card.filled(
-          margin: EdgeInsets.zero,
-          child: Padding(
-            padding: const EdgeInsets.all(10),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                BlocBuilder<HabitEmojiCubit, HabitIconState>(
-                  builder: (context, state) {
-                    return Text(state.emoji ?? "None");
-                  },
-                ),
-                CupertinoListTileChevron(),
-              ],
-            ),
-          ),
-        ),
-      );
+  // Widget _buildIconPickerContent() => SizedBox(
+  //       width: double.infinity,
+  //       child: Card.filled(
+  //         margin: EdgeInsets.zero,
+  //         child: Padding(
+  //           padding: const EdgeInsets.all(10),
+  //           child: Row(
+  //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //             children: [
+  //               BlocBuilder<HabitEmojiCubit, HabitIconState>(
+  //                 builder: (context, state) {
+  //                   return Text(state.emoji ?? "None");
+  //                 },
+  //               ),
+  //               CupertinoListTileChevron(),
+  //             ],
+  //           ),
+  //         ),
+  //       ),
+  //     );
 
-  Widget _buildColorPickerContent() => SizedBox(
-        width: double.infinity,
-        child: BlocBuilder<HabitColorCubit, HabitColorState>(
-          builder: (context, state) {
-            return Card.filled(
-              margin: EdgeInsets.zero,
-              color: state.color ?? Color(widget.habit.colorCode),
-              child: Padding(
-                padding: const EdgeInsets.all(10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    BlocBuilder<HabitColorCubit, HabitColorState>(
-                      builder: (context, state) {
-                        return state.color == null ? Text("None", textAlign: TextAlign.center) : SizedBox.shrink();
-                      },
-                    ),
-                    CupertinoListTileChevron(),
-                  ],
-                ),
-              ),
-            );
-          },
-        ),
-      );
+  // Widget _buildColorPickerContent() => SizedBox(
+  //       width: double.infinity,
+  //       child: BlocBuilder<HabitColorCubit, HabitColorState>(
+  //         builder: (context, state) {
+  //           return Card.filled(
+  //             margin: EdgeInsets.zero,
+  //             color: state.color ?? Color(widget.habit.colorCode),
+  //             child: Padding(
+  //               padding: const EdgeInsets.all(10),
+  //               child: Row(
+  //                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //                 children: [
+  //                   BlocBuilder<HabitColorCubit, HabitColorState>(
+  //                     builder: (context, state) {
+  //                       return state.color == null ? Text("None", textAlign: TextAlign.center) : SizedBox.shrink();
+  //                     },
+  //                   ),
+  //                   CupertinoListTileChevron(),
+  //                 ],
+  //               ),
+  //             ),
+  //           );
+  //         },
+  //       ),
+  //     );
 }

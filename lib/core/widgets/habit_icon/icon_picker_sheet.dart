@@ -26,44 +26,28 @@ class IconPickerSheetState extends State<IconPickerSheet> with SingleTickerProvi
 // Define categories with emojis
   Map<String, List<String>> emojiCategories = {
     "Daily Life": [
-      // Morning Routine
-      '🌅', '🛏️', '🪥', '🚿', '🧴', '🪒', '👕', '👖', '👟',
-
-      // Food & Meals
-      '🍳', '🍞', '🥚', '🥛', '☕', '🍽️', '🍕', '🍔', '🍜', '🍎', '🥤',
-
-      // Work & Productivity
-      '💼', '🖥️', '💻', '📱', '📅', '🕒', '📝', '📂', '📌', '✏️', '🖊️',
-
-      // Health & Fitness
-      '🏋️‍♂️', '🏃‍♂️', '🧘‍♀️', '🏥', '💊', '🩺', '🩹', '🧬', '🧪',
-
-      // Transportation
-      '🚗', '🚕', '🚌', '🚲', '🚆', '✈️', '🚶‍♂️', '🛴',
-
-      // Shopping & Errands
-      '🛒', '🛍️', '💳', '🏪', '🧾',
-
-      // Household Chores
-      '🧹', '🧽', '🧺', '🧼', '🗑️', '🪣', '🪠',
-
-      // Leisure & Entertainment
-      '📺', '🎮', '🎧', '🎤', '🎬', '🎨', '🛋️',
-
-      // Social Life
-      '👥', '🎉', '🎁', '🍻', '🍰', '💌',
-
-      // Sleep & Relaxation
-      '🌙', '🛌', '🧘‍♂️', '🛀', '🕯️',
-
-      // Weather & Nature
-      '☀️', '🌧️', '🌈', '🌳', '🌱', '🐦', '🐕', '🐈',
-
-      // Technology
-      '🔌', '🔋', '📡', '🖨️', '🎛️',
-
-      // Miscellaneous
-      '🔑', '💡', '🕳️', '🧮', '📦',
+      '🛏️',
+      '🛌',
+      '🪥',
+      '🚿',
+      '🧴',
+      '🪒',
+      '👕',
+      '👖',
+      '👟',
+      '💧',
+      '🎛️',
+      '🍳',
+      '🍞',
+      '🥚',
+      '🥛',
+      '☕',
+      '🍽️',
+      '🍕',
+      '🍔',
+      '🍜',
+      '🍎',
+      '🥤',
     ],
     "Sports": [
       "⚽", // Futbol
@@ -101,6 +85,19 @@ class IconPickerSheetState extends State<IconPickerSheet> with SingleTickerProvi
       "💪", // Fitness
       "💧", // Hidrasyon
       "💉", // Aşı
+      "⚕️",
+      "🩺",
+      "🩻",
+      "🏥",
+      "🧑🏻‍⚕️",
+      "👩🏻‍⚕️",
+      "👩🏼‍⚕️",
+      "👨🏻‍⚕️",
+      "👨🏼‍⚕️",
+      "👨🏿‍⚕️",
+      "👩🏿‍⚕️",
+      "🚑",
+      "⛑️",
     ],
     "Social": [
       "👥", // Sosyal bağlantı
@@ -124,7 +121,6 @@ class IconPickerSheetState extends State<IconPickerSheet> with SingleTickerProvi
       "🌙", // Ay
       "🌬️", // Rüzgar
       "🌨️", // Kar
-      "💧", // Su damlası
       "🌱", // Yeşil alan
       "🐦", // Kuş
       "🌳", // Ağaç
@@ -175,6 +171,18 @@ class IconPickerSheetState extends State<IconPickerSheet> with SingleTickerProvi
       "📧", // E-posta
       "📞", // Telefon
       "🏢", // işletme
+      "🕴🏻",
+      "🕴🏻",
+      "🖇️",
+      "🗂️",
+      "🗄️",
+      "🗒️",
+      "📤",
+      "📥",
+      "📊",
+      "📉",
+      "📈",
+      "📇",
     ],
     "Task & Project": [
       "📃", // Liste
@@ -319,13 +327,10 @@ class IconPickerSheetState extends State<IconPickerSheet> with SingleTickerProvi
     "Garden & Yard": [
       "🌱", // Bitki
       "🌳", // Ağaç
-      "🌿", // Yaprak
       "🌾", // Çim
       "🌼", // Bahçe
       "🌍", // Arazi
-      "🌿", // Çimen
       "🌹", // Çiçek
-      "", // Çim
       "⛲️",
       "🪴",
       "👨🏻‍🌾",
@@ -341,93 +346,72 @@ class IconPickerSheetState extends State<IconPickerSheet> with SingleTickerProvi
     // Extract the keys as category names
     List<String> categoryNames = emojiCategories.keys.toList();
 
-    return SizedBox(
-      child: CupertinoPageScaffold(
-        backgroundColor: Colors.transparent,
-        resizeToAvoidBottomInset: false,
-        navigationBar: SheetHeader(
-          title: "Icon",
-          closeButtonPosition: CloseButtonPosition.left,
-          trailing: TrailingActionButton(
-            title: "Save",
-            onPressed: navigator.pop,
-          ),
-        ),
-        child: Stack(
+    return Stack(
+      children: [
+        ListView(
+          shrinkWrap: true,
+          physics: ClampingScrollPhysics(),
+          padding: EdgeInsets.zero,
           children: [
-            Padding(
-              padding: EdgeInsets.only(top: 20),
-              child: ListView(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: CategoryWidget(
-                      categories: categoryNames,
-                      onCategorySelected: (int selectedCategory) {
-                        controller.forward(from: 0);
-                        setState(() {
-                          selectedCategoryIndex = selectedCategory;
-                        });
-                      },
-                    ),
-                  ),
-                  SizedBox(height: 20),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 12),
-                    child: CupertinoScrollbar(
-                      child: GridView.builder(
-                        physics: NeverScrollableScrollPhysics(),
-                        shrinkWrap: true,
-                        itemCount: emojiCategories[categoryNames[selectedCategoryIndex]]!.length,
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 5,
-                          crossAxisSpacing: 0,
-                          mainAxisSpacing: 0,
-                        ),
-                        itemBuilder: (context, index) {
-                          final iconData = emojiCategories[categoryNames[selectedCategoryIndex]]![index];
+            CategoryWidget(
+              categories: categoryNames,
+              onCategorySelected: (int selectedCategory) {
+                controller.forward(from: 0);
 
-                          return CupertinoButton(
-                            padding: EdgeInsets.zero,
-                            onPressed: () {
-                              setState(() {
-                                selectedIconIndex = index;
-                              });
+                selectedIconIndex = null;
+                setState(() {
+                  selectedCategoryIndex = selectedCategory;
+                });
+              },
+            ),
+            SizedBox(height: 10),
+            SizedBox(
+              height: 150,
+              child: GridView.builder(
+                shrinkWrap: true,
+                padding: EdgeInsets.zero,
+                scrollDirection: Axis.horizontal,
+                itemCount: emojiCategories[categoryNames[selectedCategoryIndex]]!.length,
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 3,
+                  crossAxisSpacing: 5,
+                  mainAxisSpacing: 10,
+                ),
+                itemBuilder: (context, index) {
+                  final iconData = emojiCategories[categoryNames[selectedCategoryIndex]]![index];
 
-                              widget.onIconSelected(iconData);
-                            },
-                            child: Card(
-                              elevation: .2,
-                              color: index == selectedIconIndex ? CupertinoColors.systemBlue.withOpacity(.5) : null,
-                              child: SizedBox(
-                                width: 60,
-                                height: 60,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(5.0),
-                                  child: Center(
-                                    child: FittedBox(
-                                      child: Text(
-                                        iconData,
-                                        textAlign: TextAlign.center,
-                                        style: context.titleLarge?.copyWith(fontSize: 40),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
+                  return CupertinoButton(
+                    padding: EdgeInsets.zero,
+                    onPressed: () {
+                      setState(() {
+                        selectedIconIndex = index;
+                      });
+
+                      widget.onIconSelected(iconData);
+                    },
+                    child: Card(
+                      elevation: .25,
+                      color: index == selectedIconIndex ? context.primary : null,
+                      child: Padding(
+                        padding: const EdgeInsets.all(2.5),
+                        child: Center(
+                          child: FittedBox(
+                            child: Text(
+                              iconData,
+                              textAlign: TextAlign.center,
+                              style: context.titleLarge?.copyWith(fontSize: 40),
                             ),
-                          );
-                        },
-                      ).animate(controller: controller).fadeIn(duration: 500.ms),
+                          ),
+                        ),
+                      ),
                     ),
-                  ),
-                  SizedBox(height: 40),
-                ],
-              ),
+                  );
+                },
+              ).animate(controller: controller).fadeIn(duration: 500.ms),
             ),
           ],
         ),
-      ),
+      ],
     );
   }
 }

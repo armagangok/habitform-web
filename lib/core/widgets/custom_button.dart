@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/services.dart';
 
 class CustomButton extends StatelessWidget {
   const CustomButton({
@@ -21,7 +22,10 @@ class CustomButton extends StatelessWidget {
         padding: EdgeInsets.zero,
         minSize: 0,
         alignment: Alignment.center,
-        onPressed: onTap,
+        onPressed: () async {
+          await HapticFeedback.mediumImpact();
+          onTap?.call();
+        },
         child: child,
       ),
     );

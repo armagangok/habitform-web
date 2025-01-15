@@ -1,7 +1,5 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:habitrise/core/extension/easy_context.dart';
+import 'package:habitrise/core/core.dart';
 
 class MultiCategoryWidget extends StatefulWidget {
   final List<String> categories;
@@ -118,14 +116,18 @@ class CategoryWidgetState extends State<CategoryWidget> {
               color: selectedIndex == index ? widget.customColor ?? context.primary : null,
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
               child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 8),
-                child: Text(
-                  widget.categories[index],
-                  style: context.bodySmall?.copyWith(
+                padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 5.5),
+                child: AnimatedDefaultTextStyle(
+                  duration: 300.ms, // Smooth animation duration
+                  curve: Curves.easeInOut, // Curve for the animation
+                  style: TextStyle(
+                    fontSize: selectedIndex == index ? 13 : 13, // Change size with weight if desired
+                    fontWeight: selectedIndex == index ? FontWeight.w600 : FontWeight.normal,
                     color: selectedIndex == index ? Colors.white : context.bodySmall?.color?.withValues(alpha: .72),
-                    fontWeight: FontWeight.bold,
                   ),
-                ),
+
+                  child: Text(widget.categories[index]),
+                ).animate(effects: []),
               ),
             ),
           );
