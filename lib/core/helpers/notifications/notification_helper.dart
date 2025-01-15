@@ -23,8 +23,8 @@ final class NotificationHelper {
       const initializationSettings = InitializationSettings(android: android, iOS: iOS, macOS: iOS);
 
       const AndroidNotificationChannel channel = AndroidNotificationChannel(
-        'reminder_channel_id', // Channel ID
-        'Reminders', // Channel Name
+        'HabitRise_Reminder', // Channel ID
+        'Habit Reminder', // Channel Name
         description: 'Channel for reminder notifications',
         importance: Importance.high,
       );
@@ -36,76 +36,6 @@ final class NotificationHelper {
       LogHelper.shared.debugPrint('$e\n$s');
     }
   }
-
-  Future<void> showTimerCompletedNotification({
-    required String title,
-    required String message,
-  }) async {
-    final androidDetails = AndroidNotificationDetails(
-      "Time End Channel",
-      "Timer Completed Notification",
-      priority: Priority.max,
-      color: Colors.orange.shade600,
-      importance: Importance.max,
-      playSound: true,
-      enableVibration: true,
-    );
-
-    const darwinNotificationDetails = DarwinNotificationDetails(
-      interruptionLevel: InterruptionLevel.critical,
-    );
-
-    final notificationDetails = NotificationDetails(
-      android: androidDetails,
-      iOS: darwinNotificationDetails,
-      macOS: darwinNotificationDetails,
-    );
-
-    try {
-      if (isInitializationSucceded != null && isInitializationSucceded == true) {
-        await _notificationPlugin.show(
-          12,
-          title,
-          message,
-          notificationDetails,
-        );
-      } else {
-        LogHelper.shared.debugPrint('isInitializationSucceded $isInitializationSucceded  is false');
-      }
-    } catch (e, s) {
-      LogHelper.shared.debugPrint('$e\n$s}');
-    }
-  }
-
-  // void showTimeUpdateNotification(String counter, String taskName) async {
-  //   if (Platform.isAndroid) {
-  //     final androidPlatformChannelSpecifics = AndroidNotificationDetails(
-  //       'Remaining Time Chanel',
-  //       'Remaining Time Notification',
-  //       importance: Importance.max,
-  //       priority: Priority.high,
-  //       enableVibration: false,
-  //       silent: true,
-  //       color: Colors.orange.shade600,
-  //       playSound: false,
-  //       autoCancel: true,
-  //     );
-
-  //     final platformChannelSpecifics = NotificationDetails(
-  //       android: androidPlatformChannelSpecifics,
-  //       iOS: DarwinNotificationDetails(
-  //         presentSound: false,
-  //       ),
-  //     );
-
-  //     await _notificationPlugin.show(
-  //       0,
-  //       taskName,
-  //       '${LocaleKeys.remainingTime.tr()}: $counter',
-  //       platformChannelSpecifics,
-  //     );
-  //   }
-  // }
 
   void cancelNotificationWithId(int id) async {
     await _notificationPlugin.cancel(id);
@@ -120,12 +50,12 @@ final class NotificationHelper {
   ) async {
     // Android-specific details
     final AndroidNotificationDetails androidNotificationDetails = AndroidNotificationDetails(
-      'reminder_channel_id',
-      'Reminders',
-      channelDescription: 'Channel for reminder notifications',
+      'HabitRise_Reminder_Channel',
+      'HabitRise Reminder',
+      channelDescription: 'Channel for habit reminder notifications',
       importance: Importance.high,
       priority: Priority.high,
-      color: Colors.orange.shade600,
+      color: Colors.deepOrangeAccent.shade400,
     );
 
     final NotificationDetails notificationDetails = NotificationDetails(

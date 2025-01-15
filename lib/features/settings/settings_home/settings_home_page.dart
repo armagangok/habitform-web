@@ -37,13 +37,7 @@ class _SettingsPageState extends State<SettingsPage> with SingleTickerProviderSt
           SafeArea(
             bottom: false,
             child: Card(
-              child: CupertinoListSection(
-                header: Text("SECTION"),
-                topMargin: 8,
-                footer: null,
-                margin: EdgeInsets.zero,
-                additionalDividerMargin: 0,
-                backgroundColor: context.theme.cardColor,
+              child: Column(
                 children: [
                   CupertinoListTile(
                     backgroundColor: Colors.transparent,
@@ -51,11 +45,14 @@ class _SettingsPageState extends State<SettingsPage> with SingleTickerProviderSt
                     onTap: () {},
                     trailing: CupertinoListTileChevron(),
                   ),
+                  CustomDivider(),
                   CupertinoListTile(
+                    backgroundColor: Colors.transparent,
                     title: Text("Settings"),
                     onTap: () {},
                     trailing: CupertinoListTileChevron(),
                   ),
+                  CustomDivider(),
                   CupertinoListTile(
                     title: Text("Settings"),
                     onTap: () {},
@@ -97,6 +94,35 @@ class _SettingsPageState extends State<SettingsPage> with SingleTickerProviderSt
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class CustomDivider extends StatelessWidget {
+  final Color color;
+  final double thickness;
+  final double indent;
+  final double endIndent;
+
+  const CustomDivider({
+    super.key,
+    this.color = CupertinoColors.separator,
+    this.thickness = .4,
+    this.indent = 20.0,
+    this.endIndent = 0.0,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsetsDirectional.only(
+        start: indent,
+        end: endIndent,
+      ),
+      child: Container(
+        height: thickness,
+        color: color,
       ),
     );
   }
