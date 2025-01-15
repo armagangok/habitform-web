@@ -5,7 +5,7 @@ import '/models/models.dart';
 import '../../edit_habit/edit_habit_page.dart';
 import '../../habits/bloc/single_habit/single_habit_bloc.dart';
 import '../../habits/widgets/single_habit/single_habit_detail_grid.dart';
-import '../widget/share_habit_button.dart';
+import '../../share_habit/share_habit_button.dart';
 
 class SingleHabitDetailPage extends StatefulWidget {
   const SingleHabitDetailPage({
@@ -45,9 +45,6 @@ class _SingleHabitDetailPageState extends State<SingleHabitDetailPage> {
       builder: (context, state) {
         final days = currentHabit.reminderModel?.days;
         final remindTime = currentHabit.reminderModel?.reminderTime?.toHHMM();
-        print("currentHabit");
-        print(currentHabit);
-        print("currentHabit");
 
         return Stack(
           children: [
@@ -307,7 +304,7 @@ class CompleteTodayButton extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    "Completed",
+                    "Today Completed",
                     style: TextStyle(
                       color: currentHabit.isCompletedToday ? Color(currentHabit.colorCode) : null,
                     ),

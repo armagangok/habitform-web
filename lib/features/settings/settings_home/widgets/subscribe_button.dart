@@ -8,7 +8,6 @@ class SubscribeButton extends StatelessWidget {
   Widget build(BuildContext context) {
     // final isSubscriptionActive = false;
 
-    final brightness = Theme.of(context).brightness;
     return CustomButton(
       onTap: () async {
         // if (isSubscriptionActive) {

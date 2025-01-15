@@ -292,7 +292,7 @@ class ColorPickerSheetState extends State<ColorPickerSheet> with SingleTickerPro
                     ? Icon(
                         CupertinoIcons.checkmark_circle,
                         size: 32,
-                        color: index == selectedColorIndex ? getIconColor(color) : Colors.transparent,
+                        color: index == selectedColorIndex ? color.colorRegardingToBrightness : Colors.transparent,
                       )
                     : null,
               ),
@@ -305,13 +305,3 @@ class ColorPickerSheetState extends State<ColorPickerSheet> with SingleTickerPro
   }
 }
 
-Color getIconColor(Color color) {
-  // Calculate the luminance (0.0 to 1.0) of the selected color
-  final luminance = color.computeLuminance();
-
-  // Set a threshold to determine if the color is bright
-  const brightnessThreshold = 0.5;
-
-  // If luminance is higher than threshold, use a darker icon color; otherwise, use a lighter icon color
-  return luminance > brightnessThreshold ? Colors.black : Colors.white;
-}

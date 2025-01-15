@@ -16,18 +16,18 @@ class SingleHabitDetailGrid extends StatefulWidget {
 
 class _SingleHabitDetailGridState extends State<SingleHabitDetailGrid> {
   final List<DateTime> last90Days = [];
-  final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
     super.initState();
     // Son 90 günü oluştur
     DateTime today = DateTime.now();
-    for (int i = 180; i >= 0; i--) {
+    for (int i = 150; i >= 0; i--) {
       last90Days.add(today.subtract(Duration(days: i)));
     }
   }
 
+  final ScrollController _scrollController = ScrollController();
   @override
   void dispose() {
     _scrollController.dispose();

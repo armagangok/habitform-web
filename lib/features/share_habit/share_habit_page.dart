@@ -5,7 +5,7 @@ import 'package:screenshot/screenshot.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '/core/core.dart';
-import '../../../models/models.dart';
+import '../../models/models.dart';
 
 class ShareHabitPage extends StatefulWidget {
   final Habit habit;
@@ -22,22 +22,9 @@ class ShareHabitPage extends StatefulWidget {
 class _ShareHabitPageState extends State<ShareHabitPage> {
   final screenshotController = ScreenshotController();
 
-  Future<void> _shareHabitAsImage() async {
+  Future<void> _shareHabitAsImage(Widget widget, BuildContext contextFromWidget) async {
     try {
-      final imageFile = await screenshotController.captureFromWidget(
-        MediaQuery(
-          data: const MediaQueryData(),
-          child: MaterialApp(
-            theme: context.theme,
-            debugShowCheckedModeBanner: false,
-            home: Material(
-              child: ShareHabitPreview(habit: widget.habit),
-            ),
-          ),
-        ),
-        delay: const Duration(milliseconds: 100),
-        context: context,
-      );
+      final imageFile = await screenshotController.captureFromWidget(widget, context: contextFromWidget);
 
       final tempDir = await getTemporaryDirectory();
       final file = await File('${tempDir.path}/habit.png').create();
@@ -65,6 +52,7 @@ class _ShareHabitPageState extends State<ShareHabitPage> {
 
   @override
   Widget build(BuildContext context) {
+    final habitWidget = ShareHabitPreview(habit: widget.habit);
     return CupertinoPageScaffold(
       navigationBar: SheetHeader(
         closeButtonPosition: CloseButtonPosition.left,
@@ -77,7 +65,7 @@ class _ShareHabitPageState extends State<ShareHabitPage> {
             children: [
               SafeArea(
                 bottom: false,
-                child: ShareHabitPreview(habit: widget.habit),
+                child: habitWidget,
               ),
               const SizedBox(height: 20),
             ],
@@ -94,7 +82,9 @@ class _ShareHabitPageState extends State<ShareHabitPage> {
                         child: CupertinoButton.tinted(
                           color: Colors.indigoAccent.shade100,
                           focusColor: Colors.indigoAccent.shade100,
-                          onPressed: _shareHabitAsImage,
+                          onPressed: () {
+                            _shareHabitAsImage(habitWidget, context);
+                          },
                           sizeStyle: CupertinoButtonSize.medium,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -141,7 +131,7 @@ class _ShareHabitPageState extends State<ShareHabitPage> {
   }
 }
 
-class ShareHabitPreview extends StatelessWidget {
+class ShareHabitPreview extends StatefulWidget {
   final Habit habit;
 
   const ShareHabitPreview({
@@ -150,16 +140,51 @@ class ShareHabitPreview extends StatelessWidget {
   });
 
   @override
+  State<ShareHabitPreview> createState() => _ShareHabitPreviewState();
+}
+
+class _ShareHabitPreviewState extends State<ShareHabitPreview> {
+  final ScrollController _scrollController = ScrollController();
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _scrollToEnd() {
+    if (_scrollController.hasClients) {
+      _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+    }
+  }
+
+  @override
+  void initState() {
+    // Add post frame callback here instead of initState
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _scrollToEnd();
+
+      setState(() {});
+    });
+
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Material(
       color: Colors.transparent,
       child: Container(
+        height: 330,
         decoration: BoxDecoration(
-          gradient: LinearGradient(colors: [
-            Color(habit.colorCode).withOpacity(.8),
-            Color(habit.colorCode).withOpacity(.9),
-            Color(habit.colorCode).withOpacity(1),
-          ]),
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              Color(widget.habit.colorCode).withOpacity(.8),
+              Color(widget.habit.colorCode).withOpacity(.9),
+              Color(widget.habit.colorCode).withOpacity(1),
+            ],
+          ),
         ),
         child: Padding(
           padding: const EdgeInsets.all(20.0),
@@ -176,17 +201,18 @@ class ShareHabitPreview extends StatelessWidget {
                         children: [
                           Expanded(
                             child: Column(
+                              mainAxisSize: MainAxisSize.min,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  habit.habitName,
+                                  widget.habit.habitName,
                                   style: context.textTheme.titleLarge?.copyWith(
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
-                                if (habit.habitDescription != null) ...[
+                                if (widget.habit.habitDescription != null) ...[
                                   Text(
-                                    habit.habitDescription!,
+                                    widget.habit.habitDescription!,
                                     style: context.textTheme.bodyMedium,
                                   ),
                                 ],
@@ -196,10 +222,7 @@ class ShareHabitPreview extends StatelessWidget {
                         ],
                       ),
                       const SizedBox(height: 10),
-                      SizedBox(
-                        height: 150,
-                        child: _buildHabitGrid(),
-                      ),
+                      _buildHabitGrid(),
                     ],
                   ),
                 ),
@@ -221,7 +244,7 @@ class ShareHabitPreview extends StatelessWidget {
                   Text(
                     "HabitRise",
                     style: context.bodyMedium?.copyWith(
-                      color: Colors.black,
+                      color: Color(widget.habit.colorCode).colorRegardingToBrightness,
                       fontWeight: FontWeight.bold,
                     ),
                   )
@@ -237,11 +260,11 @@ class ShareHabitPreview extends StatelessWidget {
   Widget _buildHabitGrid() {
     final List<DateTime> last90Days = [];
     DateTime today = DateTime.now();
-    for (int i = 90; i >= 0; i--) {
+    for (int i = 150; i >= 0; i--) {
       last90Days.add(today.subtract(Duration(days: i)));
     }
 
-    final completionDates = habit.completionDates?..sort();
+    final completionDates = widget.habit.completionDates?..sort();
     DateTime? startDate;
     DateTime? endDate;
 
@@ -250,50 +273,53 @@ class ShareHabitPreview extends StatelessWidget {
       endDate = completionDates.last;
     }
 
-    return GridView.builder(
-      physics: const NeverScrollableScrollPhysics(),
-      scrollDirection: Axis.horizontal,
-      itemCount: last90Days.length,
-      shrinkWrap: true,
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 7,
-        crossAxisSpacing: 6,
-        mainAxisSpacing: 6,
-        childAspectRatio: 1,
-      ),
-      itemBuilder: (context, index) {
-        final dateTimeIn90Days = last90Days[index];
-        final isToday = dateTimeIn90Days.isToday;
+    return SizedBox(
+      height: 150,
+      child: GridView.builder(
+        controller: _scrollController,
+        scrollDirection: Axis.horizontal,
+        itemCount: last90Days.length,
+        shrinkWrap: true,
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 7,
+          crossAxisSpacing: 5,
+          mainAxisSpacing: 5,
+          childAspectRatio: 1,
+        ),
+        itemBuilder: (context, index) {
+          final dateTimeIn90Days = last90Days[index];
+          final isToday = dateTimeIn90Days.isToday;
 
-        bool isCompletedDate = completionDates?.any((d) => d.isSameDayWith(dateTimeIn90Days)) ?? false;
+          bool isCompletedDate = completionDates?.any((d) => d.isSameDayWith(dateTimeIn90Days)) ?? false;
 
-        bool isBetweenDates = false;
-        if (startDate != null && endDate != null) {
-          isBetweenDates = dateTimeIn90Days.isAfter(startDate) && dateTimeIn90Days.isBefore(endDate);
-        }
+          bool isBetweenDates = false;
+          if (startDate != null && endDate != null) {
+            isBetweenDates = dateTimeIn90Days.isAfter(startDate) && dateTimeIn90Days.isBefore(endDate);
+          }
 
-        return Card(
-          elevation: 0.1,
-          surfaceTintColor: Colors.transparent,
-          shadowColor: Colors.white.withAlpha(50),
-          color: isCompletedDate
-              ? Color(habit.colorCode)
-              : isBetweenDates
-                  ? Color(habit.colorCode).withOpacity(.1)
-                  : context.theme.cardColor,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(4),
-            side: BorderSide(
-              color: isToday ? context.primary : context.theme.dividerColor.withAlpha(50),
-              width: isToday ? 2.5 : .5,
+          return Card(
+            elevation: 0.1,
+            surfaceTintColor: Colors.transparent,
+            shadowColor: Colors.white.withAlpha(50),
+            color: isCompletedDate
+                ? Color(widget.habit.colorCode)
+                : isBetweenDates
+                    ? Color(widget.habit.colorCode).withOpacity(.1)
+                    : context.theme.cardColor,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(4),
+              side: BorderSide(
+                color: isToday ? context.primary : context.theme.dividerColor.withAlpha(50),
+                width: isToday ? 2.5 : .5,
+              ),
             ),
-          ),
-          child: const SizedBox(
-            height: 24,
-            width: 24,
-          ),
-        );
-      },
+            child: const SizedBox(
+              height: 24,
+              width: 24,
+            ),
+          );
+        },
+      ),
     );
   }
 }

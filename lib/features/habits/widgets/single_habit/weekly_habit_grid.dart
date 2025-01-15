@@ -108,7 +108,7 @@ class _WeeklyHabitGridState extends State<WeeklyHabitGrid> {
                           child: isCompletedDate
                               ? Icon(
                                   CupertinoIcons.check_mark_circled,
-                                  color: Colors.white,
+                                  color: Color(habitColor).colorRegardingToBrightness,
                                   size: 14,
                                 )
                               : null,

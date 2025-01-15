@@ -51,7 +51,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                       child: BlocBuilder(
                         bloc: context.read<OnboardingBloc>(),
                         builder: (context, state) {
-                          debugPrint(state.toString());
+                          
                           return OnboardingButton(
                             onPressed: (state is NameValid || state is GoalValid)
                                 ? () {

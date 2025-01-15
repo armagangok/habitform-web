@@ -1,6 +1,6 @@
 import '/core/core.dart';
-import '../../../models/models.dart';
-import '../page/share_habit_page.dart';
+import '../../models/models.dart';
+import 'share_habit_page.dart';
 
 class ShareHabitButton extends StatelessWidget {
   final Habit habit;
@@ -19,10 +19,9 @@ class ShareHabitButton extends StatelessWidget {
         sizeStyle: CupertinoButtonSize.small,
         onPressed: () {
           showCupertinoModalBottomSheet(
-              context: context,
-              builder: (context) {
-                return ShareHabitPage(habit: habit);
-              });
+            context: context,
+            builder: (context) => ShareHabitPage(habit: habit),
+          );
         },
         child: Row(
           mainAxisSize: MainAxisSize.min,

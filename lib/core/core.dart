@@ -9,7 +9,9 @@ export 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 export '/core/widgets/trailing_button.dart';
 export '/gen/assets.gen.dart';
-export './extension/extensions.dart';
 export './helpers/helpers.dart';
 export './navigation/navigation.dart';
 export './widgets/widgets.dart';
+export './extension/color_extension.dart';
+export './extension/datetime_extension.dart';
+export './extension/extensions.dart';
