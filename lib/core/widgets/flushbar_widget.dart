@@ -10,7 +10,7 @@ final class AppFlushbar {
 
   Flushbar<dynamic> errorFlushbar(String message) {
     return Flushbar(
-      backgroundColor: CupertinoColors.white.withValues(alpha: 0.4),
+      backgroundColor: context?.theme.scaffoldBackgroundColor.withAlpha(10) ?? Colors.transparent,
       icon: Icon(
         CupertinoIcons.exclamationmark_circle_fill,
         size: 42,
@@ -25,7 +25,7 @@ final class AppFlushbar {
         textAlign: TextAlign.left,
       ),
       borderRadius: BorderRadius.circular(16),
-      borderColor: Colors.white.withValues(alpha: 0.25),
+      borderColor: context?.theme.dividerColor.withAlpha(75),
       borderWidth: 1,
       margin: EdgeInsets.all(20),
       barBlur: 5,
@@ -36,6 +36,7 @@ final class AppFlushbar {
 
   Flushbar<dynamic> warningFlushbar(String message) {
     return Flushbar(
+      backgroundColor: context?.theme.scaffoldBackgroundColor.withAlpha(10) ?? Colors.transparent,
       titleText: Text(
         "Warning",
         textAlign: TextAlign.left,
@@ -45,10 +46,9 @@ final class AppFlushbar {
         message,
         textAlign: TextAlign.left,
       ),
-      backgroundColor: CupertinoColors.white.withValues(alpha: 0.4),
       barBlur: 5,
       borderRadius: BorderRadius.circular(16),
-      borderColor: Colors.white.withValues(alpha: 0.25),
+      borderColor: context?.theme.dividerColor.withAlpha(75),
       borderWidth: 1,
       margin: EdgeInsets.all(20),
       duration: const Duration(seconds: 4),
@@ -58,6 +58,7 @@ final class AppFlushbar {
 
   Flushbar<dynamic> successFlushbar(String message) {
     return Flushbar(
+      backgroundColor: context?.theme.scaffoldBackgroundColor.withAlpha(10) ?? Colors.transparent,
       titleText: Text(
         "Information",
         style: context?.titleLarge,
@@ -68,9 +69,8 @@ final class AppFlushbar {
         textAlign: TextAlign.left,
       ),
       barBlur: 5,
-      backgroundColor: CupertinoColors.white.withValues(alpha: 0.4),
       borderRadius: BorderRadius.circular(16),
-      borderColor: Colors.white.withValues(alpha: 0.25),
+      borderColor: context?.theme.dividerColor.withAlpha(75),
       borderWidth: 1,
       margin: EdgeInsets.all(20),
       duration: const Duration(seconds: 4),

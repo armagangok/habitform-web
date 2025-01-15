@@ -1,3 +1,5 @@
+import 'package:habitrise/features/reminder/widget/reminder_widget.dart';
+
 import '/core/core.dart';
 import '/models/models.dart';
 import '../../../edit_habit/edit_habit_page.dart';
@@ -91,11 +93,21 @@ class _SingleHabitDetailPageState extends State<SingleHabitDetailPage> {
                                       shrinkWrap: true,
                                       itemCount: days?.length ?? 0,
                                       separatorBuilder: (context, index) {
-                                        return Text(", ");
+                                        return Text(
+                                          ", ",
+                                          style: context.bodyMedium?.copyWith(
+                                            color: context.primary.withAlpha(170),
+                                          ),
+                                        );
                                       },
                                       itemBuilder: (context, index) {
-                                        final dayName = days?[index].name ?? "None";
-                                        return Text(dayName);
+                                        final dayName = days?[index].capitalized ?? "None";
+                                        return Text(
+                                          dayName,
+                                          style: context.bodyMedium?.copyWith(
+                                            color: context.primary.withAlpha(170),
+                                          ),
+                                        );
                                       },
                                     ),
                                   ),

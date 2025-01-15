@@ -2,17 +2,17 @@ import '../core.dart';
 
 final class Themes {
   static final darkTheme = ThemeData.dark().copyWith(
-    primaryColor: Color(0xff0A84FF),
+    primaryColor: Colors.deepOrange.shade500,
     scaffoldBackgroundColor: Colors.black,
     // platform: TargetPlatform.iOS,
     colorScheme: ColorScheme.dark(
-      primary: Color(0xff0A84FF),
+      primary: Colors.deepOrange.shade500,
     ),
     dividerTheme: const DividerThemeData(
       color: Color(0xff3D3C41),
     ),
     appBarTheme: AppBarTheme(
-      foregroundColor: Color(0xff0A84FF),
+      foregroundColor: Colors.deepOrange.shade500,
       backgroundColor: Colors.transparent,
     ),
     inputDecorationTheme: const InputDecorationTheme(
@@ -32,21 +32,21 @@ final class Themes {
     iconTheme: IconThemeData(color: CupertinoColors.white.withValues(alpha: .7)),
     cupertinoOverrideTheme: CupertinoThemeData(
       applyThemeToAll: true,
-      primaryColor: Color(0xff0A84FF),
+      primaryColor: Colors.deepOrange.shade500,
       scaffoldBackgroundColor: Colors.black,
       brightness: Brightness.dark,
       barBackgroundColor: Colors.transparent.withAlpha(0),
       textTheme: CupertinoTextThemeData(
-        primaryColor: Color(0xff0A84FF),
+        primaryColor: Colors.deepOrange.shade500,
       ),
     ),
   );
 
   static final lightTheme = ThemeData.light().copyWith(
-    primaryColor: Color(0xff007AFF),
+    primaryColor: Colors.deepOrange.shade600,
     // platform: TargetPlatform.iOS,
     colorScheme: ColorScheme.dark(
-      primary: Color(0xff007AFF),
+      primary: Colors.deepOrange.shade600,
     ),
     dividerTheme: const DividerThemeData(
       color: Color(0xffC6C6C8),
@@ -56,7 +56,7 @@ final class Themes {
       fillColor: Color.fromARGB(255, 231, 231, 231),
     ),
     appBarTheme: AppBarTheme(
-      foregroundColor: Color(0xff007AFF),
+      foregroundColor: Colors.deepOrange.shade600,
       backgroundColor: Colors.transparent,
     ),
     iconTheme: IconThemeData(color: CupertinoColors.black.withValues(alpha: .5)),
@@ -75,9 +75,9 @@ final class Themes {
       barBackgroundColor: Color(0xffF2F2F7).withAlpha(0),
       scaffoldBackgroundColor: Color(0xffF2F2F7),
       brightness: Brightness.light,
-      primaryColor: Color(0xff007AFF),
+      primaryColor: Colors.deepOrange.shade600,
       textTheme: CupertinoTextThemeData(
-        primaryColor: Color(0xff007AFF),
+        primaryColor: Colors.deepOrange.shade600,
       ),
     ),
     scaffoldBackgroundColor: const Color(0xffF2F2F7),

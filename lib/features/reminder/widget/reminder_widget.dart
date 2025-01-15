@@ -54,14 +54,14 @@ class ReminderPage extends StatelessWidget {
                           if (reminder.reminderTime != null && reminder.days.isNotNullAndNotEmpty) {
                             navigator.pop();
                             LogHelper.shared.debugPrint('$reminder');
-                            AppFlushbar.shared.successFlushbar("LocaleKeys.reminderWillBeActivatedOnTaskSave.tr()");
+                            AppFlushbar.shared.successFlushbar("Reminder will be activated when the habit is being saved");
                           } else {
                             LogHelper.shared.debugPrint('$reminder');
-                            AppFlushbar.shared.warningFlushbar("LocaleKeys.pleaseSelectDayAndTimeToCreateAReminder.tr()");
+                            AppFlushbar.shared.warningFlushbar("Please select days and remind time");
                           }
                         } else {
                           LogHelper.shared.debugPrint('$reminder');
-                          AppFlushbar.shared.warningFlushbar("LocaleKeys.pleaseSelectDayAndTimeToCreateAReminder.tr()");
+                          AppFlushbar.shared.warningFlushbar("Please select days and remind time");
                         }
                       },
                     ),
@@ -79,7 +79,7 @@ class ReminderPage extends StatelessWidget {
                     children: [
                       CupertinoListSection(
                         backgroundColor: Colors.transparent,
-                        header: Text("LocaleKeys.days.tr().toUpperCase()"),
+                        header: Text("DAYS"),
                         children: [
                           CupertinoListTile(
                             padding: EdgeInsets.all(10),
@@ -117,7 +117,7 @@ class ReminderPage extends StatelessWidget {
                                           child: Center(
                                             child: FittedBox(
                                               child: Text(
-                                                day.name,
+                                                day.capitalized,
                                                 style: TextStyle(
                                                   fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
                                                 ),

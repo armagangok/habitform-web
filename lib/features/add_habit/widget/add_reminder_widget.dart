@@ -33,7 +33,7 @@ class AddReminderWidget extends StatelessWidget {
                       return Padding(
                         padding: const EdgeInsets.only(right: 1.0),
                         child: Text(
-                          days.isLast(index) ? day.name : "${day.name}, ",
+                          days.isLast(index) ? day.capitalized : "${day.capitalized}, ",
                           style: context.bodySmall?.copyWith(color: context.primary),
                         ),
                       );
