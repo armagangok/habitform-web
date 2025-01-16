@@ -20,11 +20,23 @@ class ShareHabitPage extends StatefulWidget {
 }
 
 class _ShareHabitPageState extends State<ShareHabitPage> {
+  bool isShareLoading = false;
   final screenshotController = ScreenshotController();
 
-  Future<void> _shareHabitAsImage(Widget widget, BuildContext contextFromWidget) async {
+  Future<void> _shareHabitAsImage(ShareHabitPreview previewWidget, BuildContext contextFromWidget) async {
+    setState(() {
+      isShareLoading = true;
+    });
+
     try {
-      final imageFile = await screenshotController.captureFromWidget(widget, context: contextFromWidget);
+      final screenshotWidget = ShareHabitPreview(
+        habit: widget.habit,
+      );
+
+      final imageFile = await screenshotController.captureFromWidget(
+        screenshotWidget,
+        context: contextFromWidget,
+      );
 
       final tempDir = await getTemporaryDirectory();
       final file = await File('${tempDir.path}/habit.png').create();
@@ -37,6 +49,10 @@ class _ShareHabitPageState extends State<ShareHabitPage> {
     } catch (e) {
       debugPrint('Error sharing habit: $e');
     }
+
+    setState(() {
+      isShareLoading = false;
+    });
   }
 
   Future<void> _shareHabitAsText() async {
@@ -52,7 +68,9 @@ class _ShareHabitPageState extends State<ShareHabitPage> {
 
   @override
   Widget build(BuildContext context) {
-    final habitWidget = ShareHabitPreview(habit: widget.habit);
+    final habitWidget = ShareHabitPreview(
+      habit: widget.habit,
+    );
     return CupertinoPageScaffold(
       navigationBar: SheetHeader(
         closeButtonPosition: CloseButtonPosition.left,
@@ -75,39 +93,43 @@ class _ShareHabitPageState extends State<ShareHabitPage> {
               alignment: Alignment.bottomCenter,
               child: SafeArea(
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                  padding: const EdgeInsets.all(15),
                   child: Row(
                     children: [
                       Expanded(
                         child: CupertinoButton.tinted(
                           color: Colors.indigoAccent.shade100,
                           focusColor: Colors.indigoAccent.shade100,
-                          onPressed: () {
-                            _shareHabitAsImage(habitWidget, context);
-                          },
-                          sizeStyle: CupertinoButtonSize.medium,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(
-                                FontAwesomeIcons.solidFileImage,
-                                color: Colors.indigoAccent.shade100,
-                              ),
-                              const SizedBox(width: 5),
-                              Text(
-                                'Share Image',
-                                style: TextStyle(
-                                  color: Colors.indigoAccent.shade100,
+                          onPressed: isShareLoading
+                              ? null
+                              : () {
+                                  _shareHabitAsImage(habitWidget, context);
+                                },
+                          sizeStyle: CupertinoButtonSize.small,
+                          child: isShareLoading
+                              ? CircularProgressIndicator.adaptive()
+                              : Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(
+                                      FontAwesomeIcons.solidFileImage,
+                                      color: Colors.indigoAccent.shade100,
+                                    ),
+                                    const SizedBox(width: 5),
+                                    Text(
+                                      'Share Image',
+                                      style: TextStyle(
+                                        color: Colors.indigoAccent.shade100,
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ),
-                            ],
-                          ),
                         ),
                       ),
                       const SizedBox(width: 20),
                       Expanded(
                         child: CupertinoButton.tinted(
-                          sizeStyle: CupertinoButtonSize.medium,
+                          sizeStyle: CupertinoButtonSize.small,
                           onPressed: _shareHabitAsText,
                           child: const Row(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -145,28 +167,29 @@ class ShareHabitPreview extends StatefulWidget {
 
 class _ShareHabitPreviewState extends State<ShareHabitPreview> {
   final ScrollController _scrollController = ScrollController();
+
   @override
   void dispose() {
     _scrollController.dispose();
     super.dispose();
   }
 
-  void _scrollToEnd() {
-    if (_scrollController.hasClients) {
+  void _scrollToEnd() async {
+    // Wait for the widget to be fully built and laid out
+    await Future.delayed(Duration(milliseconds: 100));
+    if (_scrollController.hasClients && mounted) {
       _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
     }
   }
 
   @override
   void initState() {
-    // Add post frame callback here instead of initState
+    super.initState();
+
+    // Only auto-scroll in preview mode, not screenshot mode
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _scrollToEnd();
-
-      setState(() {});
     });
-
-    super.initState();
   }
 
   @override
@@ -174,7 +197,6 @@ class _ShareHabitPreviewState extends State<ShareHabitPreview> {
     return Material(
       color: Colors.transparent,
       child: Container(
-        height: 330,
         decoration: BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topLeft,
@@ -186,72 +208,83 @@ class _ShareHabitPreviewState extends State<ShareHabitPreview> {
             ],
           ),
         ),
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
+        child: Stack(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(40.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Card(
+                    child: Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Expanded(
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  widget.habit.habitName,
-                                  style: context.textTheme.titleLarge?.copyWith(
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      widget.habit.habitName,
+                                      style: context.textTheme.titleLarge?.copyWith(
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    if (widget.habit.habitDescription != null) ...[
+                                      Text(
+                                        widget.habit.habitDescription!,
+                                        style: context.textTheme.bodyMedium,
+                                      ),
+                                    ],
+                                  ],
                                 ),
-                                if (widget.habit.habitDescription != null) ...[
-                                  Text(
-                                    widget.habit.habitDescription!,
-                                    style: context.textTheme.bodyMedium,
-                                  ),
-                                ],
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
+                          const SizedBox(height: 10),
+                          _buildHabitGrid(),
                         ],
                       ),
-                      const SizedBox(height: 10),
-                      _buildHabitGrid(),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Positioned.fill(
+              child: Align(
+                alignment: Alignment.bottomCenter,
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 8, left: 40),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Card(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                        child: Assets.app.appLogoDark.image(
+                          height: 24,
+                          width: 24,
+                        ),
+                      ),
+                      const SizedBox(width: 5),
+                      Text(
+                        "HabitRise",
+                        style: context.bodySmall?.copyWith(
+                          color: Color(widget.habit.colorCode).colorRegardingToBrightness,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      )
                     ],
                   ),
                 ),
               ),
-              const SizedBox(height: 10),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Card(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                    child: Assets.app.appLogoDark.image(
-                      height: 30,
-                      width: 30,
-                    ),
-                  ),
-                  const SizedBox(width: 5),
-                  Text(
-                    "HabitRise",
-                    style: context.bodyMedium?.copyWith(
-                      color: Color(widget.habit.colorCode).colorRegardingToBrightness,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  )
-                ],
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
@@ -260,7 +293,7 @@ class _ShareHabitPreviewState extends State<ShareHabitPreview> {
   Widget _buildHabitGrid() {
     final List<DateTime> last90Days = [];
     DateTime today = DateTime.now();
-    for (int i = 150; i >= 0; i--) {
+    for (int i = 90; i >= 0; i--) {
       last90Days.add(today.subtract(Duration(days: i)));
     }
 
@@ -274,7 +307,7 @@ class _ShareHabitPreviewState extends State<ShareHabitPreview> {
     }
 
     return SizedBox(
-      height: 150,
+      height: 152,
       child: GridView.builder(
         controller: _scrollController,
         scrollDirection: Axis.horizontal,

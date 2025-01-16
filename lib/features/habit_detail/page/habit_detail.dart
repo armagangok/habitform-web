@@ -56,7 +56,7 @@ class _SingleHabitDetailPageState extends State<SingleHabitDetailPage> {
               child: ListView(
                 children: [
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 20) + EdgeInsets.only(top: 10),
+                    padding: EdgeInsets.symmetric(horizontal: 15) + EdgeInsets.only(top: 10),
                     child: CustomHeader(
                       text: "INFORMATION",
                       child: item(
@@ -66,9 +66,9 @@ class _SingleHabitDetailPageState extends State<SingleHabitDetailPage> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 25),
+                  SizedBox(height: 15),
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    padding: EdgeInsets.symmetric(horizontal: 15),
                     child: CustomHeader(
                       text: "REMINDER",
                       child: SizedBox(
@@ -116,9 +116,9 @@ class _SingleHabitDetailPageState extends State<SingleHabitDetailPage> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 25),
+                  SizedBox(height: 15),
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    padding: EdgeInsets.symmetric(horizontal: 15),
                     child: CustomHeader(
                       text: "HABIT DATA",
                       child: Column(
@@ -145,7 +145,7 @@ class _SingleHabitDetailPageState extends State<SingleHabitDetailPage> {
                 alignment: Alignment.bottomCenter,
                 child: SafeArea(
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                    padding: const EdgeInsets.all(10),
                     child: Row(
                       spacing: 15,
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -368,8 +368,8 @@ class CustomHeader extends StatelessWidget {
                 width: double.infinity,
                 child: Text(
                   text,
-                  style: context.bodyMedium?.copyWith(
-                    color: context.bodyMedium?.color?.withAlpha(170),
+                  style: context.bodySmall?.copyWith(
+                    color: context.bodySmall?.color?.withAlpha(170),
                     fontWeight: FontWeight.w500,
                   ),
                 ),

@@ -92,10 +92,10 @@ class _EditHabitPageState extends State<EditHabitPage> {
           ),
         ),
         child: ListView(
-          padding: EdgeInsets.all(20),
+          padding: EdgeInsets.all(15),
           children: [
             Column(
-              spacing: 30,
+              spacing: 20,
               children: [
                 SafeArea(
                   bottom: false,

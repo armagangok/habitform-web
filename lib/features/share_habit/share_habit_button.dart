@@ -4,11 +4,19 @@ import 'share_habit_page.dart';
 
 class ShareHabitButton extends StatelessWidget {
   final Habit habit;
+  final ScrollController? scrollController;
 
   const ShareHabitButton({
     super.key,
     required this.habit,
+    this.scrollController,
   });
+
+  void _scrollToEnd() {
+    if (scrollController?.hasClients ?? false) {
+      scrollController!.jumpTo(scrollController!.position.maxScrollExtent);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -18,10 +26,15 @@ class ShareHabitButton extends StatelessWidget {
         padding: EdgeInsets.zero,
         sizeStyle: CupertinoButtonSize.small,
         onPressed: () {
-          showCupertinoModalBottomSheet(
-            context: context,
-            builder: (context) => ShareHabitPage(habit: habit),
-          );
+          _scrollToEnd();
+
+          // Add a small delay to ensure scroll completes before showing the sheet
+          Future.delayed(Duration(milliseconds: 100), () {
+            showCupertinoModalBottomSheet(
+              context: context,
+              builder: (context) => ShareHabitPage(habit: habit),
+            );
+          });
         },
         child: Row(
           mainAxisSize: MainAxisSize.min,

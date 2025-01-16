@@ -25,9 +25,15 @@ class _SingleHabitDetailGridState extends State<SingleHabitDetailGrid> {
     for (int i = 150; i >= 0; i--) {
       last90Days.add(today.subtract(Duration(days: i)));
     }
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _scrollToEnd();
+      setState(() {});
+    });
   }
 
   final ScrollController _scrollController = ScrollController();
+
   @override
   void dispose() {
     _scrollController.dispose();
@@ -42,11 +48,6 @@ class _SingleHabitDetailGridState extends State<SingleHabitDetailGrid> {
 
   @override
   Widget build(BuildContext context) {
-    // Add post frame callback here instead of initState
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _scrollToEnd();
-    });
-
     // Tamamlanmış tarihleri sırala
     final completionDates = widget.habit.completionDates?..sort();
 
