@@ -1,7 +1,6 @@
-import 'package:habitrise/services/single_habit/i_single_habit_service.dart';
-
 import '../../core/core.dart';
-import '../../models/single_habit/habit_model.dart';
+import '../../models/habit/habit_model.dart';
+import 'i_habit_service.dart';
 
 class MockHabitService extends IHabitService {
   @override

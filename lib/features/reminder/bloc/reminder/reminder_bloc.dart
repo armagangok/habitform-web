@@ -1,6 +1,6 @@
 import '/core/core.dart';
 import '/core/helpers/notifications/notification_helper.dart';
-import '/core/widgets/flushbar_widget.dart';
+import '../../../../core/widgets/flushbar_widget.dart';
 import '../../models/days/days_enum.dart';
 import '../../models/reminder/reminder_model.dart';
 import '../../service/reminder_service.dart';
@@ -12,14 +12,25 @@ part 'reminder_event.dart';
 part 'reminder_state.dart';
 
 class ReminderBloc extends Bloc<ReminderEvent, ReminderState> {
+  
+
   ReminderBloc() : super(ReminderStateInitial()) {
-    on<SetReminderEvent>((event, emit) {
-      emit(ReminderSelectionState(reminder: event.reminder));
-    });
+    on<InitializeReminderEvent>(_initializeReminderData);
+
+    on<CancelReminderEvent>(cancelReminder);
+
+    on<ScheduleReminderEvent>(scheduleReminder);
+
+    on<UpdateReminderDaysEvent>(updateDays);
+
+    on<UpdateReminderTimeEvent>(updateTime);
   }
 
-  void initializeReminderData(ReminderModel? initialReminder, BuildContext context) {
-    final timeFromPicker = context.read<RemindTimeCubit>().state;
+  
+
+  void _initializeReminderData(InitializeReminderEvent event, Emitter<ReminderState> emit) {
+    final timeFromPicker = event.context.read<RemindTimeCubit>().state;
+    final initialReminder = event.reminder;
 
     if (initialReminder != null) {
       final selectedDays = initialReminder.days ?? [];
@@ -27,15 +38,13 @@ class ReminderBloc extends Bloc<ReminderEvent, ReminderState> {
 
       final reminder = initialReminder.copyWith(days: selectedDays, time: reminderTime ?? timeFromPicker);
 
-      context.read<DaySelectionCubit>();
-
-      context.read<DaySelectionCubit>().initializeDaySelection(selectedDays);
-      context.read<RemindTimeCubit>().initializeTime(reminderTime);
+      event.context.read<DaySelectionCubit>().initializeDaySelection(selectedDays);
+      event. context.read<RemindTimeCubit>().initializeTime(reminderTime);
 
       if (selectedDays.isEmpty) {
-        context.read<PickerExtendCubit>().initialize(false);
+        event.context.read<PickerExtendCubit>().initialize(false);
       } else {
-        context.read<PickerExtendCubit>().initialize(true);
+        event. context.read<PickerExtendCubit>().initialize(true);
       }
 
       emit(ReminderSelectionState(reminder: reminder));
@@ -52,15 +61,15 @@ class ReminderBloc extends Bloc<ReminderEvent, ReminderState> {
     }
   }
 
-    Future<void> scheduleReminder(String habitName, String body) async {
+  Future<void> scheduleReminder(ScheduleReminderEvent event, Emitter<ReminderState> emit) async {
     final ReminderModel? reminder = state.reminder;
     try {
       if (reminder != null) {
         ReminderService.cancelReminderNotification(reminder.id);
         await ReminderService.createReminderNotification(
           reminder,
-          habitName,
-          body,
+          event.title,
+          event.body,
         );
       }
     } catch (e, s) {
@@ -69,31 +78,22 @@ class ReminderBloc extends Bloc<ReminderEvent, ReminderState> {
     }
   }
 
-  Future<void> deleteReminder(ReminderModel? reminder, BuildContext context) async {
+  Future<void> cancelReminder(CancelReminderEvent event, Emitter<ReminderState> emit) async {
+    final reminder = event.reminder;
+
     try {
-      await NotificationHelper.shared.cancelReminderNotifications(reminder);
-
-      emit(ReminderSelectionState(reminder: null));
-
-      context.read<PickerExtendCubit>().initialize(false);
-
-      context.read<DaySelectionCubit>().initializeDaySelection([]);
-
-      AppFlushbar.shared.successFlushbar("LocaleKeys.reminderDeletedSuccesfully.tr()");
+      if (reminder != null) {
+        await NotificationHelper.shared.cancelReminderNotifications(reminder);
+        final cancelState = CancelReminderState();
+        emit(cancelState);
+        AppFlushbar.shared.successFlushbar("Reminder cancelled successfuly");
+      }
     } catch (e) {
-      AppFlushbar.shared.errorFlushbar("LocaleKeys.opsAnErrorOccured.tr()");
+      LogHelper.shared.debugPrint('$e');
     }
   }
 
-  void updateDaysInReminder(List<Days>? selectedDays) {
-    final reminder = state.reminder?.copyWith(days: selectedDays);
+  Future<void> updateDays(UpdateReminderDaysEvent event, Emitter<ReminderState> emit) async {}
 
-    emit(ReminderSelectionState(reminder: reminder));
-  }
-
-  void updateReminderTime(DateTime? selectedTime) {
-    final reminder = state.reminder?.copyWith(time: selectedTime);
-
-    emit(ReminderSelectionState(reminder: reminder));
-  }
+  Future<void> updateTime(UpdateReminderTimeEvent event, Emitter<ReminderState> emit) async {}
 }

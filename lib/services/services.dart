@@ -1,3 +1,3 @@
-export './single_habit/dummy_single_habit_service.dart';
-export './single_habit/i_single_habit_service.dart';
-export './single_habit/single_habit_service.dart';
+export 'habit_service/dummy_habit_service.dart';
+export 'habit_service/i_habit_service.dart';
+export 'habit_service/habit_service.dart';

@@ -1,7 +1,9 @@
 import 'package:habitrise/core/core.dart';
+import 'package:habitrise/features/reminder/bloc/picker_extend/picker_extend_cubit.dart';
 import 'package:habitrise/features/reminder/bloc/reminder/reminder_bloc.dart';
 
 import '../../models/days/days_enum.dart';
+import '../remind_time/remind_time_cubit.dart';
 
 enum DaySelection { empty, selected, allSelected }
 
@@ -67,7 +69,7 @@ class DaySelectionCubit extends Cubit<DaySelection> {
 
     emit(DaySelection.allSelected);
 
-    context.read<ReminderBloc>().updateDaysInReminder(selectedDays);
+    context.read<ReminderBloc>().add(UpdateReminderDaysEvent(days: selectedDays));
   }
 
   void deselectAll(BuildContext context) {
@@ -75,8 +77,10 @@ class DaySelectionCubit extends Cubit<DaySelection> {
 
     emit(DaySelection.empty);
 
-    context.read<ReminderBloc>().updateDaysInReminder(null);
-    context.read<ReminderBloc>().updateReminderTime(null);
+    context.read<ReminderBloc>().add(UpdateReminderDaysEvent(days: null));
+    context.read<ReminderBloc>().add(UpdateReminderTimeEvent(time: null));
+    context.read<RemindTimeCubit>().updateTime(null, context);
+    context.read<PickerExtendCubit>().setValue(false);
   }
 
   void selectOneByOne(Days day, bool isSelected, BuildContext context) {
@@ -98,6 +102,6 @@ class DaySelectionCubit extends Cubit<DaySelection> {
       emit(DaySelection.allSelected);
     }
 
-    context.read<ReminderBloc>().updateDaysInReminder(selectedDays);
+    context.read<ReminderBloc>().add(UpdateReminderDaysEvent(days: selectedDays));
   }
 }

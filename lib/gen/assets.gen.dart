@@ -71,6 +71,16 @@ class $AssetsLottieGen {
   List<String> get values => [rocketAnimation];
 }
 
+class $AssetsSvgGen {
+  const $AssetsSvgGen();
+
+  /// File path: assets/svg/not_found_svg.svg
+  String get notFoundSvg => 'assets/svg/not_found_svg.svg';
+
+  /// List of all assets
+  List<String> get values => [notFoundSvg];
+}
+
 class Assets {
   Assets._();
 
@@ -78,6 +88,7 @@ class Assets {
   static const $AssetsIllustrationsGen illustrations =
       $AssetsIllustrationsGen();
   static const $AssetsLottieGen lottie = $AssetsLottieGen();
+  static const $AssetsSvgGen svg = $AssetsSvgGen();
 }
 
 class AssetGenImage {

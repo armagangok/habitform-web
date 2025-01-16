@@ -57,6 +57,8 @@ class SubscribeButton extends StatelessWidget {
                 ),
                 SizedBox(width: 12),
                 Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Row(
@@ -68,8 +70,16 @@ class SubscribeButton extends StatelessWidget {
                           style: context.titleMedium?.copyWith(
                             fontWeight: FontWeight.bold,
                           ),
+                          textHeightBehavior: TextHeightBehavior(
+                            applyHeightToFirstAscent: false,
+                            applyHeightToLastDescent: false,
+                          ),
                         ),
                         RichText(
+                          textHeightBehavior: TextHeightBehavior(
+                            applyHeightToFirstAscent: false,
+                            applyHeightToLastDescent: false,
+                          ),
                           text: TextSpan(
                             text: 'Habit',
                             style: context.titleMedium?.copyWith(
@@ -91,13 +101,20 @@ class SubscribeButton extends StatelessWidget {
                           style: context.titleMedium?.copyWith(
                             fontWeight: FontWeight.bold,
                           ),
+                          textHeightBehavior: TextHeightBehavior(
+                            applyHeightToFirstAscent: false,
+                            applyHeightToLastDescent: false,
+                          ),
                         )
                       ],
                     ),
-                    SizedBox(height: 4),
                     Text(
                       "Tap to see all advantages",
                       textAlign: TextAlign.start,
+                      textHeightBehavior: TextHeightBehavior(
+                        applyHeightToFirstAscent: false,
+                        applyHeightToLastDescent: false,
+                      ),
                     ),
                   ],
                 ),

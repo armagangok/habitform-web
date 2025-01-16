@@ -306,52 +306,54 @@ class _ShareHabitPreviewState extends State<ShareHabitPreview> {
       endDate = completionDates.last;
     }
 
-    return SizedBox(
-      height: 152,
-      child: GridView.builder(
-        controller: _scrollController,
-        scrollDirection: Axis.horizontal,
-        itemCount: last90Days.length,
-        shrinkWrap: true,
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 7,
-          crossAxisSpacing: 5,
-          mainAxisSpacing: 5,
-          childAspectRatio: 1,
-        ),
-        itemBuilder: (context, index) {
-          final dateTimeIn90Days = last90Days[index];
-          final isToday = dateTimeIn90Days.isToday;
+    return FittedBox(
+      child: SizedBox(
+        height: 152,
+        child: GridView.builder(
+          controller: _scrollController,
+          scrollDirection: Axis.horizontal,
+          itemCount: last90Days.length,
+          shrinkWrap: true,
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 7,
+            crossAxisSpacing: 5,
+            mainAxisSpacing: 5,
+            childAspectRatio: 1,
+          ),
+          itemBuilder: (context, index) {
+            final dateTimeIn90Days = last90Days[index];
+            final isToday = dateTimeIn90Days.isToday;
 
-          bool isCompletedDate = completionDates?.any((d) => d.isSameDayWith(dateTimeIn90Days)) ?? false;
+            bool isCompletedDate = completionDates?.any((d) => d.isSameDayWith(dateTimeIn90Days)) ?? false;
 
-          bool isBetweenDates = false;
-          if (startDate != null && endDate != null) {
-            isBetweenDates = dateTimeIn90Days.isAfter(startDate) && dateTimeIn90Days.isBefore(endDate);
-          }
+            bool isBetweenDates = false;
+            if (startDate != null && endDate != null) {
+              isBetweenDates = dateTimeIn90Days.isAfter(startDate) && dateTimeIn90Days.isBefore(endDate);
+            }
 
-          return Card(
-            elevation: 0.1,
-            surfaceTintColor: Colors.transparent,
-            shadowColor: Colors.white.withAlpha(50),
-            color: isCompletedDate
-                ? Color(widget.habit.colorCode)
-                : isBetweenDates
-                    ? Color(widget.habit.colorCode).withOpacity(.1)
-                    : context.theme.cardColor,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(4),
-              side: BorderSide(
-                color: isToday ? context.primary : context.theme.dividerColor.withAlpha(50),
-                width: isToday ? 2.5 : .5,
+            return Card(
+              elevation: 0.1,
+              surfaceTintColor: Colors.transparent,
+              shadowColor: Colors.white.withAlpha(50),
+              color: isCompletedDate
+                  ? Color(widget.habit.colorCode)
+                  : isBetweenDates
+                      ? Color(widget.habit.colorCode).withOpacity(.1)
+                      : context.theme.cardColor,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(4),
+                side: BorderSide(
+                  color: isToday ? context.primary : context.theme.dividerColor.withAlpha(50),
+                  width: isToday ? 2.5 : .5,
+                ),
               ),
-            ),
-            child: const SizedBox(
-              height: 24,
-              width: 24,
-            ),
-          );
-        },
+              child: const SizedBox(
+                height: 24,
+                width: 24,
+              ),
+            );
+          },
+        ),
       ),
     );
   }

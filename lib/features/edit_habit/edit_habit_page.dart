@@ -33,9 +33,13 @@ class _EditHabitPageState extends State<EditHabitPage> {
     // Initialize the cubits with existing habit data
     context.read<HabitEmojiCubit>().pickIcon(widget.habit.emoji);
     context.read<HabitColorCubit>().pickColor(Color(widget.habit.colorCode));
-    if (widget.habit.reminderModel != null) {
+    final reminderFromConstructor = widget.habit.reminderModel;
+    if (reminderFromConstructor != null) {
       context.read<ReminderBloc>().add(
-            SetReminderEvent(reminder: widget.habit.reminderModel!),
+            InitializeReminderEvent(
+              reminder: reminderFromConstructor,
+              context: context,
+            ),
           );
     }
   }
@@ -71,6 +75,7 @@ class _EditHabitPageState extends State<EditHabitPage> {
               }
 
               final ReminderModel? reminderModel = context.read<ReminderBloc>().state.reminder;
+
               final String? emoji = context.read<HabitEmojiCubit>().state.emoji;
               final int colorCode = context.read<HabitColorCubit>().state.color?.value ?? widget.habit.colorCode;
 
@@ -82,10 +87,12 @@ class _EditHabitPageState extends State<EditHabitPage> {
                 colorCode: colorCode,
               );
 
-              context.read<ReminderBloc>().scheduleReminder(
-                    updatedHabit.habitName,
-                    "Some message goes here",
-                  );
+              final scheduleReminderEvent = ScheduleReminderEvent(
+                updatedHabit.habitName,
+                "It's time to add a completion",
+              );
+
+              context.read<ReminderBloc>().add(scheduleReminderEvent);
 
               context.read<EditHabitBloc>().add(UpdateHabitEvent(habit: updatedHabit));
             },

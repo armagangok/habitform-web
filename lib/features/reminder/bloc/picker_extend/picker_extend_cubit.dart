@@ -5,5 +5,7 @@ class PickerExtendCubit extends Cubit<bool> {
 
   void switchExtendValue() => emit(!state);
 
+  void setValue(bool value) => emit(value);
+
   void initialize(bool initialValue) => emit(initialValue);
 }

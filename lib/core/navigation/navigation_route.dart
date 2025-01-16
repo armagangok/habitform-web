@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 
-import '../../features/home/overview_page.dart';
+import '../../features/habits/home_page.dart';
 import '../../features/onboarding/pages/onboarding_final/onboarding_final_page.dart';
 import '../../features/onboarding/pages/onboarding_greeting.dart';
 import '../../features/onboarding/pages/onboarding_page.dart';

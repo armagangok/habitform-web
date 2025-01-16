@@ -1,14 +1,14 @@
-import 'package:habitrise/features/reminder/widget/reminder_widget.dart';
-
 import '/core/core.dart';
+import '/features/reminder/widget/reminder_widget.dart';
 import '/models/models.dart';
 import '../../edit_habit/edit_habit_page.dart';
-import '../../habits/bloc/single_habit/single_habit_bloc.dart';
+import '../../habits/bloc/single_habit_bloc.dart';
 import '../../habits/widgets/single_habit/single_habit_detail_grid.dart';
+import '../../reminder/bloc/reminder/reminder_bloc.dart';
 import '../../share_habit/share_habit_button.dart';
 
-class SingleHabitDetailPage extends StatefulWidget {
-  const SingleHabitDetailPage({
+class HabitDetailPage extends StatefulWidget {
+  const HabitDetailPage({
     super.key,
     required this.habit,
   });
@@ -16,16 +16,21 @@ class SingleHabitDetailPage extends StatefulWidget {
   final Habit habit;
 
   @override
-  State<SingleHabitDetailPage> createState() => _SingleHabitDetailPageState();
+  State<HabitDetailPage> createState() => _HabitDetailPageState();
 }
 
-class _SingleHabitDetailPageState extends State<SingleHabitDetailPage> {
+class _HabitDetailPageState extends State<HabitDetailPage> {
   late Habit currentHabit;
 
   @override
   void initState() {
     super.initState();
-    currentHabit = widget.habit;
+
+    if (mounted) {
+      setState(() {
+        currentHabit = widget.habit;
+      });
+    }
   }
 
   @override
@@ -44,6 +49,7 @@ class _SingleHabitDetailPageState extends State<SingleHabitDetailPage> {
       },
       builder: (context, state) {
         final days = currentHabit.reminderModel?.days;
+
         final remindTime = currentHabit.reminderModel?.reminderTime?.toHHMM();
 
         return Stack(
@@ -83,13 +89,13 @@ class _SingleHabitDetailPageState extends State<SingleHabitDetailPage> {
                                   remindTime ?? "None",
                                   style: context.bodyLarge?.copyWith(fontWeight: FontWeight.bold),
                                 ),
-                                if (remindTime != null)
+                                if (days != null && days.isNotEmpty)
                                   SizedBox(
                                     height: 20,
                                     child: ListView.separated(
                                       scrollDirection: Axis.horizontal,
                                       shrinkWrap: true,
-                                      itemCount: days?.length ?? 0,
+                                      itemCount: days.length,
                                       separatorBuilder: (context, index) {
                                         return Text(
                                           ", ",
@@ -99,7 +105,7 @@ class _SingleHabitDetailPageState extends State<SingleHabitDetailPage> {
                                         );
                                       },
                                       itemBuilder: (context, index) {
-                                        final dayName = days?[index].capitalized ?? "None";
+                                        final dayName = days[index].capitalized;
                                         return Text(
                                           dayName,
                                           style: context.bodyMedium?.copyWith(
@@ -185,6 +191,12 @@ class _SingleHabitDetailPageState extends State<SingleHabitDetailPage> {
                               sizeStyle: CupertinoButtonSize.small,
                               padding: EdgeInsets.zero,
                               onPressed: () {
+                                final event = InitializeReminderEvent(
+                                  reminder: currentHabit.reminderModel,
+                                  context: context,
+                                );
+                                context.read<ReminderBloc>().add(event);
+
                                 showCupertinoModalBottomSheet(
                                   enableDrag: false,
                                   context: context,

@@ -1,7 +1,7 @@
 import '/core/core.dart';
 import '../add_habit/add_habit_page.dart';
-import '../habits/bloc/single_habit/single_habit_bloc.dart';
-import '../habits/widgets/single_habit/single_habit_builder.dart';
+import 'bloc/single_habit_bloc.dart';
+import 'widgets/single_habit/single_habit_builder.dart';
 import '../settings/settings_home/settings_home_page.dart';
 
 class HomePage extends StatefulWidget {

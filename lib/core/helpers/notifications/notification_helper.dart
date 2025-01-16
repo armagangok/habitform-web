@@ -120,17 +120,15 @@ final class NotificationHelper {
   }
 
   /// Cancels all notifications for a given reminder
-  Future<void> cancelReminderNotifications(ReminderModel? reminder) async {
-    if (reminder != null) {
-      if (reminder.days == null || reminder.days!.isEmpty) {
-        cancelNotificationWithId(reminder.id);
-        return;
-      }
+  Future<void> cancelReminderNotifications(ReminderModel reminder) async {
+    if (reminder.days == null || reminder.days!.isEmpty) {
+      cancelNotificationWithId(reminder.id);
+      return;
+    }
 
-      // Cancel notifications for each day
-      for (final day in reminder.days!) {
-        cancelNotificationWithId(reminder.id + day.index);
-      }
+    // Cancel notifications for each day
+    for (final day in reminder.days!) {
+      cancelNotificationWithId(reminder.id + day.index);
     }
   }
 }

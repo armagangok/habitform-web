@@ -48,7 +48,6 @@ class _SettingsPageState extends State<SettingsPage> with SingleTickerProviderSt
                   child: Column(
                     children: [
                       ThemeModeFeature(),
-                      CustomDivider(),
                       CupertinoListTile(
                         leading: const SettingLeadingWidget(
                           iconData: CupertinoIcons.bell_fill,
@@ -80,7 +79,6 @@ class _SettingsPageState extends State<SettingsPage> with SingleTickerProviderSt
                       onTap: () {},
                       trailing: CupertinoListTileChevron(),
                     ),
-                    CustomDivider(),
                     CupertinoListTile(
                       leading: const SettingLeadingWidget(
                         iconData: CupertinoIcons.mail_solid,
@@ -108,7 +106,6 @@ class _SettingsPageState extends State<SettingsPage> with SingleTickerProviderSt
                     onTap: () {},
                     trailing: CupertinoListTileChevron(),
                   ),
-                  CustomDivider(),
                   CupertinoListTile(
                     leading: const SettingLeadingWidget(
                       iconData: CupertinoIcons.hand_point_right_fill,

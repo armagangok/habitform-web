@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import '/core/core.dart';
-import '../../../core/widgets/flushbar_widget.dart';
 import '../bloc/day_selection/day_selection_cubit.dart';
 import '../bloc/picker_extend/picker_extend_cubit.dart';
 import '../bloc/remind_time/remind_time_cubit.dart';
@@ -29,43 +28,13 @@ class ReminderPage extends StatelessWidget {
         final selectedDays = context.read<DaySelectionCubit>().selectedDays;
         return BlocBuilder<ReminderBloc, ReminderState>(
           builder: (context, state) {
-            final reminder = state.reminder;
             return CupertinoPageScaffold(
               navigationBar: SheetHeader(
                 closeButtonPosition: CloseButtonPosition.left,
                 title: "Reminder",
                 trailing: Row(
                   mainAxisSize: MainAxisSize.min,
-                  children: [
-                    TrailingActionButton(
-                      child: Text(
-                        "Delete",
-                        style: TextStyle(color: CupertinoColors.destructiveRed),
-                      ),
-                      onPressed: () async {
-                        context.read<ReminderBloc>().deleteReminder(reminder, context);
-                      },
-                    ),
-                    SizedBox(width: 10),
-                    TrailingActionButton(
-                      title: "Save",
-                      onPressed: () {
-                        if (reminder != null) {
-                          if (reminder.reminderTime != null && reminder.days.isNotNullAndNotEmpty) {
-                            navigator.pop();
-                            LogHelper.shared.debugPrint('$reminder');
-                            AppFlushbar.shared.successFlushbar("Reminder will be activated when the habit is being saved");
-                          } else {
-                            LogHelper.shared.debugPrint('$reminder');
-                            AppFlushbar.shared.warningFlushbar("Please select days and remind time");
-                          }
-                        } else {
-                          LogHelper.shared.debugPrint('$reminder');
-                          AppFlushbar.shared.warningFlushbar("Please select days and remind time");
-                        }
-                      },
-                    ),
-                  ],
+                  children: [],
                 ),
               ),
               child: ListView(
@@ -161,7 +130,12 @@ class ReminderPage extends StatelessWidget {
                                       sizeStyle: CupertinoButtonSize.small,
                                       borderRadius: BorderRadius.circular(8),
                                       onPressed: () {
+                                        context.read<ReminderBloc>().add(CancelReminderEvent());
+
                                         context.read<DaySelectionCubit>().deselectAll(context);
+                                        // Reset the reminder time to null when deselecting all days
+                                        context.read<RemindTimeCubit>().updateTime(null, context);
+                                        // Optionally, reset the reminder model as well
                                       },
                                       child: Text(
                                         "Deselect All",
@@ -190,7 +164,7 @@ class ReminderPage extends StatelessWidget {
                                         BlocBuilder<PickerExtendCubit, bool>(
                                           builder: (context, state) {
                                             final isExpanded = state;
-                                            return BlocBuilder<RemindTimeCubit, DateTime>(
+                                            return BlocBuilder<RemindTimeCubit, DateTime?>(
                                               builder: (context, state) {
                                                 final remindTime = state;
                                                 return AnimatedSize(
@@ -201,7 +175,7 @@ class ReminderPage extends StatelessWidget {
                                                       crossAxisAlignment: CrossAxisAlignment.start,
                                                       children: [
                                                         Text(
-                                                          remindTime.toHHMM(),
+                                                          remindTime?.toHHMM() ?? "None",
                                                           style: TextStyle(
                                                             color: CupertinoColors.systemBlue,
                                                             fontWeight: FontWeight.normal,
@@ -235,7 +209,7 @@ class ReminderPage extends StatelessWidget {
                                     final isExpanded = state;
                                     return AnimatedContainer(
                                       duration: Duration(milliseconds: 300),
-                                      height: isExpanded ? 140 : 0,
+                                      height: isExpanded ? 300 : 0,
                                       child: CupertinoDatePicker(
                                         mode: CupertinoDatePickerMode.time,
                                         initialDateTime: DateTime.now(),

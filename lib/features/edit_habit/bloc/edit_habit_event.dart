@@ -15,3 +15,12 @@ class UpdateHabitEvent extends EditHabitEvent {
   @override
   List<Object> get props => [habit];
 }
+
+class InitializeHabitEvent extends EditHabitEvent {
+  final Habit habit;
+
+  const InitializeHabitEvent({required this.habit});
+
+  @override
+  List<Object> get props => [habit];
+}

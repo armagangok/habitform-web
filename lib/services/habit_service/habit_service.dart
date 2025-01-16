@@ -1,6 +1,7 @@
 import '../../core/core.dart';
 import '../../models/models.dart';
-import 'i_single_habit_service.dart';
+import 'i_habit_service.dart';
+
 
 class SingleHabitService extends IHabitService {
   @override

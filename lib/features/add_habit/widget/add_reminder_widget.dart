@@ -4,9 +4,7 @@ import '../../reminder/bloc/reminder/reminder_bloc.dart';
 import '../../reminder/widget/reminder_widget.dart';
 
 class AddReminderWidget extends StatelessWidget {
-  const AddReminderWidget({
-    super.key,
-  });
+  const AddReminderWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +40,12 @@ class AddReminderWidget extends StatelessWidget {
                 ),
               CustomButton(
                 onTap: () {
-                  context.read<ReminderBloc>().initializeReminderData(null, context);
+                  final event = InitializeReminderEvent(
+                    reminder: reminderState.reminder,
+                    context: context,
+                  );
+                  context.read<ReminderBloc>().add(event);
+
                   showCupertinoModalBottomSheet(
                     enableDrag: false,
                     context: context,

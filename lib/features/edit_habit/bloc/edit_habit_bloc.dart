@@ -1,8 +1,8 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../models/single_habit/habit_model.dart';
-import '../../habits/bloc/single_habit/single_habit_bloc.dart';
+import '../../../models/habit/habit_model.dart';
+import '../../habits/bloc/single_habit_bloc.dart';
 
 part 'edit_habit_event.dart';
 part 'edit_habit_state.dart';
@@ -14,13 +14,9 @@ class EditHabitBloc extends Bloc<EditHabitEvent, EditHabitState> {
     on<UpdateHabitEvent>(_onUpdateHabit);
   }
 
-  Future<void> _onUpdateHabit(
-    UpdateHabitEvent event,
-    Emitter<EditHabitState> emit,
-  ) async {
+  Future<void> _onUpdateHabit(UpdateHabitEvent event, Emitter<EditHabitState> emit) async {
     emit(EditHabitLoading());
     try {
-      
       _singleHabitBloc.add(UpdateSingleHabitEvent(habit: event.habit));
       emit(EditHabitSuccess());
     } catch (e) {

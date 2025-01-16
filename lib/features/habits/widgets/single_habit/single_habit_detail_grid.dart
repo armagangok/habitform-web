@@ -1,7 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import '/core/core.dart';
 import '../../../../models/models.dart';
-import '../../bloc/single_habit/single_habit_bloc.dart';
+import '../../bloc/single_habit_bloc.dart';
 
 class SingleHabitDetailGrid extends StatefulWidget {
   final Habit habit;

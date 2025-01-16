@@ -1,7 +1,7 @@
 import '/core/core.dart';
 import '/models/models.dart';
 import '../../../add_habit/enum/days_enum.dart';
-import '../../bloc/single_habit/single_habit_bloc.dart';
+import '../../bloc/single_habit_bloc.dart';
 
 class Last7DaysModel {
   final Days day;
@@ -79,14 +79,15 @@ class _WeeklyHabitGridState extends State<WeeklyHabitGrid> {
                 return CupertinoButton(
                   padding: EdgeInsets.zero,
                   minSize: 0,
-                  onPressed: () {
-                    final event = UpdateHabitForSelectedDayEvent(
-                      habit: widget.habit,
-                      dateToSaveOrRemove: dateTimeIn7Days,
-                    );
+                  onPressed: null,
+                  // () {
+                  //   final event = UpdateHabitForSelectedDayEvent(
+                  //     habit: widget.habit,
+                  //     dateToSaveOrRemove: dateTimeIn7Days,
+                  //   );
 
-                    context.read<SingleHabitBloc>().add(event);
-                  },
+                  //   context.read<SingleHabitBloc>().add(event);
+                  // },
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.center,
