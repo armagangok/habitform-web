@@ -1,7 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import '/core/core.dart';
 import '../../../../models/models.dart';
-import '../../bloc/single_habit_bloc.dart';
+import '../../bloc/habit_bloc.dart';
 
 class SingleHabitDetailGrid extends StatefulWidget {
   final Habit habit;
@@ -94,7 +94,7 @@ class _SingleHabitDetailGridState extends State<SingleHabitDetailGrid> {
                 habit: widget.habit,
               );
 
-              context.read<SingleHabitBloc>().add(event);
+              context.read<HabitBloc>().add(event);
             },
             child: Card(
               elevation: 0.1,

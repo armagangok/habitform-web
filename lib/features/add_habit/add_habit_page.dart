@@ -6,7 +6,7 @@ import '/core/widgets/habit_color_sheet/cubit/habit_color_cubit.dart';
 import '/core/widgets/habit_icon/cubit/habit_icon_cubit.dart';
 import '/core/widgets/habit_icon/icon_picker_sheet.dart';
 import '/models/models.dart';
-import '../habits/bloc/single_habit_bloc.dart';
+import '../habits/bloc/habit_bloc.dart';
 import '../reminder/bloc/reminder/reminder_bloc.dart';
 import '../reminder/models/reminder/reminder_model.dart';
 import 'widget/add_reminder_widget.dart';
@@ -66,7 +66,7 @@ class _AddHabitPageState extends State<AddHabitPage> {
 
             context.read<ReminderBloc>().add(scheduleReminderEvent);
 
-            context.read<SingleHabitBloc>().add(SaveSingleHabitEvent(habit: habit));
+            context.read<HabitBloc>().add(SaveHabitEvent(habit: habit));
 
             navigator.pop();
           },

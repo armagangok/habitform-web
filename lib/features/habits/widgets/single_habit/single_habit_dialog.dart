@@ -1,6 +1,6 @@
 import '/core/core.dart';
 import '/models/models.dart';
-import '../../bloc/single_habit_bloc.dart';
+import '../../bloc/habit_bloc.dart';
 
 class SingleHabitDialog extends StatefulWidget {
   const SingleHabitDialog({
@@ -82,7 +82,7 @@ class _SingleHabitDialogState extends State<SingleHabitDialog> {
           padding: EdgeInsets.all(10),
           minSize: 0,
           onPressed: () {
-            context.read<SingleHabitBloc>().add(DeleteSingleHabitEvent(habit: widget.habit));
+            context.read<HabitBloc>().add(DeleteHabitEvent(habit: widget.habit));
             navigator.pop();
           },
           child: Icon(CupertinoIcons.trash),
@@ -104,7 +104,7 @@ class _SingleHabitDialogState extends State<SingleHabitDialog> {
               dateToSaveOrRemove: DateTime.now(),
             );
 
-            context.read<SingleHabitBloc>().add(event);
+            context.read<HabitBloc>().add(event);
           },
           child: Icon(CupertinoIcons.check_mark),
         );

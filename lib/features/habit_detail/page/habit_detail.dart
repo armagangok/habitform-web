@@ -2,7 +2,7 @@ import '/core/core.dart';
 import '/features/reminder/widget/reminder_widget.dart';
 import '/models/models.dart';
 import '../../edit_habit/edit_habit_page.dart';
-import '../../habits/bloc/single_habit_bloc.dart';
+import '../../habits/bloc/habit_bloc.dart';
 import '../../habits/widgets/single_habit/single_habit_detail_grid.dart';
 import '../../reminder/bloc/reminder/reminder_bloc.dart';
 import '../../share_habit/share_habit_button.dart';
@@ -35,7 +35,7 @@ class _HabitDetailPageState extends State<HabitDetailPage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<SingleHabitBloc, SingleHabitState>(
+    return BlocConsumer<HabitBloc, HabitState>(
       listener: (context, state) {
         if (state is SingleHabitsFetched) {
           final updatedHabit = state.habits.firstWhere(
@@ -162,7 +162,7 @@ class _HabitDetailPageState extends State<HabitDetailPage> {
                             sizeStyle: CupertinoButtonSize.small,
                             padding: EdgeInsets.zero,
                             onPressed: () {
-                              context.read<SingleHabitBloc>().add(DeleteSingleHabitEvent(habit: currentHabit));
+                              context.read<HabitBloc>().add(DeleteHabitEvent(habit: currentHabit));
                               navigator.pop();
                             },
                             child: Row(
@@ -352,7 +352,7 @@ class CompleteTodayButton extends StatelessWidget {
           habit: currentHabit,
         );
 
-        context.read<SingleHabitBloc>().add(event);
+        context.read<HabitBloc>().add(event);
       },
     );
   }

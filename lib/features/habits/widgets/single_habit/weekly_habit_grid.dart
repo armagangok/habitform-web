@@ -1,7 +1,7 @@
 import '/core/core.dart';
 import '/models/models.dart';
 import '../../../add_habit/enum/days_enum.dart';
-import '../../bloc/single_habit_bloc.dart';
+import '../../bloc/habit_bloc.dart';
 
 class Last7DaysModel {
   final Days day;
@@ -47,7 +47,7 @@ class _WeeklyHabitGridState extends State<WeeklyHabitGrid> {
   @override
   Widget build(BuildContext context) {
     final habitColor = widget.habit.colorCode;
-    return BlocBuilder<SingleHabitBloc, SingleHabitState>(
+    return BlocBuilder<HabitBloc, HabitState>(
       builder: (context, state) {
         if (state is SingleHabitsFetched) {
           return SizedBox(

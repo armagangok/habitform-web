@@ -94,7 +94,7 @@ class _EditHabitPageState extends State<EditHabitPage> {
 
               context.read<ReminderBloc>().add(scheduleReminderEvent);
 
-              context.read<EditHabitBloc>().add(UpdateHabitEvent(habit: updatedHabit));
+              context.read<EditHabitBloc>().add(UpdateEditHabitEvent(habit: updatedHabit));
             },
           ),
         ),

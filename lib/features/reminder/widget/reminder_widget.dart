@@ -32,10 +32,6 @@ class ReminderPage extends StatelessWidget {
               navigationBar: SheetHeader(
                 closeButtonPosition: CloseButtonPosition.left,
                 title: "Reminder",
-                trailing: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [],
-                ),
               ),
               child: ListView(
                 physics: const NeverScrollableScrollPhysics(),
@@ -65,7 +61,7 @@ class ReminderPage extends StatelessWidget {
                                   ),
                                   itemBuilder: (context, index) {
                                     final day = allDays[index];
-                                    final isSelected = selectedDays.contains(day); // Günün seçili olup olmadığını kontrol et.
+                                    final isSelected = selectedDays.contains(day);
 
                                     return CupertinoButton(
                                       padding: EdgeInsets.zero,

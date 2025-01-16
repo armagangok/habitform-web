@@ -4,7 +4,7 @@ import 'package:habitrise/models/habit/habit_model.dart';
 import '/core/core.dart';
 import '../../../add_habit/add_habit_page.dart';
 import '../../../habit_detail/page/habit_detail.dart';
-import '../../bloc/single_habit_bloc.dart';
+import '../../bloc/habit_bloc.dart';
 import 'weekly_habit_grid.dart';
 
 class SingleHabitBuilder extends StatelessWidget {
@@ -12,7 +12,7 @@ class SingleHabitBuilder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<SingleHabitBloc, SingleHabitState>(
+    return BlocBuilder<HabitBloc, HabitState>(
       builder: (context, state) {
         if (state is SingleHabitInitial) return SizedBox.shrink();
 

@@ -1,8 +1,8 @@
 import '/core/core.dart';
 import '../add_habit/add_habit_page.dart';
-import 'bloc/single_habit_bloc.dart';
-import 'widgets/single_habit/single_habit_builder.dart';
 import '../settings/settings_home/settings_home_page.dart';
+import 'bloc/habit_bloc.dart';
+import 'widgets/single_habit/single_habit_builder.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -27,7 +27,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
     controller = AnimationController(vsync: this, duration: Duration(milliseconds: 250));
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<SingleHabitBloc>().add(FetchSingleHabitEvent());
+      context.read<HabitBloc>().add(FetchHabitEvent());
     });
     super.initState();
   }

@@ -9,7 +9,7 @@ import 'core/theme/theme_data/theme_data.dart';
 import 'core/widgets/habit_color_sheet/cubit/habit_color_cubit.dart';
 import 'core/widgets/habit_icon/cubit/habit_icon_cubit.dart';
 import 'features/edit_habit/bloc/edit_habit_bloc.dart';
-import 'features/habits/bloc/single_habit_bloc.dart';
+import 'features/habits/bloc/habit_bloc.dart';
 import 'features/onboarding/bloc/onboarding_bloc.dart';
 import 'features/reminder/bloc/day_selection/day_selection_cubit.dart';
 import 'features/reminder/bloc/picker_extend/picker_extend_cubit.dart';
@@ -31,7 +31,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final singleHabitBloc = SingleHabitBloc(habitService: SingleHabitService());
+    final singleHabitBloc = HabitBloc(habitService: SingleHabitService());
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (_) => RemindTimeCubit()),

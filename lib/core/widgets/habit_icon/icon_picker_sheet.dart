@@ -41,6 +41,9 @@ class IconPickerSheetState extends State<IconPickerSheet> with SingleTickerProvi
       '🍞',
       '🥚',
       '🥛',
+      "🚴‍♂️", // Bisiklet
+      "🏊‍♂️", // Yüzme
+      "🏃‍♂️", // Koşu
       '☕',
       '🍽️',
       '🍕',
@@ -172,7 +175,6 @@ class IconPickerSheetState extends State<IconPickerSheet> with SingleTickerProvi
       "📞", // Telefon
       "🏢", // işletme
       "🕴🏻",
-      "🕴🏻",
       "🖇️",
       "🗂️",
       "🗄️",
@@ -223,8 +225,6 @@ class IconPickerSheetState extends State<IconPickerSheet> with SingleTickerProvi
       "📃", // Belge
       "❔", // Soru
       "📝", // Ödev
-      "📚", // Kütüphane
-      "📚", // Çalışma planı
       "⏱️", // Zaman yönetimi
       "🙇🏻",
       "🙇🏻",
@@ -288,12 +288,10 @@ class IconPickerSheetState extends State<IconPickerSheet> with SingleTickerProvi
       "🔺",
       "💉",
       "🩺",
-      "🩻",
       "🔬",
       "🔭",
       "💉",
       "🩺",
-      "🩻",
       "🔬",
       "🔭",
       "🪐",
