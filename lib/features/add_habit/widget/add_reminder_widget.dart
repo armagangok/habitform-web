@@ -49,7 +49,7 @@ class AddReminderWidget extends StatelessWidget {
                         color: context.titleMedium?.color,
                       ),
                     ),
-                    days != null
+                    days != null && days.isNotEmpty
                         ? SizedBox(
                             height: 20,
                             child: ListView.builder(

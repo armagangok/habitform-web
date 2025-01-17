@@ -1,3 +1,4 @@
+import 'package:habitrise/core/helpers/spacing_helper.dart';
 import 'package:habitrise/core/theme/bloc/theme_bloc.dart';
 import 'package:habitrise/models/habit/habit_model.dart';
 
@@ -145,7 +146,7 @@ class SingleHabitBuilder extends StatelessWidget {
               },
               separatorBuilder: (context, index) {
                 return Padding(
-                  padding: EdgeInsets.symmetric(vertical: 10),
+                  padding: EdgeInsets.symmetric(vertical: KSpacing.betweenListItems),
                 );
               },
             ),

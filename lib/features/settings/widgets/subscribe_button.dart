@@ -1,5 +1,5 @@
-import '../../../../core/core.dart';
-import '../../../../core/theme/bloc/theme_bloc.dart';
+import '../../../core/core.dart';
+import '../../../core/theme/bloc/theme_bloc.dart';
 
 class SubscribeButton extends StatelessWidget {
   const SubscribeButton({super.key});

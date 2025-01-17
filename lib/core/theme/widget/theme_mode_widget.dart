@@ -1,5 +1,5 @@
 import '/core/core.dart';
-import '../../../features/settings/settings_home/widgets/setting_item.dart';
+import '../../../features/settings/widgets/setting_item.dart';
 import '../bloc/theme_bloc.dart';
 
 class ThemeModeFeature extends StatelessWidget {

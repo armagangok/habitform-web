@@ -29,25 +29,25 @@ class ReminderPage extends StatelessWidget {
             navigationBar: SheetHeader(
               closeButtonPosition: CloseButtonPosition.left,
               title: "Reminder",
-              trailing: CupertinoButton(
-                padding: EdgeInsets.zero,
-                child: Text(
-                  'Done',
-                  style: context.titleMedium?.copyWith(color: context.primary),
-                ),
-                onPressed: () {
-                  final currentState = context.read<ReminderBloc>().state;
-                  if (currentState is ReminderSelectionState) {
-                    context.read<ReminderBloc>().add(
-                          InitializeReminderEvent(
-                            reminder: currentState.reminder,
-                            context: context,
-                          ),
-                        );
-                  }
-                  Navigator.pop(context);
-                },
-              ),
+              // trailing: CupertinoButton(
+              //   padding: EdgeInsets.zero,
+              //   child: Text(
+              //     'Done',
+              //     style: context.titleMedium?.copyWith(color: context.primary),
+              //   ),
+              //   onPressed: () {
+              //     final currentState = context.read<ReminderBloc>().state;
+              //     if (currentState is ReminderSelectionState) {
+              //       context.read<ReminderBloc>().add(
+              //             InitializeReminderEvent(
+              //               reminder: currentState.reminder,
+              //               context: context,
+              //             ),
+              //           );
+              //     }
+              //     Navigator.pop(context);
+              //   },
+              // ),
             ),
             child: ListView(
               physics: const NeverScrollableScrollPhysics(),

@@ -23,13 +23,22 @@ class ReminderBloc extends Bloc<ReminderEvent, ReminderState> {
     if (initialReminder != null) {
       final selectedDays = initialReminder.days ?? [];
       final reminderTime = initialReminder.reminderTime;
-      final reminder = initialReminder.copyWith(days: selectedDays, time: reminderTime);
-      emit(ReminderSelectionState(reminder: reminder));
+
+      // Check if any day is selected
+      if (selectedDays.isNotEmpty) {
+        // If days are selected, allow setting the reminder time
+        final reminder = initialReminder.copyWith(days: selectedDays, time: reminderTime);
+        emit(ReminderSelectionState(reminder: reminder));
+      } else {
+        // If no days are selected, set the reminder time to null
+        final reminder = initialReminder.copyWith(days: selectedDays, time: null);
+        emit(ReminderSelectionState(reminder: reminder));
+      }
     } else {
       final reminderModelToInitialize = ReminderModel(
         id: UuidHelper.uidInt,
         days: [],
-        reminderTime: DateTime.now().copyWith(hour: 12, minute: 0, second: 0),
+        reminderTime: null, // Set initial time to null
       );
       emit(ReminderSelectionState(reminder: reminderModelToInitialize));
     }

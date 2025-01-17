@@ -1,3 +1,5 @@
+import 'package:habitrise/core/helpers/spacing_helper.dart';
+
 import '/core/core.dart';
 import '/core/widgets/flushbar_widget.dart';
 import '/models/models.dart';
@@ -74,7 +76,7 @@ class _AddHabitPageState extends State<AddHabitPage> {
               padding: EdgeInsets.all(15),
               children: [
                 Column(
-                  spacing: 20,
+                  spacing: KSpacing.betweenListItems,
                   children: [
                     SafeArea(
                       bottom: false,
@@ -89,7 +91,6 @@ class _AddHabitPageState extends State<AddHabitPage> {
                     ),
                     BlocBuilder<ReminderBloc, ReminderState>(
                       builder: (context, state) {
-                        print(state.reminder.toString());
                         return AddReminderWidget(reminder: state.reminder);
                       },
                     ),

@@ -1,5 +1,6 @@
 import '../../../core/core.dart';
 import '../bloc/day_selection/day_selection_cubit.dart';
+import '../bloc/remind_time/remind_time_cubit.dart';
 import '../bloc/reminder/reminder_bloc.dart';
 
 class SelectionButtons extends StatelessWidget {
@@ -19,8 +20,9 @@ class SelectionButtons extends StatelessWidget {
             sizeStyle: CupertinoButtonSize.small,
             borderRadius: BorderRadius.circular(8),
             onPressed: () {
-              context.read<DaySelectionCubit>().selectAll();
+              context.read<DaySelectionCubit>().selectAll(context);
               context.read<ReminderBloc>().add(UpdateReminderDaysEvent(days: allDays.toList()));
+              context.read<RemindTimeCubit>().updateTime(DateTime.now().copyWith(hour: 14, minute: 0));
             },
             child: Text(
               "Select All",

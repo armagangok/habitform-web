@@ -1,3 +1,4 @@
+import '../remind_time/remind_time_cubit.dart';
 import '/core/core.dart';
 import '../../models/days/days_enum.dart';
 import '../reminder/reminder_bloc.dart';
@@ -11,18 +12,22 @@ class DaySelectionCubit extends Cubit<List<Days>> {
     emit(List.from(days));
   }
 
-  void selectOneByOne(Days selectedDay) {
+  void selectOneByOne(Days selectedDay, BuildContext context) {
     final bool isSelected = state.contains(selectedDay);
 
     if (isSelected) {
       emit(List.from(state)..remove(selectedDay));
     } else {
       emit(List.from(state)..add(selectedDay));
+      // Set default time to 14:00 when a day is selected
+      context.read<RemindTimeCubit>().updateTime(DateTime.now().copyWith(hour: 14, minute: 0));
     }
   }
 
-  void selectAll() {
+  void selectAll(BuildContext context) {
     emit(List.from(state..clear())..addAll(allDays));
+    // Set default time to 14:00 when all days are selected
+    context.read<RemindTimeCubit>().updateTime(DateTime.now().copyWith(hour: 14, minute: 0));
   }
 
   void deselectAll(BuildContext context) {

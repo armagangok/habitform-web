@@ -43,16 +43,10 @@ class _DaysGridViewBuilderState extends State<DaysGridViewBuilder> {
               padding: EdgeInsets.zero,
               onPressed: () {
                 final daySelectionCubit = context.read<DaySelectionCubit>();
-                daySelectionCubit.selectOneByOne(currentDay);
+                daySelectionCubit.selectOneByOne(currentDay, context);
 
                 // Güncel seçili günleri al ve ReminderBloc'u güncelle
                 final updatedDays = List<Days>.from(daySelectionCubit.state);
-                if (!isSelected) {
-                  updatedDays.add(currentDay);
-                } else {
-                  updatedDays.remove(currentDay);
-                }
-
                 context.read<ReminderBloc>().add(UpdateReminderDaysEvent(days: updatedDays));
               },
               child: Card(

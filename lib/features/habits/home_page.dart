@@ -1,6 +1,6 @@
 import '/core/core.dart';
 import '../add_habit/add_habit_page.dart';
-import '../settings/settings_home/settings_home_page.dart';
+import '../settings/settings_home_page.dart';
 import 'bloc/habit_bloc.dart';
 import 'widgets/single_habit/single_habit_builder.dart';
 
@@ -28,7 +28,10 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<HabitBloc>().add(FetchHabitEvent());
+
+      setState(() {});
     });
+
     super.initState();
   }
 
@@ -40,55 +43,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
       body: CupertinoPageScaffold(
         child: CustomScrollView(
           slivers: <Widget>[
-            CupertinoSliverNavigationBar(
-              leading: Builder(builder: (context) {
-                return Align(
-                  widthFactor: 1,
-                  child: CupertinoButton(
-                    padding: EdgeInsets.zero,
-                    child: Icon(
-                      CupertinoIcons.gear,
-                      size: 32,
-                    ),
-                    onPressed: () {
-                      CupertinoScaffold.showCupertinoModalBottomSheet(
-                        enableDrag: false,
-                        context: context,
-                        builder: (contextFromSheet) {
-                          return SettingsPage();
-                        },
-                      );
-                    },
-                  ).animate().fadeIn(
-                        duration: Duration(milliseconds: 300),
-                      ),
-                );
-              }),
-              largeTitle: Text('HabitRise').animate().fadeIn(
-                    duration: Duration(milliseconds: 300),
-                  ),
-              trailing: Align(
-                widthFactor: 1,
-                child: Builder(builder: (context) {
-                  return CupertinoButton(
-                    padding: EdgeInsets.zero,
-                    child: Icon(
-                      CupertinoIcons.add_circled,
-                      size: 32,
-                    ),
-                    onPressed: () {
-                      CupertinoScaffold.showCupertinoModalBottomSheet(
-                        enableDrag: false,
-                        context: context,
-                        builder: (contextFromSheet) {
-                          return AddHabitPage();
-                        },
-                      );
-                    },
-                  );
-                }),
-              ).animate().fadeIn(duration: Duration(milliseconds: 300)),
-            ),
+            _homePageNavigationBar(),
             SliverList(
               delegate: SliverChildListDelegate(
                 [
@@ -108,6 +63,58 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
           ],
         ),
       ),
+    );
+  }
+
+  CupertinoSliverNavigationBar _homePageNavigationBar() {
+    return CupertinoSliverNavigationBar(
+      leading: Builder(builder: (context) {
+        return Align(
+          widthFactor: 1,
+          child: CupertinoButton(
+            padding: EdgeInsets.zero,
+            child: Icon(
+              CupertinoIcons.gear,
+              size: 32,
+            ),
+            onPressed: () {
+              CupertinoScaffold.showCupertinoModalBottomSheet(
+                enableDrag: false,
+                context: context,
+                builder: (contextFromSheet) {
+                  return SettingsPage();
+                },
+              );
+            },
+          ).animate().fadeIn(
+                duration: Duration(milliseconds: 300),
+              ),
+        );
+      }),
+      largeTitle: Text('HabitRise').animate().fadeIn(
+            duration: Duration(milliseconds: 300),
+          ),
+      trailing: Align(
+        widthFactor: 1,
+        child: Builder(builder: (context) {
+          return CupertinoButton(
+            padding: EdgeInsets.zero,
+            child: Icon(
+              CupertinoIcons.add_circled,
+              size: 32,
+            ),
+            onPressed: () {
+              CupertinoScaffold.showCupertinoModalBottomSheet(
+                enableDrag: false,
+                context: context,
+                builder: (contextFromSheet) {
+                  return AddHabitPage();
+                },
+              );
+            },
+          );
+        }),
+      ).animate().fadeIn(duration: Duration(milliseconds: 300)),
     );
   }
 }
