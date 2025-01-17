@@ -4,7 +4,6 @@ import '../../../../core/widgets/flushbar_widget.dart';
 import '../../models/days/days_enum.dart';
 import '../../models/reminder/reminder_model.dart';
 import '../../service/reminder_service.dart';
-import '../day_selection/day_selection_cubit.dart';
 import '../picker_extend/picker_extend_cubit.dart';
 import '../remind_time/remind_time_cubit.dart';
 
@@ -12,8 +11,6 @@ part 'reminder_event.dart';
 part 'reminder_state.dart';
 
 class ReminderBloc extends Bloc<ReminderEvent, ReminderState> {
-  
-
   ReminderBloc() : super(ReminderStateInitial()) {
     on<InitializeReminderEvent>(_initializeReminderData);
 
@@ -26,8 +23,6 @@ class ReminderBloc extends Bloc<ReminderEvent, ReminderState> {
     on<UpdateReminderTimeEvent>(updateTime);
   }
 
-  
-
   void _initializeReminderData(InitializeReminderEvent event, Emitter<ReminderState> emit) {
     final timeFromPicker = event.context.read<RemindTimeCubit>().state;
     final initialReminder = event.reminder;
@@ -38,13 +33,13 @@ class ReminderBloc extends Bloc<ReminderEvent, ReminderState> {
 
       final reminder = initialReminder.copyWith(days: selectedDays, time: reminderTime ?? timeFromPicker);
 
-      event.context.read<DaySelectionCubit>().initializeDaySelection(selectedDays);
-      event. context.read<RemindTimeCubit>().initializeTime(reminderTime);
+      // event.context.read<DaySelectionCubit>().initializeDaySelection(selectedDays);
+      event.context.read<RemindTimeCubit>().initializeTime(reminderTime);
 
       if (selectedDays.isEmpty) {
         event.context.read<PickerExtendCubit>().initialize(false);
       } else {
-        event. context.read<PickerExtendCubit>().initialize(true);
+        event.context.read<PickerExtendCubit>().initialize(true);
       }
 
       emit(ReminderSelectionState(reminder: reminder));
