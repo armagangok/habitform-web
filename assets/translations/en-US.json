@@ -1,0 +1,122 @@
+{
+    "common": {
+        "save": "Save",
+        "cancel": "Cancel",
+        "delete": "Delete",
+        "edit": "Edit",
+        "confirm": "Confirm",
+        "back": "Back",
+        "none": "None",
+        "app": "APP",
+        "general": "GENERAL",
+        "days": "DAYS",
+        "version": "1.0.0",
+        "made_by": "Made with ☕️ and ❤️ by Armağan Gök",
+        "icon": "Icon"
+    },
+    "colors": {
+        "color": "Color",
+        "blue": "Blue",
+        "lightBlue": "Light Blue",
+        "indigo": "Indigo",
+        "red": "Red",
+        "orange": "Orange",
+        "deepOrange": "Deep Orange",
+        "amber": "Amber",
+        "yellow": "Yellow",
+        "Lime": "Lime",
+        "green": "Green",
+        "cyan": "Cyan",
+        "teal": "Teal",
+        "blueGrey": "BlueGrey",
+        "grey": "Grey",
+        "purple": "Purple",
+        "deepPurple": "Deep Purple",
+        "brown": "Brown",
+        "pink": "Pink"
+    },
+    "iconCategories": {
+        "dailylife": "Daily Life",
+        "sports": "Sports",
+        "health": "Health",
+        "social": "Social",
+        "nature": "Nature",
+        "business": "Business",
+        "art": "Art",
+        "studyandtask": "Study & Task",
+        "science": "Science",
+        "gardenandyard": "Garden & Yard",
+        "pets": "Pets"
+    },
+    "onboarding": {
+        "welcome": "Welcome",
+        "get_started": "Get Started",
+        "next": "Next",
+        "welcome_message": "Welcome to HabitRise,",
+        "greeting_message": "Before everything, we want to know about you. Because, we want you to experience the HabitRise better!",
+        "features": {
+            "minimalist": "Minimalist.",
+            "easy_to_use": "Easy to Use.",
+            "science_based": "Science-Based."
+        }
+    },
+    "habit": {
+        "add_habit": "Add Habit",
+        "edit_habit": "Edit Habit",
+        "habit_name": "Habit Name",
+        "habit_description": "Description",
+        "reminder": "Reminder",
+        "add_reminder": "Add Reminder",
+        "frequency": "Frequency",
+        "daily": "Daily",
+        "weekly": "Weekly",
+        "monthly": "Monthly",
+        "create_habit": "Create Habit",
+        "no_habit_found": "No habit found",
+        "lets_gain_habit": "Let's gain a new habit",
+        "habit_data": "HABIT DATA",
+        "todayCompleted": "Today Completed",
+        "complete": "Complete"
+    },
+    "habit_detail": {
+        "habitDetail": "Alışkanlık Detayı"
+    },
+    "settings": {
+        "settings": "Settings",
+        "language": "Language",
+        "notifications": "Notifications",
+        "theme": "Theme",
+        "system": "System",
+        "dark_mode": "Dark Mode",
+        "light_mode": "Light Mode",
+        "support": "Support HabitRise",
+        "support_subtitle": "Loved HabitRise? Rate and help us grow!",
+        "feedback": "Send Feedback",
+        "privacy": "Privacy",
+        "terms": "Terms"
+    },
+    "subscription": {
+        "subscribe_to": "Subscribe to",
+        "habitrise_pro": "HabitRise Pro",
+        "tap_advantages": "Tap to see all advantages"
+    },
+    "share": {
+        "share": "Share",
+        "share_image": "Share Image",
+        "share_text": "Share Text"
+    },
+    "days": {
+        "monday": "Monday",
+        "tuesday": "Tuesday",
+        "wednesday": "Wednesday",
+        "thursday": "Thursday",
+        "friday": "Friday",
+        "saturday": "Saturday",
+        "sunday": "Sunday"
+    },
+    "errors": {
+        "something_went_wrong": "Something went wrong",
+        "try_again": "Try again",
+        "required_field": "This field is required"
+    }
+}

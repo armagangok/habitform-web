@@ -1,4 +1,6 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:habitrise/core/helpers/spacing_helper.dart';
+import 'package:habitrise/features/language/widget/language_feature.dart';
 
 import '/core/core.dart';
 import '/core/helpers/url_laucher/url_launcher.dart';
@@ -33,7 +35,7 @@ class _SettingsPageState extends State<SettingsPage> with SingleTickerProviderSt
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
       navigationBar: SheetHeader(
-        title: "Settings",
+        title: LocaleKeys.settings_settings.tr(),
         closeButtonPosition: CloseButtonPosition.left,
       ),
       child: ListView(
@@ -49,17 +51,18 @@ class _SettingsPageState extends State<SettingsPage> with SingleTickerProviderSt
                   SubscribeButton(),
                   SafeArea(
                     child: CustomHeader(
-                      text: "APP",
+                      text: LocaleKeys.common_app.tr(),
                       child: Card(
                         child: Column(
                           children: [
                             ThemeModeFeature(),
+                            LanguageFeature(),
                             CupertinoListTile(
                               leading: const SettingLeadingWidget(
                                 iconData: CupertinoIcons.bell_fill,
                                 cardColor: Colors.indigoAccent,
                               ),
-                              title: Text("Notification"),
+                              title: Text(LocaleKeys.settings_notifications.tr()),
                               onTap: () {},
                               trailing: CupertinoListTileChevron(),
                             ),
@@ -69,7 +72,7 @@ class _SettingsPageState extends State<SettingsPage> with SingleTickerProviderSt
                     ),
                   ),
                   CustomHeader(
-                    text: "GENERAL",
+                    text: LocaleKeys.common_general.tr(),
                     child: Card(
                       child: Column(
                         children: [
@@ -79,8 +82,8 @@ class _SettingsPageState extends State<SettingsPage> with SingleTickerProviderSt
                               iconData: CupertinoIcons.heart_fill,
                               cardColor: Colors.pinkAccent,
                             ),
-                            title: Text("Support HabitRise"),
-                            subtitle: Text("Loved HabitRise? Rate and help us grow!"),
+                            title: Text(LocaleKeys.settings_support.tr()),
+                            subtitle: Text(LocaleKeys.settings_support_subtitle.tr()),
                             onTap: () {},
                             trailing: CupertinoListTileChevron(),
                           ),
@@ -89,7 +92,7 @@ class _SettingsPageState extends State<SettingsPage> with SingleTickerProviderSt
                               iconData: CupertinoIcons.mail_solid,
                               cardColor: CupertinoColors.activeBlue,
                             ),
-                            title: Text("Send Feedback"),
+                            title: Text(LocaleKeys.settings_feedback.tr()),
                             onTap: () {},
                             trailing: CupertinoListTileChevron(),
                           ),
@@ -106,7 +109,7 @@ class _SettingsPageState extends State<SettingsPage> with SingleTickerProviderSt
                             iconData: CupertinoIcons.hand_raised_fill,
                             cardColor: CupertinoColors.activeBlue,
                           ),
-                          title: Text("Privacy"),
+                          title: Text(LocaleKeys.settings_privacy.tr()),
                           onTap: () {},
                           trailing: CupertinoListTileChevron(),
                         ),
@@ -115,7 +118,7 @@ class _SettingsPageState extends State<SettingsPage> with SingleTickerProviderSt
                             iconData: CupertinoIcons.hand_point_right_fill,
                             cardColor: CupertinoColors.activeBlue,
                           ),
-                          title: Text("Terms"),
+                          title: Text(LocaleKeys.settings_terms.tr()),
                           onTap: () {},
                           trailing: CupertinoListTileChevron(),
                         ),
@@ -146,7 +149,7 @@ class _SettingsPageState extends State<SettingsPage> with SingleTickerProviderSt
                             ),
                           ),
                           Text(
-                            " 1.0.0",
+                            " ${LocaleKeys.common_version.tr()}",
                             style: context.bodyMedium?.copyWith(
                               color: context.textTheme.bodySmall?.color?.withOpacity(.75),
                             ),
@@ -156,7 +159,7 @@ class _SettingsPageState extends State<SettingsPage> with SingleTickerProviderSt
                       CustomButton(
                         onTap: UrlLauncherHelper.openTwitter,
                         child: Text(
-                          "Made with ☕️ and ❤️ by Armağan Gök",
+                          LocaleKeys.common_made_by.tr(),
                           style: context.bodySmall,
                         ),
                       )

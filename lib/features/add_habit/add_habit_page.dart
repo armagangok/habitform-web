@@ -39,13 +39,13 @@ class _AddHabitPageState extends State<AddHabitPage> {
         builder: (context) {
           return CupertinoPageScaffold(
             navigationBar: SheetHeader(
-              title: "Add Habit",
+              title: LocaleKeys.habit_add_habit.tr(),
               closeButtonPosition: CloseButtonPosition.left,
               trailing: TrailingActionButton(
-                title: "Save",
+                title: LocaleKeys.common_save.tr(),
                 onPressed: () {
                   if (_habitNameController.text.isEmpty) {
-                    AppFlushbar.shared.warningFlushbar("Habit name can't be empty");
+                    AppFlushbar.shared.warningFlushbar(LocaleKeys.errors_required_field.tr());
                     return;
                   }
                   final ReminderModel? reminderModel = context.read<ReminderBloc>().state.reminder;
@@ -81,12 +81,12 @@ class _AddHabitPageState extends State<AddHabitPage> {
                     SafeArea(
                       bottom: false,
                       child: CustomHeader(
-                        text: "NAME",
+                        text: LocaleKeys.habit_habit_name.tr().toUpperCase(),
                         child: _buildHabitTextField(controller: _habitNameController),
                       ),
                     ),
                     CustomHeader(
-                      text: "DESCRIPTION",
+                      text: LocaleKeys.habit_habit_description.tr().toUpperCase(),
                       child: _buildHabitTextField(controller: _habitDescriptionController),
                     ),
                     BlocBuilder<ReminderBloc, ReminderState>(
@@ -95,7 +95,7 @@ class _AddHabitPageState extends State<AddHabitPage> {
                       },
                     ),
                     CustomHeader(
-                      text: "ICON",
+                      text: LocaleKeys.common_icon.tr().toUpperCase(),
                       child: IconPickerSheet(
                         onIconSelected: (icon) {
                           context.read<HabitEmojiCubit>().pickIcon(icon);
@@ -103,7 +103,7 @@ class _AddHabitPageState extends State<AddHabitPage> {
                       ),
                     ),
                     CustomHeader(
-                      text: "COLOR",
+                      text: LocaleKeys.colors_color.tr().toUpperCase(),
                       child: ColorPickerSheet(
                         onColorSelected: (color) {
                           context.read<HabitColorCubit>().pickColor(color);

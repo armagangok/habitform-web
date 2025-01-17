@@ -25,7 +25,7 @@ class IconPickerSheetState extends State<IconPickerSheet> with SingleTickerProvi
 
 // Define categories with emojis
   Map<String, List<String>> emojiCategories = {
-    "Daily Life": [
+    LocaleKeys.iconCategories_dailylife.tr(): [
       '🛏️',
       '🛌',
       '🪥',
@@ -52,7 +52,7 @@ class IconPickerSheetState extends State<IconPickerSheet> with SingleTickerProvi
       '🍎',
       '🥤',
     ],
-    "Sports": [
+    LocaleKeys.iconCategories_sports.tr(): [
       "⚽", // Futbol
       "🏀", // Basketbol
       "⚾", // Beyzbol
@@ -79,7 +79,7 @@ class IconPickerSheetState extends State<IconPickerSheet> with SingleTickerProvi
       "🛂", // Paragliding
       "⛵", // Yelken sporu
     ],
-    "Health": [
+    LocaleKeys.iconCategories_health.tr(): [
       "❤️", // Kalp
       "🔥", // Kalori yakma
       "🩹", // Sağlık bakımı
@@ -102,7 +102,7 @@ class IconPickerSheetState extends State<IconPickerSheet> with SingleTickerProvi
       "🚑",
       "⛑️",
     ],
-    "Social": [
+    LocaleKeys.iconCategories_social.tr(): [
       "👥", // Sosyal bağlantı
       "💬", // Sohbet
       "📧", // E-posta
@@ -118,7 +118,7 @@ class IconPickerSheetState extends State<IconPickerSheet> with SingleTickerProvi
       "💌", // Günlük mesaj
       "🌍" // Genel paylaşım
     ],
-    "Nature": [
+    LocaleKeys.iconCategories_nature.tr(): [
       "☁️", // Bulut
       "☀️", // Güneş
       "🌙", // Ay
@@ -128,7 +128,6 @@ class IconPickerSheetState extends State<IconPickerSheet> with SingleTickerProvi
       "🐦", // Kuş
       "🌳", // Ağaç
       "🌿", // Çimen
-      "⾃然", // Doğa
       "🌸", // Çiçek,
       "🌵",
       "🌴",
@@ -161,7 +160,7 @@ class IconPickerSheetState extends State<IconPickerSheet> with SingleTickerProvi
       "🌬️",
       "🌪️"
     ],
-    "Business": [
+    LocaleKeys.iconCategories_business.tr(): [
       "💼", // Çanta
       "📈", // Grafik
       "📊", // Pasta grafiği
@@ -186,7 +185,28 @@ class IconPickerSheetState extends State<IconPickerSheet> with SingleTickerProvi
       "📈",
       "📇",
     ],
-    "Task & Project": [
+    "Art": [
+      "✏️", // Kalem
+      "🖌️", // Boyama
+      "🖼️", // Fotoğraf
+      "📷", // Kamera
+      "🎨", // Renk paleti
+      "🖼️", // Sanat eseri
+      "✏️", // Düzenleme
+      "📷", // Fotoğrafçılık
+      "🧶", "🧵", "✍🏻", "👨🏻‍🎨",
+    ],
+    LocaleKeys.iconCategories_studyandtask.tr(): [
+      "📚", // Kitap
+      "📝", // Not
+      "📂", // Dosya
+      "⏱️", // Zamanlayıcı
+      "📆", // Takvim
+      "💡", // Fikir
+      "📃", // Belge
+      "❔", // Soru
+      "📝", // Ödev
+      "⏱️", // Zaman yönetimi
       "📃", // Liste
       "📆", // Takvim
       "📑", // Belge
@@ -202,30 +222,7 @@ class IconPickerSheetState extends State<IconPickerSheet> with SingleTickerProvi
       "⏱️", // Zaman
       "",
       "📝", // Not
-      "📆" // Planlama
-    ],
-    "Art": [
-      "✏️", // Kalem
-      "🖌️", // Boyama
-      "🖼️", // Fotoğraf
-      "📷", // Kamera
-      "🎨", // Renk paleti
-      "🖼️", // Sanat eseri
-      "✏️", // Düzenleme
-      "📷", // Fotoğrafçılık
-      "🧶", "🧵", "✍🏻", "👨🏻‍🎨",
-    ],
-    "Study": [
-      "📚", // Kitap
-      "📝", // Not
-      "📂", // Dosya
-      "⏱️", // Zamanlayıcı
-      "📆", // Takvim
-      "💡", // Fikir
-      "📃", // Belge
-      "❔", // Soru
-      "📝", // Ödev
-      "⏱️", // Zaman yönetimi
+      "📆", // Planlama
       "🙇🏻",
       "🙇🏻",
       "🙇🏻‍♀️",
@@ -270,7 +267,7 @@ class IconPickerSheetState extends State<IconPickerSheet> with SingleTickerProvi
       "📘",
       "📙"
     ],
-    "Science": [
+    LocaleKeys.iconCategories_science.tr(): [
       "🌡️",
       "🧪",
       "🧫",
@@ -295,7 +292,7 @@ class IconPickerSheetState extends State<IconPickerSheet> with SingleTickerProvi
       "🥼",
       "🌑",
     ],
-    "Garden & Yard": [
+    LocaleKeys.iconCategories_gardenandyard.tr(): [
       "🌱", // Bitki
       "🌳", // Ağaç
       "🌾", // Çim
@@ -310,7 +307,7 @@ class IconPickerSheetState extends State<IconPickerSheet> with SingleTickerProvi
       "🌿", // Çimen
       "🌹" // Çiçek
     ],
-    "Pets": [
+    LocaleKeys.iconCategories_pets.tr(): [
       "🐾", // Hayvan ayak izi
       "🐶",
       "🦴",

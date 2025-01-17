@@ -1,5 +1,6 @@
-import 'package:flutter/cupertino.dart';
-import 'package:habitrise/core/extension/easy_context.dart';
+import 'package:easy_localization/easy_localization.dart';
+
+import '../../../core/core.dart';
 
 class OnboardingTitle extends StatelessWidget {
   final String data;
@@ -25,18 +26,12 @@ class GreetingText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return RichText(
+    return Text(
+      LocaleKeys.onboarding_greeting_message.tr(),
       textAlign: TextAlign.center,
-      text: TextSpan(
-        style: TextStyle(
-          fontSize: 18,
-          color: CupertinoColors.black,
-        ),
-        children: [
-          TextSpan(text: "Before everything, we want to know about you. Because, we want you to experience the"),
-          TextSpan(text: " HabitRise ", style: TextStyle(fontWeight: FontWeight.bold)),
-          TextSpan(text: "better!"),
-        ],
+      style: TextStyle(
+        fontSize: 18,
+        color: CupertinoColors.black,
       ),
     );
   }

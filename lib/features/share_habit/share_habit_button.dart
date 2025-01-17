@@ -40,7 +40,7 @@ class ShareHabitButton extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              "Share",
+              LocaleKeys.share_share.tr(),
               style: TextStyle(
                 fontWeight: FontWeight.w500,
                 color: CupertinoColors.activeBlue,

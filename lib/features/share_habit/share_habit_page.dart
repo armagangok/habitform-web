@@ -58,9 +58,9 @@ class _ShareHabitPageState extends State<ShareHabitPage> {
   Future<void> _shareHabitAsText() async {
     final completedDays = widget.habit.completionDates?.length ?? 0;
     final shareText = '''
-🎯 Habit: ${widget.habit.habitName}
-✅ Completed: $completedDays times
-📝 Note: ${widget.habit.habitDescription ?? 'No note'}
+🎯 ${LocaleKeys.habit_habit_name.tr()}: ${widget.habit.habitName}
+✅ ${LocaleKeys.habit_complete.tr()}: $completedDays times
+📝 ${LocaleKeys.habit_habit_description.tr()}: ${widget.habit.habitDescription ?? LocaleKeys.common_none.tr()}
     ''';
 
     await Share.share(shareText);
@@ -74,7 +74,7 @@ class _ShareHabitPageState extends State<ShareHabitPage> {
     return CupertinoPageScaffold(
       navigationBar: SheetHeader(
         closeButtonPosition: CloseButtonPosition.left,
-        title: "Share Habit",
+        title: LocaleKeys.share_share_text.tr(),
       ),
       child: Stack(
         children: [
@@ -117,7 +117,7 @@ class _ShareHabitPageState extends State<ShareHabitPage> {
                                     ),
                                     const SizedBox(width: 5),
                                     Text(
-                                      'Share Image',
+                                      LocaleKeys.share_share_image.tr(),
                                       style: TextStyle(
                                         color: Colors.indigoAccent.shade100,
                                       ),
@@ -131,12 +131,12 @@ class _ShareHabitPageState extends State<ShareHabitPage> {
                         child: CupertinoButton.tinted(
                           sizeStyle: CupertinoButtonSize.small,
                           onPressed: _shareHabitAsText,
-                          child: const Row(
+                          child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Icon(FontAwesomeIcons.solidFileLines),
                               SizedBox(width: 5),
-                              Text('Share Text'),
+                              Text(LocaleKeys.share_share_text.tr()),
                             ],
                           ),
                         ),

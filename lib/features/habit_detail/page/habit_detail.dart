@@ -51,91 +51,97 @@ class HabitDetailPage extends StatelessWidget {
                 children: [
                   CupertinoPageScaffold(
                     navigationBar: SheetHeader(
-                      title: "Habit Detail",
+                      title: LocaleKeys.habit_detail_habitDetail.tr(),
                       closeButtonPosition: CloseButtonPosition.left,
                     ),
                     child: ListView(
                       children: [
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 15) + EdgeInsets.only(top: 10),
-                          child: CustomHeader(
-                            text: "INFORMATION",
-                            child: item(
-                              currentHabit.habitName,
-                              subtitle: currentHabit.habitDescription,
-                              emoji: currentHabit.emoji,
-                            ),
-                          ),
-                        ),
-                        SizedBox(height: 15),
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 15),
-                          child: CustomHeader(
-                            text: "REMINDER",
-                            child: SizedBox(
-                              width: double.infinity,
-                              child: Card(
-                                child: Padding(
-                                  padding: EdgeInsets.all(10),
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        remindTime ?? "None",
-                                        style: context.bodyLarge?.copyWith(fontWeight: FontWeight.bold),
-                                      ),
-                                      if (days != null && days.isNotEmpty)
-                                        SizedBox(
-                                          height: 20,
-                                          child: ListView.separated(
-                                            scrollDirection: Axis.horizontal,
-                                            shrinkWrap: true,
-                                            itemCount: days.length,
-                                            separatorBuilder: (context, index) {
-                                              return Text(
-                                                ", ",
-                                                style: context.bodyMedium?.copyWith(
-                                                  color: context.primary.withAlpha(170),
+                        SafeArea(
+                          child: Column(
+                            spacing: 30,
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 15) + EdgeInsets.only(top: 10),
+                                child: CustomHeader(
+                                  text: LocaleKeys.common_general.tr(),
+                                  child: item(
+                                    currentHabit.habitName,
+                                    subtitle: currentHabit.habitDescription,
+                                    emoji: currentHabit.emoji,
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 15),
+                                child: CustomHeader(
+                                  text: LocaleKeys.habit_reminder.tr().toUpperCase(),
+                                  child: SizedBox(
+                                    width: double.infinity,
+                                    child: Card(
+                                      child: Padding(
+                                        padding: EdgeInsets.all(10),
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              remindTime ?? LocaleKeys.common_none.tr(),
+                                              style: context.bodyLarge?.copyWith(fontWeight: FontWeight.bold),
+                                            ),
+                                            if (days != null && days.isNotEmpty)
+                                              SizedBox(
+                                                height: 20,
+                                                child: ListView.separated(
+                                                  scrollDirection: Axis.horizontal,
+                                                  shrinkWrap: true,
+                                                  itemCount: days.length,
+                                                  separatorBuilder: (context, index) {
+                                                    return Text(
+                                                      ", ",
+                                                      style: context.bodyMedium?.copyWith(
+                                                        color: context.primary.withAlpha(170),
+                                                      ),
+                                                    );
+                                                  },
+                                                  itemBuilder: (context, index) {
+                                                    final dayName = days[index].capitalized;
+                                                    return Text(
+                                                      dayName,
+                                                      style: context.bodyMedium?.copyWith(
+                                                        color: context.primary.withAlpha(170),
+                                                      ),
+                                                    );
+                                                  },
                                                 ),
-                                              );
-                                            },
-                                            itemBuilder: (context, index) {
-                                              final dayName = days[index].capitalized;
-                                              return Text(
-                                                dayName,
-                                                style: context.bodyMedium?.copyWith(
-                                                  color: context.primary.withAlpha(170),
-                                                ),
-                                              );
-                                            },
-                                          ),
+                                              ),
+                                          ],
                                         ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 15),
+                                child: CustomHeader(
+                                  text: LocaleKeys.habit_habit_data.tr(),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    children: [
+                                      SingleHabitDetailGrid(habit: currentHabit),
+                                      SizedBox(height: 10),
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.end,
+                                        spacing: 10,
+                                        children: [
+                                          CompleteTodayButton(currentHabit: currentHabit),
+                                        ],
+                                      ),
                                     ],
                                   ),
                                 ),
                               ),
-                            ),
-                          ),
-                        ),
-                        SizedBox(height: 15),
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 15),
-                          child: CustomHeader(
-                            text: "HABIT DATA",
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              children: [
-                                SingleHabitDetailGrid(habit: currentHabit),
-                                SizedBox(height: 10),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  spacing: 10,
-                                  children: [
-                                    CompleteTodayButton(currentHabit: currentHabit),
-                                  ],
-                                ),
-                              ],
-                            ),
+                              SizedBox(height: 40),
+                            ],
                           ),
                         ),
                       ],
@@ -163,7 +169,7 @@ class HabitDetailPage extends StatelessWidget {
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
                                       Text(
-                                        "Delete",
+                                        LocaleKeys.common_delete.tr(),
                                         style: TextStyle(
                                           color: CupertinoColors.destructiveRed,
                                           fontWeight: FontWeight.w500,
@@ -203,7 +209,7 @@ class HabitDetailPage extends StatelessWidget {
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
                                         Text(
-                                          "Edit",
+                                          LocaleKeys.common_edit.tr(),
                                           style: TextStyle(
                                             color: CupertinoColors.activeOrange,
                                             fontWeight: FontWeight.w500,
@@ -279,17 +285,20 @@ class HabitDetailPage extends StatelessWidget {
       context: context,
       builder: (context) {
         return CupertinoAlertDialog(
-          title: Text('Delete Habit'),
+          title: Text(LocaleKeys.common_delete.tr()),
           content: Text('Are you sure you want to delete this habit?'),
           actions: [
             CupertinoDialogAction(
-              child: Text('Cancel'),
+              child: Text(LocaleKeys.common_cancel.tr()),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             CupertinoDialogAction(
-              child: Text('Delete', style: TextStyle(color: CupertinoColors.destructiveRed)),
+              child: Text(
+                LocaleKeys.common_delete.tr(),
+                style: TextStyle(color: CupertinoColors.destructiveRed),
+              ),
               onPressed: () {
                 context.read<HabitBloc>().add(DeleteHabitEvent(habit: habit));
                 Navigator.of(context).pop();

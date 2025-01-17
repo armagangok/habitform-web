@@ -1,7 +1,7 @@
 import '../../../models/models.dart';
 
 void sortHabitsByReminderTime(List<Habit> habits) {
-  habits.sort((a, b) {
+  habits.sort((Habit a, Habit b) {
     final timeA = a.reminderModel?.reminderTime;
     final timeB = b.reminderModel?.reminderTime;
 

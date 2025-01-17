@@ -18,13 +18,16 @@ class CustomHeader extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             spacing: 2.5,
             children: [
-              SizedBox(
-                width: double.infinity,
-                child: Text(
-                  text,
-                  style: context.bodySmall?.copyWith(
-                    color: context.bodySmall?.color?.withAlpha(170),
-                    fontWeight: FontWeight.w500,
+              Padding(
+                padding: const EdgeInsets.only(left: 10.0),
+                child: SizedBox(
+                  width: double.infinity,
+                  child: Text(
+                    text,
+                    style: context.bodySmall?.copyWith(
+                      color: context.bodySmall?.color?.withAlpha(170),
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
                 ),
               ),

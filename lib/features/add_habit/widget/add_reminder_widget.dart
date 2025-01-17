@@ -16,7 +16,7 @@ class AddReminderWidget extends StatelessWidget {
     final days = reminder?.days;
     final remindTime = reminder?.reminderTime;
     return CustomHeader(
-      text: "REMINDER",
+      text: LocaleKeys.habit_reminder.tr().toUpperCase(),
       child: Card(
         child: CupertinoButton(
           minSize: 0,
@@ -43,7 +43,7 @@ class AddReminderWidget extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      remindTime?.toHHMM() ?? "None",
+                      remindTime?.toHHMM() ?? LocaleKeys.common_none.tr(),
                       style: context.titleMedium?.copyWith(
                         fontWeight: FontWeight.w500,
                         color: context.titleMedium?.color,

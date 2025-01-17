@@ -28,11 +28,11 @@ class ReminderPage extends StatelessWidget {
           return CupertinoPageScaffold(
             navigationBar: SheetHeader(
               closeButtonPosition: CloseButtonPosition.left,
-              title: "Reminder",
+              title: LocaleKeys.habit_reminder.tr(),
               // trailing: CupertinoButton(
               //   padding: EdgeInsets.zero,
               //   child: Text(
-              //     'Done',
+              //     LocaleKeys.common_save.tr(),
               //     style: context.titleMedium?.copyWith(color: context.primary),
               //   ),
               //   onPressed: () {
@@ -60,7 +60,7 @@ class ReminderPage extends StatelessWidget {
                   children: [
                     CupertinoListSection(
                       backgroundColor: Colors.transparent,
-                      header: Text("DAYS"),
+                      header: Text(LocaleKeys.common_days.tr()),
                       children: [
                         CupertinoListTile(
                           padding: EdgeInsets.all(10),

@@ -34,7 +34,7 @@ class CompleteTodayButton extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    "Today Completed",
+                    LocaleKeys.habit_todayCompleted.tr(),
                     style: TextStyle(
                       color: currentHabit.isCompletedToday ? Color(currentHabit.colorCode) : null,
                     ),
@@ -51,7 +51,7 @@ class CompleteTodayButton extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    "Complete",
+                    LocaleKeys.habit_complete.tr(),
                     style: TextStyle(
                       color: currentHabit.isCompletedToday ? Color(currentHabit.colorCode) : null,
                     ),

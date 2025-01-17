@@ -1,11 +1,4 @@
-import 'package:animated_text_kit/animated_text_kit.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
-import 'package:habitrise/core/extension/easy_context.dart';
-
-import '../../../core/navigation/navigation.dart';
-import '../../../gen/assets.gen.dart';
+import '../../../core/core.dart';
 import '../widgets/onboarding_button.dart';
 import '../widgets/onboarding_title.dart';
 
@@ -40,7 +33,7 @@ class OnboardingGreeting extends StatelessWidget {
               Column(
                 children: [
                   Text(
-                    "Welcome to HabitRise,",
+                    LocaleKeys.onboarding_welcome_message.tr(),
                     style: context.headlineMedium?.copyWith(
                       fontWeight: FontWeight.bold,
                     ),
@@ -65,17 +58,17 @@ class OnboardingGreeting extends StatelessWidget {
                               repeatForever: true,
                               animatedTexts: [
                                 RotateAnimatedText(
-                                  "Minimalist.",
+                                  LocaleKeys.onboarding_features_minimalist.tr(),
                                   duration: Duration(seconds: 2),
                                   textStyle: context.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
                                 ),
                                 RotateAnimatedText(
-                                  "Easy to Use.",
+                                  LocaleKeys.onboarding_features_easy_to_use.tr(),
                                   duration: Duration(seconds: 2),
                                   textStyle: context.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
                                 ),
                                 RotateAnimatedText(
-                                  "Sicence-Based.",
+                                  LocaleKeys.onboarding_features_science_based.tr(),
                                   duration: Duration(seconds: 2),
                                   textStyle: context.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
                                 ),
@@ -109,7 +102,7 @@ class OnboardingGreeting extends StatelessWidget {
                     onPressed: () {
                       navigator.navigateAndClear(path: KRoute.onboardingPage);
                     },
-                    buttonText: "🚀 Let's Start 🚀",
+                    buttonText: LocaleKeys.onboarding_get_started.tr(),
                   ).animate().fadeIn(
                         delay: Duration(milliseconds: 1200),
                       ),

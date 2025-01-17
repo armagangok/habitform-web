@@ -56,67 +56,64 @@ class SubscribeButton extends StatelessWidget {
                   },
                 ),
                 SizedBox(width: 12),
-                Column(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Subscribe to ",
-                          style: context.titleMedium?.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
-                          textHeightBehavior: TextHeightBehavior(
-                            applyHeightToFirstAscent: false,
-                            applyHeightToLastDescent: false,
-                          ),
-                        ),
-                        RichText(
-                          textHeightBehavior: TextHeightBehavior(
-                            applyHeightToFirstAscent: false,
-                            applyHeightToLastDescent: false,
-                          ),
-                          text: TextSpan(
-                            text: 'Habit',
+                Expanded(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            LocaleKeys.subscription_subscribe_to.tr(),
                             style: context.titleMedium?.copyWith(
                               fontWeight: FontWeight.bold,
                             ),
-                            children: [
-                              TextSpan(
-                                text: 'Rise ',
-                                style: context.titleMedium?.copyWith(
-                                  color: context.primary,
-                                  fontWeight: FontWeight.bold,
-                                ),
+                            maxLines: 1,
+                            textHeightBehavior: TextHeightBehavior(),
+                          ),
+                          RichText(
+                            maxLines: 1,
+                            text: TextSpan(
+                              text: ' Habit',
+                              style: context.titleMedium?.copyWith(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18.75,
                               ),
-                            ],
+                              children: [
+                                TextSpan(
+                                  text: 'Rise ',
+                                  style: context.titleMedium?.copyWith(
+                                    color: context.primary,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 18.75,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                        Text(
-                          "Pro",
-                          style: context.titleMedium?.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
-                          textHeightBehavior: TextHeightBehavior(
-                            applyHeightToFirstAscent: false,
-                            applyHeightToLastDescent: false,
-                          ),
-                        )
-                      ],
-                    ),
-                    Text(
-                      "Tap to see all advantages",
-                      textAlign: TextAlign.start,
-                      textHeightBehavior: TextHeightBehavior(
-                        applyHeightToFirstAscent: false,
-                        applyHeightToLastDescent: false,
+                          Text(
+                            "Pro",
+                            style: context.titleMedium?.copyWith(
+                              fontWeight: FontWeight.bold,
+                            ),
+                            textHeightBehavior: TextHeightBehavior(),
+                          )
+                        ],
                       ),
-                    ),
-                  ],
+                      Column(
+                        children: [
+                          Text(
+                            LocaleKeys.subscription_tap_advantages.tr(),
+                            textAlign: TextAlign.start,
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),

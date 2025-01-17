@@ -16,34 +16,34 @@ class ThemeModeFeature extends StatelessWidget {
             cardColor: Colors.deepOrange,
           ),
           trailing: CupertinoListTileChevron(),
-          title: Text("Theme"),
+          title: Text(LocaleKeys.settings_theme.tr()),
           onTap: () {
             showCupertinoModalPopup(
               context: context,
               builder: (context) {
                 return CupertinoActionSheet(
-                  title: Text("Change Appearance"),
+                  title: Text(LocaleKeys.settings_theme.tr()),
                   actions: [
                     CupertinoActionSheetAction(
                       isDefaultAction: themeMode == ThemeMode.system,
                       onPressed: () {
                         context.read<ThemeBloc>().add(SetSystemThemeEvent());
                       },
-                      child: Text("System"),
+                      child: Text(LocaleKeys.settings_system.tr()),
                     ),
                     CupertinoActionSheetAction(
                       isDefaultAction: themeMode == ThemeMode.light,
                       onPressed: () {
                         context.read<ThemeBloc>().add(SetLightThemeEvent());
                       },
-                      child: Text("Light"),
+                      child: Text(LocaleKeys.settings_light_mode.tr()),
                     ),
                     CupertinoActionSheetAction(
                       isDefaultAction: themeMode == ThemeMode.dark,
                       onPressed: () {
                         context.read<ThemeBloc>().add(SetDarkThemeEvent());
                       },
-                      child: Text("Dark"),
+                      child: Text(LocaleKeys.settings_dark_mode.tr()),
                     ),
                   ],
                   cancelButton: CupertinoActionSheetAction(

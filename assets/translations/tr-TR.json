@@ -1,0 +1,124 @@
+{
+    "common": {
+        "save": "Kaydet",
+        "cancel": "İptal",
+        "delete": "Sil",
+        "edit": "Düzenle",
+        "confirm": "Onayla",
+        "back": "Geri",
+        "none": "Yok",
+        "app": "UYGULAMA",
+        "general": "GENEL",
+        "days": "GÜNLER",
+        "version": "1.0.0",
+        "made_by": "☕️ ve ❤️ ile Armağan Gök tarafından yapıldı",
+        "icon": "İkon"
+    },
+    "colors": {
+        "color": "Renk",
+        "blue": "Mavi",
+        "lightBlue": "Açık Mavi",
+        "indigo": "Çivit Mavisi",
+        "red": "Kırmızı",
+        "orange": "Turuncu",
+        "deepOrange": "Koyu Turuncu",
+        "amber": "Kehribar",
+        "yellow": "Sarı",
+        "Lime": "Limon Yeşili",
+        "green": "Yeşil",
+        "cyan": "Cam Göbeği",
+        "teal": "Deniz Mavisi",
+        "blueGrey": "Mavi Gri",
+        "grey": "Gri",
+        "purple": "Mor",
+        "deepPurple": "Koyu Mor",
+        "brown": "Kahverengi",
+        "pink": "Pembe"
+    },
+    "iconCategories": {
+        "dailylife": "Günlük Hayat",
+        "sports": "Spor",
+        "health": "Sağlık",
+        "social": "Sosyal",
+        "nature": "Doğa",
+        "business": "İş",
+        "art": "Sanat",
+        "studyandtask": "Çalışma ve Görev",
+        "science": "Bilim",
+        "gardenandyard": "Bahçe ve Avlu",
+        "pets": "Evcil Hayvanlar"
+    },
+    "onboarding": {
+        "welcome": "Hoş Geldiniz",
+        "get_started": "Başlayın",
+        "next": "İleri",
+        "welcome_message": "HabitRise'a Hoş Geldiniz,",
+        "greeting_message": "Her şeyden önce, sizi tanımak istiyoruz. Çünkü HabitRise'ı daha iyi deneyimlemenizi istiyoruz!",
+        "features": {
+            "minimalist": "Minimalist.",
+            "easy_to_use": "Kullanımı Kolay.",
+            "science_based": "Bilim Temelli."
+        }
+    },
+    "habit": {
+        "add_habit": "Alışkanlık Ekle",
+        "edit_habit": "Alışkanlık Düzenle",
+        "habit_name": "Alışkanlık Adı",
+        "habit_description": "Açıklama",
+        "reminder": "Hatırlatıcı",
+        "add_reminder": "Hatırlatıcı Ekle",
+        "frequency": "Sıklık",
+        "daily": "Günlük",
+        "weekly": "Haftalık",
+        "monthly": "Aylık",
+        "create_habit": "Alışkanlık Oluştur",
+        "no_habit_found": "Alışkanlık bulunamadı",
+        "lets_gain_habit": "Yeni bir alışkanlık kazanalım",
+        "habit_data": "ALIŞKANLIK VERİLERİ",
+        "todayCompleted": "Bugün Tamamlandı",
+        "complete": "Tamamla"
+    },
+    "habit_detail": {
+        "habitDetail": "Alışkanlık Detayı",
+        "reminder": "HATIRLATICI",
+        "habitData": "ALIŞKANLIK VERİLERİ"
+    },
+    "settings": {
+        "settings": "Ayarlar",
+        "language": "Dil",
+        "notifications": "Bildirimler",
+        "theme": "Tema",
+        "system": "Sistem",
+        "dark_mode": "Karanlık Mod",
+        "light_mode": "Aydınlık Mod",
+        "support": "HabitRise'ı Destekle",
+        "support_subtitle": "HabitRise'ı sevdiniz mi? Puanlayın ve büyümemize yardımcı olun!",
+        "feedback": "Geri Bildirim Gönder",
+        "privacy": "Gizlilik",
+        "terms": "Şartlar"
+    },
+    "subscription": {
+        "subscribe_to": "Abone Ol",
+        "habitrise_pro": "HabitRise Pro",
+        "tap_advantages": "Tüm avantajları görmek için dokun"
+    },
+    "share": {
+        "share": "Paylaş",
+        "share_image": "Görsel Paylaş",
+        "share_text": "Metin Paylaş"
+    },
+    "days": {
+        "monday": "Pazartesi",
+        "tuesday": "Salı",
+        "wednesday": "Çarşamba",
+        "thursday": "Perşembe",
+        "friday": "Cuma",
+        "saturday": "Cumartesi",
+        "sunday": "Pazar"
+    },
+    "errors": {
+        "something_went_wrong": "Bir şeyler yanlış gitti",
+        "try_again": "Tekrar dene",
+        "required_field": "Bu alan zorunludur"
+    }
+}

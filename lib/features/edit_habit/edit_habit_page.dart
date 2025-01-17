@@ -56,7 +56,7 @@ class _EditHabitPageState extends State<EditHabitPage> {
         builder: (context) {
           return CupertinoPageScaffold(
             navigationBar: SheetHeader(
-              title: "Edit Habit",
+              title: LocaleKeys.habit_edit_habit.tr(),
               closeButtonPosition: CloseButtonPosition.left,
               trailing: BlocConsumer<EditHabitBloc, EditHabitState>(
                 listener: (context, state) {
@@ -90,7 +90,7 @@ class _EditHabitPageState extends State<EditHabitPage> {
                     child: state is EditHabitLoading
                         ? const CupertinoActivityIndicator()
                         : Text(
-                            'Save',
+                            LocaleKeys.common_save.tr(),
                             style: context.titleMedium?.copyWith(
                               color: context.primary,
                             ),
@@ -101,49 +101,50 @@ class _EditHabitPageState extends State<EditHabitPage> {
             ),
             child: Padding(
               padding: const EdgeInsets.all(15),
-              child: SafeArea(
-                bottom: false,
-                child: ListView(
-                  children: [
-                    CustomHeader(
-                      text: "HABIT NAME",
-                      child: _buildHabitTextField(
-                        controller: _habitNameController,
-                      ),
+              child: ListView(
+                children: [
+                  SafeArea(
+                    bottom: false,
+                    child: Column(
+                      spacing: 30,
+                      children: [
+                        CustomHeader(
+                          text: LocaleKeys.habit_habit_name.tr().toUpperCase(),
+                          child: _buildHabitTextField(
+                            controller: _habitNameController,
+                          ),
+                        ),
+                        CustomHeader(
+                          text: LocaleKeys.habit_habit_description.tr().toUpperCase(),
+                          child: _buildHabitTextField(
+                            controller: _habitDescriptionController,
+                          ),
+                        ),
+                        BlocBuilder<ReminderBloc, ReminderState>(
+                          builder: (context, state) {
+                            return AddReminderWidget(reminder: state.reminder);
+                          },
+                        ),
+                        CustomHeader(
+                          text: LocaleKeys.common_icon.tr().toUpperCase(),
+                          child: IconPickerSheet(
+                            onIconSelected: (icon) {
+                              context.read<HabitEmojiCubit>().pickIcon(icon);
+                            },
+                          ),
+                        ),
+                        CustomHeader(
+                          text: LocaleKeys.colors_color.tr().toUpperCase(),
+                          child: ColorPickerSheet(
+                            onColorSelected: (color) {
+                              context.read<HabitColorCubit>().pickColor(color);
+                            },
+                          ),
+                        ),
+                      ],
                     ),
-                    SizedBox(height: 15),
-                    CustomHeader(
-                      text: "DESCRIPTION",
-                      child: _buildHabitTextField(
-                        controller: _habitDescriptionController,
-                      ),
-                    ),
-                    SizedBox(height: 15),
-                    BlocBuilder<ReminderBloc, ReminderState>(
-                      builder: (context, state) {
-                        return AddReminderWidget(reminder: state.reminder);
-                      },
-                    ),
-                    SizedBox(height: 15),
-                    CustomHeader(
-                      text: "ICON",
-                      child: IconPickerSheet(
-                        onIconSelected: (icon) {
-                          context.read<HabitEmojiCubit>().pickIcon(icon);
-                        },
-                      ),
-                    ),
-                    SizedBox(height: 15),
-                    CustomHeader(
-                      text: "COLOR",
-                      child: ColorPickerSheet(
-                        onColorSelected: (color) {
-                          context.read<HabitColorCubit>().pickColor(color);
-                        },
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           );
