@@ -304,4 +304,3 @@ class ColorPickerSheetState extends State<ColorPickerSheet> with SingleTickerPro
     );
   }
 }
-

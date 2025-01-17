@@ -1,82 +1,82 @@
 import '/core/core.dart';
-import '../../habit_detail/page/habit_detail.dart';
 import '../../reminder/bloc/reminder/reminder_bloc.dart';
+import '../../reminder/models/reminder/reminder_model.dart';
 import '../../reminder/widget/reminder_widget.dart';
 
 class AddReminderWidget extends StatelessWidget {
-  const AddReminderWidget({super.key});
+  const AddReminderWidget({
+    super.key,
+    this.reminder,
+  });
+
+  final ReminderModel? reminder;
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ReminderBloc, ReminderState>(
-      builder: (context, state) {
-        final reminderState = state;
-        final days = reminderState.reminder?.days;
-        final remindTime = reminderState.reminder?.reminderTime;
-
-        return CustomHeader(
-          text: "REMINDER",
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+    final days = reminder?.days;
+    final remindTime = reminder?.reminderTime;
+    return CustomHeader(
+      text: "REMINDER",
+      child: Card(
+        child: CupertinoButton(
+          minSize: 0,
+          padding: EdgeInsets.all(10),
+          onPressed: () {
+            showCupertinoModalBottomSheet(
+              enableDrag: false,
+              context: context,
+              builder: (context) {
+                context.read<ReminderBloc>().add(
+                      InitializeReminderEvent(
+                        reminder: reminder,
+                        context: context,
+                      ),
+                    );
+                return const ReminderPage();
+              },
+            );
+          },
+          child: Row(
             children: [
-              if (days != null && days.isNotEmpty)
-                SizedBox(
-                  height: 20,
-                  child: ListView.builder(
-                    shrinkWrap: true,
-                    scrollDirection: Axis.horizontal,
-                    itemCount: days.length,
-                    itemBuilder: (context, index) {
-                      final day = days[index];
-                      return Padding(
-                        padding: const EdgeInsets.only(right: 1.0),
-                        child: Text(
-                          days.isLast(index) ? day.capitalized : "${day.capitalized}, ",
-                          style: context.bodySmall?.copyWith(color: context.primary),
-                        ),
-                      );
-                    },
-                  ),
-                ),
-              CustomButton(
-                onTap: () {
-                  final event = InitializeReminderEvent(
-                    reminder: reminderState.reminder,
-                    context: context,
-                  );
-                  context.read<ReminderBloc>().add(event);
-
-                  showCupertinoModalBottomSheet(
-                    enableDrag: false,
-                    context: context,
-                    builder: (contextFromSheet) {
-                      return ReminderPage();
-                    },
-                  );
-                },
-                child: Card(
-                  child: Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: SizedBox(
-                      child: Row(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            remindTime == null || days == null || days.isEmpty ? "None" : remindTime.toHHMM(),
-                            style: context.bodyLarge?.copyWith(fontWeight: FontWeight.normal),
-                          ),
-                          CupertinoListTileChevron(),
-                        ],
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      remindTime?.toHHMM() ?? "None",
+                      style: context.titleMedium?.copyWith(
+                        fontWeight: FontWeight.w500,
+                        color: context.titleMedium?.color,
                       ),
                     ),
-                  ),
+                    days != null
+                        ? SizedBox(
+                            height: 20,
+                            child: ListView.builder(
+                              shrinkWrap: true,
+                              scrollDirection: Axis.horizontal,
+                              itemCount: days.length,
+                              itemBuilder: (context, index) {
+                                final day = days[index];
+                                return Padding(
+                                  padding: const EdgeInsets.only(right: 1.0),
+                                  child: Text(
+                                    days.isLast(index) ? day.capitalized : "${day.capitalized}, ",
+                                    style: context.bodySmall?.copyWith(color: context.primary),
+                                  ),
+                                );
+                              },
+                            ),
+                          )
+                        : SizedBox.shrink(),
+                  ],
                 ),
               ),
+              CupertinoListTileChevron(),
             ],
           ),
-        );
-      },
+        ),
+      ),
     );
   }
 }

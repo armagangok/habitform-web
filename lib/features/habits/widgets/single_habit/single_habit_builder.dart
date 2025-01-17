@@ -5,6 +5,7 @@ import '/core/core.dart';
 import '../../../add_habit/add_habit_page.dart';
 import '../../../habit_detail/page/habit_detail.dart';
 import '../../bloc/habit_bloc.dart';
+import '../complete_today_button.dart';
 import 'weekly_habit_grid.dart';
 
 class SingleHabitBuilder extends StatelessWidget {

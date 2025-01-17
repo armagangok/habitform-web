@@ -1,18 +1,13 @@
-import 'package:bloc/bloc.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 part 'onboarding_event.dart';
 part 'onboarding_state.dart';
 
 class OnboardingBloc extends Bloc<OnboardingEvent, OnboardingState> {
   final TextEditingController nameTextController = TextEditingController();
-  OnboardingBloc() : super(OnboardingInitial()) {
-    on<NameChangedEvent>(onChangeName);
-    on<SelectGoalEvent>(onSelectGoal);
-    on<OnboardingInitialEvent>(setToInitial);
-  }
-
-  final goalList = [
+  final List<int> selectedGoals = [];
+  final List<String> goalList = [
     "Better productivity",
     "Build a routine",
     "Break bad habits",
@@ -22,18 +17,23 @@ class OnboardingBloc extends Bloc<OnboardingEvent, OnboardingState> {
     "Other",
   ];
 
-  List<int> selectedGoals = [];
+  OnboardingBloc() : super(OnboardingInitial()) {
+    on<NameChangedEvent>(_onChangeName);
+    on<SelectGoalEvent>(_onSelectGoal);
+    on<OnboardingInitialEvent>(_setToInitial);
+  }
 
-  void onSelectGoal(SelectGoalEvent event, Emitter<OnboardingState> emit) {
+  void _onSelectGoal(SelectGoalEvent event, Emitter<OnboardingState> emit) {
     if (event.goals.isEmpty) {
       emit(GoalInvalid());
     } else {
-      selectedGoals = event.goals;
+      selectedGoals.clear();
+      selectedGoals.addAll(event.goals);
       emit(GoalValid());
     }
   }
 
-  void onChangeName(NameChangedEvent event, Emitter<OnboardingState> emit) {
+  void _onChangeName(NameChangedEvent event, Emitter<OnboardingState> emit) {
     if (nameTextController.text.length > 1) {
       emit(NameValid());
     } else {
@@ -41,7 +41,7 @@ class OnboardingBloc extends Bloc<OnboardingEvent, OnboardingState> {
     }
   }
 
-  void setToInitial(OnboardingInitialEvent event, Emitter<OnboardingState> emit) {
+  void _setToInitial(OnboardingInitialEvent event, Emitter<OnboardingState> emit) {
     emit(OnboardingInitial());
   }
 }

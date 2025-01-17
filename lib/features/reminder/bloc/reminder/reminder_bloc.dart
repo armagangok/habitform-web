@@ -4,8 +4,6 @@ import '../../../../core/widgets/flushbar_widget.dart';
 import '../../models/days/days_enum.dart';
 import '../../models/reminder/reminder_model.dart';
 import '../../service/reminder_service.dart';
-import '../picker_extend/picker_extend_cubit.dart';
-import '../remind_time/remind_time_cubit.dart';
 
 part 'reminder_event.dart';
 part 'reminder_state.dart';
@@ -13,46 +11,27 @@ part 'reminder_state.dart';
 class ReminderBloc extends Bloc<ReminderEvent, ReminderState> {
   ReminderBloc() : super(ReminderStateInitial()) {
     on<InitializeReminderEvent>(_initializeReminderData);
-
     on<CancelReminderEvent>(cancelReminder);
-
     on<ScheduleReminderEvent>(scheduleReminder);
-
     on<UpdateReminderDaysEvent>(updateDays);
-
     on<UpdateReminderTimeEvent>(updateTime);
   }
 
   void _initializeReminderData(InitializeReminderEvent event, Emitter<ReminderState> emit) {
-    final timeFromPicker = event.context.read<RemindTimeCubit>().state;
     final initialReminder = event.reminder;
 
     if (initialReminder != null) {
       final selectedDays = initialReminder.days ?? [];
       final reminderTime = initialReminder.reminderTime;
-
-      final reminder = initialReminder.copyWith(days: selectedDays, time: reminderTime ?? timeFromPicker);
-
-      // event.context.read<DaySelectionCubit>().initializeDaySelection(selectedDays);
-      event.context.read<RemindTimeCubit>().initializeTime(reminderTime);
-
-      if (selectedDays.isEmpty) {
-        event.context.read<PickerExtendCubit>().initialize(false);
-      } else {
-        event.context.read<PickerExtendCubit>().initialize(true);
-      }
-
+      final reminder = initialReminder.copyWith(days: selectedDays, time: reminderTime);
       emit(ReminderSelectionState(reminder: reminder));
     } else {
       final reminderModelToInitialize = ReminderModel(
         id: UuidHelper.uidInt,
         days: [],
-        reminderTime: timeFromPicker,
+        reminderTime: DateTime.now().copyWith(hour: 12, minute: 0, second: 0),
       );
-
       emit(ReminderSelectionState(reminder: reminderModelToInitialize));
-
-      LogHelper.shared.debugPrint('$reminderModelToInitialize');
     }
   }
 
@@ -88,7 +67,37 @@ class ReminderBloc extends Bloc<ReminderEvent, ReminderState> {
     }
   }
 
-  Future<void> updateDays(UpdateReminderDaysEvent event, Emitter<ReminderState> emit) async {}
+  Future<void> updateDays(UpdateReminderDaysEvent event, Emitter<ReminderState> emit) async {
+    if (event.days == null || event.days!.isEmpty) {
+      emit(ReminderStateInitial());
+      return;
+    }
 
-  Future<void> updateTime(UpdateReminderTimeEvent event, Emitter<ReminderState> emit) async {}
+    final currentReminder = state.reminder ??
+        ReminderModel(
+          id: UuidHelper.uidInt,
+          days: [],
+          reminderTime: DateTime.now().copyWith(hour: 12, minute: 0, second: 0),
+        );
+
+    final updatedReminder = currentReminder.copyWith(days: event.days);
+    emit(ReminderSelectionState(reminder: updatedReminder));
+  }
+
+  Future<void> updateTime(UpdateReminderTimeEvent event, Emitter<ReminderState> emit) async {
+    if (event.time == null) {
+      emit(ReminderStateInitial());
+      return;
+    }
+
+    final currentReminder = state.reminder ??
+        ReminderModel(
+          id: UuidHelper.uidInt,
+          days: [],
+          reminderTime: event.time,
+        );
+
+    final updatedReminder = currentReminder.copyWith(time: event.time);
+    emit(ReminderSelectionState(reminder: updatedReminder));
+  }
 }

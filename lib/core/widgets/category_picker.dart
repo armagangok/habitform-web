@@ -89,50 +89,69 @@ class CategoryWidget extends StatefulWidget {
 
 class CategoryWidgetState extends State<CategoryWidget> {
   int selectedIndex = 0;
+
   @override
   Widget build(BuildContext context) {
-    return Wrap(
-      spacing: 4, // Kategoriler arasındaki yatay boşluk
-      runSpacing: 4, // Satırlar arasındaki dikey boşluk
-      children: List.generate(
-        widget.categories.length,
-        (index) {
-          return CupertinoButton(
-            minSize: 0,
-            pressedOpacity: .8,
-            padding: EdgeInsets.zero,
-            borderRadius: BorderRadius.circular(8),
-            color: Colors.transparent,
-            onPressed: () {
-              HapticFeedback.selectionClick();
-              setState(() {
-                selectedIndex = index;
-              });
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              maxWidth: constraints.maxWidth,
+            ),
+            child: Wrap(
+              spacing: 4, // Kategoriler arasındaki yatay boşluk
+              runSpacing: 4, // Satırlar arasındaki dikey boşluk
+              alignment: WrapAlignment.start, // İlk satırın hizalaması
+              runAlignment: WrapAlignment.start, // Satır hizalaması
+              children: List.generate(
+                widget.categories.length,
+                (index) {
+                  return CupertinoButton(
+                    minSize: 0,
+                    pressedOpacity: .8,
+                    padding: EdgeInsets.zero,
+                    borderRadius: BorderRadius.circular(8),
+                    color: Colors.transparent,
+                    onPressed: () {
+                      HapticFeedback.selectionClick();
+                      setState(() {
+                        selectedIndex = index;
+                      });
 
-              widget.onCategorySelected(index);
-            },
-            child: Card(
-              elevation: .1,
-              color: selectedIndex == index ? widget.customColor ?? context.primary : null,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 5.5),
-                child: AnimatedDefaultTextStyle(
-                  duration: 300.ms, // Smooth animation duration
-                  curve: Curves.easeInOut, // Curve for the animation
-                  style: TextStyle(
-                    fontSize: selectedIndex == index ? 13 : 13, // Change size with weight if desired
-                    fontWeight: selectedIndex == index ? FontWeight.w600 : FontWeight.normal,
-                    color: selectedIndex == index ? Colors.white : context.bodySmall?.color?.withValues(alpha: .72),
-                  ),
-
-                  child: Text(widget.categories[index]),
-                ).animate(effects: []),
+                      widget.onCategorySelected(index);
+                    },
+                    child: Card(
+                      elevation: .1,
+                      color: selectedIndex == index ? widget.customColor ?? Theme.of(context).primaryColor : null,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 4,
+                          horizontal: 5.5,
+                        ),
+                        child: AnimatedDefaultTextStyle(
+                          duration: const Duration(milliseconds: 300), // Smooth animation duration
+                          curve: Curves.easeInOut, // Curve for the animation
+                          style: TextStyle(
+                            fontSize: 13,
+                            fontWeight: selectedIndex == index ? FontWeight.w600 : FontWeight.normal,
+                            color: selectedIndex == index ? Colors.white : Theme.of(context).textTheme.bodySmall?.color?.withAlpha(183),
+                          ),
+                          child: Text(widget.categories[index]),
+                        ),
+                      ),
+                    ),
+                  );
+                },
               ),
             ),
-          );
-        },
-      ),
+          ),
+        );
+      },
     );
   }
 }

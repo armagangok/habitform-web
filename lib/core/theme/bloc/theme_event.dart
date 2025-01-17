@@ -4,7 +4,10 @@ abstract class ThemeEvent {}
 
 class InitializeThemeEvent extends ThemeEvent {}
 
-class SwitchThemeEvent extends ThemeEvent {}
+class SwitchThemeEvent extends ThemeEvent {
+  final ThemeMode themeMode;
+  SwitchThemeEvent(this.themeMode);
+}
 
 class SetDarkThemeEvent extends ThemeEvent {}
 

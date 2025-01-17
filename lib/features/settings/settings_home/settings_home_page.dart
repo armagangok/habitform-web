@@ -1,7 +1,6 @@
 import '/core/core.dart';
 import '/core/helpers/url_laucher/url_launcher.dart';
 import '/core/theme/widget/theme_mode_widget.dart';
-import '../../habit_detail/page/habit_detail.dart';
 import 'widgets/setting_item.dart';
 import 'widgets/subscribe_button.dart';
 

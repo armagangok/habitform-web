@@ -5,10 +5,9 @@ import '/core/widgets/habit_icon/cubit/habit_icon_cubit.dart';
 import '/core/widgets/habit_icon/icon_picker_sheet.dart';
 import '/models/models.dart';
 import '../add_habit/widget/add_reminder_widget.dart';
-import '../habit_detail/page/habit_detail.dart';
 import '../reminder/bloc/reminder/reminder_bloc.dart';
-import '../reminder/models/reminder/reminder_model.dart';
 import 'bloc/edit_habit_bloc.dart';
+import 'provider/edit_habit_provider.dart';
 
 class EditHabitPage extends StatefulWidget {
   final Habit habit;
@@ -30,18 +29,15 @@ class _EditHabitPageState extends State<EditHabitPage> {
     _habitNameController = TextEditingController(text: widget.habit.habitName);
     _habitDescriptionController = TextEditingController(text: widget.habit.habitDescription);
 
-    // Initialize the cubits with existing habit data
-    context.read<HabitEmojiCubit>().pickIcon(widget.habit.emoji);
-    context.read<HabitColorCubit>().pickColor(Color(widget.habit.colorCode));
-    final reminderFromConstructor = widget.habit.reminderModel;
-    if (reminderFromConstructor != null) {
+    // Initialize the reminder with the current habit's reminder
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<ReminderBloc>().add(
             InitializeReminderEvent(
-              reminder: reminderFromConstructor,
+              reminder: widget.habit.reminderModel,
               context: context,
             ),
           );
-    }
+    });
   }
 
   @override
@@ -54,93 +50,109 @@ class _EditHabitPageState extends State<EditHabitPage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<EditHabitBloc, EditHabitState>(
-      listener: (context, state) {
-        if (state is EditHabitSuccess) {
-          navigator.pop();
-        } else if (state is EditHabitFailure) {
-          AppFlushbar.shared.errorFlushbar(state.error);
-        }
-      },
-      child: CupertinoPageScaffold(
-        navigationBar: SheetHeader(
-          title: "Edit Habit",
-          closeButtonPosition: CloseButtonPosition.left,
-          trailing: TrailingActionButton(
-            title: "Save",
-            onPressed: () {
-              if (_habitNameController.text.isEmpty) {
-                AppFlushbar.shared.warningFlushbar("Habit name can't be empty");
-                return;
-              }
+    return EditHabitProvider(
+      habit: widget.habit,
+      child: Builder(
+        builder: (context) {
+          return CupertinoPageScaffold(
+            navigationBar: SheetHeader(
+              title: "Edit Habit",
+              closeButtonPosition: CloseButtonPosition.left,
+              trailing: BlocConsumer<EditHabitBloc, EditHabitState>(
+                listener: (context, state) {
+                  if (state is EditHabitSuccess) {
+                    Navigator.pop(context);
+                  }
+                  if (state is EditHabitFailure) {
+                    AppFlushbar.shared.errorFlushbar(state.error);
+                  }
+                },
+                builder: (context, state) {
+                  return CupertinoButton(
+                    padding: EdgeInsets.zero,
+                    onPressed: state is EditHabitLoading
+                        ? null
+                        : () {
+                            final reminderState = context.read<ReminderBloc>().state;
+                            final habitIconState = context.read<HabitEmojiCubit>().state;
+                            final habitColorState = context.read<HabitColorCubit>().state;
 
-              final ReminderModel? reminderModel = context.read<ReminderBloc>().state.reminder;
+                            final updatedHabit = widget.habit.copyWith(
+                              habitName: _habitNameController.text,
+                              habitDescription: _habitDescriptionController.text,
+                              emoji: habitIconState.emoji ?? widget.habit.emoji,
+                              colorCode: habitColorState.color?.value ?? widget.habit.colorCode,
+                              reminderModel: reminderState.reminder,
+                            );
 
-              final String? emoji = context.read<HabitEmojiCubit>().state.emoji;
-              final int colorCode = context.read<HabitColorCubit>().state.color?.value ?? widget.habit.colorCode;
-
-              final updatedHabit = widget.habit.copyWith(
-                habitName: _habitNameController.text.trim(),
-                habitDescription: _habitDescriptionController.text,
-                reminderModel: reminderModel,
-                emoji: emoji,
-                colorCode: colorCode,
-              );
-
-              final scheduleReminderEvent = ScheduleReminderEvent(
-                updatedHabit.habitName,
-                "It's time to add a completion",
-              );
-
-              context.read<ReminderBloc>().add(scheduleReminderEvent);
-
-              context.read<EditHabitBloc>().add(UpdateEditHabitEvent(habit: updatedHabit));
-            },
-          ),
-        ),
-        child: ListView(
-          padding: EdgeInsets.all(15),
-          children: [
-            Column(
-              spacing: 20,
-              children: [
-                SafeArea(
-                  bottom: false,
-                  child: CustomHeader(
-                    text: "NAME",
-                    child: _buildHabitTextField(controller: _habitNameController),
-                  ),
-                ),
-                CustomHeader(
-                  text: "DESCRIPTION",
-                  child: _buildHabitTextField(controller: _habitDescriptionController),
-                ),
-                AddReminderWidget(),
-                CustomHeader(
-                  text: "ICON",
-                  child: IconPickerSheet(
-                    onIconSelected: (icon) {
-                      context.read<HabitEmojiCubit>().pickIcon(icon);
-                    },
-                  ),
-                ),
-                CustomHeader(
-                  text: "COLOR",
-                  child: ColorPickerSheet(
-                    onColorSelected: (color) {
-                      context.read<HabitColorCubit>().pickColor(color);
-                    },
-                  ),
-                ),
-              ],
+                            context.read<EditHabitBloc>().add(UpdateEditHabitEvent(habit: updatedHabit));
+                          },
+                    child: state is EditHabitLoading
+                        ? const CupertinoActivityIndicator()
+                        : Text(
+                            'Save',
+                            style: context.titleMedium?.copyWith(
+                              color: context.primary,
+                            ),
+                          ),
+                  );
+                },
+              ),
             ),
-          ],
-        ),
+            child: Padding(
+              padding: const EdgeInsets.all(15),
+              child: SafeArea(
+                bottom: false,
+                child: ListView(
+                  children: [
+                    CustomHeader(
+                      text: "HABIT NAME",
+                      child: _buildHabitTextField(
+                        controller: _habitNameController,
+                      ),
+                    ),
+                    SizedBox(height: 15),
+                    CustomHeader(
+                      text: "DESCRIPTION",
+                      child: _buildHabitTextField(
+                        controller: _habitDescriptionController,
+                      ),
+                    ),
+                    SizedBox(height: 15),
+                    BlocBuilder<ReminderBloc, ReminderState>(
+                      builder: (context, state) {
+                        return AddReminderWidget(reminder: state.reminder);
+                      },
+                    ),
+                    SizedBox(height: 15),
+                    CustomHeader(
+                      text: "ICON",
+                      child: IconPickerSheet(
+                        onIconSelected: (icon) {
+                          context.read<HabitEmojiCubit>().pickIcon(icon);
+                        },
+                      ),
+                    ),
+                    SizedBox(height: 15),
+                    CustomHeader(
+                      text: "COLOR",
+                      child: ColorPickerSheet(
+                        onColorSelected: (color) {
+                          context.read<HabitColorCubit>().pickColor(color);
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        },
       ),
     );
   }
 
-  Widget _buildHabitTextField({required TextEditingController controller}) {
+  Widget _buildHabitTextField({required TextEditingController controller, String? placeHolder}) {
     return Card(
       child: CupertinoTextField(
         padding: EdgeInsets.all(10),
@@ -148,99 +160,9 @@ class _EditHabitPageState extends State<EditHabitPage> {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
         ),
+        placeholder: placeHolder,
         controller: controller,
       ),
     );
   }
-
-  // // Reuse the icon and color picker widgets from AddHabitPage
-  // Widget _buildIconPicker() => Column(
-  //       crossAxisAlignment: CrossAxisAlignment.start,
-  //       mainAxisAlignment: MainAxisAlignment.center,
-  //       children: [
-  //         Text("Icon", style: context.bodySmall),
-  //         CustomButton(
-  //           onTap: () {
-  //             showCupertinoModalBottomSheet(
-  //               enableDrag: false,
-  //               context: context,
-  //               builder: (context) => IconPickerSheet(
-  //                 onIconSelected: (icon) {
-  //                   context.read<HabitEmojiCubit>().pickIcon(icon);
-  //                 },
-  //               ),
-  //             );
-  //           },
-  //           child: _buildIconPickerContent(),
-  //         ),
-  //       ],
-  //     );
-
-  // Widget _buildColorPicker() => Column(
-  //       crossAxisAlignment: CrossAxisAlignment.start,
-  //       mainAxisAlignment: MainAxisAlignment.center,
-  //       children: [
-  //         Text("Color", style: context.bodySmall),
-  //         CustomButton(
-  //           onTap: () {
-  //             showCupertinoModalBottomSheet(
-  //               context: context,
-  //               builder: (context) => ColorPickerSheet(
-  //                 onColorSelected: (color) {
-  //                   context.read<HabitColorCubit>().pickColor(color);
-  //                 },
-  //               ),
-  //             );
-  //           },
-  //           child: _buildColorPickerContent(),
-  //         ),
-  //       ],
-  //     );
-
-  // Widget _buildIconPickerContent() => SizedBox(
-  //       width: double.infinity,
-  //       child: Card.filled(
-  //         margin: EdgeInsets.zero,
-  //         child: Padding(
-  //           padding: const EdgeInsets.all(10),
-  //           child: Row(
-  //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //             children: [
-  //               BlocBuilder<HabitEmojiCubit, HabitIconState>(
-  //                 builder: (context, state) {
-  //                   return Text(state.emoji ?? "None");
-  //                 },
-  //               ),
-  //               CupertinoListTileChevron(),
-  //             ],
-  //           ),
-  //         ),
-  //       ),
-  //     );
-
-  // Widget _buildColorPickerContent() => SizedBox(
-  //       width: double.infinity,
-  //       child: BlocBuilder<HabitColorCubit, HabitColorState>(
-  //         builder: (context, state) {
-  //           return Card.filled(
-  //             margin: EdgeInsets.zero,
-  //             color: state.color ?? Color(widget.habit.colorCode),
-  //             child: Padding(
-  //               padding: const EdgeInsets.all(10),
-  //               child: Row(
-  //                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //                 children: [
-  //                   BlocBuilder<HabitColorCubit, HabitColorState>(
-  //                     builder: (context, state) {
-  //                       return state.color == null ? Text("None", textAlign: TextAlign.center) : SizedBox.shrink();
-  //                     },
-  //                   ),
-  //                   CupertinoListTileChevron(),
-  //                 ],
-  //               ),
-  //             ),
-  //           );
-  //         },
-  //       ),
-  //     );
 }

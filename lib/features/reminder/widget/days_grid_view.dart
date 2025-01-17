@@ -2,18 +2,30 @@ import '../../../core/core.dart';
 import '../bloc/day_selection/day_selection_cubit.dart';
 import '../bloc/reminder/reminder_bloc.dart';
 import '../models/days/days_enum.dart';
-import 'reminder_widget.dart';
 
-class DaysGridViewBuilder extends StatelessWidget {
-  const DaysGridViewBuilder({
-    super.key,
-  });
+class DaysGridViewBuilder extends StatefulWidget {
+  const DaysGridViewBuilder({super.key});
+
+  @override
+  State<DaysGridViewBuilder> createState() => _DaysGridViewBuilderState();
+}
+
+class _DaysGridViewBuilderState extends State<DaysGridViewBuilder> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final reminderState = context.read<ReminderBloc>().state;
+      if (reminderState.reminder?.days != null) {
+        context.read<DaySelectionCubit>().initializeDays(reminderState.reminder!.days!);
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<DaySelectionCubit, List<Days>>(
-      builder: (context, state) {
-        final selectedDays = state;
+      builder: (context, selectedDays) {
         return GridView.builder(
           shrinkWrap: true,
           physics: NeverScrollableScrollPhysics(),
@@ -30,10 +42,18 @@ class DaysGridViewBuilder extends StatelessWidget {
             return CupertinoButton(
               padding: EdgeInsets.zero,
               onPressed: () {
-                final selectedDay = allDays[index];
-                context.read<DaySelectionCubit>().selectOneByOne(selectedDay);
+                final daySelectionCubit = context.read<DaySelectionCubit>();
+                daySelectionCubit.selectOneByOne(currentDay);
 
-                context.read<ReminderBloc>().add(UpdateReminderDaysEvent(days: state));
+                // Güncel seçili günleri al ve ReminderBloc'u güncelle
+                final updatedDays = List<Days>.from(daySelectionCubit.state);
+                if (!isSelected) {
+                  updatedDays.add(currentDay);
+                } else {
+                  updatedDays.remove(currentDay);
+                }
+
+                context.read<ReminderBloc>().add(UpdateReminderDaysEvent(days: updatedDays));
               },
               child: Card(
                 shape: RoundedRectangleBorder(
@@ -49,11 +69,10 @@ class DaysGridViewBuilder extends StatelessWidget {
                   child: Center(
                     child: FittedBox(
                       child: Text(
-                        currentDay.capitalized,
-                        style: TextStyle(
-                          fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                        currentDay.name[0].toUpperCase(),
+                        style: context.bodySmall?.copyWith(
+                          color: isSelected ? Colors.white : null,
                         ),
-                        maxLines: 1,
                       ),
                     ),
                   ),

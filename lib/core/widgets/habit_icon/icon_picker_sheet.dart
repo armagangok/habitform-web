@@ -278,49 +278,22 @@ class IconPickerSheetState extends State<IconPickerSheet> with SingleTickerProvi
       "🧬",
       "🩸",
       "💉",
+      "⚗️",
       "💊",
       "🩺",
       "🩻",
       "🩹",
       "🕳️",
       "🔬",
-      "🔭",
       "🔺",
       "💉",
-      "🩺",
-      "🔬",
-      "🔭",
-      "💉",
-      "🩺",
-      "🔬",
       "🔭",
       "🪐",
-      "🧑🏻‍🔬",
       "🧑🏻‍🔬",
       "👩🏻‍🔬",
       "👨🏻‍🔬",
       "🥼",
       "🌑",
-    ],
-    "Pets": [
-      "🐾", // Hayvan ayak izi
-      "🐶",
-      "🦴",
-      "🐩",
-      "🐩",
-      "🐈‍⬛",
-      "🐈", "🐂", "🐂",
-      "🐱", // Kedi
-      "🐶", // Köpek
-      "🐰", // Tavşan
-      "🐹", // Hamster
-      "🐟", // Balık
-      "🦎", // Timsah
-      "🚗", // Araba
-      "🦦", // Otter
-      "🐦", // Kuş
-      "🦮",
-      "🐕‍🦺",
     ],
     "Garden & Yard": [
       "🌱", // Bitki
@@ -336,6 +309,29 @@ class IconPickerSheetState extends State<IconPickerSheet> with SingleTickerProvi
       "🧑🏻‍🌾",
       "🌿", // Çimen
       "🌹" // Çiçek
+    ],
+    "Pets": [
+      "🐾", // Hayvan ayak izi
+      "🐶",
+      "🦴",
+      "🐩",
+      "🐩",
+      "🐈‍⬛",
+      "🐈",
+      "🦮",
+      "🐕‍🦺",
+      "🐱", // Kedi
+      "🐶", // Köpek
+      "🐐",
+      "🐑",
+      "🐰", // Tavşan
+      "🐹", // Hamster
+      "🐟", // Balık
+      "🐂",
+      "🦎", // Timsah
+      "🚗", // Araba
+      "🦦", // Otter
+      "🐦", // Kuş
     ],
   };
 
@@ -364,16 +360,16 @@ class IconPickerSheetState extends State<IconPickerSheet> with SingleTickerProvi
             ),
             SizedBox(height: 10),
             SizedBox(
-              height: 150,
+              height: 120,
               child: GridView.builder(
                 shrinkWrap: true,
                 padding: EdgeInsets.zero,
                 scrollDirection: Axis.horizontal,
                 itemCount: emojiCategories[categoryNames[selectedCategoryIndex]]!.length,
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3,
-                  crossAxisSpacing: 5,
-                  mainAxisSpacing: 10,
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 10,
+                  mainAxisSpacing: 15,
                 ),
                 itemBuilder: (context, index) {
                   final iconData = emojiCategories[categoryNames[selectedCategoryIndex]]![index];

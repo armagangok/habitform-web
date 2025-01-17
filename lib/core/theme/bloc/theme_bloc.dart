@@ -1,3 +1,5 @@
+import 'package:hive_flutter/hive_flutter.dart';
+
 import '../../core.dart';
 
 part 'theme_event.dart';
@@ -38,37 +40,23 @@ class ThemeBloc extends Bloc<ThemeEvent, ThemeState> {
   }
 
   void _onSwitchTheme(SwitchThemeEvent event, Emitter<ThemeState> emit) {
-    final currentTheme = state.themeMode;
-    ThemeMode newTheme;
-
-    switch (currentTheme) {
-      case ThemeMode.dark:
-        newTheme = ThemeMode.light;
-        break;
-      case ThemeMode.light:
-        newTheme = ThemeMode.system;
-        break;
-      case ThemeMode.system:
-        newTheme = ThemeMode.dark;
-        break;
-    }
-
-    HiveHelper.shared.putData<String?>(HiveBoxes.themeBox, HiveKeys.themeKey, newTheme.toString());
+    final newTheme = event.themeMode;
     emit(ThemeState(newTheme));
+    Hive.box<String?>(HiveBoxes.themeBox).put(HiveKeys.themeKey, newTheme.toString());
   }
 
   void _onSetDarkTheme(SetDarkThemeEvent event, Emitter<ThemeState> emit) {
-    HiveHelper.shared.putData<String?>(HiveBoxes.themeBox, HiveKeys.themeKey, ThemeMode.dark.toString());
     emit(ThemeState(ThemeMode.dark));
+    Hive.box<String?>(HiveBoxes.themeBox).put(HiveKeys.themeKey, ThemeMode.dark.toString());
   }
 
   void _onSetLightTheme(SetLightThemeEvent event, Emitter<ThemeState> emit) {
-    HiveHelper.shared.putData<String?>(HiveBoxes.themeBox, HiveKeys.themeKey, ThemeMode.light.toString());
     emit(ThemeState(ThemeMode.light));
+    Hive.box<String?>(HiveBoxes.themeBox).put(HiveKeys.themeKey, ThemeMode.light.toString());
   }
 
   void _onSetSystemTheme(SetSystemThemeEvent event, Emitter<ThemeState> emit) {
-    HiveHelper.shared.putData<String?>(HiveBoxes.themeBox, HiveKeys.themeKey, ThemeMode.system.toString());
     emit(ThemeState(ThemeMode.system));
+    Hive.box<String?>(HiveBoxes.themeBox).put(HiveKeys.themeKey, ThemeMode.system.toString());
   }
 }

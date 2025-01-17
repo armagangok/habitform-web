@@ -2,17 +2,17 @@ import '../../core.dart';
 
 final class Themes {
   static final darkTheme = ThemeData.dark().copyWith(
-    primaryColor: Color(0xffFFAE00),
+    primaryColor: Colors.orange,
     scaffoldBackgroundColor: Colors.black,
     // platform: TargetPlatform.iOS,
     colorScheme: ColorScheme.dark(
-      primary: Color(0xffFFAE00),
+      primary: Colors.orange,
     ),
     dividerTheme: const DividerThemeData(
       color: Color(0xff3D3C41),
     ),
     appBarTheme: AppBarTheme(
-      foregroundColor: Color(0xffFFAE00),
+      foregroundColor: Colors.orange,
       backgroundColor: Colors.transparent,
     ),
     inputDecorationTheme: const InputDecorationTheme(
@@ -33,12 +33,12 @@ final class Themes {
     iconTheme: IconThemeData(color: CupertinoColors.white.withValues(alpha: .7)),
     cupertinoOverrideTheme: CupertinoThemeData(
       applyThemeToAll: true,
-      primaryColor: Color(0xffFFAE00),
+      primaryColor: Colors.orange,
       scaffoldBackgroundColor: Colors.black,
       brightness: Brightness.dark,
       barBackgroundColor: Colors.transparent.withAlpha(0),
       textTheme: CupertinoTextThemeData(
-        primaryColor: Color(0xffFFAE00),
+        primaryColor: Colors.orange,
       ),
     ),
   );
