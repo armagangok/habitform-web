@@ -1,7 +1,7 @@
 import '/core/core.dart';
 
 class RemindTimeCubit extends Cubit<DateTime?> {
-  RemindTimeCubit() : super(DateTime.now().copyWith(hour: 12, minute: 0, second: 0));
+  RemindTimeCubit() : super(null);
 
   void updateTime(DateTime? date) {
     emit(date);

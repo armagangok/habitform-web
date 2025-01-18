@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import '/core/core.dart';
 import '/models/models.dart';
 import '../../../add_habit/enum/days_enum.dart';
@@ -47,6 +48,7 @@ class _WeeklyHabitGridState extends State<WeeklyHabitGrid> {
   @override
   Widget build(BuildContext context) {
     final habitColor = widget.habit.colorCode;
+    final emoji = widget.habit.emoji;
     return BlocBuilder<HabitBloc, HabitState>(
       builder: (context, state) {
         if (state is SingleHabitsFetched) {
@@ -80,14 +82,6 @@ class _WeeklyHabitGridState extends State<WeeklyHabitGrid> {
                   padding: EdgeInsets.zero,
                   minSize: 0,
                   onPressed: null,
-                  // () {
-                  //   final event = UpdateHabitForSelectedDayEvent(
-                  //     habit: widget.habit,
-                  //     dateToSaveOrRemove: dateTimeIn7Days,
-                  //   );
-
-                  //   context.read<SingleHabitBloc>().add(event);
-                  // },
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -103,16 +97,20 @@ class _WeeklyHabitGridState extends State<WeeklyHabitGrid> {
                           borderRadius: BorderRadius.circular(5),
                         ),
                         color: isCompletedDate ? Color(habitColor) : null,
-                        child: SizedBox(
-                          width: 32,
-                          height: 32,
-                          child: isCompletedDate
-                              ? Icon(
-                                  CupertinoIcons.check_mark_circled,
-                                  color: Color(habitColor).colorRegardingToBrightness,
-                                  size: 14,
-                                )
-                              : null,
+                        child: FittedBox(
+                          child: SizedBox(
+                            width: 32,
+                            height: 32,
+                            child: isCompletedDate
+                                ? Center(
+                                    child: Text(
+                                      emoji ?? "",
+                                      style: TextStyle(fontSize: 22),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  )
+                                : null,
+                          ),
                         ),
                       ),
                       SizedBox(height: 2),

@@ -52,24 +52,7 @@ class SelectTimeItem extends StatelessWidget {
                       ],
                     ),
                     onTap: () {
-                      if (selectedDays.isEmpty) {
-                        // Show a warning if no days are selected
-                        showCupertinoDialog(
-                          context: context,
-                          builder: (context) => CupertinoAlertDialog(
-                            title: Text("Warning"),
-                            content: Text("Please select at least one day before selecting a time."),
-                            actions: [
-                              CupertinoDialogAction(
-                                child: Text("OK"),
-                                onPressed: () => Navigator.pop(context),
-                              ),
-                            ],
-                          ),
-                        );
-                      } else {
-                        context.read<PickerExtendCubit>().switchExtendValue();
-                      }
+                      context.read<PickerExtendCubit>().switchExtendValue();
                     },
                   ),
                 );

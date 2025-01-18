@@ -20,14 +20,14 @@ class DaySelectionCubit extends Cubit<List<Days>> {
     } else {
       emit(List.from(state)..add(selectedDay));
       // Set default time to 14:00 when a day is selected
-      context.read<RemindTimeCubit>().updateTime(DateTime.now().copyWith(hour: 14, minute: 0));
+      context.read<RemindTimeCubit>().updateTime(DateTime.now().copyWith(hour: 12, minute: 0));
     }
   }
 
   void selectAll(BuildContext context) {
     emit(List.from(state..clear())..addAll(allDays));
     // Set default time to 14:00 when all days are selected
-    context.read<RemindTimeCubit>().updateTime(DateTime.now().copyWith(hour: 14, minute: 0));
+    context.read<RemindTimeCubit>().updateTime(DateTime.now().copyWith(hour: 12, minute: 0));
   }
 
   void deselectAll(BuildContext context) {

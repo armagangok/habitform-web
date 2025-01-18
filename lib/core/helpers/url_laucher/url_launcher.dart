@@ -6,10 +6,10 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../core.dart';
 import '../../widgets/flushbar_widget.dart';
 
-const _privacyPolicyLink = "https://docs.google.com/document/d/1SZ6VhlQjLpD8h06FyIjWxy0Ll7tG1tZY9Sz_tvG7fy4/pub";
-const _termsOfUseLink = "https://docs.google.com/document/u/1/d/1T-6lIEZwFrQj1fE_Rd0LHga-CsmKpUctgoNDfnbkn6Q/pub";
+const _privacyPolicyLink = "https://docs.google.com/document/d/e/2PACX-1vQ76kvKNioMD6L4Y0JvxcBHB2AMr7tIZyN2O6WJeva1ZYkzybIFQsbLhRE3Qdj83ewC_ICzovvb8EmL/pub";
+const _termsOfUseLink = "https://docs.google.com/document/d/e/2PACX-1vRVAZkWkWzZjyxwR4ZKMxIxIowwKJPNWEI9BZTrpfYIuZlvwPUW9ZPNwU76V4yiOmw_ORaLlLuXXVjz/pub";
 const _twitterArmagan = "https://x.com/armaganrun";
-const _twitterPomoDone = "https://x.com/PomoDoneTimer";
+const _twitterPomoDone = "https://x.com/HabitRise";
 
 class UrlLauncherHelper {
   const UrlLauncherHelper._();
@@ -31,9 +31,9 @@ class UrlLauncherHelper {
       final response = await launchUrl(emailLaunchUri);
       LogHelper.shared.debugPrint("$response");
       if (response) return;
-      AppFlushbar.shared.warningFlushbar("LocaleKeys.pleaseTryAgainLater.tr()");
+      AppFlushbar.shared.warningFlushbar(LocaleKeys.errors_try_again.tr());
     } on PlatformException catch (e) {
-      AppFlushbar.shared.warningFlushbar(e.message ?? "LocaleKeys.pleaseTryAgainLater.tr()");
+      AppFlushbar.shared.warningFlushbar(LocaleKeys.errors_try_again.tr());
     }
   }
 

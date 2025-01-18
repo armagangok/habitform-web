@@ -1,6 +1,6 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:habitrise/core/helpers/spacing_helper.dart';
 import 'package:habitrise/features/language/widget/language_feature.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import '/core/core.dart';
 import '/core/helpers/url_laucher/url_launcher.dart';
@@ -58,12 +58,12 @@ class _SettingsPageState extends State<SettingsPage> with SingleTickerProviderSt
                             ThemeModeFeature(),
                             LanguageFeature(),
                             CupertinoListTile(
-                              leading: const SettingLeadingWidget(
+                              leading: SettingLeadingWidget(
                                 iconData: CupertinoIcons.bell_fill,
-                                cardColor: Colors.indigoAccent,
+                                cardColor: CupertinoColors.systemGreen,
                               ),
                               title: Text(LocaleKeys.settings_notifications.tr()),
-                              onTap: () {},
+                              onTap: openAppSettings,
                               trailing: CupertinoListTileChevron(),
                             ),
                           ],
@@ -93,7 +93,7 @@ class _SettingsPageState extends State<SettingsPage> with SingleTickerProviderSt
                               cardColor: CupertinoColors.activeBlue,
                             ),
                             title: Text(LocaleKeys.settings_feedback.tr()),
-                            onTap: () {},
+                            onTap: UrlLauncherHelper.requestEmail,
                             trailing: CupertinoListTileChevron(),
                           ),
                         ],

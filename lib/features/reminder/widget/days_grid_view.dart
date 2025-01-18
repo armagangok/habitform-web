@@ -1,3 +1,5 @@
+import 'package:habitrise/features/reminder/widget/reminder_widget.dart';
+
 import '../../../core/core.dart';
 import '../bloc/day_selection/day_selection_cubit.dart';
 import '../bloc/reminder/reminder_bloc.dart';
@@ -33,7 +35,6 @@ class _DaysGridViewBuilderState extends State<DaysGridViewBuilder> {
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 7,
             crossAxisSpacing: 8,
-            mainAxisSpacing: 20,
           ),
           itemBuilder: (context, index) {
             final currentDay = allDays[index];
@@ -44,7 +45,6 @@ class _DaysGridViewBuilderState extends State<DaysGridViewBuilder> {
               onPressed: () {
                 final daySelectionCubit = context.read<DaySelectionCubit>();
                 daySelectionCubit.selectOneByOne(currentDay, context);
-
                 // Güncel seçili günleri al ve ReminderBloc'u güncelle
                 final updatedDays = List<Days>.from(daySelectionCubit.state);
                 context.read<ReminderBloc>().add(UpdateReminderDaysEvent(days: updatedDays));
@@ -59,14 +59,13 @@ class _DaysGridViewBuilderState extends State<DaysGridViewBuilder> {
                 ),
                 color: isSelected ? context.primary : context.cupertinoTheme.scaffoldBackgroundColor,
                 child: Padding(
-                  padding: const EdgeInsets.all(5),
+                  padding: const EdgeInsets.all(1),
                   child: Center(
-                    child: FittedBox(
-                      child: Text(
-                        currentDay.name[0].toUpperCase(),
-                        style: context.bodySmall?.copyWith(
-                          color: isSelected ? Colors.white : null,
-                        ),
+                    child: Text(
+                      currentDay.capitalized,
+                      maxLines: 1,
+                      style: context.bodySmall?.copyWith(
+                        color: isSelected ? Colors.white : null,
                       ),
                     ),
                   ),

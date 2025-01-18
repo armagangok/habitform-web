@@ -22,6 +22,8 @@ class AddReminderWidget extends StatelessWidget {
           minSize: 0,
           padding: EdgeInsets.all(10),
           onPressed: () {
+            context.hideKeyboard();
+
             showCupertinoModalBottomSheet(
               enableDrag: false,
               context: context,

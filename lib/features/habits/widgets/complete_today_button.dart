@@ -2,7 +2,7 @@ import '../../../core/core.dart';
 import '../../../models/models.dart';
 import '../bloc/habit_bloc.dart';
 
-class CompleteTodayButton extends StatelessWidget {
+class CompleteTodayButton extends StatefulWidget {
   const CompleteTodayButton({
     super.key,
     required this.currentHabit,
@@ -11,67 +11,98 @@ class CompleteTodayButton extends StatelessWidget {
   final Habit currentHabit;
 
   @override
-  Widget build(BuildContext context) {
-    return CupertinoButton.tinted(
-      color: currentHabit.isCompletedToday ? Color(currentHabit.colorCode) : Colors.grey.shade500,
-      sizeStyle: CupertinoButtonSize.small,
-      child: AnimatedSwitcher(
-        duration: Duration(milliseconds: 400),
-        transitionBuilder: (Widget child, Animation<double> animation) {
-          return FadeTransition(
-            opacity: animation,
-            child: SizeTransition(
-              sizeFactor: animation,
-              axis: Axis.horizontal, // Yatay eksende animasyon
-              axisAlignment: -1, // Soldan hizala
-              child: child,
-            ),
-          );
-        },
-        child: currentHabit.isCompletedToday
-            ? Row(
-                key: ValueKey('completed'),
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    LocaleKeys.habit_todayCompleted.tr(),
-                    style: TextStyle(
-                      color: currentHabit.isCompletedToday ? Color(currentHabit.colorCode) : null,
-                    ),
-                  ),
-                  SizedBox(width: 5),
-                  Icon(
-                    CupertinoIcons.checkmark_alt,
-                    color: currentHabit.isCompletedToday ? Color(currentHabit.colorCode) : null,
-                  ),
-                ],
-              )
-            : Row(
-                key: ValueKey('uncompleted'),
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    LocaleKeys.habit_complete.tr(),
-                    style: TextStyle(
-                      color: currentHabit.isCompletedToday ? Color(currentHabit.colorCode) : null,
-                    ),
-                  ),
-                  SizedBox(width: 5),
-                  Icon(
-                    CupertinoIcons.calendar_today,
-                    color: currentHabit.isCompletedToday ? Color(currentHabit.colorCode) : null,
-                  ),
-                ],
-              ),
-      ),
-      onPressed: () {
-        final event = UpdateHabitForSelectedDayEvent(
-          dateToSaveOrRemove: DateTime.now(),
-          habit: currentHabit,
-        );
+  State<CompleteTodayButton> createState() => _CompleteTodayButtonState();
+}
 
-        context.read<HabitBloc>().add(event);
-      },
+class _CompleteTodayButtonState extends State<CompleteTodayButton> with TickerProviderStateMixin {
+  late AnimationController controller1;
+  late AnimationController controller2;
+
+  @override
+  void initState() {
+    controller1 = AnimationController(
+      vsync: this,
+      duration: 500.ms,
     );
+    controller2 = AnimationController(
+      vsync: this,
+      duration: 500.ms,
+    );
+
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final habitColor = Color(widget.currentHabit.colorCode);
+    final isCompletedToday = widget.currentHabit.isCompletedToday;
+
+    return isCompletedToday
+        ? CupertinoButton(
+            key: const ValueKey('completed'),
+            sizeStyle: CupertinoButtonSize.small,
+            color: habitColor,
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            onPressed: () {
+              controller1.forward(from: 0);
+              controller2.forward(from: 0);
+
+              final event = UpdateHabitForSelectedDayEvent(
+                dateToSaveOrRemove: DateTime.now(),
+                habit: widget.currentHabit,
+              );
+              context.read<HabitBloc>().add(event);
+            },
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  LocaleKeys.habit_todayCompleted.tr(),
+                  style: TextStyle(
+                    color: habitColor.colorRegardingToBrightness,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                const SizedBox(width: 5),
+                Icon(
+                  CupertinoIcons.checkmark_alt,
+                  color: habitColor.colorRegardingToBrightness,
+                ),
+              ],
+            ),
+          ).animate(controller: controller1).fadeIn(duration: 400.ms) // Blur kaybolduktan sonra tekrar fadeIn
+        : CupertinoButton.tinted(
+            sizeStyle: CupertinoButtonSize.small,
+            key: const ValueKey('uncompleted'),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            color: habitColor,
+            onPressed: () {
+              controller1.forward(from: 0);
+              controller2.forward(from: 0);
+
+              final event = UpdateHabitForSelectedDayEvent(
+                dateToSaveOrRemove: DateTime.now(),
+                habit: widget.currentHabit,
+              );
+              context.read<HabitBloc>().add(event);
+            },
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  LocaleKeys.habit_complete.tr(),
+                  style: TextStyle(
+                    color: habitColor,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                const SizedBox(width: 5),
+                Icon(
+                  CupertinoIcons.calendar_today,
+                  color: habitColor,
+                ),
+              ],
+            ),
+          ).animate(controller: controller1).fadeIn();
   }
 }

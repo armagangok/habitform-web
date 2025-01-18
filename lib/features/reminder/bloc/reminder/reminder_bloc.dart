@@ -86,10 +86,16 @@ class ReminderBloc extends Bloc<ReminderEvent, ReminderState> {
         ReminderModel(
           id: UuidHelper.uidInt,
           days: [],
-          reminderTime: DateTime.now().copyWith(hour: 12, minute: 0, second: 0),
+          reminderTime: null,
         );
 
-    final updatedReminder = currentReminder.copyWith(days: event.days);
+    // If days are being added and there's no time set, set it to 12:00
+    final DateTime reminderTime = currentReminder.reminderTime ?? DateTime.now().copyWith(hour: 12, minute: 0, second: 0);
+
+    final updatedReminder = currentReminder.copyWith(
+      days: event.days,
+      time: reminderTime,
+    );
     emit(ReminderSelectionState(reminder: updatedReminder));
   }
 

@@ -29,80 +29,63 @@ class ReminderPage extends StatelessWidget {
             navigationBar: SheetHeader(
               closeButtonPosition: CloseButtonPosition.left,
               title: LocaleKeys.habit_reminder.tr(),
-              // trailing: CupertinoButton(
-              //   padding: EdgeInsets.zero,
-              //   child: Text(
-              //     LocaleKeys.common_save.tr(),
-              //     style: context.titleMedium?.copyWith(color: context.primary),
-              //   ),
-              //   onPressed: () {
-              //     final currentState = context.read<ReminderBloc>().state;
-              //     if (currentState is ReminderSelectionState) {
-              //       context.read<ReminderBloc>().add(
-              //             InitializeReminderEvent(
-              //               reminder: currentState.reminder,
-              //               context: context,
-              //             ),
-              //           );
-              //     }
-              //     Navigator.pop(context);
-              //   },
-              // ),
             ),
             child: ListView(
-              physics: const NeverScrollableScrollPhysics(),
               children: [
                 SafeArea(
                   bottom: false,
-                  child: SizedBox(height: 20),
-                ),
-                Column(
-                  children: [
-                    CupertinoListSection(
-                      backgroundColor: Colors.transparent,
-                      header: Text(LocaleKeys.common_days.tr()),
-                      children: [
-                        CupertinoListTile(
-                          padding: EdgeInsets.all(10),
-                          title: DaysGridViewBuilder(),
-                        ),
-                      ],
-                    ),
-                    SelectionButtons(),
-                  ],
-                ),
-                Column(
-                  children: [
-                    Column(
-                      children: [
-                        CupertinoListSection(
-                          header: Text("TIME"),
-                          backgroundColor: Colors.transparent,
-                          children: [
-                            SelectTimeItem(),
-                          ],
-                        ),
-                        BlocBuilder<PickerExtendCubit, bool>(
-                          builder: (context, state) {
-                            final isExpanded = state;
-                            return AnimatedContainer(
-                              duration: Duration(milliseconds: 300),
-                              height: isExpanded ? 300 : 0,
-                              child: CupertinoDatePicker(
-                                mode: CupertinoDatePickerMode.time,
-                                initialDateTime: reminder?.reminderTime ?? DateTime.now().copyWith(hour: 12, minute: 0, second: 0),
-                                use24hFormat: true,
-                                onDateTimeChanged: (val) {
-                                  context.read<RemindTimeCubit>().updateTime(val);
-                                  context.read<ReminderBloc>().add(UpdateReminderTimeEvent(time: val));
-                                },
+                  child: Column(
+                    spacing: 20,
+                    children: [
+                      Column(
+                        children: [
+                          CupertinoListSection(
+                            backgroundColor: Colors.transparent,
+                            header: Text(LocaleKeys.common_days.tr()),
+                            children: [
+                              CupertinoListTile(
+                                padding: EdgeInsets.all(10),
+                                title: DaysGridViewBuilder(),
                               ),
-                            );
-                          },
-                        ),
-                      ],
-                    ),
-                  ],
+                            ],
+                          ),
+                          SelectionButtons(),
+                        ],
+                      ),
+                      BlocBuilder<PickerExtendCubit, bool>(
+                        builder: (context, state) {
+                          final isExpanded = state;
+                          return AnimatedContainer(
+                            duration: 300.ms,
+                            child: Column(
+                              children: [
+                                CupertinoListSection(
+                                  header: Text("TIME"),
+                                  backgroundColor: Colors.transparent,
+                                  children: [
+                                    SelectTimeItem(),
+                                  ],
+                                ),
+                                AnimatedContainer(
+                                  duration: 300.ms,
+                                  height: isExpanded ? 300 : 0,
+                                  child: CupertinoDatePicker(
+                                    mode: CupertinoDatePickerMode.time,
+                                    initialDateTime: reminder?.reminderTime ?? DateTime.now().copyWith(hour: 12, minute: 0, second: 0),
+                                    use24hFormat: true,
+                                    onDateTimeChanged: (val) {
+                                      context.read<RemindTimeCubit>().updateTime(val);
+                                      context.read<ReminderBloc>().add(UpdateReminderTimeEvent(time: val));
+                                    },
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
