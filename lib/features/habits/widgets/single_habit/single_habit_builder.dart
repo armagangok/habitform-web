@@ -1,8 +1,7 @@
-import 'package:habitrise/core/helpers/spacing_helper.dart';
-import 'package:habitrise/core/theme/bloc/theme_bloc.dart';
-import 'package:habitrise/models/habit/habit_model.dart';
-
 import '/core/core.dart';
+import '../../../../core/helpers/spacing_helper.dart';
+import '../../../../core/theme/bloc/theme_bloc.dart';
+import '../../../../models/habit/habit_model.dart';
 import '../../../add_habit/add_habit_page.dart';
 import '../../../habit_detail/page/habit_detail.dart';
 import '../../bloc/habit_bloc.dart';
@@ -156,58 +155,64 @@ class SingleHabitBuilder extends StatelessWidget {
     });
   }
 
-  Widget _noDataWidget() => Builder(
-        builder: (context) {
-          return SizedBox(
-            width: double.infinity,
-            height: context.dynamicHeight / 2,
-            child: Padding(
-              padding: const EdgeInsets.all(15.0),
-              child: Column(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Icon(
-                    FontAwesomeIcons.boxOpen,
-                    size: 70,
+  Widget _noDataWidget() => Align(
+        alignment: Alignment.center,
+        child: Builder(
+          builder: (context) {
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                SizedBox(height: context.height(.075)),
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      CupertinoIcons.square_grid_4x3_fill,
+                      size: 70,
+                    ),
+                    Icon(
+                      CupertinoIcons.square_grid_4x3_fill,
+                      size: 70,
+                    ),
+                  ],
+                ),
+                SizedBox(height: 10),
+                Text(
+                  "No habit found",
+                  style: context.titleLarge?.copyWith(
+                    fontWeight: FontWeight.w500,
                   ),
-                  SizedBox(height: 15),
-                  Text(
-                    "No habit found",
-                    style: context.titleLarge?.copyWith(
+                  textAlign: TextAlign.center,
+                ),
+                Text(
+                  "Let's gain a new habit",
+                  style: context.titleMedium,
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(height: 15),
+                CupertinoButton.tinted(
+                  sizeStyle: CupertinoButtonSize.medium,
+                  child: Text(
+                    "Create Habit",
+                    style: TextStyle(
                       fontWeight: FontWeight.w500,
                     ),
-                    textAlign: TextAlign.center,
                   ),
-                  Text(
-                    "Let's gain a new habit",
-                    style: context.titleMedium,
-                    textAlign: TextAlign.center,
-                  ),
-                  SizedBox(height: 15),
-                  CupertinoButton.tinted(
-                    sizeStyle: CupertinoButtonSize.medium,
-                    child: Text(
-                      "Create Habit",
-                      style: TextStyle(
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    onPressed: () {
-                      CupertinoScaffold.showCupertinoModalBottomSheet(
-                        enableDrag: false,
-                        context: context,
-                        builder: (contextFromSheet) {
-                          return AddHabitPage();
-                        },
-                      );
-                    },
-                  ),
-                ],
-              ),
-            ),
-          );
-        },
+                  onPressed: () {
+                    CupertinoScaffold.showCupertinoModalBottomSheet(
+                      enableDrag: false,
+                      context: context,
+                      builder: (contextFromSheet) {
+                        return AddHabitPage();
+                      },
+                    );
+                  },
+                ),
+              ],
+            );
+          },
+        ),
       );
 }

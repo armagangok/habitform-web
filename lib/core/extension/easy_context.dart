@@ -13,6 +13,9 @@ extension EasyContext on BuildContext {
     }
   }
 
+  bool get isPortrait => MediaQuery.of(this).orientation == Orientation.portrait;
+  bool get isLandscape => MediaQuery.of(this).orientation == Orientation.landscape;
+
   Object? get arguments => ModalRoute.of(this)?.settings.arguments;
 
   void unfocus() => FocusScope.of(this).unfocus();

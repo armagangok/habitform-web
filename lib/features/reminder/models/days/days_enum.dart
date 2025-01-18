@@ -2,7 +2,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 
 part 'days_enum.g.dart';
 
-@HiveType(typeId: 8)
+@HiveType(typeId: 3)
 enum Days {
   @HiveField(0)
   mon,

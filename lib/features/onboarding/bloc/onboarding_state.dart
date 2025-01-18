@@ -13,4 +13,4 @@ final class GoalValid extends OnboardingState {}
 
 final class NameValid extends OnboardingState {}
 
-final class OnboardingTemplateGenerateEvent extends OnboardingState {}
+// final class OnboardingTemplateGenerateEvent extends OnboardingState {}

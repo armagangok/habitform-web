@@ -1,38 +1,35 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'reminder_model.dart';
+part of 'user_defaults.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class ReminderModelAdapter extends TypeAdapter<ReminderModel> {
+class UserDefaultsAdapter extends TypeAdapter<UserDefaults> {
   @override
-  final int typeId = 4;
+  final int typeId = 5;
 
   @override
-  ReminderModel read(BinaryReader reader) {
+  UserDefaults read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return ReminderModel(
-      id: fields[0] as int,
-      reminderTime: fields[1] as DateTime?,
-      days: (fields[2] as List?)?.cast<Days>(),
+    return UserDefaults(
+      userName: fields[0] as String,
+      userGoals: (fields[1] as List?)?.cast<UserGoal>(),
     );
   }
 
   @override
-  void write(BinaryWriter writer, ReminderModel obj) {
+  void write(BinaryWriter writer, UserDefaults obj) {
     writer
-      ..writeByte(3)
-      ..writeByte(0)
-      ..write(obj.id)
-      ..writeByte(1)
-      ..write(obj.reminderTime)
       ..writeByte(2)
-      ..write(obj.days);
+      ..writeByte(0)
+      ..write(obj.userName)
+      ..writeByte(1)
+      ..write(obj.userGoals);
   }
 
   @override
@@ -41,7 +38,7 @@ class ReminderModelAdapter extends TypeAdapter<ReminderModel> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is ReminderModelAdapter &&
+      other is UserDefaultsAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

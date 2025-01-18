@@ -12,7 +12,9 @@ final class ReminderService {
     String body,
   ) async {
     if (reminder.reminderTime != null) {
-      NotificationHelper.shared.scheduleReminderNotification(
+      await NotificationHelper.shared.cancelReminderNotifications(reminder);
+
+      await NotificationHelper.shared.scheduleReminderNotification(
         reminder.id,
         title,
         body,
@@ -22,7 +24,9 @@ final class ReminderService {
     }
   }
 
-  static void cancelReminderNotification(int id) {
-    NotificationHelper.shared.cancelNotificationWithId(id);
+  static Future<void> cancelReminderNotification(int id) async {
+    // Tüm günlerin bildirimlerini iptal et
+    final dummyReminder = ReminderModel(id: id, days: [], reminderTime: null);
+    await NotificationHelper.shared.cancelReminderNotifications(dummyReminder);
   }
 }

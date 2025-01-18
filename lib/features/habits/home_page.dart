@@ -114,9 +114,25 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
               ),
         );
       }),
-      largeTitle: Text('HabitRise').animate().fadeIn(
-            duration: Duration(milliseconds: 300),
+      largeTitle: Row(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Image.asset(
+            context.theme.brightness == Brightness.dark ? Assets.app.habitriseDarkTransparent.path : Assets.app.habitriseLightTransparent.path,
+            height: 25,
+            width: 25,
           ),
+          SizedBox(width: 10),
+          Text(
+            'HabitRise',
+            textAlign: TextAlign.center,
+          ).animate().fadeIn(
+                duration: Duration(milliseconds: 300),
+              ),
+        ],
+      ),
       trailing: Align(
         widthFactor: 1,
         child: Builder(builder: (context) {

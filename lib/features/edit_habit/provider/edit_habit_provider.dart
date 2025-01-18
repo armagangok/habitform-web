@@ -21,14 +21,19 @@ class EditHabitProvider extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final habitBloc = context.read<HabitBloc>();
-    final reminderBloc = context.read<ReminderBloc>();
 
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (_) => HabitEmojiCubit()),
         BlocProvider(create: (_) => HabitColorCubit()),
         BlocProvider(create: (_) => EditHabitBloc(habitBloc)),
-        BlocProvider.value(value: reminderBloc),
+        BlocProvider(
+          create: (_) => ReminderBloc()
+            ..add(InitializeReminderEvent(
+              reminder: habit.reminderModel,
+              context: context,
+            )),
+        ),
       ],
       child: child,
     );

@@ -1,5 +1,3 @@
-import 'package:easy_localization/easy_localization.dart';
-
 import '../../../core/core.dart';
 
 class OnboardingTitle extends StatelessWidget {
@@ -29,9 +27,8 @@ class GreetingText extends StatelessWidget {
     return Text(
       LocaleKeys.onboarding_greeting_message.tr(),
       textAlign: TextAlign.center,
-      style: TextStyle(
+      style: context.titleLarge?.copyWith(
         fontSize: 18,
-        color: CupertinoColors.black,
       ),
     );
   }

@@ -5,7 +5,7 @@ import '../days/days_enum.dart';
 
 part 'reminder_model.g.dart';
 
-@HiveType(typeId: 9)
+@HiveType(typeId: 4)
 class ReminderModel extends HiveObject {
   @HiveField(0)
   final int id;

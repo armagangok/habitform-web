@@ -195,7 +195,6 @@ class HabitDetailPage extends StatelessWidget {
                                         reminder: currentHabit.reminderModel,
                                         context: context,
                                       );
-                                      context.read<ReminderBloc>().add(event);
 
                                       showCupertinoModalBottomSheet(
                                         enableDrag: false,

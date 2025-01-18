@@ -1,6 +1,6 @@
 // DO NOT EDIT. This is code generated via package:easy_localization/generate.dart
 
-abstract class LocaleKeys {
+abstract class  LocaleKeys {
   static const common_save = 'common.save';
   static const common_cancel = 'common.cancel';
   static const common_delete = 'common.delete';
@@ -52,10 +52,19 @@ abstract class LocaleKeys {
   static const onboarding_next = 'onboarding.next';
   static const onboarding_welcome_message = 'onboarding.welcome_message';
   static const onboarding_greeting_message = 'onboarding.greeting_message';
+  static const onboarding_weRecommendYouToUseHabitRise = 'onboarding.weRecommendYouToUseHabitRise';
   static const onboarding_features_minimalist = 'onboarding.features.minimalist';
   static const onboarding_features_easy_to_use = 'onboarding.features.easy_to_use';
   static const onboarding_features_science_based = 'onboarding.features.science_based';
   static const onboarding_features = 'onboarding.features';
+  static const onboarding_goals_title = 'onboarding.goals.title';
+  static const onboarding_goals_better_productivity = 'onboarding.goals.better_productivity';
+  static const onboarding_goals_build_routine = 'onboarding.goals.build_routine';
+  static const onboarding_goals_break_bad_habits = 'onboarding.goals.break_bad_habits';
+  static const onboarding_goals_get_healthier = 'onboarding.goals.get_healthier';
+  static const onboarding_goals_time_management = 'onboarding.goals.time_management';
+  static const onboarding_goals_reduce_stress = 'onboarding.goals.reduce_stress';
+  static const onboarding_goals = 'onboarding.goals';
   static const onboarding = 'onboarding';
   static const habit_add_habit = 'habit.add_habit';
   static const habit_edit_habit = 'habit.edit_habit';
@@ -119,4 +128,5 @@ abstract class LocaleKeys {
   static const errors_try_again = 'errors.try_again';
   static const errors_required_field = 'errors.required_field';
   static const errors = 'errors';
+
 }

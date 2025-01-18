@@ -32,7 +32,9 @@ class UrlLauncherHelper {
       LogHelper.shared.debugPrint("$response");
       if (response) return;
       AppFlushbar.shared.warningFlushbar(LocaleKeys.errors_try_again.tr());
-    } on PlatformException catch (e) {
+    } on PlatformException catch (e, s) {
+      LogHelper.shared.debugPrint('$e');
+      LogHelper.shared.debugPrint('$s');
       AppFlushbar.shared.warningFlushbar(LocaleKeys.errors_try_again.tr());
     }
   }

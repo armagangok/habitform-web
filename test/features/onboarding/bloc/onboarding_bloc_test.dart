@@ -1,13 +1,15 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:habitrise/features/onboarding/bloc/onboarding_bloc.dart';
+import 'package:habitrise/features/onboarding/enum/user_goal_enum.dart';
+import 'package:habitrise/services/user_defaults/user_defaults_service.dart';
 
 void main() {
   group('OnboardingBloc', () {
     late OnboardingBloc onboardingBloc;
 
     setUp(() {
-      onboardingBloc = OnboardingBloc();
+      onboardingBloc = OnboardingBloc(userDefaultsService: UserDefaultsService());
     });
 
     tearDown(() {
@@ -31,7 +33,12 @@ void main() {
     blocTest<OnboardingBloc, OnboardingState>(
       'emits [GoalValid] when SelectGoalEvent is added with non-empty goals',
       build: () => onboardingBloc,
-      act: (bloc) => bloc.add(SelectGoalEvent(goals: [1, 2])),
+      act: (bloc) => bloc.add(SelectGoalEvent(
+        goals: [
+          UserGoal.breakBadHabits,
+          UserGoal.reduceStress,
+        ],
+      )),
       expect: () => [isA<GoalValid>()],
     );
   });

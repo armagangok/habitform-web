@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import '/core/core.dart';
 import '../../../models/habit/habit_model.dart';
 import '../../../services/services.dart';
+import '../../reminder/service/reminder_service.dart';
 import '../helper/habit_sorter.dart';
 
 part 'habit_event.dart';
@@ -56,14 +57,20 @@ class HabitBloc extends Bloc<HabitEvent, HabitState> {
 
   Future<void> _deleteHabit(DeleteHabitEvent event, Emitter<HabitState> emit) async {
     try {
+      // Önce reminder'ı iptal et
+      if (event.habit.reminderModel != null) {
+        ReminderService.cancelReminderNotification(event.habit.reminderModel!.id);
+      }
+
+      // Sonra habit'i sil
       await habitService.deleteHabit(event.habit.id);
       add(FetchHabitEvent());
     } on PlatformException catch (e, s) {
-      LogHelper.shared.debugPrint('Unexpected error saving habit: $e');
+      LogHelper.shared.debugPrint('Error deleting habit: $e');
       LogHelper.shared.debugPrint('Stack trace: $s');
       emit(SingleHabitSaveError(e.message ?? "An error occurred while deleting the habit"));
     } catch (e, s) {
-      LogHelper.shared.debugPrint('Unexpected error saving habit: $e');
+      LogHelper.shared.debugPrint('Unexpected error deleting habit: $e');
       LogHelper.shared.debugPrint('Stack trace: $s');
       emit(SingleHabitSaveError("An unexpected error occurred"));
     }

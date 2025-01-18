@@ -1,26 +1,23 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import '/core/core.dart';
+import '/services/user_defaults/user_defaults_service.dart';
+import '../enum/user_goal_enum.dart';
 
 part 'onboarding_event.dart';
 part 'onboarding_state.dart';
 
 class OnboardingBloc extends Bloc<OnboardingEvent, OnboardingState> {
   final TextEditingController nameTextController = TextEditingController();
-  final List<int> selectedGoals = [];
-  final List<String> goalList = [
-    "Better productivity",
-    "Build a routine",
-    "Break bad habits",
-    "Get healthier",
-    "Time management",
-    "Reduce stress",
-    "Other",
-  ];
+  final List<UserGoal> selectedGoals = [];
 
-  OnboardingBloc() : super(OnboardingInitial()) {
+  final UserDefaultsService userDefaultsService;
+
+  OnboardingBloc({
+    required this.userDefaultsService,
+  }) : super(OnboardingInitial()) {
     on<NameChangedEvent>(_onChangeName);
     on<SelectGoalEvent>(_onSelectGoal);
     on<OnboardingInitialEvent>(_setToInitial);
+    // on<GetHabitRiseProEvent>(_openPaywallEvent);
   }
 
   void _onSelectGoal(SelectGoalEvent event, Emitter<OnboardingState> emit) {

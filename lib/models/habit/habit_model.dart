@@ -5,7 +5,7 @@ import '../../features/reminder/models/reminder/reminder_model.dart';
 
 part 'habit_model.g.dart';
 
-@HiveType(typeId: 2)
+@HiveType(typeId: 1)
 class Habit extends HiveObject {
   @HiveField(0)
   final String id;

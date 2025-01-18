@@ -53,11 +53,22 @@
         "get_started": "Başlayın",
         "next": "İleri",
         "welcome_message": "HabitRise'a Hoş Geldiniz,",
-        "greeting_message": "Her şeyden önce, sizi tanımak istiyoruz. Çünkü HabitRise'ı daha iyi deneyimlemenizi istiyoruz!",
+        "greeting_message": "“Her şeyden önce, alışkanlıklar oluşturmak bir yolculuktur ve ilk birkaç gün boyunca tutarlı kalmak yanınıza alabileceğiniz en iyi azıktır. 😊”",
+        "weRecommendYouToUseHabitRise": "Bu yüzden, ilk günlerde HabitRise'ı devamlı bir şekilde kullanmanızı öneririz 💪🏽🚀",
         "features": {
             "minimalist": "Minimalist.",
             "easy_to_use": "Kullanımı Kolay.",
             "science_based": "Bilim Temelli."
+        },
+        "goals": {
+            "title": "Ana hedefiniz nedir?",
+            "better_productivity": "Daha iyi üretkenlik",
+            "build_routine": "Rutin oluşturmak",
+            "break_bad_habits": "Kötü alışkanlıkları bırakmak",
+            "get_healthier": "Daha sağlıklı olmak",
+            "time_management": "Zaman yönetimi",
+            "reduce_stress": "Stresi azaltmak",
+            "other": "Diğer"
         }
     },
     "habit": {

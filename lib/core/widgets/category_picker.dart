@@ -1,34 +1,37 @@
 import 'package:flutter/services.dart';
 import 'package:habitrise/core/core.dart';
 
-class MultiCategoryWidget extends StatefulWidget {
-  final List<String> categories;
-  final Function(List<int>) onCategorySelected;
+class MultiCategoryWidget<T> extends StatefulWidget {
+  final List<T> categories;
+  final Function(List<T>) onCategorySelected;
+  final String Function(T) categoryLabelBuilder;
   final Color? customColor;
 
   const MultiCategoryWidget({
     super.key,
     required this.categories,
     required this.onCategorySelected,
+    required this.categoryLabelBuilder,
     this.customColor,
   });
 
   @override
-  MultiCategoryWidgetState createState() => MultiCategoryWidgetState();
+  MultiCategoryWidgetState<T> createState() => MultiCategoryWidgetState<T>();
 }
 
-class MultiCategoryWidgetState extends State<MultiCategoryWidget> {
-  final Set<int> selectedIndexes = {}; // Çoklu seçim için set kullanıyoruz.
+class MultiCategoryWidgetState<T> extends State<MultiCategoryWidget<T>> {
+  final Set<T> selectedItems = {};
 
   @override
   Widget build(BuildContext context) {
     return Wrap(
-      spacing: 5.0, // Kategoriler arasındaki yatay boşluk
-      runSpacing: 5.0, // Satırlar arasındaki dikey boşluk
+      spacing: 5.0,
+      runSpacing: 5.0,
       children: List.generate(
         widget.categories.length,
         (index) {
-          final isSelected = selectedIndexes.contains(index);
+          final item = widget.categories[index];
+          final isSelected = selectedItems.contains(item);
           return CupertinoButton(
             minSize: 0,
             pressedOpacity: .8,
@@ -39,13 +42,13 @@ class MultiCategoryWidgetState extends State<MultiCategoryWidget> {
               HapticFeedback.selectionClick();
               setState(() {
                 if (isSelected) {
-                  selectedIndexes.remove(index); // Eğer seçiliyse çıkar
+                  selectedItems.remove(item);
                 } else {
-                  selectedIndexes.add(index); // Eğer seçili değilse ekle
+                  selectedItems.add(item);
                 }
               });
 
-              widget.onCategorySelected(selectedIndexes.toList());
+              widget.onCategorySelected(selectedItems.toList());
             },
             child: Card(
               surfaceTintColor: Colors.transparent,
@@ -55,7 +58,7 @@ class MultiCategoryWidgetState extends State<MultiCategoryWidget> {
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 8),
                 child: Text(
-                  widget.categories[index],
+                  widget.categoryLabelBuilder(item),
                   style: context.bodySmall?.copyWith(
                     color: isSelected ? Colors.white : context.bodySmall?.color?.withValues(alpha: .72),
                     fontWeight: FontWeight.bold,

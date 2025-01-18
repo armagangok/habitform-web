@@ -40,25 +40,12 @@ class $AssetsAppGen {
 class $AssetsIllustrationsGen {
   const $AssetsIllustrationsGen();
 
-  /// File path: assets/illustrations/daily_life.jpeg
-  AssetGenImage get dailyLife =>
-      const AssetGenImage('assets/illustrations/daily_life.jpeg');
-
-  /// File path: assets/illustrations/dots.png
-  AssetGenImage get dots =>
-      const AssetGenImage('assets/illustrations/dots.png');
-
-  /// File path: assets/illustrations/greeting_image.jpg
-  AssetGenImage get greetingImage =>
-      const AssetGenImage('assets/illustrations/greeting_image.jpg');
-
-  /// File path: assets/illustrations/open_book_on_a_desk.jpeg
-  AssetGenImage get openBookOnADesk =>
-      const AssetGenImage('assets/illustrations/open_book_on_a_desk.jpeg');
+  /// File path: assets/illustrations/onboarding_greeting.jpeg
+  AssetGenImage get onboardingGreeting =>
+      const AssetGenImage('assets/illustrations/onboarding_greeting.jpeg');
 
   /// List of all assets
-  List<AssetGenImage> get values =>
-      [dailyLife, dots, greetingImage, openBookOnADesk];
+  List<AssetGenImage> get values => [onboardingGreeting];
 }
 
 class $AssetsLottieGen {
@@ -71,14 +58,17 @@ class $AssetsLottieGen {
   List<String> get values => [rocketAnimation];
 }
 
-class $AssetsSvgGen {
-  const $AssetsSvgGen();
+class $AssetsTranslationsGen {
+  const $AssetsTranslationsGen();
 
-  /// File path: assets/svg/not_found_svg.svg
-  String get notFoundSvg => 'assets/svg/not_found_svg.svg';
+  /// File path: assets/translations/en-US.json
+  String get enUS => 'assets/translations/en-US.json';
+
+  /// File path: assets/translations/tr-TR.json
+  String get trTR => 'assets/translations/tr-TR.json';
 
   /// List of all assets
-  List<String> get values => [notFoundSvg];
+  List<String> get values => [enUS, trTR];
 }
 
 class Assets {
@@ -88,7 +78,7 @@ class Assets {
   static const $AssetsIllustrationsGen illustrations =
       $AssetsIllustrationsGen();
   static const $AssetsLottieGen lottie = $AssetsLottieGen();
-  static const $AssetsSvgGen svg = $AssetsSvgGen();
+  static const $AssetsTranslationsGen translations = $AssetsTranslationsGen();
 }
 
 class AssetGenImage {

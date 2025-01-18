@@ -1,59 +1,59 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'days_enum.dart';
+part of 'user_goal_enum.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class DaysAdapter extends TypeAdapter<Days> {
+class UserGoalAdapter extends TypeAdapter<UserGoal> {
   @override
-  final int typeId = 3;
+  final int typeId = 2;
 
   @override
-  Days read(BinaryReader reader) {
+  UserGoal read(BinaryReader reader) {
     switch (reader.readByte()) {
       case 0:
-        return Days.mon;
+        return UserGoal.betterProductivity;
       case 1:
-        return Days.tue;
+        return UserGoal.buildRoutine;
       case 2:
-        return Days.wed;
+        return UserGoal.breakBadHabits;
       case 3:
-        return Days.thu;
+        return UserGoal.getHealthier;
       case 4:
-        return Days.fri;
+        return UserGoal.timeManagement;
       case 5:
-        return Days.sat;
+        return UserGoal.reduceStress;
       case 6:
-        return Days.sun;
+        return UserGoal.other;
       default:
-        return Days.mon;
+        return UserGoal.betterProductivity;
     }
   }
 
   @override
-  void write(BinaryWriter writer, Days obj) {
+  void write(BinaryWriter writer, UserGoal obj) {
     switch (obj) {
-      case Days.mon:
+      case UserGoal.betterProductivity:
         writer.writeByte(0);
         break;
-      case Days.tue:
+      case UserGoal.buildRoutine:
         writer.writeByte(1);
         break;
-      case Days.wed:
+      case UserGoal.breakBadHabits:
         writer.writeByte(2);
         break;
-      case Days.thu:
+      case UserGoal.getHealthier:
         writer.writeByte(3);
         break;
-      case Days.fri:
+      case UserGoal.timeManagement:
         writer.writeByte(4);
         break;
-      case Days.sat:
+      case UserGoal.reduceStress:
         writer.writeByte(5);
         break;
-      case Days.sun:
+      case UserGoal.other:
         writer.writeByte(6);
         break;
     }
@@ -65,7 +65,7 @@ class DaysAdapter extends TypeAdapter<Days> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is DaysAdapter &&
+      other is UserGoalAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

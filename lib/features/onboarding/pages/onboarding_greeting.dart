@@ -15,7 +15,7 @@ class OnboardingGreeting extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               SizedBox(
-                height: context.height(.45),
+                height: context.height(.5),
                 width: double.infinity,
                 child: Card(
                   shape: RoundedRectangleBorder(
@@ -23,7 +23,7 @@ class OnboardingGreeting extends StatelessWidget {
                   ),
                   margin: EdgeInsets.zero,
                   clipBehavior: Clip.antiAlias,
-                  child: Assets.illustrations.greetingImage.image(
+                  child: Assets.illustrations.onboardingGreeting.image(
                     scale: 1.25,
                     fit: BoxFit.cover,
                   ),
@@ -40,54 +40,21 @@ class OnboardingGreeting extends StatelessWidget {
                   ),
                 ],
               ),
-              Spacer(),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                padding: const EdgeInsets.symmetric(horizontal: 20.0) + EdgeInsets.only(top: 20),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Column(
-                      children: [
-                        SizedBox(
-                          height: 100,
-                          width: double.infinity,
-                          child: DefaultTextStyle(
-                            style: TextStyle(),
-                            child: AnimatedTextKit(
-                              repeatForever: true,
-                              animatedTexts: [
-                                RotateAnimatedText(
-                                  LocaleKeys.onboarding_features_minimalist.tr(),
-                                  duration: Duration(seconds: 2),
-                                  textStyle: context.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
-                                ),
-                                RotateAnimatedText(
-                                  LocaleKeys.onboarding_features_easy_to_use.tr(),
-                                  duration: Duration(seconds: 2),
-                                  textStyle: context.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
-                                ),
-                                RotateAnimatedText(
-                                  LocaleKeys.onboarding_features_science_based.tr(),
-                                  duration: Duration(seconds: 2),
-                                  textStyle: context.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
+                    GreetingText(),
+                    SizedBox(height: 10),
+                    Text(
+                      LocaleKeys.onboarding_weRecommendYouToUseHabitRise.tr(),
+                      style: context.titleMedium,
+                      textAlign: TextAlign.center,
                     ),
                   ],
-                ).animate().fadeIn(
-                      delay: Duration(milliseconds: 300),
-                    ),
+                ),
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0) + EdgeInsets.only(top: 10),
-                child: GreetingText(),
-              ),
-              Spacer(flex: 4),
+              Spacer(flex: 5),
             ],
           ),
           SafeArea(
@@ -100,11 +67,11 @@ class OnboardingGreeting extends StatelessWidget {
                   width: double.infinity,
                   child: OnboardingButton(
                     onPressed: () {
-                      navigator.navigateAndClear(path: KRoute.onboardingPage);
+                      navigator.navigateAndClear(path: KRoute.home);
                     },
                     buttonText: LocaleKeys.onboarding_get_started.tr(),
                   ).animate().fadeIn(
-                        delay: Duration(milliseconds: 1200),
+                        delay: Duration(milliseconds: 2000),
                       ),
                 ),
               ),

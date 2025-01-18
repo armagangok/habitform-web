@@ -56,17 +56,17 @@ class SettingsPage extends StatelessWidget {
                     child: Card(
                       child: Column(
                         children: [
-                          CupertinoListTile(
-                            backgroundColor: Colors.transparent,
-                            leading: const SettingLeadingWidget(
-                              iconData: CupertinoIcons.heart_fill,
-                              cardColor: Colors.pinkAccent,
-                            ),
-                            title: Text(LocaleKeys.settings_support.tr()),
-                            subtitle: Text(LocaleKeys.settings_support_subtitle.tr()),
-                            onTap: () {},
-                            trailing: CupertinoListTileChevron(),
-                          ),
+                          // CupertinoListTile(
+                          //   backgroundColor: Colors.transparent,
+                          //   leading: const SettingLeadingWidget(
+                          //     iconData: CupertinoIcons.heart_fill,
+                          //     cardColor: Colors.pinkAccent,
+                          //   ),
+                          //   title: Text(LocaleKeys.settings_support.tr()),
+                          //   subtitle: Text(LocaleKeys.settings_support_subtitle.tr()),
+                          //   onTap: () {},
+                          //   trailing: CupertinoListTileChevron(),
+                          // ),
                           CupertinoListTile(
                             leading: const SettingLeadingWidget(
                               iconData: CupertinoIcons.mail_solid,

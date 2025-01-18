@@ -1,6 +1,7 @@
-import '../remind_time/remind_time_cubit.dart';
 import '/core/core.dart';
 import '../../models/days/days_enum.dart';
+import '../picker_extend/picker_extend_cubit.dart';
+import '../remind_time/remind_time_cubit.dart';
 import '../reminder/reminder_bloc.dart';
 
 final allDays = Days.values;
@@ -14,27 +15,44 @@ class DaySelectionCubit extends Cubit<List<Days>> {
 
   void selectOneByOne(Days selectedDay, BuildContext context) {
     final bool isSelected = state.contains(selectedDay);
+    final List<Days> updatedDays = List.from(state);
 
     if (isSelected) {
-      emit(List.from(state)..remove(selectedDay));
+      updatedDays.remove(selectedDay);
     } else {
-      emit(List.from(state)..add(selectedDay));
-      // Set default time to 14:00 when a day is selected
-      context.read<RemindTimeCubit>().updateTime(DateTime.now().copyWith(hour: 12, minute: 0));
+      updatedDays.add(selectedDay);
+    }
+
+    emit(updatedDays);
+
+    // Update ReminderBloc with new days
+    if (updatedDays.isEmpty) {
+      context.read<ReminderBloc>().add(UpdateReminderDaysEvent(days: null));
+    } else {
+      // İlk gün seçildiğinde default saat 12:00
+      if (updatedDays.length == 1 && !isSelected) {
+        context.read<RemindTimeCubit>().updateTime(DateTime.now().copyWith(hour: 12, minute: 0));
+      }
+      context.read<ReminderBloc>().add(UpdateReminderDaysEvent(days: updatedDays));
     }
   }
 
   void selectAll(BuildContext context) {
-    emit(List.from(state..clear())..addAll(allDays));
-    // Set default time to 14:00 when all days are selected
-    context.read<RemindTimeCubit>().updateTime(DateTime.now().copyWith(hour: 12, minute: 0));
+    final updatedDays = allDays.toList();
+    emit(updatedDays);
+
+    // İlk kez gün seçiliyorsa default saat 12:00
+    if (state.isEmpty) {
+      context.read<RemindTimeCubit>().updateTime(DateTime.now().copyWith(hour: 12, minute: 0));
+    }
+    context.read<ReminderBloc>().add(UpdateReminderDaysEvent(days: updatedDays));
   }
 
   void deselectAll(BuildContext context) {
     emit([]);
-    // Tüm günleri ve zamanı sıfırla
-    context.read<ReminderBloc>()
-      ..add(UpdateReminderDaysEvent(days: null))
-      ..add(UpdateReminderTimeEvent(time: null));
+    // Tüm günleri ve zamanı sıfırla, ama reminder ID'sini koru
+    context.read<ReminderBloc>().add(UpdateReminderDaysEvent(days: null));
+    context.read<RemindTimeCubit>().updateTime(null);
+    context.read<PickerExtendCubit>().setValue(false);
   }
 }

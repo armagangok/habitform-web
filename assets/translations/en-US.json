@@ -53,11 +53,22 @@
         "get_started": "Get Started",
         "next": "Next",
         "welcome_message": "Welcome to HabitRise,",
-        "greeting_message": "Before everything, we want to know about you. Because, we want you to experience the HabitRise better!",
+        "greeting_message": "“Before everything else, building habits is a journey, and staying consistent during the very first days is the most valuable tool you can carry with you. 😊”",
+        "weRecommendYouToUseHabitRise": "So, we recommend you to use HabitRise consistently in the first few days 💪🏽🚀",
         "features": {
             "minimalist": "Minimalist.",
             "easy_to_use": "Easy to Use.",
             "science_based": "Science-Based."
+        },
+        "goals": {
+            "title": "What's your main goal?",
+            "better_productivity": "Better productivity",
+            "build_routine": "Build a routine",
+            "break_bad_habits": "Break bad habits",
+            "get_healthier": "Get healthier",
+            "time_management": "Time management",
+            "reduce_stress": "Reduce stress",
+            "other": "Other"
         }
     },
     "habit": {

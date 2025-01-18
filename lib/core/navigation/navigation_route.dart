@@ -1,9 +1,7 @@
 import 'package:flutter/cupertino.dart';
 
 import '../../features/habits/home_page.dart';
-import '../../features/onboarding/pages/onboarding_final/onboarding_final_page.dart';
 import '../../features/onboarding/pages/onboarding_greeting.dart';
-import '../../features/onboarding/pages/onboarding_page.dart';
 import '../extension/easy_context.dart';
 import 'constant/routes.dart';
 
@@ -15,16 +13,8 @@ class NavigationRoute {
 
   Route<dynamic> generateRoute(RouteSettings args) {
     switch (args.name) {
-
-
-      case KRoute.onboardingPage:
-        return _getRoute(page: const OnboardingPage(), settings: args);
-
       case KRoute.onboardingGreeting:
         return _getRoute(page: const OnboardingGreeting(), settings: args);
-
-      case KRoute.onboardingFinalPage:
-        return _getRoute(page: const OnboardingFinalPage(), settings: args);
 
       case KRoute.home:
         return _getRoute(page: const HomePage(), settings: args);

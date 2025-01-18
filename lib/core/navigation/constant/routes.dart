@@ -4,6 +4,7 @@ class KRoute {
   static const onboardingGreeting = '/';
   
   static const home = '/home';
-  static const onboardingPage = '/onboardingPage';
+  // static const onboardingPage = '/onboardingPage';
+  static const onboardingPaywall = '/onboardingPaywall';
   static const onboardingFinalPage = '/onboardingFinalPage';
 }

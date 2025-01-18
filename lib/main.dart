@@ -5,16 +5,18 @@ import 'core/helpers/notifications/timezone.dart';
 import 'core/theme/bloc/theme_bloc.dart';
 import 'core/theme/theme_data/theme_data.dart';
 import 'features/habits/bloc/habit_bloc.dart';
-import 'features/habits/home_page.dart';
+import 'features/onboarding/bloc/onboarding_bloc.dart';
 import 'features/paywall/bloc/paywall_bloc.dart';
 import 'features/paywall/in_app_purchase/iap.dart';
 import 'features/reminder/bloc/reminder/reminder_bloc.dart';
 import 'services/services.dart';
+import 'services/user_defaults/user_defaults_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
   await HiveHelper.shared.initializeHive();
+
   await PurchaseService.configureSDK();
   await TimeZoneHelper.initializeTimeZone();
   await NotificationHelper.shared.initializeNotificationPlugin;
@@ -41,6 +43,11 @@ class MyApp extends StatelessWidget {
       providers: [
         // Global providers
         BlocProvider(
+          create: (_) => OnboardingBloc(
+            userDefaultsService: UserDefaultsService(),
+          ),
+        ),
+        BlocProvider(
           create: (_) => ThemeBloc(),
         ),
         BlocProvider(
@@ -61,10 +68,11 @@ class MyApp extends StatelessWidget {
             debugShowCheckedModeBanner: KDebug.debugModeEnabled,
             navigatorKey: NavigationService.shared.navigatorKey,
             onGenerateRoute: NavigationRoute.shared.generateRoute,
+            initialRoute: KRoute.onboardingGreeting,
             localizationsDelegates: context.localizationDelegates,
             supportedLocales: context.supportedLocales,
             locale: context.locale,
-            home: HomePage(),
+            // home: HomePage(),
           );
         },
       ),
