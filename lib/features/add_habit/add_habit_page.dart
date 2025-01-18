@@ -75,45 +75,45 @@ class _AddHabitPageState extends State<AddHabitPage> {
               child: ListView(
                 padding: EdgeInsets.all(15),
                 children: [
-                  Column(
-                    spacing: KSpacing.betweenListItems,
-                    children: [
-                      SafeArea(
-                        bottom: false,
-                        child: CustomHeader(
+                  SafeArea(
+                    bottom: false,
+                    child: Column(
+                      spacing: KSpacing.betweenListItems,
+                      children: [
+                        CustomHeader(
                           text: LocaleKeys.habit_habit_name.tr().toUpperCase(),
                           child: _buildHabitTextField(
                             controller: _habitNameController,
                             maxLines: 1,
                           ),
                         ),
-                      ),
-                      CustomHeader(
-                        text: LocaleKeys.habit_habit_description.tr().toUpperCase(),
-                        child: _buildHabitTextField(controller: _habitDescriptionController),
-                      ),
-                      BlocBuilder<ReminderBloc, ReminderState>(
-                        builder: (context, state) {
-                          return AddReminderWidget(reminder: state.reminder);
-                        },
-                      ),
-                      CustomHeader(
-                        text: LocaleKeys.common_icon.tr().toUpperCase(),
-                        child: IconPickerSheet(
-                          onIconSelected: (icon) {
-                            context.read<HabitEmojiCubit>().pickIcon(icon);
+                        CustomHeader(
+                          text: LocaleKeys.habit_habit_description.tr().toUpperCase(),
+                          child: _buildHabitTextField(controller: _habitDescriptionController),
+                        ),
+                        BlocBuilder<ReminderBloc, ReminderState>(
+                          builder: (context, state) {
+                            return AddReminderWidget(reminder: state.reminder);
                           },
                         ),
-                      ),
-                      CustomHeader(
-                        text: LocaleKeys.colors_color.tr().toUpperCase(),
-                        child: ColorPickerSheet(
-                          onColorSelected: (color) {
-                            context.read<HabitColorCubit>().pickColor(color);
-                          },
+                        CustomHeader(
+                          text: LocaleKeys.common_icon.tr().toUpperCase(),
+                          child: IconPickerSheet(
+                            onIconSelected: (icon) {
+                              context.read<HabitEmojiCubit>().pickIcon(icon);
+                            },
+                          ),
                         ),
-                      ),
-                    ],
+                        CustomHeader(
+                          text: LocaleKeys.colors_color.tr().toUpperCase(),
+                          child: ColorPickerSheet(
+                            onColorSelected: (color) {
+                              context.read<HabitColorCubit>().pickColor(color);
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),

@@ -4,6 +4,7 @@ import '/core/widgets/habit_color_sheet/cubit/habit_color_cubit.dart';
 import '/core/widgets/habit_icon/cubit/habit_icon_cubit.dart';
 import '/core/widgets/habit_icon/icon_picker_sheet.dart';
 import '/models/models.dart';
+import '../../core/helpers/spacing_helper.dart';
 import '../add_habit/widget/add_reminder_widget.dart';
 import '../reminder/bloc/reminder/reminder_bloc.dart';
 import 'bloc/edit_habit_bloc.dart';
@@ -99,53 +100,51 @@ class _EditHabitPageState extends State<EditHabitPage> {
                 },
               ),
             ),
-            child: Padding(
+            child: ListView(
               padding: const EdgeInsets.all(15),
-              child: ListView(
-                children: [
-                  SafeArea(
-                    bottom: false,
-                    child: Column(
-                      spacing: 30,
-                      children: [
-                        CustomHeader(
-                          text: LocaleKeys.habit_habit_name.tr().toUpperCase(),
-                          child: _buildHabitTextField(
-                            controller: _habitNameController,
-                          ),
+              children: [
+                SafeArea(
+                  bottom: false,
+                  child: Column(
+                    spacing: KSpacing.betweenListItems,
+                    children: [
+                      CustomHeader(
+                        text: LocaleKeys.habit_habit_name.tr().toUpperCase(),
+                        child: _buildHabitTextField(
+                          controller: _habitNameController,
                         ),
-                        CustomHeader(
-                          text: LocaleKeys.habit_habit_description.tr().toUpperCase(),
-                          child: _buildHabitTextField(
-                            controller: _habitDescriptionController,
-                          ),
+                      ),
+                      CustomHeader(
+                        text: LocaleKeys.habit_habit_description.tr().toUpperCase(),
+                        child: _buildHabitTextField(
+                          controller: _habitDescriptionController,
                         ),
-                        BlocBuilder<ReminderBloc, ReminderState>(
-                          builder: (context, state) {
-                            return AddReminderWidget(reminder: state.reminder);
+                      ),
+                      BlocBuilder<ReminderBloc, ReminderState>(
+                        builder: (context, state) {
+                          return AddReminderWidget(reminder: state.reminder);
+                        },
+                      ),
+                      CustomHeader(
+                        text: LocaleKeys.common_icon.tr().toUpperCase(),
+                        child: IconPickerSheet(
+                          onIconSelected: (icon) {
+                            context.read<HabitEmojiCubit>().pickIcon(icon);
                           },
                         ),
-                        CustomHeader(
-                          text: LocaleKeys.common_icon.tr().toUpperCase(),
-                          child: IconPickerSheet(
-                            onIconSelected: (icon) {
-                              context.read<HabitEmojiCubit>().pickIcon(icon);
-                            },
-                          ),
+                      ),
+                      CustomHeader(
+                        text: LocaleKeys.colors_color.tr().toUpperCase(),
+                        child: ColorPickerSheet(
+                          onColorSelected: (color) {
+                            context.read<HabitColorCubit>().pickColor(color);
+                          },
                         ),
-                        CustomHeader(
-                          text: LocaleKeys.colors_color.tr().toUpperCase(),
-                          child: ColorPickerSheet(
-                            onColorSelected: (color) {
-                              context.read<HabitColorCubit>().pickColor(color);
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           );
         },

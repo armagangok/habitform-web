@@ -1,35 +1,15 @@
-import 'package:habitrise/core/helpers/spacing_helper.dart';
-import 'package:habitrise/features/language/widget/language_feature.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import '/core/core.dart';
 import '/core/helpers/url_laucher/url_launcher.dart';
 import '/core/theme/widget/theme_mode_widget.dart';
+import '../../core/helpers/spacing_helper.dart';
+import '../language/widget/language_feature.dart';
 import 'widgets/setting_item.dart';
 import 'widgets/subscribe_button.dart';
 
-class SettingsPage extends StatefulWidget {
+class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
-
-  @override
-  State<SettingsPage> createState() => _SettingsPageState();
-}
-
-class _SettingsPageState extends State<SettingsPage> with SingleTickerProviderStateMixin {
-  late final AnimationController controller;
-
-  @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  void initState() {
-    controller = AnimationController(vsync: this, duration: Duration(milliseconds: 250));
-
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -110,7 +90,7 @@ class _SettingsPageState extends State<SettingsPage> with SingleTickerProviderSt
                             cardColor: CupertinoColors.activeBlue,
                           ),
                           title: Text(LocaleKeys.settings_privacy.tr()),
-                          onTap: () {},
+                          onTap: UrlLauncherHelper.openPrivacyPolicy,
                           trailing: CupertinoListTileChevron(),
                         ),
                         CupertinoListTile(
@@ -119,51 +99,47 @@ class _SettingsPageState extends State<SettingsPage> with SingleTickerProviderSt
                             cardColor: CupertinoColors.activeBlue,
                           ),
                           title: Text(LocaleKeys.settings_terms.tr()),
-                          onTap: () {},
+                          onTap: UrlLauncherHelper.openTermsOfUse,
                           trailing: CupertinoListTileChevron(),
                         ),
                       ],
                     ),
                   ),
                   SizedBox(height: 30),
-                  Column(
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text.rich(
+                      Text.rich(
+                        TextSpan(
+                          children: [
                             TextSpan(
-                              children: [
-                                TextSpan(
-                                  text: 'Habit',
-                                  style: context.bodyLarge?.copyWith(
-                                    color: context.bodyLarge?.color?.withOpacity(1),
-                                  ),
-                                ),
-                                TextSpan(
-                                  text: 'Rise',
-                                  style: context.bodyLarge?.copyWith(color: context.primary),
-                                ),
-                              ],
+                              text: 'Habit',
+                              style: context.bodyLarge?.copyWith(
+                                color: context.bodyLarge?.color?.withOpacity(1),
+                              ),
                             ),
-                          ),
-                          Text(
-                            " ${LocaleKeys.common_version.tr()}",
-                            style: context.bodyMedium?.copyWith(
-                              color: context.textTheme.bodySmall?.color?.withOpacity(.75),
+                            TextSpan(
+                              text: 'Rise',
+                              style: context.bodyLarge?.copyWith(color: context.primary),
                             ),
-                          )
-                        ],
+                          ],
+                        ),
                       ),
-                      CustomButton(
-                        onTap: UrlLauncherHelper.openTwitter,
-                        child: Text(
-                          LocaleKeys.common_made_by.tr(),
-                          style: context.bodySmall,
+                      Text(
+                        " ${LocaleKeys.common_version.tr()}",
+                        style: context.bodyMedium?.copyWith(
+                          color: context.textTheme.bodySmall?.color?.withOpacity(.75),
                         ),
                       )
                     ],
+                  ),
+                  CustomButton(
+                    onTap: UrlLauncherHelper.openTwitter,
+                    child: Text(
+                      LocaleKeys.common_made_by.tr(),
+                      style: context.bodySmall,
+                    ),
                   ),
                 ],
               ),
@@ -175,31 +151,31 @@ class _SettingsPageState extends State<SettingsPage> with SingleTickerProviderSt
   }
 }
 
-class CustomDivider extends StatelessWidget {
-  final Color color;
-  final double thickness;
-  final double indent;
-  final double endIndent;
+// class CustomDivider extends StatelessWidget {
+//   final Color color;
+//   final double thickness;
+//   final double indent;
+//   final double endIndent;
 
-  const CustomDivider({
-    super.key,
-    this.color = CupertinoColors.separator,
-    this.thickness = .5,
-    this.indent = 28.0,
-    this.endIndent = 0.0,
-  });
+//   const CustomDivider({
+//     super.key,
+//     this.color = CupertinoColors.separator,
+//     this.thickness = .5,
+//     this.indent = 28.0,
+//     this.endIndent = 0.0,
+//   });
 
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsetsDirectional.only(
-        start: indent,
-        end: endIndent,
-      ),
-      child: Container(
-        height: thickness,
-        color: color,
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return Padding(
+//       padding: EdgeInsetsDirectional.only(
+//         start: indent,
+//         end: endIndent,
+//       ),
+//       child: Container(
+//         height: thickness,
+//         color: color,
+//       ),
+//     );
+//   }
+// }
