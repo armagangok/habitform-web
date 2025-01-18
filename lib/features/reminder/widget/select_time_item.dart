@@ -16,6 +16,9 @@ class SelectTimeItem extends StatelessWidget {
     return BlocBuilder<DaySelectionCubit, List<Days>>(
       builder: (context, selectedDays) {
         if (selectedDays.isEmpty) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            context.read<PickerExtendCubit>().setValue(false);
+          });
           return const SizedBox.shrink();
         }
 

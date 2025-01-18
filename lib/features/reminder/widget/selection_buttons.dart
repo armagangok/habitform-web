@@ -1,5 +1,6 @@
 import '../../../core/core.dart';
 import '../bloc/day_selection/day_selection_cubit.dart';
+import '../bloc/picker_extend/picker_extend_cubit.dart';
 import '../bloc/remind_time/remind_time_cubit.dart';
 import '../bloc/reminder/reminder_bloc.dart';
 
@@ -22,7 +23,7 @@ class SelectionButtons extends StatelessWidget {
             onPressed: () {
               context.read<DaySelectionCubit>().selectAll(context);
               context.read<ReminderBloc>().add(UpdateReminderDaysEvent(days: allDays.toList()));
-              context.read<RemindTimeCubit>().updateTime(DateTime.now().copyWith(hour: 12, minute: 0));
+              context.read<RemindTimeCubit>().updateTime(DateTime.now().copyWith(hour: 14, minute: 0));
             },
             child: Text(
               "Select All",
@@ -36,6 +37,7 @@ class SelectionButtons extends StatelessWidget {
               borderRadius: BorderRadius.circular(8),
               onPressed: () {
                 context.read<DaySelectionCubit>().deselectAll(context);
+                context.read<PickerExtendCubit>().setValue(false);
               },
               child: Text(
                 "Deselect All",
