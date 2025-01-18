@@ -98,7 +98,15 @@
     "subscription": {
         "subscribe_to": "Subscribe to",
         "habitrise_pro": "HabitRise Pro",
-        "tap_advantages": "Tap to see all advantages"
+        "tap_advantages": "Tap to see all advantages",
+        "popular": "Popular",
+        "yearly": "Yearly",
+        "monthly": "Monthly",
+        "month": "mo",
+        "year": "yr",
+        "billed": "Billed",
+        "restore": "Restore Purchases",
+        "continue": "Continue"
     },
     "share": {
         "share": "Share",

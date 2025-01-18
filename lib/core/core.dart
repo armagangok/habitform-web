@@ -15,5 +15,5 @@ export './widgets/widgets.dart';
 export './extension/color_extension.dart';
 export './extension/datetime_extension.dart';
 export './extension/extensions.dart';
-export 'package:habitrise/core/helpers/translation/locale_keys.g.dart';
+export 'package:habitrise/features/translation/constants/locale_keys.g.dart';
 export 'package:easy_localization/easy_localization.dart' hide TextDirection;

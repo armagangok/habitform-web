@@ -1,4 +1,6 @@
 import '/core/core.dart';
+import '/features/paywall/bloc/paywall_bloc.dart';
+import '/features/paywall/widgets/paywall_widget.dart';
 import '../add_habit/add_habit_page.dart';
 import '../settings/settings_home_page.dart';
 import 'bloc/habit_bloc.dart';
@@ -33,6 +35,27 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
     });
 
     super.initState();
+    _checkPaywall();
+  }
+
+  Future<void> _checkPaywall() async {
+    // Initialize paywall and show if needed
+    context.read<PaywallBloc>().add(InitializePaywallEvent());
+
+    // Listen for paywall state changes
+    final paywallState = context.read<PaywallBloc>().state;
+    if (paywallState is PaywallLoaded && !paywallState.isSubscriptionActive) {
+      await Future.delayed(Duration(milliseconds: 700));
+      if (!mounted) return;
+
+      showCupertinoModalBottomSheet(
+        expand: true,
+        elevation: 0,
+        enableDrag: false,
+        context: context,
+        builder: (contextFromSheet) => PaywallWidget(),
+      );
+    }
   }
 
   HabitSelection selectedVal = HabitSelection.today;

@@ -1,5 +1,3 @@
-import 'package:easy_localization/easy_localization.dart';
-
 import 'core/constants/debug_constants.dart';
 import 'core/core.dart';
 import 'core/helpers/notifications/notification_helper.dart';
@@ -8,6 +6,8 @@ import 'core/theme/bloc/theme_bloc.dart';
 import 'core/theme/theme_data/theme_data.dart';
 import 'features/habits/bloc/habit_bloc.dart';
 import 'features/habits/home_page.dart';
+import 'features/paywall/bloc/paywall_bloc.dart';
+import 'features/paywall/in_app_purchase/iap.dart';
 import 'features/reminder/bloc/reminder/reminder_bloc.dart';
 import 'services/services.dart';
 
@@ -15,6 +15,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
   await HiveHelper.shared.initializeHive();
+  await PurchaseService.configureSDK();
   await TimeZoneHelper.initializeTimeZone();
   await NotificationHelper.shared.initializeNotificationPlugin;
 
@@ -48,6 +49,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (_) => ReminderBloc(),
         ),
+        BlocProvider(create: (context) => PaywallBloc()),
       ],
       child: BlocBuilder<ThemeBloc, ThemeState>(
         builder: (context, state) {

@@ -1,6 +1,6 @@
 // DO NOT EDIT. This is code generated via package:easy_localization/generate.dart
 
-abstract class  LocaleKeys {
+abstract class LocaleKeys {
   static const common_save = 'common.save';
   static const common_cancel = 'common.cancel';
   static const common_delete = 'common.delete';
@@ -94,6 +94,14 @@ abstract class  LocaleKeys {
   static const subscription_subscribe_to = 'subscription.subscribe_to';
   static const subscription_habitrise_pro = 'subscription.habitrise_pro';
   static const subscription_tap_advantages = 'subscription.tap_advantages';
+  static const subscription_popular = 'subscription.popular';
+  static const subscription_yearly = 'subscription.yearly';
+  static const subscription_monthly = 'subscription.monthly';
+  static const subscription_month = 'subscription.month';
+  static const subscription_year = 'subscription.year';
+  static const subscription_billed = 'subscription.billed';
+  static const subscription_restore = 'subscription.restore';
+  static const subscription_continue = 'subscription.continue';
   static const subscription = 'subscription';
   static const share_share = 'share.share';
   static const share_share_image = 'share.share_image';
@@ -111,5 +119,4 @@ abstract class  LocaleKeys {
   static const errors_try_again = 'errors.try_again';
   static const errors_required_field = 'errors.required_field';
   static const errors = 'errors';
-
 }

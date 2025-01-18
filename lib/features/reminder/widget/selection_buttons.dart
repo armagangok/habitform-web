@@ -23,7 +23,7 @@ class SelectionButtons extends StatelessWidget {
             onPressed: () {
               context.read<DaySelectionCubit>().selectAll(context);
               context.read<ReminderBloc>().add(UpdateReminderDaysEvent(days: allDays.toList()));
-              context.read<RemindTimeCubit>().updateTime(DateTime.now().copyWith(hour: 14, minute: 0));
+              context.read<RemindTimeCubit>().updateTime(DateTime.now().copyWith(hour: 12, minute: 0));
             },
             child: Text(
               "Select All",

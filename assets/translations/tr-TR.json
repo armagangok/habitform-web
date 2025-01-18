@@ -100,7 +100,15 @@
     "subscription": {
         "subscribe_to": "Abone Ol",
         "habitrise_pro": "HabitRise Pro",
-        "tap_advantages": "Tüm avantajları görmek için dokun"
+        "tap_advantages": "Tüm avantajları görmek için dokun",
+        "popular": "Popüler",
+        "yearly": "Yıllık",
+        "monthly": "Aylık",
+        "month": "ay",
+        "year": "yıl",
+        "billed": "Faturalandırma",
+        "restore": "Satın Alımları Geri Yükle",
+        "continue": "Devam Et"
     },
     "share": {
         "share": "Paylaş",
