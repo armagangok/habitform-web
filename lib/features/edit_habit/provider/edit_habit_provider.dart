@@ -5,7 +5,6 @@ import '../../../core/widgets/habit_color_sheet/cubit/habit_color_cubit.dart';
 import '../../../core/widgets/habit_icon/cubit/habit_icon_cubit.dart';
 import '../../../models/models.dart';
 import '../../habits/bloc/habit_bloc.dart';
-import '../../reminder/bloc/reminder/reminder_bloc.dart';
 import '../bloc/edit_habit_bloc.dart';
 
 class EditHabitProvider extends StatelessWidget {
@@ -27,13 +26,6 @@ class EditHabitProvider extends StatelessWidget {
         BlocProvider(create: (_) => HabitEmojiCubit()),
         BlocProvider(create: (_) => HabitColorCubit()),
         BlocProvider(create: (_) => EditHabitBloc(habitBloc)),
-        BlocProvider(
-          create: (_) => ReminderBloc()
-            ..add(InitializeReminderEvent(
-              reminder: habit.reminderModel,
-              context: context,
-            )),
-        ),
       ],
       child: child,
     );

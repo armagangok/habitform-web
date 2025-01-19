@@ -25,16 +25,13 @@ class DaySelectionCubit extends Cubit<List<Days>> {
 
     emit(updatedDays);
 
-    // Update ReminderBloc with new days
-    if (updatedDays.isEmpty) {
-      context.read<ReminderBloc>().add(UpdateReminderDaysEvent(days: null));
-    } else {
-      // İlk gün seçildiğinde default saat 12:00
-      if (updatedDays.length == 1 && !isSelected) {
-        context.read<RemindTimeCubit>().updateTime(DateTime.now().copyWith(hour: 12, minute: 0));
-      }
-      context.read<ReminderBloc>().add(UpdateReminderDaysEvent(days: updatedDays));
+    // İlk gün seçildiğinde default saat 12:00
+    if (updatedDays.length == 1 && !isSelected) {
+      context.read<RemindTimeCubit>().updateTime(DateTime.now().copyWith(hour: 12, minute: 0));
     }
+
+    // Update ReminderBloc with new days
+    context.read<ReminderBloc>().add(UpdateReminderDaysEvent(days: updatedDays));
   }
 
   void selectAll(BuildContext context) {

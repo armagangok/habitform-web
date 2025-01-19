@@ -91,11 +91,7 @@ class _AddHabitPageState extends State<AddHabitPage> {
                           text: LocaleKeys.habit_habit_description.tr().toUpperCase(),
                           child: _buildHabitTextField(controller: _habitDescriptionController),
                         ),
-                        BlocBuilder<ReminderBloc, ReminderState>(
-                          builder: (context, state) {
-                            return AddReminderWidget(reminder: state.reminder);
-                          },
-                        ),
+                        AddReminderWidget(),
                         CustomHeader(
                           text: LocaleKeys.common_icon.tr().toUpperCase(),
                           child: IconPickerSheet(

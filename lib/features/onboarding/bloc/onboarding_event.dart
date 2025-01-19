@@ -1,30 +1,30 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
-part of 'onboarding_bloc.dart';
+// // ignore_for_file: public_member_api_docs, sort_constructors_first
+// part of 'onboarding_bloc.dart';
 
-@immutable
-sealed class OnboardingEvent {}
+// @immutable
+// sealed class OnboardingEvent {}
 
-class OnboardingInitialEvent extends OnboardingEvent {}
+// class OnboardingInitialEvent extends OnboardingEvent {}
 
-class SelectGoalEvent extends OnboardingEvent {
-  final List<UserGoal> goals;
-  SelectGoalEvent({
-    required this.goals,
-  });
-}
+// class SelectGoalEvent extends OnboardingEvent {
+//   final List<UserGoal> goals;
+//   SelectGoalEvent({
+//     required this.goals,
+//   });
+// }
 
-class NameChangedEvent extends OnboardingEvent {
-  final String name;
+// class NameChangedEvent extends OnboardingEvent {
+//   final String name;
 
-  NameChangedEvent(this.name);
-}
+//   NameChangedEvent(this.name);
+// }
 
-class GetHabitRiseProEvent extends OnboardingEvent {
-  final BuildContext context;
+// class GetHabitRiseProEvent extends OnboardingEvent {
+//   final BuildContext context;
 
-  GetHabitRiseProEvent({required this.context});
-}
+//   GetHabitRiseProEvent({required this.context});
+// }
 
-class GenerateHabitTemplateEvent extends OnboardingEvent {}
+// class GenerateHabitTemplateEvent extends OnboardingEvent {}
 
-class GoToHomePageEvent extends OnboardingEvent {}
+// class GoToHomePageEvent extends OnboardingEvent {}

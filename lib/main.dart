@@ -5,12 +5,10 @@ import 'core/helpers/notifications/timezone.dart';
 import 'core/theme/bloc/theme_bloc.dart';
 import 'core/theme/theme_data/theme_data.dart';
 import 'features/habits/bloc/habit_bloc.dart';
-import 'features/onboarding/bloc/onboarding_bloc.dart';
+import 'features/habits/home_page.dart';
 import 'features/paywall/bloc/paywall_bloc.dart';
 import 'features/paywall/in_app_purchase/iap.dart';
-import 'features/reminder/bloc/reminder/reminder_bloc.dart';
 import 'services/services.dart';
-import 'services/user_defaults/user_defaults_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,6 +18,7 @@ void main() async {
   await PurchaseService.configureSDK();
   await TimeZoneHelper.initializeTimeZone();
   await NotificationHelper.shared.initializeNotificationPlugin;
+  await NotificationHelper.shared.listScheduledNotifications();
 
   runApp(
     EasyLocalization(
@@ -41,20 +40,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        // Global providers
-        BlocProvider(
-          create: (_) => OnboardingBloc(
-            userDefaultsService: UserDefaultsService(),
-          ),
-        ),
         BlocProvider(
           create: (_) => ThemeBloc(),
         ),
         BlocProvider(
           create: (_) => HabitBloc(habitService: SingleHabitService()),
-        ),
-        BlocProvider(
-          create: (_) => ReminderBloc(),
         ),
         BlocProvider(create: (context) => PaywallBloc()),
       ],
@@ -68,11 +58,11 @@ class MyApp extends StatelessWidget {
             debugShowCheckedModeBanner: KDebug.debugModeEnabled,
             navigatorKey: NavigationService.shared.navigatorKey,
             onGenerateRoute: NavigationRoute.shared.generateRoute,
-            initialRoute: KRoute.onboardingGreeting,
+            // initialRoute: KRoute.onboardingGreeting,
             localizationsDelegates: context.localizationDelegates,
             supportedLocales: context.supportedLocales,
             locale: context.locale,
-            // home: HomePage(),
+            home: HomePage(),
           );
         },
       ),

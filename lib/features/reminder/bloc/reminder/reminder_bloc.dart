@@ -77,11 +77,15 @@ class ReminderBloc extends Bloc<ReminderEvent, ReminderState> {
 
     if (event.days == null || event.days!.isEmpty) {
       // Günler boşaltılıyorsa, zamanı da sıfırla ama ID'yi koru
-      final updatedReminder = ReminderModel(
-        id: currentReminder?.id ?? UuidHelper.uidInt,
-        days: [],
-        reminderTime: null,
-      );
+      final updatedReminder = currentReminder?.copyWith(
+            days: [],
+            time: null,
+          ) ??
+          ReminderModel(
+            id: UuidHelper.uidInt,
+            days: [],
+            reminderTime: null,
+          );
       emit(ReminderSelectionState(reminder: updatedReminder));
       return;
     }
@@ -89,11 +93,15 @@ class ReminderBloc extends Bloc<ReminderEvent, ReminderState> {
     // Eğer ilk defa gün seçiliyorsa ve zaman null ise, default saat 12:00
     final DateTime reminderTime = currentReminder?.reminderTime ?? DateTime.now().copyWith(hour: 12, minute: 0, second: 0);
 
-    final updatedReminder = ReminderModel(
-      id: currentReminder?.id ?? UuidHelper.uidInt,
-      days: event.days,
-      reminderTime: reminderTime,
-    );
+    final updatedReminder = currentReminder?.copyWith(
+          days: event.days,
+          time: reminderTime,
+        ) ??
+        ReminderModel(
+          id: UuidHelper.uidInt,
+          days: event.days,
+          reminderTime: reminderTime,
+        );
     emit(ReminderSelectionState(reminder: updatedReminder));
   }
 

@@ -139,4 +139,15 @@ final class NotificationHelper {
       cancelNotificationWithId(reminder.id + day.index);
     }
   }
+
+  Future<void> listScheduledNotifications() async {
+    final List<PendingNotificationRequest> pendingNotifications = await _notificationPlugin.pendingNotificationRequests();
+
+    for (var notification in pendingNotifications) {
+      print('Notification ID: ${notification.id}');
+      print('Notification Title: ${notification.title}');
+      print('Notification Body: ${notification.body}');
+      print('Payload: ${notification.payload}');
+    }
+  }
 }
