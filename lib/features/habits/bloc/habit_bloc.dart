@@ -59,7 +59,7 @@ class HabitBloc extends Bloc<HabitEvent, HabitState> {
     try {
       // Önce reminder'ı iptal et
       if (event.habit.reminderModel != null) {
-        ReminderService.cancelReminderNotification(event.habit.reminderModel!.id);
+        await ReminderService.cancelReminderNotification(event.habit.reminderModel!.id);
       }
 
       // Sonra habit'i sil
@@ -113,6 +113,26 @@ class HabitBloc extends Bloc<HabitEvent, HabitState> {
   Future<void> _onUpdateHabit(UpdateHabitEvent event, Emitter<HabitState> emit) async {
     try {
       emit(SingleHabitLoading());
+
+      // Önce eski reminder'ı kontrol et ve iptal et
+      final oldHabit = (await habitService.getAllHabits()).firstWhere(
+        (h) => h.id == event.habit.id,
+        orElse: () => event.habit,
+      );
+
+      if (oldHabit.reminderModel != null) {
+        await ReminderService.cancelReminderNotification(oldHabit.reminderModel!.id);
+      }
+
+      // Yeni reminder'ı ayarla
+      if (event.habit.reminderModel != null && event.habit.reminderModel!.days != null && event.habit.reminderModel!.days!.isNotEmpty && event.habit.reminderModel!.reminderTime != null) {
+        await ReminderService.createReminderNotification(
+          event.habit.reminderModel!,
+          event.habit.habitName,
+          "Time to complete your habit!",
+        );
+      }
+
       await habitService.updateHabit(event.habit);
       add(FetchHabitEvent());
     } catch (e, s) {

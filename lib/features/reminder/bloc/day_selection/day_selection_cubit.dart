@@ -30,6 +30,12 @@ class DaySelectionCubit extends Cubit<List<Days>> {
       context.read<RemindTimeCubit>().updateTime(DateTime.now().copyWith(hour: 12, minute: 0));
     }
 
+    // Hiç gün seçili değilse zamanı sıfırla
+    if (updatedDays.isEmpty) {
+      context.read<RemindTimeCubit>().updateTime(null);
+      context.read<PickerExtendCubit>().setValue(false);
+    }
+
     // Update ReminderBloc with new days
     context.read<ReminderBloc>().add(UpdateReminderDaysEvent(days: updatedDays));
   }
@@ -39,16 +45,14 @@ class DaySelectionCubit extends Cubit<List<Days>> {
     emit(updatedDays);
 
     // İlk kez gün seçiliyorsa default saat 12:00
-    if (state.isEmpty) {
-      context.read<RemindTimeCubit>().updateTime(DateTime.now().copyWith(hour: 12, minute: 0));
-    }
+    context.read<RemindTimeCubit>().updateTime(DateTime.now().copyWith(hour: 12, minute: 0));
     context.read<ReminderBloc>().add(UpdateReminderDaysEvent(days: updatedDays));
   }
 
   void deselectAll(BuildContext context) {
     emit([]);
-    // Tüm günleri ve zamanı sıfırla, ama reminder ID'sini koru
-    context.read<ReminderBloc>().add(UpdateReminderDaysEvent(days: null));
+    // Tüm günleri ve zamanı sıfırla
+    context.read<ReminderBloc>().add(UpdateReminderDaysEvent(days: []));
     context.read<RemindTimeCubit>().updateTime(null);
     context.read<PickerExtendCubit>().setValue(false);
   }

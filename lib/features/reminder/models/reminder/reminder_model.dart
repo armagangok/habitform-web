@@ -29,7 +29,7 @@ class ReminderModel extends HiveObject {
   }) {
     return ReminderModel(
       id: id ?? this.id,
-      reminderTime: time ?? this.reminderTime,
+      reminderTime: time,
       days: days ?? this.days,
     );
   }
