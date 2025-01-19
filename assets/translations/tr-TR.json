@@ -140,7 +140,7 @@
     "errors": {
         "something_went_wrong": "Bir şeyler yanlış gitti",
         "try_again": "Tekrar dene",
-        "required_field": "Bu alan zorunludur"
+        "required_field": "Lütfen alışkanlık adını giriniz"
     },
     "reminder": {
         "select_all": "Tümünü Seç",
