@@ -1,16 +1,19 @@
-// part of 'onboarding_bloc.dart';
+part of 'onboarding_bloc.dart';
 
-// @immutable
-// sealed class OnboardingState {}
+@immutable
+sealed class OnboardingState {}
 
-// final class OnboardingInitial extends OnboardingState {}
+class OnboardingInitial extends OnboardingState {}
 
-// final class NameInvalid extends OnboardingState {}
+class OnboardingCompleted extends OnboardingState {}
 
-// final class GoalInvalid extends OnboardingState {}
+class OnboardingSkipped extends OnboardingState {}
 
-// final class GoalValid extends OnboardingState {}
+class OnboardingRequired extends OnboardingState {}
 
-// final class NameValid extends OnboardingState {}
+class OnboardingError extends OnboardingState {
+  final String error;
+  OnboardingError(this.error);
+}
 
-// // final class OnboardingTemplateGenerateEvent extends OnboardingState {}
+// final class OnboardingTemplateGenerateEvent extends OnboardingState {}

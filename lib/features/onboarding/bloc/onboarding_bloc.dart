@@ -1,44 +1,63 @@
-// import '/core/core.dart';
-// import '/services/user_defaults/user_defaults_service.dart';
-// import '../enum/user_goal_enum.dart';
+import '/core/core.dart';
+import '/services/app_default.dart';
+import '/services/user_defaults/user_defaults_service.dart';
+import '../../../models/app_defaults/app_defaults.dart';
+import '../../../models/preferences/user_defaults.dart';
+import '../enum/user_goal_enum.dart';
 
-// part 'onboarding_event.dart';
-// part 'onboarding_state.dart';
+part 'onboarding_event.dart';
+part 'onboarding_state.dart';
 
-// class OnboardingBloc extends Bloc<OnboardingEvent, OnboardingState> {
-//   final TextEditingController nameTextController = TextEditingController();
-//   final List<UserGoal> selectedGoals = [];
+class OnboardingBloc extends Bloc<OnboardingEvent, OnboardingState> {
+  final TextEditingController nameTextController = TextEditingController();
+  final List<UserGoal> selectedGoals = [];
 
-//   final UserDefaultsService userDefaultsService;
+  final UserDefaultsService userDefaultsService;
+  final AppDefaultsService appDefaultsService;
 
-//   OnboardingBloc({
-//     required this.userDefaultsService,
-//   }) : super(OnboardingInitial()) {
-//     on<NameChangedEvent>(_onChangeName);
-//     on<SelectGoalEvent>(_onSelectGoal);
-//     on<OnboardingInitialEvent>(_setToInitial);
-//     // on<GetHabitRiseProEvent>(_openPaywallEvent);
-//   }
+  OnboardingBloc({
+    required this.userDefaultsService,
+    required this.appDefaultsService,
+  }) : super(OnboardingInitial()) {
+    on<OnboardingInitialEvent>(_setToInitial);
+    on<CompleteOnboardingEvent>(_onCompleteOnboarding);
+    on<CheckFirstLaunchEvent>(_checkFirstLaunch);
+  }
 
-//   void _onSelectGoal(SelectGoalEvent event, Emitter<OnboardingState> emit) {
-//     if (event.goals.isEmpty) {
-//       emit(GoalInvalid());
-//     } else {
-//       selectedGoals.clear();
-//       selectedGoals.addAll(event.goals);
-//       emit(GoalValid());
-//     }
-//   }
+  void _setToInitial(OnboardingInitialEvent event, Emitter<OnboardingState> emit) {
+    emit(OnboardingInitial());
+  }
 
-//   void _onChangeName(NameChangedEvent event, Emitter<OnboardingState> emit) {
-//     if (nameTextController.text.length > 1) {
-//       emit(NameValid());
-//     } else {
-//       emit(NameInvalid());
-//     }
-//   }
+  Future<void> _onCompleteOnboarding(CompleteOnboardingEvent event, Emitter<OnboardingState> emit) async {
+    try {
+      // Save user defaults
+      final userDefaults = UserDefaults(
+        userName: nameTextController.text,
+        userGoals: selectedGoals,
+      );
+      await userDefaultsService.setUserDefault(userDefaults);
 
-//   void _setToInitial(OnboardingInitialEvent event, Emitter<OnboardingState> emit) {
-//     emit(OnboardingInitial());
-//   }
-// }
+      // Update app defaults to indicate app has been opened
+      final appDefaults = AppDefaults(isAppOpenedFirstTime: true);
+      await appDefaultsService.saveAppDefaults(appDefaults);
+
+      emit(OnboardingCompleted());
+    } catch (e) {
+      emit(OnboardingError(e.toString()));
+    }
+  }
+
+  Future<void> _checkFirstLaunch(CheckFirstLaunchEvent event, Emitter<OnboardingState> emit) async {
+    try {
+      final appDefaults = await appDefaultsService.gettAppDefault();
+
+      if (appDefaults?.isAppOpenedFirstTime ?? false) {
+        emit(OnboardingRequired());
+      } else {
+        emit(OnboardingSkipped());
+      }
+    } catch (e) {
+      emit(OnboardingError(e.toString()));
+    }
+  }
+}

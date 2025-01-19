@@ -3,6 +3,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import '/models/models.dart';
 import '../../../features/reminder/models/days/days_enum.dart';
 import '../../../features/reminder/models/reminder/reminder_model.dart';
+import '../../../models/app_defaults/app_defaults.dart';
 import '../../../models/preferences/user_defaults.dart';
 import '../../core.dart';
 
@@ -21,10 +22,12 @@ class HiveHelper {
       Hive.registerAdapter(ReminderModelAdapter());
       Hive.registerAdapter(HabitAdapter());
       Hive.registerAdapter(UserDefaultsAdapter());
+      Hive.registerAdapter(AppDefaultsAdapter());
 
       await Hive.openBox<Habit>(HiveBoxes.habitBox);
       await Hive.openBox<String?>(HiveBoxes.themeBox);
       await Hive.openBox<UserDefaults?>(HiveBoxes.userDeafultsBox);
+      await Hive.openBox<AppDefaults?>(HiveBoxes.habitRiseDefaults);
     } catch (e) {
       LogHelper.shared.debugPrint('$e');
     }

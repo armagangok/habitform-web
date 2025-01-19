@@ -1,9 +1,9 @@
-import '../../../core/core.dart';
+import '/core/core.dart';
 import '../widgets/onboarding_button.dart';
 import '../widgets/onboarding_title.dart';
 
-class OnboardingGreeting extends StatelessWidget {
-  const OnboardingGreeting({super.key});
+class OnboardingGreetingPage extends StatelessWidget {
+  const OnboardingGreetingPage({super.key});
 
   @override
   Widget build(BuildContext context) {
