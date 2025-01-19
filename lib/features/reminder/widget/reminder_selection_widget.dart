@@ -1,6 +1,6 @@
 import '/core/core.dart';
-import '../../reminder/bloc/reminder/reminder_bloc.dart';
-import '../../reminder/widget/reminder_widget.dart';
+import '../bloc/reminder/reminder_bloc.dart';
+import 'reminder_widget.dart';
 
 class ReminderSelectionWidget extends StatelessWidget {
   const ReminderSelectionWidget({

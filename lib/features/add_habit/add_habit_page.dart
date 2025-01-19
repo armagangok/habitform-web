@@ -10,7 +10,7 @@ import '../habits/bloc/habit_bloc.dart';
 import '../reminder/bloc/reminder/reminder_bloc.dart';
 import '../reminder/models/reminder/reminder_model.dart';
 import 'provider/add_habit_provider.dart';
-import 'widget/reminder_selection_widget.dart';
+import '../reminder/widget/reminder_selection_widget.dart';
 
 class AddHabitPage extends StatefulWidget {
   const AddHabitPage({super.key});
