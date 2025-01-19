@@ -38,6 +38,7 @@ class SelectionButtons extends StatelessWidget {
               onPressed: () {
                 context.read<DaySelectionCubit>().deselectAll(context);
                 context.read<PickerExtendCubit>().setValue(false);
+                context.read<RemindTimeCubit>().updateTime(null);
               },
               child: Text(
                 "Deselect All",

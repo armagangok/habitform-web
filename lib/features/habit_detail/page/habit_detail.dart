@@ -5,7 +5,6 @@ import '../../edit_habit/edit_habit_page.dart';
 import '../../habits/bloc/habit_bloc.dart';
 import '../../habits/widgets/complete_today_button.dart';
 import '../../habits/widgets/single_habit/single_habit_detail_grid.dart';
-import '../../reminder/bloc/reminder/reminder_bloc.dart';
 import '../../share_habit/share_habit_button.dart';
 import '../bloc/habit_detail_bloc.dart';
 import '../providers/habit_detail_bloc_provider.dart';
@@ -191,11 +190,6 @@ class HabitDetailPage extends StatelessWidget {
                                     sizeStyle: CupertinoButtonSize.small,
                                     padding: EdgeInsets.zero,
                                     onPressed: () {
-                                      final event = InitializeReminderEvent(
-                                        reminder: currentHabit.reminderModel,
-                                        context: context,
-                                      );
-
                                       showCupertinoModalBottomSheet(
                                         enableDrag: false,
                                         context: context,

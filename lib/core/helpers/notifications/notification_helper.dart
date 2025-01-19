@@ -143,11 +143,14 @@ final class NotificationHelper {
   Future<void> listScheduledNotifications() async {
     final List<PendingNotificationRequest> pendingNotifications = await _notificationPlugin.pendingNotificationRequests();
 
+    int index = 0;
     for (var notification in pendingNotifications) {
+      print("${index++}" ".Notifitication");
       print('Notification ID: ${notification.id}');
       print('Notification Title: ${notification.title}');
       print('Notification Body: ${notification.body}');
       print('Payload: ${notification.payload}');
+      print("--------------------------------------------------");
     }
   }
 }

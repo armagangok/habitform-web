@@ -10,7 +10,7 @@ import '../habits/bloc/habit_bloc.dart';
 import '../reminder/bloc/reminder/reminder_bloc.dart';
 import '../reminder/models/reminder/reminder_model.dart';
 import 'provider/add_habit_provider.dart';
-import 'widget/add_reminder_widget.dart';
+import 'widget/reminder_selection_widget.dart';
 
 class AddHabitPage extends StatefulWidget {
   const AddHabitPage({super.key});
@@ -91,7 +91,7 @@ class _AddHabitPageState extends State<AddHabitPage> {
                           text: LocaleKeys.habit_habit_description.tr().toUpperCase(),
                           child: _buildHabitTextField(controller: _habitDescriptionController),
                         ),
-                        AddReminderWidget(),
+                        ReminderSelectionWidget(),
                         CustomHeader(
                           text: LocaleKeys.common_icon.tr().toUpperCase(),
                           child: IconPickerSheet(

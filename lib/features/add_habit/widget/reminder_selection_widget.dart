@@ -2,8 +2,8 @@ import '/core/core.dart';
 import '../../reminder/bloc/reminder/reminder_bloc.dart';
 import '../../reminder/widget/reminder_widget.dart';
 
-class AddReminderWidget extends StatelessWidget {
-  const AddReminderWidget({
+class ReminderSelectionWidget extends StatelessWidget {
+  const ReminderSelectionWidget({
     super.key,
   });
 
@@ -13,6 +13,8 @@ class AddReminderWidget extends StatelessWidget {
       builder: (contextFromBuilder, state) {
         final days = state.reminder?.days;
         final remindTime = state.reminder?.reminderTime;
+
+        print(remindTime);
         return CustomHeader(
           text: LocaleKeys.habit_reminder.tr().toUpperCase(),
           child: Card(
@@ -21,7 +23,7 @@ class AddReminderWidget extends StatelessWidget {
               padding: EdgeInsets.all(10),
               onPressed: () {
                 contextFromBuilder.hideKeyboard();
-    
+
                 showCupertinoModalBottomSheet(
                   enableDrag: false,
                   context: context,
