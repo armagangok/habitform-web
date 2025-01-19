@@ -119,12 +119,6 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Image.asset(
-            context.theme.brightness == Brightness.dark ? Assets.app.habitriseDarkTransparent.path : Assets.app.habitriseLightTransparent.path,
-            height: 25,
-            width: 25,
-          ),
-          SizedBox(width: 10),
           Text(
             'HabitRise',
             textAlign: TextAlign.center,

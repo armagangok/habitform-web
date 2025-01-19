@@ -106,40 +106,47 @@ class SettingsPage extends StatelessWidget {
                     ),
                   ),
                   SizedBox(height: 30),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
+                  Column(
                     children: [
-                      Text.rich(
-                        TextSpan(
-                          children: [
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text.rich(
                             TextSpan(
-                              text: 'Habit',
-                              style: context.bodyLarge?.copyWith(
-                                color: context.bodyLarge?.color?.withOpacity(1),
-                              ),
+                              children: [
+                                TextSpan(
+                                  text: 'Habit',
+                                  style: context.bodyLarge?.copyWith(
+                                    color: context.bodyLarge?.color?.withOpacity(1),
+                                  ),
+                                ),
+                                TextSpan(
+                                  text: 'Rise',
+                                  style: context.bodyLarge?.copyWith(color: context.primary),
+                                ),
+                              ],
                             ),
-                            TextSpan(
-                              text: 'Rise',
-                              style: context.bodyLarge?.copyWith(color: context.primary),
+                          ),
+                          Text(
+                            " ${LocaleKeys.common_version.tr()}",
+                            style: context.bodyMedium?.copyWith(
+                              color: context.textTheme.bodyLarge?.color?.withOpacity(.75),
                             ),
-                          ],
+                          )
+                        ],
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 5.0),
+                        child: CustomButton(
+                          onTap: UrlLauncherHelper.openTwitter,
+                          child: Text(
+                            LocaleKeys.common_made_by.tr(),
+                            style: context.bodySmall,
+                          ),
                         ),
                       ),
-                      Text(
-                        " ${LocaleKeys.common_version.tr()}",
-                        style: context.bodyMedium?.copyWith(
-                          color: context.textTheme.bodySmall?.color?.withOpacity(.75),
-                        ),
-                      )
                     ],
-                  ),
-                  CustomButton(
-                    onTap: UrlLauncherHelper.openTwitter,
-                    child: Text(
-                      LocaleKeys.common_made_by.tr(),
-                      style: context.bodySmall,
-                    ),
                   ),
                 ],
               ),

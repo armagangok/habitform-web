@@ -81,7 +81,6 @@ class SubscribeButton extends StatelessWidget {
                               text: ' Habit',
                               style: context.titleMedium?.copyWith(
                                 fontWeight: FontWeight.bold,
-                                fontSize: 18.75,
                               ),
                               children: [
                                 TextSpan(
@@ -89,7 +88,6 @@ class SubscribeButton extends StatelessWidget {
                                   style: context.titleMedium?.copyWith(
                                     color: context.primary,
                                     fontWeight: FontWeight.bold,
-                                    fontSize: 18.75,
                                   ),
                                 ),
                               ],

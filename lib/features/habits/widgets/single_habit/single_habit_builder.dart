@@ -164,19 +164,10 @@ class SingleHabitBuilder extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 SizedBox(height: context.height(.075)),
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      CupertinoIcons.square_grid_4x3_fill,
-                      size: 70,
-                    ),
-                    Icon(
-                      CupertinoIcons.square_grid_4x3_fill,
-                      size: 70,
-                    ),
-                  ],
+                Image.asset(
+                  context.theme.brightness == Brightness.dark ? Assets.app.habitriseDarkTransparent.path : Assets.app.habitriseLightTransparent.path,
+                  height: 100,
+                  width: 100,
                 ),
                 SizedBox(height: 10),
                 Text(

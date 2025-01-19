@@ -23,7 +23,6 @@ void main() async {
   await PurchaseService.configureSDK();
   await TimeZoneHelper.initializeTimeZone();
   await NotificationHelper.shared.initializeNotificationPlugin;
-  await NotificationHelper.shared.listScheduledNotifications();
 
   await AppDefaultsService().initializeAppDefaults();
 

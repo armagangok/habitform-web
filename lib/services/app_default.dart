@@ -19,7 +19,7 @@ final class AppDefaultsService {
     );
 
     if (result == null) {
-      final AppDefaults appDefaults = AppDefaults(isAppOpenedFirstTime: false);
+      final AppDefaults appDefaults = AppDefaults(isAppOpenedFirstTime: true);
       await HiveHelper.shared.putData<AppDefaults?>(
         HiveBoxes.habitRiseDefaults,
         HiveKeys.habitRiseDefaultsKeys,
