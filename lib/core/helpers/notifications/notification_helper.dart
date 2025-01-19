@@ -121,21 +121,11 @@ final class NotificationHelper {
 
   /// Cancels all notifications for a given reminder
   Future<void> cancelReminderNotifications(ReminderModel reminder) async {
-    final days = reminder.days;
+    // Önce temel reminder ID'si ile bildirimi iptal et
+    cancelNotificationWithId(reminder.id);
 
-    print("#############");
-    print(reminder.id);
-    print(reminder.days);
-    print(reminder.reminderTime);
-    print("#############");
-
-    if (days == null || days.isEmpty) {
-      cancelNotificationWithId(reminder.id);
-      return;
-    }
-
-    // Cancel notifications for each day
-    for (final day in days) {
+    // Tüm olası günler için bildirimleri iptal et
+    for (final day in Days.values) {
       cancelNotificationWithId(reminder.id + day.index);
     }
   }

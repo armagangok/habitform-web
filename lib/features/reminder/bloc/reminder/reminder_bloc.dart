@@ -75,12 +75,12 @@ class ReminderBloc extends Bloc<ReminderEvent, ReminderState> {
   Future<void> updateDays(UpdateReminderDaysEvent event, Emitter<ReminderState> emit) async {
     final currentReminder = state.reminder;
 
-    if (event.days == null || event.days!.isEmpty) {
-      // Günler boşaltılıyorsa, önce mevcut bildirimleri iptal et
-      if (currentReminder != null) {
-        await NotificationHelper.shared.cancelReminderNotifications(currentReminder);
-      }
+    // Önce mevcut bildirimleri iptal et
+    if (currentReminder != null) {
+      await NotificationHelper.shared.cancelReminderNotifications(currentReminder);
+    }
 
+    if (event.days == null || event.days!.isEmpty) {
       // Zamanı da sıfırla ama ID'yi koru
       final updatedReminder = currentReminder?.copyWith(
             days: [],
@@ -98,11 +98,6 @@ class ReminderBloc extends Bloc<ReminderEvent, ReminderState> {
     // Eğer ilk defa gün seçiliyorsa ve zaman null ise, default saat 12:00
     final DateTime reminderTime = currentReminder?.reminderTime ?? DateTime.now().copyWith(hour: 12, minute: 0, second: 0);
 
-    // Önce mevcut bildirimleri iptal et
-    if (currentReminder != null) {
-      await NotificationHelper.shared.cancelReminderNotifications(currentReminder);
-    }
-
     final updatedReminder = currentReminder?.copyWith(
           days: event.days,
           time: reminderTime,
@@ -113,27 +108,18 @@ class ReminderBloc extends Bloc<ReminderEvent, ReminderState> {
           reminderTime: reminderTime,
         );
 
-    // Yeni bildirimleri oluştur
-    if (updatedReminder.days != null && updatedReminder.days!.isNotEmpty && updatedReminder.reminderTime != null) {
-      await ReminderService.createReminderNotification(
-        updatedReminder,
-        "Habit Reminder",
-        "Time to complete your habit!",
-      );
-    }
-
     emit(ReminderSelectionState(reminder: updatedReminder));
   }
 
   Future<void> updateTime(UpdateReminderTimeEvent event, Emitter<ReminderState> emit) async {
     final currentReminder = state.reminder;
 
-    if (event.time == null) {
-      // Zaman sıfırlanıyorsa, önce mevcut bildirimleri iptal et
-      if (currentReminder != null) {
-        await NotificationHelper.shared.cancelReminderNotifications(currentReminder);
-      }
+    // Önce mevcut bildirimleri iptal et
+    if (currentReminder != null) {
+      await NotificationHelper.shared.cancelReminderNotifications(currentReminder);
+    }
 
+    if (event.time == null) {
       // Günleri de sıfırla ama ID'yi koru
       final updatedReminder = ReminderModel(
         id: currentReminder?.id ?? UuidHelper.uidInt,
@@ -144,25 +130,11 @@ class ReminderBloc extends Bloc<ReminderEvent, ReminderState> {
       return;
     }
 
-    // Önce mevcut bildirimleri iptal et
-    if (currentReminder != null) {
-      await NotificationHelper.shared.cancelReminderNotifications(currentReminder);
-    }
-
     final updatedReminder = ReminderModel(
       id: currentReminder?.id ?? UuidHelper.uidInt,
       days: currentReminder?.days ?? [],
       reminderTime: event.time,
     );
-
-    // Yeni bildirimleri oluştur
-    if (updatedReminder.days != null && updatedReminder.days!.isNotEmpty && updatedReminder.reminderTime != null) {
-      await ReminderService.createReminderNotification(
-        updatedReminder,
-        "Habit Reminder",
-        "Time to complete your habit!",
-      );
-    }
 
     emit(ReminderSelectionState(reminder: updatedReminder));
   }
