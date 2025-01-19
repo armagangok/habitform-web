@@ -92,7 +92,9 @@
     "habit_detail": {
         "habitDetail": "Alışkanlık Detayı",
         "reminder": "HATIRLATICI",
-        "habitData": "ALIŞKANLIK VERİLERİ"
+        "habitData": "ALIŞKANLIK VERİLERİ",
+        "areYouSureToDeleteHabit": "Bu alışkanlığı silmek istediğinize emin misiniz?"
+        
     },
     "settings": {
         "settings": "Ayarlar",
@@ -139,5 +141,15 @@
         "something_went_wrong": "Bir şeyler yanlış gitti",
         "try_again": "Tekrar dene",
         "required_field": "Bu alan zorunludur"
+    },
+    "reminder": {
+        "select_all": "Tümünü Seç",
+        "deselect_all": "Seçimi Kaldır",
+        "select_time": "Zaman Seç",
+        "time": "Zaman"
+    },
+    "languages": {
+        "english": "İngilizce",
+        "turkish": "Türkçe"
     }
 }

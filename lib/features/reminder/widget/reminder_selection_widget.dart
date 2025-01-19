@@ -1,5 +1,7 @@
 import '/core/core.dart';
 import '../bloc/reminder/reminder_bloc.dart';
+import '../extension/easy_day.dart';
+import '../models/days/days_enum.dart';
 import 'reminder_widget.dart';
 
 class ReminderSelectionWidget extends StatelessWidget {
@@ -57,11 +59,11 @@ class ReminderSelectionWidget extends StatelessWidget {
                                   scrollDirection: Axis.horizontal,
                                   itemCount: days.length,
                                   itemBuilder: (context, index) {
-                                    final day = days[index];
+                                    final Days day = days[index];
                                     return Padding(
                                       padding: const EdgeInsets.only(right: 1.0),
                                       child: Text(
-                                        days.isLast(index) ? day.capitalized : "${day.capitalized}, ",
+                                        days.isLast(index) ? day.getDayName : "${day.getDayName}, ",
                                         style: context.bodySmall?.copyWith(color: context.primary),
                                       ),
                                     );

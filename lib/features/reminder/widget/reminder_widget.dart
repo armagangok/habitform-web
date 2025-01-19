@@ -4,17 +4,9 @@ import '/core/core.dart';
 import '../bloc/picker_extend/picker_extend_cubit.dart';
 import '../bloc/remind_time/remind_time_cubit.dart';
 import '../bloc/reminder/reminder_bloc.dart';
-import '../models/days/days_enum.dart';
 import '../provider/reminder_provider.dart';
 import 'days_grid_view.dart';
 import 'selection_buttons.dart';
-
-extension DaysExtension on Days {
-  String get capitalized {
-    final name = this.name;
-    return name[0].toUpperCase() + name.substring(1);
-  }
-}
 
 class ReminderPage extends StatelessWidget {
   const ReminderPage({super.key});
@@ -88,7 +80,7 @@ class _ReminderPageContentState extends State<_ReminderPageContent> {
                           child: Column(
                             children: [
                               CupertinoListSection(
-                                header: Text("TIME"),
+                                header: Text(LocaleKeys.reminder_time.tr().toUpperCase()),
                                 backgroundColor: Colors.transparent,
                                 children: [
                                   SelectTimeItem(),

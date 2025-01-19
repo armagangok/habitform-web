@@ -26,7 +26,7 @@ class SelectionButtons extends StatelessWidget {
               context.read<RemindTimeCubit>().updateTime(DateTime.now().copyWith(hour: 12, minute: 0));
             },
             child: Text(
-              "Select All",
+              LocaleKeys.reminder_select_all.tr(),
               style: TextStyle(color: context.primary),
             ),
           ).animate().fadeIn(),
@@ -41,7 +41,7 @@ class SelectionButtons extends StatelessWidget {
                 context.read<RemindTimeCubit>().updateTime(null);
               },
               child: Text(
-                "Deselect All",
+                LocaleKeys.reminder_deselect_all.tr(),
                 style: TextStyle(color: context.primary),
               ).animate().fadeIn(),
             ).animate().fadeIn(),

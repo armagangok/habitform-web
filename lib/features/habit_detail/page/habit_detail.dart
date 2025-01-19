@@ -1,5 +1,6 @@
+import 'package:habitrise/features/reminder/extension/easy_day.dart';
+
 import '/core/core.dart';
-import '/features/reminder/widget/reminder_widget.dart';
 import '/models/models.dart';
 import '../../edit_habit/edit_habit_page.dart';
 import '../../habits/bloc/habit_bloc.dart';
@@ -279,7 +280,7 @@ class HabitDetailPage extends StatelessWidget {
       builder: (context) {
         return CupertinoAlertDialog(
           title: Text(LocaleKeys.common_delete.tr()),
-          content: Text('Are you sure you want to delete this habit?'),
+          content: Text(LocaleKeys.habit_detail_areYouSureToDeleteHabit.tr()),
           actions: [
             CupertinoDialogAction(
               child: Text(LocaleKeys.common_cancel.tr()),

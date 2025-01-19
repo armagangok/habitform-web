@@ -53,7 +53,7 @@
         "get_started": "Get Started",
         "next": "Next",
         "welcome_message": "Welcome to HabitRise,",
-        "greeting_message": "“Before everything else, building habits is a journey, and staying committed during the very first days is the best tool you can carry with you. 😊”",
+        "greeting_message": "Before everything else, building habits is a journey, and staying committed during the very first days is the best tool you can carry with you. 😊",
         "weRecommendYouToUseHabitRise": "So, it's crucial to stay committed in the very first days of using HabitRise. 💪🏽🚀",
         "features": {
             "minimalist": "Minimalist.",
@@ -90,7 +90,8 @@
         "complete": "Complete"
     },
     "habit_detail": {
-        "habitDetail": "Alışkanlık Detayı"
+        "habitDetail": "Alışkanlık Detayı",
+        "areYouSureToDeleteHabit": "Are you sure you want to delete this habit?"
     },
     "settings": {
         "settings": "Settings",
@@ -137,5 +138,15 @@
         "something_went_wrong": "Something went wrong",
         "try_again": "Try again",
         "required_field": "This field is required"
+    },
+    "reminder": {
+        "select_all": "Select All",
+        "deselect_all": "Deselect All",
+        "select_time": "Select Time",
+        "time": "Time"
+    },
+    "languages": {
+        "english": "English",
+        "turkish": "Turkish"
     }
 }

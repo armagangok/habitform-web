@@ -166,19 +166,19 @@ class SingleHabitBuilder extends StatelessWidget {
                 SizedBox(height: context.height(.075)),
                 Image.asset(
                   context.theme.brightness == Brightness.dark ? Assets.app.habitriseDarkTransparent.path : Assets.app.habitriseLightTransparent.path,
-                  height: 100,
-                  width: 100,
+                  height: 120,
+                  width: 120,
                 ),
                 SizedBox(height: 10),
                 Text(
-                  "No habit found",
+                  LocaleKeys.habit_no_habit_found.tr(),
                   style: context.titleLarge?.copyWith(
                     fontWeight: FontWeight.w500,
                   ),
                   textAlign: TextAlign.center,
                 ),
                 Text(
-                  "Let's gain a new habit",
+                  LocaleKeys.habit_lets_gain_habit.tr(),
                   style: context.titleMedium,
                   textAlign: TextAlign.center,
                 ),
@@ -186,7 +186,7 @@ class SingleHabitBuilder extends StatelessWidget {
                 CupertinoButton.tinted(
                   sizeStyle: CupertinoButtonSize.medium,
                   child: Text(
-                    "Create Habit",
+                    LocaleKeys.habit_create_habit.tr(),
                     style: TextStyle(
                       fontWeight: FontWeight.w500,
                     ),

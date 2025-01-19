@@ -1,7 +1,7 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import '/core/core.dart';
 import '/models/models.dart';
-import '../../../add_habit/enum/days_enum.dart';
+import '../../../reminder/extension/easy_day.dart';
+import '../../../reminder/models/days/days_enum.dart';
 import '../../bloc/habit_bloc.dart';
 
 class Last7DaysModel {
@@ -115,7 +115,7 @@ class _WeeklyHabitGridState extends State<WeeklyHabitGrid> {
                       ),
                       SizedBox(height: 2),
                       Text(
-                        _capitalize(day.toString().split('.').last),
+                        day.getDayName,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         textAlign: TextAlign.center,
@@ -133,15 +133,4 @@ class _WeeklyHabitGridState extends State<WeeklyHabitGrid> {
       },
     );
   }
-
-  String _capitalize(String string) {
-    if (string.isEmpty) return string;
-    return string[0].toUpperCase() + string.substring(1);
-  }
-}
-
-List<DateTime>? convertStringListToDateTimeList(List<String>? stringList) {
-  if (stringList == null) return null;
-
-  return stringList.map((str) => DateTime.parse(str)).toList();
 }

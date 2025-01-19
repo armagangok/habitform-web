@@ -1,10 +1,8 @@
-import 'package:habitrise/features/reminder/widget/reminder_widget.dart';
-
 import '../../../core/core.dart';
 import '../bloc/day_selection/day_selection_cubit.dart';
 import '../bloc/reminder/reminder_bloc.dart';
 import '../models/days/days_enum.dart';
-
+import '../extension/easy_day.dart';
 class DaysGridViewBuilder extends StatefulWidget {
   const DaysGridViewBuilder({super.key});
 
@@ -39,6 +37,7 @@ class _DaysGridViewBuilderState extends State<DaysGridViewBuilder> {
           itemBuilder: (context, index) {
             final currentDay = allDays[index];
             final isSelected = selectedDays.contains(currentDay);
+            final dayName = currentDay.getDayName;
 
             return CupertinoButton(
               padding: EdgeInsets.zero,
@@ -62,7 +61,7 @@ class _DaysGridViewBuilderState extends State<DaysGridViewBuilder> {
                   padding: const EdgeInsets.all(1),
                   child: Center(
                     child: Text(
-                      currentDay.capitalized,
+                      dayName,
                       maxLines: 1,
                       style: context.bodySmall?.copyWith(
                         color: isSelected ? Colors.white : null,

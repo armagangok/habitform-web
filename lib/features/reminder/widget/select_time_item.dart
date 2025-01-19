@@ -31,12 +31,12 @@ class SelectTimeItem extends StatelessWidget {
                 return AnimatedSize(
                   duration: Duration(milliseconds: 300),
                   child: CupertinoListTile(
-                    title: Text("Select Time"),
+                    title: Text(LocaleKeys.reminder_select_time.tr()),
                     subtitle: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          remindTime?.toHHMM() ?? "None",
+                          remindTime?.toHHMM() ?? LocaleKeys.common_none.tr(),
                           style: TextStyle(
                             color: CupertinoColors.systemBlue,
                             fontWeight: FontWeight.normal,

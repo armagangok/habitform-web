@@ -86,6 +86,7 @@ abstract class  LocaleKeys {
   static const habit_detail_habitDetail = 'habit_detail.habitDetail';
   static const habit_detail_reminder = 'habit_detail.reminder';
   static const habit_detail_habitData = 'habit_detail.habitData';
+  static const habit_detail_areYouSureToDeleteHabit = 'habit_detail.areYouSureToDeleteHabit';
   static const habit_detail = 'habit_detail';
   static const settings_settings = 'settings.settings';
   static const settings_language = 'settings.language';
@@ -128,5 +129,13 @@ abstract class  LocaleKeys {
   static const errors_try_again = 'errors.try_again';
   static const errors_required_field = 'errors.required_field';
   static const errors = 'errors';
+  static const reminder_select_all = 'reminder.select_all';
+  static const reminder_deselect_all = 'reminder.deselect_all';
+  static const reminder_select_time = 'reminder.select_time';
+  static const reminder_time = 'reminder.time';
+  static const reminder = 'reminder';
+  static const languages_english = 'languages.english';
+  static const languages_turkish = 'languages.turkish';
+  static const languages = 'languages';
 
 }

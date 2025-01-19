@@ -26,7 +26,7 @@ class LanguageFeature extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text("🇬🇧 "),
-                      Text("English"),
+                      Text(LocaleKeys.languages_english.tr()),
                       Text(" 🇬🇧"),
                     ],
                   ),
@@ -40,7 +40,7 @@ class LanguageFeature extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text("🇹🇷 "),
-                      Text("Turkish"),
+                      Text(LocaleKeys.languages_turkish.tr()),
                       Text(" 🇹🇷"),
                     ],
                   ),
