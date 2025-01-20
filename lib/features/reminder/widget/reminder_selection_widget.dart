@@ -16,7 +16,6 @@ class ReminderSelectionWidget extends StatelessWidget {
         final days = state.reminder?.days;
         final remindTime = state.reminder?.reminderTime;
 
-        print(remindTime);
         return CustomHeader(
           text: LocaleKeys.habit_reminder.tr().toUpperCase(),
           child: Card(

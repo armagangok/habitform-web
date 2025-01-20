@@ -22,7 +22,6 @@ class ShareHabitButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
       child: CupertinoButton.tinted(
-        color: CupertinoColors.activeBlue,
         padding: EdgeInsets.zero,
         sizeStyle: CupertinoButtonSize.small,
         onPressed: () {
@@ -41,16 +40,10 @@ class ShareHabitButton extends StatelessWidget {
           children: [
             Text(
               LocaleKeys.share_share.tr(),
-              style: TextStyle(
-                fontWeight: FontWeight.w500,
-                color: CupertinoColors.activeBlue,
-              ),
+              style: TextStyle(fontWeight: FontWeight.w500),
             ),
             SizedBox(width: 5),
-            Icon(
-              FontAwesomeIcons.share,
-              color: CupertinoColors.activeBlue,
-            ),
+            Icon(FontAwesomeIcons.share),
           ],
         ),
       ),

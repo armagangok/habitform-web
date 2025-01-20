@@ -1,8 +1,9 @@
 import '../../../core/core.dart';
 import '../bloc/day_selection/day_selection_cubit.dart';
 import '../bloc/reminder/reminder_bloc.dart';
-import '../models/days/days_enum.dart';
 import '../extension/easy_day.dart';
+import '../models/days/days_enum.dart';
+
 class DaysGridViewBuilder extends StatefulWidget {
   const DaysGridViewBuilder({super.key});
 
@@ -65,6 +66,7 @@ class _DaysGridViewBuilderState extends State<DaysGridViewBuilder> {
                       maxLines: 1,
                       style: context.bodySmall?.copyWith(
                         color: isSelected ? Colors.white : null,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),

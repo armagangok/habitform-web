@@ -15,7 +15,7 @@
         "icon": "İkon",
         "warning": "Uyarı",
         "error": "Hata",
-        "Information":"Bilgilendirme"
+        "Information": "Bilgilendirme"
     },
     "colors": {
         "color": "Renk",
@@ -90,14 +90,16 @@
         "lets_gain_habit": "Yeni bir alışkanlık kazanalım",
         "habit_data": "ALIŞKANLIK VERİLERİ",
         "todayCompleted": "Bugün Tamamlandı",
-        "complete": "Tamamla"
+        "complete": "Tamamla",
+        "calendar_completion": "Takvim Tamamlama",
+        "calendar_tap_info": "Tarihlere dokunarak tamamlama durumunu değiştirebilirsiniz"
     },
     "habit_detail": {
         "habitDetail": "Alışkanlık Detayı",
         "reminder": "HATIRLATICI",
         "habitData": "ALIŞKANLIK VERİLERİ",
-        "areYouSureToDeleteHabit": "Bu alışkanlığı silmek istediğinize emin misiniz?"
-        
+        "areYouSureToDeleteHabit": "Bu alışkanlığı silmek istediğinize emin misiniz?",
+        "calendar": "Takvim"
     },
     "settings": {
         "settings": "Ayarlar",

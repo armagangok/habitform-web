@@ -111,6 +111,8 @@ class CategoryWidgetState extends State<CategoryWidget> {
               children: List.generate(
                 widget.categories.length,
                 (index) {
+                  final cardBackgroundColor = selectedIndex == index ? widget.customColor ?? context.primary.withOpacity(.9) : Colors.transparent;
+
                   return CupertinoButton(
                     minSize: 0,
                     pressedOpacity: .8,
@@ -127,9 +129,13 @@ class CategoryWidgetState extends State<CategoryWidget> {
                     },
                     child: Card(
                       elevation: .1,
-                      color: selectedIndex == index ? widget.customColor ?? Theme.of(context).primaryColor : null,
+                      color: cardBackgroundColor,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
+                        side: BorderSide(
+                          color: selectedIndex == index ? Colors.transparent : Theme.of(context).primaryColor.withOpacity(.2),
+                          width: 1,
+                        ),
                       ),
                       child: Padding(
                         padding: const EdgeInsets.symmetric(
@@ -137,12 +143,12 @@ class CategoryWidgetState extends State<CategoryWidget> {
                           horizontal: 5.5,
                         ),
                         child: AnimatedDefaultTextStyle(
-                          duration: const Duration(milliseconds: 300), // Smooth animation duration
+                          duration: const Duration(milliseconds: 350), // Smooth animation duration
                           curve: Curves.easeInOut, // Curve for the animation
                           style: TextStyle(
                             fontSize: 13,
-                            fontWeight: selectedIndex == index ? FontWeight.w600 : FontWeight.normal,
-                            color: selectedIndex == index ? Colors.white : Theme.of(context).textTheme.bodySmall?.color?.withAlpha(183),
+                            fontWeight: selectedIndex == index ? FontWeight.w700 : FontWeight.normal,
+                            color: selectedIndex == index ? cardBackgroundColor.colorRegardingToBrightness : context.primary.withOpacity(.75),
                           ),
                           child: Text(widget.categories[index]),
                         ),

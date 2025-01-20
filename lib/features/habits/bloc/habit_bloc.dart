@@ -85,28 +85,44 @@ class HabitBloc extends Bloc<HabitEvent, HabitState> {
 
   Future<void> _updateHabitForSelectedDay(UpdateHabitForSelectedDayEvent event, Emitter<HabitState> emit) async {
     try {
+      emit(SingleHabitLoading());
+      LogHelper.shared.debugPrint('Updating habit for selected day: ${event.dateToSaveOrRemove}');
+      LogHelper.shared.debugPrint('Original habit: ${event.habit}');
+      LogHelper.shared.debugPrint('Current completion dates: ${event.habit.completionDates}');
+
       final DateTime selectedDate = event.dateToSaveOrRemove;
 
+      // Get the current habit from storage to ensure we have the latest data
+      final currentHabit = HiveHelper.shared.getData<Habit>(HiveBoxes.habitBox, event.habit.id) ?? event.habit;
+      LogHelper.shared.debugPrint('Current habit from storage: $currentHabit');
+
       // Get or create the updated completion dates list
-      final updatedCompletionDates = event.habit.completionDates?.map((date) {
-            return DateTime(date.year, date.month, date.day);
-          }).toList() ??
-          [];
+      final updatedCompletionDates = currentHabit.completionDates?.map((date) => DateTime(date.year, date.month, date.day)).toList() ?? [];
 
       // If the selected date is already in the list, remove it; otherwise, add it
-      if (updatedCompletionDates.any((date) => date.year == selectedDate.year && date.month == selectedDate.month && date.day == selectedDate.day)) {
-        updatedCompletionDates.removeWhere((date) => date.year == selectedDate.year && date.month == selectedDate.month && date.day == selectedDate.day);
+      if (updatedCompletionDates.any((date) => date.isSameDayWith(selectedDate))) {
+        LogHelper.shared.debugPrint('Removing date from completion dates');
+        updatedCompletionDates.removeWhere((date) => date.isSameDayWith(selectedDate));
       } else {
+        LogHelper.shared.debugPrint('Adding date to completion dates');
         updatedCompletionDates.add(selectedDate);
       }
 
-      final updatedHabit = event.habit.copyWith(completionDates: updatedCompletionDates);
+      final updatedHabit = currentHabit.copyWith(completionDates: updatedCompletionDates);
+      LogHelper.shared.debugPrint('Updated habit before save: $updatedHabit');
+      LogHelper.shared.debugPrint('Updated completion dates: ${updatedHabit.completionDates}');
 
       await habitService.updateHabit(updatedHabit);
-      add(FetchHabitEvent());
+
+      // Fetch updated habits and emit new state
+      final habits = await habitService.getAllHabits();
+      LogHelper.shared.debugPrint('Fetched habits after update: $habits');
+      sortHabitsByReminderTime(habits);
+      emit(SingleHabitsFetched(habits));
     } catch (e, s) {
-      LogHelper.shared.debugPrint('$e');
-      LogHelper.shared.debugPrint('$s');
+      LogHelper.shared.debugPrint('Error updating habit: $e');
+      LogHelper.shared.debugPrint('Stack trace: $s');
+      emit(SingleHabitSaveError(e.toString()));
     }
   }
 

@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 import '../../features/reminder/models/reminder/reminder_model.dart';
@@ -54,21 +53,13 @@ class Habit extends HiveObject {
       habitDescription: habitDescription ?? this.habitDescription,
       emoji: emoji ?? this.emoji,
       reminderModel: reminderModel ?? this.reminderModel,
-      completionDates: completionDates ?? this.completionDates,
+      completionDates: completionDates != null
+          ? List<DateTime>.from(completionDates)
+          : this.completionDates != null
+              ? List<DateTime>.from(this.completionDates!)
+              : null,
       colorCode: colorCode ?? this.colorCode,
     );
-  }
-
-  @override
-  bool operator ==(covariant Habit other) {
-    if (identical(this, other)) return true;
-
-    return other.id == id && other.habitName == habitName && other.habitDescription == habitDescription && other.emoji == emoji && other.reminderModel == reminderModel && listEquals(other.completionDates, completionDates);
-  }
-
-  @override
-  int get hashCode {
-    return id.hashCode ^ habitName.hashCode ^ habitDescription.hashCode ^ emoji.hashCode ^ reminderModel.hashCode ^ completionDates.hashCode;
   }
 
   @override

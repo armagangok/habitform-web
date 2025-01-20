@@ -85,11 +85,14 @@ abstract class  LocaleKeys {
   static const habit_habit_data = 'habit.habit_data';
   static const habit_todayCompleted = 'habit.todayCompleted';
   static const habit_complete = 'habit.complete';
+  static const habit_calendar_completion = 'habit.calendar_completion';
+  static const habit_calendar_tap_info = 'habit.calendar_tap_info';
   static const habit = 'habit';
   static const habit_detail_habitDetail = 'habit_detail.habitDetail';
   static const habit_detail_reminder = 'habit_detail.reminder';
   static const habit_detail_habitData = 'habit_detail.habitData';
   static const habit_detail_areYouSureToDeleteHabit = 'habit_detail.areYouSureToDeleteHabit';
+  static const habit_detail_calendar = 'habit_detail.calendar';
   static const habit_detail = 'habit_detail';
   static const settings_settings = 'settings.settings';
   static const settings_language = 'settings.language';

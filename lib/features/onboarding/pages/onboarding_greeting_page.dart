@@ -37,20 +37,20 @@ class OnboardingGreetingPage extends StatelessWidget {
                     style: context.headlineMedium?.copyWith(
                       fontWeight: FontWeight.bold,
                     ),
-                  ),
+                  ).animate(delay: Duration(milliseconds: 300)).fadeIn(),
                 ],
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20.0) + EdgeInsets.only(top: 20),
                 child: Column(
                   children: [
-                    GreetingText(),
+                    GreetingText().animate(delay: Duration(milliseconds: 1500)).fadeIn(duration: Duration(milliseconds: 1000)),
                     SizedBox(height: 10),
                     Text(
                       LocaleKeys.onboarding_weRecommendYouToUseHabitRise.tr(),
                       style: context.titleMedium,
                       textAlign: TextAlign.center,
-                    ),
+                    ).animate(delay: Duration(milliseconds: 3500)).fadeIn(duration: Duration(milliseconds: 1000)),
                   ],
                 ),
               ),
@@ -71,7 +71,7 @@ class OnboardingGreetingPage extends StatelessWidget {
                     },
                     buttonText: LocaleKeys.onboarding_get_started.tr(),
                   ).animate().fadeIn(
-                        delay: Duration(milliseconds: 2000),
+                        delay: Duration(milliseconds: 5500),
                       ),
                 ),
               ),

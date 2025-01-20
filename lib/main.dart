@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 import 'core/constants/debug_constants.dart';
@@ -27,10 +29,12 @@ void main() async {
   await NotificationHelper.shared.initializeNotificationPlugin;
   // await NotificationHelper.shared.listScheduledNotifications();
 
-  await AppDefaultsService().initializeAppDefaults();
+  if (Platform.isAndroid) {
+    final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+    await flutterLocalNotificationsPlugin.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()?.requestNotificationsPermission();
+  }
 
-  final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-  await flutterLocalNotificationsPlugin.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()?.requestNotificationsPermission();
+  await AppDefaultsService().initializeAppDefaults();
 
   runApp(
     EasyLocalization(

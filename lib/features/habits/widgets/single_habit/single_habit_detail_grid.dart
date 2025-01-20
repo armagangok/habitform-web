@@ -87,6 +87,12 @@ class _SingleHabitDetailGridState extends State<SingleHabitDetailGrid> {
 
           final habitColor = widget.habit.colorCode;
 
+          final cardColor = isCompletedDate
+              ? Color(habitColor)
+              : isBetweenDates
+                  ? Color(habitColor).withOpacity(.1) // İki tarih arası
+                  : context.theme.cardColor;
+
           return CustomButton(
             onTap: () {
               final event = UpdateHabitForSelectedDayEvent(
@@ -99,22 +105,19 @@ class _SingleHabitDetailGridState extends State<SingleHabitDetailGrid> {
             child: Card(
               elevation: 0.1,
               surfaceTintColor: Colors.transparent,
-              shadowColor: Colors.white.withAlpha(50),
-              color: isCompletedDate
-                  ? Color(habitColor)
-                  : isBetweenDates
-                      ? Color(habitColor).withOpacity(.1) // İki tarih arası
-                      : context.theme.cardColor, // Diğer öğeler
+              shadowColor: Colors.transparent,
+
+              color: cardColor, // Diğer öğeler
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(6),
                 side: BorderSide(
-                  color: isToday ? context.primary : context.theme.dividerColor.withAlpha(50),
-                  width: isToday ? 2.5 : .5,
+                  color: context.theme.dividerColor.withAlpha(50),
                 ),
               ),
               child: SizedBox(
                 height: 24,
                 width: 24,
+                child: isToday ? Icon(CupertinoIcons.calendar_today, size: 18, color: cardColor.colorRegardingToBrightness) : null,
               ),
             ),
           );

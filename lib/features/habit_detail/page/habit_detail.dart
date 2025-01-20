@@ -1,6 +1,6 @@
-import 'package:habitrise/features/reminder/extension/easy_day.dart';
-
 import '/core/core.dart';
+import '/features/habit_detail/widget/habit_calendar_widget.dart';
+import '/features/reminder/extension/easy_day.dart';
 import '/models/models.dart';
 import '../../edit_habit/edit_habit_page.dart';
 import '../../habits/bloc/habit_bloc.dart';
@@ -130,9 +130,10 @@ class HabitDetailPage extends StatelessWidget {
                                       SingleHabitDetailGrid(habit: currentHabit),
                                       SizedBox(height: 10),
                                       Row(
-                                        mainAxisAlignment: MainAxisAlignment.end,
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         spacing: 10,
                                         children: [
+                                          HabitCalendarWidget(habit: currentHabit),
                                           CompleteTodayButton(currentHabit: currentHabit),
                                         ],
                                       ),
@@ -159,7 +160,6 @@ class HabitDetailPage extends StatelessWidget {
                             children: [
                               Expanded(
                                 child: CupertinoButton.tinted(
-                                  color: CupertinoColors.destructiveRed,
                                   sizeStyle: CupertinoButtonSize.small,
                                   padding: EdgeInsets.zero,
                                   onPressed: () {
@@ -171,14 +171,12 @@ class HabitDetailPage extends StatelessWidget {
                                       Text(
                                         LocaleKeys.common_delete.tr(),
                                         style: TextStyle(
-                                          color: CupertinoColors.destructiveRed,
                                           fontWeight: FontWeight.w500,
                                         ),
                                       ),
                                       SizedBox(width: 5),
                                       Icon(
                                         FontAwesomeIcons.solidTrashCan,
-                                        color: CupertinoColors.destructiveRed,
                                       ),
                                     ],
                                   ),
@@ -187,7 +185,6 @@ class HabitDetailPage extends StatelessWidget {
                               Expanded(
                                 child: Builder(builder: (context) {
                                   return CupertinoButton.tinted(
-                                    color: CupertinoColors.activeOrange,
                                     sizeStyle: CupertinoButtonSize.small,
                                     padding: EdgeInsets.zero,
                                     onPressed: () {
@@ -205,14 +202,12 @@ class HabitDetailPage extends StatelessWidget {
                                         Text(
                                           LocaleKeys.common_edit.tr(),
                                           style: TextStyle(
-                                            color: CupertinoColors.activeOrange,
                                             fontWeight: FontWeight.w500,
                                           ),
                                         ),
                                         SizedBox(width: 5),
                                         Icon(
                                           FontAwesomeIcons.solidPenToSquare,
-                                          color: CupertinoColors.activeOrange,
                                         ),
                                       ],
                                     ),
@@ -245,27 +240,33 @@ class HabitDetailPage extends StatelessWidget {
                 width: double.infinity,
                 child: Row(
                   children: [
-                    if (emoji != null) Text(emoji),
+                    if (emoji != null)
+                      Text(
+                        emoji,
+                        style: TextStyle(fontSize: 32),
+                      ),
                     if (emoji != null) SizedBox(width: 10),
                     Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            title,
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          if (subtitle != null && subtitle.isNotEmpty)
+                      child: Builder(builder: (context) {
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
                             Text(
-                              subtitle,
-                              style: TextStyle(
-                                color: CupertinoColors.systemGrey,
+                              title,
+                              style: context.titleMedium?.copyWith(
+                                fontWeight: FontWeight.bold,
                               ),
                             ),
-                        ],
-                      ),
+                            if (subtitle != null && subtitle.isNotEmpty)
+                              Text(
+                                subtitle,
+                                style: context.bodyMedium?.copyWith(
+                                  color: context.bodyMedium?.color?.withAlpha(180),
+                                ),
+                              ),
+                          ],
+                        );
+                      }),
                     ),
                   ],
                 ),

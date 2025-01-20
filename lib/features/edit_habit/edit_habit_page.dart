@@ -5,8 +5,9 @@ import '/core/widgets/habit_icon/cubit/habit_icon_cubit.dart';
 import '/core/widgets/habit_icon/icon_picker_sheet.dart';
 import '/models/models.dart';
 import '../../core/helpers/spacing_helper.dart';
-import '../reminder/widget/reminder_selection_widget.dart';
+import '../habits/bloc/habit_bloc.dart';
 import '../reminder/bloc/reminder/reminder_bloc.dart';
+import '../reminder/widget/reminder_selection_widget.dart';
 import 'bloc/edit_habit_bloc.dart';
 import 'provider/edit_habit_provider.dart';
 
@@ -54,95 +55,112 @@ class _EditHabitPageState extends State<EditHabitPage> {
         builder: (context) {
           return EditHabitProvider(
             habit: widget.habit,
-            child: Builder(
-              builder: (context) {
-                return CupertinoPageScaffold(
-                  navigationBar: SheetHeader(
-                    title: LocaleKeys.habit_edit_habit.tr(),
-                    closeButtonPosition: CloseButtonPosition.left,
-                    trailing: BlocConsumer<EditHabitBloc, EditHabitState>(
-                      listener: (context, state) {
-                        if (state is EditHabitSuccess) {
-                          Navigator.pop(context);
-                        }
-                        if (state is EditHabitFailure) {
-                          AppFlushbar.shared.errorFlushbar(state.error);
-                        }
-                      },
-                      builder: (context, state) {
-                        return CupertinoButton(
-                          padding: EdgeInsets.zero,
-                          onPressed: state is EditHabitLoading
-                              ? null
-                              : () {
-                                  final reminderState = context.read<ReminderBloc>().state;
-                                  final habitIconState = context.read<HabitEmojiCubit>().state;
-                                  final habitColorState = context.read<HabitColorCubit>().state;
+            child: BlocConsumer<HabitBloc, HabitState>(
+              listener: (context, state) {
+                if (state is SingleHabitsFetched) {
+                  final updatedHabit = state.habits.firstWhere(
+                    (h) => h.id == widget.habit.id,
+                    orElse: () => widget.habit,
+                  );
+                  if (updatedHabit != widget.habit) {
+                    // Update text controllers with new values
+                    _habitNameController.text = updatedHabit.habitName;
+                    _habitDescriptionController.text = updatedHabit.habitDescription ?? '';
+                  }
+                }
+              },
+              builder: (context, habitState) {
+                return Builder(
+                  builder: (context) {
+                    return CupertinoPageScaffold(
+                      navigationBar: SheetHeader(
+                        title: LocaleKeys.habit_edit_habit.tr(),
+                        closeButtonPosition: CloseButtonPosition.left,
+                        trailing: BlocConsumer<EditHabitBloc, EditHabitState>(
+                          listener: (context, state) {
+                            if (state is EditHabitSuccess) {
+                              Navigator.pop(context);
+                            }
+                            if (state is EditHabitFailure) {
+                              AppFlushbar.shared.errorFlushbar(state.error);
+                            }
+                          },
+                          builder: (context, state) {
+                            return CupertinoButton(
+                              padding: EdgeInsets.zero,
+                              onPressed: state is EditHabitLoading
+                                  ? null
+                                  : () {
+                                      final reminderState = context.read<ReminderBloc>().state;
+                                      final habitIconState = context.read<HabitEmojiCubit>().state;
+                                      final habitColorState = context.read<HabitColorCubit>().state;
 
-                                  final updatedHabit = widget.habit.copyWith(
-                                    habitName: _habitNameController.text,
-                                    habitDescription: _habitDescriptionController.text,
-                                    emoji: habitIconState.emoji ?? widget.habit.emoji,
-                                    colorCode: habitColorState.color?.value ?? widget.habit.colorCode,
-                                    reminderModel: reminderState.reminder,
-                                  );
+                                      final updatedHabit = widget.habit.copyWith(
+                                        habitName: _habitNameController.text,
+                                        habitDescription: _habitDescriptionController.text,
+                                        emoji: habitIconState.emoji ?? widget.habit.emoji,
+                                        colorCode: habitColorState.color?.value ?? widget.habit.colorCode,
+                                        reminderModel: reminderState.reminder,
+                                      );
 
-                                  context.read<EditHabitBloc>().add(UpdateEditHabitEvent(habit: updatedHabit));
-                                },
-                          child: state is EditHabitLoading
-                              ? const CupertinoActivityIndicator()
-                              : Text(
-                                  LocaleKeys.common_save.tr(),
-                                  style: context.titleMedium?.copyWith(
-                                    color: context.primary,
-                                  ),
-                                ),
-                        );
-                      },
-                    ),
-                  ),
-                  child: ListView(
-                    padding: const EdgeInsets.all(15),
-                    children: [
-                      SafeArea(
-                        bottom: false,
-                        child: Column(
-                          spacing: KSpacing.betweenListItems,
-                          children: [
-                            CustomHeader(
-                              text: LocaleKeys.habit_habit_name.tr().toUpperCase(),
-                              child: _buildHabitTextField(
-                                controller: _habitNameController,
-                              ),
-                            ),
-                            CustomHeader(
-                              text: LocaleKeys.habit_habit_description.tr().toUpperCase(),
-                              child: _buildHabitTextField(
-                                controller: _habitDescriptionController,
-                              ),
-                            ),
-                            ReminderSelectionWidget(),
-                            CustomHeader(
-                              text: LocaleKeys.common_icon.tr().toUpperCase(),
-                              child: IconPickerSheet(
-                                onIconSelected: (icon) {
-                                  context.read<HabitEmojiCubit>().pickIcon(icon);
-                                },
-                              ),
-                            ),
-                            CustomHeader(
-                              text: LocaleKeys.colors_color.tr().toUpperCase(),
-                              child: ColorPickerSheet(
-                                onColorSelected: (color) {
-                                  context.read<HabitColorCubit>().pickColor(color);
-                                },
-                              ),
-                            ),
-                          ],
+                                      context.read<EditHabitBloc>().add(UpdateEditHabitEvent(habit: updatedHabit));
+                                    },
+                              child: state is EditHabitLoading
+                                  ? const CupertinoActivityIndicator()
+                                  : Text(
+                                      LocaleKeys.common_save.tr(),
+                                      style: context.titleMedium?.copyWith(
+                                        color: context.primary,
+                                      ),
+                                    ),
+                            );
+                          },
                         ),
                       ),
-                    ],
-                  ),
+                      child: ListView(
+                        padding: const EdgeInsets.all(15),
+                        children: [
+                          SafeArea(
+                            bottom: false,
+                            child: Column(
+                              spacing: KSpacing.betweenListItems,
+                              children: [
+                                CustomHeader(
+                                  text: LocaleKeys.habit_habit_name.tr().toUpperCase(),
+                                  child: _buildHabitTextField(
+                                    controller: _habitNameController,
+                                  ),
+                                ),
+                                CustomHeader(
+                                  text: LocaleKeys.habit_habit_description.tr().toUpperCase(),
+                                  child: _buildHabitTextField(
+                                    controller: _habitDescriptionController,
+                                  ),
+                                ),
+                                ReminderSelectionWidget(),
+                                CustomHeader(
+                                  text: LocaleKeys.common_icon.tr().toUpperCase(),
+                                  child: IconPickerSheet(
+                                    onIconSelected: (icon) {
+                                      context.read<HabitEmojiCubit>().pickIcon(icon);
+                                    },
+                                  ),
+                                ),
+                                CustomHeader(
+                                  text: LocaleKeys.colors_color.tr().toUpperCase(),
+                                  child: ColorPickerSheet(
+                                    onColorSelected: (color) {
+                                      context.read<HabitColorCubit>().pickColor(color);
+                                    },
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
                 );
               },
             ),

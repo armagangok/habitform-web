@@ -41,9 +41,15 @@ class IconPickerSheetState extends State<IconPickerSheet> with SingleTickerProvi
       '🍞',
       '🥚',
       '🥛',
+      "📚", // Kitap
       "🚴‍♂️", // Bisiklet
       "🏊‍♂️", // Yüzme
       "🏃‍♂️", // Koşu
+      "🚶🏼‍➡️",
+      "🚶🏻‍➡️",
+      "🚶🏼‍♀️",
+      "🚶🏿‍➡️",
+      "🚶🏿‍♀️",
       '☕',
       '🍽️',
       '🍕',
@@ -53,6 +59,9 @@ class IconPickerSheetState extends State<IconPickerSheet> with SingleTickerProvi
       '🥤',
     ],
     LocaleKeys.iconCategories_sports.tr(): [
+      "🚶🏻‍➡️",
+      "🚶🏼‍♀️",
+      "🚶🏻‍♀️",
       "⚽", // Futbol
       "🏀", // Basketbol
       "⚾", // Beyzbol
@@ -185,7 +194,8 @@ class IconPickerSheetState extends State<IconPickerSheet> with SingleTickerProvi
       "📈",
       "📇",
     ],
-    "Art": [
+    LocaleKeys.iconCategories_art.tr(): [
+      "🎭",
       "✏️", // Kalem
       "🖌️", // Boyama
       "🖼️", // Fotoğraf
@@ -194,7 +204,13 @@ class IconPickerSheetState extends State<IconPickerSheet> with SingleTickerProvi
       "🖼️", // Sanat eseri
       "✏️", // Düzenleme
       "📷", // Fotoğrafçılık
-      "🧶", "🧵", "✍🏻", "👨🏻‍🎨",
+      "🧶",
+      "🧵",
+      "✍🏻",
+      "👨🏻‍🎨",
+      "👩🏼‍🎨",
+      "🧑🏼‍🎨",
+      "👨🏼‍🎨",
     ],
     LocaleKeys.iconCategories_studyandtask.tr(): [
       "📚", // Kitap
@@ -220,7 +236,6 @@ class IconPickerSheetState extends State<IconPickerSheet> with SingleTickerProvi
       "📅", // Tarih
       "🔔", // Alarm
       "⏱️", // Zaman
-      "",
       "📝", // Not
       "📆", // Planlama
       "🙇🏻",

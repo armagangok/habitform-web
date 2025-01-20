@@ -90,11 +90,14 @@
         "lets_gain_habit": "Let's gain a new habit",
         "habit_data": "HABIT DATA",
         "todayCompleted": "Today Completed",
-        "complete": "Complete"
+        "complete": "Complete",
+        "calendar_completion": "Calendar Completion",
+        "calendar_tap_info": "Tap on dates to mark or unmark completion"
     },
     "habit_detail": {
-        "habitDetail": "Alışkanlık Detayı",
-        "areYouSureToDeleteHabit": "Are you sure you want to delete this habit?"
+        "habitDetail": "Habit Detail",
+        "areYouSureToDeleteHabit": "Are you sure you want to delete this habit?",
+        "calendar": "Calendar"
     },
     "settings": {
         "settings": "Settings",
