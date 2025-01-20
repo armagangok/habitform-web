@@ -62,7 +62,7 @@ class OnboardingGreetingPage extends StatelessWidget {
             child: Align(
               alignment: Alignment.bottomCenter,
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                padding: const EdgeInsets.symmetric(horizontal: 30.0) + EdgeInsets.only(bottom: 10),
                 child: SizedBox(
                   width: double.infinity,
                   child: OnboardingButton(

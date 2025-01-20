@@ -1,5 +1,4 @@
 import '/core/core.dart';
-import '/core/helpers/notifications/notification_helper.dart';
 import '../../../../core/widgets/flushbar_widget.dart';
 import '../../models/days/days_enum.dart';
 import '../../models/reminder/reminder_model.dart';
@@ -39,7 +38,7 @@ class ReminderBloc extends Bloc<ReminderEvent, ReminderState> {
     try {
       if (reminder != null) {
         // Önce mevcut bildirimleri iptal et
-        await NotificationHelper.shared.cancelReminderNotifications(reminder);
+        await ReminderService.cancelReminderNotification(reminder.id);
 
         // Eğer gün ve zaman seçili ise yeni bildirimi oluştur
         if (reminder.days != null && reminder.days!.isNotEmpty && reminder.reminderTime != null) {
@@ -61,7 +60,7 @@ class ReminderBloc extends Bloc<ReminderEvent, ReminderState> {
 
     try {
       if (reminder != null) {
-        await NotificationHelper.shared.cancelReminderNotifications(reminder);
+        await ReminderService.cancelReminderNotification(reminder.id);
         // ID'yi koru ama diğer değerleri sıfırla
         final updatedReminder = reminder.copyWith(days: [], time: null);
         emit(ReminderSelectionState(reminder: updatedReminder));
@@ -75,10 +74,10 @@ class ReminderBloc extends Bloc<ReminderEvent, ReminderState> {
   Future<void> updateDays(UpdateReminderDaysEvent event, Emitter<ReminderState> emit) async {
     final currentReminder = state.reminder;
 
-    // Önce mevcut bildirimleri iptal et
-    if (currentReminder != null) {
-      await NotificationHelper.shared.cancelReminderNotifications(currentReminder);
-    }
+    // // Önce mevcut bildirimleri iptal et
+    // if (currentReminder != null) {
+    //   await NotificationHelper.shared.cancelReminderNotifications(currentReminder);
+    // }
 
     if (event.days == null || event.days!.isEmpty) {
       // Zamanı da sıfırla ama ID'yi koru
@@ -113,11 +112,6 @@ class ReminderBloc extends Bloc<ReminderEvent, ReminderState> {
 
   Future<void> updateTime(UpdateReminderTimeEvent event, Emitter<ReminderState> emit) async {
     final currentReminder = state.reminder;
-
-    // Önce mevcut bildirimleri iptal et
-    if (currentReminder != null) {
-      await NotificationHelper.shared.cancelReminderNotifications(currentReminder);
-    }
 
     if (event.time == null) {
       // Günleri de sıfırla ama ID'yi koru

@@ -12,7 +12,10 @@
         "days": "DAYS",
         "version": "1.0.0",
         "made_by": "Made with ☕️ and ❤️ by Armağan Gök",
-        "icon": "Icon"
+        "icon": "Icon",
+        "warning": "Warning",
+        "error": "Error",
+        "Information": "Information"
     },
     "colors": {
         "color": "Color",

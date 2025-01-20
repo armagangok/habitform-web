@@ -21,9 +21,9 @@ class SelectionButtons extends StatelessWidget {
             sizeStyle: CupertinoButtonSize.small,
             borderRadius: BorderRadius.circular(8),
             onPressed: () {
-              context.read<DaySelectionCubit>().selectAll(context);
-              context.read<ReminderBloc>().add(UpdateReminderDaysEvent(days: allDays.toList()));
+              context.read<DaySelectionCubit>().selectAll();
               context.read<RemindTimeCubit>().updateTime(DateTime.now().copyWith(hour: 12, minute: 0));
+              context.read<ReminderBloc>().add(UpdateReminderDaysEvent(days: allDays.toList()));
             },
             child: Text(
               LocaleKeys.reminder_select_all.tr(),
@@ -36,9 +36,10 @@ class SelectionButtons extends StatelessWidget {
               sizeStyle: CupertinoButtonSize.small,
               borderRadius: BorderRadius.circular(8),
               onPressed: () {
-                context.read<DaySelectionCubit>().deselectAll(context);
+                context.read<DaySelectionCubit>().deselectAll();
                 context.read<PickerExtendCubit>().setValue(false);
                 context.read<RemindTimeCubit>().updateTime(null);
+                context.read<ReminderBloc>().add(UpdateReminderDaysEvent(days: null));
               },
               child: Text(
                 LocaleKeys.reminder_deselect_all.tr(),

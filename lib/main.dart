@@ -1,3 +1,5 @@
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+
 import 'core/constants/debug_constants.dart';
 import 'core/core.dart';
 import 'core/helpers/notifications/notification_helper.dart';
@@ -23,8 +25,12 @@ void main() async {
   await PurchaseService.configureSDK();
   await TimeZoneHelper.initializeTimeZone();
   await NotificationHelper.shared.initializeNotificationPlugin;
+  // await NotificationHelper.shared.listScheduledNotifications();
 
   await AppDefaultsService().initializeAppDefaults();
+
+  final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+  await flutterLocalNotificationsPlugin.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()?.requestNotificationsPermission();
 
   runApp(
     EasyLocalization(

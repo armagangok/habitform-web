@@ -12,7 +12,10 @@
         "days": "GÜNLER",
         "version": "1.0.0",
         "made_by": "☕️ ve ❤️ ile Armağan Gök tarafından yapıldı",
-        "icon": "İkon"
+        "icon": "İkon",
+        "warning": "Uyarı",
+        "error": "Hata",
+        "Information":"Bilgilendirme"
     },
     "colors": {
         "color": "Renk",

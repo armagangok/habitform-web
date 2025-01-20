@@ -16,7 +16,7 @@ final class AppFlushbar {
         size: 42,
       ),
       titleText: Text(
-        "Error",
+        LocaleKeys.errors.tr(),
         textAlign: TextAlign.left,
         style: context?.titleLarge,
       ),
@@ -38,7 +38,7 @@ final class AppFlushbar {
     return Flushbar(
       backgroundColor: context?.theme.scaffoldBackgroundColor.withAlpha(10) ?? Colors.transparent,
       titleText: Text(
-        "Warning",
+        LocaleKeys.common_warning.tr(),
         textAlign: TextAlign.left,
         style: context?.titleLarge,
       ),
@@ -60,7 +60,7 @@ final class AppFlushbar {
     return Flushbar(
       backgroundColor: context?.theme.scaffoldBackgroundColor.withAlpha(10) ?? Colors.transparent,
       titleText: Text(
-        "Information",
+        LocaleKeys.common_Information.tr(),
         style: context?.titleLarge,
         textAlign: TextAlign.left,
       ),

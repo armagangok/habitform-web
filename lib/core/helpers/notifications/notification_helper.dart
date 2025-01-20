@@ -23,9 +23,9 @@ final class NotificationHelper {
       const initializationSettings = InitializationSettings(android: android, iOS: iOS, macOS: iOS);
 
       const AndroidNotificationChannel channel = AndroidNotificationChannel(
-        'HabitRise_Reminder', // Channel ID
+        'HabitRise_Habit_Reminder', // Channel ID
         'Habit Reminder', // Channel Name
-        description: 'Channel for reminder notifications',
+        description: 'Channel for habit reminder notifications',
         importance: Importance.high,
       );
 
@@ -37,10 +37,6 @@ final class NotificationHelper {
     }
   }
 
-  void cancelNotificationWithId(int id) async {
-    await _notificationPlugin.cancel(id);
-  }
-
   Future<void> scheduleReminderNotification(
     int id,
     String title,
@@ -50,12 +46,12 @@ final class NotificationHelper {
   ) async {
     // Android-specific details
     final AndroidNotificationDetails androidNotificationDetails = AndroidNotificationDetails(
-      'HabitRise_Reminder_Channel',
-      'HabitRise Reminder',
+      'HabitRise_Habit_Reminder',
+      'Habit Reminder',
       channelDescription: 'Channel for habit reminder notifications',
       importance: Importance.high,
       priority: Priority.high,
-      color: Colors.deepOrangeAccent.shade400,
+      color: Colors.orange.shade600,
     );
 
     final NotificationDetails notificationDetails = NotificationDetails(
@@ -121,28 +117,31 @@ final class NotificationHelper {
 
   /// Cancels all notifications for a given reminder
   Future<void> cancelReminderNotifications(ReminderModel reminder) async {
+    
     // Önce temel reminder ID'si ile bildirimi iptal et
-    cancelNotificationWithId(reminder.id);
+    await _notificationPlugin.cancel(reminder.id);
 
     // Tüm olası günler için bildirimleri iptal et
     for (final day in Days.values) {
-      cancelNotificationWithId(reminder.id + day.index);
+      await _notificationPlugin.cancel(reminder.id + day.index);
     }
   }
 
   Future<void> listScheduledNotifications() async {
-    final List<PendingNotificationRequest> pendingNotifications = await _notificationPlugin.pendingNotificationRequests();
+    try {
+      final List<PendingNotificationRequest> pendingNotifications = await _notificationPlugin.pendingNotificationRequests();
 
-    int index = 0;
-    for (var notification in pendingNotifications) {
-      print("${index++}" ".Notifitication");
-      print('Notification ID: ${notification.id}');
-      print('Notification Title: ${notification.title}');
-      print('Notification Body: ${notification.body}');
-      print('Payload: ${notification.payload}');
-      print("--------------------------------------------------");
+      int index = 0;
+      for (var notification in pendingNotifications) {
+        print("${index++}" ".Notifitication");
+        print('Notification ID: ${notification.id}');
+        print('Notification Title: ${notification.title}');
+        print('Notification Body: ${notification.body}');
+        print('Payload: ${notification.payload}');
+        print("--------------------------------------------------");
+      }
+    } catch (e) {
+      LogHelper.shared.debugPrint('$e');
     }
   }
-
-
 }
