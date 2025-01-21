@@ -25,13 +25,17 @@ class WeeklyHabitGrid extends StatefulWidget {
   State<WeeklyHabitGrid> createState() => _WeeklyHabitGridState();
 }
 
-class _WeeklyHabitGridState extends State<WeeklyHabitGrid> {
+class _WeeklyHabitGridState extends State<WeeklyHabitGrid> with SingleTickerProviderStateMixin {
   final List<Last7DaysModel> last7Days = [];
   late Habit currentHabit;
+
+  late final AnimationController _animationController;
 
   @override
   void initState() {
     super.initState();
+
+    _animationController = AnimationController(vsync: this);
     currentHabit = widget.habit;
     // Initialize habits for the last 6 days and today
     DateTime today = DateTime.now();
@@ -45,6 +49,12 @@ class _WeeklyHabitGridState extends State<WeeklyHabitGrid> {
         ),
       );
     }
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
   }
 
   @override
@@ -105,75 +115,69 @@ class _WeeklyHabitGridState extends State<WeeklyHabitGrid> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.end,
             spacing: 0,
-            children: List.generate(last7Days.length, (index) {
-              final day = last7Days[index].day;
-              final dateTimeIn7Days = last7Days[index].dateTime;
+            children: List.generate(
+              last7Days.length,
+              (index) {
+                // final day = last7Days[index].day;
+                final dateTimeIn7Days = last7Days[index].dateTime;
 
-              final isToday = dateTimeIn7Days.isToday;
-              bool isCompletedDate = false;
+                // final isToday = dateTimeIn7Days.isToday;
+                bool isCompletedDate = false;
 
-              final completionDates = currentHabit.completionDates;
+                final completionDates = currentHabit.completionDates;
 
-              if (completionDates != null && completionDates.isNotEmpty) {
-                isCompletedDate = completionDates.any((d) => d.isSameDayWith(dateTimeIn7Days));
-              }
+                if (completionDates != null && completionDates.isNotEmpty) {
+                  isCompletedDate = completionDates.any((d) => d.isSameDayWith(dateTimeIn7Days));
+                }
 
-              return CupertinoButton(
-                padding: EdgeInsets.zero,
-                minSize: 0,
-                onPressed: () {
-                  LogHelper.shared.debugPrint('Tapped on date: $dateTimeIn7Days');
-                  LogHelper.shared.debugPrint('Current completion status: $isCompletedDate');
-
-                  final event = UpdateHabitForSelectedDayEvent(
-                    dateToSaveOrRemove: dateTimeIn7Days,
-                    habit: currentHabit,
-                  );
-                  context.read<HabitBloc>().add(event);
-                },
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Card(
-                      margin: EdgeInsets.zero,
-                      shape: RoundedRectangleBorder(
-                        side: BorderSide(
-                          color: isToday ? context.primary : Colors.transparent,
-                          width: 2,
+                return CupertinoButton(
+                  padding: EdgeInsets.zero,
+                  minSize: 0,
+                  onPressed: null,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Card(
+                        margin: EdgeInsets.zero,
+                        shape: RoundedRectangleBorder(
+                          side: BorderSide(
+                            color: context.primary.withAlpha(100),
+                            width: .25,
+                          ),
+                          borderRadius: BorderRadius.circular(5),
                         ),
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                      color: isCompletedDate ? Color(habitColor) : null,
-                      child: FittedBox(
-                        child: SizedBox(
-                          width: 32,
-                          height: 32,
-                          child: isCompletedDate
-                              ? Center(
-                                  child: Text(
-                                    emoji ?? "",
-                                    style: TextStyle(fontSize: 22),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                )
-                              : null,
+                        color: isCompletedDate ? Color(habitColor) : null,
+                        child: FittedBox(
+                          child: SizedBox(
+                            width: 32,
+                            height: 32,
+                            child: isCompletedDate
+                                ? Center(
+                                    child: Text(
+                                      emoji ?? "",
+                                      style: TextStyle(fontSize: 22),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  )
+                                : null,
+                          ),
                         ),
                       ),
-                    ),
-                    SizedBox(height: 2),
-                    Text(
-                      day.getDayName,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      textAlign: TextAlign.center,
-                      style: context.bodySmall?.copyWith(fontSize: 11),
-                    ),
-                  ],
-                ),
-              );
-            }),
+                      // SizedBox(height: 2),
+                      // Text(
+                      //   day.getDayName,
+                      //   maxLines: 1,
+                      //   overflow: TextOverflow.ellipsis,
+                      //   textAlign: TextAlign.center,
+                      //   style: context.bodySmall?.copyWith(fontSize: 11),
+                      // ),
+                    ],
+                  ),
+                ).animate(controller: _animationController).fadeIn(duration: Duration(milliseconds: 750));
+              },
+            ),
           ),
         );
       },

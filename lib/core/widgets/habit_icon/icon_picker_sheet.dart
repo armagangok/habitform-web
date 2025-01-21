@@ -397,7 +397,7 @@ class IconPickerSheetState extends State<IconPickerSheet> with SingleTickerProvi
                     },
                     child: Card(
                       elevation: .25,
-                      color: index == selectedIconIndex ? context.primary : null,
+                      color: index == selectedIconIndex ? context.primary.withAlpha(100) : null,
                       child: Padding(
                         padding: const EdgeInsets.all(2.5),
                         child: Center(

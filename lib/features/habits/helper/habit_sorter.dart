@@ -5,13 +5,14 @@ void sortHabitsByReminderTime(List<Habit> habits) {
     final timeA = a.reminderModel?.reminderTime;
     final timeB = b.reminderModel?.reminderTime;
 
-    if (timeA == null && timeB == null) return 0; // İkisi de null ise eşit
-    if (timeA == null) return 1; // Null olanlar sona gider
+    if (timeA == null && timeB == null) return 0; // Both null, consider equal
+    if (timeA == null) return 1; // Null values go to the end
     if (timeB == null) return -1;
 
-    final parsedTimeA = timeA;
-    final parsedTimeB = timeB;
+    // Compare only the time part (hours and minutes)
+    final timeAMinutes = timeA.hour * 60 + timeA.minute;
+    final timeBMinutes = timeB.hour * 60 + timeB.minute;
 
-    return parsedTimeA.compareTo(parsedTimeB);
+    return timeAMinutes.compareTo(timeBMinutes);
   });
 }

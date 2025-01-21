@@ -108,7 +108,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
           create: (_) => ThemeBloc(),
         ),
         BlocProvider(
-          create: (_) => HabitBloc(habitService: SingleHabitService()),
+          create: (_) => HabitBloc(habitService: HabitService()),
         ),
         BlocProvider(create: (context) => PaywallBloc()),
         BlocProvider(

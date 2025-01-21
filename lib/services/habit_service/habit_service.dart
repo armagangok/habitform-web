@@ -2,7 +2,7 @@ import '../../core/core.dart';
 import '../../models/models.dart';
 import 'i_habit_service.dart';
 
-class SingleHabitService extends IHabitService {
+class HabitService extends IHabitService {
   @override
   Future<void> addData(Habit habit) async {
     LogHelper.shared.debugPrint('Adding habit: $habit');

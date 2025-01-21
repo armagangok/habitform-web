@@ -62,7 +62,7 @@ class SingleHabitBuilder extends StatelessWidget {
               itemBuilder: (context, index) {
                 final habit = habits[index];
                 final habitIcon = habit.emoji;
-                final reminderTime = habit.reminderModel?.reminderTime;
+                // final reminderTime = habit.reminderModel?.reminderTime;
                 final habitDescription = habit.habitDescription;
 
                 return Column(
@@ -122,12 +122,7 @@ class SingleHabitBuilder extends StatelessWidget {
                                     ),
                                   ),
                                   SizedBox(width: 10),
-                                  if (reminderTime != null)
-                                    Text(
-                                      reminderTime.toHHMM(),
-                                      style: context.bodySmall,
-                                      textAlign: TextAlign.end,
-                                    ),
+                                  CompleteTodayButton(currentHabit: habit),
                                 ],
                               );
                             },
@@ -137,14 +132,19 @@ class SingleHabitBuilder extends StatelessWidget {
                         ],
                       ),
                     ),
-                    SizedBox(height: 5),
-                    CompleteTodayButton(currentHabit: habit),
+                    // SizedBox(height: 5),
+                    // if (reminderTime != null)
+                    //   Text(
+                    //     reminderTime.toHHMM(),
+                    //     style: context.bodySmall,
+                    //     textAlign: TextAlign.end,
+                    //   ),
                   ],
                 );
               },
               separatorBuilder: (context, index) {
                 return Padding(
-                  padding: EdgeInsets.symmetric(vertical: 15),
+                  padding: EdgeInsets.symmetric(vertical: 20),
                 );
               },
             ),

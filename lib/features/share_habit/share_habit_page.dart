@@ -74,7 +74,7 @@ class _ShareHabitPageState extends State<ShareHabitPage> {
     return CupertinoPageScaffold(
       navigationBar: SheetHeader(
         closeButtonPosition: CloseButtonPosition.left,
-        title: LocaleKeys.share_share_text.tr(),
+        title: LocaleKeys.share_share.tr(),
       ),
       child: Stack(
         children: [

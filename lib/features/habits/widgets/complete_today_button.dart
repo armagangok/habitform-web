@@ -61,74 +61,54 @@ class _CompleteTodayButtonState extends State<CompleteTodayButton> with TickerPr
         final habitColor = Color(currentHabit.colorCode);
         final isCompletedToday = currentHabit.isCompletedToday;
 
-        return isCompletedToday
-            ? CupertinoButton(
-                key: const ValueKey('completed'),
-                sizeStyle: CupertinoButtonSize.small,
-                color: habitColor,
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                onPressed: () {
-                  controller1.forward(from: 0);
-                  controller2.forward(from: 0);
+        if (isCompletedToday) {
+          return CupertinoButton(
+            key: const ValueKey('completed'),
+            color: habitColor,
+            padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+            minSize: 0,
+            borderRadius: BorderRadius.circular(8),
+            onPressed: () {
+              controller1.forward(from: 0);
+              controller2.forward(from: 0);
 
-                  final event = UpdateHabitForSelectedDayEvent(
-                    dateToSaveOrRemove: DateTime.now(),
-                    habit: currentHabit,
-                  );
-                  context.read<HabitBloc>().add(event);
-                },
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      LocaleKeys.habit_todayCompleted.tr(),
-                      style: TextStyle(
-                        color: habitColor.colorRegardingToBrightness,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    const SizedBox(width: 5),
-                    Icon(
-                      CupertinoIcons.checkmark_alt,
-                      color: habitColor.colorRegardingToBrightness,
-                    ),
-                  ],
-                ),
-              ).animate(controller: controller1).fadeIn(duration: 400.ms)
-            : CupertinoButton.tinted(
-                sizeStyle: CupertinoButtonSize.small,
-                key: const ValueKey('uncompleted'),
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                color: habitColor,
-                onPressed: () {
-                  controller1.forward(from: 0);
-                  controller2.forward(from: 0);
+              final event = UpdateHabitForSelectedDayEvent(
+                dateToSaveOrRemove: DateTime.now(),
+                habit: currentHabit,
+              );
+              context.read<HabitBloc>().add(event);
+            },
+            child: Icon(
+              CupertinoIcons.checkmark_circle,
+              color: habitColor.colorRegardingToBrightness,
+              size: 24,
+            ),
+          ).animate(controller: controller1).fadeIn(duration: 500.ms);
+        } else {
+          return CupertinoButton.tinted(
+            key: const ValueKey('uncompleted'),
+            padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+            minSize: 0,
+            borderRadius: BorderRadius.circular(8),
+            color: habitColor,
+            onPressed: () {
+              controller1.forward(from: 0);
+              controller2.forward(from: 0);
 
-                  final event = UpdateHabitForSelectedDayEvent(
-                    dateToSaveOrRemove: DateTime.now(),
-                    habit: currentHabit,
-                  );
+              final event = UpdateHabitForSelectedDayEvent(
+                dateToSaveOrRemove: DateTime.now(),
+                habit: currentHabit,
+              );
 
-                  context.read<HabitBloc>().add(event);
-                },
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      LocaleKeys.habit_complete.tr(),
-                      style: TextStyle(
-                        color: habitColor,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    const SizedBox(width: 5),
-                    Icon(
-                      CupertinoIcons.calendar_today,
-                      color: habitColor,
-                    ),
-                  ],
-                ),
-              ).animate(controller: controller1).fadeIn();
+              context.read<HabitBloc>().add(event);
+            },
+            child: Icon(
+              CupertinoIcons.circle,
+              size: 24,
+              color: habitColor,
+            ),
+          ).animate(controller: controller1).fadeIn(duration: 500.ms);
+        }
       },
     );
   }

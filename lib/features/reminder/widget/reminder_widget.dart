@@ -1,11 +1,10 @@
-import 'package:habitrise/features/reminder/widget/select_time_item.dart';
-
 import '/core/core.dart';
 import '../bloc/picker_extend/picker_extend_cubit.dart';
 import '../bloc/remind_time/remind_time_cubit.dart';
 import '../bloc/reminder/reminder_bloc.dart';
 import '../provider/reminder_provider.dart';
 import 'days_grid_view.dart';
+import 'select_time_item.dart';
 import 'selection_buttons.dart';
 
 class ReminderPage extends StatelessWidget {

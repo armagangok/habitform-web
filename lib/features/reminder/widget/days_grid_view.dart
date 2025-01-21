@@ -57,7 +57,9 @@ class _DaysGridViewBuilderState extends State<DaysGridViewBuilder> {
                     width: .75,
                   ),
                 ),
-                color: isSelected ? context.primary : context.cupertinoTheme.scaffoldBackgroundColor,
+                elevation: 0,
+                surfaceTintColor: Colors.transparent,
+                color: isSelected ? CupertinoColors.activeBlue : null,
                 child: Padding(
                   padding: const EdgeInsets.all(1),
                   child: Center(

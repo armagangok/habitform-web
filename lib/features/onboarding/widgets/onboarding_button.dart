@@ -17,9 +17,10 @@ class OnboardingButton extends StatefulWidget {
 class _OnboardingButtonState extends State<OnboardingButton> {
   @override
   Widget build(BuildContext context) {
-    return CupertinoButton.filled(
+    return CupertinoButton(
       borderRadius: BorderRadius.circular(90),
       sizeStyle: CupertinoButtonSize.large,
+      color: Colors.deepOrange,
       onPressed: widget.onPressed,
       child: Text(
         widget.buttonText,
