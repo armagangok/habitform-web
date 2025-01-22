@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 import 'core/constants/debug_constants.dart';
@@ -23,6 +24,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
   await HiveHelper.shared.initializeHive();
+  await dotenv.load(fileName: ".env");
 
   await PurchaseService.configureSDK();
   await TimeZoneHelper.initializeTimeZone();
@@ -35,6 +37,8 @@ void main() async {
   }
 
   await AppDefaultsService().initializeAppDefaults();
+
+  
 
   runApp(
     EasyLocalization(

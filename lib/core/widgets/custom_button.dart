@@ -1,5 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
+
+import '../core.dart';
 
 class CustomButton extends StatelessWidget {
   const CustomButton({

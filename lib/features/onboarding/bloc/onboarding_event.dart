@@ -23,12 +23,12 @@ class CompleteOnboardingEvent extends OnboardingEvent {}
 
 class CheckFirstLaunchEvent extends OnboardingEvent {}
 
-class GetHabitRiseProEvent extends OnboardingEvent {
-  final BuildContext context;
+// class GetHabitRiseProEvent extends OnboardingEvent {
+//   final BuildContext context;
 
-  GetHabitRiseProEvent({required this.context});
-}
+//   GetHabitRiseProEvent({required this.context});
+// }
 
-class GenerateHabitTemplateEvent extends OnboardingEvent {}
+// class GenerateHabitTemplateEvent extends OnboardingEvent {}
 
-class GoToHomePageEvent extends OnboardingEvent {}
+// class GoToHomePageEvent extends OnboardingEvent {}

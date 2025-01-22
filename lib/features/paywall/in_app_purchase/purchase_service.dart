@@ -1,9 +1,9 @@
 import 'dart:io';
 
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 
 import '../../../core/core.dart';
-import 'constants.dart';
 import 'store_config.dart';
 
 final class PurchaseService {
@@ -42,17 +42,23 @@ final class PurchaseService {
   static Future<void> configureSDK() async {
     try {
       if (Platform.isIOS || Platform.isMacOS) {
-        StoreConfig(
-          store: Store.appStore,
-          apiKey: appleApiKey,
-        );
+        final key = dotenv.env['appleApiKey'];
+        if (key != null) {
+          StoreConfig(
+            store: Store.appStore,
+            apiKey: key,
+          );
+        }
       } else if (Platform.isAndroid) {
         // Run the app passing --dart-define=AMAZON=true
-        const useAmazon = bool.fromEnvironment("amazon");
-        StoreConfig(
-          store: useAmazon ? Store.amazon : Store.playStore,
-          apiKey: useAmazon ? amazonApiKey : googleApiKey,
-        );
+        // const useAmazon = bool.fromEnvironment("amazon");
+        final key = dotenv.env['googleApiKey'];
+        if (key != null) {
+          StoreConfig(
+            store: Store.playStore,
+            apiKey: key,
+          );
+        }
       }
 
       // Enable debug logs before calling `configure`.

@@ -83,7 +83,7 @@ class _CompleteTodayButtonState extends State<CompleteTodayButton> with TickerPr
               color: habitColor.colorRegardingToBrightness,
               size: 24,
             ),
-          ).animate(controller: controller1).fadeIn(duration: 500.ms);
+          ).animate(controller: controller1).scale(duration: 350.ms);
         } else {
           return CupertinoButton.tinted(
             key: const ValueKey('uncompleted'),
@@ -107,7 +107,7 @@ class _CompleteTodayButtonState extends State<CompleteTodayButton> with TickerPr
               size: 24,
               color: habitColor,
             ),
-          ).animate(controller: controller1).fadeIn(duration: 500.ms);
+          ).animate(controller: controller1).scale(duration: 350.ms);
         }
       },
     );

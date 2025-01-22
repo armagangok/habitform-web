@@ -16,6 +16,7 @@ class SettingLeadingWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       color: cardColor,
       child: Padding(
         padding: EdgeInsets.all(padding),

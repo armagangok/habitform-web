@@ -23,6 +23,10 @@ class PaywallBloc extends Bloc<PaywallEvent, PaywallState> {
       final offerings = await PurchaseService.fetchOffers;
       final isSubscriptionActive = _checkSubscriptionStatus(customerInfo);
 
+      LogHelper.shared.debugPrint('$customerInfo');
+      LogHelper.shared.debugPrint('$offerings');
+      LogHelper.shared.debugPrint('$isSubscriptionActive');
+
       if (KDebug.purchaseDebugMode) {
         emit(PaywallLoaded(
           offerings: offerings,
@@ -108,7 +112,9 @@ class PaywallBloc extends Bloc<PaywallEvent, PaywallState> {
     } on PlatformException catch (e, s) {
       AppFlushbar.shared.errorFlushbar(e.message ?? "LocaleKeys.pleaseTryAgainLater.tr()");
       LogHelper.shared.debugPrint('$e\n$s');
-      emit(currentState.copyWith(isRestoring: false));
+
+      final updatedState = currentState.copyWith(isRestoring: false);
+      emit(updatedState);
     }
   }
 

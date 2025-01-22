@@ -11,12 +11,8 @@ final class AppFlushbar {
   Flushbar<dynamic> errorFlushbar(String message) {
     return Flushbar(
       backgroundColor: context?.theme.scaffoldBackgroundColor.withAlpha(10) ?? Colors.transparent,
-      icon: Icon(
-        CupertinoIcons.exclamationmark_circle_fill,
-        size: 42,
-      ),
       titleText: Text(
-        LocaleKeys.errors.tr(),
+        LocaleKeys.common_error.tr(),
         textAlign: TextAlign.left,
         style: context?.titleLarge,
       ),

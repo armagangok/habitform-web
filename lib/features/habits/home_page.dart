@@ -39,9 +39,6 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   }
 
   Future<void> _checkPaywall() async {
-    // Initialize paywall and show if needed
-    context.read<PaywallBloc>().add(InitializePaywallEvent());
-
     // Listen for paywall state changes
     final paywallState = context.read<PaywallBloc>().state;
     if (paywallState is PaywallLoaded && !paywallState.isSubscriptionActive) {

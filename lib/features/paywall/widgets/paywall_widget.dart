@@ -3,7 +3,6 @@ import 'package:purchases_flutter/purchases_flutter.dart';
 
 import '/core/core.dart' hide LocaleKeys;
 import '/core/widgets/blur_widget.dart';
-import '/core/widgets/body_text.dart';
 import '/core/widgets/setting_leading.dart';
 import '../../../core/helpers/url_laucher/url_launcher.dart';
 import '../../translation/constants/locale_keys.g.dart';
@@ -18,126 +17,149 @@ class PaywallWidget extends StatefulWidget {
 }
 
 class _PaywallWidgetState extends State<PaywallWidget> with SingleTickerProviderStateMixin {
-  int selectedIndex = 1;
+  int selectedIndex = 2;
   late Package selectedPackage;
 
   final List<FeatureModel> featureList = [
     FeatureModel(
-      "LocaleKeys.infiniteTasks.tr()",
-      CupertinoIcons.square_list_fill,
-      "LocaleKeys.createUnlimitedPomodoroTasksToManage.tr()",
-      Colors.blue.shade600,
+      LocaleKeys.subscription_unlimitiedHabits.tr(),
+      CupertinoIcons.square_grid_3x2_fill,
+      LocaleKeys.subscription_unlimitiedHabitsDescription.tr(),
+      Colors.blue,
     ),
     FeatureModel(
-      "LocaleKeys.infiniteProjects.tr()",
+      LocaleKeys.subscription_unlimitiedCustomization.tr(),
       CupertinoIcons.folder_fill_badge_plus,
-      "LocaleKeys.organizeYourTasksUnderUnlimited.tr()",
-      Colors.red.shade600,
+      LocaleKeys.subscription_unlimitiedCustomizationDescription.tr(),
+      Colors.red,
     ),
     FeatureModel(
-      "LocaleKeys.statistics.tr()",
+      LocaleKeys.subscription_noBoringAds.tr(),
       CupertinoIcons.graph_square_fill,
-      "LocaleKeys.trackYourProgressWithDetailedPomodoro.tr()",
-      Colors.orange.shade600,
+      LocaleKeys.subscription_noBoringAdsDescription.tr(),
+      Colors.orange,
+    ),
+    FeatureModel(
+      LocaleKeys.subscription_alwaysUpToDate.tr(),
+      CupertinoIcons.graph_square_fill,
+      LocaleKeys.subscription_alwaysUpToDateDescription.tr(),
+      Colors.cyan,
+    ),
+    FeatureModel(
+      LocaleKeys.subscription_upcomingFeatures.tr(),
+      CupertinoIcons.timelapse,
+      LocaleKeys.subscription_upcomingFeaturesDescription.tr(),
+      Colors.green,
+    ),
+    FeatureModel(
+      LocaleKeys.subscription_supportAnIndieDev.tr(),
+      CupertinoIcons.heart_fill,
+      LocaleKeys.subscription_supportAnIndieDevDescription.tr(),
+      Colors.pinkAccent,
     ),
   ];
 
   @override
   void initState() {
     super.initState();
+
     context.read<PaywallBloc>().add(InitializePaywallEvent());
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<PaywallBloc, PaywallState>(
-      builder: (context, state) {
-        if (state is PaywallLoading) {
-          return Center(child: CupertinoActivityIndicator());
-        }
-
-        if (state is PaywallLoaded) {
-          final availablePackages = state.offerings?.current?.availablePackages;
-          if (availablePackages != null && availablePackages.isNotEmpty) {
-            selectedPackage = availablePackages.last;
-            selectedIndex = availablePackages.indexOf(availablePackages.last);
+    return Material(
+      child: BlocBuilder<PaywallBloc, PaywallState>(
+        builder: (context, state) {
+          if (state is PaywallLoading) {
+            return Center(child: CupertinoActivityIndicator());
           }
 
-          return CupertinoPageScaffold(
-            navigationBar: _navBar(context),
-            child: Stack(
-              children: [
-                SizedBox(
-                  width: double.infinity,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                    child: ListView(
-                      children: [
-                        SizedBox(height: 20),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                          child: BodySmall(text: "LocaleKeys.accessAllTheAdvantages.tr()"),
-                        ),
-                        SizedBox(height: 8),
-                        _productSection(state),
-                        SizedBox(height: 40),
-                        Text(
-                          "LocaleKeys.whatYouWillUnlock.tr()",
-                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                fontWeight: FontWeight.bold,
-                              ),
-                          textAlign: TextAlign.start,
-                        ),
-                        SizedBox(height: 10),
-                        ListView.builder(
-                          physics: ClampingScrollPhysics(),
-                          itemCount: featureList.length,
-                          shrinkWrap: true,
-                          itemBuilder: (context, index) {
-                            final feature = featureList[index];
-                            return CupertinoListTile(
-                              padding: EdgeInsets.only(bottom: 15, right: 15),
-                              leadingSize: 40,
-                              leading: SettingLeadingWidget(
-                                cardColor: feature.color.withAlpha((0.8 * 255).toInt()),
-                                padding: 6,
-                                iconData: feature.widget,
-                              ),
-                              title: Text(
-                                feature.name,
-                                style: TextStyle(
-                                  color: feature.color,
-                                  fontWeight: FontWeight.w600,
+          if (state is PaywallLoaded) {
+            final availablePackages = state.offerings?.current?.availablePackages;
+            if (availablePackages != null && availablePackages.isNotEmpty) {
+              selectedPackage = availablePackages.last;
+              // selectedIndex = availablePackages.indexOf(availablePackages.last);
+            }
+
+            return CupertinoPageScaffold(
+              navigationBar: _navBar(context),
+              child: Stack(
+                children: [
+                  SizedBox(
+                    width: double.infinity,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                      child: ListView(
+                        children: [
+                          SizedBox(height: 20),
+                          // Padding(
+                          //   padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                          //   child: BodySmall(text: "LocaleKeys.accessAllTheAdvantages.tr()"),
+                          // ),
+                          // SizedBox(height: 8),
+                          _productSection(state),
+                          SizedBox(height: 40),
+                          Text(
+                            LocaleKeys.subscription_whatYouWillUnlock.tr(),
+                            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                  fontWeight: FontWeight.bold,
                                 ),
-                              ),
-                              subtitle: Text(
-                                feature.description,
-                                maxLines: 3,
-                              ),
-                            );
-                          },
-                        ),
-                        SizedBox(height: 160),
-                      ],
+                            textAlign: TextAlign.start,
+                          ),
+                          SizedBox(height: 10),
+                          ListView.builder(
+                            physics: ClampingScrollPhysics(),
+                            itemCount: featureList.length,
+                            shrinkWrap: true,
+                            itemBuilder: (context, index) {
+                              final feature = featureList[index];
+
+                              return CupertinoListTile(
+                                padding: EdgeInsets.only(bottom: 15, right: 15),
+                                leadingSize: 40,
+                                leading: SettingLeadingWidget(
+                                  cardColor: feature.color.withAlpha((0.34 * 255).toInt()),
+                                  padding: 7,
+                                  iconData: feature.widget,
+                                ),
+                                title: Text(
+                                  feature.name,
+                                  style: TextStyle(
+                                    color: feature.color,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                                subtitle: Text(
+                                  feature.description,
+                                  maxLines: 3,
+                                ),
+                              );
+                            },
+                          ),
+                          SizedBox(height: 160),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-                _continueButton(state),
-              ],
-            ),
-          );
-        }
+                  _continueButton(state),
+                ],
+              ),
+            );
+          }
 
-        if (state is PaywallError) {
-          return Center(child: Text(state.message));
-        }
+          if (state is PaywallError) {
+            return Center(child: Text(state.message));
+          }
 
-        return SizedBox.shrink();
-      },
+          return SizedBox.shrink();
+        },
+      ),
     );
   }
 
   CupertinoNavigationBar _navBar(BuildContext context) {
+    
     return CupertinoNavigationBar(
       backgroundColor: Colors.transparent,
       automaticallyImplyLeading: false,
@@ -208,128 +230,221 @@ class _PaywallWidgetState extends State<PaywallWidget> with SingleTickerProvider
     );
   }
 
-  Widget _continueButton(PaywallLoaded state) {
-    return Align(
-      alignment: Alignment.bottomCenter,
-      child: CustomBlurWidget(
-        blurValue: 20,
-        child: SafeArea(
-          top: false,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              SizedBox(height: 10),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 10.0),
-                child: CupertinoButton(
-                  padding: EdgeInsets.zero,
-                  onPressed: state.isPurchasing
-                      ? null
-                      : () async {
-                          HapticFeedback.heavyImpact();
-                          context.read<PaywallBloc>().add(
-                                PurchaseProductEvent(selectedPackage: selectedPackage),
-                              );
-                        },
-                  child: SizedBox(
-                    width: double.infinity,
-                    child: Card(
-                      color: context.primary,
-                      child: Padding(
-                        padding: const EdgeInsets.all(12.0),
-                        child: Center(
-                          child: state.isPurchasing
-                              ? CupertinoActivityIndicator(color: Colors.white)
-                              : Text(
-                                  "LocaleKeys.common_continue.tr()",
-                                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+  Widget _continueButton(PaywallState paywallState) {
+    if (paywallState is PaywallLoaded) {
+      final purchaseLoading = paywallState.isPurchasing;
+      return Align(
+        alignment: Alignment.bottomCenter,
+        child: CustomBlurWidget(
+          blurValue: 20,
+          child: SafeArea(
+            top: false,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SizedBox(height: 10),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 10.0),
+                  child: CupertinoButton(
+                    padding: EdgeInsets.zero,
+                    onPressed: purchaseLoading
+                        ? null
+                        : () async {
+                            HapticFeedback.heavyImpact();
+                            context.read<PaywallBloc>().add(PurchaseProductEvent(selectedPackage: selectedPackage));
+                          },
+                    child: SizedBox(
+                      width: double.infinity,
+                      child: Card(
+                        color: Colors.deepOrangeAccent,
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(vertical: 12),
+                          child: purchaseLoading
+                              ? Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(LocaleKeys.subscription_loading.tr()),
+                                    SizedBox(width: 4),
+                                    Text(
+                                      "🔓",
+                                      style: context.cupertinoTextStyle.copyWith(
+                                        fontSize: 24,
+                                        fontWeight: FontWeight.bold,
                                         color: Colors.white,
-                                        fontWeight: FontWeight.w500,
                                       ),
+                                    ),
+                                    CupertinoActivityIndicator(radius: 12),
+                                  ],
+                                )
+                              : Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      LocaleKeys.subscription_continue.tr(),
+                                      style: context.cupertinoTextStyle.copyWith(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                    Text(
+                                      " 🚀",
+                                      style: context.cupertinoTextStyle.copyWith(
+                                        fontSize: 24,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ],
                                 ),
                         ),
                       ),
                     ),
                   ),
                 ),
-              ),
-              SizedBox(height: 10),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  CupertinoButton(
-                    padding: EdgeInsets.zero,
-                    onPressed: () => UrlLauncherHelper.openTermsOfUse(),
-                    child: Text(
-                      LocaleKeys.settings_terms.tr(),
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            decoration: TextDecoration.underline,
-                          ),
-                    ),
-                  ),
-                  Text(" • "),
-                  CupertinoButton(
-                    padding: EdgeInsets.zero,
-                    onPressed: () => UrlLauncherHelper.openPrivacyPolicy(),
-                    child: Text(
-                      LocaleKeys.settings_privacy.tr(),
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            decoration: TextDecoration.underline,
-                          ),
-                    ),
-                  ),
-                ],
-              ),
-              CupertinoButton(
-                padding: EdgeInsets.zero,
-                onPressed: () {
-                  context.read<PaywallBloc>().add(RestorePurchasesEvent());
-                },
-                child: Text(
-                  LocaleKeys.subscription_restore.tr(),
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        decoration: TextDecoration.underline,
+                FittedBox(
+                  child: SizedBox(
+                    height: 40,
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 20.0),
+                      child: IntrinsicHeight(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            CustomButton(
+                              onTap: UrlLauncherHelper.openPrivacyPolicy,
+                              child: Text(
+                                LocaleKeys.settings_privacy.tr(),
+                                textAlign: TextAlign.center,
+                                style: context.bodySmall?.copyWith(
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(12.0),
+                              child: VerticalDivider(),
+                            ),
+                            _restoreButton,
+                            Padding(
+                              padding: const EdgeInsets.all(12.0),
+                              child: VerticalDivider(),
+                            ),
+                            CustomButton(
+                              onTap: UrlLauncherHelper.openTermsOfUse,
+                              child: Text(
+                                LocaleKeys.settings_terms.tr(),
+                                textAlign: TextAlign.center,
+                                style: context.bodySmall?.copyWith(
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
+                    ),
+                  ),
                 ),
-              ),
-              SizedBox(height: 10),
-            ],
+                SizedBox(height: 5),
+              ],
+            ),
           ),
         ),
-      ),
+      );
+    } else {
+      return SizedBox();
+    }
+  }
+
+  Widget get _restoreButton {
+    return BlocBuilder<PaywallBloc, PaywallState>(
+      builder: (context, state) {
+        if (state is PaywallLoaded) {
+          final isRestoring = state.isRestoring;
+
+          return CupertinoButton(
+            padding: EdgeInsets.zero,
+            onPressed: isRestoring
+                ? null
+                : () {
+                    context.read<PaywallBloc>().add(RestorePurchasesEvent());
+                  },
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  LocaleKeys.subscription_restore.tr(),
+                  style: context.bodySmall?.copyWith(
+                    fontWeight: FontWeight.w600,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                if (isRestoring) SizedBox(width: 4),
+                if (isRestoring) CupertinoActivityIndicator()
+              ],
+            ),
+          );
+        } else {
+          return SizedBox.shrink();
+        }
+      },
     );
   }
 
   Widget _productSection(PaywallLoaded state) {
-    final offerings = state.offerings;
-    if (offerings == null) return SizedBox.shrink();
+    final availablePackages = state.offerings?.current?.availablePackages;
 
-    final packages = offerings.current?.availablePackages;
-    if (packages == null) return SizedBox.shrink();
+    if (availablePackages == null) return SizedBox.shrink();
 
-    return SizedBox(
-      height: 180,
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        itemCount: packages.length,
-        itemBuilder: (context, index) {
-          final package = packages[index];
-          final isSelected = selectedIndex == index;
+    String? monthlyCalculated;
 
-          return GestureDetector(
-            onTap: () {
-              setState(() {
-                selectedIndex = index;
-                selectedPackage = package;
-              });
-            },
-            child: ProductWidget(
-              package: package,
-              isSelected: isSelected,
-            ),
-          );
-        },
-      ),
+    monthlyCalculated = ((availablePackages[1].storeProduct.price / 12).toStringAsFixed(2)).toString();
+
+    print(selectedIndex);
+
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        ListView.separated(
+          separatorBuilder: (context, index) => SizedBox(height: 12),
+          physics: ClampingScrollPhysics(),
+          shrinkWrap: true,
+          itemCount: availablePackages.length,
+          itemBuilder: (context, index) {
+            String? stringDiscount;
+            if (availablePackages.isNotNullAndNotEmpty) {
+              final annualMonthlyPrice = availablePackages.first.storeProduct.price * 12;
+              final annualPrice = availablePackages[1].storeProduct.price;
+              final discountPercent = (((annualMonthlyPrice - annualPrice) / annualMonthlyPrice) * 100).toStringAsFixed(0);
+
+              stringDiscount = "-$discountPercent%";
+            }
+
+            final currentPackage = availablePackages[index];
+
+            return CustomButton(
+              onTap: () {
+                HapticFeedback.heavyImpact();
+
+                setState(() {
+                  selectedIndex = index;
+                  selectedPackage = availablePackages[selectedIndex];
+                });
+              },
+              child: ProductWidget(
+                package: currentPackage,
+                isSelected: selectedIndex == index,
+                monthlyCalculated: index == 1 ? monthlyCalculated : null,
+                discount: index == 1 ? stringDiscount : null,
+                isAnnual: index == 1,
+              ),
+            );
+          },
+        ),
+      ],
     );
   }
 }

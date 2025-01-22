@@ -20,7 +20,7 @@ class _OnboardingButtonState extends State<OnboardingButton> {
     return CupertinoButton(
       borderRadius: BorderRadius.circular(90),
       sizeStyle: CupertinoButtonSize.large,
-      color: Colors.deepOrange,
+      color: Colors.deepOrangeAccent,
       onPressed: widget.onPressed,
       child: Text(
         widget.buttonText,

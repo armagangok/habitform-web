@@ -1,3 +1,5 @@
+import 'package:habitrise/features/paywall/bloc/paywall_bloc.dart';
+
 import '/core/core.dart';
 import '../widgets/onboarding_button.dart';
 import '../widgets/onboarding_title.dart';
@@ -67,6 +69,7 @@ class OnboardingGreetingPage extends StatelessWidget {
                   width: double.infinity,
                   child: OnboardingButton(
                     onPressed: () {
+                      context.read<PaywallBloc>().add(InitializePaywallEvent());
                       navigator.navigateAndClear(path: KRoute.home);
                     },
                     buttonText: LocaleKeys.onboarding_get_started.tr(),
