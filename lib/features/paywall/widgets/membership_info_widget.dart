@@ -31,40 +31,42 @@ class MembershipInfoWidget extends StatelessWidget {
                 children: [
                   Padding(
                     padding: EdgeInsets.all(20),
-                    child: Builder(builder: (contextFromBuilder) {
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          _infoItemWidget(
-                            infoText: "Membersip State",
-                            text: isActive == null
-                                ? null
-                                : isActive
-                                    ? "Active"
-                                    : "Inactive",
-                          ),
-                          _infoItemWidget(infoText: "Membership Plan", text: productPlanIdentifier),
-                          _infoItemWidget(infoText: "Customer ID", text: originalAppUserId),
-                          _infoItemWidget(infoText: "Expiration Date", text: expirationDate),
-                          _infoItemWidget(infoText: "First Purchase Date", text: originalPurchaseDate),
-                          _infoItemWidget(infoText: "Last Purchase Date", text: latestPurchaseDate),
-                          _infoItemWidget(
-                            infoText: "Change Subscription Plan",
-                            text: "Change your plan as you wish",
-                            onTap: () {
-                              CupertinoScaffold.showCupertinoModalBottomSheet(
-                                backgroundColor: Colors.transparent,
-                                barrierColor: Colors.transparent,
-                                expand: true,
-                                enableDrag: false,
-                                context: contextFromBuilder,
-                                builder: (_) => PaywallWidget(),
-                              );
-                            },
-                          ),
-                        ],
-                      );
-                    }),
+                    child: Builder(
+                      builder: (contextFromBuilder) {
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            _infoItemWidget(
+                              infoText: "Membersip State",
+                              text: isActive == null
+                                  ? null
+                                  : isActive
+                                      ? "Active"
+                                      : "Inactive",
+                            ),
+                            _infoItemWidget(infoText: "Membership Plan", text: productPlanIdentifier),
+                            _infoItemWidget(infoText: "Customer ID", text: originalAppUserId),
+                            _infoItemWidget(infoText: "Expiration Date", text: expirationDate),
+                            _infoItemWidget(infoText: "First Purchase Date", text: originalPurchaseDate),
+                            _infoItemWidget(infoText: "Last Purchase Date", text: latestPurchaseDate),
+                            _infoItemWidget(
+                              infoText: "Change Subscription Plan",
+                              text: "Change your plan as you wish",
+                              onTap: () {
+                                CupertinoScaffold.showCupertinoModalBottomSheet(
+                                  backgroundColor: Colors.transparent,
+                                  barrierColor: Colors.transparent,
+                                  expand: true,
+                                  enableDrag: false,
+                                  context: contextFromBuilder,
+                                  builder: (_) => PaywallWidget(),
+                                );
+                              },
+                            ),
+                          ],
+                        );
+                      },
+                    ),
                   ),
                 ],
               );
