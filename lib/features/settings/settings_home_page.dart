@@ -1,4 +1,5 @@
 import 'package:flutter/services.dart';
+import 'package:habitrise/features/paywall/widgets/membership_info_widget.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import '/core/core.dart';
@@ -31,7 +32,31 @@ class SettingsPage extends StatelessWidget {
                 spacing: KSpacing.betweenListItems,
                 children: [
                   SizedBox(height: 10),
-                  SubscribeButton(),
+                  BlocBuilder<PaywallBloc, PaywallState>(
+                    builder: (context, state) {
+                      if (state is PaywallLoaded) {
+                        final isSubscriptionActive = state.isSubscriptionActive;
+                        return isSubscriptionActive
+                            ? Card(
+                                child: CupertinoListTile(
+                                  leading: Assets.app.habitriseDarkTransparent.image(height: 24, width: 24),
+                                  title: Text("My Membership"),
+                                  onTap: () {
+                                    showCupertinoModalBottomSheet(
+                                        context: context,
+                                        builder: (_) {
+                                          return MembershipInfoWidget();
+                                        });
+                                  },
+                                  trailing: CupertinoListTileChevron(),
+                                ),
+                              )
+                            : SubscribeButton();
+                      }
+
+                      return SizedBox.shrink();
+                    },
+                  ),
                   SafeArea(
                     child: CustomHeader(
                       text: LocaleKeys.common_app.tr(),

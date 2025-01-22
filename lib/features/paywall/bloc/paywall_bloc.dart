@@ -22,6 +22,8 @@ class PaywallBloc extends Bloc<PaywallEvent, PaywallState> {
       final offerings = await PurchaseService.fetchOffers;
       final isSubscriptionActive = _checkSubscriptionStatus(customerInfo);
 
+      print(isSubscriptionActive);
+
       LogHelper.shared.debugPrint('$customerInfo');
       LogHelper.shared.debugPrint('$offerings');
       LogHelper.shared.debugPrint('$isSubscriptionActive');

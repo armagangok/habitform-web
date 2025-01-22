@@ -113,7 +113,7 @@ class _ProductWidgetState extends State<ProductWidget> {
                             if (isAnnual) SizedBox(width: 2),
                             if (isAnnual)
                               Text(
-                                widget.package.storeProduct.price.toString(),
+                                widget.package.storeProduct.price.toStringAsFixed(2),
                                 textAlign: TextAlign.left,
                                 style: context.bodySmall,
                               ),

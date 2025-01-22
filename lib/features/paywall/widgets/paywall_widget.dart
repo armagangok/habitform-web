@@ -434,8 +434,6 @@ class _PaywallWidgetState extends State<PaywallWidget> with SingleTickerProvider
                   selectedIndex = index;
                   selectedPackage = availablePackages[selectedIndex];
                 });
-
-                print(selectedPackage);
               },
               child: ProductWidget(
                 package: currentPackage,

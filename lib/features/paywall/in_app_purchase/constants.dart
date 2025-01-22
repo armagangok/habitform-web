@@ -1,6 +1,6 @@
 //TO DO: add the entitlement ID from the RevenueCat dashboard that is activated upon successful in-app purchase for the duration of the purchase.
 
-const entitlementID = 'Premium';
+const entitlementID = 'HabitRisePro';
 
 //TO DO: add your subscription terms and conditions
 const footerText = """Don't forget to add your subscription terms and conditions. 
