@@ -7,10 +7,10 @@ final class SingleHabitInitial extends HabitState {}
 
 final class SingleHabitLoading extends HabitState {}
 
-final class SingleHabitsFetched extends HabitState {
+final class HabitsFetched extends HabitState {
   final List<Habit> habits;
 
-  SingleHabitsFetched(this.habits);
+  HabitsFetched(this.habits);
 }
 
 final class SingleHabitFetchError extends HabitState {

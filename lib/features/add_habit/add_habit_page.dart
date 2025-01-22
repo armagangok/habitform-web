@@ -1,16 +1,15 @@
-import 'package:habitrise/core/helpers/spacing_helper.dart';
-
 import '/core/core.dart';
 import '/core/widgets/flushbar_widget.dart';
 import '/models/models.dart';
+import '../../core/helpers/spacing_helper.dart';
 import '../../core/widgets/habit_color_sheet/cubit/habit_color_cubit.dart';
 import '../../core/widgets/habit_icon/cubit/habit_icon_cubit.dart';
 import '../../core/widgets/habit_icon/icon_picker_sheet.dart';
 import '../habits/bloc/habit_bloc.dart';
 import '../reminder/bloc/reminder/reminder_bloc.dart';
 import '../reminder/models/reminder/reminder_model.dart';
-import 'provider/add_habit_provider.dart';
 import '../reminder/widget/reminder_selection_widget.dart';
+import 'provider/add_habit_provider.dart';
 
 class AddHabitPage extends StatefulWidget {
   const AddHabitPage({super.key});

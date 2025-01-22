@@ -133,12 +133,12 @@ final class NotificationHelper {
 
       int index = 0;
       for (var notification in pendingNotifications) {
-        print("${index++}" ".Notifitication");
-        print('Notification ID: ${notification.id}');
-        print('Notification Title: ${notification.title}');
-        print('Notification Body: ${notification.body}');
-        print('Payload: ${notification.payload}');
-        print("--------------------------------------------------");
+       LogHelper.shared.debugPrint("${index++}" ".Notifitication");
+       LogHelper.shared.debugPrint('Notification ID: ${notification.id}');
+       LogHelper.shared.debugPrint('Notification Title: ${notification.title}');
+       LogHelper.shared.debugPrint('Notification Body: ${notification.body}');
+       LogHelper.shared.debugPrint('Payload: ${notification.payload}');
+       LogHelper.shared.debugPrint("--------------------------------------------------");
       }
     } catch (e) {
       LogHelper.shared.debugPrint('$e');

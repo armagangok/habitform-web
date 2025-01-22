@@ -1,9 +1,12 @@
+import 'package:flutter/services.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import '/core/core.dart';
 import '/core/helpers/url_laucher/url_launcher.dart';
 import '/core/theme/widget/theme_mode_widget.dart';
 import '../../core/helpers/spacing_helper.dart';
+import '../../core/widgets/flushbar_widget.dart';
+import '../paywall/bloc/paywall_bloc.dart';
 import '../translation/widget/language_feature.dart';
 import 'widgets/setting_item.dart';
 import 'widgets/subscribe_button.dart';
@@ -75,6 +78,22 @@ class SettingsPage extends StatelessWidget {
                             title: Text(LocaleKeys.settings_feedback.tr()),
                             onTap: UrlLauncherHelper.requestEmail,
                             trailing: CupertinoListTileChevron(),
+                          ),
+
+                          CupertinoListTile(
+                            leading: const SettingLeadingWidget(
+                              iconData: CupertinoIcons.mail_solid,
+                              cardColor: Colors.deepOrangeAccent,
+                            ),
+                            onTap: () => _copyRCId(context),
+                            title: Text("Rc ID"),
+                            trailing: CupertinoButton(
+                              child: Icon(
+                                CupertinoIcons.doc_on_clipboard_fill,
+                                color: Colors.deepOrangeAccent,
+                              ),
+                              onPressed: () => _copyRCId(context),
+                            ),
                           ),
                         ],
                       ),
@@ -155,6 +174,20 @@ class SettingsPage extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  Future<void> _copyRCId(BuildContext context) async {
+    final state = context.read<PaywallBloc>().state;
+
+    if (state is PaywallLoaded) {
+      final userId = state.customerInfo?.originalAppUserId;
+
+      if (userId != null) {
+        await Clipboard.setData(ClipboardData(text: userId));
+
+        AppFlushbar.shared.successFlushbar("Your customer ID copied successfully\nID:$userId");
+      }
+    }
   }
 }
 

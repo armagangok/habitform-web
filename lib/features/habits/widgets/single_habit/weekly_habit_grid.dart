@@ -83,10 +83,10 @@ class _WeeklyHabitGridState extends State<WeeklyHabitGrid> with SingleTickerProv
     return BlocConsumer<HabitBloc, HabitState>(
       listenWhen: (previous, current) {
         LogHelper.shared.debugPrint('listenWhen called with current state: $current');
-        return current is SingleHabitsFetched;
+        return current is HabitsFetched;
       },
       listener: (context, state) {
-        if (state is SingleHabitsFetched) {
+        if (state is HabitsFetched) {
           final updatedHabit = state.habits.firstWhere(
             (h) => h.id == currentHabit.id,
             orElse: () => currentHabit,
@@ -101,7 +101,7 @@ class _WeeklyHabitGridState extends State<WeeklyHabitGrid> with SingleTickerProv
         }
       },
       buildWhen: (previous, current) {
-        return current is SingleHabitsFetched;
+        return current is HabitsFetched;
       },
       builder: (context, state) {
         LogHelper.shared.debugPrint('Building WeeklyHabitGrid with habit: ${currentHabit.id}');

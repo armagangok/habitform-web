@@ -26,7 +26,7 @@ class HabitBloc extends Bloc<HabitEvent, HabitState> {
       emit(SingleHabitLoading());
       final habits = await habitService.getAllHabits();
       sortHabitsByReminderTime(habits);
-      emit(SingleHabitsFetched(habits));
+      emit(HabitsFetched(habits));
     } on PlatformException catch (e, s) {
       debugPrint('Error fetching habits: $e\nStack trace: $s');
       emit(SingleHabitFetchError(e.message ?? "An error occurred while fetching habits"));
@@ -118,7 +118,7 @@ class HabitBloc extends Bloc<HabitEvent, HabitState> {
       final habits = await habitService.getAllHabits();
       LogHelper.shared.debugPrint('Fetched habits after update: $habits');
       sortHabitsByReminderTime(habits);
-      emit(SingleHabitsFetched(habits));
+      emit(HabitsFetched(habits));
     } catch (e, s) {
       LogHelper.shared.debugPrint('Error updating habit: $e');
       LogHelper.shared.debugPrint('Stack trace: $s');

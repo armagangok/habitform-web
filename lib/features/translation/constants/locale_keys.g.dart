@@ -132,6 +132,10 @@ abstract class  LocaleKeys {
   static const subscription_supportAnIndieDev = 'subscription.supportAnIndieDev';
   static const subscription_supportAnIndieDevDescription = 'subscription.supportAnIndieDevDescription';
   static const subscription_loading = 'subscription.loading';
+  static const subscription_purchaseRestoredSuccessfuly = 'subscription.purchaseRestoredSuccessfuly';
+  static const subscription_youDoNotHaveAnyPurchasesToRestore = 'subscription.youDoNotHaveAnyPurchasesToRestore';
+  static const subscription_youAlreadyHaveAnActiveSubscription = 'subscription.youAlreadyHaveAnActiveSubscription';
+  static const subscription_anIssueOccuredWhilePurchasing = 'subscription.anIssueOccuredWhilePurchasing';
   static const subscription = 'subscription';
   static const share_share = 'share.share';
   static const share_share_image = 'share.share_image';

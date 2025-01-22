@@ -57,7 +57,7 @@ class _EditHabitPageState extends State<EditHabitPage> {
             habit: widget.habit,
             child: BlocConsumer<HabitBloc, HabitState>(
               listener: (context, state) {
-                if (state is SingleHabitsFetched) {
+                if (state is HabitsFetched) {
                   final updatedHabit = state.habits.firstWhere(
                     (h) => h.id == widget.habit.id,
                     orElse: () => widget.habit,

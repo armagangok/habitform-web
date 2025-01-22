@@ -1,4 +1,5 @@
 import 'package:flutter/services.dart';
+import 'package:habitrise/features/paywall/widgets/product_widget.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 
 import '/core/core.dart' hide LocaleKeys;
@@ -7,7 +8,6 @@ import '/core/widgets/setting_leading.dart';
 import '../../../core/helpers/url_laucher/url_launcher.dart';
 import '../../translation/constants/locale_keys.g.dart';
 import '../bloc/paywall_bloc.dart';
-import 'product_widget.dart';
 
 class PaywallWidget extends StatefulWidget {
   const PaywallWidget({super.key});
@@ -18,7 +18,7 @@ class PaywallWidget extends StatefulWidget {
 
 class _PaywallWidgetState extends State<PaywallWidget> with SingleTickerProviderStateMixin {
   int selectedIndex = 2;
-  late Package selectedPackage;
+  Package? selectedPackage;
 
   final List<FeatureModel> featureList = [
     FeatureModel(
@@ -76,12 +76,11 @@ class _PaywallWidgetState extends State<PaywallWidget> with SingleTickerProvider
           }
 
           if (state is PaywallLoaded) {
-            final availablePackages = state.offerings?.current?.availablePackages;
-            if (availablePackages != null && availablePackages.isNotEmpty) {
-              selectedPackage = availablePackages.last;
-              // selectedIndex = availablePackages.indexOf(availablePackages.last);
-            }
+            selectedPackage ??= state.offerings?.current?.annual;
 
+            // final monthlyPackage = state.offerings?.current?.monthly;
+            // final annualPackage = state.offerings?.current?.annual;
+            // final lifetimePackage = state.offerings?.current?.lifetime;
             return CupertinoPageScaffold(
               navigationBar: _navBar(context),
               child: Stack(
@@ -93,11 +92,6 @@ class _PaywallWidgetState extends State<PaywallWidget> with SingleTickerProvider
                       child: ListView(
                         children: [
                           SizedBox(height: 20),
-                          // Padding(
-                          //   padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                          //   child: BodySmall(text: "LocaleKeys.accessAllTheAdvantages.tr()"),
-                          // ),
-                          // SizedBox(height: 8),
                           _productSection(state),
                           SizedBox(height: 40),
                           Text(
@@ -159,7 +153,6 @@ class _PaywallWidgetState extends State<PaywallWidget> with SingleTickerProvider
   }
 
   CupertinoNavigationBar _navBar(BuildContext context) {
-    
     return CupertinoNavigationBar(
       backgroundColor: Colors.transparent,
       automaticallyImplyLeading: false,
@@ -197,13 +190,20 @@ class _PaywallWidgetState extends State<PaywallWidget> with SingleTickerProvider
         children: [
           RichText(
             text: TextSpan(
-              text: 'Pomo',
+              text: 'Habit',
               style: Theme.of(context).textTheme.titleLarge?.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
               children: [
                 TextSpan(
-                  text: 'Done  ',
+                  text: 'Rise  ',
+                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                        color: Colors.deepOrangeAccent,
+                        fontWeight: FontWeight.bold,
+                      ),
+                ),
+                TextSpan(
+                  text: 'Pro',
                   style: Theme.of(context).textTheme.titleLarge?.copyWith(
                         color: context.primary,
                         fontWeight: FontWeight.bold,
@@ -212,12 +212,6 @@ class _PaywallWidgetState extends State<PaywallWidget> with SingleTickerProvider
               ],
             ),
           ),
-          Text(
-            "Pro",
-            style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
-          )
         ],
       ),
       border: Border(
@@ -251,7 +245,9 @@ class _PaywallWidgetState extends State<PaywallWidget> with SingleTickerProvider
                         ? null
                         : () async {
                             HapticFeedback.heavyImpact();
-                            context.read<PaywallBloc>().add(PurchaseProductEvent(selectedPackage: selectedPackage));
+                            if (selectedPackage != null) {
+                              context.read<PaywallBloc>().add(PurchaseProductEvent(selectedPackage: selectedPackage!));
+                            }
                           },
                     child: SizedBox(
                       width: double.infinity,
@@ -264,7 +260,14 @@ class _PaywallWidgetState extends State<PaywallWidget> with SingleTickerProvider
                                   mainAxisSize: MainAxisSize.min,
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    Text(LocaleKeys.subscription_loading.tr()),
+                                    Text(
+                                      LocaleKeys.subscription_loading.tr(),
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white,
+                                      ),
+                                    ),
                                     SizedBox(width: 4),
                                     Text(
                                       "🔓",
@@ -403,8 +406,6 @@ class _PaywallWidgetState extends State<PaywallWidget> with SingleTickerProvider
 
     monthlyCalculated = ((availablePackages[1].storeProduct.price / 12).toStringAsFixed(2)).toString();
 
-    print(selectedIndex);
-
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -433,6 +434,8 @@ class _PaywallWidgetState extends State<PaywallWidget> with SingleTickerProvider
                   selectedIndex = index;
                   selectedPackage = availablePackages[selectedIndex];
                 });
+
+                print(selectedPackage);
               },
               child: ProductWidget(
                 package: currentPackage,

@@ -1,6 +1,7 @@
+import 'package:habitrise/features/paywall/widgets/paywall_widget.dart';
+
 import '/core/core.dart';
 import '/features/paywall/bloc/paywall_bloc.dart';
-import '/features/paywall/widgets/paywall_widget.dart';
 import '../add_habit/add_habit_page.dart';
 import '../settings/settings_home_page.dart';
 import 'bloc/habit_bloc.dart';
@@ -28,32 +29,29 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   void initState() {
     controller = AnimationController(vsync: this, duration: Duration(milliseconds: 250));
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<HabitBloc>().add(FetchHabitEvent());
+    context.read<PaywallBloc>().add(InitializePaywallEvent());
 
-      setState(() {});
-    });
+    context.read<HabitBloc>().add(FetchHabitEvent());
 
     super.initState();
-    _checkPaywall();
   }
 
-  Future<void> _checkPaywall() async {
-    // Listen for paywall state changes
-    final paywallState = context.read<PaywallBloc>().state;
-    if (paywallState is PaywallLoaded && !paywallState.isSubscriptionActive) {
-      await Future.delayed(Duration(milliseconds: 700));
-      if (!mounted) return;
+  // Future<void> _checkPaywall() async {
+  //   final paywallState = context.watch<PaywallBloc>().state;
 
-      showCupertinoModalBottomSheet(
-        expand: true,
-        elevation: 0,
-        enableDrag: false,
-        context: context,
-        builder: (contextFromSheet) => PaywallWidget(),
-      );
-    }
-  }
+  //   print(paywallState);
+  //   if (paywallState is PaywallLoaded && !paywallState.isSubscriptionActive) {
+  //     if (!mounted) return;
+
+  //     showCupertinoModalBottomSheet(
+  //       expand: true,
+  //       elevation: 0,
+  //       enableDrag: false,
+  //       context: context,
+  //       builder: (contextFromSheet) => PaywallWidget(),
+  //     );
+  //   }
+  // }
 
   HabitSelection selectedVal = HabitSelection.today;
 
@@ -134,17 +132,44 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
               size: 32,
             ),
             onPressed: () {
-              CupertinoScaffold.showCupertinoModalBottomSheet(
-                enableDrag: false,
-                context: context,
-                builder: (contextFromSheet) {
-                  return AddHabitPage();
-                },
-              );
+              final paywallState = context.read<PaywallBloc>().state;
+
+              if (paywallState is PaywallLoaded) {
+                final isSubActive = paywallState.isSubscriptionActive;
+
+                if (isSubActive) {
+                  _openAddHabitPage(context);
+                } else {
+                  final habitState = context.read<HabitBloc>().state;
+
+                  if (habitState is HabitsFetched) {
+                    final createdTaskAmount = habitState.habits.length;
+                    if (createdTaskAmount <= 3) {
+                      _openAddHabitPage(context);
+                    } else {
+                      showCupertinoModalBottomSheet(
+                        enableDrag: false,
+                        context: context,
+                        builder: (_) => PaywallWidget(),
+                      );
+                    }
+                  }
+                }
+              }
             },
           );
         }),
       ).animate().fadeIn(duration: Duration(milliseconds: 300)),
+    );
+  }
+
+  Future<dynamic> _openAddHabitPage(BuildContext context) {
+    return CupertinoScaffold.showCupertinoModalBottomSheet(
+      enableDrag: false,
+      context: context,
+      builder: (contextFromSheet) {
+        return AddHabitPage();
+      },
     );
   }
 }

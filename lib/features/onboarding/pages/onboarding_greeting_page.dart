@@ -1,6 +1,8 @@
 import 'package:habitrise/features/paywall/bloc/paywall_bloc.dart';
 
 import '/core/core.dart';
+import '../../../models/app_defaults/app_defaults.dart';
+import '../../../services/app_default.dart';
 import '../widgets/onboarding_button.dart';
 import '../widgets/onboarding_title.dart';
 
@@ -68,8 +70,20 @@ class OnboardingGreetingPage extends StatelessWidget {
                 child: SizedBox(
                   width: double.infinity,
                   child: OnboardingButton(
-                    onPressed: () {
+                    onPressed: () async {
                       context.read<PaywallBloc>().add(InitializePaywallEvent());
+
+                      try {
+                        final appDefaults = await AppDefaultsService().gettAppDefault();
+                        print(appDefaults.toString());
+                        if (appDefaults != null) {
+                          final updatedDefaults = AppDefaults(isAppOpenedFirstTime: false);
+                          await AppDefaultsService().saveAppDefaults(updatedDefaults);
+                          print(appDefaults.toString());
+                        }
+                      } catch (e) {
+                        print("Error updating app defaults: $e");
+                      }
                       navigator.navigateAndClear(path: KRoute.home);
                     },
                     buttonText: LocaleKeys.onboarding_get_started.tr(),

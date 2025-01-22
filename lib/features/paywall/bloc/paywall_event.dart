@@ -3,9 +3,7 @@ part of 'paywall_bloc.dart';
 @immutable
 abstract class PaywallEvent {}
 
-class InitializePaywallEvent extends PaywallEvent {
-  InitializePaywallEvent();
-}
+class InitializePaywallEvent extends PaywallEvent {}
 
 class PurchaseProductEvent extends PaywallEvent {
   final Package selectedPackage;

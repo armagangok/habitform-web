@@ -16,7 +16,7 @@ class SingleHabitBuilder extends StatelessWidget {
       builder: (context, state) {
         if (state is SingleHabitInitial) return SizedBox.shrink();
 
-        if (state is SingleHabitsFetched) {
+        if (state is HabitsFetched) {
           final habits = state.habits;
 
           if (habits.isEmpty) return _noDataWidget();

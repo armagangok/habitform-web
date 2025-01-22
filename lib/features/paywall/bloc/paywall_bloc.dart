@@ -1,8 +1,7 @@
 import 'package:flutter/services.dart';
 
 import '/core/core.dart';
-import '../../../core/constants/debug_constants.dart';
-import '../../../core/widgets/flushbar_widget.dart';
+import '/core/widgets/flushbar_widget.dart';
 import '../in_app_purchase/iap.dart';
 
 part 'paywall_event.dart';
@@ -27,17 +26,6 @@ class PaywallBloc extends Bloc<PaywallEvent, PaywallState> {
       LogHelper.shared.debugPrint('$offerings');
       LogHelper.shared.debugPrint('$isSubscriptionActive');
 
-      if (KDebug.purchaseDebugMode) {
-        emit(PaywallLoaded(
-          offerings: offerings,
-          customerInfo: customerInfo,
-          isSubscriptionActive: true,
-          isPurchasing: false,
-          isRestoring: false,
-        ));
-        return;
-      }
-
       emit(PaywallLoaded(
         offerings: offerings,
         customerInfo: customerInfo,
@@ -47,7 +35,7 @@ class PaywallBloc extends Bloc<PaywallEvent, PaywallState> {
       ));
     } on PlatformException catch (e, s) {
       LogHelper.shared.debugPrint('$e\n$s');
-      emit(PaywallError(message: e.message ?? "An error occurred"));
+      emit(PaywallError(message: e.message ?? LocaleKeys.errors_try_again.tr()));
     }
   }
 
@@ -62,7 +50,7 @@ class PaywallBloc extends Bloc<PaywallEvent, PaywallState> {
       final subscriptionResult = _checkSubscriptionStatus(customerInfoResult);
 
       if (!subscriptionResult) {
-        AppFlushbar.shared.warningFlushbar("LocaleKeys.anIssueOccuredWhilePurchasing.tr()");
+        AppFlushbar.shared.warningFlushbar(LocaleKeys.subscription_anIssueOccuredWhilePurchasing.tr());
       }
 
       emit(PaywallLoaded(
@@ -75,7 +63,7 @@ class PaywallBloc extends Bloc<PaywallEvent, PaywallState> {
 
       navigator.pop();
     } on PlatformException catch (e) {
-      AppFlushbar.shared.warningFlushbar(e.message ?? "LocaleKeys.anIssueOccuredWhilePurchasing.tr()");
+      AppFlushbar.shared.warningFlushbar(e.message ?? LocaleKeys.errors_try_again.tr());
       LogHelper.shared.debugPrint('$e\n${e.stacktrace}');
       emit(currentState.copyWith(isPurchasing: false));
     }
@@ -86,7 +74,7 @@ class PaywallBloc extends Bloc<PaywallEvent, PaywallState> {
     final currentState = state as PaywallLoaded;
 
     if (currentState.isSubscriptionActive) {
-      AppFlushbar.shared.warningFlushbar("LocaleKeys.youAlreadyHaveAnActiveSubscription.tr()");
+      AppFlushbar.shared.warningFlushbar(LocaleKeys.subscription_youAlreadyHaveAnActiveSubscription.tr());
       return;
     }
 
@@ -105,12 +93,12 @@ class PaywallBloc extends Bloc<PaywallEvent, PaywallState> {
       ));
 
       if (isSubscriptionActive) {
-        AppFlushbar.shared.successFlushbar("LocaleKeys.purchaseRestoredSuccessfuly.tr()");
+        AppFlushbar.shared.successFlushbar(LocaleKeys.subscription_purchaseRestoredSuccessfuly.tr());
       } else {
-        AppFlushbar.shared.warningFlushbar("LocaleKeys.youDoNotHaveAnyPurchasesToRestore.tr()");
+        AppFlushbar.shared.warningFlushbar(LocaleKeys.subscription_youDoNotHaveAnyPurchasesToRestore.tr());
       }
     } on PlatformException catch (e, s) {
-      AppFlushbar.shared.errorFlushbar(e.message ?? "LocaleKeys.pleaseTryAgainLater.tr()");
+      AppFlushbar.shared.errorFlushbar(e.message ?? LocaleKeys.errors_try_again.tr());
       LogHelper.shared.debugPrint('$e\n$s');
 
       final updatedState = currentState.copyWith(isRestoring: false);

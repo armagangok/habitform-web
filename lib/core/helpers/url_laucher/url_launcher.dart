@@ -9,7 +9,7 @@ import '../../widgets/flushbar_widget.dart';
 const _privacyPolicyLink = "https://docs.google.com/document/d/e/2PACX-1vQ76kvKNioMD6L4Y0JvxcBHB2AMr7tIZyN2O6WJeva1ZYkzybIFQsbLhRE3Qdj83ewC_ICzovvb8EmL/pub";
 const _termsOfUseLink = "https://docs.google.com/document/d/e/2PACX-1vRVAZkWkWzZjyxwR4ZKMxIxIowwKJPNWEI9BZTrpfYIuZlvwPUW9ZPNwU76V4yiOmw_ORaLlLuXXVjz/pub";
 const _twitterArmagan = "https://x.com/armaganrun";
-const _twitterPomoDone = "https://x.com/HabitRise";
+const _twitterHabitRise = "https://x.com/HabitRise";
 
 class UrlLauncherHelper {
   const UrlLauncherHelper._();
@@ -81,10 +81,10 @@ class UrlLauncherHelper {
     }
   }
 
-  static Future<void> openPomoDoneTwitter() async {
+  static Future<void> openHabitRiseTwitter() async {
     try {
       await launchUrl(
-        Uri.parse(_twitterPomoDone),
+        Uri.parse(_twitterHabitRise),
         mode: LaunchMode.externalApplication,
       );
     } catch (e) {

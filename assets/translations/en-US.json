@@ -134,7 +134,11 @@
         "upcomingFeaturesDescription": "Exciting features you requested are coming soon!",
         "supportAnIndieDev": "Support An Indie Developer",
         "supportAnIndieDevDescription": "Your purchase supports an independent app developer",
-        "loading": "Loading.."
+        "loading": "Loading..",
+        "purchaseRestoredSuccessfuly": "Purchase restored successfully",
+        "youDoNotHaveAnyPurchasesToRestore": "You don't have any previous purchase to restore",
+        "youAlreadyHaveAnActiveSubscription": "You already have an active subscription",
+        "anIssueOccuredWhilePurchasing": "An error occured while purchasing"
     },
     "share": {
         "share": "Share",

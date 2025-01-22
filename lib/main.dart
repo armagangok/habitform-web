@@ -15,7 +15,6 @@ import 'features/onboarding/bloc/onboarding_bloc.dart';
 import 'features/onboarding/pages/onboarding_greeting_page.dart';
 import 'features/paywall/bloc/paywall_bloc.dart';
 import 'features/paywall/in_app_purchase/iap.dart';
-import 'models/app_defaults/app_defaults.dart';
 import 'services/app_default.dart';
 import 'services/services.dart';
 import 'services/user_defaults/user_defaults_service.dart';
@@ -38,8 +37,6 @@ void main() async {
 
   await AppDefaultsService().initializeAppDefaults();
 
-  
-
   runApp(
     EasyLocalization(
       supportedLocales: const [
@@ -53,56 +50,8 @@ void main() async {
   );
 }
 
-class MyApp extends StatefulWidget {
+class MyApp extends StatelessWidget {
   const MyApp({super.key});
-
-  @override
-  State<MyApp> createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
-  @override
-  void initState() {
-    WidgetsBinding.instance.addObserver(this); // Observer ekleniyor
-
-    super.initState();
-  }
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    super.didChangeAppLifecycleState(state);
-
-    print("AppLifecycleState: $state");
-
-    if (state == AppLifecycleState.detached) {
-      print("App is detached (closed)");
-      _onAppClosed();
-    } else if (state == AppLifecycleState.paused) {
-      print("App is paused (backgrounded)");
-    } else if (state == AppLifecycleState.resumed) {
-      print("App is resumed (foregrounded)");
-    }
-  }
-
-  @override
-  void dispose() {
-    WidgetsBinding.instance.removeObserver(this); // Observer kaldırılıyor
-    super.dispose();
-  }
-
-  void _onAppClosed() async {
-    try {
-      final appDefaults = await AppDefaultsService().gettAppDefault();
-      print(appDefaults.toString());
-      if (appDefaults != null) {
-        final updatedDefaults = AppDefaults(isAppOpenedFirstTime: false);
-        await AppDefaultsService().saveAppDefaults(updatedDefaults);
-        print(appDefaults.toString());
-      }
-    } catch (e) {
-      print("Error updating app defaults: $e");
-    }
-  }
 
   @override
   Widget build(BuildContext context) {

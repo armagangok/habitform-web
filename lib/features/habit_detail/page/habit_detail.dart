@@ -24,7 +24,7 @@ class HabitDetailPage extends StatelessWidget {
       habit: habit,
       child: BlocConsumer<HabitBloc, HabitState>(
         listener: (context, state) {
-          if (state is SingleHabitsFetched) {
+          if (state is HabitsFetched) {
             final updatedHabit = state.habits.firstWhere(
               (habit) => habit.id == this.habit.id,
               orElse: () => habit,

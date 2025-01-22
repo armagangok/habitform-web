@@ -43,7 +43,7 @@ class _CompleteTodayButtonState extends State<CompleteTodayButton> with TickerPr
   Widget build(BuildContext context) {
     return BlocConsumer<HabitBloc, HabitState>(
       listener: (context, state) {
-        if (state is SingleHabitsFetched) {
+        if (state is HabitsFetched) {
           // Force rebuild when state changes
           setState(() {});
         }
@@ -51,7 +51,7 @@ class _CompleteTodayButtonState extends State<CompleteTodayButton> with TickerPr
       builder: (context, state) {
         // Get the updated habit from state
         Habit currentHabit = widget.currentHabit;
-        if (state is SingleHabitsFetched) {
+        if (state is HabitsFetched) {
           currentHabit = state.habits.firstWhere(
             (h) => h.id == widget.currentHabit.id,
             orElse: () => widget.currentHabit,

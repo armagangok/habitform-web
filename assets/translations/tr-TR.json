@@ -140,7 +140,11 @@
         "upcomingFeaturesDescription": "Talep ettiğiniz özellikler çok yakında geliyor!",
         "supportAnIndieDev": "Bağımsız Bir Geliştiriciyi Destekley",
         "supportAnIndieDevDescription": "Satın alımınız, bağımsız bir uygulama geliştiricisini destekler",
-        "loading": "Yükleniyor.."
+        "loading": "Yükleniyor..",
+        "purchaseRestoredSuccessfuly": "Satın alma başarıyla geri yüklendi",
+        "youDoNotHaveAnyPurchasesToRestore": "Geri yüklenecek önceki bir satın almanız yok",
+        "youAlreadyHaveAnActiveSubscription": "Zaten aktif bir aboneliğiniz var",
+        "anIssueOccuredWhilePurchasing": "Satın alma sırasında bir hata oluştu"
     },
     "share": {
         "share": "Paylaş",
