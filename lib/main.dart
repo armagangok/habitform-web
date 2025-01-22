@@ -13,7 +13,6 @@ import 'features/habits/bloc/habit_bloc.dart';
 import 'features/habits/home_page.dart';
 import 'features/onboarding/bloc/onboarding_bloc.dart';
 import 'features/onboarding/pages/onboarding_greeting_page.dart';
-import 'features/paywall/bloc/paywall_bloc.dart';
 import 'features/paywall/in_app_purchase/iap.dart';
 import 'services/app_default.dart';
 import 'services/services.dart';
