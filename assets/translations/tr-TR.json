@@ -56,7 +56,7 @@
         "get_started": "Başlayın",
         "next": "İleri",
         "welcome_message": "HabitRise'a Hoş Geldiniz,",
-        "greeting_message": "“Her şeyden önce, alışkanlıklar oluşturmak bir yolculuktur ve ilk birkaç gün boyunca tutarlı kalmak yanınıza alabileceğiniz en iyi azıktır. 😊”",
+        "greeting_message": "“Her şeyden önce, alışkanlıklar oluşturmak bir yolculuktur ve ilk birkaç gün boyunca tutarlı kalmak yanınıza alabileceğiniz en iyi araçtır. 😊”",
         "weRecommendYouToUseHabitRise": "Bu yüzden, ilk günlerde HabitRise'ı devamlı bir şekilde kullanmanızı öneririz 💪🏽🚀",
         "features": {
             "minimalist": "Minimalist.",
@@ -117,7 +117,6 @@
     },
     "subscription": {
         "subscribe_to": "Abone Ol",
-        "habitrise_pro": "HabitRise Pro",
         "tap_advantages": "Tüm avantajları görmek için dokun",
         "popular": "Popüler",
         "yearly": "Yıllık",

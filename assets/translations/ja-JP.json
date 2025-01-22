@@ -1,0 +1,171 @@
+{
+    "common": {
+        "save": "保存",
+        "cancel": "キャンセル",
+        "delete": "削除",
+        "edit": "編集",
+        "confirm": "確認",
+        "back": "戻る",
+        "none": "なし",
+        "app": "アプリ",
+        "general": "一般",
+        "days": "日数",
+        "version": "1.0.0",
+        "made_by": "Armağan Gök によって ☕️ と ❤️ で作られました",
+        "icon": "アイコン",
+        "warning": "警告",
+        "error": "エラー",
+        "Information": "情報"
+    },
+    "colors": {
+        "color": "色",
+        "blue": "青",
+        "lightBlue": "水色",
+        "indigo": "藍色",
+        "red": "赤",
+        "orange": "オレンジ",
+        "deepOrange": "濃いオレンジ",
+        "amber": "琥珀色",
+        "yellow": "黄色",
+        "Lime": "ライム",
+        "green": "緑",
+        "cyan": "シアン",
+        "teal": "ティール",
+        "blueGrey": "青灰色",
+        "grey": "灰色",
+        "purple": "紫",
+        "deepPurple": "濃い紫",
+        "brown": "茶色",
+        "pink": "ピンク"
+    },
+    "iconCategories": {
+        "dailylife": "日常生活",
+        "sports": "スポーツ",
+        "health": "健康",
+        "social": "ソーシャル",
+        "nature": "自然",
+        "business": "ビジネス",
+        "art": "アート",
+        "studyandtask": "勉強とタスク",
+        "science": "科学",
+        "gardenandyard": "庭と庭園",
+        "pets": "ペット"
+    },
+    "onboarding": {
+        "welcome": "ようこそ",
+        "get_started": "始める",
+        "next": "次へ",
+        "welcome_message": "HabitRise へようこそ、",
+        "greeting_message": "何よりもまず、習慣を築くことは旅であり、最初の数日間はあなたが持つことができる最高のツールです。😊",
+        "weRecommendYouToUseHabitRise": "したがって、HabitRise を使い始めた最初の数日間は、コミットし続けることが重要です。💪🏽🚀",
+        "features": {
+            "minimalist": "ミニマリスト。",
+            "easy_to_use": "使いやすい。",
+            "science_based": "科学に基づく。"
+        },
+        "goals": {
+            "title": "あなたの主な目標は何ですか？",
+            "better_productivity": "生産性の向上",
+            "build_routine": "ルーティンの構築",
+            "break_bad_habits": "悪い習慣を断つ",
+            "get_healthier": "より健康的になる",
+            "time_management": "時間管理",
+            "reduce_stress": "ストレスの軽減",
+            "other": "その他"
+        }
+    },
+    "habit": {
+        "add_habit": "習慣を追加",
+        "edit_habit": "習慣を編集",
+        "habit_name": "習慣名",
+        "habit_description": "説明",
+        "reminder": "リマインダー",
+        "add_reminder": "リマインダーを追加",
+        "frequency": "頻度",
+        "daily": "毎日",
+        "weekly": "毎週",
+        "monthly": "毎月",
+        "create_habit": "習慣を作成",
+        "no_habit_found": "習慣が見つかりません",
+        "lets_gain_habit": "新しい習慣を身につけましょう",
+        "habit_data": "習慣データ",
+        "todayCompleted": "今日完了",
+        "complete": "完了",
+        "calendar_completion": "カレンダーの完了",
+        "calendar_tap_info": "日付をタップして完了をマークまたは解除"
+    },
+    "habit_detail": {
+        "habitDetail": "習慣の詳細",
+        "areYouSureToDeleteHabit": "この習慣を削除してもよろしいですか？",
+        "calendar": "カレンダー"
+    },
+    "settings": {
+        "settings": "設定",
+        "language": "言語",
+        "notifications": "通知",
+        "theme": "テーマ",
+        "system": "システム",
+        "dark_mode": "ダークモード",
+        "light_mode": "ライトモード",
+        "support": "HabitRise をサポート",
+        "support_subtitle": "HabitRise が気に入りましたか？評価して私たちの成長を助けてください！",
+        "feedback": "フィードバックを送信",
+        "privacy": "プライバシー",
+        "terms": "利用規約"
+    },
+    "subscription": {
+        "subscribe_to": "購読",
+        "tap_advantages": "すべての利点を見るにはタップ",
+        "popular": "人気",
+        "billed": "請求済み",
+        "restore": "復元",
+        "continue": "続行",
+        "whatYouWillUnlock": "何が解除されますか？",
+        "unlimitiedHabits": "無制限の習慣",
+        "unlimitiedHabitsDescription": "無制限の習慣を簡単に追加して追跡できます。",
+        "unlimitiedCustomization": "無制限のカスタマイズ",
+        "unlimitiedCustomizationDescription": "習慣と設定を自由にカスタマイズできます。",
+        "noBoringAds": "広告なし",
+        "noBoringAdsDescription": "中断のない、広告なしの体験をお楽しみください。",
+        "alwaysUpToDate": "常に最新",
+        "alwaysUpToDateDescription": "最新の状態を保ち、定期的に新機能にアクセスできます。",
+        "upcomingFeatures": "今後の機能",
+        "upcomingFeaturesDescription": "あなたがリクエストしたエキサイティングな機能が近日公開予定です！",
+        "supportAnIndieDev": "独立開発者をサポート",
+        "supportAnIndieDevDescription": "あなたの購入は独立したアプリ開発者を支援します",
+        "loading": "読み込み中..",
+        "purchaseRestoredSuccessfuly": "購入が正常に復元されました",
+        "youDoNotHaveAnyPurchasesToRestore": "復元する以前の購入はありません",
+        "youAlreadyHaveAnActiveSubscription": "すでにアクティブなサブスクリプションがあります",
+        "anIssueOccuredWhilePurchasing": "購入中にエラーが発生しました"
+    },
+    "share": {
+        "share": "共有",
+        "share_image": "画像を共有",
+        "share_text": "テキストを共有"
+    },
+    "days": {
+        "monday": "月曜日",
+        "tuesday": "火曜日",
+        "wednesday": "水曜日",
+        "thursday": "木曜日",
+        "friday": "金曜日",
+        "saturday": "土曜日",
+        "sunday": "日曜日"
+    },
+    "errors": {
+        "something_went_wrong": "問題が発生しました",
+        "try_again": "再試行",
+        "required_field": "習慣名を入力してください"
+    },
+    "reminder": {
+        "select_all": "すべて選択",
+        "deselect_all": "すべて選択解除",
+        "select_time": "時間を選択",
+        "time": "時間"
+    },
+    "languages": {
+        "english": "英語",
+        "turkish": "トルコ語"
+    }
+}

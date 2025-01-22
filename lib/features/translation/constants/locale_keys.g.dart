@@ -108,7 +108,6 @@ abstract class  LocaleKeys {
   static const settings_terms = 'settings.terms';
   static const settings = 'settings';
   static const subscription_subscribe_to = 'subscription.subscribe_to';
-  static const subscription_habitrise_pro = 'subscription.habitrise_pro';
   static const subscription_tap_advantages = 'subscription.tap_advantages';
   static const subscription_popular = 'subscription.popular';
   static const subscription_yearly = 'subscription.yearly';
