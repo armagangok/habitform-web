@@ -76,7 +76,7 @@ class _PaywallWidgetState extends State<PaywallWidget> with SingleTickerProvider
           }
 
           if (state is PaywallLoaded) {
-            selectedPackage ??= state.offerings?.current?.annual;
+            selectedPackage ??= state.offerings?.current?.lifetime;
 
             // final monthlyPackage = state.offerings?.current?.monthly;
             // final annualPackage = state.offerings?.current?.annual;
