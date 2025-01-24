@@ -18,6 +18,12 @@ class IconPickerSheetState extends State<IconPickerSheet> with SingleTickerProvi
   late final AnimationController controller;
 
   @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  @override
   void initState() {
     controller = AnimationController(vsync: this);
     super.initState();

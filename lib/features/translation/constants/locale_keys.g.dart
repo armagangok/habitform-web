@@ -87,6 +87,7 @@ abstract class  LocaleKeys {
   static const habit_complete = 'habit.complete';
   static const habit_calendar_completion = 'habit.calendar_completion';
   static const habit_calendar_tap_info = 'habit.calendar_tap_info';
+  static const habit_timeToCompleteYourHabit = 'habit.timeToCompleteYourHabit';
   static const habit = 'habit';
   static const habit_detail_habitDetail = 'habit_detail.habitDetail';
   static const habit_detail_reminder = 'habit_detail.reminder';

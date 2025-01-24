@@ -30,28 +30,10 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
     controller = AnimationController(vsync: this, duration: Duration(milliseconds: 250));
 
     context.read<PaywallBloc>().add(InitializePaywallEvent());
-
     context.read<HabitBloc>().add(FetchHabitEvent());
 
     super.initState();
   }
-
-  // Future<void> _checkPaywall() async {
-  //   final paywallState = context.watch<PaywallBloc>().state;
-
-  //   print(paywallState);
-  //   if (paywallState is PaywallLoaded && !paywallState.isSubscriptionActive) {
-  //     if (!mounted) return;
-
-  //     showCupertinoModalBottomSheet(
-  //       expand: true,
-  //       elevation: 0,
-  //       enableDrag: false,
-  //       context: context,
-  //       builder: (contextFromSheet) => PaywallWidget(),
-  //     );
-  //   }
-  // }
 
   HabitSelection selectedVal = HabitSelection.today;
 

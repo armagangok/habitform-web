@@ -110,61 +110,77 @@ class _WeeklyHabitGridState extends State<WeeklyHabitGrid> with SingleTickerProv
         final habitColor = currentHabit.colorCode;
         final emoji = currentHabit.emoji;
 
-        return SizedBox(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.end,
-            spacing: 0,
-            children: List.generate(
-              last7Days.length,
-              (index) {
-                // final day = last7Days[index].day;
-                final dateTimeIn7Days = last7Days[index].dateTime;
+        return LayoutBuilder(
+          builder: (context, constraints) {
+            // Calculate the available width for each day
+            final availableWidth = constraints.maxWidth;
+            final itemWidth = (availableWidth - (last7Days.length - 1) * 5) / last7Days.length; // 5 is the spacing between items
 
-                // final isToday = dateTimeIn7Days.isToday;
-                bool isCompletedDate = false;
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: List.generate(
+                last7Days.length,
+                (index) {
+                  final dateTimeIn7Days = last7Days[index].dateTime;
+                  bool isCompletedDate = false;
 
-                final completionDates = currentHabit.completionDates;
+                  final completionDates = currentHabit.completionDates;
 
-                if (completionDates != null && completionDates.isNotEmpty) {
-                  isCompletedDate = completionDates.any((d) => d.isSameDayWith(dateTimeIn7Days));
-                }
+                  if (completionDates != null && completionDates.isNotEmpty) {
+                    isCompletedDate = completionDates.any((d) => d.isSameDayWith(dateTimeIn7Days));
+                  }
 
-                return CupertinoButton(
-                  padding: EdgeInsets.zero,
-                  minSize: 0,
-                  onPressed: null,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Card(
-                        margin: EdgeInsets.zero,
-                        shape: RoundedRectangleBorder(
-                          side: BorderSide(
-                            color: context.primary.withAlpha(100),
-                            width: .25,
+                  return Expanded(
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 3),
+                      child: SizedBox(
+                        height: itemWidth,
+                        width: itemWidth, // Set the width of each item
+                        child: CupertinoButton(
+                          padding: EdgeInsets.zero,
+                          minSize: 0,
+                          onPressed: null,
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(vertical: 1),
+                            child: Card(
+                              margin: EdgeInsets.zero,
+                              shadowColor: Colors.transparent,
+                              surfaceTintColor: Colors.transparent,
+                              shape: RoundedRectangleBorder(
+                                side: BorderSide(
+                                  color: context.primary.withAlpha(25),
+                                  width: .5,
+                                ),
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                              color: isCompletedDate ? Color(habitColor) : null,
+                              child: SizedBox(
+                                child: Align(
+                                  child: Text(
+                                    isCompletedDate ? emoji ?? "" : "",
+                                    style: TextStyle(fontSize: context.isPortrait ? 22 : 24),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                              ),
+                            ),
                           ),
-                          borderRadius: BorderRadius.circular(5),
-                        ),
-                        color: isCompletedDate ? Color(habitColor) : null,
-                        child: FittedBox(
-                          child: SizedBox(
-                            width: 32,
-                            height: 32,
-                            child: isCompletedDate
-                                ? Center(
-                                    child: Text(
-                                      emoji ?? "",
-                                      style: TextStyle(fontSize: 22),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  )
-                                : null,
-                          ),
-                        ),
+                        ).animate(controller: _animationController).fadeIn(
+                              duration: Duration(milliseconds: 750),
+                            ),
                       ),
+                    ),
+                  );
+                },
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+}
+
                       // SizedBox(height: 2),
                       // Text(
                       //   day.getDayName,
@@ -173,14 +189,3 @@ class _WeeklyHabitGridState extends State<WeeklyHabitGrid> with SingleTickerProv
                       //   textAlign: TextAlign.center,
                       //   style: context.bodySmall?.copyWith(fontSize: 11),
                       // ),
-                    ],
-                  ),
-                ).animate(controller: _animationController).fadeIn(duration: Duration(milliseconds: 750));
-              },
-            ),
-          ),
-        );
-      },
-    );
-  }
-}

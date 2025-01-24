@@ -1,6 +1,7 @@
 import 'package:flutter/services.dart';
 
 import '/core/core.dart';
+import '../../../core/helpers/in_app_review/in_app_review.dart';
 import '../../../models/habit/habit_model.dart';
 import '../../../services/services.dart';
 import '../../reminder/service/reminder_service.dart';
@@ -12,7 +13,7 @@ part 'habit_state.dart';
 class HabitBloc extends Bloc<HabitEvent, HabitState> {
   final IHabitService habitService;
 
-  HabitBloc({required this.habitService}) : super(SingleHabitInitial()) {
+  HabitBloc({required this.habitService}) : super(HabitInitial()) {
     on<FetchHabitEvent>(_onFetchHabits);
     on<IdleHabitEvent>(_idle);
     on<SaveHabitEvent>(_saveNewHabit);
@@ -23,35 +24,38 @@ class HabitBloc extends Bloc<HabitEvent, HabitState> {
 
   Future<void> _onFetchHabits(FetchHabitEvent event, Emitter<HabitState> emit) async {
     try {
-      emit(SingleHabitLoading());
+      emit(HabitLoading());
       final habits = await habitService.getAllHabits();
       sortHabitsByReminderTime(habits);
       emit(HabitsFetched(habits));
     } on PlatformException catch (e, s) {
       debugPrint('Error fetching habits: $e\nStack trace: $s');
-      emit(SingleHabitFetchError(e.message ?? "An error occurred while fetching habits"));
+      emit(HabitFetchError(e.message ?? "An error occurred while fetching habits"));
     } catch (e, s) {
       debugPrint('Unexpected error fetching habits: $e\nStack trace: $s');
-      emit(SingleHabitFetchError("An unexpected error occurred"));
+      emit(HabitFetchError("An unexpected error occurred"));
     }
   }
 
   Future<void> _saveNewHabit(SaveHabitEvent event, Emitter<HabitState> emit) async {
     try {
-      emit(SingleHabitLoading());
+      emit(HabitLoading());
       await habitService.addData(event.habit);
-      emit(SingleHabitSaveSuccess("${event.habit.habitName}: Habit saved successfully"));
+
+      emit(HabitSaveSuccess("${event.habit.habitName}: Habit saved successfully"));
 
       // Fetch the updated list of habits
       add(FetchHabitEvent());
+
+      await InAppReviewHelper.shared.requestReview();
     } on PlatformException catch (e, s) {
       LogHelper.shared.debugPrint('Error saving habit: $e');
       LogHelper.shared.debugPrint('Stack trace: $s');
-      emit(SingleHabitSaveError(e.message ?? "An error occurred while saving the habit"));
+      emit(HabitSaveError(e.message ?? "An error occurred while saving the habit"));
     } catch (e, s) {
       LogHelper.shared.debugPrint('Unexpected error saving habit: $e');
       LogHelper.shared.debugPrint('Stack trace: $s');
-      emit(SingleHabitSaveError("An unexpected error occurred"));
+      emit(HabitSaveError("An unexpected error occurred"));
     }
   }
 
@@ -68,11 +72,11 @@ class HabitBloc extends Bloc<HabitEvent, HabitState> {
     } on PlatformException catch (e, s) {
       LogHelper.shared.debugPrint('Error deleting habit: $e');
       LogHelper.shared.debugPrint('Stack trace: $s');
-      emit(SingleHabitSaveError(e.message ?? "An error occurred while deleting the habit"));
+      emit(HabitSaveError(e.message ?? "An error occurred while deleting the habit"));
     } catch (e, s) {
       LogHelper.shared.debugPrint('Unexpected error deleting habit: $e');
       LogHelper.shared.debugPrint('Stack trace: $s');
-      emit(SingleHabitSaveError("An unexpected error occurred"));
+      emit(HabitSaveError("An unexpected error occurred"));
     }
   }
 
@@ -85,7 +89,7 @@ class HabitBloc extends Bloc<HabitEvent, HabitState> {
 
   Future<void> _updateHabitForSelectedDay(UpdateHabitForSelectedDayEvent event, Emitter<HabitState> emit) async {
     try {
-      emit(SingleHabitLoading());
+      emit(HabitLoading());
       LogHelper.shared.debugPrint('Updating habit for selected day: ${event.dateToSaveOrRemove}');
       LogHelper.shared.debugPrint('Original habit: ${event.habit}');
       LogHelper.shared.debugPrint('Current completion dates: ${event.habit.completionDates}');
@@ -119,16 +123,18 @@ class HabitBloc extends Bloc<HabitEvent, HabitState> {
       LogHelper.shared.debugPrint('Fetched habits after update: $habits');
       sortHabitsByReminderTime(habits);
       emit(HabitsFetched(habits));
+
+      await InAppReviewHelper.shared.requestReview();
     } catch (e, s) {
       LogHelper.shared.debugPrint('Error updating habit: $e');
       LogHelper.shared.debugPrint('Stack trace: $s');
-      emit(SingleHabitSaveError(e.toString()));
+      emit(HabitSaveError(e.toString()));
     }
   }
 
   Future<void> _onUpdateHabit(UpdateHabitEvent event, Emitter<HabitState> emit) async {
     try {
-      emit(SingleHabitLoading());
+      emit(HabitLoading());
 
       // Önce eski reminder'ı kontrol et ve iptal et
       final oldHabit = (await habitService.getAllHabits()).firstWhere(
@@ -139,22 +145,27 @@ class HabitBloc extends Bloc<HabitEvent, HabitState> {
       if (oldHabit.reminderModel != null) {
         await ReminderService.cancelReminderNotification(oldHabit.reminderModel!.id);
       }
+      final reminderModel = event.habit.reminderModel;
+      final days = event.habit.reminderModel?.days;
+      final reminderTime = event.habit.reminderModel?.reminderTime;
 
       // Yeni reminder'ı ayarla
-      if (event.habit.reminderModel != null && event.habit.reminderModel!.days != null && event.habit.reminderModel!.days!.isNotEmpty && event.habit.reminderModel!.reminderTime != null) {
+      if (reminderModel != null && days != null && days.isNotEmpty && reminderTime != null) {
         await ReminderService.createReminderNotification(
-          event.habit.reminderModel!,
+          reminderModel,
           event.habit.habitName,
-          "Time to complete your habit!",
+          LocaleKeys.habit_timeToCompleteYourHabit.tr(),
         );
       }
 
       await habitService.updateHabit(event.habit);
       add(FetchHabitEvent());
+
+      await InAppReviewHelper.shared.requestReview();
     } catch (e, s) {
       LogHelper.shared.debugPrint('$e');
       LogHelper.shared.debugPrint('$s');
-      emit(SingleHabitSaveError(e.toString()));
+      emit(HabitSaveError(e.toString()));
     }
   }
 }

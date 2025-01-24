@@ -14,7 +14,7 @@ class SingleHabitBuilder extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<HabitBloc, HabitState>(
       builder: (context, state) {
-        if (state is SingleHabitInitial) return SizedBox.shrink();
+        if (state is HabitInitial) return SizedBox.shrink();
 
         if (state is HabitsFetched) {
           final habits = state.habits;
@@ -27,22 +27,25 @@ class SingleHabitBuilder extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                _habitBuilder(habits),
+                SafeArea(
+                  top: false,
+                  bottom: false,
+                  child: _habitBuilder(habits),
+                ),
               ],
             ),
           );
         }
 
-        if (state is SingleHabitLoading) return Center(child: CupertinoActivityIndicator());
+        if (state is HabitLoading) return Center(child: CupertinoActivityIndicator());
 
-        if (state is SingleHabitFetchError) {
+        if (state is HabitFetchError) {
           return Text(
             state.message,
             style: context.bodySmall,
           );
-        } else {
-          return SizedBox.shrink();
         }
+        return SizedBox.shrink();
       },
     );
   }

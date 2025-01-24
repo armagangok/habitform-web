@@ -92,7 +92,8 @@
         "todayCompleted": "Bugün Tamamlandı",
         "complete": "Tamamla",
         "calendar_completion": "Takvim Tamamlama",
-        "calendar_tap_info": "Tarihlere dokunarak tamamlama durumunu değiştirebilirsiniz"
+        "calendar_tap_info": "Tarihlere dokunarak tamamlama durumunu değiştirebilirsiniz",
+        "timeToCompleteYourHabit": "Alışkanlığı tamamlama zamanı geldi"
     },
     "habit_detail": {
         "habitDetail": "Alışkanlık Detayı",

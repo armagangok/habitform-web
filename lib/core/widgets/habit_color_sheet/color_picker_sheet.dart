@@ -238,6 +238,12 @@ class ColorPickerSheetState extends State<ColorPickerSheet> with SingleTickerPro
   Color customColorForPicker = Colors.blue.shade500;
 
   @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  @override
   void initState() {
     controller = AnimationController(vsync: this);
     super.initState();

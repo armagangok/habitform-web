@@ -91,7 +91,7 @@ class _CompleteTodayButtonState extends State<CompleteTodayButton> with TickerPr
             minSize: 0,
             borderRadius: BorderRadius.circular(8),
             color: habitColor,
-            onPressed: () {
+            onPressed: () async {
               controller1.forward(from: 0);
               controller2.forward(from: 0);
 

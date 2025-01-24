@@ -92,7 +92,8 @@
         "todayCompleted": "Today Completed",
         "complete": "Complete",
         "calendar_completion": "Calendar Completion",
-        "calendar_tap_info": "Tap on dates to mark or unmark completion"
+        "calendar_tap_info": "Tap on dates to mark or unmark completion",
+        "timeToCompleteYourHabit":"Time to complete your habit"
     },
     "habit_detail": {
         "habitDetail": "Habit Detail",
