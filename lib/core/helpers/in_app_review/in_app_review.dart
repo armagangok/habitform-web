@@ -8,18 +8,18 @@ final class InAppReviewHelper {
   static final shared = InAppReviewHelper._();
 
   Future<void> requestReview() async {
-    // if (KDebug.rateDebugMode) return;
+    if (KDebug.rateDebugMode) return;
 
-    // try {
-    //   final isAvailable = await InAppReview.instance.isAvailable();
+    try {
+      final isAvailable = await InAppReview.instance.isAvailable();
 
-    //   LogHelper.shared.debugPrint('InAppReviewHelper: $isAvailable');
-    //   if (isAvailable) {
-    //     await InAppReview.instance.requestReview();
-    //   }
-    // } catch (e) {
-    //   LogHelper.shared.debugPrint('$e');
-    // }
+      LogHelper.shared.debugPrint('InAppReviewHelper: $isAvailable');
+      if (isAvailable) {
+        await InAppReview.instance.requestReview();
+      }
+    } catch (e) {
+      LogHelper.shared.debugPrint('$e');
+    }
   }
 
   // void openStoreListing() {
