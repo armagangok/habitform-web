@@ -55,8 +55,8 @@ class HabitDetailPage extends StatelessWidget {
               return Stack(
                 children: [
                   CupertinoPageScaffold(
-                    navigationBar: const SheetHeader(
-                      title: LocaleKeys.habit_detail_habitDetail,
+                    navigationBar: SheetHeader(
+                      title: LocaleKeys.habit_detail_habitDetail.tr(),
                       closeButtonPosition: CloseButtonPosition.left,
                     ),
                     child: ListView(
@@ -164,19 +164,22 @@ class _HabitGeneralInfo extends StatelessWidget {
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(10),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              name,
-              style: context.bodyLarge?.copyWith(fontWeight: FontWeight.bold),
-            ),
-            if (description != null)
+        child: SizedBox(
+          width: double.infinity,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
               Text(
-                description!,
-                style: context.bodyMedium?.copyWith(color: context.bodyMedium?.color?.withAlpha(170)),
+                name,
+                style: context.bodyLarge?.copyWith(fontWeight: FontWeight.bold),
               ),
-          ],
+              if (description != null)
+                Text(
+                  description!,
+                  style: context.bodyMedium?.copyWith(color: context.bodyMedium?.color?.withAlpha(170)),
+                ),
+            ],
+          ),
         ),
       ),
     );
