@@ -12,28 +12,51 @@ final class NotificationHelper {
   static final shared = NotificationHelper._();
 
   final _notificationPlugin = FlutterLocalNotificationsPlugin();
+  AndroidNotificationChannel? _channel;
 
   bool? isInitializationSucceded;
 
   /// Call this method in the `main` method to initialize the notification plugin.
   Future<void> get initializeNotificationPlugin async {
     try {
-      const android = AndroidInitializationSettings("ic_launcher");
-      const iOS = DarwinInitializationSettings();
-      const initializationSettings = InitializationSettings(android: android, iOS: iOS, macOS: iOS);
-
-      const AndroidNotificationChannel channel = AndroidNotificationChannel(
+      // Create the notification channel first
+      _channel = const AndroidNotificationChannel(
         'HabitRise_Habit_Reminder', // Channel ID
         'Habit Reminder', // Channel Name
         description: 'Channel for habit reminder notifications',
         importance: Importance.high,
+        enableVibration: true,
+        showBadge: true,
       );
 
-      await _notificationPlugin.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()?.createNotificationChannel(channel);
+      // Create the Android-specific notification channel
+      final androidPlugin = _notificationPlugin.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>();
+      if (androidPlugin != null) {
+        await androidPlugin.requestNotificationsPermission();
+        await androidPlugin.createNotificationChannel(_channel!);
+      }
 
-      isInitializationSucceded = await _notificationPlugin.initialize(initializationSettings);
+      // Initialize the plugin
+      const android = AndroidInitializationSettings("ic_launcher");
+      const iOS = DarwinInitializationSettings(
+        requestAlertPermission: true,
+        requestBadgePermission: true,
+        requestSoundPermission: true,
+      );
+      const initializationSettings = InitializationSettings(android: android, iOS: iOS);
+
+      isInitializationSucceded = await _notificationPlugin.initialize(
+        initializationSettings,
+        onDidReceiveNotificationResponse: (NotificationResponse response) {
+          LogHelper.shared.debugPrint('Notification clicked: ${response.payload}');
+        },
+      );
+
+      LogHelper.shared.debugPrint('Notification plugin initialized: $isInitializationSucceded');
     } catch (e, s) {
-      LogHelper.shared.debugPrint('$e\n$s');
+      LogHelper.shared.debugPrint('Error initializing notifications: $e');
+      LogHelper.shared.debugPrint('Stack trace: $s');
+      isInitializationSucceded = false;
     }
   }
 
@@ -44,52 +67,70 @@ final class NotificationHelper {
     DateTime scheduledTime,
     ReminderModel reminder,
   ) async {
-    // Android-specific details
-    final AndroidNotificationDetails androidNotificationDetails = AndroidNotificationDetails(
-      'HabitRise_Habit_Reminder',
-      'Habit Reminder',
-      channelDescription: 'Channel for habit reminder notifications',
-      importance: Importance.high,
-      priority: Priority.high,
-      color: Colors.orange.shade600,
-    );
+    try {
+      if (_channel == null) {
+        LogHelper.shared.debugPrint('Notification channel not initialized');
+        return;
+      }
 
-    final NotificationDetails notificationDetails = NotificationDetails(
-      android: androidNotificationDetails,
-      iOS: DarwinNotificationDetails(),
-    );
-
-    // If no days are selected, schedule a one-time notification
-    if (reminder.days == null || reminder.days!.isEmpty) {
-      await _notificationPlugin.zonedSchedule(
-        id,
-        title,
-        body,
-        tz.TZDateTime.from(scheduledTime, tz.local),
-        notificationDetails,
-        // androidAllowWhileIdle: true,
-        androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
-        uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.wallClockTime,
+      final AndroidNotificationDetails androidDetails = AndroidNotificationDetails(
+        _channel!.id,
+        _channel!.name,
+        channelDescription: _channel!.description,
+        importance: Importance.high,
+        priority: Priority.high,
+        enableVibration: true,
+        color: Colors.orange.shade600,
+        icon: 'ic_launcher',
       );
-      return;
-    }
 
-    // Schedule notifications for each selected day
-    for (final day in reminder.days!) {
-      final scheduleDate = _nextInstanceOfDay(scheduledTime, day);
-
-      await _notificationPlugin.zonedSchedule(
-        // Create unique ID for each day by combining reminder ID and day index
-        id + day.index,
-        title,
-        body,
-        scheduleDate,
-        notificationDetails,
-        // androidAllowWhileIdle: true,
-        androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
-        uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.wallClockTime,
-        matchDateTimeComponents: DateTimeComponents.dayOfWeekAndTime,
+      final NotificationDetails notificationDetails = NotificationDetails(
+        android: androidDetails,
+        iOS: const DarwinNotificationDetails(
+          presentAlert: true,
+          presentBadge: true,
+          presentSound: true,
+        ),
       );
+
+      // If no days are selected, schedule a one-time notification
+      if (reminder.days == null || reminder.days!.isEmpty) {
+        final scheduledDateTime = tz.TZDateTime.from(scheduledTime, tz.local);
+        LogHelper.shared.debugPrint('Scheduling one-time notification for: $scheduledDateTime');
+
+        await _notificationPlugin.zonedSchedule(
+          id,
+          title,
+          body,
+          scheduledDateTime,
+          notificationDetails,
+          androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+          uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.wallClockTime,
+        );
+        return;
+      }
+
+      // Schedule notifications for each selected day
+      for (final day in reminder.days!) {
+        final scheduleDate = _nextInstanceOfDay(scheduledTime, day);
+        LogHelper.shared.debugPrint('Scheduling notification for day ${day.name} at: $scheduleDate');
+
+        final notificationId = id + day.index;
+        await _notificationPlugin.zonedSchedule(
+          notificationId,
+          title,
+          body,
+          scheduleDate,
+          notificationDetails,
+          androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+          uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.wallClockTime,
+          matchDateTimeComponents: DateTimeComponents.dayOfWeekAndTime,
+        );
+        LogHelper.shared.debugPrint('Successfully scheduled notification with ID: $notificationId');
+      }
+    } catch (e, s) {
+      LogHelper.shared.debugPrint('Error scheduling notification: $e');
+      LogHelper.shared.debugPrint('Stack trace: $s');
     }
   }
 
@@ -117,13 +158,19 @@ final class NotificationHelper {
 
   /// Cancels all notifications for a given reminder
   Future<void> cancelReminderNotifications(ReminderModel reminder) async {
-    
-    // Önce temel reminder ID'si ile bildirimi iptal et
-    await _notificationPlugin.cancel(reminder.id);
+    try {
+      // Cancel the base reminder notification
+      await _notificationPlugin.cancel(reminder.id);
+      LogHelper.shared.debugPrint('Cancelled base notification with ID: ${reminder.id}');
 
-    // Tüm olası günler için bildirimleri iptal et
-    for (final day in Days.values) {
-      await _notificationPlugin.cancel(reminder.id + day.index);
+      // Cancel notifications for all possible days
+      for (final day in Days.values) {
+        final notificationId = reminder.id + day.index;
+        await _notificationPlugin.cancel(notificationId);
+        LogHelper.shared.debugPrint('Cancelled notification for day ${day.name} with ID: $notificationId');
+      }
+    } catch (e) {
+      LogHelper.shared.debugPrint('Error cancelling notifications: $e');
     }
   }
 
@@ -131,17 +178,17 @@ final class NotificationHelper {
     try {
       final List<PendingNotificationRequest> pendingNotifications = await _notificationPlugin.pendingNotificationRequests();
 
-      int index = 0;
+      LogHelper.shared.debugPrint('Total pending notifications: ${pendingNotifications.length}');
+
       for (var notification in pendingNotifications) {
-       LogHelper.shared.debugPrint("${index++}" ".Notifitication");
-       LogHelper.shared.debugPrint('Notification ID: ${notification.id}');
-       LogHelper.shared.debugPrint('Notification Title: ${notification.title}');
-       LogHelper.shared.debugPrint('Notification Body: ${notification.body}');
-       LogHelper.shared.debugPrint('Payload: ${notification.payload}');
-       LogHelper.shared.debugPrint("--------------------------------------------------");
+        LogHelper.shared.debugPrint('Notification ID: ${notification.id}');
+        LogHelper.shared.debugPrint('Title: ${notification.title}');
+        LogHelper.shared.debugPrint('Body: ${notification.body}');
+        LogHelper.shared.debugPrint('Payload: ${notification.payload}');
+        LogHelper.shared.debugPrint('---');
       }
     } catch (e) {
-      LogHelper.shared.debugPrint('$e');
+      LogHelper.shared.debugPrint('Error listing notifications: $e');
     }
   }
 }

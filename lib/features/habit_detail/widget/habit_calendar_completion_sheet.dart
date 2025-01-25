@@ -17,6 +17,7 @@ class HabitCalendarCompletionSheet extends StatefulWidget {
 }
 
 class _HabitCalendarCompletionSheetState extends State<HabitCalendarCompletionSheet> with SingleTickerProviderStateMixin {
+  // Use static final instead of const for DateTime
   static final _firstDay = DateTime.utc(2023, 1, 1);
   static final _lastDay = DateTime.now();
 
@@ -24,17 +25,8 @@ class _HabitCalendarCompletionSheetState extends State<HabitCalendarCompletionSh
   late DateTime _focusedDay;
   late Set<DateTime> _completedDays;
 
-  @override
-  void dispose() {
-    // Ensure all resources are properly disposed
-    super.dispose();
-  }
-
-  Future<void> _loadCompletionDates() async {
-    // Implement the logic to load completion dates from the database
-    // Example: _completedDays = await DatabaseService.getCompletionDates(widget.habit.id);
-    setState(() {}); // Update the state after loading
-  }
+  // Cache the calendar style
+  late final CalendarStyle _calendarStyle;
 
   @override
   void initState() {
@@ -42,27 +34,61 @@ class _HabitCalendarCompletionSheetState extends State<HabitCalendarCompletionSh
     _today = DateTime.now();
     _focusedDay = _today;
     _completedDays = widget.habit.completionDates?.map((date) => DateTime(date.year, date.month, date.day)).toSet() ?? {};
-    _loadCompletionDates(); // Load completion dates from the database
-    print('Completion Dates: \\${widget.habit.completionDates}'); // Debugging line to check completion dates
+
+    // Initialize calendar style
+    _calendarStyle = CalendarStyle(
+      defaultDecoration: BoxDecoration(
+        shape: BoxShape.rectangle,
+        borderRadius: BorderRadius.circular(8),
+      ),
+      weekendTextStyle: const TextStyle(),
+      weekNumberTextStyle: const TextStyle(),
+      weekendDecoration: BoxDecoration(
+        shape: BoxShape.rectangle,
+        borderRadius: BorderRadius.circular(8),
+      ),
+      outsideDecoration: BoxDecoration(
+        shape: BoxShape.rectangle,
+        borderRadius: BorderRadius.circular(8),
+      ),
+      todayDecoration: BoxDecoration(
+        color: Color(widget.habit.colorCode).withOpacity(.2),
+        shape: BoxShape.rectangle,
+        borderRadius: BorderRadius.circular(8),
+      ),
+      markerDecoration: BoxDecoration(
+        color: Color(widget.habit.colorCode),
+        shape: BoxShape.circle,
+        border: Border.all(
+          color: Color(widget.habit.colorCode),
+          width: 1.5,
+        ),
+      ),
+      markersMaxCount: 1,
+      markerSize: 10,
+      markersAlignment: Alignment.center,
+      markerMargin: const EdgeInsets.only(top: 2),
+      cellPadding: EdgeInsets.zero,
+      cellMargin: const EdgeInsets.all(10),
+    );
   }
 
   void _onDaySelected(DateTime selectedDay, DateTime focusedDay) {
+    final normalizedDay = DateTime(selectedDay.year, selectedDay.month, selectedDay.day);
+
     setState(() {
       _focusedDay = focusedDay;
-      final normalizedDay = DateTime(selectedDay.year, selectedDay.month, selectedDay.day);
+
       if (_completedDays.contains(normalizedDay)) {
         _completedDays.remove(normalizedDay);
       } else {
         _completedDays.add(normalizedDay);
       }
-
-      // Update the habit with new completion dates
-      final updatedHabit = widget.habit.copyWith(completionDates: _completedDays.toList());
-      // Dispatch the event to update the habit
-
-      // Save changes to the database
-      context.read<HabitBloc>().add(UpdateHabitEvent(habit: updatedHabit));
     });
+
+    // Update the habit with new completion dates outside setState
+    final updatedHabit = widget.habit.copyWith(completionDates: _completedDays.toList());
+    context.read<HabitBloc>().add(UpdateHabitEvent(habit: updatedHabit));
   }
 
   @override
@@ -73,7 +99,7 @@ class _HabitCalendarCompletionSheetState extends State<HabitCalendarCompletionSh
         closeButtonPosition: CloseButtonPosition.left,
       ),
       child: ListView(
-        physics: ClampingScrollPhysics(),
+        physics: const ClampingScrollPhysics(),
         shrinkWrap: true,
         children: [
           Material(
@@ -88,48 +114,11 @@ class _HabitCalendarCompletionSheetState extends State<HabitCalendarCompletionSh
                 formatButtonVisible: false,
                 titleCentered: true,
               ),
-              calendarStyle: CalendarStyle(
-                defaultDecoration: BoxDecoration(
-                  shape: BoxShape.rectangle,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                weekendTextStyle: TextStyle(),
-                weekNumberTextStyle: TextStyle(),
-                weekendDecoration: BoxDecoration(
-                  shape: BoxShape.rectangle,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                outsideDecoration: BoxDecoration(
-                  shape: BoxShape.rectangle,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                todayDecoration: BoxDecoration(
-                  color: Color(widget.habit.colorCode).withOpacity(.2),
-                  shape: BoxShape.rectangle,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                markerDecoration: BoxDecoration(
-                  color: Color(widget.habit.colorCode),
-                  shape: BoxShape.circle,
-                  border: Border.all(
-                    color: Color(widget.habit.colorCode),
-                    width: 1.5,
-                  ),
-                ),
-                markersMaxCount: 1,
-                markerSize: 10,
-                markersAlignment: Alignment.center,
-                markerMargin: const EdgeInsets.only(top: 2),
-                cellPadding: EdgeInsets.all(0),
-                cellMargin: EdgeInsets.all(10),
-                todayTextStyle: TextStyle(
-                  color: context.theme.textTheme.bodyLarge?.color,
-                ),
-              ),
+              calendarStyle: _calendarStyle,
               onDaySelected: _onDaySelected,
               eventLoader: (day) {
                 final normalizedDay = DateTime(day.year, day.month, day.day);
-                return _completedDays.contains(normalizedDay) ? [normalizedDay] : [];
+                return _completedDays.contains(normalizedDay) ? [normalizedDay] : const [];
               },
             ),
           ),

@@ -1,4 +1,4 @@
-const _activeAllDebugMode = false;
+const _activeAllDebugMode = true;
 
 abstract final class KDebug {
   // enables debug mode for print

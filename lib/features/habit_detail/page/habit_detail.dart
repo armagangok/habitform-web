@@ -1,12 +1,12 @@
 import '/core/core.dart';
 import '/features/habit_detail/widget/habit_calendar_widget.dart';
 import '/features/reminder/extension/easy_day.dart';
+import '/features/reminder/models/days/days_enum.dart';
 import '/models/models.dart';
 import '../../edit_habit/edit_habit_page.dart';
 import '../../habits/bloc/habit_bloc.dart';
 import '../../habits/widgets/complete_today_button.dart';
 import '../../habits/widgets/single_habit/single_habit_detail_grid.dart';
-import '../../share_habit/share_habit_button.dart';
 import '../bloc/habit_detail_bloc.dart';
 import '../providers/habit_detail_bloc_provider.dart';
 
@@ -36,6 +36,13 @@ class HabitDetailPage extends StatelessWidget {
         },
         builder: (context, state) {
           return BlocBuilder<HabitDetailBloc, HabitDetailState>(
+            buildWhen: (previous, current) {
+              // Only rebuild if the habit data has changed
+              if (previous is HabitDetailLoaded && current is HabitDetailLoaded) {
+                return previous.habit != current.habit;
+              }
+              return true;
+            },
             builder: (context, state) {
               if (state is! HabitDetailLoaded) {
                 return const Center(child: CupertinoActivityIndicator());
@@ -45,13 +52,11 @@ class HabitDetailPage extends StatelessWidget {
               final days = currentHabit.reminderModel?.days;
               final remindTime = currentHabit.reminderModel?.reminderTime?.toHHMM();
 
-              print("Current Habit: ${currentHabit.habitName}");
-
               return Stack(
                 children: [
                   CupertinoPageScaffold(
-                    navigationBar: SheetHeader(
-                      title: LocaleKeys.habit_detail_habitDetail.tr(),
+                    navigationBar: const SheetHeader(
+                      title: LocaleKeys.habit_detail_habitDetail,
                       closeButtonPosition: CloseButtonPosition.left,
                     ),
                     child: ListView(
@@ -61,74 +66,37 @@ class HabitDetailPage extends StatelessWidget {
                             spacing: 30,
                             children: [
                               Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 15) + EdgeInsets.only(top: 10),
+                                padding: const EdgeInsets.symmetric(horizontal: 15) + const EdgeInsets.only(top: 10),
                                 child: CustomHeader(
-                                  text: LocaleKeys.common_general.tr(),
-                                  child: item(
-                                    currentHabit.habitName,
-                                    subtitle: currentHabit.habitDescription,
+                                  text: LocaleKeys.common_general.tr().toUpperCase(),
+                                  child: _HabitGeneralInfo(
+                                    name: currentHabit.habitName,
+                                    description: currentHabit.habitDescription,
                                     emoji: currentHabit.emoji,
                                   ),
                                 ),
                               ),
                               Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 15),
+                                padding: const EdgeInsets.symmetric(horizontal: 15),
                                 child: CustomHeader(
                                   text: LocaleKeys.habit_reminder.tr().toUpperCase(),
-                                  child: SizedBox(
-                                    width: double.infinity,
-                                    child: Card(
-                                      child: Padding(
-                                        padding: EdgeInsets.all(10),
-                                        child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              remindTime ?? LocaleKeys.common_none.tr(),
-                                              style: context.bodyLarge?.copyWith(fontWeight: FontWeight.bold),
-                                            ),
-                                            if (days != null && days.isNotEmpty)
-                                              SizedBox(
-                                                height: 20,
-                                                child: ListView.separated(
-                                                  scrollDirection: Axis.horizontal,
-                                                  shrinkWrap: true,
-                                                  itemCount: days.length,
-                                                  separatorBuilder: (context, index) {
-                                                    return Text(
-                                                      ", ",
-                                                      style: context.bodyMedium?.copyWith(
-                                                        color: context.primary.withAlpha(170),
-                                                      ),
-                                                    );
-                                                  },
-                                                  itemBuilder: (context, index) {
-                                                    final dayName = days[index].capitalized;
-                                                    return Text(
-                                                      dayName,
-                                                      style: context.bodyMedium?.copyWith(
-                                                        color: context.primary.withAlpha(170),
-                                                      ),
-                                                    );
-                                                  },
-                                                ),
-                                              ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
+                                  child: _ReminderInfo(
+                                    remindTime: remindTime,
+                                    days: days,
                                   ),
                                 ),
                               ),
                               Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 15),
+                                padding: const EdgeInsets.symmetric(horizontal: 15),
                                 child: CustomHeader(
-                                  text: LocaleKeys.habit_habit_data.tr(),
+                                  text: LocaleKeys.habit_habit_data.tr().toUpperCase(),
                                   child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.end,
                                     children: [
-                                      SingleHabitDetailGrid(habit: currentHabit),
-                                      SizedBox(height: 10),
+                                      RepaintBoundary(
+                                        child: SingleHabitDetailGrid(habit: currentHabit),
+                                      ),
+                                      const SizedBox(height: 10),
                                       Row(
                                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         spacing: 10,
@@ -141,7 +109,7 @@ class HabitDetailPage extends StatelessWidget {
                                   ),
                                 ),
                               ),
-                              SizedBox(height: 40),
+                              const SizedBox(height: 40),
                             ],
                           ),
                         ),
@@ -159,62 +127,11 @@ class HabitDetailPage extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
                               Expanded(
-                                child: CupertinoButton.tinted(
-                                  sizeStyle: CupertinoButtonSize.small,
-                                  padding: EdgeInsets.zero,
-                                  onPressed: () {
-                                    _showDeleteConfirmationDialog(context, currentHabit);
-                                  },
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Text(
-                                        LocaleKeys.common_delete.tr(),
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      ),
-                                      SizedBox(width: 5),
-                                      Icon(
-                                        FontAwesomeIcons.solidTrashCan,
-                                      ),
-                                    ],
-                                  ),
-                                ),
+                                child: _DeleteButton(habit: currentHabit),
                               ),
                               Expanded(
-                                child: Builder(builder: (context) {
-                                  return CupertinoButton.tinted(
-                                    sizeStyle: CupertinoButtonSize.small,
-                                    padding: EdgeInsets.zero,
-                                    onPressed: () {
-                                      showCupertinoModalBottomSheet(
-                                        enableDrag: false,
-                                        context: context,
-                                        builder: (context) {
-                                          return EditHabitPage(habit: currentHabit);
-                                        },
-                                      );
-                                    },
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Text(
-                                          LocaleKeys.common_edit.tr(),
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.w500,
-                                          ),
-                                        ),
-                                        SizedBox(width: 5),
-                                        Icon(
-                                          FontAwesomeIcons.solidPenToSquare,
-                                        ),
-                                      ],
-                                    ),
-                                  );
-                                }),
+                                child: _EditButton(habit: currentHabit),
                               ),
-                              ShareHabitButton(habit: currentHabit),
                             ],
                           ),
                         ),
@@ -229,80 +146,180 @@ class HabitDetailPage extends StatelessWidget {
       ),
     );
   }
+}
 
-  Widget item(String title, {String? emoji, String? subtitle}) {
-    return title.isEmpty && subtitle == null
-        ? SizedBox.shrink()
-        : Card(
-            child: Padding(
-              padding: EdgeInsets.all(10),
-              child: SizedBox(
-                width: double.infinity,
-                child: Row(
-                  children: [
-                    if (emoji != null)
-                      Text(
-                        emoji,
-                        style: TextStyle(fontSize: 32),
-                      ),
-                    if (emoji != null) SizedBox(width: 10),
-                    Expanded(
-                      child: Builder(builder: (context) {
-                        return Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              title,
-                              style: context.titleMedium?.copyWith(
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            if (subtitle != null && subtitle.isNotEmpty)
-                              Text(
-                                subtitle,
-                                style: context.bodyMedium?.copyWith(
-                                  color: context.bodyMedium?.color?.withAlpha(180),
-                                ),
-                              ),
-                          ],
-                        );
-                      }),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          );
-  }
+class _HabitGeneralInfo extends StatelessWidget {
+  const _HabitGeneralInfo({
+    required this.name,
+    this.description,
+    this.emoji,
+  });
 
-  void _showDeleteConfirmationDialog(BuildContext context, Habit habit) {
-    showCupertinoDialog(
-      context: context,
-      builder: (context) {
-        return CupertinoAlertDialog(
-          title: Text(LocaleKeys.common_delete.tr()),
-          content: Text(LocaleKeys.habit_detail_areYouSureToDeleteHabit.tr()),
-          actions: [
-            CupertinoDialogAction(
-              child: Text(LocaleKeys.common_cancel.tr()),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
+  final String name;
+  final String? description;
+  final String? emoji;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(10),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              name,
+              style: context.bodyLarge?.copyWith(fontWeight: FontWeight.bold),
             ),
-            CupertinoDialogAction(
-              child: Text(
-                LocaleKeys.common_delete.tr(),
-                style: TextStyle(color: CupertinoColors.destructiveRed),
+            if (description != null)
+              Text(
+                description!,
+                style: context.bodyMedium?.copyWith(color: context.bodyMedium?.color?.withAlpha(170)),
               ),
-              onPressed: () {
-                context.read<HabitBloc>().add(DeleteHabitEvent(habit: habit));
-                Navigator.of(context).pop();
-                Navigator.of(context).pop();
-              },
-            ),
           ],
-        );
-      },
+        ),
+      ),
     );
   }
+}
+
+class _ReminderInfo extends StatelessWidget {
+  const _ReminderInfo({
+    required this.remindTime,
+    this.days,
+  });
+
+  final String? remindTime;
+  final List<Days>? days;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      child: Card(
+        child: Padding(
+          padding: const EdgeInsets.all(10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                remindTime ?? LocaleKeys.common_none.tr(),
+                style: context.bodyLarge?.copyWith(fontWeight: FontWeight.bold),
+              ),
+              if (days != null && days!.isNotEmpty)
+                SizedBox(
+                  height: 20,
+                  child: ListView.separated(
+                    scrollDirection: Axis.horizontal,
+                    shrinkWrap: true,
+                    itemCount: days!.length,
+                    separatorBuilder: (context, index) {
+                      return Text(
+                        ", ",
+                        style: context.bodyMedium?.copyWith(
+                          color: context.primary.withAlpha(170),
+                        ),
+                      );
+                    },
+                    itemBuilder: (context, index) {
+                      final dayName = days![index].capitalized;
+                      return Text(
+                        dayName,
+                        style: context.bodyMedium?.copyWith(
+                          color: context.primary.withAlpha(170),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _DeleteButton extends StatelessWidget {
+  const _DeleteButton({required this.habit});
+
+  final Habit habit;
+
+  @override
+  Widget build(BuildContext context) {
+    return CupertinoButton.tinted(
+      sizeStyle: CupertinoButtonSize.small,
+      padding: EdgeInsets.zero,
+      onPressed: () => _showDeleteConfirmationDialog(context, habit),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            LocaleKeys.common_delete.tr(),
+            style: const TextStyle(fontWeight: FontWeight.w500),
+          ),
+          const SizedBox(width: 5),
+          const Icon(FontAwesomeIcons.solidTrashCan),
+        ],
+      ),
+    );
+  }
+}
+
+class _EditButton extends StatelessWidget {
+  const _EditButton({required this.habit});
+
+  final Habit habit;
+
+  @override
+  Widget build(BuildContext context) {
+    return CupertinoButton.tinted(
+      sizeStyle: CupertinoButtonSize.small,
+      padding: EdgeInsets.zero,
+      onPressed: () {
+        showCupertinoModalBottomSheet(
+          enableDrag: false,
+          context: context,
+          builder: (context) => EditHabitPage(habit: habit),
+        );
+      },
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            LocaleKeys.common_edit.tr(),
+            style: const TextStyle(fontWeight: FontWeight.w500),
+          ),
+          const SizedBox(width: 5),
+          const Icon(FontAwesomeIcons.pencil),
+        ],
+      ),
+    );
+  }
+}
+
+void _showDeleteConfirmationDialog(BuildContext context, Habit habit) {
+  showCupertinoDialog(
+    context: context,
+    builder: (context) => CupertinoAlertDialog(
+      title: Text(LocaleKeys.common_delete.tr()),
+      content: Text(LocaleKeys.habit_detail_areYouSureToDeleteHabit.tr()),
+      actions: [
+        CupertinoDialogAction(
+          isDestructiveAction: true,
+          onPressed: () {
+            Navigator.pop(context);
+            context.read<HabitBloc>().add(DeleteHabitEvent(habit: habit));
+            Navigator.pop(context);
+          },
+          child: Text(LocaleKeys.common_delete.tr()),
+        ),
+        CupertinoDialogAction(
+          isDefaultAction: true,
+          onPressed: () => Navigator.pop(context),
+          child: Text(LocaleKeys.common_cancel.tr()),
+        ),
+      ],
+    ),
+  );
 }
