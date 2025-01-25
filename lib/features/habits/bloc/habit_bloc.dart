@@ -89,7 +89,7 @@ class HabitBloc extends Bloc<HabitEvent, HabitState> {
 
   Future<void> _updateHabitForSelectedDay(UpdateHabitForSelectedDayEvent event, Emitter<HabitState> emit) async {
     try {
-      emit(HabitLoading());
+      // Don't emit loading state here as it causes UI flicker
       LogHelper.shared.debugPrint('Updating habit for selected day: ${event.dateToSaveOrRemove}');
       LogHelper.shared.debugPrint('Original habit: ${event.habit}');
       LogHelper.shared.debugPrint('Current completion dates: ${event.habit.completionDates}');
@@ -122,6 +122,8 @@ class HabitBloc extends Bloc<HabitEvent, HabitState> {
       final habits = await habitService.getAllHabits();
       LogHelper.shared.debugPrint('Fetched habits after update: $habits');
       sortHabitsByReminderTime(habits);
+
+      // Emit the fetched state directly without going through loading
       emit(HabitsFetched(habits));
 
       await InAppReviewHelper.shared.requestReview();
@@ -136,35 +138,56 @@ class HabitBloc extends Bloc<HabitEvent, HabitState> {
     try {
       emit(HabitLoading());
 
-      // Önce eski reminder'ı kontrol et ve iptal et
-      final oldHabit = (await habitService.getAllHabits()).firstWhere(
-        (h) => h.id == event.habit.id,
-        orElse: () => event.habit,
-      );
+      // Get the current habit from storage
+      final currentHabit = HiveHelper.shared.getData<Habit>(HiveBoxes.habitBox, event.habit.id);
+      LogHelper.shared.debugPrint('Current habit from storage before update: $currentHabit');
 
-      if (oldHabit.reminderModel != null) {
-        await ReminderService.cancelReminderNotification(oldHabit.reminderModel!.id);
-      }
-      final reminderModel = event.habit.reminderModel;
-      final days = event.habit.reminderModel?.days;
-      final reminderTime = event.habit.reminderModel?.reminderTime;
-
-      // Yeni reminder'ı ayarla
-      if (reminderModel != null && days != null && days.isNotEmpty && reminderTime != null) {
-        await ReminderService.createReminderNotification(
-          reminderModel,
-          event.habit.habitName,
-          LocaleKeys.habit_timeToCompleteYourHabit.tr(),
-        );
+      // Cancel old reminder if exists
+      try {
+        if (currentHabit?.reminderModel != null) {
+          LogHelper.shared.debugPrint('Cancelling old reminder: ${currentHabit?.reminderModel}');
+          await ReminderService.cancelReminderNotification(currentHabit!.reminderModel!.id);
+        }
+      } catch (e) {
+        LogHelper.shared.debugPrint('Error cancelling old reminder: $e');
       }
 
-      await habitService.updateHabit(event.habit);
+      // Set up new reminder if exists
+      try {
+        final reminderModel = event.habit.reminderModel;
+        final days = reminderModel?.days;
+        final reminderTime = reminderModel?.reminderTime;
+
+        LogHelper.shared.debugPrint('New reminder details - Model: $reminderModel, Days: $days, Time: $reminderTime');
+
+        if (reminderModel != null && days != null && days.isNotEmpty && reminderTime != null) {
+          LogHelper.shared.debugPrint('Setting up new reminder notification');
+          await ReminderService.createReminderNotification(
+            reminderModel,
+            event.habit.habitName,
+            LocaleKeys.habit_timeToCompleteYourHabit.tr(),
+          );
+        }
+      } catch (e) {
+        LogHelper.shared.debugPrint('Error setting up new reminder: $e');
+      }
+
+      // Update the habit in storage
+      try {
+        LogHelper.shared.debugPrint('Updating habit in storage: ${event.habit}');
+        await habitService.updateHabit(event.habit);
+      } catch (e) {
+        LogHelper.shared.debugPrint('Error updating habit in storage: $e');
+        rethrow; // Re-throw to be caught by outer catch block
+      }
+
+      // Fetch updated habits
       add(FetchHabitEvent());
 
       await InAppReviewHelper.shared.requestReview();
     } catch (e, s) {
-      LogHelper.shared.debugPrint('$e');
-      LogHelper.shared.debugPrint('$s');
+      LogHelper.shared.debugPrint('Error in _onUpdateHabit: $e');
+      LogHelper.shared.debugPrint('Stack trace: $s');
       emit(HabitSaveError(e.toString()));
     }
   }
