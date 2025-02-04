@@ -1,13 +1,13 @@
 import 'package:flutter/services.dart';
-import 'package:habitrise/features/paywall/widgets/product_widget.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 
 import '/core/core.dart' hide LocaleKeys;
+import '/core/helpers/url_laucher/url_launcher.dart';
 import '/core/widgets/blur_widget.dart';
 import '/core/widgets/setting_leading.dart';
-import '../../../core/helpers/url_laucher/url_launcher.dart';
 import '../../translation/constants/locale_keys.g.dart';
 import '../bloc/paywall_bloc.dart';
+import 'product_widget.dart';
 
 class PaywallWidget extends StatefulWidget {
   const PaywallWidget({super.key});
@@ -23,25 +23,19 @@ class _PaywallWidgetState extends State<PaywallWidget> with SingleTickerProvider
   final List<FeatureModel> featureList = [
     FeatureModel(
       LocaleKeys.subscription_unlimitiedHabits.tr(),
-      CupertinoIcons.square_grid_3x2_fill,
+      CupertinoIcons.square_grid_3x2,
       LocaleKeys.subscription_unlimitiedHabitsDescription.tr(),
       Colors.blue,
     ),
     FeatureModel(
       LocaleKeys.subscription_unlimitiedCustomization.tr(),
-      CupertinoIcons.folder_fill_badge_plus,
+      CupertinoIcons.create_solid,
       LocaleKeys.subscription_unlimitiedCustomizationDescription.tr(),
       Colors.red,
     ),
     FeatureModel(
-      LocaleKeys.subscription_noBoringAds.tr(),
-      CupertinoIcons.graph_square_fill,
-      LocaleKeys.subscription_noBoringAdsDescription.tr(),
-      Colors.orange,
-    ),
-    FeatureModel(
       LocaleKeys.subscription_alwaysUpToDate.tr(),
-      CupertinoIcons.graph_square_fill,
+      CupertinoIcons.refresh_thick,
       LocaleKeys.subscription_alwaysUpToDateDescription.tr(),
       Colors.cyan,
     ),
@@ -52,19 +46,18 @@ class _PaywallWidgetState extends State<PaywallWidget> with SingleTickerProvider
       Colors.green,
     ),
     FeatureModel(
+      LocaleKeys.subscription_noBoringAds.tr(),
+      Icons.do_not_disturb_alt,
+      LocaleKeys.subscription_noBoringAdsDescription.tr(),
+      Colors.orange,
+    ),
+    FeatureModel(
       LocaleKeys.subscription_supportAnIndieDev.tr(),
       CupertinoIcons.heart_fill,
       LocaleKeys.subscription_supportAnIndieDevDescription.tr(),
       Colors.pinkAccent,
     ),
   ];
-
-  @override
-  void initState() {
-    super.initState();
-
-    context.read<PaywallBloc>().add(InitializePaywallEvent());
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -78,9 +71,6 @@ class _PaywallWidgetState extends State<PaywallWidget> with SingleTickerProvider
           if (state is PaywallLoaded) {
             selectedPackage ??= state.offerings?.current?.lifetime;
 
-            // final monthlyPackage = state.offerings?.current?.monthly;
-            // final annualPackage = state.offerings?.current?.annual;
-            // final lifetimePackage = state.offerings?.current?.lifetime;
             return CupertinoPageScaffold(
               navigationBar: _navBar(context),
               child: Stack(
@@ -102,28 +92,23 @@ class _PaywallWidgetState extends State<PaywallWidget> with SingleTickerProvider
                             textAlign: TextAlign.start,
                           ),
                           SizedBox(height: 10),
-                          ListView.builder(
+                          ListView.separated(
                             physics: ClampingScrollPhysics(),
                             itemCount: featureList.length,
                             shrinkWrap: true,
+                            separatorBuilder: (_, __) => SizedBox(height: 15),
                             itemBuilder: (context, index) {
                               final feature = featureList[index];
 
                               return CupertinoListTile(
-                                padding: EdgeInsets.only(bottom: 15, right: 15),
+                                padding: EdgeInsets.zero,
                                 leadingSize: 40,
                                 leading: SettingLeadingWidget(
-                                  cardColor: feature.color.withAlpha((0.34 * 255).toInt()),
+                                  cardColor: feature.color.withAlpha(110),
                                   padding: 7,
                                   iconData: feature.widget,
                                 ),
-                                title: Text(
-                                  feature.name,
-                                  style: TextStyle(
-                                    color: feature.color,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
+                                title: Text(feature.name),
                                 subtitle: Text(
                                   feature.description,
                                   maxLines: 3,

@@ -67,7 +67,7 @@ class _CompleteTodayButtonState extends State<CompleteTodayButton> with TickerPr
             color: habitColor,
             padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
             minSize: 0,
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.circular(90),
             onPressed: () {
               controller1.forward(from: 0);
               controller2.forward(from: 0);
@@ -89,7 +89,7 @@ class _CompleteTodayButtonState extends State<CompleteTodayButton> with TickerPr
             key: const ValueKey('uncompleted'),
             padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
             minSize: 0,
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.circular(90),
             color: habitColor,
             onPressed: () async {
               controller1.forward(from: 0);

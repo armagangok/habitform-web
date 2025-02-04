@@ -1,6 +1,6 @@
 import '/core/core.dart';
-import '../../../../core/theme/bloc/theme_bloc.dart';
-import '../../../../models/habit/habit_model.dart';
+import '/core/theme/bloc/theme_bloc.dart';
+import '/models/habit/habit_model.dart';
 import '../../../add_habit/add_habit_page.dart';
 import '../../../habit_detail/page/habit_detail.dart';
 import '../../bloc/habit_bloc.dart';
@@ -68,81 +68,86 @@ class SingleHabitBuilder extends StatelessWidget {
                 // final reminderTime = habit.reminderModel?.reminderTime;
                 final habitDescription = habit.habitDescription;
 
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    CustomButton(
-                      onTap: () {
-                        CupertinoScaffold.showCupertinoModalBottomSheet(
-                          enableDrag: false,
-                          context: context,
-                          builder: (contextFromSheet) {
-                            return HabitDetailPage(habit: habit);
-                          },
-                        );
+                return CustomButton(
+                  onTap: () {
+                    CupertinoScaffold.showCupertinoModalBottomSheet(
+                      enableDrag: false,
+                      context: context,
+                      builder: (contextFromSheet) {
+                        return HabitDetailPage(habit: habit);
                       },
+                    );
+                  },
+                  child: Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      side: BorderSide(
+                        color: context.primary.withOpacity(.1),
+                      ),
+                    ),
+                    color: Colors.transparent,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
                       child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
-                          BlocBuilder<ThemeBloc, ThemeState>(
-                            builder: (context, state) {
-                              return Row(
-                                children: [
-                                  Expanded(
-                                    child: Row(
-                                      children: [
-                                        if (habitIcon != null)
-                                          Text(
-                                            habitIcon,
-                                            style: context.headlineMedium,
-                                            maxLines: 1,
-                                          ),
-                                        if (habitIcon != null) SizedBox(width: 8),
-                                        Expanded(
-                                          child: Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
+                          Column(
+                            children: [
+                              BlocBuilder<ThemeBloc, ThemeState>(
+                                builder: (context, state) {
+                                  return Row(
+                                    children: [
+                                      Expanded(
+                                        child: Row(
+                                          children: [
+                                            if (habitIcon != null)
                                               Text(
-                                                habit.habitName,
-                                                style: context.bodyMedium?.copyWith(
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                                overflow: TextOverflow.ellipsis,
+                                                habitIcon,
+                                                style: context.headlineMedium,
                                                 maxLines: 1,
                                               ),
-                                              if (habitDescription != null && habitDescription.isNotEmpty)
-                                                Text(
-                                                  habitDescription,
-                                                  style: context.bodySmall?.copyWith(
-                                                    fontWeight: FontWeight.w500,
+                                            if (habitIcon != null) SizedBox(width: 8),
+                                            Expanded(
+                                              child: Column(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    habit.habitName,
+                                                    style: context.bodyMedium?.copyWith(
+                                                      fontWeight: FontWeight.bold,
+                                                    ),
+                                                    overflow: TextOverflow.ellipsis,
+                                                    maxLines: 1,
                                                   ),
-                                                  overflow: TextOverflow.ellipsis,
-                                                  maxLines: 1,
-                                                ),
-                                            ],
-                                          ),
+                                                  if (habitDescription != null && habitDescription.isNotEmpty)
+                                                    Text(
+                                                      habitDescription,
+                                                      style: context.bodySmall?.copyWith(
+                                                        fontWeight: FontWeight.w500,
+                                                      ),
+                                                      overflow: TextOverflow.ellipsis,
+                                                      maxLines: 1,
+                                                    ),
+                                                ],
+                                              ),
+                                            ),
+                                          ],
                                         ),
-                                      ],
-                                    ),
-                                  ),
-                                  SizedBox(width: 10),
-                                  CompleteTodayButton(currentHabit: habit),
-                                ],
-                              );
-                            },
+                                      ),
+                                      SizedBox(width: 10),
+                                      CompleteTodayButton(currentHabit: habit),
+                                    ],
+                                  );
+                                },
+                              ),
+                              SizedBox(height: 10),
+                              WeeklyHabitGrid(habit: habit),
+                            ],
                           ),
-                          SizedBox(height: 10),
-                          WeeklyHabitGrid(habit: habit),
                         ],
                       ),
                     ),
-                    // SizedBox(height: 5),
-                    // if (reminderTime != null)
-                    //   Text(
-                    //     reminderTime.toHHMM(),
-                    //     style: context.bodySmall,
-                    //     textAlign: TextAlign.end,
-                    //   ),
-                  ],
+                  ),
                 );
               },
               separatorBuilder: (context, index) {

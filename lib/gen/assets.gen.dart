@@ -74,11 +74,15 @@ class $AssetsTranslationsGen {
 class Assets {
   Assets._();
 
+  static const String aEnv = '.env';
   static const $AssetsAppGen app = $AssetsAppGen();
   static const $AssetsIllustrationsGen illustrations =
       $AssetsIllustrationsGen();
   static const $AssetsLottieGen lottie = $AssetsLottieGen();
   static const $AssetsTranslationsGen translations = $AssetsTranslationsGen();
+
+  /// List of all assets
+  static List<String> get values => [aEnv];
 }
 
 class AssetGenImage {

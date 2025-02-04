@@ -16,7 +16,9 @@ class AppDefaultsAdapter extends TypeAdapter<AppDefaults> {
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return AppDefaults()..isAppOpenedFirstTime = fields[0] as bool?;
+    return AppDefaults(
+      isAppOpenedFirstTime: fields[0] as bool?,
+    );
   }
 
   @override

@@ -17,16 +17,31 @@ class HiveHelper {
   }
 
   Future<void> _initBoxes() async {
-    try {
-      Hive.registerAdapter(DaysAdapter());
-      Hive.registerAdapter(ReminderModelAdapter());
-      Hive.registerAdapter(HabitAdapter());
-      Hive.registerAdapter(UserDefaultsAdapter());
-      Hive.registerAdapter(AppDefaultsAdapter());
+    Hive.registerAdapter(DaysAdapter());
+    Hive.registerAdapter(ReminderModelAdapter());
+    Hive.registerAdapter(HabitAdapter());
+    Hive.registerAdapter(UserDefaultsAdapter());
+    Hive.registerAdapter(AppDefaultsAdapter());
 
+    try {
       await Hive.openBox<Habit>(HiveBoxes.habitBox);
+    } catch (e) {
+      LogHelper.shared.debugPrint('$e');
+    }
+
+    try {
       await Hive.openBox<String?>(HiveBoxes.themeBox);
+    } catch (e) {
+      LogHelper.shared.debugPrint('$e');
+    }
+
+    try {
       await Hive.openBox<UserDefaults?>(HiveBoxes.userDeafultsBox);
+    } catch (e) {
+      LogHelper.shared.debugPrint('$e');
+    }
+
+    try {
       await Hive.openBox<AppDefaults?>(HiveBoxes.habitRiseDefaults);
     } catch (e) {
       LogHelper.shared.debugPrint('$e');

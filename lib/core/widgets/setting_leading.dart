@@ -22,7 +22,7 @@ class SettingLeadingWidget extends StatelessWidget {
         padding: EdgeInsets.all(padding),
         child: Icon(
           iconData,
-          color: CupertinoColors.white,
+          color: CupertinoColors.white.withAlpha(200),
         ),
       ),
     );

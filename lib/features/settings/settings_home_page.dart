@@ -1,5 +1,4 @@
 import 'package:flutter/services.dart';
-import 'package:habitrise/features/paywall/widgets/membership_info_widget.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import '/core/core.dart';
@@ -8,6 +7,7 @@ import '/core/theme/widget/theme_mode_widget.dart';
 import '../../core/helpers/spacing_helper.dart';
 import '../../core/widgets/flushbar_widget.dart';
 import '../paywall/bloc/paywall_bloc.dart';
+import '../paywall/widgets/membership_info_widget.dart';
 import '../translation/widget/language_feature.dart';
 import 'widgets/setting_item.dart';
 import 'widgets/subscribe_button.dart';
@@ -107,7 +107,7 @@ class SettingsPage extends StatelessWidget {
 
                           CupertinoListTile(
                             leading: const SettingLeadingWidget(
-                              iconData: CupertinoIcons.mail_solid,
+                              iconData: CupertinoIcons.doc_person_fill,
                               cardColor: Colors.deepOrangeAccent,
                             ),
                             onTap: () => _copyRCId(context),
