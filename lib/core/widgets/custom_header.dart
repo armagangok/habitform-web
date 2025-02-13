@@ -25,7 +25,8 @@ class CustomHeader extends StatelessWidget {
                   child: Text(
                     text,
                     style: context.bodySmall?.copyWith(
-                      color: context.bodySmall?.color?.withAlpha(170),
+                      color: context.bodySmall?.color?.withAlpha(200),
+                      fontSize: 13,
                       fontWeight: FontWeight.w500,
                     ),
                   ),

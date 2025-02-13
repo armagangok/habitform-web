@@ -1,3 +1,5 @@
+import 'package:habitrise/features/share_habit/share_habit_button.dart';
+
 import '/core/core.dart';
 import '/features/habit_detail/widget/habit_calendar_widget.dart';
 import '/features/reminder/extension/easy_day.dart';
@@ -129,6 +131,7 @@ class HabitDetailPage extends StatelessWidget {
                               Expanded(
                                 child: _DeleteButton(habit: currentHabit),
                               ),
+                              ShareHabitButton(habit: habit),
                               Expanded(
                                 child: _EditButton(habit: currentHabit),
                               ),
@@ -173,7 +176,7 @@ class _HabitGeneralInfo extends StatelessWidget {
                 name,
                 style: context.bodyLarge?.copyWith(fontWeight: FontWeight.bold),
               ),
-              if (description != null)
+              if (description.isNotNullAndNotEmpty)
                 Text(
                   description!,
                   style: context.bodyMedium?.copyWith(color: context.bodyMedium?.color?.withAlpha(170)),

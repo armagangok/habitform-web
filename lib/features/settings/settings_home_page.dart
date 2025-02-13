@@ -215,32 +215,3 @@ class SettingsPage extends StatelessWidget {
     }
   }
 }
-
-// class CustomDivider extends StatelessWidget {
-//   final Color color;
-//   final double thickness;
-//   final double indent;
-//   final double endIndent;
-
-//   const CustomDivider({
-//     super.key,
-//     this.color = CupertinoColors.separator,
-//     this.thickness = .5,
-//     this.indent = 28.0,
-//     this.endIndent = 0.0,
-//   });
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Padding(
-//       padding: EdgeInsetsDirectional.only(
-//         start: indent,
-//         end: endIndent,
-//       ),
-//       child: Container(
-//         height: thickness,
-//         color: color,
-//       ),
-//     );
-//   }
-// }
