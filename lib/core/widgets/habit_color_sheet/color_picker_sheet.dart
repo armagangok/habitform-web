@@ -2,8 +2,13 @@ import '/core/core.dart';
 
 class ColorPickerSheet extends StatefulWidget {
   final Function(Color) onColorSelected;
+  final Color? selectedColor;
 
-  const ColorPickerSheet({super.key, required this.onColorSelected});
+  const ColorPickerSheet({
+    super.key,
+    required this.onColorSelected,
+    this.selectedColor,
+  });
 
   @override
   ColorPickerSheetState createState() => ColorPickerSheetState();
@@ -238,15 +243,28 @@ class ColorPickerSheetState extends State<ColorPickerSheet> with SingleTickerPro
   Color customColorForPicker = Colors.blue.shade500;
 
   @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
+  void initState() {
+    super.initState();
+    controller = AnimationController(vsync: this);
+    if (widget.selectedColor != null) {
+      // Find the category and index of the selected color
+      for (var i = 0; i < colorCategories.length; i++) {
+        final category = colorCategories.values.elementAt(i);
+        final colorIndex = category.indexOf(widget.selectedColor!);
+        if (colorIndex != -1) {
+          selectedCategoryIndex = i;
+          selectedColorIndex = colorIndex;
+          customColorForPicker = widget.selectedColor!;
+          break;
+        }
+      }
+    }
   }
 
   @override
-  void initState() {
-    controller = AnimationController(vsync: this);
-    super.initState();
+  void dispose() {
+    controller.dispose();
+    super.dispose();
   }
 
   @override
@@ -262,6 +280,7 @@ class ColorPickerSheetState extends State<ColorPickerSheet> with SingleTickerPro
         CategoryWidget(
           customColor: customColorForPicker,
           categories: categoryNames,
+          initialSelectedIndex: selectedCategoryIndex,
           onCategorySelected: (val) {
             controller.forward(from: 0);
             setState(() {

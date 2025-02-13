@@ -2,8 +2,13 @@ import '/core/core.dart';
 
 class IconPickerSheet extends StatefulWidget {
   final Function(String) onIconSelected;
+  final String? selectedIcon;
 
-  const IconPickerSheet({super.key, required this.onIconSelected});
+  const IconPickerSheet({
+    super.key,
+    required this.onIconSelected,
+    this.selectedIcon,
+  });
 
   @override
   IconPickerSheetState createState() => IconPickerSheetState();
@@ -25,8 +30,20 @@ class IconPickerSheetState extends State<IconPickerSheet> with SingleTickerProvi
 
   @override
   void initState() {
-    controller = AnimationController(vsync: this);
     super.initState();
+    controller = AnimationController(vsync: this);
+    if (widget.selectedIcon != null) {
+      // Find the category and index of the selected icon
+      for (var i = 0; i < emojiCategories.length; i++) {
+        final category = emojiCategories.values.elementAt(i);
+        final iconIndex = category.indexOf(widget.selectedIcon!);
+        if (iconIndex != -1) {
+          selectedCategoryIndex = i;
+          selectedIconIndex = iconIndex;
+          break;
+        }
+      }
+    }
   }
 
 // Define categories with emojis
@@ -367,6 +384,7 @@ class IconPickerSheetState extends State<IconPickerSheet> with SingleTickerProvi
           children: [
             CategoryWidget(
               categories: categoryNames,
+              initialSelectedIndex: selectedCategoryIndex,
               onCategorySelected: (int selectedCategory) {
                 controller.forward(from: 0);
 

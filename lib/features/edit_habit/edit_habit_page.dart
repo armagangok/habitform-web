@@ -25,6 +25,8 @@ class _EditHabitPageState extends State<EditHabitPage> {
   late final TextEditingController _habitNameController;
   late final TextEditingController _habitDescriptionController;
   late final ReminderBloc _reminderBloc;
+  late final HabitEmojiCubit _habitEmojiCubit;
+  late final HabitColorCubit _habitColorCubit;
 
   @override
   void initState() {
@@ -36,6 +38,8 @@ class _EditHabitPageState extends State<EditHabitPage> {
         reminder: widget.habit.reminderModel,
         context: context,
       ));
+    _habitEmojiCubit = HabitEmojiCubit()..pickIcon(widget.habit.emoji);
+    _habitColorCubit = HabitColorCubit()..pickColor(Color(widget.habit.colorCode));
   }
 
   @override
@@ -44,13 +48,19 @@ class _EditHabitPageState extends State<EditHabitPage> {
     _habitNameController.dispose();
     _habitDescriptionController.dispose();
     _reminderBloc.close();
+    _habitEmojiCubit.close();
+    _habitColorCubit.close();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider.value(
-      value: _reminderBloc,
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider.value(value: _reminderBloc),
+        BlocProvider.value(value: _habitEmojiCubit),
+        BlocProvider.value(value: _habitColorCubit),
+      ],
       child: Builder(
         builder: (context) {
           return EditHabitProvider(
@@ -141,6 +151,7 @@ class _EditHabitPageState extends State<EditHabitPage> {
                                 CustomHeader(
                                   text: LocaleKeys.common_icon.tr().toUpperCase(),
                                   child: IconPickerSheet(
+                                    selectedIcon: widget.habit.emoji,
                                     onIconSelected: (icon) {
                                       context.read<HabitEmojiCubit>().pickIcon(icon);
                                     },
@@ -149,6 +160,7 @@ class _EditHabitPageState extends State<EditHabitPage> {
                                 CustomHeader(
                                   text: LocaleKeys.colors_color.tr().toUpperCase(),
                                   child: ColorPickerSheet(
+                                    selectedColor: Color(widget.habit.colorCode),
                                     onColorSelected: (color) {
                                       context.read<HabitColorCubit>().pickColor(color);
                                     },

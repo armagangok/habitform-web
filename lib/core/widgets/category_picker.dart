@@ -76,14 +76,15 @@ class MultiCategoryWidgetState<T> extends State<MultiCategoryWidget<T>> {
 class CategoryWidget extends StatefulWidget {
   final List<String> categories;
   final Function(int) onCategorySelected;
-
   final Color? customColor;
+  final int? initialSelectedIndex;
 
   const CategoryWidget({
     super.key,
     required this.categories,
     required this.onCategorySelected,
     this.customColor,
+    this.initialSelectedIndex,
   });
 
   @override
@@ -91,7 +92,13 @@ class CategoryWidget extends StatefulWidget {
 }
 
 class CategoryWidgetState extends State<CategoryWidget> {
-  int selectedIndex = 0;
+  late int selectedIndex;
+
+  @override
+  void initState() {
+    super.initState();
+    selectedIndex = widget.initialSelectedIndex ?? 0;
+  }
 
   @override
   Widget build(BuildContext context) {
