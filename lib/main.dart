@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
-import 'core/constants/debug_constants.dart';
 import 'core/core.dart';
 import 'core/helpers/notifications/notification_helper.dart';
 import 'core/helpers/notifications/timezone.dart';
@@ -77,7 +76,7 @@ class MyApp extends StatelessWidget {
             darkTheme: Themes.darkTheme,
             theme: Themes.lightTheme,
             themeMode: themeMode,
-            debugShowCheckedModeBanner: KDebug.debugModeEnabled,
+            debugShowCheckedModeBanner: false,
             navigatorKey: NavigationService.shared.navigatorKey,
             onGenerateRoute: NavigationRoute.shared.generateRoute,
             localizationsDelegates: context.localizationDelegates,
