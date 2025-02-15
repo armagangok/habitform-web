@@ -100,6 +100,15 @@ class CategoryWidgetState extends State<CategoryWidget> {
     selectedIndex = widget.initialSelectedIndex ?? 0;
   }
 
+  // Add this to handle external index changes
+  @override
+  void didUpdateWidget(CategoryWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.initialSelectedIndex != widget.initialSelectedIndex) {
+      selectedIndex = widget.initialSelectedIndex ?? 0;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
@@ -111,10 +120,10 @@ class CategoryWidgetState extends State<CategoryWidget> {
               maxWidth: constraints.maxWidth,
             ),
             child: Wrap(
-              spacing: 4, // Kategoriler arasındaki yatay boşluk
-              runSpacing: 4, // Satırlar arasındaki dikey boşluk
-              alignment: WrapAlignment.start, // İlk satırın hizalaması
-              runAlignment: WrapAlignment.start, // Satır hizalaması
+              spacing: 4,
+              runSpacing: 4,
+              alignment: WrapAlignment.start,
+              runAlignment: WrapAlignment.start,
               children: List.generate(
                 widget.categories.length,
                 (index) {
@@ -128,10 +137,7 @@ class CategoryWidgetState extends State<CategoryWidget> {
                     color: Colors.transparent,
                     onPressed: () {
                       HapticFeedback.selectionClick();
-                      setState(() {
-                        selectedIndex = index;
-                      });
-
+                      setState(() => selectedIndex = index);
                       widget.onCategorySelected(index);
                     },
                     child: Card(
@@ -149,15 +155,13 @@ class CategoryWidgetState extends State<CategoryWidget> {
                           vertical: 4,
                           horizontal: 5.5,
                         ),
-                        child: AnimatedDefaultTextStyle(
-                          duration: const Duration(milliseconds: 350), // Smooth animation duration
-                          curve: Curves.easeInOut, // Curve for the animation
+                        child: Text(
+                          widget.categories[index],
                           style: TextStyle(
                             fontSize: 13,
-                            fontWeight: selectedIndex == index ? FontWeight.w700 : FontWeight.normal,
+                            fontWeight: FontWeight.w600,
                             color: selectedIndex == index ? cardBackgroundColor.colorRegardingToBrightness : context.primary.withOpacity(.75),
                           ),
-                          child: Text(widget.categories[index]),
                         ),
                       ),
                     ),

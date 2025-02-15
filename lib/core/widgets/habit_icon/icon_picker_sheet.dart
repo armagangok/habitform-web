@@ -1,3 +1,5 @@
+import 'package:habitrise/core/widgets/custom_emoji_picker.dart';
+
 import '/core/core.dart';
 
 class IconPickerSheet extends StatefulWidget {
@@ -22,18 +24,347 @@ class IconPickerSheetState extends State<IconPickerSheet> with SingleTickerProvi
 
   late final AnimationController controller;
 
-  @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
+  // Define categories with emojis
+  late Map<String, List<String>> emojiCategories;
+
+  void _initializeCategories() {
+    emojiCategories = {
+      LocaleKeys.iconCategories_dailylife.tr(): [
+        '🛏️',
+        '🛌',
+        '🪥',
+        '🚿',
+        '🧴',
+        '🪒',
+        '👕',
+        '👖',
+        '👟',
+        '💧',
+        '🎛️',
+        '🍳',
+        '🍞',
+        '🥚',
+        '🥛',
+        "📚",
+        "🚴‍♂️",
+        "🏊‍♂️",
+        "🏃‍♂️",
+        "🚶🏼‍➡️",
+        "🚶🏻‍➡️",
+        "🚶🏼‍♀️",
+        "🚶🏿‍➡️",
+        "🚶🏿‍♀️",
+        '☕',
+        '🍽️',
+        '🍕',
+        '🍔',
+        '🍜',
+        '🍎',
+        '🥤',
+      ],
+      LocaleKeys.iconCategories_sports.tr(): [
+        "🚶🏻‍➡️",
+        "🚶🏼‍♀️",
+        "🚶🏻‍♀️",
+        "⚽",
+        "🏀",
+        "⚾",
+        "🥎",
+        "⛳",
+        "🏋️‍♂️",
+        "🏈",
+        "🎾",
+        "🏐",
+        "🏉",
+        "🥏",
+        "🥋",
+        "🏎️",
+        "🛹",
+        "🏂",
+        "🏄‍♂️",
+        "🚣‍♂️",
+        "🚴‍♂️",
+        "🏊‍♂️",
+        "🏃‍♂️",
+        "🛶",
+        "⛰️",
+        "🥾",
+        "🛂",
+        "⛵",
+      ],
+      LocaleKeys.iconCategories_health.tr(): [
+        "❤️",
+        "🔥",
+        "🩹",
+        "🌡️",
+        "❤️‍🩹",
+        "💪",
+        "💧",
+        "💉",
+        "⚕️",
+        "🩺",
+        "🩻",
+        "🏥",
+        "🧑🏻‍⚕️",
+        "👩🏻‍⚕️",
+        "👩🏼‍⚕️",
+        "👨🏻‍⚕️",
+        "👨🏼‍⚕️",
+        "👨🏿‍⚕️",
+        "👩🏿‍⚕️",
+        "🚑",
+        "⛑️",
+      ],
+      LocaleKeys.iconCategories_social.tr(): [
+        "👥",
+        "💬",
+        "📧",
+        "📞",
+        "🌐",
+        "🔔",
+        "🤝",
+        "👥",
+        "🗣️",
+        "📢",
+        "🔗",
+        "⭐",
+        "💌",
+        "🌍",
+      ],
+      LocaleKeys.iconCategories_nature.tr(): [
+        "☁️",
+        "☀️",
+        "🌙",
+        "🌬️",
+        "🌨️",
+        "🌱",
+        "🐦",
+        "🌳",
+        "🌿",
+        "🌸",
+        "🌵",
+        "🌴",
+        "🍀",
+        "🍁",
+        "🍂",
+        "🦣",
+        "🦤",
+        "🦥",
+        "🐫",
+        "🐪",
+        "🐎",
+        "🐐",
+        "🐑",
+        "🐏",
+        "🐒",
+        "🐓",
+        "🐔",
+        "🐕",
+        "🐖",
+        "🐗",
+        "🐙",
+        "🐚",
+        "🌨️",
+        "⛈️",
+        "🌦️",
+        "🏔️",
+        "☄️",
+        "⛰️",
+        "🌬️",
+        "🌪️",
+      ],
+      LocaleKeys.iconCategories_business.tr(): [
+        "💼",
+        "📈",
+        "📊",
+        "📁",
+        "📄",
+        "💰",
+        "💳",
+        "📆",
+        "👥",
+        "📧",
+        "📞",
+        "🏢",
+        "🕴🏻",
+        "🖇️",
+        "🗂️",
+        "🗄️",
+        "🗒️",
+        "📤",
+        "📥",
+        "📊",
+        "📉",
+        "📈",
+        "📇",
+      ],
+      LocaleKeys.iconCategories_art.tr(): [
+        "🎭",
+        "✏️",
+        "🖌️",
+        "🖼️",
+        "📷",
+        "🎨",
+        "🖼️",
+        "✏️",
+        "📷",
+        "🧶",
+        "🧵",
+        "✍🏻",
+        "👨🏻‍🎨",
+        "👩🏼‍🎨",
+        "🧑🏼‍🎨",
+        "👨🏼‍🎨",
+      ],
+      LocaleKeys.iconCategories_studyandtask.tr(): [
+        "📚",
+        "📝",
+        "📂",
+        "⏱️",
+        "📆",
+        "💡",
+        "📃",
+        "❔",
+        "📝",
+        "⏱️",
+        "📃",
+        "📆",
+        "📑",
+        "📋",
+        "☑️",
+        "📎",
+        "📁",
+        "💼",
+        "✅",
+        "✔️",
+        "📅",
+        "🔔",
+        "⏱️",
+        "📝",
+        "📆",
+        "🙇🏻",
+        "🙇🏻",
+        "🙇🏻‍♀️",
+        "🧑‍🎄",
+        "📖",
+        "🧑🏻‍💻",
+        "👩🏻‍💻",
+        "👨🏻‍💻",
+        "🧑🏻‍🏫",
+        "🧑🏻‍🏫",
+        "👩🏻‍🏫",
+        "👨🏻‍🏫",
+        "✍🏻",
+        "📌",
+        "📍",
+        "🖇️",
+        "🔗",
+        "🧷",
+        "🔖",
+        "🖍️",
+        "🖌️",
+        "🖊️",
+        "🖋️",
+        "🧮",
+        "📊",
+        "📅",
+        "🗃️",
+        "📇",
+        "🗳️",
+        "🗄️",
+        "📋",
+        "📁",
+        "📂",
+        "🗂️",
+        "🗞️",
+        "📰",
+        "📓",
+        "📔",
+        "📒",
+        "📕",
+        "📗",
+        "📘",
+        "📙",
+      ],
+      LocaleKeys.iconCategories_science.tr(): [
+        "🌡️",
+        "🧪",
+        "🧫",
+        "🦠",
+        "🧬",
+        "🩸",
+        "💉",
+        "⚗️",
+        "💊",
+        "🩺",
+        "🩻",
+        "🩹",
+        "🕳️",
+        "🔬",
+        "🔺",
+        "💉",
+        "🔭",
+        "🪐",
+        "🧑🏻‍🔬",
+        "👩🏻‍🔬",
+        "👨🏻‍🔬",
+        "🥼",
+        "🌑",
+      ],
+      LocaleKeys.iconCategories_gardenandyard.tr(): [
+        "🌱",
+        "🌳",
+        "🌾",
+        "🌼",
+        "🌍",
+        "🌹",
+        "⛲️",
+        "🪴",
+        "👨🏻‍🌾",
+        "👩🏻‍🌾",
+        "🧑🏻‍🌾",
+        "🌿",
+        "🌹",
+      ],
+      LocaleKeys.iconCategories_pets.tr(): [
+        "🐾",
+        "🐶",
+        "🦴",
+        "🐩",
+        "🐩",
+        "🐈‍⬛",
+        "🐈",
+        "🦮",
+        "🐕‍🦺",
+        "🐱",
+        "🐶",
+        "🐐",
+        "🐑",
+        "🐰",
+        "🐹",
+        "🐟",
+        "🐂",
+        "🦎",
+        "🚗",
+        "🦦",
+        "🐦",
+      ],
+      "Custom": [], // Custom emojiler EmojiPicker'dan yüklenecek
+    };
+
+    // Eğer seçili icon Custom kategorisindeyse listeye ekle
+    if (widget.selectedIcon != null && !emojiCategories.values.any((list) => list.contains(widget.selectedIcon))) {
+      emojiCategories["Custom"]!.add(widget.selectedIcon!);
+    }
   }
 
   @override
   void initState() {
     super.initState();
     controller = AnimationController(vsync: this);
+    _initializeCategories();
     if (widget.selectedIcon != null) {
-      // Find the category and index of the selected icon
+      // Tüm kategorilerde ara (Custom dahil)
       for (var i = 0; i < emojiCategories.length; i++) {
         final category = emojiCategories.values.elementAt(i);
         final iconIndex = category.indexOf(widget.selectedIcon!);
@@ -46,329 +377,11 @@ class IconPickerSheetState extends State<IconPickerSheet> with SingleTickerProvi
     }
   }
 
-// Define categories with emojis
-  Map<String, List<String>> emojiCategories = {
-    LocaleKeys.iconCategories_dailylife.tr(): [
-      '🛏️',
-      '🛌',
-      '🪥',
-      '🚿',
-      '🧴',
-      '🪒',
-      '👕',
-      '👖',
-      '👟',
-      '💧',
-      '🎛️',
-      '🍳',
-      '🍞',
-      '🥚',
-      '🥛',
-      "📚", // Kitap
-      "🚴‍♂️", // Bisiklet
-      "🏊‍♂️", // Yüzme
-      "🏃‍♂️", // Koşu
-      "🚶🏼‍➡️",
-      "🚶🏻‍➡️",
-      "🚶🏼‍♀️",
-      "🚶🏿‍➡️",
-      "🚶🏿‍♀️",
-      '☕',
-      '🍽️',
-      '🍕',
-      '🍔',
-      '🍜',
-      '🍎',
-      '🥤',
-    ],
-    LocaleKeys.iconCategories_sports.tr(): [
-      "🚶🏻‍➡️",
-      "🚶🏼‍♀️",
-      "🚶🏻‍♀️",
-      "⚽", // Futbol
-      "🏀", // Basketbol
-      "⚾", // Beyzbol
-      "🥎", // Beyzbol
-      "⛳", // Golf
-      "🏋️‍♂️", // Ağırlık kaldırma
-      "🏈", // Amerikan futbolu
-      "🎾", // Tenis
-      "🏐", // Voleybol
-      "🏉", // Rugby
-      "🥏", // Kriket
-      "🥋", // MMA
-      "🏎️", // Motor sporları
-      "🛹", // Skateboard
-      "🏂", // Snowboard
-      "🏄‍♂️", // Sörf
-      "🚣‍♂️", // Kürek sporu
-      "🚴‍♂️", // Bisiklet
-      "🏊‍♂️", // Yüzme
-      "🏃‍♂️", // Koşu
-      "🛶", // Kayak
-      "⛰️", // Doğa yürüyüşü
-      "🥾", // Hiking
-      "🛂", // Paragliding
-      "⛵", // Yelken sporu
-    ],
-    LocaleKeys.iconCategories_health.tr(): [
-      "❤️", // Kalp
-      "🔥", // Kalori yakma
-      "🩹", // Sağlık bakımı
-      "🌡️", // Sıcaklık ölçümü
-      "❤️‍🩹", // Kalp sağlığı
-      "💪", // Fitness
-      "💧", // Hidrasyon
-      "💉", // Aşı
-      "⚕️",
-      "🩺",
-      "🩻",
-      "🏥",
-      "🧑🏻‍⚕️",
-      "👩🏻‍⚕️",
-      "👩🏼‍⚕️",
-      "👨🏻‍⚕️",
-      "👨🏼‍⚕️",
-      "👨🏿‍⚕️",
-      "👩🏿‍⚕️",
-      "🚑",
-      "⛑️",
-    ],
-    LocaleKeys.iconCategories_social.tr(): [
-      "👥", // Sosyal bağlantı
-      "💬", // Sohbet
-      "📧", // E-posta
-      "📞", // Telefon
-      "🌐", // İnternet
-      "🔔", // Bildirim
-      "🤝", // İş birliği
-      "👥", // Grup
-      "🗣️", // Konuşma
-      "📢", // Duyuru
-      "🔗", // Bağlantı
-      "⭐", // Beğeni
-      "💌", // Günlük mesaj
-      "🌍" // Genel paylaşım
-    ],
-    LocaleKeys.iconCategories_nature.tr(): [
-      "☁️", // Bulut
-      "☀️", // Güneş
-      "🌙", // Ay
-      "🌬️", // Rüzgar
-      "🌨️", // Kar
-      "🌱", // Yeşil alan
-      "🐦", // Kuş
-      "🌳", // Ağaç
-      "🌿", // Çimen
-      "🌸", // Çiçek,
-      "🌵",
-      "🌴",
-      "🍀",
-      "🍁",
-      "🍂",
-      "🦣",
-      "🦤",
-      "🦥",
-      "🐫",
-      "🐪",
-      "🐎",
-      "🐐",
-      "🐑",
-      "🐏",
-      "🐒",
-      "🐓",
-      "🐔",
-      "🐕",
-      "🐖",
-      "🐗",
-      "🐙",
-      "🐚",
-      "🌨️",
-      "⛈️",
-      "🌦️",
-      "🏔️",
-      "☄️",
-      "⛰️",
-      "🌬️",
-      "🌪️"
-    ],
-    LocaleKeys.iconCategories_business.tr(): [
-      "💼", // Çanta
-      "📈", // Grafik
-      "📊", // Pasta grafiği
-      "📁", // Klasör
-      "📄", // Doküman
-      "💰", // Para
-      "💳", // Kredi kartı
-      "📆", // Takvim
-      "👥", // Kişiler
-      "📧", // E-posta
-      "📞", // Telefon
-      "🏢", // işletme
-      "🕴🏻",
-      "🖇️",
-      "🗂️",
-      "🗄️",
-      "🗒️",
-      "📤",
-      "📥",
-      "📊",
-      "📉",
-      "📈",
-      "📇",
-    ],
-    LocaleKeys.iconCategories_art.tr(): [
-      "🎭",
-      "✏️", // Kalem
-      "🖌️", // Boyama
-      "🖼️", // Fotoğraf
-      "📷", // Kamera
-      "🎨", // Renk paleti
-      "🖼️", // Sanat eseri
-      "✏️", // Düzenleme
-      "📷", // Fotoğrafçılık
-      "🧶",
-      "🧵",
-      "✍🏻",
-      "👨🏻‍🎨",
-      "👩🏼‍🎨",
-      "🧑🏼‍🎨",
-      "👨🏼‍🎨",
-    ],
-    LocaleKeys.iconCategories_studyandtask.tr(): [
-      "📚", // Kitap
-      "📝", // Not
-      "📂", // Dosya
-      "⏱️", // Zamanlayıcı
-      "📆", // Takvim
-      "💡", // Fikir
-      "📃", // Belge
-      "❔", // Soru
-      "📝", // Ödev
-      "⏱️", // Zaman yönetimi
-      "📃", // Liste
-      "📆", // Takvim
-      "📑", // Belge
-      "📋",
-      "☑️",
-      "📎", // Paperclip
-      "📁", // Klasör
-      "💼", // Çanta
-      "✅", // Tamamlanan
-      "✔️", // Onay
-      "📅", // Tarih
-      "🔔", // Alarm
-      "⏱️", // Zaman
-      "📝", // Not
-      "📆", // Planlama
-      "🙇🏻",
-      "🙇🏻",
-      "🙇🏻‍♀️",
-      "🧑‍🎄",
-      "📖",
-      "🧑🏻‍💻",
-      "👩🏻‍💻",
-      "👨🏻‍💻",
-      "🧑🏻‍🏫",
-      "🧑🏻‍🏫",
-      "👩🏻‍🏫",
-      "👨🏻‍🏫",
-      "✍🏻",
-      "📌",
-      "📍",
-      "🖇️",
-      "🔗",
-      "🧷",
-      "🔖",
-      "🖍️",
-      "🖌️",
-      "🖊️",
-      "🖋️",
-      "🧮",
-      "📊",
-      "📅",
-      "🗃️",
-      "📇",
-      "🗳️",
-      "🗄️",
-      "📋",
-      "📁",
-      "📂",
-      "🗂️",
-      "🗞️",
-      "📰",
-      "📓",
-      "📔",
-      "📒",
-      "📕",
-      "📗",
-      "📘",
-      "📙"
-    ],
-    LocaleKeys.iconCategories_science.tr(): [
-      "🌡️",
-      "🧪",
-      "🧫",
-      "🦠",
-      "🧬",
-      "🩸",
-      "💉",
-      "⚗️",
-      "💊",
-      "🩺",
-      "🩻",
-      "🩹",
-      "🕳️",
-      "🔬",
-      "🔺",
-      "💉",
-      "🔭",
-      "🪐",
-      "🧑🏻‍🔬",
-      "👩🏻‍🔬",
-      "👨🏻‍🔬",
-      "🥼",
-      "🌑",
-    ],
-    LocaleKeys.iconCategories_gardenandyard.tr(): [
-      "🌱", // Bitki
-      "🌳", // Ağaç
-      "🌾", // Çim
-      "🌼", // Bahçe
-      "🌍", // Arazi
-      "🌹", // Çiçek
-      "⛲️",
-      "🪴",
-      "👨🏻‍🌾",
-      "👩🏻‍🌾",
-      "🧑🏻‍🌾",
-      "🌿", // Çimen
-      "🌹" // Çiçek
-    ],
-    LocaleKeys.iconCategories_pets.tr(): [
-      "🐾", // Hayvan ayak izi
-      "🐶",
-      "🦴",
-      "🐩",
-      "🐩",
-      "🐈‍⬛",
-      "🐈",
-      "🦮",
-      "🐕‍🦺",
-      "🐱", // Kedi
-      "🐶", // Köpek
-      "🐐",
-      "🐑",
-      "🐰", // Tavşan
-      "🐹", // Hamster
-      "🐟", // Balık
-      "🐂",
-      "🦎", // Timsah
-      "🚗", // Araba
-      "🦦", // Otter
-      "🐦", // Kuş
-    ],
-  };
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -387,7 +400,6 @@ class IconPickerSheetState extends State<IconPickerSheet> with SingleTickerProvi
               initialSelectedIndex: selectedCategoryIndex,
               onCategorySelected: (int selectedCategory) {
                 controller.forward(from: 0);
-
                 selectedIconIndex = null;
                 setState(() {
                   selectedCategoryIndex = selectedCategory;
@@ -438,6 +450,37 @@ class IconPickerSheetState extends State<IconPickerSheet> with SingleTickerProvi
                   );
                 },
               ).animate(controller: controller).fadeIn(duration: 500.ms),
+            ),
+            Align(
+              alignment: Alignment.centerRight,
+              child: Padding(
+                padding: const EdgeInsets.only(
+                  right: 10,
+                  top: 5,
+                ),
+                child: CustomEmojiPicker(
+                  onEmojiSelected: (category, emoji) {
+                    // Yeni emojiyi Custom kategorisine ekle
+                    final customEmojis = emojiCategories["Custom"] ?? [];
+                    if (!customEmojis.contains(emoji.emoji)) {
+                      setState(() {
+                        customEmojis.add(emoji.emoji);
+                        emojiCategories["Custom"] = customEmojis;
+                      });
+                    }
+
+                    widget.onIconSelected(emoji.emoji);
+
+                    // Custom kategorisini seç
+                    final customCategoryIndex = emojiCategories.keys.toList().indexOf("Custom");
+                    setState(() {
+                      selectedCategoryIndex = customCategoryIndex;
+                    });
+
+                    navigator.pop();
+                  },
+                ),
+              ),
             ),
           ],
         ),

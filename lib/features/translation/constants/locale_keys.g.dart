@@ -17,6 +17,8 @@ abstract class  LocaleKeys {
   static const common_warning = 'common.warning';
   static const common_error = 'common.error';
   static const common_Information = 'common.Information';
+  static const common_pick_your_emoji = 'common.pick_your_emoji';
+  static const common_custom = 'common.custom';
   static const common = 'common';
   static const colors_color = 'colors.color';
   static const colors_blue = 'colors.blue';

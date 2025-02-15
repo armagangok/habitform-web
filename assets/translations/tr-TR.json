@@ -15,7 +15,9 @@
         "icon": "İkon",
         "warning": "Uyarı",
         "error": "Hata",
-        "Information": "Bilgilendirme"
+        "Information": "Bilgilendirme",
+        "pick_your_emoji": "Kendi İkonunu Seç",
+        "custom": "Özel"
     },
     "colors": {
         "color": "Renk",
@@ -138,7 +140,7 @@
         "alwaysUpToDateDescription": "Her zaman güncel kalın ve yeni özelliklere erişin.",
         "upcomingFeatures": "Yakında Gelecek Özellikler",
         "upcomingFeaturesDescription": "Talep ettiğiniz özellikler çok yakında geliyor!",
-        "supportAnIndieDev": "Bağımsız Bir Geliştiriciyi Destekley",
+        "supportAnIndieDev": "Bağımsız Bir Geliştiriciyi Destekle",
         "supportAnIndieDevDescription": "Satın alımınız, bağımsız bir uygulama geliştiricisini destekler",
         "loading": "Yükleniyor..",
         "purchaseRestoredSuccessfuly": "Satın alma başarıyla geri yüklendi",
