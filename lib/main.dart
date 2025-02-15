@@ -76,7 +76,7 @@ class MyApp extends StatelessWidget {
             darkTheme: Themes.darkTheme,
             theme: Themes.lightTheme,
             themeMode: themeMode,
-            debugShowCheckedModeBanner: false,
+            debugShowCheckedModeBanner: true,
             navigatorKey: NavigationService.shared.navigatorKey,
             onGenerateRoute: NavigationRoute.shared.generateRoute,
             localizationsDelegates: context.localizationDelegates,

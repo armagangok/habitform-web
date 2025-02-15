@@ -15,7 +15,9 @@
         "icon": "Icon",
         "warning": "Warning",
         "error": "Error",
-        "Information": "Information"
+        "Information": "Information",
+        "pick_your_emoji": "Pick Your Own Icon",
+        "custom":"Custom"
     },
     "colors": {
         "color": "Color",
