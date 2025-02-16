@@ -1,164 +1,83 @@
 import 'package:flutter/services.dart';
+import 'package:purchases_flutter/purchases_flutter.dart';
 
 import '/core/core.dart';
 
-enum RevenueCatHelper {
-  // Purchase related states
-  purchaseError,
-  purchaseSuccess,
-  purchaseCancelled,
-  purchaseInProgress,
-  purchaseTimeout,
-  purchaseInvalidated,
+class RevenueCatHelper {
+  static String get purchaseSuccessMessage => LocaleKeys.subscription_purchaseSuccessful.tr();
+  static String get restoreSuccessMessage => LocaleKeys.subscription_purchaseRestoredSuccessfuly.tr();
+  static String get loadingMessage => LocaleKeys.subscription_loading.tr();
+  static String get alreadyPurchasedMessage => LocaleKeys.subscription_youAlreadyHaveAnActiveSubscription.tr();
 
-  // Restore related states
-  restoreError,
-  restoreSuccess,
-  restoreInProgress,
-  noPurchaseToRestore,
-
-  // Subscription states
-  alreadyPurchased,
-  subscriptionExpired,
-  subscriptionPaused,
-  subscriptionResumed,
-
-  // Billing related states
-  billingUnavailable,
-  billingInvalid,
-  priceNotLoaded,
-
-  // Network related states
-  networkError,
-  serverError,
-
-  // General states
-  generalError,
-  invalidCredentials,
-  notInitialized;
-
-  String get message {
-    switch (this) {
-      // Purchase messages
-      case RevenueCatHelper.purchaseError:
-        return LocaleKeys.subscription_purchaseError.tr();
-      case RevenueCatHelper.purchaseSuccess:
-        return LocaleKeys.subscription_purchaseSuccessful.tr();
-      case RevenueCatHelper.purchaseCancelled:
+  static String getMessageFromError(PurchasesError error) {
+    switch (error.code) {
+      case PurchasesErrorCode.purchaseCancelledError:
         return LocaleKeys.subscription_purchaseCancelled.tr();
-      case RevenueCatHelper.purchaseInProgress:
-        return LocaleKeys.subscription_loading.tr();
-      case RevenueCatHelper.purchaseTimeout:
-        return LocaleKeys.subscription_purchaseTimeout.tr();
-      case RevenueCatHelper.purchaseInvalidated:
+      case PurchasesErrorCode.purchaseNotAllowedError:
+        return LocaleKeys.subscription_purchaseError.tr();
+      case PurchasesErrorCode.purchaseInvalidError:
         return LocaleKeys.subscription_purchaseInvalidated.tr();
-
-      // Restore messages
-      case RevenueCatHelper.restoreError:
-        return LocaleKeys.subscription_restoreError.tr();
-      case RevenueCatHelper.restoreSuccess:
-        return LocaleKeys.subscription_purchaseRestoredSuccessfuly.tr();
-      case RevenueCatHelper.restoreInProgress:
-        return LocaleKeys.subscription_loading.tr();
-      case RevenueCatHelper.noPurchaseToRestore:
-        return LocaleKeys.subscription_youDoNotHaveAnyPurchasesToRestore.tr();
-
-      // Subscription messages
-      case RevenueCatHelper.alreadyPurchased:
-        return LocaleKeys.subscription_youAlreadyHaveAnActiveSubscription.tr();
-      case RevenueCatHelper.subscriptionExpired:
-        return LocaleKeys.subscription_subscriptionExpired.tr();
-      case RevenueCatHelper.subscriptionPaused:
-        return LocaleKeys.subscription_subscriptionPaused.tr();
-      case RevenueCatHelper.subscriptionResumed:
-        return LocaleKeys.subscription_subscriptionResumed.tr();
-
-      // Billing messages
-      case RevenueCatHelper.billingUnavailable:
-        return LocaleKeys.subscription_billingUnavailable.tr();
-      case RevenueCatHelper.billingInvalid:
-        return LocaleKeys.subscription_billingInvalid.tr();
-      case RevenueCatHelper.priceNotLoaded:
-        return LocaleKeys.subscription_priceNotLoaded.tr();
-
-      // Network messages
-      case RevenueCatHelper.networkError:
+      case PurchasesErrorCode.networkError:
         return LocaleKeys.subscription_networkError.tr();
-      case RevenueCatHelper.serverError:
-        return LocaleKeys.subscription_serverError.tr();
-
-      // General messages
-      case RevenueCatHelper.generalError:
-        return LocaleKeys.errors_try_again.tr();
-      case RevenueCatHelper.invalidCredentials:
+      case PurchasesErrorCode.productAlreadyPurchasedError:
+        return alreadyPurchasedMessage;
+      case PurchasesErrorCode.receiptAlreadyInUseError:
+        return LocaleKeys.subscription_restoreError.tr();
+      case PurchasesErrorCode.invalidCredentialsError:
         return LocaleKeys.subscription_invalidCredentials.tr();
-      case RevenueCatHelper.notInitialized:
-        return LocaleKeys.subscription_notInitialized.tr();
+      case PurchasesErrorCode.paymentPendingError:
+        return LocaleKeys.subscription_purchaseTimeout.tr();
+      case PurchasesErrorCode.insufficientPermissionsError:
+        return LocaleKeys.subscription_billingUnavailable.tr();
+      default:
+        _logErrorDetails(error);
+        return LocaleKeys.errors_try_again.tr();
     }
   }
 
-  static RevenueCatHelper fromPlatformException(PlatformException exception) {
-    final code = exception.code.toLowerCase();
-    final details = exception.details?.toString().toLowerCase() ?? '';
-    final message = exception.message?.toLowerCase() ?? '';
+  static void _logErrorDetails(PurchasesError error) {
+    debugPrint('''
+    RevenueCat Error:
+    Code: ${error.code}
+    Message: ${error.message}
+    Underlying Error: ${error.underlyingErrorMessage}
+    ''');
+  }
 
-    // Purchase related errors
-    if (code.contains('purchase_error') || message.contains('purchase')) {
-      if (message.contains('cancel') || details.contains('cancel')) {
-        return RevenueCatHelper.purchaseCancelled;
+  static String getMessageFromException(PlatformException exception) {
+    final error = RevenueCatErrorParser.getErrorFromException(exception);
+    if (error != null) {
+      return getMessageFromError(error);
+    }
+    return LocaleKeys.errors_try_again.tr();
+  }
+}
+
+class RevenueCatErrorParser {
+  static PurchasesErrorCode getErrorCode(String code) {
+    try {
+      return PurchasesErrorCode.values.firstWhere(
+        (e) => e.toString().split('.').last == code,
+        orElse: () => PurchasesErrorCode.unknownError,
+      );
+    } catch (e) {
+      return PurchasesErrorCode.unknownError;
+    }
+  }
+
+  static PurchasesError? getErrorFromException(PlatformException exception) {
+    try {
+      if (exception.details is Map) {
+        final Map<String, dynamic> details = exception.details as Map<String, dynamic>;
+        final code = details['code'] as String?;
+        if (code != null) {
+          final errorCode = getErrorCode(code);
+          return PurchasesError(errorCode, exception.message ?? '', exception.details, details['underlyingErrorMessage'] ?? '');
+        }
       }
-      if (message.contains('timeout') || details.contains('timeout')) {
-        return RevenueCatHelper.purchaseTimeout;
-      }
-      if (message.contains('invalid') || details.contains('invalid')) {
-        return RevenueCatHelper.purchaseInvalidated;
-      }
-      return RevenueCatHelper.purchaseError;
+    } catch (e) {
+      debugPrint('Error parsing exception: $e');
     }
-
-    // Restore related errors
-    if (code.contains('restore') || message.contains('restore')) {
-      if (message.contains('no purchases') || details.contains('no purchases')) {
-        return RevenueCatHelper.noPurchaseToRestore;
-      }
-      return RevenueCatHelper.restoreError;
-    }
-
-    // Billing related errors
-    if (code.contains('billing')) {
-      if (message.contains('unavailable') || details.contains('unavailable')) {
-        return RevenueCatHelper.billingUnavailable;
-      }
-      return RevenueCatHelper.billingInvalid;
-    }
-
-    // Network related errors
-    if (code.contains('network') || message.contains('network') || details.contains('network')) {
-      return RevenueCatHelper.networkError;
-    }
-    if (code.contains('server') || message.contains('server') || details.contains('server')) {
-      return RevenueCatHelper.serverError;
-    }
-
-    // Subscription related errors
-    if (message.contains('already purchased') || details.contains('already purchased')) {
-      return RevenueCatHelper.alreadyPurchased;
-    }
-    if (message.contains('expired') || details.contains('expired')) {
-      return RevenueCatHelper.subscriptionExpired;
-    }
-    if (message.contains('paused') || details.contains('paused')) {
-      return RevenueCatHelper.subscriptionPaused;
-    }
-
-    // Other errors
-    if (code.contains('not_initialized') || message.contains('not initialized')) {
-      return RevenueCatHelper.notInitialized;
-    }
-    if (code.contains('invalid_credentials') || message.contains('invalid credentials')) {
-      return RevenueCatHelper.invalidCredentials;
-    }
-
-    return RevenueCatHelper.generalError;
+    return null;
   }
 }

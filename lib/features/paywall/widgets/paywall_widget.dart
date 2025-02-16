@@ -77,7 +77,7 @@ class _PaywallWidgetState extends State<PaywallWidget> with SingleTickerProvider
               AppFlushbar.shared.warningFlushbar(state.errorMessage!);
             } else if (state.isPurchaseCompleted) {
               Navigator.of(context).pop();
-              AppFlushbar.shared.successFlushbar(RevenueCatHelper.purchaseSuccess.message);
+              AppFlushbar.shared.successFlushbar(RevenueCatHelper.purchaseSuccessMessage);
             }
           }
         },
@@ -247,8 +247,7 @@ class _PaywallWidgetState extends State<PaywallWidget> with SingleTickerProvider
                         : () async {
                             HapticFeedback.heavyImpact();
                             if (isSubscriptionActive && selectedPackage?.identifier == paywallState.customerInfo?.entitlements.active[entitlementID]?.productIdentifier) {
-                              final helper = RevenueCatHelper.alreadyPurchased;
-                              AppFlushbar.shared.warningFlushbar(helper.message);
+                              AppFlushbar.shared.warningFlushbar(RevenueCatHelper.alreadyPurchasedMessage);
                               return;
                             }
                             if (selectedPackage != null) {

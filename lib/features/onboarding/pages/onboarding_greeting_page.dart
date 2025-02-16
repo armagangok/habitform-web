@@ -2,6 +2,7 @@ import '/core/core.dart';
 import '../../../models/app_defaults/app_defaults.dart';
 import '../../../services/app_default.dart';
 import '../../paywall/bloc/paywall_bloc.dart';
+import '../../paywall/widgets/onboarding_paywall_widget.dart';
 import '../widgets/onboarding_button.dart';
 
 class OnboardingGreetingPage extends StatefulWidget {
@@ -114,7 +115,13 @@ class _OnboardingGreetingPageState extends State<OnboardingGreetingPage> {
                           return;
                         }
 
-                        context.read<PaywallBloc>().add(ShowOnboardingPaywallEvent());
+                        showCupertinoModalBottomSheet(
+                          context: context,
+                          enableDrag: false,
+                          expand: true,
+                          barrierColor: Colors.black,
+                          builder: (context) => OnboardingPaywallWidget(),
+                        );
                       },
                       buttonText: "${LocaleKeys.onboarding_get_started.tr()} 🚀",
                     ).animate().fadeIn(delay: 2200.ms, duration: 600.ms),

@@ -1,8 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/services.dart';
 
 import '/core/core.dart';
+import '../../../core/widgets/flushbar_widget.dart';
 import '../in_app_purchase/iap.dart';
-import '../widgets/onboarding_paywall_widget.dart';
 
 part 'paywall_event.dart';
 part 'paywall_state.dart';
@@ -30,7 +32,6 @@ class PaywallBloc extends Bloc<PaywallEvent, PaywallState> {
     on<InitializePaywallEvent>(_onInitialize);
     on<PurchaseProductEvent>(_onPurchaseProduct);
     on<RestorePurchasesEvent>(_onRestorePurchases);
-    on<ShowOnboardingPaywallEvent>(_onShowOnboardingPaywall);
   }
 
   Future<void> _onInitialize(InitializePaywallEvent event, Emitter<PaywallState> emit) async {
@@ -42,7 +43,7 @@ class PaywallBloc extends Bloc<PaywallEvent, PaywallState> {
       final isSubscriptionActive = _checkSubscriptionStatus(customerInfo);
 
       if (offerings.current == null) {
-        emit(PaywallError(RevenueCatHelper.priceNotLoaded.message));
+        emit(const PaywallError("Could not load subscription prices"));
         return;
       }
 
@@ -51,9 +52,9 @@ class PaywallBloc extends Bloc<PaywallEvent, PaywallState> {
         customerInfo: customerInfo,
         isSubscriptionActive: isSubscriptionActive,
       ));
-    } on PlatformException catch (e, s) {
-      LogHelper.shared.debugPrint('$e\n$s');
-      emit(PaywallError(RevenueCatHelper.fromPlatformException(e).message));
+    } on PlatformException catch (e) {
+      LogHelper.shared.debugPrint('$e\n${e.stacktrace}');
+      emit(PaywallError(RevenueCatHelper.getMessageFromException(e)));
     }
   }
 
@@ -75,9 +76,10 @@ class PaywallBloc extends Bloc<PaywallEvent, PaywallState> {
       ));
     } on PlatformException catch (e) {
       LogHelper.shared.debugPrint('$e\n${e.stacktrace}');
+      final error = RevenueCatErrorParser.getErrorFromException(e);
       emit(currentState.copyWith(
         purchaseStatus: PurchaseStatus.failed,
-        errorMessage: RevenueCatHelper.fromPlatformException(e).message,
+        errorMessage: error != null ? RevenueCatHelper.getMessageFromError(error) : RevenueCatHelper.getMessageFromException(e),
       ));
     }
   }
@@ -92,36 +94,28 @@ class PaywallBloc extends Bloc<PaywallEvent, PaywallState> {
       final response = await PurchaseService.restorePurchases;
       final isSubscriptionActive = _checkSubscriptionStatus(response);
 
-      emit(PaywallResult(
-        offerings: currentState.offerings,
-        customerInfo: response,
-        isSubscriptionActive: isSubscriptionActive,
-      ));
-    } on PlatformException catch (e, s) {
-      LogHelper.shared.debugPrint('$e\n$s');
+      if (isSubscriptionActive) {
+        AppFlushbar.shared.successFlushbar(LocaleKeys.subscription_purchaseRestoredSuccessfuly.tr());
+      } else {
+        AppFlushbar.shared.warningFlushbar(LocaleKeys.subscription_youDoNotHaveAnyPurchasesToRestore.tr());
+      }
+
+      emit(
+        PaywallResult(
+          offerings: currentState.offerings,
+          customerInfo: response,
+          isSubscriptionActive: isSubscriptionActive,
+          isRestoring: false,
+        ),
+      );
+    } on PlatformException catch (e) {
+      LogHelper.shared.debugPrint('$e\n${e.stacktrace}');
+      final error = RevenueCatErrorParser.getErrorFromException(e);
       emit(currentState.copyWith(
         isRestoring: false,
-        errorMessage: RevenueCatHelper.fromPlatformException(e).message,
+        errorMessage: error != null ? RevenueCatHelper.getMessageFromError(error) : RevenueCatHelper.getMessageFromException(e),
       ));
     }
-  }
-
-  Future<void> _onShowOnboardingPaywall(ShowOnboardingPaywallEvent event, Emitter<PaywallState> emit) async {
-    if (state is! PaywallResult) {
-      emit(PaywallError(RevenueCatHelper.notInitialized.message));
-      return;
-    }
-
-    final currentContext = navigator.navigatorKey.currentContext;
-    if (currentContext == null) return;
-
-    showCupertinoModalBottomSheet(
-      context: currentContext,
-      enableDrag: false,
-      expand: true,
-      barrierColor: Colors.black,
-      builder: (context) => OnboardingPaywallWidget(),
-    );
   }
 
   bool _checkSubscriptionStatus(CustomerInfo? customerInfo) {

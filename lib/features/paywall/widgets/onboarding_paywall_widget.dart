@@ -79,7 +79,7 @@ class _OnboardingPaywallWidgetState extends State<OnboardingPaywallWidget> with 
                 barrierDismissible: true,
                 context: context,
                 builder: (context) => CupertinoAlertDialog(
-                  title: Text(RevenueCatHelper.purchaseSuccess.message),
+                  title: Text(RevenueCatHelper.purchaseSuccessMessage),
                   actions: [
                     CupertinoDialogAction(
                       child: Text(LocaleKeys.subscription_continue.tr()),
