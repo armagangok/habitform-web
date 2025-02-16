@@ -1,6 +1,6 @@
 // DO NOT EDIT. This is code generated via package:easy_localization/generate.dart
 
-abstract class LocaleKeys {
+abstract class  LocaleKeys {
   static const common_save = 'common.save';
   static const common_cancel = 'common.cancel';
   static const common_delete = 'common.delete';
@@ -81,7 +81,6 @@ abstract class LocaleKeys {
   static const habit_monthly = 'habit.monthly';
   static const habit_create_habit = 'habit.create_habit';
   static const habit_no_habit_found = 'habit.no_habit_found';
-  static const habit_lets_gain_habit = 'habit.lets_gain_habit';
   static const habit_habit_data = 'habit.habit_data';
   static const habit_todayCompleted = 'habit.todayCompleted';
   static const habit_complete = 'habit.complete';
@@ -122,6 +121,7 @@ abstract class LocaleKeys {
   static const subscription_unlimitiedHabits = 'subscription.unlimitiedHabits';
   static const subscription_unlimitiedHabitsDescription = 'subscription.unlimitiedHabitsDescription';
   static const subscription_unlimitiedCustomization = 'subscription.unlimitiedCustomization';
+  static const subscription_myMembership = 'subscription.myMembership';
   static const subscription_unlimitiedCustomizationDescription = 'subscription.unlimitiedCustomizationDescription';
   static const subscription_noBoringAds = 'subscription.noBoringAds';
   static const subscription_noBoringAdsDescription = 'subscription.noBoringAdsDescription';
@@ -141,6 +141,18 @@ abstract class LocaleKeys {
   static const subscription_purchaseCancelled = 'subscription.purchaseCancelled';
   static const subscription_restoreError = 'subscription.restoreError';
   static const subscription_continueWithLimitedPlan = 'subscription.continueWithLimitedPlan';
+  static const subscription_purchaseTimeout = 'subscription.purchaseTimeout';
+  static const subscription_purchaseInvalidated = 'subscription.purchaseInvalidated';
+  static const subscription_subscriptionExpired = 'subscription.subscriptionExpired';
+  static const subscription_subscriptionPaused = 'subscription.subscriptionPaused';
+  static const subscription_subscriptionResumed = 'subscription.subscriptionResumed';
+  static const subscription_billingUnavailable = 'subscription.billingUnavailable';
+  static const subscription_billingInvalid = 'subscription.billingInvalid';
+  static const subscription_priceNotLoaded = 'subscription.priceNotLoaded';
+  static const subscription_networkError = 'subscription.networkError';
+  static const subscription_serverError = 'subscription.serverError';
+  static const subscription_invalidCredentials = 'subscription.invalidCredentials';
+  static const subscription_notInitialized = 'subscription.notInitialized';
   static const subscription = 'subscription';
   static const share_share = 'share.share';
   static const share_share_image = 'share.share_image';
@@ -166,16 +178,5 @@ abstract class LocaleKeys {
   static const languages_english = 'languages.english';
   static const languages_turkish = 'languages.turkish';
   static const languages = 'languages';
-  static const subscription_purchaseTimeout = 'subscription.purchaseTimeout';
-  static const subscription_purchaseInvalidated = 'subscription.purchaseInvalidated';
-  static const subscription_subscriptionExpired = 'subscription.subscriptionExpired';
-  static const subscription_subscriptionPaused = 'subscription.subscriptionPaused';
-  static const subscription_subscriptionResumed = 'subscription.subscriptionResumed';
-  static const subscription_billingUnavailable = 'subscription.billingUnavailable';
-  static const subscription_billingInvalid = 'subscription.billingInvalid';
-  static const subscription_priceNotLoaded = 'subscription.priceNotLoaded';
-  static const subscription_networkError = 'subscription.networkError';
-  static const subscription_serverError = 'subscription.serverError';
-  static const subscription_invalidCredentials = 'subscription.invalidCredentials';
-  static const subscription_notInitialized = 'subscription.notInitialized';
+
 }
