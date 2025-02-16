@@ -40,7 +40,7 @@ class SettingsPage extends StatelessWidget {
                             ? Card(
                                 child: CupertinoListTile(
                                   leading: Assets.app.habitriseDarkTransparent.image(height: 24, width: 24),
-                                  title: Text("My Membership"),
+                                  title: Text(LocaleKeys.subscription_myMembership.tr()),
                                   onTap: () {
                                     showCupertinoModalBottomSheet(
                                         context: context,

@@ -184,18 +184,15 @@ class SingleHabitBuilder extends StatelessWidget {
                   ),
                   textAlign: TextAlign.center,
                 ),
-                Text(
-                  LocaleKeys.habit_lets_gain_habit.tr(),
-                  style: context.titleMedium,
-                  textAlign: TextAlign.center,
-                ),
                 SizedBox(height: 15),
                 CupertinoButton.tinted(
+                  color: Colors.deepOrangeAccent,
                   sizeStyle: CupertinoButtonSize.medium,
                   child: Text(
                     LocaleKeys.habit_create_habit.tr(),
                     style: TextStyle(
                       fontWeight: FontWeight.w500,
+                      color: Colors.deepOrangeAccent,
                     ),
                   ),
                   onPressed: () {
