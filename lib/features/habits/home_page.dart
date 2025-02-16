@@ -5,7 +5,7 @@ import '/features/paywall/bloc/paywall_bloc.dart';
 import '../add_habit/add_habit_page.dart';
 import '../settings/settings_home_page.dart';
 import 'bloc/habit_bloc.dart';
-import 'widgets/single_habit/single_habit_builder.dart';
+import 'widgets/single_habit/habit_builder.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -107,41 +107,67 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
       trailing: Align(
         widthFactor: 1,
         child: Builder(builder: (context) {
-          return CupertinoButton(
-            padding: EdgeInsets.zero,
-            child: Icon(
-              CupertinoIcons.add_circled,
-              size: 32,
-            ),
-            onPressed: () {
-              final paywallState = context.read<PaywallBloc>().state;
+          final paywallState = context.watch<PaywallBloc>().state;
+          final isSubActive = paywallState is PaywallResult ? paywallState.isSubscriptionActive : false;
+          final isPurchasing = paywallState is PaywallResult ? paywallState.isPurchasing : false;
+          final isRestoring = paywallState is PaywallResult ? paywallState.isRestoring : false;
 
-              if (paywallState is PaywallLoaded) {
-                final isSubActive = paywallState.isSubscriptionActive;
+          return Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if (!isSubActive)
+                isPurchasing || isRestoring
+                    ? CupertinoActivityIndicator()
+                    : CupertinoButton(
+                        minSize: 0,
+                        padding: EdgeInsets.zero,
+                        onPressed: () {
+                          showCupertinoModalBottomSheet(
+                            enableDrag: false,
+                            context: context,
+                            builder: (_) => PaywallWidget(),
+                          );
+                        },
+                        child: FaIcon(
+                          FontAwesomeIcons.crown,
+                          size: 24,
+                          color: CupertinoColors.systemYellow,
+                        ),
+                      ).animate().fadeIn(duration: Duration(milliseconds: 300)),
+              SizedBox(width: 8),
+              CupertinoButton(
+                padding: EdgeInsets.zero,
+                onPressed: isPurchasing || isRestoring
+                    ? null
+                    : () {
+                        if (isSubActive) {
+                          _openAddHabitPage(context);
+                        } else {
+                          final habitState = context.read<HabitBloc>().state;
 
-                if (isSubActive) {
-                  _openAddHabitPage(context);
-                } else {
-                  final habitState = context.read<HabitBloc>().state;
-
-                  if (habitState is HabitsFetched) {
-                    final createdTaskAmount = habitState.habits.length;
-                    if (createdTaskAmount <= 3) {
-                      _openAddHabitPage(context);
-                    } else {
-                      showCupertinoModalBottomSheet(
-                        enableDrag: false,
-                        context: context,
-                        builder: (_) => PaywallWidget(),
-                      );
-                    }
-                  }
-                }
-              }
-            },
+                          if (habitState is HabitsFetched) {
+                            final createdTaskAmount = habitState.habits.length;
+                            if (createdTaskAmount <= 3) {
+                              _openAddHabitPage(context);
+                            } else {
+                              showCupertinoModalBottomSheet(
+                                enableDrag: false,
+                                context: context,
+                                builder: (_) => PaywallWidget(),
+                              );
+                            }
+                          }
+                        }
+                      },
+                child: Icon(
+                  CupertinoIcons.add_circled,
+                  size: 32,
+                ),
+              ).animate().fadeIn(duration: Duration(milliseconds: 300)),
+            ],
           );
         }),
-      ).animate().fadeIn(duration: Duration(milliseconds: 300)),
+      ),
     );
   }
 

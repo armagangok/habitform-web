@@ -9,7 +9,6 @@ class ThemeModeFeature extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<ThemeBloc, ThemeState>(
       builder: (context, state) {
-        final themeMode = state.themeMode;
         return CupertinoListTile(
           leading: const SettingLeadingWidget(
             iconData: CupertinoIcons.paintbrush_fill,
@@ -21,36 +20,41 @@ class ThemeModeFeature extends StatelessWidget {
             showCupertinoModalPopup(
               context: context,
               builder: (context) {
-                return CupertinoActionSheet(
-                  title: Text(LocaleKeys.settings_theme.tr()),
-                  actions: [
-                    CupertinoActionSheetAction(
-                      isDefaultAction: themeMode == ThemeMode.system,
-                      onPressed: () {
-                        context.read<ThemeBloc>().add(SetSystemThemeEvent());
-                      },
-                      child: Text(LocaleKeys.settings_system.tr()),
-                    ),
-                    CupertinoActionSheetAction(
-                      isDefaultAction: themeMode == ThemeMode.light,
-                      onPressed: () {
-                        context.read<ThemeBloc>().add(SetLightThemeEvent());
-                      },
-                      child: Text(LocaleKeys.settings_light_mode.tr()),
-                    ),
-                    CupertinoActionSheetAction(
-                      isDefaultAction: themeMode == ThemeMode.dark,
-                      onPressed: () {
-                        context.read<ThemeBloc>().add(SetDarkThemeEvent());
-                      },
-                      child: Text(LocaleKeys.settings_dark_mode.tr()),
-                    ),
-                  ],
-                  cancelButton: CupertinoActionSheetAction(
-                    isDestructiveAction: true,
-                    onPressed: navigator.pop,
-                    child: Text("Cancel"),
-                  ),
+                return BlocBuilder<ThemeBloc, ThemeState>(
+                  builder: (context, state) {
+                    final currentThemeMode = state.themeMode;
+                    return CupertinoActionSheet(
+                      title: Text(LocaleKeys.settings_theme.tr()),
+                      actions: [
+                        CupertinoActionSheetAction(
+                          isDefaultAction: currentThemeMode == ThemeMode.system,
+                          onPressed: () {
+                            context.read<ThemeBloc>().add(SetSystemThemeEvent());
+                          },
+                          child: Text(LocaleKeys.settings_system.tr()),
+                        ),
+                        CupertinoActionSheetAction(
+                          isDefaultAction: currentThemeMode == ThemeMode.light,
+                          onPressed: () {
+                            context.read<ThemeBloc>().add(SetLightThemeEvent());
+                          },
+                          child: Text(LocaleKeys.settings_light_mode.tr()),
+                        ),
+                        CupertinoActionSheetAction(
+                          isDefaultAction: currentThemeMode == ThemeMode.dark,
+                          onPressed: () {
+                            context.read<ThemeBloc>().add(SetDarkThemeEvent());
+                          },
+                          child: Text(LocaleKeys.settings_dark_mode.tr()),
+                        ),
+                      ],
+                      cancelButton: CupertinoActionSheetAction(
+                        isDestructiveAction: true,
+                        onPressed: navigator.pop,
+                        child: Text(LocaleKeys.common_cancel.tr()),
+                      ),
+                    );
+                  },
                 );
               },
             );

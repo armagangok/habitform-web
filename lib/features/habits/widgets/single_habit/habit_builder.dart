@@ -82,7 +82,7 @@ class SingleHabitBuilder extends StatelessWidget {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                       side: BorderSide(
-                        color: context.primary.withOpacity(.1),
+                        color: context.theme.dividerColor.withOpacity(0.35),
                       ),
                     ),
                     color: Colors.transparent,

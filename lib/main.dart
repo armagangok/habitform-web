@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
+import 'core/constants/debug_constants.dart';
 import 'core/core.dart';
 import 'core/helpers/notifications/notification_helper.dart';
 import 'core/helpers/notifications/timezone.dart';
@@ -59,7 +60,7 @@ class MyApp extends StatelessWidget {
           create: (_) => ThemeBloc(),
         ),
         BlocProvider(
-          create: (_) => HabitBloc(habitService: HabitService()),
+          create: (_) => HabitBloc(habitService: KDebug.serviceDebugMode ? MockHabitService() : HabitService()),
         ),
         BlocProvider(create: (context) => PaywallBloc()),
         BlocProvider(
@@ -76,7 +77,7 @@ class MyApp extends StatelessWidget {
             darkTheme: Themes.darkTheme,
             theme: Themes.lightTheme,
             themeMode: themeMode,
-            debugShowCheckedModeBanner: true,
+            debugShowCheckedModeBanner: false,
             navigatorKey: NavigationService.shared.navigatorKey,
             onGenerateRoute: NavigationRoute.shared.generateRoute,
             localizationsDelegates: context.localizationDelegates,
@@ -84,6 +85,9 @@ class MyApp extends StatelessWidget {
             locale: context.locale,
             home: BlocBuilder<OnboardingBloc, OnboardingState>(
               builder: (context, state) {
+                if (KDebug.onboardingDebugMode) {
+                  return const OnboardingGreetingPage();
+                }
                 if (state is OnboardingRequired) {
                   return const OnboardingGreetingPage();
                 }

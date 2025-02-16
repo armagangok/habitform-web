@@ -30,22 +30,22 @@ class $AssetsAppGen {
 
   /// List of all assets
   List<AssetGenImage> get values => [
-        appLogoDark,
-        appLogoLight,
-        habitriseDarkTransparent,
-        habitriseLightTransparent
-      ];
+    appLogoDark,
+    appLogoLight,
+    habitriseDarkTransparent,
+    habitriseLightTransparent,
+  ];
 }
 
-class $AssetsIllustrationsGen {
-  const $AssetsIllustrationsGen();
+class $AssetsImagesGen {
+  const $AssetsImagesGen();
 
-  /// File path: assets/illustrations/onboarding_greeting.jpeg
-  AssetGenImage get onboardingGreeting =>
-      const AssetGenImage('assets/illustrations/onboarding_greeting.jpeg');
+  /// File path: assets/images/aristoteles.jpg
+  AssetGenImage get aristoteles =>
+      const AssetGenImage('assets/images/aristoteles.jpg');
 
   /// List of all assets
-  List<AssetGenImage> get values => [onboardingGreeting];
+  List<AssetGenImage> get values => [aristoteles];
 }
 
 class $AssetsLottieGen {
@@ -72,12 +72,11 @@ class $AssetsTranslationsGen {
 }
 
 class Assets {
-  Assets._();
+  const Assets._();
 
   static const String aEnv = '.env';
   static const $AssetsAppGen app = $AssetsAppGen();
-  static const $AssetsIllustrationsGen illustrations =
-      $AssetsIllustrationsGen();
+  static const $AssetsImagesGen images = $AssetsImagesGen();
   static const $AssetsLottieGen lottie = $AssetsLottieGen();
   static const $AssetsTranslationsGen translations = $AssetsTranslationsGen();
 
@@ -86,11 +85,7 @@ class Assets {
 }
 
 class AssetGenImage {
-  const AssetGenImage(
-    this._assetName, {
-    this.size,
-    this.flavors = const {},
-  });
+  const AssetGenImage(this._assetName, {this.size, this.flavors = const {}});
 
   final String _assetName;
 
@@ -118,7 +113,7 @@ class AssetGenImage {
     bool gaplessPlayback = true,
     bool isAntiAlias = false,
     String? package,
-    FilterQuality filterQuality = FilterQuality.low,
+    FilterQuality filterQuality = FilterQuality.medium,
     int? cacheWidth,
     int? cacheHeight,
   }) {
@@ -150,15 +145,8 @@ class AssetGenImage {
     );
   }
 
-  ImageProvider provider({
-    AssetBundle? bundle,
-    String? package,
-  }) {
-    return AssetImage(
-      _assetName,
-      bundle: bundle,
-      package: package,
-    );
+  ImageProvider provider({AssetBundle? bundle, String? package}) {
+    return AssetImage(_assetName, bundle: bundle, package: package);
   }
 
   String get path => _assetName;

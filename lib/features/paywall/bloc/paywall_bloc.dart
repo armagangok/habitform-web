@@ -1,14 +1,34 @@
+import 'dart:async';
+
 import 'package:flutter/services.dart';
 
 import '/core/core.dart';
-import '/core/widgets/flushbar_widget.dart';
+import '../../../core/widgets/flushbar_widget.dart';
 import '../in_app_purchase/iap.dart';
 
 part 'paywall_event.dart';
 part 'paywall_state.dart';
 
+extension PaywallBlocX on PaywallBloc {
+  String? get customerId {
+    if (state is PaywallResult) {
+      return (state as PaywallResult).customerInfo?.originalAppUserId;
+    }
+    return null;
+  }
+
+  Future<bool> copyCustomerId() async {
+    final id = customerId;
+    if (id != null) {
+      await Clipboard.setData(ClipboardData(text: id));
+      return true;
+    }
+    return false;
+  }
+}
+
 class PaywallBloc extends Bloc<PaywallEvent, PaywallState> {
-  PaywallBloc() : super(PaywallInitial()) {
+  PaywallBloc() : super(const PaywallInitial()) {
     on<InitializePaywallEvent>(_onInitialize);
     on<PurchaseProductEvent>(_onPurchaseProduct);
     on<RestorePurchasesEvent>(_onRestorePurchases);
@@ -16,69 +36,57 @@ class PaywallBloc extends Bloc<PaywallEvent, PaywallState> {
 
   Future<void> _onInitialize(InitializePaywallEvent event, Emitter<PaywallState> emit) async {
     try {
-      emit(PaywallLoading());
+      emit(const PaywallLoading());
 
       final customerInfo = await PurchaseService.getCustomerInfo;
       final offerings = await PurchaseService.fetchOffers;
       final isSubscriptionActive = _checkSubscriptionStatus(customerInfo);
 
-      print(isSubscriptionActive);
+      if (offerings.current == null) {
+        emit(const PaywallError("Could not load subscription prices"));
+        return;
+      }
 
-      LogHelper.shared.debugPrint('$customerInfo');
-      LogHelper.shared.debugPrint('$offerings');
-      LogHelper.shared.debugPrint('$isSubscriptionActive');
-
-      emit(PaywallLoaded(
+      emit(PaywallResult(
         offerings: offerings,
         customerInfo: customerInfo,
         isSubscriptionActive: isSubscriptionActive,
-        isPurchasing: false,
-        isRestoring: false,
       ));
-    } on PlatformException catch (e, s) {
-      LogHelper.shared.debugPrint('$e\n$s');
-      emit(PaywallError(message: e.message ?? LocaleKeys.errors_try_again.tr()));
+    } on PlatformException catch (e) {
+      LogHelper.shared.debugPrint('$e\n${e.stacktrace}');
+      emit(PaywallError(RevenueCatHelper.getMessageFromException(e)));
     }
   }
 
   Future<void> _onPurchaseProduct(PurchaseProductEvent event, Emitter<PaywallState> emit) async {
-    if (state is! PaywallLoaded) return;
-    final currentState = state as PaywallLoaded;
+    if (state is! PaywallResult) return;
+    final currentState = state as PaywallResult;
 
     try {
-      emit(currentState.copyWith(isPurchasing: true));
+      emit(currentState.copyWith(purchaseStatus: PurchaseStatus.inProgress));
 
       final customerInfoResult = await PurchaseService.purchasePackage(event.selectedPackage);
       final subscriptionResult = _checkSubscriptionStatus(customerInfoResult);
 
-      if (!subscriptionResult) {
-        AppFlushbar.shared.warningFlushbar(LocaleKeys.subscription_anIssueOccuredWhilePurchasing.tr());
-      }
-
-      emit(PaywallLoaded(
+      emit(PaywallResult(
         offerings: currentState.offerings,
         customerInfo: customerInfoResult,
         isSubscriptionActive: subscriptionResult,
-        isPurchasing: false,
-        isRestoring: false,
+        purchaseStatus: PurchaseStatus.completed,
       ));
-
-      navigator.pop();
     } on PlatformException catch (e) {
-      AppFlushbar.shared.warningFlushbar(e.message ?? LocaleKeys.errors_try_again.tr());
       LogHelper.shared.debugPrint('$e\n${e.stacktrace}');
-      emit(currentState.copyWith(isPurchasing: false));
+      final error = RevenueCatErrorParser.getErrorFromException(e);
+      emit(currentState.copyWith(
+        purchaseStatus: PurchaseStatus.failed,
+        errorMessage: error != null ? RevenueCatHelper.getMessageFromError(error) : RevenueCatHelper.getMessageFromException(e),
+      ));
     }
   }
 
   Future<void> _onRestorePurchases(RestorePurchasesEvent event, Emitter<PaywallState> emit) async {
-    if (state is! PaywallLoaded) return;
-    final currentState = state as PaywallLoaded;
-
-    if (currentState.isSubscriptionActive) {
-      AppFlushbar.shared.warningFlushbar(LocaleKeys.subscription_youAlreadyHaveAnActiveSubscription.tr());
-      return;
-    }
+    if (state is! PaywallResult) return;
+    final currentState = state as PaywallResult;
 
     try {
       emit(currentState.copyWith(isRestoring: true));
@@ -86,29 +94,31 @@ class PaywallBloc extends Bloc<PaywallEvent, PaywallState> {
       final response = await PurchaseService.restorePurchases;
       final isSubscriptionActive = _checkSubscriptionStatus(response);
 
-      emit(PaywallLoaded(
-        offerings: currentState.offerings,
-        customerInfo: response,
-        isSubscriptionActive: isSubscriptionActive,
-        isPurchasing: false,
-        isRestoring: false,
-      ));
-
       if (isSubscriptionActive) {
         AppFlushbar.shared.successFlushbar(LocaleKeys.subscription_purchaseRestoredSuccessfuly.tr());
       } else {
         AppFlushbar.shared.warningFlushbar(LocaleKeys.subscription_youDoNotHaveAnyPurchasesToRestore.tr());
       }
-    } on PlatformException catch (e, s) {
-      AppFlushbar.shared.errorFlushbar(e.message ?? LocaleKeys.errors_try_again.tr());
-      LogHelper.shared.debugPrint('$e\n$s');
 
-      final updatedState = currentState.copyWith(isRestoring: false);
-      emit(updatedState);
+      emit(
+        PaywallResult(
+          offerings: currentState.offerings,
+          customerInfo: response,
+          isSubscriptionActive: isSubscriptionActive,
+          isRestoring: false,
+        ),
+      );
+    } on PlatformException catch (e) {
+      LogHelper.shared.debugPrint('$e\n${e.stacktrace}');
+      final error = RevenueCatErrorParser.getErrorFromException(e);
+      emit(currentState.copyWith(
+        isRestoring: false,
+        errorMessage: error != null ? RevenueCatHelper.getMessageFromError(error) : RevenueCatHelper.getMessageFromException(e),
+      ));
     }
   }
 
   bool _checkSubscriptionStatus(CustomerInfo? customerInfo) {
-    return customerInfo?.entitlements.all[entitlementID] != null && customerInfo?.entitlements.all[entitlementID]?.isActive == true;
+    return customerInfo?.entitlements.all[entitlementID]?.isActive == true;
   }
 }

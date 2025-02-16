@@ -5,5 +5,9 @@ abstract final class KDebug {
   static const debugModeEnabled = _activeAllDebugMode;
 
   static const rateDebugMode = _activeAllDebugMode;
+
+  static const serviceDebugMode = _activeAllDebugMode;
+
+  static const onboardingDebugMode = _activeAllDebugMode;
 }
 
