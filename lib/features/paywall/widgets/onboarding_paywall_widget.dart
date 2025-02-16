@@ -75,9 +75,8 @@ class _OnboardingPaywallWidgetState extends State<OnboardingPaywallWidget> with 
             if (state.errorMessage != null) {
               AppFlushbar.shared.warningFlushbar(state.errorMessage!);
             } else if (state.isPurchaseCompleted) {
-              await navigator.navigateAndClear(path: KRoute.home);
-
               showCupertinoDialog(
+                barrierDismissible: true,
                 context: context,
                 builder: (context) => CupertinoAlertDialog(
                   title: Text(RevenueCatHelper.purchaseSuccess.message),
@@ -205,149 +204,152 @@ class _OnboardingPaywallWidgetState extends State<OnboardingPaywallWidget> with 
       final purchaseLoading = paywallState.isPurchasing;
       return Align(
         alignment: Alignment.bottomCenter,
-        child: CustomBlurWidget(
-          blurValue: 20,
-          child: SafeArea(
-            top: false,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                SizedBox(height: 10),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10.0),
-                  child: CupertinoButton(
-                    padding: EdgeInsets.zero,
-                    onPressed: purchaseLoading
-                        ? null
-                        : () async {
-                            HapticFeedback.heavyImpact();
-                            if (selectedPackage != null) {
-                              context.read<PaywallBloc>().add(PurchaseProductEvent(
-                                    selectedPackage: selectedPackage!,
-                                    isFromOnboarding: true,
-                                  ));
-                            }
-                          },
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: CustomBlurWidget(
+            blurValue: 20,
+            child: SafeArea(
+              top: false,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  SizedBox(height: 10),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 10.0),
+                    child: CupertinoButton(
+                      padding: EdgeInsets.zero,
+                      onPressed: purchaseLoading
+                          ? null
+                          : () async {
+                              HapticFeedback.heavyImpact();
+                              if (selectedPackage != null) {
+                                context.read<PaywallBloc>().add(PurchaseProductEvent(
+                                      selectedPackage: selectedPackage!,
+                                      isFromOnboarding: true,
+                                    ));
+                              }
+                            },
+                      child: SizedBox(
+                        width: double.infinity,
+                        child: Card(
+                          color: Colors.deepOrangeAccent,
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(vertical: 12),
+                            child: purchaseLoading
+                                ? Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        LocaleKeys.subscription_loading.tr(),
+                                        style: TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                      SizedBox(width: 4),
+                                      Text(
+                                        "🔓",
+                                        style: context.cupertinoTextStyle.copyWith(
+                                          fontSize: 24,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                      CupertinoActivityIndicator(radius: 12),
+                                    ],
+                                  )
+                                : Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        LocaleKeys.subscription_continue.tr(),
+                                        style: context.cupertinoTextStyle.copyWith(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                      Text(
+                                        " 🚀",
+                                        style: context.cupertinoTextStyle.copyWith(
+                                          fontSize: 24,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  CupertinoButton(
+                    padding: EdgeInsets.symmetric(vertical: 5),
+                    onPressed: () {
+                      HapticFeedback.lightImpact();
+                      navigator.navigateAndClear(path: KRoute.home);
+                    },
+                    child: Text(
+                      LocaleKeys.subscription_continueWithLimitedPlan.tr(),
+                      style: context.bodyMedium?.copyWith(
+                        fontWeight: FontWeight.w500,
+                        color: Colors.grey,
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 5),
+                  FittedBox(
                     child: SizedBox(
-                      width: double.infinity,
-                      child: Card(
-                        color: Colors.deepOrangeAccent,
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(vertical: 12),
-                          child: purchaseLoading
-                              ? Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      LocaleKeys.subscription_loading.tr(),
-                                      style: TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                    SizedBox(width: 4),
-                                    Text(
-                                      "🔓",
-                                      style: context.cupertinoTextStyle.copyWith(
-                                        fontSize: 24,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                    CupertinoActivityIndicator(radius: 12),
-                                  ],
-                                )
-                              : Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      LocaleKeys.subscription_continue.tr(),
-                                      style: context.cupertinoTextStyle.copyWith(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                    Text(
-                                      " 🚀",
-                                      style: context.cupertinoTextStyle.copyWith(
-                                        fontSize: 24,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                  ],
+                      height: 40,
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 20.0),
+                        child: IntrinsicHeight(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              CustomButton(
+                                onTap: UrlLauncherHelper.openPrivacyPolicy,
+                                child: Text(
+                                  LocaleKeys.settings_privacy.tr(),
+                                  textAlign: TextAlign.center,
+                                  style: context.bodySmall?.copyWith(
+                                    fontWeight: FontWeight.w600,
+                                  ),
                                 ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(12.0),
+                                child: VerticalDivider(),
+                              ),
+                              _restoreButton(paywallState),
+                              Padding(
+                                padding: const EdgeInsets.all(12.0),
+                                child: VerticalDivider(),
+                              ),
+                              CustomButton(
+                                onTap: UrlLauncherHelper.openTermsOfUse,
+                                child: Text(
+                                  LocaleKeys.settings_terms.tr(),
+                                  textAlign: TextAlign.center,
+                                  style: context.bodySmall?.copyWith(
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
-                SizedBox(height: 10),
-                CupertinoButton(
-                  padding: EdgeInsets.symmetric(vertical: 5),
-                  onPressed: () {
-                    HapticFeedback.lightImpact();
-                    navigator.navigateAndClear(path: KRoute.home);
-                  },
-                  child: Text(
-                    LocaleKeys.subscription_continueWithLimitedPlan.tr(),
-                    style: context.bodyMedium?.copyWith(
-                      fontWeight: FontWeight.w500,
-                      color: Colors.grey,
-                    ),
-                  ),
-                ),
-                SizedBox(height: 5),
-                FittedBox(
-                  child: SizedBox(
-                    height: 40,
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 20.0),
-                      child: IntrinsicHeight(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            CustomButton(
-                              onTap: UrlLauncherHelper.openPrivacyPolicy,
-                              child: Text(
-                                LocaleKeys.settings_privacy.tr(),
-                                textAlign: TextAlign.center,
-                                style: context.bodySmall?.copyWith(
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(12.0),
-                              child: VerticalDivider(),
-                            ),
-                            _restoreButton(paywallState),
-                            Padding(
-                              padding: const EdgeInsets.all(12.0),
-                              child: VerticalDivider(),
-                            ),
-                            CustomButton(
-                              onTap: UrlLauncherHelper.openTermsOfUse,
-                              child: Text(
-                                LocaleKeys.settings_terms.tr(),
-                                textAlign: TextAlign.center,
-                                style: context.bodySmall?.copyWith(
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(height: 5),
-              ],
+                  SizedBox(height: 5),
+                ],
+              ),
             ),
           ),
         ),

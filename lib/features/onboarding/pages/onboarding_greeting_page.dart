@@ -38,8 +38,8 @@ class _OnboardingGreetingPageState extends State<OnboardingGreetingPage> {
                             height: context.height(0.4),
                             fit: BoxFit.cover,
                           )
-                          .animate(delay: 1000.ms)
-                          .fadeIn(duration: 2000.ms),
+                          .animate(delay: 300.ms)
+                          .fadeIn(duration: 800.ms),
                       Positioned.fill(
                         child: Align(
                           alignment: Alignment.bottomCenter,
@@ -63,7 +63,7 @@ class _OnboardingGreetingPageState extends State<OnboardingGreetingPage> {
                             ),
                           ),
                         ),
-                      ).animate(delay: 3000.ms).fadeIn(duration: 2000.ms),
+                      ).animate(delay: 1000.ms).fadeIn(duration: 600.ms),
                     ],
                   ),
                 ),
@@ -78,7 +78,7 @@ class _OnboardingGreetingPageState extends State<OnboardingGreetingPage> {
                           fontWeight: FontWeight.w400,
                           color: Colors.white70,
                         ),
-                      ).animate(delay: 5000.ms).fadeIn(duration: 2000.ms),
+                      ).animate(delay: 1500.ms).fadeIn(duration: 800.ms),
                     ),
                   ],
                 ),
@@ -117,7 +117,7 @@ class _OnboardingGreetingPageState extends State<OnboardingGreetingPage> {
                         context.read<PaywallBloc>().add(ShowOnboardingPaywallEvent());
                       },
                       buttonText: "${LocaleKeys.onboarding_get_started.tr()} 🚀",
-                    ).animate().fadeIn(delay: 7000.ms, duration: 2000.ms),
+                    ).animate().fadeIn(delay: 2200.ms, duration: 600.ms),
                   ),
                 ),
               ),
