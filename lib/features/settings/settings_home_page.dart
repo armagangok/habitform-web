@@ -1,4 +1,3 @@
-import 'package:flutter/services.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import '/core/core.dart';
@@ -7,6 +6,7 @@ import '/core/theme/widget/theme_mode_widget.dart';
 import '../../core/helpers/spacing_helper.dart';
 import '../../core/widgets/flushbar_widget.dart';
 import '../paywall/bloc/paywall_bloc.dart';
+import '../paywall/in_app_purchase/copy_helper.dart';
 import '../paywall/widgets/membership_info_widget.dart';
 import '../translation/widget/language_feature.dart';
 import 'widgets/setting_item.dart';
@@ -34,7 +34,7 @@ class SettingsPage extends StatelessWidget {
                   SizedBox(height: 10),
                   BlocBuilder<PaywallBloc, PaywallState>(
                     builder: (context, state) {
-                      if (state is PaywallLoaded) {
+                      if (state is PaywallResult) {
                         final isSubscriptionActive = state.isSubscriptionActive;
                         return isSubscriptionActive
                             ? Card(
@@ -84,17 +84,6 @@ class SettingsPage extends StatelessWidget {
                     child: Card(
                       child: Column(
                         children: [
-                          // CupertinoListTile(
-                          //   backgroundColor: Colors.transparent,
-                          //   leading: const SettingLeadingWidget(
-                          //     iconData: CupertinoIcons.heart_fill,
-                          //     cardColor: Colors.pinkAccent,
-                          //   ),
-                          //   title: Text(LocaleKeys.settings_support.tr()),
-                          //   subtitle: Text(LocaleKeys.settings_support_subtitle.tr()),
-                          //   onTap: () {},
-                          //   trailing: CupertinoListTileChevron(),
-                          // ),
                           CupertinoListTile(
                             leading: const SettingLeadingWidget(
                               iconData: CupertinoIcons.mail_solid,
@@ -104,20 +93,21 @@ class SettingsPage extends StatelessWidget {
                             onTap: UrlLauncherHelper.requestEmail,
                             trailing: CupertinoListTileChevron(),
                           ),
-
                           CupertinoListTile(
                             leading: const SettingLeadingWidget(
                               iconData: CupertinoIcons.doc_person_fill,
                               cardColor: Colors.deepOrangeAccent,
                             ),
-                            onTap: () => _copyRCId(context),
+                            onTap: () => CopyHelper.shared.copyRCId(context),
                             title: Text("Rc ID"),
                             trailing: CupertinoButton(
+                              padding: EdgeInsets.zero,
+                              minSize: 0,
                               child: Icon(
                                 CupertinoIcons.doc_on_clipboard_fill,
                                 color: Colors.deepOrangeAccent,
                               ),
-                              onPressed: () => _copyRCId(context),
+                              onPressed: () => CopyHelper.shared.copyRCId(context),
                             ),
                           ),
                         ],
@@ -200,18 +190,13 @@ class SettingsPage extends StatelessWidget {
       ),
     );
   }
+}
 
-  Future<void> _copyRCId(BuildContext context) async {
-    final state = context.read<PaywallBloc>().state;
+Future<void> copyRCId(BuildContext context) async {
+  final paywallBloc = context.read<PaywallBloc>();
+  final success = await paywallBloc.copyCustomerId();
 
-    if (state is PaywallLoaded) {
-      final userId = state.customerInfo?.originalAppUserId;
-
-      if (userId != null) {
-        await Clipboard.setData(ClipboardData(text: userId));
-
-        AppFlushbar.shared.successFlushbar("Your customer ID copied successfully\nID:$userId");
-      }
-    }
+  if (success) {
+    AppFlushbar.shared.successFlushbar("Your customer ID copied successfully\nID:${paywallBloc.customerId}");
   }
 }

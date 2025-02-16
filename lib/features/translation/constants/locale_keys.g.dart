@@ -1,6 +1,6 @@
 // DO NOT EDIT. This is code generated via package:easy_localization/generate.dart
 
-abstract class  LocaleKeys {
+abstract class LocaleKeys {
   static const common_save = 'common.save';
   static const common_cancel = 'common.cancel';
   static const common_delete = 'common.delete';
@@ -55,9 +55,7 @@ abstract class  LocaleKeys {
   static const onboarding_welcome = 'onboarding.welcome';
   static const onboarding_get_started = 'onboarding.get_started';
   static const onboarding_next = 'onboarding.next';
-  static const onboarding_welcome_message = 'onboarding.welcome_message';
-  static const onboarding_greeting_message = 'onboarding.greeting_message';
-  static const onboarding_weRecommendYouToUseHabitRise = 'onboarding.weRecommendYouToUseHabitRise';
+  static const onboarding_aristotleHabitQuote = 'onboarding.aristotleHabitQuote';
   static const onboarding_features_minimalist = 'onboarding.features.minimalist';
   static const onboarding_features_easy_to_use = 'onboarding.features.easy_to_use';
   static const onboarding_features_science_based = 'onboarding.features.science_based';
@@ -138,6 +136,11 @@ abstract class  LocaleKeys {
   static const subscription_youDoNotHaveAnyPurchasesToRestore = 'subscription.youDoNotHaveAnyPurchasesToRestore';
   static const subscription_youAlreadyHaveAnActiveSubscription = 'subscription.youAlreadyHaveAnActiveSubscription';
   static const subscription_anIssueOccuredWhilePurchasing = 'subscription.anIssueOccuredWhilePurchasing';
+  static const subscription_purchaseSuccessful = 'subscription.purchaseSuccessful';
+  static const subscription_purchaseError = 'subscription.purchaseError';
+  static const subscription_purchaseCancelled = 'subscription.purchaseCancelled';
+  static const subscription_restoreError = 'subscription.restoreError';
+  static const subscription_continueWithLimitedPlan = 'subscription.continueWithLimitedPlan';
   static const subscription = 'subscription';
   static const share_share = 'share.share';
   static const share_share_image = 'share.share_image';
@@ -163,5 +166,16 @@ abstract class  LocaleKeys {
   static const languages_english = 'languages.english';
   static const languages_turkish = 'languages.turkish';
   static const languages = 'languages';
-
+  static const subscription_purchaseTimeout = 'subscription.purchaseTimeout';
+  static const subscription_purchaseInvalidated = 'subscription.purchaseInvalidated';
+  static const subscription_subscriptionExpired = 'subscription.subscriptionExpired';
+  static const subscription_subscriptionPaused = 'subscription.subscriptionPaused';
+  static const subscription_subscriptionResumed = 'subscription.subscriptionResumed';
+  static const subscription_billingUnavailable = 'subscription.billingUnavailable';
+  static const subscription_billingInvalid = 'subscription.billingInvalid';
+  static const subscription_priceNotLoaded = 'subscription.priceNotLoaded';
+  static const subscription_networkError = 'subscription.networkError';
+  static const subscription_serverError = 'subscription.serverError';
+  static const subscription_invalidCredentials = 'subscription.invalidCredentials';
+  static const subscription_notInitialized = 'subscription.notInitialized';
 }

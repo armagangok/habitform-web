@@ -8,7 +8,7 @@ import '/models/models.dart';
 import '../../edit_habit/edit_habit_page.dart';
 import '../../habits/bloc/habit_bloc.dart';
 import '../../habits/widgets/complete_today_button.dart';
-import '../../habits/widgets/single_habit/single_habit_detail_grid.dart';
+import '../../habits/widgets/single_habit/habit_detail_grid.dart';
 import '../bloc/habit_detail_bloc.dart';
 import '../providers/habit_detail_bloc_provider.dart';
 

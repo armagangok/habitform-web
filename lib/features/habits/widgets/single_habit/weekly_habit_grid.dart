@@ -148,7 +148,7 @@ class _WeeklyHabitGridState extends State<WeeklyHabitGrid> with SingleTickerProv
                               surfaceTintColor: Colors.transparent,
                               shape: RoundedRectangleBorder(
                                 side: BorderSide(
-                                  color: context.primary.withAlpha(25),
+                                  color: context.primary.withAlpha(50),
                                   width: .5,
                                 ),
                                 borderRadius: BorderRadius.circular(5),
@@ -156,10 +156,12 @@ class _WeeklyHabitGridState extends State<WeeklyHabitGrid> with SingleTickerProv
                               color: isCompletedDate ? Color(habitColor) : null,
                               child: SizedBox(
                                 child: Align(
-                                  child: Text(
-                                    isCompletedDate ? emoji ?? "" : "",
-                                    style: TextStyle(fontSize: context.isPortrait ? 22 : 24),
-                                    textAlign: TextAlign.center,
+                                  child: Center(
+                                    child: Text(
+                                      isCompletedDate ? emoji ?? "" : "",
+                                      style: TextStyle(fontSize: context.isPortrait ? 22 : 24),
+                                      textAlign: TextAlign.center,
+                                    ),
                                   ),
                                 ),
                               ),

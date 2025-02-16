@@ -1,6 +1,6 @@
-import 'package:habitrise/features/paywall/in_app_purchase/iap.dart';
-
 import '/core/core.dart';
+import '/features/paywall/in_app_purchase/iap.dart';
+import '../in_app_purchase/copy_helper.dart';
 import 'paywall_widget.dart';
 
 class MembershipInfoWidget extends StatelessWidget {
@@ -17,7 +17,7 @@ class MembershipInfoWidget extends StatelessWidget {
         ),
         child: BlocBuilder<PaywallBloc, PaywallState>(
           builder: (context, state) {
-            if (state is PaywallLoaded) {
+            if (state is PaywallResult) {
               final customerInfo = state.customerInfo;
 
               final String? latestPurchaseDate = customerInfo?.entitlements.all["Premium"]?.latestPurchaseDate;
@@ -45,7 +45,11 @@ class MembershipInfoWidget extends StatelessWidget {
                                       : "Inactive",
                             ),
                             _infoItemWidget(infoText: "Membership Plan", text: productPlanIdentifier),
-                            _infoItemWidget(infoText: "Customer ID", text: originalAppUserId),
+                            _infoItemWidget(
+                              infoText: "Customer ID",
+                              text: originalAppUserId,
+                              onTap: () => CopyHelper.shared.copyRCId(contextFromBuilder),
+                            ),
                             _infoItemWidget(infoText: "Expiration Date", text: expirationDate),
                             _infoItemWidget(infoText: "First Purchase Date", text: originalPurchaseDate),
                             _infoItemWidget(infoText: "Last Purchase Date", text: latestPurchaseDate),

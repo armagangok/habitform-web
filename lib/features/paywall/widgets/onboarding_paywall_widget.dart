@@ -8,18 +8,17 @@ import '/core/widgets/flushbar_widget.dart';
 import '/core/widgets/setting_leading.dart';
 import '../../translation/constants/locale_keys.g.dart';
 import '../bloc/paywall_bloc.dart';
-import '../in_app_purchase/constants.dart';
 import '../in_app_purchase/revenue_cat_helper.dart';
 import 'product_widget.dart';
 
-class PaywallWidget extends StatefulWidget {
-  const PaywallWidget({super.key});
+class OnboardingPaywallWidget extends StatefulWidget {
+  const OnboardingPaywallWidget({super.key});
 
   @override
-  State<PaywallWidget> createState() => _PaywallWidgetState();
+  State<OnboardingPaywallWidget> createState() => _OnboardingPaywallWidgetState();
 }
 
-class _PaywallWidgetState extends State<PaywallWidget> with SingleTickerProviderStateMixin {
+class _OnboardingPaywallWidgetState extends State<OnboardingPaywallWidget> with SingleTickerProviderStateMixin {
   int selectedIndex = 2;
   Package? selectedPackage;
 
@@ -67,7 +66,7 @@ class _PaywallWidgetState extends State<PaywallWidget> with SingleTickerProvider
     return Material(
       color: context.theme.scaffoldBackgroundColor,
       child: BlocConsumer<PaywallBloc, PaywallState>(
-        listener: (context, state) {
+        listener: (context, state) async {
           if (state is PaywallError) {
             AppFlushbar.shared.warningFlushbar(state.message);
           }
@@ -76,8 +75,20 @@ class _PaywallWidgetState extends State<PaywallWidget> with SingleTickerProvider
             if (state.errorMessage != null) {
               AppFlushbar.shared.warningFlushbar(state.errorMessage!);
             } else if (state.isPurchaseCompleted) {
-              Navigator.of(context).pop();
-              AppFlushbar.shared.successFlushbar(RevenueCatHelper.purchaseSuccess.message);
+              await navigator.navigateAndClear(path: KRoute.home);
+
+              showCupertinoDialog(
+                context: context,
+                builder: (context) => CupertinoAlertDialog(
+                  title: Text(RevenueCatHelper.purchaseSuccess.message),
+                  actions: [
+                    CupertinoDialogAction(
+                      child: Text(LocaleKeys.subscription_continue.tr()),
+                      onPressed: () => navigator.navigateAndClear(path: KRoute.home),
+                    ),
+                  ],
+                ),
+              );
             }
           }
         },
@@ -153,36 +164,8 @@ class _PaywallWidgetState extends State<PaywallWidget> with SingleTickerProvider
 
   CupertinoNavigationBar _navBar(BuildContext context) {
     return CupertinoNavigationBar(
-      backgroundColor: context.theme.scaffoldBackgroundColor.withOpacity(0.8),
+      backgroundColor: Colors.transparent,
       automaticallyImplyLeading: false,
-      leading: Align(
-        widthFactor: 1,
-        child: SizedBox(
-          height: 28,
-          width: 28,
-          child: CupertinoButton(
-            color: context.theme.dividerColor.withOpacity(0.1),
-            borderRadius: BorderRadius.circular(90),
-            padding: EdgeInsets.zero,
-            onPressed: navigator.pop,
-            child: FittedBox(
-              child: Card(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(360),
-                ),
-                color: Colors.transparent,
-                child: Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child: Icon(
-                    CupertinoIcons.xmark,
-                    color: context.theme.iconTheme.color,
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ),
-      ),
       middle: Row(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.start,
@@ -213,12 +196,6 @@ class _PaywallWidgetState extends State<PaywallWidget> with SingleTickerProvider
           ),
         ],
       ),
-      border: Border(
-        bottom: BorderSide(
-          color: CupertinoColors.separator,
-          width: 0.5,
-        ),
-      ),
       transitionBetweenRoutes: false,
     );
   }
@@ -226,8 +203,6 @@ class _PaywallWidgetState extends State<PaywallWidget> with SingleTickerProvider
   Widget _continueButton(PaywallState paywallState) {
     if (paywallState is PaywallResult) {
       final purchaseLoading = paywallState.isPurchasing;
-      final isSubscriptionActive = paywallState.isSubscriptionActive;
-
       return Align(
         alignment: Alignment.bottomCenter,
         child: CustomBlurWidget(
@@ -246,15 +221,10 @@ class _PaywallWidgetState extends State<PaywallWidget> with SingleTickerProvider
                         ? null
                         : () async {
                             HapticFeedback.heavyImpact();
-                            if (isSubscriptionActive && selectedPackage?.identifier == paywallState.customerInfo?.entitlements.active[entitlementID]?.productIdentifier) {
-                              final helper = RevenueCatHelper.alreadyPurchased;
-                              AppFlushbar.shared.warningFlushbar(helper.message);
-                              return;
-                            }
                             if (selectedPackage != null) {
                               context.read<PaywallBloc>().add(PurchaseProductEvent(
                                     selectedPackage: selectedPackage!,
-                                    isFromOnboarding: false,
+                                    isFromOnboarding: true,
                                   ));
                             }
                           },
@@ -316,6 +286,22 @@ class _PaywallWidgetState extends State<PaywallWidget> with SingleTickerProvider
                     ),
                   ),
                 ),
+                SizedBox(height: 10),
+                CupertinoButton(
+                  padding: EdgeInsets.symmetric(vertical: 5),
+                  onPressed: () {
+                    HapticFeedback.lightImpact();
+                    navigator.navigateAndClear(path: KRoute.home);
+                  },
+                  child: Text(
+                    LocaleKeys.subscription_continueWithLimitedPlan.tr(),
+                    style: context.bodyMedium?.copyWith(
+                      fontWeight: FontWeight.w500,
+                      color: Colors.grey,
+                    ),
+                  ),
+                ),
+                SizedBox(height: 5),
                 FittedBox(
                   child: SizedBox(
                     height: 40,
@@ -339,7 +325,7 @@ class _PaywallWidgetState extends State<PaywallWidget> with SingleTickerProvider
                               padding: const EdgeInsets.all(12.0),
                               child: VerticalDivider(),
                             ),
-                            _restoreButton,
+                            _restoreButton(paywallState),
                             Padding(
                               padding: const EdgeInsets.all(12.0),
                               child: VerticalDivider(),
@@ -371,49 +357,74 @@ class _PaywallWidgetState extends State<PaywallWidget> with SingleTickerProvider
     }
   }
 
-  Widget get _restoreButton {
-    return BlocBuilder<PaywallBloc, PaywallState>(
-      builder: (context, state) {
-        if (state is PaywallResult) {
-          final isRestoring = state.isRestoring;
-
-          return CupertinoButton(
-            padding: EdgeInsets.zero,
-            onPressed: isRestoring
-                ? null
-                : () {
-                    context.read<PaywallBloc>().add(RestorePurchasesEvent());
-                  },
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  LocaleKeys.subscription_restore.tr(),
-                  style: context.bodySmall?.copyWith(
-                    fontWeight: FontWeight.w600,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                if (isRestoring) SizedBox(width: 4),
-                if (isRestoring) CupertinoActivityIndicator()
-              ],
+  Widget _restoreButton(PaywallResult state) {
+    final isRestoring = state.isRestoring;
+    return CupertinoButton(
+      padding: EdgeInsets.zero,
+      onPressed: isRestoring
+          ? null
+          : () {
+              HapticFeedback.lightImpact();
+              context.read<PaywallBloc>().add(RestorePurchasesEvent());
+            },
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            LocaleKeys.subscription_restore.tr(),
+            style: context.bodySmall?.copyWith(
+              fontWeight: FontWeight.w600,
             ),
-          );
-        } else {
-          return SizedBox.shrink();
-        }
-      },
+            textAlign: TextAlign.center,
+          ),
+          if (isRestoring) ...[
+            SizedBox(width: 4),
+            CupertinoActivityIndicator(radius: 8),
+          ],
+        ],
+      ),
     );
   }
 
   Widget _productSection(PaywallResult state) {
     final availablePackages = state.offerings?.current?.availablePackages;
 
-    if (availablePackages == null) return SizedBox.shrink();
+    if (availablePackages == null || availablePackages.isEmpty) {
+      return SizedBox.shrink();
+    }
 
-    String? monthlyCalculated;
+    if (availablePackages.length < 2) {
+      return ListView.separated(
+        separatorBuilder: (context, index) => SizedBox(height: 12),
+        physics: ClampingScrollPhysics(),
+        shrinkWrap: true,
+        itemCount: availablePackages.length,
+        itemBuilder: (context, index) {
+          final currentPackage = availablePackages[index];
+          return CustomButton(
+            onTap: () {
+              HapticFeedback.heavyImpact();
+              setState(() {
+                selectedIndex = index;
+                selectedPackage = currentPackage;
+              });
+            },
+            child: ProductWidget(
+              package: currentPackage,
+              isSelected: selectedIndex == index,
+              isAnnual: false,
+            ),
+          );
+        },
+      );
+    }
 
-    monthlyCalculated = ((availablePackages[1].storeProduct.price / 12).toStringAsFixed(2)).toString();
+    final monthlyCalculated = ((availablePackages[1].storeProduct.price / 12).toStringAsFixed(2));
+
+    final annualMonthlyPrice = availablePackages[0].storeProduct.price * 12;
+    final annualPrice = availablePackages[1].storeProduct.price;
+    final discountPercent = (((annualMonthlyPrice - annualPrice) / annualMonthlyPrice) * 100).toStringAsFixed(0);
+    final stringDiscount = "-$discountPercent%";
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -424,24 +435,13 @@ class _PaywallWidgetState extends State<PaywallWidget> with SingleTickerProvider
           shrinkWrap: true,
           itemCount: availablePackages.length,
           itemBuilder: (context, index) {
-            String? stringDiscount;
-            if (availablePackages.isNotNullAndNotEmpty) {
-              final annualMonthlyPrice = availablePackages.first.storeProduct.price * 12;
-              final annualPrice = availablePackages[1].storeProduct.price;
-              final discountPercent = (((annualMonthlyPrice - annualPrice) / annualMonthlyPrice) * 100).toStringAsFixed(0);
-
-              stringDiscount = "-$discountPercent%";
-            }
-
             final currentPackage = availablePackages[index];
-
             return CustomButton(
               onTap: () {
                 HapticFeedback.heavyImpact();
-
                 setState(() {
                   selectedIndex = index;
-                  selectedPackage = availablePackages[selectedIndex];
+                  selectedPackage = currentPackage;
                 });
               },
               child: ProductWidget(

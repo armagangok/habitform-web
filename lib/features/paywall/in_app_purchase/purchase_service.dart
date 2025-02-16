@@ -6,37 +6,23 @@ import 'package:purchases_flutter/purchases_flutter.dart';
 import '../../../core/core.dart';
 import 'store_config.dart';
 
-final class PurchaseService {
+class PurchaseService {
   const PurchaseService._();
 
-  static Future<Offerings> get fetchOffers async {
-    final Offerings offerings = await Purchases.getOfferings();
-    return offerings;
-  }
-
-  /// Purchase package and return the membership result as `bool`
-  static Future<CustomerInfo> purchasePackage(Package packageToPurchase) async {
-    final CustomerInfo customerInfo = await Purchases.purchasePackage(packageToPurchase);
-
-    return customerInfo;
-  }
-
-  // /// Get customer info and, by using this customer info check wheter user has subcscription and return the value as `bool`
-  // static Future<bool> get isMembershipActive async {
-  //   final CustomerInfo customerInfo = await Purchases.getCustomerInfo();
-  //   final isSubscriptionActive = customerInfo.entitlements.all[entitlementID] != null && customerInfo.entitlements.all[entitlementID]!.isActive;
-
-  //   return isSubscriptionActive;
-  // }
-
   static Future<CustomerInfo> get getCustomerInfo async {
-    final CustomerInfo customerInfo = await Purchases.getCustomerInfo();
-    return customerInfo;
+    return await Purchases.getCustomerInfo();
+  }
+
+  static Future<Offerings> get fetchOffers async {
+    return await Purchases.getOfferings();
   }
 
   static Future<CustomerInfo> get restorePurchases async {
-    final CustomerInfo customerInfo = await Purchases.restorePurchases();
-    return customerInfo;
+    return await Purchases.restorePurchases();
+  }
+
+  static Future<CustomerInfo> purchasePackage(Package package) async {
+    return await Purchases.purchasePackage(package);
   }
 
   static Future<void> configureSDK() async {

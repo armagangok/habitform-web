@@ -22,12 +22,13 @@ class SheetHeader extends StatelessWidget implements ObstructingPreferredSizeWid
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return CupertinoNavigationBar(
-      // backgroundColor: Colors.transparent,
+      backgroundColor: theme.scaffoldBackgroundColor.withOpacity(0.8),
       border: Border(
         bottom: BorderSide(
-          color: CupertinoColors.separator,
-          width: 0.5, // Adjust thickness as needed
+          color: theme.dividerColor.withOpacity(0.3),
+          width: 0.5,
         ),
       ),
       transitionBetweenRoutes: false,
@@ -40,7 +41,13 @@ class SheetHeader extends StatelessWidget implements ObstructingPreferredSizeWid
           child: closeButtonPosition == CloseButtonPosition.left ? _closeButton(context) : leading,
         ),
       ),
-      middle: Text(title),
+      middle: Text(
+        title,
+        style: TextStyle(
+          color: theme.textTheme.titleLarge?.color,
+          fontWeight: FontWeight.w600,
+        ),
+      ),
       trailing: Align(
         widthFactor: 1,
         child: closeButtonPosition == CloseButtonPosition.right ? _closeButton(context) : trailing,
@@ -49,13 +56,14 @@ class SheetHeader extends StatelessWidget implements ObstructingPreferredSizeWid
   }
 
   Widget _closeButton(BuildContext context) {
+    final theme = Theme.of(context);
     return Align(
       widthFactor: 1,
       child: SizedBox(
         height: 28,
         width: 28,
         child: CupertinoButton(
-          color: context.iconTheme.color?.withValues(alpha: .1),
+          color: theme.dividerColor.withOpacity(0.1),
           borderRadius: BorderRadius.circular(90),
           padding: EdgeInsets.zero,
           onPressed: () {
@@ -73,7 +81,7 @@ class SheetHeader extends StatelessWidget implements ObstructingPreferredSizeWid
                 padding: const EdgeInsets.all(12.0),
                 child: Icon(
                   CupertinoIcons.xmark,
-                  color: context.iconTheme.color?.withAlpha(250),
+                  color: theme.iconTheme.color,
                   size: 40,
                 ),
               ),
