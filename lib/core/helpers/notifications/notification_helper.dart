@@ -32,17 +32,18 @@ final class NotificationHelper {
       // Create the Android-specific notification channel
       final androidPlugin = _notificationPlugin.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>();
       if (androidPlugin != null) {
-        await androidPlugin.requestNotificationsPermission();
+        // await androidPlugin.requestNotificationsPermission();
         await androidPlugin.createNotificationChannel(_channel!);
       }
 
       // Initialize the plugin
       const android = AndroidInitializationSettings("ic_launcher");
       const iOS = DarwinInitializationSettings(
-        requestAlertPermission: true,
-        requestBadgePermission: true,
-        requestSoundPermission: true,
+        requestAlertPermission: false,
+        requestBadgePermission: false,
+        requestSoundPermission: false,
       );
+      
       const initializationSettings = InitializationSettings(android: android, iOS: iOS);
 
       isInitializationSucceded = await _notificationPlugin.initialize(

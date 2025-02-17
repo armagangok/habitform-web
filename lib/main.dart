@@ -1,7 +1,4 @@
-import 'dart:io';
-
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 import 'core/constants/debug_constants.dart';
 import 'core/core.dart';
@@ -28,11 +25,6 @@ void main() async {
   await TimeZoneHelper.initializeTimeZone();
   await NotificationHelper.shared.initializeNotificationPlugin;
   // await NotificationHelper.shared.listScheduledNotifications();
-
-  if (Platform.isAndroid) {
-    final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-    await flutterLocalNotificationsPlugin.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()?.requestNotificationsPermission();
-  }
 
   await AppDefaultsService().initializeAppDefaults();
 

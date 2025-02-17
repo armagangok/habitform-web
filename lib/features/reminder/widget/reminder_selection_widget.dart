@@ -1,4 +1,5 @@
 import '/core/core.dart';
+import '../../../core/helpers/permissions/notification_permission.dart';
 import '../bloc/reminder/reminder_bloc.dart';
 import '../extension/easy_day.dart';
 import '../models/days/days_enum.dart';
@@ -22,20 +23,24 @@ class ReminderSelectionWidget extends StatelessWidget {
             child: CupertinoButton(
               minSize: 0,
               padding: EdgeInsets.all(10),
-              onPressed: () {
+              onPressed: () async {
                 contextFromBuilder.hideKeyboard();
 
-                showCupertinoModalBottomSheet(
-                  enableDrag: false,
-                  context: context,
-                  builder: (contextFromSheet) {
-                    final reminderBloc = contextFromBuilder.read<ReminderBloc>();
-                    return BlocProvider.value(
-                      value: reminderBloc,
-                      child: const ReminderPage(),
-                    );
-                  },
-                );
+                final permissionGranted = await NotificationPermission.handleNotificationPermission();
+
+                if (permissionGranted && context.mounted) {
+                  showCupertinoModalBottomSheet(
+                    enableDrag: false,
+                    context: context,
+                    builder: (contextFromSheet) {
+                      final reminderBloc = contextFromBuilder.read<ReminderBloc>();
+                      return BlocProvider.value(
+                        value: reminderBloc,
+                        child: const ReminderPage(),
+                      );
+                    },
+                  );
+                }
               },
               child: Row(
                 children: [
