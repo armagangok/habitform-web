@@ -72,6 +72,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
         return Align(
           widthFactor: 1,
           child: CupertinoButton(
+            minSize: 0,
             padding: EdgeInsets.zero,
             child: Icon(
               CupertinoIcons.gear,
@@ -130,12 +131,13 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                         },
                         child: FaIcon(
                           FontAwesomeIcons.crown,
-                          size: 24,
+                          size: 28,
                           color: CupertinoColors.systemYellow,
                         ),
                       ).animate().fadeIn(duration: Duration(milliseconds: 300)),
               SizedBox(width: 8),
               CupertinoButton(
+                minSize: 0,
                 padding: EdgeInsets.zero,
                 onPressed: isPurchasing || isRestoring
                     ? null
