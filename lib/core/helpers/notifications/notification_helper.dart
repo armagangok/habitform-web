@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:timezone/timezone.dart' as tz;
 
 import '/features/reminder/models/reminder/reminder_model.dart';
@@ -43,7 +46,7 @@ final class NotificationHelper {
         requestBadgePermission: false,
         requestSoundPermission: false,
       );
-      
+
       const initializationSettings = InitializationSettings(android: android, iOS: iOS);
 
       isInitializationSucceded = await _notificationPlugin.initialize(
@@ -70,7 +73,7 @@ final class NotificationHelper {
   ) async {
     try {
       if (_channel == null) {
-        LogHelper.shared.debugPrint('Notification channel not initialized');
+        LogHelper.shared.debugPrint(' Notification channel not initialized');
         return;
       }
 
@@ -94,17 +97,29 @@ final class NotificationHelper {
         ),
       );
 
+      // Format time string
+      final timeString = "${scheduledTime.hour.toString().padLeft(2, '0')}:${scheduledTime.minute.toString().padLeft(2, '0')}";
+
       // If no days are selected, schedule a one-time notification
       if (reminder.days == null || reminder.days!.isEmpty) {
         final scheduledDateTime = tz.TZDateTime.from(scheduledTime, tz.local);
+        final notificationBody = "Alışkanlığı tamamlama zamanı geldi";
+
+        final Map<String, dynamic> payloadData = {
+          'time': timeString,
+          'days': [],
+        };
+
         LogHelper.shared.debugPrint('Scheduling one-time notification for: $scheduledDateTime');
+        LogHelper.shared.debugPrint('Payload: ${jsonEncode(payloadData)}');
 
         await _notificationPlugin.zonedSchedule(
           id,
           title,
-          body,
+          notificationBody,
           scheduledDateTime,
           notificationDetails,
+          payload: jsonEncode(payloadData),
           androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
           uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.wallClockTime,
         );
@@ -114,15 +129,24 @@ final class NotificationHelper {
       // Schedule notifications for each selected day
       for (final day in reminder.days!) {
         final scheduleDate = _nextInstanceOfDay(scheduledTime, day);
+        final notificationBody = "Alışkanlığı tamamlama zamanı geldi";
+
+        final Map<String, dynamic> payloadData = {
+          'time': timeString,
+          'days': reminder.days!.map((d) => d.name).toList(),
+        };
+
         LogHelper.shared.debugPrint('Scheduling notification for day ${day.name} at: $scheduleDate');
+        LogHelper.shared.debugPrint('Payload: ${jsonEncode(payloadData)}');
 
         final notificationId = id + day.index;
         await _notificationPlugin.zonedSchedule(
           notificationId,
           title,
-          body,
+          notificationBody,
           scheduleDate,
           notificationDetails,
+          payload: jsonEncode(payloadData),
           androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
           uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.wallClockTime,
           matchDateTimeComponents: DateTimeComponents.dayOfWeekAndTime,
@@ -175,7 +199,7 @@ final class NotificationHelper {
     }
   }
 
-  Future<void> listScheduledNotifications() async {
+  Future<List<PendingNotificationRequest>> listScheduledNotifications() async {
     try {
       final List<PendingNotificationRequest> pendingNotifications = await _notificationPlugin.pendingNotificationRequests();
 
@@ -188,8 +212,52 @@ final class NotificationHelper {
         LogHelper.shared.debugPrint('Payload: ${notification.payload}');
         LogHelper.shared.debugPrint('---');
       }
+
+      return pendingNotifications;
     } catch (e) {
       LogHelper.shared.debugPrint('Error listing notifications: $e');
+      return [];
     }
+  }
+
+  Future<bool> requestNotificationPermission(BuildContext context) async {
+    final status = await Permission.notification.status;
+
+    // Eğer izin zaten verilmişse true dön
+    if (status.isGranted) return true;
+
+    // Eğer permanently denied ise settings dialogu göster
+    if (status.isPermanentlyDenied) {
+      if (context.mounted) {
+        final shouldOpenSettings = await showCupertinoDialog<bool>(
+          context: context,
+          builder: (context) => CupertinoAlertDialog(
+            title: const Text('Notifications Permission'),
+            content: const Text('To set reminders, please enable notifications in settings.'),
+            actions: [
+              CupertinoDialogAction(
+                child: const Text('Cancel'),
+                onPressed: () => Navigator.pop(context, false),
+              ),
+              CupertinoDialogAction(
+                isDefaultAction: true,
+                child: const Text('Settings'),
+                onPressed: () => Navigator.pop(context, true),
+              ),
+            ],
+          ),
+        );
+
+        if (shouldOpenSettings == true) {
+          await openAppSettings();
+        }
+        return false;
+      }
+      return false;
+    }
+
+    // Normal permission request
+    final result = await Permission.notification.request();
+    return result.isGranted;
   }
 }

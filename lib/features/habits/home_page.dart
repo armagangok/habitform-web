@@ -75,8 +75,8 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
             minSize: 0,
             padding: EdgeInsets.zero,
             child: Icon(
-              CupertinoIcons.gear,
-              size: 32,
+              FontAwesomeIcons.gear,
+              size: 24,
             ),
             onPressed: () {
               CupertinoScaffold.showCupertinoModalBottomSheet(
@@ -131,11 +131,10 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                         },
                         child: FaIcon(
                           FontAwesomeIcons.crown,
-                          size: 28,
                           color: CupertinoColors.systemYellow,
                         ),
                       ).animate().fadeIn(duration: Duration(milliseconds: 300)),
-              SizedBox(width: 8),
+              SizedBox(width: 15),
               CupertinoButton(
                 minSize: 0,
                 padding: EdgeInsets.zero,
@@ -162,8 +161,8 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                         }
                       },
                 child: Icon(
-                  CupertinoIcons.add_circled,
-                  size: 32,
+                  FontAwesomeIcons.circlePlus,
+                  size: 24,
                 ),
               ).animate().fadeIn(duration: Duration(milliseconds: 300)),
             ],

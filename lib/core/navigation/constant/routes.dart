@@ -7,4 +7,5 @@ class KRoute {
   // static const onboardingPage = '/onboardingPage';
   static const onboardingPaywall = '/onboardingPaywall';
   static const onboardingFinalPage = '/onboardingFinalPage';
+  static const notifications = '/notificationsPage';
 }

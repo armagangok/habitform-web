@@ -1,5 +1,3 @@
-import 'package:permission_handler/permission_handler.dart';
-
 import '/core/core.dart';
 import '/core/helpers/url_laucher/url_launcher.dart';
 import '/core/theme/widget/theme_mode_widget.dart';
@@ -71,7 +69,7 @@ class SettingsPage extends StatelessWidget {
                                 cardColor: CupertinoColors.systemGreen,
                               ),
                               title: Text(LocaleKeys.settings_notifications.tr()),
-                              onTap: openAppSettings,
+                              onTap: () => NavigationService.shared.navigateTo(path: KRoute.notifications),
                               trailing: CupertinoListTileChevron(),
                             ),
                           ],

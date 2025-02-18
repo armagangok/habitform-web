@@ -1,5 +1,6 @@
 {
     "common": {
+        "ok": "Tamam",
         "save": "Kaydet",
         "cancel": "İptal",
         "delete": "Sil",

@@ -9,5 +9,7 @@ abstract final class KDebug {
   static const serviceDebugMode = _activeAllDebugMode;
 
   static const onboardingDebugMode = _activeAllDebugMode;
+
+  static const logDebugMode = true;
 }
 

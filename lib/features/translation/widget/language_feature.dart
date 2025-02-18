@@ -49,7 +49,7 @@ class LanguageFeature extends StatelessWidget {
               cancelButton: CupertinoActionSheetAction(
                 isDestructiveAction: true,
                 onPressed: navigator.pop,
-                child: Text(LocaleKeys.common_cancel.tr()),
+                child: Text(LocaleKeys.common_ok.tr()),
               ),
             );
           },

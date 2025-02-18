@@ -9,19 +9,19 @@ class LogHelper {
   final _logger = Logger();
 
   void debugPrint(String message) {
-    if (KDebug.debugModeEnabled) _logger.d(message);
+    if (KDebug.logDebugMode) _logger.d(message);
   }
 
   void warningPrint(String message) {
-    if (KDebug.debugModeEnabled) _logger.w(message);
+    if (KDebug.logDebugMode) _logger.w(message);
   }
 
   void errorPrint(String message) {
-    if (KDebug.debugModeEnabled) _logger.e(message);
+    if (KDebug.logDebugMode) _logger.e(message);
   }
 
   void whatTheFuckPrint(String message) {
-    if (KDebug.debugModeEnabled) _logger.f(message);
+    if (KDebug.logDebugMode) _logger.f(message);
   }
 
   String getError({

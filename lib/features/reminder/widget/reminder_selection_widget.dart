@@ -1,9 +1,9 @@
 import '/core/core.dart';
-import '../../../core/helpers/permissions/notification_permission.dart';
+import '../../../core/helpers/notifications/notification_helper.dart';
 import '../bloc/reminder/reminder_bloc.dart';
 import '../extension/easy_day.dart';
 import '../models/days/days_enum.dart';
-import 'reminder_widget.dart';
+import 'reminder_page_widget.dart';
 
 class ReminderSelectionWidget extends StatelessWidget {
   const ReminderSelectionWidget({
@@ -26,9 +26,9 @@ class ReminderSelectionWidget extends StatelessWidget {
               onPressed: () async {
                 contextFromBuilder.hideKeyboard();
 
-                final permissionGranted = await NotificationPermission.handleNotificationPermission();
+                final hasPermission = await NotificationHelper.shared.requestNotificationPermission(context);
 
-                if (permissionGranted && context.mounted) {
+                if (hasPermission && context.mounted) {
                   showCupertinoModalBottomSheet(
                     enableDrag: false,
                     context: context,
