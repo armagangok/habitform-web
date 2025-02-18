@@ -29,6 +29,9 @@ class RestorePurchasesEvent extends PaywallEvent {
   const RestorePurchasesEvent();
 }
 
+class RestorePurchasesFromOnboardingEvent extends PaywallEvent {
+  const RestorePurchasesFromOnboardingEvent();
+}
 
 
 class PurchaseProductFromOnboardingEvent extends PaywallEvent {

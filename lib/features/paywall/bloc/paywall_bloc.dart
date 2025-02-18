@@ -32,11 +32,12 @@ class PaywallBloc extends Bloc<PaywallEvent, PaywallState> {
     on<InitializePaywallEvent>(_onInitialize);
     on<PurchaseProductEvent>(_onPurchaseProduct);
     on<RestorePurchasesEvent>(_onRestorePurchases);
+    on<RestorePurchasesFromOnboardingEvent>(_restorePurchaseFromOnboarding);
   }
 
   Future<void> _onInitialize(InitializePaywallEvent event, Emitter<PaywallState> emit) async {
     try {
-      emit(const PaywallLoading());
+      emit(const PaywallInitializing());
 
       final customerInfo = await PurchaseService.getCustomerInfo;
       final offerings = await PurchaseService.fetchOffers;
@@ -118,8 +119,34 @@ class PaywallBloc extends Bloc<PaywallEvent, PaywallState> {
     }
   }
 
+  void _restorePurchaseFromOnboarding(RestorePurchasesFromOnboardingEvent event, Emitter<PaywallState> emit) async {
+    if (state is! PaywallResult) return;
+    final currentState = state as PaywallResult;
+
+    emit(currentState.copyWith(isRestoring: true));
+
+    try {
+      final response = await PurchaseService.restorePurchases;
+      final isSubscriptionActive = _checkSubscriptionStatus(response);
+
+      if (isSubscriptionActive) {
+        navigator.navigateAndClear(path: KRoute.home);
+        AppFlushbar.shared.successFlushbar(LocaleKeys.subscription_purchaseRestoredSuccessfuly.tr());
+      } else {
+        AppFlushbar.shared.warningFlushbar(LocaleKeys.subscription_youDoNotHaveAnyPurchasesToRestore.tr());
+      }
+    } on PlatformException catch (e) {
+      LogHelper.shared.debugPrint('$e\n${e.stacktrace}');
+      emit(currentState.copyWith(
+        isRestoring: false,
+        errorMessage: RevenueCatHelper.getMessageFromException(e),
+      ));
+    }
+
+    emit(currentState.copyWith(isRestoring: false));
+  }
+
   bool _checkSubscriptionStatus(CustomerInfo? customerInfo) {
     return customerInfo?.entitlements.all[entitlementID]?.isActive == true;
   }
 }
-

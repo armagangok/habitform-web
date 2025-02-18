@@ -9,8 +9,8 @@ class PaywallInitial extends PaywallState {
   const PaywallInitial();
 }
 
-class PaywallLoading extends PaywallState {
-  const PaywallLoading();
+class PaywallInitializing extends PaywallState {
+  const PaywallInitializing();
 }
 
 class PaywallError extends PaywallState {

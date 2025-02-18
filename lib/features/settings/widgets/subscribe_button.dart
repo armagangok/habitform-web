@@ -10,7 +10,7 @@ class SubscribeButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<PaywallBloc, PaywallState>(
       builder: (context, state) {
-        final isProductsFetching = state is PaywallLoading;
+        final isProductsFetching = state is PaywallInitializing;
         if (isProductsFetching) {
           return CircularProgressIndicator();
         } else {

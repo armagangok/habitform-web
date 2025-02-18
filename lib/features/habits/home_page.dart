@@ -112,9 +112,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
           final isPurchasing = paywallState is PaywallResult ? paywallState.isPurchasing : false;
           final isRestoring = paywallState is PaywallResult ? paywallState.isRestoring : false;
 
-          final bool paywallStateisLoading = paywallState is PaywallLoading;
-
-          
+          final bool paywallStateisLoading = paywallState is PaywallInitializing;
 
           return Row(
             mainAxisSize: MainAxisSize.min,
