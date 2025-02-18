@@ -82,7 +82,7 @@ class _PaywallWidgetState extends State<PaywallWidget> with SingleTickerProvider
           }
         },
         builder: (context, state) {
-          if (state is PaywallLoading) {
+          if (state is PaywallInitializing) {
             return Center(child: CupertinoActivityIndicator());
           }
 

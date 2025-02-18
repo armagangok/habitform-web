@@ -92,7 +92,7 @@ class _OnboardingPaywallWidgetState extends State<OnboardingPaywallWidget> with 
           }
         },
         builder: (context, state) {
-          if (state is PaywallLoading) {
+          if (state is PaywallInitializing) {
             return Center(child: CupertinoActivityIndicator());
           }
 
@@ -204,10 +204,10 @@ class _OnboardingPaywallWidgetState extends State<OnboardingPaywallWidget> with 
       final purchaseLoading = paywallState.isPurchasing;
       return Align(
         alignment: Alignment.bottomCenter,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: CustomBlurWidget(
-            blurValue: 20,
+        child: CustomBlurWidget(
+          blurValue: 20,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
             child: SafeArea(
               top: false,
               child: Column(
@@ -289,7 +289,8 @@ class _OnboardingPaywallWidgetState extends State<OnboardingPaywallWidget> with 
                   ),
                   SizedBox(height: 10),
                   CupertinoButton(
-                    padding: EdgeInsets.symmetric(vertical: 5),
+                    padding: EdgeInsets.zero,
+                    minSize: 0,
                     onPressed: () {
                       HapticFeedback.lightImpact();
                       navigator.navigateAndClear(path: KRoute.home);
@@ -367,7 +368,7 @@ class _OnboardingPaywallWidgetState extends State<OnboardingPaywallWidget> with 
           ? null
           : () {
               HapticFeedback.lightImpact();
-              context.read<PaywallBloc>().add(RestorePurchasesEvent());
+              context.read<PaywallBloc>().add(RestorePurchasesFromOnboardingEvent());
             },
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
