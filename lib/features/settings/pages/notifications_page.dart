@@ -156,61 +156,63 @@ class _NotificationsPageState extends State<NotificationsPage> with SingleTicker
 
   @override
   Widget build(BuildContext context) {
-    return CupertinoPageScaffold(
-      navigationBar: const CupertinoNavigationBar(
-        middle: Text('Notifications'),
-      ),
-      child: SafeArea(
-        child: CustomScrollView(
-          slivers: [
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 16),
-                child: CupertinoListSection.insetGrouped(
-                  header: const Text('Settings'),
-                  children: [
-                    CupertinoListTile(
-                      leading: const Icon(
-                        CupertinoIcons.settings,
-                        color: CupertinoColors.systemGrey,
-                        size: 22,
+    return Material(
+      child: CupertinoPageScaffold(
+        navigationBar: const CupertinoNavigationBar(
+          middle: Text('Notifications'),
+        ),
+        child: SafeArea(
+          child: CustomScrollView(
+            slivers: [
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  child: CupertinoListSection.insetGrouped(
+                    header: const Text('Settings'),
+                    children: [
+                      CupertinoListTile(
+                        leading: const Icon(
+                          CupertinoIcons.settings,
+                          color: CupertinoColors.systemGrey,
+                          size: 22,
+                        ),
+                        title: const Text('App Notification Settings'),
+                        trailing: const CupertinoListTileChevron(),
+                        onTap: () => openAppSettings(),
                       ),
-                      title: const Text('App Notification Settings'),
-                      trailing: const CupertinoListTileChevron(),
-                      onTap: () => openAppSettings(),
-                    ),
+                    ],
+                  ),
+                ),
+              ),
+              SliverToBoxAdapter(
+                child: CupertinoListSection.insetGrouped(
+                  header: const Text('Scheduled Notifications'),
+                  children: [
+                    if (_isLoading)
+                      const Center(
+                        child: Padding(
+                          padding: EdgeInsets.all(16),
+                          child: CupertinoActivityIndicator(),
+                        ),
+                      )
+                    else if (_notifications.isEmpty)
+                      Center(
+                        child: Padding(
+                          padding: const EdgeInsets.all(16),
+                          child: Text(
+                            'No scheduled notifications',
+                          ),
+                        ),
+                      )
+                    else
+                      ...(_groupNotificationsByHabit().entries.map((entry) {
+                        return _buildExpandableGroup(entry.key, entry.value);
+                      }).toList()),
                   ],
                 ),
               ),
-            ),
-            SliverToBoxAdapter(
-              child: CupertinoListSection.insetGrouped(
-                header: const Text('Scheduled Notifications'),
-                children: [
-                  if (_isLoading)
-                    const Center(
-                      child: Padding(
-                        padding: EdgeInsets.all(16),
-                        child: CupertinoActivityIndicator(),
-                      ),
-                    )
-                  else if (_notifications.isEmpty)
-                    Center(
-                      child: Padding(
-                        padding: const EdgeInsets.all(16),
-                        child: Text(
-                          'No scheduled notifications',
-                        ),
-                      ),
-                    )
-                  else
-                    ...(_groupNotificationsByHabit().entries.map((entry) {
-                      return _buildExpandableGroup(entry.key, entry.value);
-                    }).toList()),
-                ],
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

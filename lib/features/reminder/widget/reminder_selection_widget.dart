@@ -1,3 +1,5 @@
+import 'package:permission_handler/permission_handler.dart';
+
 import '/core/core.dart';
 import '../../../core/helpers/notifications/notification_helper.dart';
 import '../bloc/reminder/reminder_bloc.dart';
@@ -26,20 +28,55 @@ class ReminderSelectionWidget extends StatelessWidget {
               onPressed: () async {
                 contextFromBuilder.hideKeyboard();
 
-                final hasPermission = await NotificationHelper.shared.requestNotificationPermission(context);
+                final permissionStatus = await NotificationHelper.shared.requestNotificationPermission();
 
-                if (hasPermission && context.mounted) {
-                  showCupertinoModalBottomSheet(
-                    enableDrag: false,
-                    context: context,
-                    builder: (contextFromSheet) {
-                      final reminderBloc = contextFromBuilder.read<ReminderBloc>();
-                      return BlocProvider.value(
-                        value: reminderBloc,
-                        child: const ReminderPage(),
-                      );
-                    },
-                  );
+                print(permissionStatus);
+
+                switch (permissionStatus) {
+                  case PermissionStatus.granted:
+                    showCupertinoModalBottomSheet(
+                      enableDrag: false,
+                      context: context,
+                      builder: (contextFromSheet) {
+                        final reminderBloc = contextFromBuilder.read<ReminderBloc>();
+                        return BlocProvider.value(
+                          value: reminderBloc,
+                          child: const ReminderPage(),
+                        );
+                      },
+                    );
+                    break;
+
+                  case PermissionStatus.permanentlyDenied || PermissionStatus.denied:
+                    final shouldOpenSettings = await showCupertinoDialog<bool>(
+                      context: context,
+                      builder: (context) => CupertinoAlertDialog(
+                        title: const Text('Notifications Permission'),
+                        content: const Text('To set reminders, please enable notifications in settings.'),
+                        actions: [
+                          CupertinoDialogAction(
+                            child: const Text('Cancel'),
+                            onPressed: () => Navigator.pop(context, false),
+                          ),
+                          CupertinoDialogAction(
+                            isDefaultAction: true,
+                            child: const Text('Settings'),
+                            onPressed: () => Navigator.pop(context, true),
+                          ),
+                        ],
+                      ),
+                    );
+
+                    if (shouldOpenSettings == true) {
+                      await openAppSettings();
+                    }
+                    break;
+
+                  default:
+
+                    // For denied or other cases, do nothing as the permission request
+                    // will have already been shown by the requestNotificationPermission method
+                    break;
                 }
               },
               child: Row(

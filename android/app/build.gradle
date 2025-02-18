@@ -11,8 +11,6 @@ if (keystorePropertiesFile.exists()) {
     keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 }
 
-
-
 android {
     namespace = "com.appsweat.habitrise"
     compileSdk = flutter.compileSdkVersion
@@ -56,6 +54,17 @@ android {
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+    }
+
+    // Remove deprecated options
+    aaptOptions {
+        noCompress 'tflite'
+        noCompress 'lite'
+    }
+
+    lint {
+        disable 'InvalidPackage'
+        checkReleaseBuilds false
     }
 }
 

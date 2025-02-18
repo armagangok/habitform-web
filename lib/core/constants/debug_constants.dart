@@ -1,15 +1,16 @@
-const _activeAllDebugMode = false;
-
 abstract final class KDebug {
   // enables debug mode for print
-  static const debugModeEnabled = _activeAllDebugMode;
+  static const debugModeEnabled = false;
 
-  static const rateDebugMode = _activeAllDebugMode;
+  // enables rate debug mode for print
+  static const rateDebugMode = false;
 
-  static const serviceDebugMode = _activeAllDebugMode;
+  // enables service debug mode for print
+  static const serviceDebugMode = false;
 
-  static const onboardingDebugMode = _activeAllDebugMode;
+  // enables onboarding debug mode for print
+  static const onboardingDebugMode = false;
 
-  static const logDebugMode = true;
+  // enables log debug mode for print
+  static const logDebugMode = false;
 }
-

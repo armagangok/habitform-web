@@ -13,12 +13,12 @@ PODS:
     - FlutterMacOS
   - permission_handler_apple (9.3.0):
     - Flutter
-  - purchases_flutter (8.4.3):
+  - purchases_flutter (8.5.0):
     - Flutter
-    - PurchasesHybridCommon (= 13.16.0)
-  - PurchasesHybridCommon (13.16.0):
-    - RevenueCat (= 5.15.0)
-  - RevenueCat (5.15.0)
+    - PurchasesHybridCommon (= 13.18.1)
+  - PurchasesHybridCommon (13.18.1):
+    - RevenueCat (= 5.16.1)
+  - RevenueCat (5.16.1)
   - share_plus (0.0.1):
     - Flutter
   - shared_preferences_foundation (0.0.1):
@@ -77,9 +77,9 @@ SPEC CHECKSUMS:
   in_app_review: a31b5257259646ea78e0e35fc914979b0031d011
   path_provider_foundation: 2b6b4c569c0fb62ec74538f866245ac84301af46
   permission_handler_apple: 9878588469a2b0d0fc1e048d9f43605f92e6cec2
-  purchases_flutter: 302d1bd8971ea8b8d3c95b2123e00f8a2adf1ef6
-  PurchasesHybridCommon: 60bc5dedcc77aadcf1ef8fc2e98e9d9906ac6082
-  RevenueCat: 90e7642834cabc3e04e396117776bfb3f50debbf
+  purchases_flutter: 43c67a4d75e54b157f98f195523dd7ac73d1249b
+  PurchasesHybridCommon: bcc204d982166d7fcece10eb98e2ee7c0b0ea668
+  RevenueCat: d38c56d5e1058f955ee7fce4ea7b18d126235e64
   share_plus: 8b6f8b3447e494cca5317c8c3073de39b3600d1f
   shared_preferences_foundation: fcdcbc04712aee1108ac7fda236f363274528f78
   url_launcher_ios: 5334b05cef931de560670eeae103fd3e431ac3fe

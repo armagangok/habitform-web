@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -220,44 +221,32 @@ final class NotificationHelper {
     }
   }
 
-  Future<bool> requestNotificationPermission(BuildContext context) async {
-    final status = await Permission.notification.status;
+  Future<PermissionStatus> requestNotificationPermission() async {
+    if (Platform.isIOS) {
+      final iosPlugin = _notificationPlugin.resolvePlatformSpecificImplementation<IOSFlutterLocalNotificationsPlugin>();
+      final permissionStatus = await Permission.notification.status;
 
-    // Eğer izin zaten verilmişse true dön
-    if (status.isGranted) return true;
-
-    // Eğer permanently denied ise settings dialogu göster
-    if (status.isPermanentlyDenied) {
-      if (context.mounted) {
-        final shouldOpenSettings = await showCupertinoDialog<bool>(
-          context: context,
-          builder: (context) => CupertinoAlertDialog(
-            title: const Text('Notifications Permission'),
-            content: const Text('To set reminders, please enable notifications in settings.'),
-            actions: [
-              CupertinoDialogAction(
-                child: const Text('Cancel'),
-                onPressed: () => Navigator.pop(context, false),
-              ),
-              CupertinoDialogAction(
-                isDefaultAction: true,
-                child: const Text('Settings'),
-                onPressed: () => Navigator.pop(context, true),
-              ),
-            ],
-          ),
+      if (permissionStatus.isDenied) {
+        // Request permission for iOS
+        final result = await iosPlugin?.requestPermissions(
+          alert: true,
+          badge: true,
+          sound: true,
         );
-
-        if (shouldOpenSettings == true) {
-          await openAppSettings();
-        }
-        return false;
+        return result == true ? PermissionStatus.granted : PermissionStatus.denied;
       }
-      return false;
+
+      return permissionStatus;
     }
 
-    // Normal permission request
-    final result = await Permission.notification.request();
-    return result.isGranted;
+    // Android logic
+    final status = await Permission.notification.status;
+    if (status.isDenied) {
+      return await Permission.notification.request();
+    }
+
+    return status;
   }
+
+
 }
