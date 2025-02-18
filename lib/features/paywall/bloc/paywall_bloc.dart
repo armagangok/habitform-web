@@ -122,3 +122,4 @@ class PaywallBloc extends Bloc<PaywallEvent, PaywallState> {
     return customerInfo?.entitlements.all[entitlementID]?.isActive == true;
   }
 }
+

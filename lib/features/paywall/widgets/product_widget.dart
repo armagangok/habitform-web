@@ -33,11 +33,6 @@ class _ProductWidgetState extends State<ProductWidget> {
     final priceString = widget.package.storeProduct.priceString;
     final productTitle = widget.package.storeProduct.title;
 
-    print(productTitle);
-    final description = widget.package.storeProduct.description;
-
-    print(description);
-
     final isAnnual = widget.isAnnual;
 
     return AnimatedOpacity(

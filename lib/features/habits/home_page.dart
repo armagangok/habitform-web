@@ -1,8 +1,7 @@
-import 'package:habitrise/features/paywall/widgets/paywall_widget.dart';
-
 import '/core/core.dart';
 import '/features/paywall/bloc/paywall_bloc.dart';
 import '../add_habit/add_habit_page.dart';
+import '../paywall/widgets/paywall_widget.dart';
 import '../settings/settings_home_page.dart';
 import 'bloc/habit_bloc.dart';
 import 'widgets/single_habit/habit_builder.dart';
@@ -113,27 +112,32 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
           final isPurchasing = paywallState is PaywallResult ? paywallState.isPurchasing : false;
           final isRestoring = paywallState is PaywallResult ? paywallState.isRestoring : false;
 
+          final bool paywallStateisLoading = paywallState is PaywallLoading;
+
+          
+
           return Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              if (!isSubActive)
-                isPurchasing || isRestoring
-                    ? CupertinoActivityIndicator()
-                    : CupertinoButton(
-                        minSize: 0,
-                        padding: EdgeInsets.zero,
-                        onPressed: () {
-                          showCupertinoModalBottomSheet(
-                            enableDrag: false,
-                            context: context,
-                            builder: (_) => PaywallWidget(),
-                          );
-                        },
-                        child: FaIcon(
-                          FontAwesomeIcons.crown,
-                          color: CupertinoColors.systemYellow,
-                        ),
-                      ).animate().fadeIn(duration: Duration(milliseconds: 300)),
+              paywallStateisLoading
+                  ? CupertinoActivityIndicator()
+                  : isSubActive
+                      ? SizedBox.shrink()
+                      : CupertinoButton(
+                          minSize: 0,
+                          padding: EdgeInsets.zero,
+                          onPressed: () {
+                            showCupertinoModalBottomSheet(
+                              enableDrag: false,
+                              context: context,
+                              builder: (_) => PaywallWidget(),
+                            );
+                          },
+                          child: FaIcon(
+                            FontAwesomeIcons.crown,
+                            color: CupertinoColors.systemYellow,
+                          ),
+                        ).animate().fadeIn(duration: Duration(milliseconds: 300)),
               SizedBox(width: 15),
               CupertinoButton(
                 minSize: 0,

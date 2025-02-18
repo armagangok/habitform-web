@@ -30,8 +30,6 @@ class ReminderSelectionWidget extends StatelessWidget {
 
                 final permissionStatus = await NotificationHelper.shared.requestNotificationPermission();
 
-                print(permissionStatus);
-
                 switch (permissionStatus) {
                   case PermissionStatus.granted:
                     showCupertinoModalBottomSheet(

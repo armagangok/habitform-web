@@ -1,5 +1,7 @@
 // DO NOT EDIT. This is code generated via package:easy_localization/generate.dart
 
+// ignore_for_file: constant_identifier_names
+
 abstract class  LocaleKeys {
   static const common_ok = 'common.ok';
   static const common_save = 'common.save';
@@ -154,6 +156,22 @@ abstract class  LocaleKeys {
   static const subscription_serverError = 'subscription.serverError';
   static const subscription_invalidCredentials = 'subscription.invalidCredentials';
   static const subscription_notInitialized = 'subscription.notInitialized';
+  static const subscription_invalidReceipt = 'subscription.invalidReceipt';
+  static const subscription_storeProblem = 'subscription.storeProblem';
+  static const subscription_unsupportedFeature = 'subscription.unsupportedFeature';
+  static const subscription_invalidUserID = 'subscription.invalidUserID';
+  static const subscription_operationInProgress = 'subscription.operationInProgress';
+  static const subscription_invalidAppleKey = 'subscription.invalidAppleKey';
+  static const subscription_ineligible = 'subscription.ineligible';
+  static const subscription_configError = 'subscription.configError';
+  static const subscription_unexpectedResponse = 'subscription.unexpectedResponse';
+  static const subscription_accountAlreadyUsed = 'subscription.accountAlreadyUsed';
+  static const subscription_purchaseNotAllowed = 'subscription.purchaseNotAllowed';
+  static const subscription_receiptAlreadyInUse = 'subscription.receiptAlreadyInUse';
+  static const subscription_paymentPending = 'subscription.paymentPending';
+  static const subscription_insufficientPermissions = 'subscription.insufficientPermissions';
+  static const subscription_unknownError = 'subscription.unknownError';
+  static const subscription_configurationError = 'subscription.configurationError';
   static const subscription = 'subscription';
   static const share_share = 'share.share';
   static const share_share_image = 'share.share_image';
