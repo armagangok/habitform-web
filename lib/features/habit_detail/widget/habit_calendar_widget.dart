@@ -35,9 +35,8 @@ class _HabitCalendarWidgetState extends State<HabitCalendarWidget> {
             style: TextStyle(
               fontWeight: FontWeight.w500,
             ),
+            maxLines: 1,
           ),
-          SizedBox(width: 5),
-          Icon(CupertinoIcons.calendar_badge_plus),
         ],
       ),
     );

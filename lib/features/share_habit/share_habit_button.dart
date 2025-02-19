@@ -20,32 +20,28 @@ class ShareHabitButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: CupertinoButton.tinted(
-        padding: EdgeInsets.zero,
-        sizeStyle: CupertinoButtonSize.small,
-        onPressed: () {
-          _scrollToEnd();
+    return CupertinoButton.tinted(
+      padding: EdgeInsets.zero,
+      sizeStyle: CupertinoButtonSize.small,
+      onPressed: () {
+        _scrollToEnd();
 
-          // Add a small delay to ensure scroll completes before showing the sheet
-          Future.delayed(Duration(milliseconds: 100), () {
-            showCupertinoModalBottomSheet(
-              context: context,
-              builder: (context) => ShareHabitPage(habit: habit),
-            );
-          });
-        },
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              LocaleKeys.share_share.tr(),
-              style: TextStyle(fontWeight: FontWeight.w500),
-            ),
-            SizedBox(width: 5),
-            Icon(FontAwesomeIcons.share),
-          ],
-        ),
+        // Add a small delay to ensure scroll completes before showing the sheet
+        Future.delayed(Duration(milliseconds: 100), () {
+          showCupertinoModalBottomSheet(
+            context: context,
+            builder: (context) => ShareHabitPage(habit: habit),
+          );
+        });
+      },
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            LocaleKeys.share_share.tr(),
+            style: TextStyle(fontWeight: FontWeight.w500),
+          ),
+        ],
       ),
     );
   }

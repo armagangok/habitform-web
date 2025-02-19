@@ -305,16 +305,25 @@ class _HabitDataWidgetState extends State<HabitDataWidget> with SingleTickerProv
             if (longestStreak > 0) ...[
               Card(
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 5.0, vertical: 2.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Text(
                         'Longest Streak: $longestStreak',
-                        style: const TextStyle(fontSize: 13),
+                        style: const TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
-                      const Text(' ⭐️', style: TextStyle(fontSize: 13)),
+                      const Text(
+                        ' ⭐️',
+                        style: TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -323,16 +332,22 @@ class _HabitDataWidgetState extends State<HabitDataWidget> with SingleTickerProv
             if (currentStreak > 0) ...[
               Card(
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 5.0, vertical: 2.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Text(
                         'Current Streak: $currentStreak',
-                        style: const TextStyle(fontSize: 13),
+                        style: const TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
-                      const Text(' 🏆', style: TextStyle(fontSize: 13)),
+                      const Text(
+                        ' 🏆',
+                        style: TextStyle(fontSize: 13),
+                      ),
                     ],
                   ),
                 ),
@@ -382,15 +397,8 @@ class _HabitDataWidgetState extends State<HabitDataWidget> with SingleTickerProv
                   child: Container(
                     margin: const EdgeInsets.all(1.25),
                     decoration: BoxDecoration(
-                      color: isDayInMonth
-                          ? (isInFuture
-                              ? Colors.transparent
-                              : (isCompleted
-                                  ? color
-                                  : Colors.grey.shade900.withValues(
-                                      alpha: .3,
-                                    )))
-                          : Colors.transparent,
+                      color: isDayInMonth ? (isInFuture ? Colors.transparent : (isCompleted ? color : context.theme.dividerColor.withValues(alpha: .2))) : Colors.transparent,
+                      border: isDayInMonth ? Border.all(color: context.theme.dividerColor.withValues(alpha: .5)) : null,
                     ),
                   ),
                 );

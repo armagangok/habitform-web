@@ -1,8 +1,8 @@
+import 'package:habitrise/core/widgets/blur_widget.dart';
 import 'package:habitrise/features/habit_detail/widget/habit_data_widget.dart';
 import 'package:habitrise/features/share_habit/share_habit_button.dart';
 
 import '/core/core.dart';
-import '/features/habit_detail/widget/habit_calendar_widget.dart';
 import '/features/reminder/extension/easy_day.dart';
 import '/features/reminder/models/days/days_enum.dart';
 import '/models/models.dart';
@@ -11,6 +11,7 @@ import '../../habits/bloc/habit_bloc.dart';
 import '../../habits/widgets/complete_today_button.dart';
 import '../bloc/habit_detail_bloc.dart';
 import '../providers/habit_detail_bloc_provider.dart';
+import '../widget/habit_calendar_widget.dart';
 
 class HabitDetailPage extends StatelessWidget {
   const HabitDetailPage({
@@ -96,10 +97,9 @@ class HabitDetailPage extends StatelessWidget {
                                     HabitDataWidget(habit: currentHabit),
                                     const SizedBox(height: 10),
                                     Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      mainAxisAlignment: MainAxisAlignment.end,
                                       spacing: 10,
                                       children: [
-                                        HabitCalendarWidget(habit: currentHabit),
                                         CompleteTodayButton(currentHabit: currentHabit),
                                       ],
                                     ),
@@ -116,21 +116,24 @@ class HabitDetailPage extends StatelessWidget {
                   Positioned.fill(
                     child: Align(
                       alignment: Alignment.bottomCenter,
-                      child: SafeArea(
-                        child: Padding(
-                          padding: const EdgeInsets.all(10),
-                          child: Row(
-                            spacing: 15,
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              Expanded(
-                                child: _DeleteButton(habit: currentHabit),
-                              ),
-                              ShareHabitButton(habit: habit),
-                              Expanded(
-                                child: _EditButton(habit: currentHabit),
-                              ),
-                            ],
+                      child: CustomBlurWidget(
+                        child: SafeArea(
+                          child: Padding(
+                            padding: const EdgeInsets.all(10),
+                            child: Row(
+                              spacing: 8,
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Expanded(child: HabitCalendarWidget(habit: currentHabit)),
+                                Expanded(
+                                  child: _DeleteButton(habit: currentHabit),
+                                ),
+                                Expanded(child: ShareHabitButton(habit: habit)),
+                                Expanded(
+                                  child: _EditButton(habit: currentHabit),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ),
@@ -252,16 +255,12 @@ class _DeleteButton extends StatelessWidget {
       sizeStyle: CupertinoButtonSize.small,
       padding: EdgeInsets.zero,
       onPressed: () => _showDeleteConfirmationDialog(context, habit),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            LocaleKeys.common_delete.tr(),
-            style: const TextStyle(fontWeight: FontWeight.w500),
-          ),
-          const SizedBox(width: 5),
-          const Icon(FontAwesomeIcons.solidTrashCan),
-        ],
+      child: Text(
+        LocaleKeys.common_delete.tr(),
+        style: const TextStyle(
+          fontWeight: FontWeight.w500,
+        ),
+        maxLines: 1,
       ),
     );
   }
@@ -290,9 +289,8 @@ class _EditButton extends StatelessWidget {
           Text(
             LocaleKeys.common_edit.tr(),
             style: const TextStyle(fontWeight: FontWeight.w500),
+            maxLines: 1,
           ),
-          const SizedBox(width: 5),
-          const Icon(FontAwesomeIcons.pencil),
         ],
       ),
     );
