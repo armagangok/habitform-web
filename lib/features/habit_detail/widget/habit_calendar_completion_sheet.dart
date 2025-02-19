@@ -52,7 +52,7 @@ class _HabitCalendarCompletionSheetState extends State<HabitCalendarCompletionSh
         borderRadius: BorderRadius.circular(8),
       ),
       todayDecoration: BoxDecoration(
-        color: Color(widget.habit.colorCode).withOpacity(.2),
+        color: Color(widget.habit.colorCode).withValues(alpha: .2),
         shape: BoxShape.rectangle,
         borderRadius: BorderRadius.circular(8),
       ),

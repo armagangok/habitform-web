@@ -127,7 +127,7 @@ class CategoryWidgetState extends State<CategoryWidget> {
               children: List.generate(
                 widget.categories.length,
                 (index) {
-                  final cardBackgroundColor = selectedIndex == index ? widget.customColor ?? context.primary.withOpacity(.9) : Colors.transparent;
+                  final cardBackgroundColor = selectedIndex == index ? widget.customColor ?? context.primary.withValues(alpha: .9) : Colors.transparent;
 
                   return CupertinoButton(
                     minSize: 0,
@@ -146,7 +146,7 @@ class CategoryWidgetState extends State<CategoryWidget> {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
                         side: BorderSide(
-                          color: selectedIndex == index ? Colors.transparent : Theme.of(context).primaryColor.withOpacity(.2),
+                          color: selectedIndex == index ? Colors.transparent : Theme.of(context).primaryColor.withValues(alpha: .2),
                           width: 1,
                         ),
                       ),
@@ -160,7 +160,7 @@ class CategoryWidgetState extends State<CategoryWidget> {
                           style: TextStyle(
                             fontSize: 13,
                             fontWeight: FontWeight.w600,
-                            color: selectedIndex == index ? cardBackgroundColor.colorRegardingToBrightness : context.primary.withOpacity(.75),
+                            color: selectedIndex == index ? cardBackgroundColor.colorRegardingToBrightness : context.primary.withValues(alpha: .75),
                           ),
                         ),
                       ),

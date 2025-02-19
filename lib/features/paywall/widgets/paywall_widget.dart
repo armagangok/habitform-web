@@ -153,7 +153,7 @@ class _PaywallWidgetState extends State<PaywallWidget> with SingleTickerProvider
 
   CupertinoNavigationBar _navBar(BuildContext context) {
     return CupertinoNavigationBar(
-      backgroundColor: context.theme.scaffoldBackgroundColor.withOpacity(0.8),
+      backgroundColor: context.theme.scaffoldBackgroundColor.withValues(alpha: .8),
       automaticallyImplyLeading: false,
       leading: Align(
         widthFactor: 1,
@@ -161,7 +161,7 @@ class _PaywallWidgetState extends State<PaywallWidget> with SingleTickerProvider
           height: 28,
           width: 28,
           child: CupertinoButton(
-            color: context.theme.dividerColor.withOpacity(0.1),
+            color: context.theme.dividerColor.withValues(alpha: .1),
             borderRadius: BorderRadius.circular(90),
             padding: EdgeInsets.zero,
             onPressed: navigator.pop,

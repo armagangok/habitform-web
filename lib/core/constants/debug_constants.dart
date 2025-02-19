@@ -3,7 +3,7 @@ abstract final class KDebug {
   static const debugModeEnabled = false;
 
   // enables rate debug mode for print
-  static const rateDebugMode = false;
+  static const rateDebugMode = true;
 
   // enables service debug mode for print
   static const serviceDebugMode = false;

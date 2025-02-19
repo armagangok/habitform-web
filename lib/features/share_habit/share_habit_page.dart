@@ -202,9 +202,9 @@ class _ShareHabitPreviewState extends State<ShareHabitPreview> {
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
             colors: [
-              Color(widget.habit.colorCode).withOpacity(.8),
-              Color(widget.habit.colorCode).withOpacity(.9),
-              Color(widget.habit.colorCode).withOpacity(1),
+              Color(widget.habit.colorCode).withValues(alpha: .8),
+              Color(widget.habit.colorCode).withValues(alpha: .9),
+              Color(widget.habit.colorCode).withValues(alpha: 1),
             ],
           ),
         ),
@@ -334,16 +334,16 @@ class _ShareHabitPreviewState extends State<ShareHabitPreview> {
             return Card(
               elevation: 0.1,
               surfaceTintColor: Colors.transparent,
-              shadowColor: Colors.white.withAlpha(50),
+              shadowColor: Colors.white.withValues(alpha: .5),
               color: isCompletedDate
                   ? Color(widget.habit.colorCode)
                   : isBetweenDates
-                      ? Color(widget.habit.colorCode).withOpacity(.1)
+                      ? Color(widget.habit.colorCode).withValues(alpha: .1)
                       : context.theme.cardColor,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(4),
                 side: BorderSide(
-                  color: isToday ? context.primary : context.theme.dividerColor.withAlpha(50),
+                  color: isToday ? context.primary : context.theme.dividerColor.withValues(alpha: .5),
                   width: isToday ? 2.5 : .5,
                 ),
               ),

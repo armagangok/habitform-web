@@ -7,7 +7,7 @@ sealed class HabitColorState {
 
 final class HabitColorInitial extends HabitColorState {
   @override
-  final Color? color;
+  final Color? color; 
 
   HabitColorInitial(this.color);
 }

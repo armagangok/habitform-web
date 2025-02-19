@@ -47,7 +47,7 @@ class _OnboardingGreetingPageState extends State<OnboardingGreetingPage> {
                           child: Container(
                             height: 30,
                             width: double.infinity,
-                            color: Colors.black.withOpacity(.5),
+                            color: Colors.black.withValues(alpha: .5),
                             child: Center(
                               child: FittedBox(
                                 fit: BoxFit.scaleDown,

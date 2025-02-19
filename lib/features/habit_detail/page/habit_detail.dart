@@ -1,3 +1,4 @@
+import 'package:habitrise/features/habit_detail/widget/habit_data_widget.dart';
 import 'package:habitrise/features/share_habit/share_habit_button.dart';
 
 import '/core/core.dart';
@@ -8,7 +9,6 @@ import '/models/models.dart';
 import '../../edit_habit/edit_habit_page.dart';
 import '../../habits/bloc/habit_bloc.dart';
 import '../../habits/widgets/complete_today_button.dart';
-import '../../habits/widgets/single_habit/habit_detail_grid.dart';
 import '../bloc/habit_detail_bloc.dart';
 import '../providers/habit_detail_bloc_provider.dart';
 
@@ -90,25 +90,20 @@ class HabitDetailPage extends StatelessWidget {
                               ),
                               Padding(
                                 padding: const EdgeInsets.symmetric(horizontal: 15),
-                                child: CustomHeader(
-                                  text: LocaleKeys.habit_habit_data.tr().toUpperCase(),
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.end,
-                                    children: [
-                                      RepaintBoundary(
-                                        child: SingleHabitDetailGrid(habit: currentHabit),
-                                      ),
-                                      const SizedBox(height: 10),
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        spacing: 10,
-                                        children: [
-                                          HabitCalendarWidget(habit: currentHabit),
-                                          CompleteTodayButton(currentHabit: currentHabit),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    HabitDataWidget(habit: currentHabit),
+                                    const SizedBox(height: 10),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      spacing: 10,
+                                      children: [
+                                        HabitCalendarWidget(habit: currentHabit),
+                                        CompleteTodayButton(currentHabit: currentHabit),
+                                      ],
+                                    ),
+                                  ],
                                 ),
                               ),
                               const SizedBox(height: 40),

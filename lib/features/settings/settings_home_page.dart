@@ -150,7 +150,7 @@ class SettingsPage extends StatelessWidget {
                                 TextSpan(
                                   text: 'Habit',
                                   style: context.bodyLarge?.copyWith(
-                                    color: context.bodyLarge?.color?.withOpacity(1),
+                                    color: context.bodyLarge?.color?.withValues(alpha: 1),
                                   ),
                                 ),
                                 TextSpan(
@@ -163,7 +163,7 @@ class SettingsPage extends StatelessWidget {
                           Text(
                             " ${LocaleKeys.common_version.tr()}",
                             style: context.bodyMedium?.copyWith(
-                              color: context.textTheme.bodyLarge?.color?.withOpacity(.75),
+                              color: context.textTheme.bodyLarge?.color?.withValues(alpha: .75),
                             ),
                           )
                         ],
