@@ -8,7 +8,7 @@ import '/features/reminder/models/days/days_enum.dart';
 import '/models/models.dart';
 import '../../edit_habit/edit_habit_page.dart';
 import '../../habits/bloc/habit_bloc.dart';
-import '../../habits/widgets/complete_today_button.dart';
+import '../../habits/widgets/mark_today_button.dart';
 import '../bloc/habit_detail_bloc.dart';
 import '../providers/habit_detail_bloc_provider.dart';
 import '../widget/habit_calendar_widget.dart';
@@ -100,7 +100,7 @@ class HabitDetailPage extends StatelessWidget {
                                       mainAxisAlignment: MainAxisAlignment.end,
                                       spacing: 10,
                                       children: [
-                                        CompleteTodayButton(currentHabit: currentHabit),
+                                        MarkTodayButton(currentHabit: currentHabit),
                                       ],
                                     ),
                                   ],
@@ -253,14 +253,10 @@ class _DeleteButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return CupertinoButton.tinted(
       sizeStyle: CupertinoButtonSize.small,
-      padding: EdgeInsets.zero,
       onPressed: () => _showDeleteConfirmationDialog(context, habit),
-      child: Text(
-        LocaleKeys.common_delete.tr(),
-        style: const TextStyle(
-          fontWeight: FontWeight.w500,
-        ),
-        maxLines: 1,
+      child: Icon(
+        FontAwesomeIcons.solidTrashCan,
+        size: 20,
       ),
     );
   }
@@ -275,7 +271,6 @@ class _EditButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return CupertinoButton.tinted(
       sizeStyle: CupertinoButtonSize.small,
-      padding: EdgeInsets.zero,
       onPressed: () {
         showCupertinoModalBottomSheet(
           enableDrag: false,
@@ -283,15 +278,9 @@ class _EditButton extends StatelessWidget {
           builder: (context) => EditHabitPage(habit: habit),
         );
       },
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            LocaleKeys.common_edit.tr(),
-            style: const TextStyle(fontWeight: FontWeight.w500),
-            maxLines: 1,
-          ),
-        ],
+      child: Icon(
+        FontAwesomeIcons.solidPenToSquare,
+        size: 20,
       ),
     );
   }

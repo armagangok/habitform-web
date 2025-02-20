@@ -125,7 +125,7 @@ class _HabitDataWidgetState extends State<HabitDataWidget> with SingleTickerProv
     showDialog(
       context: context,
       builder: (context) => CupertinoAlertDialog(
-        title: const Text('Select Year'),
+        title: Text(LocaleKeys.habit_data_select_year.tr()),
         content: Padding(
           padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
           child: Column(
@@ -290,7 +290,7 @@ class _HabitDataWidgetState extends State<HabitDataWidget> with SingleTickerProv
             ),
           ],
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: 10),
         _buildMonthsRow(color, 18)
             .animate(
               controller: controller,
@@ -311,7 +311,7 @@ class _HabitDataWidgetState extends State<HabitDataWidget> with SingleTickerProv
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Text(
-                        'Longest Streak: $longestStreak',
+                        '${LocaleKeys.habit_data_longest_streak.tr()}: $longestStreak',
                         style: const TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.w600,
@@ -338,7 +338,7 @@ class _HabitDataWidgetState extends State<HabitDataWidget> with SingleTickerProv
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Text(
-                        'Current Streak: $currentStreak',
+                        '${LocaleKeys.habit_data_current_streak.tr()}: $currentStreak',
                         style: const TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.w600,
@@ -385,6 +385,8 @@ class _HabitDataWidgetState extends State<HabitDataWidget> with SingleTickerProv
                 final isDayInMonth = dayNumber > 0 && dayNumber <= daysInMonth;
                 final currentDate = DateTime(selectedYear, monthIndex + 1, dayNumber);
 
+                final isToday = currentDate.isToday;
+
                 final isInFuture = selectedYear == currentYear && (monthIndex > currentMonth - 1 || (monthIndex == currentMonth - 1 && dayNumber > currentDay));
 
                 bool isCompleted = false;
@@ -397,9 +399,22 @@ class _HabitDataWidgetState extends State<HabitDataWidget> with SingleTickerProv
                   child: Container(
                     margin: const EdgeInsets.all(1.25),
                     decoration: BoxDecoration(
-                      color: isDayInMonth ? (isInFuture ? Colors.transparent : (isCompleted ? color : context.theme.dividerColor.withValues(alpha: .2))) : Colors.transparent,
-                      border: isDayInMonth ? Border.all(color: context.theme.dividerColor.withValues(alpha: .5)) : null,
+                      color: isDayInMonth ? (isInFuture ? Colors.transparent : (isCompleted ? color : context.theme.dividerColor.withValues(alpha: .25))) : Colors.transparent,
+                      border: isInFuture
+                          ? Border.all(color: context.theme.dividerColor.withValues(alpha: .25))
+                          : isDayInMonth
+                              ? Border.all(color: context.theme.dividerColor.withValues(alpha: .35))
+                              : null,
                     ),
+                    child: isToday
+                        ? Center(
+                            child: Icon(
+                              CupertinoIcons.calendar_today,
+                              size: 13,
+                              color: color.colorRegardingToBrightness,
+                            ),
+                          )
+                        : Center(),
                   ),
                 );
               }),

@@ -27,17 +27,9 @@ class _HabitCalendarWidgetState extends State<HabitCalendarWidget> {
           builder: (context) => HabitCalendarCompletionSheet(habit: widget.habit),
         );
       },
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            LocaleKeys.habit_detail_calendar.tr(),
-            style: TextStyle(
-              fontWeight: FontWeight.w500,
-            ),
-            maxLines: 1,
-          ),
-        ],
+      child: Icon(
+        FontAwesomeIcons.solidCalendarDays,
+        size: 20,
       ),
     );
   }

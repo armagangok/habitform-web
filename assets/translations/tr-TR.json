@@ -18,7 +18,9 @@
         "error": "Hata",
         "Information": "Bilgilendirme",
         "pick_your_emoji": "Kendi İkonunu Seç",
-        "custom": "Özel"
+        "custom": "Özel",
+        "done": "Tamam",
+        "no_recent_emojis": "Son Kullanılan Emoji Yok"
     },
     "colors": {
         "color": "Renk",
@@ -208,5 +210,20 @@
     "languages": {
         "english": "İngilizce",
         "turkish": "Türkçe"
+    },
+    "habit_data": {
+        "longest_streak": "En Uzun Seri",
+        "current_streak": "Mevcut Seri",
+        "select_year": "Yıl Seç",
+        "marked": "Tamamlandı",
+        "mark_today": "Bugünü İşaretle"
+    },
+    "notifications": {
+        "title": "Bildirimler",
+        "settings": "Ayarlar",
+        "app_notification_settings": "Uygulama Bildirim Ayarları",
+        "scheduled_notifications": "Planlanmış Bildirimler",
+        "no_scheduled_notifications": "Planlanmış bildirim yok",
+        "reminders": "hatırlatıcı"
     }
 }

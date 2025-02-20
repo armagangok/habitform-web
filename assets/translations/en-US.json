@@ -18,7 +18,9 @@
         "error": "Error",
         "Information": "Information",
         "pick_your_emoji": "Pick Your Own Icon",
-        "custom": "Custom"
+        "custom": "Custom",
+        "done": "Done",
+        "no_recent_emojis": "No Recent Emojis"
     },
     "colors": {
         "color": "Color",
@@ -203,5 +205,20 @@
     "languages": {
         "english": "English",
         "turkish": "Turkish"
+    },
+    "habit_data": {
+        "longest_streak": "Longest Streak",
+        "current_streak": "Current Streak",
+        "select_year": "Select Year",
+        "marked": "Marked",
+        "mark_today": "Mark Today"
+    },
+    "notifications": {
+        "title": "Notifications",
+        "settings": "Settings",
+        "app_notification_settings": "App Notification Settings",
+        "scheduled_notifications": "Scheduled Notifications",
+        "no_scheduled_notifications": "No scheduled notifications",
+        "reminders": "reminders"
     }
 }

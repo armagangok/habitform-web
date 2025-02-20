@@ -21,7 +21,6 @@ class ShareHabitButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CupertinoButton.tinted(
-      padding: EdgeInsets.zero,
       sizeStyle: CupertinoButtonSize.small,
       onPressed: () {
         _scrollToEnd();
@@ -34,14 +33,9 @@ class ShareHabitButton extends StatelessWidget {
           );
         });
       },
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            LocaleKeys.share_share.tr(),
-            style: TextStyle(fontWeight: FontWeight.w500),
-          ),
-        ],
+      child: Icon(
+        FontAwesomeIcons.share,
+        size: 20,
       ),
     );
   }

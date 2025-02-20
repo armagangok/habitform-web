@@ -22,6 +22,8 @@ abstract class  LocaleKeys {
   static const common_Information = 'common.Information';
   static const common_pick_your_emoji = 'common.pick_your_emoji';
   static const common_custom = 'common.custom';
+  static const common_done = 'common.done';
+  static const common_no_recent_emojis = 'common.no_recent_emojis';
   static const common = 'common';
   static const colors_color = 'colors.color';
   static const colors_blue = 'colors.blue';
@@ -197,5 +199,18 @@ abstract class  LocaleKeys {
   static const languages_english = 'languages.english';
   static const languages_turkish = 'languages.turkish';
   static const languages = 'languages';
+  static const habit_data_longest_streak = 'habit_data.longest_streak';
+  static const habit_data_current_streak = 'habit_data.current_streak';
+  static const habit_data_select_year = 'habit_data.select_year';
+  static const habit_data_marked = 'habit_data.marked';
+  static const habit_data_mark_today = 'habit_data.mark_today';
+  static const habit_data = 'habit_data';
+  static const notifications_title = 'notifications.title';
+  static const notifications_settings = 'notifications.settings';
+  static const notifications_app_notification_settings = 'notifications.app_notification_settings';
+  static const notifications_scheduled_notifications = 'notifications.scheduled_notifications';
+  static const notifications_no_scheduled_notifications = 'notifications.no_scheduled_notifications';
+  static const notifications_reminders = 'notifications.reminders';
+  static const notifications = 'notifications';
 
 }

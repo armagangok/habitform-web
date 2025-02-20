@@ -117,7 +117,7 @@ class _NotificationsPageState extends State<NotificationsPage> with SingleTicker
             ),
           ),
           subtitle: Text(
-            '${notifications.length} reminders',
+            '${notifications.length} ${LocaleKeys.notifications_reminders.tr()}',
             style: context.bodySmall?.copyWith(
               color: CupertinoColors.systemGrey,
             ),
@@ -168,7 +168,7 @@ class _NotificationsPageState extends State<NotificationsPage> with SingleTicker
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 16),
                   child: CupertinoListSection.insetGrouped(
-                    header: const Text('Settings'),
+                    header: Text(LocaleKeys.notifications_settings.tr()),
                     children: [
                       CupertinoListTile(
                         leading: const Icon(
@@ -176,7 +176,7 @@ class _NotificationsPageState extends State<NotificationsPage> with SingleTicker
                           color: CupertinoColors.systemGrey,
                           size: 22,
                         ),
-                        title: const Text('App Notification Settings'),
+                        title: Text(LocaleKeys.notifications_app_notification_settings.tr()),
                         trailing: const CupertinoListTileChevron(),
                         onTap: () => openAppSettings(),
                       ),
@@ -186,7 +186,7 @@ class _NotificationsPageState extends State<NotificationsPage> with SingleTicker
               ),
               SliverToBoxAdapter(
                 child: CupertinoListSection.insetGrouped(
-                  header: const Text('Scheduled Notifications'),
+                  header: Text(LocaleKeys.notifications_scheduled_notifications.tr()),
                   children: [
                     if (_isLoading)
                       const Center(
@@ -200,7 +200,7 @@ class _NotificationsPageState extends State<NotificationsPage> with SingleTicker
                         child: Padding(
                           padding: const EdgeInsets.all(16),
                           child: Text(
-                            'No scheduled notifications',
+                            LocaleKeys.notifications_no_scheduled_notifications.tr(),
                           ),
                         ),
                       )

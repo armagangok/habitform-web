@@ -2,8 +2,8 @@ import '../../../core/core.dart';
 import '../../../models/models.dart';
 import '../bloc/habit_bloc.dart';
 
-class CompleteTodayButton extends StatefulWidget {
-  const CompleteTodayButton({
+class MarkTodayButton extends StatefulWidget {
+  const MarkTodayButton({
     super.key,
     required this.currentHabit,
   });
@@ -11,10 +11,10 @@ class CompleteTodayButton extends StatefulWidget {
   final Habit currentHabit;
 
   @override
-  State<CompleteTodayButton> createState() => _CompleteTodayButtonState();
+  State<MarkTodayButton> createState() => _MarkTodayButtonState();
 }
 
-class _CompleteTodayButtonState extends State<CompleteTodayButton> with TickerProviderStateMixin {
+class _MarkTodayButtonState extends State<MarkTodayButton> with TickerProviderStateMixin {
   late AnimationController controller1;
   late AnimationController controller2;
 
@@ -65,7 +65,7 @@ class _CompleteTodayButtonState extends State<CompleteTodayButton> with TickerPr
           return CupertinoButton(
             key: const ValueKey('completed'),
             color: habitColor,
-            padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+            padding: EdgeInsets.zero,
             minSize: 0,
             borderRadius: BorderRadius.circular(90),
             onPressed: () {
@@ -78,16 +78,34 @@ class _CompleteTodayButtonState extends State<CompleteTodayButton> with TickerPr
               );
               context.read<HabitBloc>().add(event);
             },
-            child: Icon(
-              CupertinoIcons.checkmark_circle,
-              color: habitColor.colorRegardingToBrightness,
-              size: 24,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              child: Card(
+                color: habitColor,
+                child: Row(
+                  children: [
+                    Text(
+                      LocaleKeys.habit_data_marked.tr(),
+                      style: context.bodySmall?.copyWith(
+                        color: habitColor.colorRegardingToBrightness,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    const SizedBox(width: 4),
+                    Icon(
+                      CupertinoIcons.checkmark_circle,
+                      color: habitColor.colorRegardingToBrightness,
+                      size: 24,
+                    ),
+                  ],
+                ),
+              ),
             ),
           ).animate(controller: controller1).scale(duration: 350.ms);
         } else {
           return CupertinoButton.tinted(
             key: const ValueKey('uncompleted'),
-            padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+            padding: EdgeInsets.zero,
             minSize: 0,
             borderRadius: BorderRadius.circular(90),
             color: habitColor,
@@ -102,10 +120,28 @@ class _CompleteTodayButtonState extends State<CompleteTodayButton> with TickerPr
 
               context.read<HabitBloc>().add(event);
             },
-            child: Icon(
-              CupertinoIcons.circle,
-              size: 24,
-              color: habitColor,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              child: Card(
+                color: Colors.transparent,
+                child: Row(
+                  children: [
+                    Text(
+                      LocaleKeys.habit_data_mark_today.tr(),
+                      style: context.bodySmall?.copyWith(
+                        color: habitColor,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    const SizedBox(width: 4),
+                    Icon(
+                      CupertinoIcons.circle,
+                      size: 24,
+                      color: habitColor,
+                    ),
+                  ],
+                ),
+              ),
             ),
           ).animate(controller: controller1).scale(duration: 350.ms);
         }
