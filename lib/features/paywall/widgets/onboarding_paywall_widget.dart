@@ -161,10 +161,9 @@ class _OnboardingPaywallWidgetState extends State<OnboardingPaywallWidget> with 
     );
   }
 
-  CupertinoNavigationBar _navBar(BuildContext context) {
-    return CupertinoNavigationBar(
-      backgroundColor: Colors.transparent,
-      automaticallyImplyLeading: false,
+  ObstructingPreferredSizeWidget _navBar(BuildContext context) {
+    return SheetHeader(
+      closeButtonPosition: CloseButtonPosition.left,
       middle: Row(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.start,
@@ -195,7 +194,6 @@ class _OnboardingPaywallWidgetState extends State<OnboardingPaywallWidget> with 
           ),
         ],
       ),
-      transitionBetweenRoutes: false,
     );
   }
 

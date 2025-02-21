@@ -65,9 +65,9 @@ class _MarkTodayHomeButtonState extends State<MarkTodayHomeButton> with TickerPr
           return CupertinoButton(
             key: const ValueKey('completed'),
             color: habitColor,
-            padding: EdgeInsets.all(3),
+            padding: EdgeInsets.all(8),
             minSize: 0,
-            borderRadius: BorderRadius.circular(90),
+            borderRadius: BorderRadius.circular(10),
             onPressed: () {
               controller1.forward(from: 0);
               controller2.forward(from: 0);
@@ -87,9 +87,9 @@ class _MarkTodayHomeButtonState extends State<MarkTodayHomeButton> with TickerPr
         } else {
           return CupertinoButton.tinted(
             key: const ValueKey('uncompleted'),
-            padding: EdgeInsets.all(3),
+            padding: EdgeInsets.all(8),
             minSize: 0,
-            borderRadius: BorderRadius.circular(90),
+            borderRadius: BorderRadius.circular(10),
             color: habitColor,
             onPressed: () async {
               controller1.forward(from: 0);

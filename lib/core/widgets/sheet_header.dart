@@ -7,24 +7,26 @@ class SheetHeader extends StatelessWidget implements ObstructingPreferredSizeWid
   const SheetHeader({
     super.key,
     this.onClose,
-    required this.title,
+    this.title,
     this.closeButtonPosition = CloseButtonPosition.right,
     this.leading,
     this.trailing,
+    this.middle,
   });
 
   final Function()? onClose;
 
-  final String title;
+  final String? title;
   final CloseButtonPosition closeButtonPosition;
   final Widget? leading;
   final Widget? trailing;
+  final Widget? middle;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return CupertinoNavigationBar(
-      backgroundColor: theme.scaffoldBackgroundColor.withValues(alpha: .8),
+      backgroundColor: theme.scaffoldBackgroundColor.withValues(alpha: .4),
       border: Border(
         bottom: BorderSide(
           color: theme.dividerColor.withValues(alpha: .3),
@@ -41,13 +43,14 @@ class SheetHeader extends StatelessWidget implements ObstructingPreferredSizeWid
           child: closeButtonPosition == CloseButtonPosition.left ? _closeButton(context) : leading,
         ),
       ),
-      middle: Text(
-        title,
-        style: TextStyle(
-          color: theme.textTheme.titleLarge?.color,
-          fontWeight: FontWeight.w600,
-        ),
-      ),
+      middle: middle ??
+          Text(
+            title ?? '',
+            style: TextStyle(
+              color: theme.textTheme.titleLarge?.color,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
       trailing: Align(
         widthFactor: 1,
         child: closeButtonPosition == CloseButtonPosition.right ? _closeButton(context) : trailing,
@@ -63,7 +66,7 @@ class SheetHeader extends StatelessWidget implements ObstructingPreferredSizeWid
         height: 28,
         width: 28,
         child: CupertinoButton(
-          color: theme.dividerColor.withValues(alpha: .1),
+          color: theme.dividerColor.withValues(alpha: .2),
           borderRadius: BorderRadius.circular(90),
           padding: EdgeInsets.zero,
           onPressed: () {

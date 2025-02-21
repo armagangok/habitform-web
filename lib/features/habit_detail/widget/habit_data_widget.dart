@@ -44,7 +44,9 @@ class _HabitDataWidgetState extends State<HabitDataWidget> with SingleTickerProv
 
   @override
   void dispose() {
+    controller.dispose();
     _isDisposed = true;
+
     super.dispose();
   }
 
@@ -198,9 +200,9 @@ class _HabitDataWidgetState extends State<HabitDataWidget> with SingleTickerProv
         Expanded(
           child: SingleChildScrollView(
             scrollDirection: Axis.horizontal,
-            physics: const ClampingScrollPhysics(),
             child: Row(
               mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: List.generate(_getVisibleMonths().length, (monthIndex) {
                 return Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -239,63 +241,47 @@ class _HabitDataWidgetState extends State<HabitDataWidget> with SingleTickerProv
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 10.0),
-              child: Text(
-                LocaleKeys.habit_habit_data.tr().toUpperCase(),
-                style: context.bodySmall?.copyWith(
-                  color: context.bodySmall?.color?.withAlpha(200),
-                  fontSize: 13,
-                  fontWeight: FontWeight.w500,
+        Padding(
+          padding: const EdgeInsets.only(
+            top: 10.0,
+            left: 10.0,
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              CupertinoButton(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                minSize: 0,
+                onPressed: () => onYearChanged(false),
+                child: Icon(
+                  CupertinoIcons.chevron_left,
                 ),
               ),
-            ),
-            const Spacer(),
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                CupertinoButton(
-                  padding: const EdgeInsets.symmetric(horizontal: 8),
-                  minSize: 0,
-                  onPressed: () => onYearChanged(false),
-                  child: Icon(
-                    CupertinoIcons.chevron_left,
-                    size: 28,
+              CupertinoButton(
+                padding: EdgeInsets.zero,
+                minSize: 0,
+                onPressed: _showYearPicker,
+                child: Text(
+                  year.toString(),
+                  style: TextStyle(
+                    fontSize: 17,
+                    fontWeight: FontWeight.w500,
                   ),
                 ),
-                CupertinoButton(
-                  padding: EdgeInsets.zero,
-                  minSize: 0,
-                  onPressed: _showYearPicker,
-                  child: Text(
-                    year.toString(),
-                    style: TextStyle(
-                      fontSize: 17,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
+              ),
+              CupertinoButton(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                minSize: 0,
+                onPressed: () => onYearChanged(true),
+                child: Icon(
+                  CupertinoIcons.chevron_right,
                 ),
-                CupertinoButton(
-                  padding: const EdgeInsets.symmetric(horizontal: 8),
-                  minSize: 0,
-                  onPressed: () => onYearChanged(true),
-                  child: Icon(
-                    CupertinoIcons.chevron_right,
-                    size: 28,
-                  ),
-                ),
-              ],
-            ),
-          ],
+              ),  
+            ],
+          ),
         ),
         const SizedBox(height: 10),
-        _buildMonthsRow(color, 18)
-            .animate(
-              controller: controller,
-            )
-            .fadeIn(duration: 350.ms),
+        _buildMonthsRow(color, 18).animate(controller: controller).fadeIn(duration: 350.ms),
         const SizedBox(height: 12),
         Wrap(
           runAlignment: WrapAlignment.start,
@@ -400,6 +386,7 @@ class _HabitDataWidgetState extends State<HabitDataWidget> with SingleTickerProv
                     margin: const EdgeInsets.all(1.25),
                     decoration: BoxDecoration(
                       color: isDayInMonth ? (isInFuture ? Colors.transparent : (isCompleted ? color : context.theme.dividerColor.withValues(alpha: .25))) : Colors.transparent,
+                      borderRadius: BorderRadius.circular(5),
                       border: isInFuture
                           ? Border.all(color: context.theme.dividerColor.withValues(alpha: .25))
                           : isDayInMonth

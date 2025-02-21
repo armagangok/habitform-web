@@ -8,7 +8,7 @@ import '/features/reminder/models/days/days_enum.dart';
 import '/models/models.dart';
 import '../../edit_habit/edit_habit_page.dart';
 import '../../habits/bloc/habit_bloc.dart';
-import '../../habits/widgets/mark_today_button.dart';
+import '../../habits/widgets/mark_today_home_button.dart';
 import '../bloc/habit_detail_bloc.dart';
 import '../providers/habit_detail_bloc_provider.dart';
 import '../widget/habit_calendar_widget.dart';
@@ -100,7 +100,7 @@ class HabitDetailPage extends StatelessWidget {
                                       mainAxisAlignment: MainAxisAlignment.end,
                                       spacing: 10,
                                       children: [
-                                        MarkTodayButton(currentHabit: currentHabit),
+                                        MarkTodayHomeButton(currentHabit: currentHabit),
                                       ],
                                     ),
                                   ],

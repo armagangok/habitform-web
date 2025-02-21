@@ -151,38 +151,8 @@ class _PaywallWidgetState extends State<PaywallWidget> with SingleTickerProvider
     );
   }
 
-  CupertinoNavigationBar _navBar(BuildContext context) {
-    return CupertinoNavigationBar(
-      backgroundColor: context.theme.scaffoldBackgroundColor.withValues(alpha: .8),
-      automaticallyImplyLeading: false,
-      leading: Align(
-        widthFactor: 1,
-        child: SizedBox(
-          height: 28,
-          width: 28,
-          child: CupertinoButton(
-            color: context.theme.dividerColor.withValues(alpha: .1),
-            borderRadius: BorderRadius.circular(90),
-            padding: EdgeInsets.zero,
-            onPressed: navigator.pop,
-            child: FittedBox(
-              child: Card(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(360),
-                ),
-                color: Colors.transparent,
-                child: Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child: Icon(
-                    CupertinoIcons.xmark,
-                    color: context.theme.iconTheme.color,
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ),
-      ),
+  ObstructingPreferredSizeWidget _navBar(BuildContext context) {
+    return SheetHeader(
       middle: Row(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.start,
@@ -213,13 +183,7 @@ class _PaywallWidgetState extends State<PaywallWidget> with SingleTickerProvider
           ),
         ],
       ),
-      border: Border(
-        bottom: BorderSide(
-          color: CupertinoColors.separator,
-          width: 0.5,
-        ),
-      ),
-      transitionBetweenRoutes: false,
+      closeButtonPosition: CloseButtonPosition.left,
     );
   }
 

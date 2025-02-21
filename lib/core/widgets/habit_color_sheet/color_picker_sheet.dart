@@ -269,8 +269,17 @@ class ColorPickerSheetState extends State<ColorPickerSheet> with SingleTickerPro
 
   @override
   Widget build(BuildContext context) {
-    // Extract the keys as category names
     List<String> categoryNames = colorCategories.keys.toList();
+
+    // Ekran genişliğine göre uygun boyut hesaplama
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isTablet = screenWidth > 600;
+
+    // Sabit item boyutu belirle
+    final itemSize = isTablet ? 45.0 : 55.0;
+
+    // Grid için sütun sayısı
+    final crossAxisCount = 5;
 
     return ListView(
       shrinkWrap: true,
@@ -286,7 +295,6 @@ class ColorPickerSheetState extends State<ColorPickerSheet> with SingleTickerPro
             setState(() {
               selectedCategoryIndex = val;
               selectedColorIndex = null;
-
               customColorForPicker = colorCategories[categoryNames[selectedCategoryIndex]]![7];
             });
           },
@@ -298,34 +306,48 @@ class ColorPickerSheetState extends State<ColorPickerSheet> with SingleTickerPro
           padding: EdgeInsets.zero,
           itemCount: colorCategories[categoryNames[selectedCategoryIndex]]!.length,
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 5,
+            crossAxisCount: crossAxisCount,
             crossAxisSpacing: 10,
             mainAxisSpacing: 10,
+
+            childAspectRatio: 1, // Kare şeklinde itemler
           ),
           itemBuilder: (context, index) {
             Color color = colorCategories[categoryNames[selectedCategoryIndex]]![index];
-            return GestureDetector(
-              onTap: () {
-                setState(() {
-                  selectedColorIndex = index;
-                  widget.onColorSelected(color);
-                });
-              },
-              child: Card(
-                color: color,
-                child: index == selectedColorIndex
-                    ? Icon(
-                        CupertinoIcons.checkmark_circle,
-                        size: 32,
-                        color: index == selectedColorIndex ? color.colorRegardingToBrightness : Colors.transparent,
-                      )
-                    : null,
-              ),
+            return SizedBox(
+              width: itemSize,
+              height: itemSize,
+              child: _buildColorItem(color, index, itemSize),
             );
           },
         ).animate(controller: controller).fadeIn(duration: 500.ms),
         SizedBox(height: 20),
       ],
+    );
+  }
+
+  Widget _buildColorItem(Color color, int index, double size) {
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          selectedColorIndex = index;
+          widget.onColorSelected(color);
+        });
+      },
+      child: Card(
+        margin: EdgeInsets.zero,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
+        ),
+        color: color,
+        child: index == selectedColorIndex
+            ? Icon(
+                CupertinoIcons.checkmark_circle,
+                size: size * 0.5,
+                color: index == selectedColorIndex ? color.colorRegardingToBrightness : Colors.transparent,
+              )
+            : null,
+      ),
     );
   }
 }

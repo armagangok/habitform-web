@@ -1,10 +1,12 @@
+import 'package:habitrise/core/widgets/spring_button.dart';
+
 import '/core/core.dart';
 import '/features/paywall/bloc/paywall_bloc.dart';
 import '../add_habit/add_habit_page.dart';
 import '../paywall/widgets/paywall_widget.dart';
 import '../settings/settings_home_page.dart';
 import 'bloc/habit_bloc.dart';
-import 'widgets/single_habit/habit_builder.dart';
+import 'widgets/habit_builder.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -50,10 +52,9 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
                       SizedBox(height: 15),
-                      SingleHabitBuilder().animate().fadeIn(
-                            duration: Duration(milliseconds: 300),
+                      HabitBuilder().animate().fadeIn(
+                            duration: Duration(milliseconds: 350),
                           ),
-                      SizedBox(height: 40),
                     ],
                   ),
                 ],
@@ -70,14 +71,10 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
       leading: Builder(builder: (context) {
         return Align(
           widthFactor: 1,
-          child: CupertinoButton(
-            minSize: 0,
-            padding: EdgeInsets.zero,
-            child: Icon(
-              FontAwesomeIcons.gear,
-              size: 24,
-            ),
-            onPressed: () {
+          child: SpringButton(
+            duration: 200,
+            scaleCoefficient: 0.8,
+            onTap: () {
               CupertinoScaffold.showCupertinoModalBottomSheet(
                 enableDrag: false,
                 context: context,
@@ -86,9 +83,12 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                 },
               );
             },
-          ).animate().fadeIn(
-                duration: Duration(milliseconds: 300),
-              ),
+            child: Icon(
+              FontAwesomeIcons.gear,
+              size: 24,
+              color: context.theme.primaryColor.withValues(alpha: .72),
+            ),
+          ),
         );
       }),
       largeTitle: Row(
@@ -117,14 +117,14 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
           return Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              paywallStateisLoading
+              paywallStateisLoading || isPurchasing || isRestoring
                   ? CupertinoActivityIndicator()
                   : isSubActive
                       ? SizedBox.shrink()
-                      : CupertinoButton(
-                          minSize: 0,
-                          padding: EdgeInsets.zero,
-                          onPressed: () {
+                      : SpringButton(
+                          duration: 200,
+                          scaleCoefficient: 0.8,
+                          onTap: () {
                             showCupertinoModalBottomSheet(
                               enableDrag: false,
                               context: context,
@@ -134,37 +134,37 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                           child: FaIcon(
                             FontAwesomeIcons.crown,
                             color: CupertinoColors.systemYellow,
+                            size: 24,
                           ),
                         ).animate().fadeIn(duration: Duration(milliseconds: 300)),
               SizedBox(width: 15),
-              CupertinoButton(
-                minSize: 0,
-                padding: EdgeInsets.zero,
-                onPressed: isPurchasing || isRestoring
-                    ? null
-                    : () {
-                        if (isSubActive) {
-                          _openAddHabitPage(context);
-                        } else {
-                          final habitState = context.read<HabitBloc>().state;
+              SpringButton(
+                duration: 200,
+                scaleCoefficient: 0.8,
+                onTap: () {
+                  if (isSubActive) {
+                    _openAddHabitPage(context);
+                  } else {
+                    final habitState = context.read<HabitBloc>().state;
 
-                          if (habitState is HabitsFetched) {
-                            final createdTaskAmount = habitState.habits.length;
-                            if (createdTaskAmount <= 3) {
-                              _openAddHabitPage(context);
-                            } else {
-                              showCupertinoModalBottomSheet(
-                                enableDrag: false,
-                                context: context,
-                                builder: (_) => PaywallWidget(),
-                              );
-                            }
-                          }
-                        }
-                      },
+                    if (habitState is HabitsFetched) {
+                      final createdTaskAmount = habitState.habits.length;
+                      if (createdTaskAmount <= 3) {
+                        _openAddHabitPage(context);
+                      } else {
+                        showCupertinoModalBottomSheet(
+                          enableDrag: false,
+                          context: context,
+                          builder: (_) => PaywallWidget(),
+                        );
+                      }
+                    }
+                  }
+                },
                 child: Icon(
                   FontAwesomeIcons.circlePlus,
                   size: 24,
+                  color: context.theme.primaryColor.withValues(alpha: .72),
                 ),
               ).animate().fadeIn(duration: Duration(milliseconds: 300)),
             ],
