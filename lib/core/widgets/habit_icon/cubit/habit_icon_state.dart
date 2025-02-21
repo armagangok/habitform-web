@@ -1,8 +1,8 @@
 part of 'habit_icon_cubit.dart';
 
 @immutable
-sealed class HabitIconState {
-  late final String? emoji;
+abstract class HabitIconState {
+  String? get emoji;
 }
 
 final class HabitIconInitial extends HabitIconState {

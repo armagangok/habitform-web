@@ -51,7 +51,7 @@ class CustomEmojiPicker extends StatelessWidget {
                 width: 40,
                 margin: const EdgeInsets.symmetric(vertical: 8),
                 decoration: BoxDecoration(
-                  color: context.theme.dividerColor.withOpacity(0.4),
+                  color: context.theme.dividerColor.withValues(alpha: 0.4),
                   borderRadius: BorderRadius.circular(3),
                 ),
               ),

@@ -1,13 +1,13 @@
 part of 'habit_color_cubit.dart';
 
 @immutable
-sealed class HabitColorState {
-  late final Color? color;
+abstract class HabitColorState {
+  Color? get color;
 }
 
 final class HabitColorInitial extends HabitColorState {
   @override
-  final Color? color; 
+  final Color? color;
 
   HabitColorInitial(this.color);
 }
