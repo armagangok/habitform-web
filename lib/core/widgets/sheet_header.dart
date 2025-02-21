@@ -1,5 +1,6 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:habitrise/core/core.dart';
+
+import 'spring_button.dart';
 
 enum CloseButtonPosition { left, right, none }
 
@@ -65,27 +66,31 @@ class SheetHeader extends StatelessWidget implements ObstructingPreferredSizeWid
       child: SizedBox(
         height: 28,
         width: 28,
-        child: CupertinoButton(
-          color: theme.dividerColor.withValues(alpha: .2),
-          borderRadius: BorderRadius.circular(90),
-          padding: EdgeInsets.zero,
-          onPressed: () {
+        child: SpringButton(
+          onTap: () {
             onClose?.call();
             navigator.pop();
           },
-          child: FittedBox(
-            child: Card(
-              elevation: 0,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(360),
-              ),
-              color: Colors.transparent,
-              child: Padding(
-                padding: const EdgeInsets.all(12.0),
-                child: Icon(
-                  CupertinoIcons.xmark,
-                  color: theme.iconTheme.color,
-                  size: 40,
+          child: CupertinoButton(
+            color: theme.dividerColor.withValues(alpha: .2),
+            disabledColor: theme.dividerColor.withValues(alpha: .3),
+            borderRadius: BorderRadius.circular(90),
+            padding: EdgeInsets.zero,
+            onPressed: null,
+            child: FittedBox(
+              child: Card(
+                elevation: 0,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(360),
+                ),
+                color: Colors.transparent,
+                child: Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Icon(
+                    CupertinoIcons.xmark,
+                    color: theme.iconTheme.color,
+                    size: 40,
+                  ),
                 ),
               ),
             ),

@@ -81,10 +81,9 @@ class _HomeHabitGridState extends State<HomeHabitGrid> {
     required int numberOfItems,
   }) {
     final isToday = dateTimeInDays.isSameDayWith(DateTime.now());
-
     final habitColor = Color(currentHabit.colorCode);
-
     final emoji = currentHabit.emoji;
+
     Widget gridItem = Container(
       width: itemSize,
       height: itemSize,
@@ -108,14 +107,7 @@ class _HomeHabitGridState extends State<HomeHabitGrid> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                if (!isCompletedDate)
-                  Text(
-                    dateTimeInDays.day.toString(),
-                    style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                if (isCompletedDate && emoji != null) ...[
+                if (emoji != null)
                   Text(
                     emoji,
                     style: TextStyle(
@@ -124,15 +116,14 @@ class _HomeHabitGridState extends State<HomeHabitGrid> {
                       textBaseline: TextBaseline.ideographic,
                     ),
                     textAlign: TextAlign.center,
+                  ).animate(target: isCompletedDate ? 1 : 0).fadeIn(duration: 300.ms).scale(begin: Offset(0.5, 0.5), end: Offset(1, 1), duration: 300.ms),
+                Text(
+                  dateTimeInDays.day.toString(),
+                  style: TextStyle(
+                    fontWeight: FontWeight.w600,
+                    color: isCompletedDate ? habitColor.colorRegardingToBrightness : null,
                   ),
-                  Text(
-                    dateTimeInDays.day.toString(),
-                    style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                      color: habitColor.colorRegardingToBrightness,
-                    ),
-                  ),
-                ],
+                ).animate(target: isCompletedDate ? 1 : 0).moveY(begin: emoji != null ? -10 : 0, end: 0, duration: 300.ms, curve: Curves.easeOutCubic),
               ],
             ),
           ),
@@ -142,7 +133,6 @@ class _HomeHabitGridState extends State<HomeHabitGrid> {
 
     return SpringButton(
       key: _buttonKeys[dateTimeInDays],
-      scaleCoefficient: 0.85,
       onTap: () {
         final event = UpdateHabitForSelectedDayEvent(
           dateToSaveOrRemove: dateTimeInDays,

@@ -573,7 +573,8 @@ class IconPickerSheetState extends State<IconPickerSheet> with SingleTickerProvi
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
                   crossAxisSpacing: 10,
-                  mainAxisSpacing: 15,
+                  mainAxisSpacing: 10,
+                  childAspectRatio: 1,
                 ),
                 itemBuilder: (context, index) {
                   final iconData = emojiCategories[categoryNames[selectedCategoryIndex]]![index];

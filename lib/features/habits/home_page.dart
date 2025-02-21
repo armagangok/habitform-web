@@ -73,7 +73,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
           widthFactor: 1,
           child: SpringButton(
             duration: 200,
-            scaleCoefficient: 0.8,
+            
             onTap: () {
               CupertinoScaffold.showCupertinoModalBottomSheet(
                 enableDrag: false,
@@ -123,7 +123,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                       ? SizedBox.shrink()
                       : SpringButton(
                           duration: 200,
-                          scaleCoefficient: 0.8,
+                          
                           onTap: () {
                             showCupertinoModalBottomSheet(
                               enableDrag: false,
@@ -140,7 +140,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
               SizedBox(width: 15),
               SpringButton(
                 duration: 200,
-                scaleCoefficient: 0.8,
+                
                 onTap: () {
                   if (isSubActive) {
                     _openAddHabitPage(context);

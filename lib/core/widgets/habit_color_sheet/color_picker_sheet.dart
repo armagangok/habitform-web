@@ -279,7 +279,7 @@ class ColorPickerSheetState extends State<ColorPickerSheet> with SingleTickerPro
     final itemSize = isTablet ? 45.0 : 55.0;
 
     // Grid için sütun sayısı
-    final crossAxisCount = 5;
+    final crossAxisCount = isTablet ? 10 : 5;
 
     return ListView(
       shrinkWrap: true,
@@ -309,7 +309,6 @@ class ColorPickerSheetState extends State<ColorPickerSheet> with SingleTickerPro
             crossAxisCount: crossAxisCount,
             crossAxisSpacing: 10,
             mainAxisSpacing: 10,
-
             childAspectRatio: 1, // Kare şeklinde itemler
           ),
           itemBuilder: (context, index) {
@@ -336,9 +335,6 @@ class ColorPickerSheetState extends State<ColorPickerSheet> with SingleTickerPro
       },
       child: Card(
         margin: EdgeInsets.zero,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
-        ),
         color: color,
         child: index == selectedColorIndex
             ? Icon(

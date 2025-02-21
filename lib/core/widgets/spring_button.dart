@@ -99,7 +99,7 @@ class SpringButton extends StatefulWidget {
     super.key,
     required this.child,
     this.onTap,
-    this.scaleCoefficient = 0.95,
+    this.scaleCoefficient = 0.875,
     this.duration = 150,
   });
 
@@ -117,7 +117,7 @@ class _SpringButtonState extends State<SpringButton> with SingleTickerProviderSt
     super.initState();
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 100),
+      duration: const Duration(milliseconds: 150),
     );
 
     _scaleAnimation = Tween<double>(
@@ -186,7 +186,7 @@ class _SpringButtonState extends State<SpringButton> with SingleTickerProviderSt
       onTapCancel: _handleTapCancel,
       onLongPressStart: _handleLongPressStart,
       onLongPressEnd: _handleLongPressEnd,
-      behavior: HitTestBehavior.opaque,
+      behavior: HitTestBehavior.deferToChild,
       child: AnimatedBuilder(
         animation: _scaleAnimation,
         builder: (context, child) => Transform.scale(
