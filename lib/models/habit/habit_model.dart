@@ -1,6 +1,8 @@
 import 'package:hive_flutter/hive_flutter.dart';
 
 import '../../features/reminder/models/reminder/reminder_model.dart';
+import '../completion_entry/completion_entry.dart';
+import 'habit_status.dart';
 
 part 'habit_model.g.dart';
 
@@ -27,53 +29,51 @@ class Habit extends HiveObject {
   @HiveField(6)
   final int colorCode;
 
+  @HiveField(7, defaultValue: {})
+  final Map<String, CompletionEntry> completions;
+
+  @HiveField(8)
+  final DateTime? archiveDate;
+
+  @HiveField(10, defaultValue: HabitStatus.active)
+  final HabitStatus status;
+
   Habit({
     required this.id,
     required this.habitName,
     this.habitDescription,
-    this.emoji,
     this.reminderModel,
+    this.emoji,
     this.completionDates,
+    this.completions = const {},
     required this.colorCode,
+    this.archiveDate,
+    this.status = HabitStatus.active,
   });
 
   Habit copyWith({
     String? id,
     String? habitName,
     String? habitDescription,
-    String? emoji,
     ReminderModel? reminderModel,
-    List<DateTime>? completionDates,
-    bool? isCompletedToday,
+    String? emoji,
     int? colorCode,
+    List<DateTime>? completionDates,
+    Map<String, CompletionEntry>? completions,
+    DateTime? archiveDate,
+    HabitStatus? status,
   }) {
     return Habit(
       id: id ?? this.id,
       habitName: habitName ?? this.habitName,
       habitDescription: habitDescription ?? this.habitDescription,
-      emoji: emoji ?? this.emoji,
       reminderModel: reminderModel ?? this.reminderModel,
-      completionDates: completionDates != null
-          ? List<DateTime>.from(completionDates)
-          : this.completionDates != null
-              ? List<DateTime>.from(this.completionDates!)
-              : null,
+      emoji: emoji ?? this.emoji,
+      completionDates: completionDates ?? this.completionDates,
+      completions: completions ?? this.completions,
       colorCode: colorCode ?? this.colorCode,
+      archiveDate: archiveDate ?? this.archiveDate,
+      status: status ?? this.status,
     );
-  }
-
-  @override
-  String toString() {
-    return 'Habit(id: $id, habitName: $habitName, habitDescription: $habitDescription, emoji: $emoji, reminderModel: $reminderModel, completionDates: $completionDates, colorCode: $colorCode)';
-  }
-
-  bool get isCompletedToday {
-    if (completionDates == null || completionDates!.isEmpty) return false;
-
-    final today = DateTime.now();
-    return completionDates!.any((dateStr) {
-      final date = dateStr;
-      return date.year == today.year && date.month == today.month && date.day == today.day;
-    });
   }
 }

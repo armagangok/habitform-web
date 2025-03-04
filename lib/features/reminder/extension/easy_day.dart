@@ -1,14 +1,8 @@
-import '../../../core/core.dart';
+import '/core/core.dart';
 import '../models/days/days_enum.dart';
 
 extension DaysExtension on Days {
-  String get capitalized {
-    // İlk harfi büyük yapmak için:
-    final name = this.name; // Enum adını al
-    return name[0].toUpperCase() + name.substring(1); // İlk harfi büyüt ve geri kalanı ekle
-  }
-
-  String get getDayName {
+  String get shortenDayName {
     switch (this) {
       case Days.mon:
         return LocaleKeys.days_monday.tr().substring(0, 3);
@@ -24,6 +18,25 @@ extension DaysExtension on Days {
         return LocaleKeys.days_saturday.tr().substring(0, 3);
       case Days.sun:
         return LocaleKeys.days_sunday.tr().substring(0, 3);
+    }
+  }
+
+  String get getFullDayName {
+    switch (this) {
+      case Days.mon:
+        return LocaleKeys.days_monday.tr();
+      case Days.tue:
+        return LocaleKeys.days_tuesday.tr();
+      case Days.wed:
+        return LocaleKeys.days_wednesday.tr();
+      case Days.thu:
+        return LocaleKeys.days_thursday.tr();
+      case Days.fri:
+        return LocaleKeys.days_friday.tr();
+      case Days.sat:
+        return LocaleKeys.days_saturday.tr();
+      case Days.sun:
+        return LocaleKeys.days_sunday.tr();
     }
   }
 }

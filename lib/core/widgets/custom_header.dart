@@ -1,12 +1,12 @@
 import '../core.dart';
 
 class CustomHeader extends StatelessWidget {
-  final String text;
+  final String? text;
   final Widget? child;
 
   const CustomHeader({
     super.key,
-    required this.text,
+    this.text,
     this.child,
   });
 
@@ -18,20 +18,20 @@ class CustomHeader extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             spacing: 2.5,
             children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 10.0),
-                child: SizedBox(
-                  width: double.infinity,
-                  child: Text(
-                    text,
-                    style: context.bodySmall?.copyWith(
-                      color: context.bodySmall?.color?.withAlpha(200),
-                      fontSize: 13,
-                      fontWeight: FontWeight.w500,
+              if (text != null)
+                Padding(
+                  padding: const EdgeInsets.only(left: 16.0, top: 8.0),
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: Text(
+                      text!.toUpperCase(),
+                      style: context.bodySmall?.copyWith(
+                        color: context.bodySmall?.color?.withAlpha(200),
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ),
                 ),
-              ),
               if (child != null) child!,
             ],
           )

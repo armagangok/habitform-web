@@ -36,16 +36,16 @@ final class NotificationHelper {
       // Create the Android-specific notification channel
       final androidPlugin = _notificationPlugin.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>();
       if (androidPlugin != null) {
-        // await androidPlugin.requestNotificationsPermission();
         await androidPlugin.createNotificationChannel(_channel!);
       }
 
       // Initialize the plugin
       const android = AndroidInitializationSettings("ic_launcher");
       const iOS = DarwinInitializationSettings(
-        requestAlertPermission: false,
+        requestAlertPermission: true,
         requestBadgePermission: false,
-        requestSoundPermission: false,
+        requestSoundPermission: true,
+        defaultPresentBadge: false,
       );
 
       const initializationSettings = InitializationSettings(android: android, iOS: iOS);
@@ -93,8 +93,9 @@ final class NotificationHelper {
         android: androidDetails,
         iOS: const DarwinNotificationDetails(
           presentAlert: true,
-          presentBadge: true,
+          presentBadge: false,
           presentSound: true,
+          badgeNumber: 0,
         ),
       );
 
@@ -247,6 +248,4 @@ final class NotificationHelper {
 
     return status;
   }
-
-
 }

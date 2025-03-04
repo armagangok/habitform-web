@@ -1,33 +1,65 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../core/widgets/habit_color_sheet/cubit/habit_color_cubit.dart';
-import '../../../core/widgets/habit_icon/cubit/habit_icon_cubit.dart';
-import '../../../models/models.dart';
-import '../../habits/bloc/habit_bloc.dart';
-import '../bloc/edit_habit_bloc.dart';
+import '/models/habit/habit_model.dart';
+import '../../../core/core.dart';
+import '../../../core/widgets/habit_color_sheet/provider/habit_color_provider.dart';
+import '../../../core/widgets/habit_icon/provider/habit_icon_provider.dart';
+import '../../habit_detail/providers/habit_detail_provider.dart';
+import '../../home/provider/home_provider.dart';
+import '../../reminder/provider/reminder_provider.dart';
 
-class EditHabitProvider extends StatelessWidget {
-  final Widget child;
-  final Habit habit;
+final editHabitProvider = AutoDisposeNotifierProvider<EditHabitNotifier, Habit?>(() {
+  return EditHabitNotifier();
+});
 
-  const EditHabitProvider({
-    super.key,
-    required this.child,
-    required this.habit,
-  });
+class EditHabitNotifier extends AutoDisposeNotifier<Habit?> {
+  final habitNameController = TextEditingController();
+  final habitDescriptionController = TextEditingController();
 
   @override
-  Widget build(BuildContext context) {
-    final habitBloc = context.read<HabitBloc>();
+  Habit? build() => null;
 
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider(create: (_) => HabitEmojiCubit()),
-        BlocProvider(create: (_) => HabitColorCubit()),
-        BlocProvider(create: (_) => EditHabitBloc(habitBloc)),
-      ],
-      child: child,
+  void initHabit(Habit habit) {
+    habitNameController.text = habit.habitName;
+    habitDescriptionController.text = habit.habitDescription ?? '';
+
+    final reminder = habit.reminderModel;
+
+    ref.watch(iconProvider.notifier).pickIcon(habit.emoji);
+    ref.watch(colorProvider.notifier).pickColor(Color(habit.colorCode));
+
+    ref.watch(reminderProvider.notifier).initializeReminder(reminder);
+    state = habit;
+  }
+
+  void updateHabit() async {
+    final habitName = habitNameController.text;
+
+    if (habitName.isEmpty) {
+      AppFlushbar.shared.warningFlushbar(LocaleKeys.edit_habit_name_cannot_be_empty.tr());
+      return;
+    }
+
+    final habitDescription = habitDescriptionController.text;
+    final reminderState = ref.watch(reminderProvider);
+    final habitIconState = ref.watch(iconProvider);
+    final habitColorState = ref.watch(colorProvider);
+    final reminderModel = reminderState.reminder;
+
+    final updatedHabit = state?.copyWith(
+      habitName: habitName,
+      habitDescription: habitDescription,
+      emoji: habitIconState,
+      colorCode: habitColorState?.value,
+      reminderModel: reminderModel,
     );
+
+    if (updatedHabit != null) {
+      state = updatedHabit;
+      await ref.read(habitDetailProvider.notifier).updateHabit(updatedHabit);
+      await ref.read(homeProvider.notifier).updateHabit(updatedHabit);
+      await ref.read(homeProvider.notifier).fetchHabits();
+      navigator.pop();
+    }
   }
 }

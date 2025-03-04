@@ -1,48 +1,33 @@
-import '../../../core/core.dart';
-import '../../../core/theme/bloc/theme_bloc.dart';
-import '../../paywall/bloc/paywall_bloc.dart';
-import '../../paywall/widgets/paywall_widget.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class SubscribeButton extends StatelessWidget {
+import '../../../core/core.dart';
+import '../../../core/theme/providers/theme_provider.dart';
+import '../../purchase/page/paywall_page.dart';
+import '../../purchase/providers/purchase_provider.dart';
+
+class SubscribeButton extends ConsumerWidget {
   const SubscribeButton({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<PaywallBloc, PaywallState>(
-      builder: (context, state) {
-        final isProductsFetching = state is PaywallInitializing;
+  Widget build(BuildContext context, WidgetRef ref) {
+    final paywallState = ref.watch(purchaseProvider);
+
+    return paywallState.when(
+      data: (state) {
+        final isProductsFetching = state.isPurchasing;
         if (isProductsFetching) {
           return CircularProgressIndicator();
         } else {
           return CustomButton(
-            onTap: () async {
-              context.read<PaywallBloc>().add(InitializePaywallEvent());
-
+            onPressed: () async {
               showCupertinoModalBottomSheet(
                 backgroundColor: Colors.transparent,
                 barrierColor: Colors.transparent,
                 expand: true,
                 enableDrag: false,
                 context: context,
-                builder: (_) => PaywallWidget(),
+                builder: (_) => PaywallPage(),
               );
-
-              // if (isSubscriptionActive) {
-              //   CupertinoScaffold.showCupertinoModalBottomSheet(
-              //     backgroundColor: Colors.transparent,
-              //     barrierColor: Colors.transparent,
-              //     expand: true,
-              //     enableDrag: false,
-              //     context: context,
-              //     builder: (context) => MembershipInfoWidget(),
-              //   );
-              // } else {
-              //   if (ref.read(purchaseProvider).offerings != null) {
-
-              //   } else {
-              //     AppFlushbar.shared.warningFlushbar(LocaleKeys.errors_something_went_wrong.tr());
-              //   }
-              // }
             },
             child: Card(
               child: SizedBox(
@@ -52,9 +37,10 @@ class SubscribeButton extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      BlocBuilder<ThemeBloc, ThemeState>(
-                        builder: (context, state) {
-                          return state.themeMode == ThemeMode.dark
+                      Consumer(
+                        builder: (context, ref, child) {
+                          final themeMode = ref.watch(themeProvider);
+                          return themeMode == ThemeMode.dark
                               ? Assets.app.habitriseDarkTransparent.image(
                                   width: 40,
                                   height: 40,
@@ -136,6 +122,8 @@ class SubscribeButton extends StatelessWidget {
           );
         }
       },
+      loading: () => Center(child: CupertinoActivityIndicator()),
+      error: (error, stackTrace) => Center(child: Text('Error: $error')),
     );
   }
 }

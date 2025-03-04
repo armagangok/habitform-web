@@ -2,7 +2,7 @@
 
 // ignore_for_file: constant_identifier_names
 
-abstract class  LocaleKeys {
+abstract class LocaleKeys {
   static const common_ok = 'common.ok';
   static const common_save = 'common.save';
   static const common_cancel = 'common.cancel';
@@ -24,6 +24,7 @@ abstract class  LocaleKeys {
   static const common_custom = 'common.custom';
   static const common_done = 'common.done';
   static const common_no_recent_emojis = 'common.no_recent_emojis';
+  static const common_loading_habits = 'common.loading_habits';
   static const common = 'common';
   static const colors_color = 'colors.color';
   static const colors_blue = 'colors.blue';
@@ -60,7 +61,8 @@ abstract class  LocaleKeys {
   static const onboarding_welcome = 'onboarding.welcome';
   static const onboarding_get_started = 'onboarding.get_started';
   static const onboarding_next = 'onboarding.next';
-  static const onboarding_aristotleHabitQuote = 'onboarding.aristotleHabitQuote';
+  static const onboarding_start_button = 'onboarding.start_button';
+  static const onboarding_continue_button = 'onboarding.continue_button';
   static const onboarding_features_minimalist = 'onboarding.features.minimalist';
   static const onboarding_features_easy_to_use = 'onboarding.features.easy_to_use';
   static const onboarding_features_science_based = 'onboarding.features.science_based';
@@ -73,6 +75,22 @@ abstract class  LocaleKeys {
   static const onboarding_goals_time_management = 'onboarding.goals.time_management';
   static const onboarding_goals_reduce_stress = 'onboarding.goals.reduce_stress';
   static const onboarding_goals = 'onboarding.goals';
+  static const onboarding_pages_small_steps_title = 'onboarding.pages.small_steps.title';
+  static const onboarding_pages_small_steps_description = 'onboarding.pages.small_steps.description';
+  static const onboarding_pages_small_steps = 'onboarding.pages.small_steps';
+  static const onboarding_pages_routine_title = 'onboarding.pages.routine.title';
+  static const onboarding_pages_routine_description = 'onboarding.pages.routine.description';
+  static const onboarding_pages_routine = 'onboarding.pages.routine';
+  static const onboarding_pages_patience_title = 'onboarding.pages.patience.title';
+  static const onboarding_pages_patience_description = 'onboarding.pages.patience.description';
+  static const onboarding_pages_patience = 'onboarding.pages.patience';
+  static const onboarding_pages_bad_habits_title = 'onboarding.pages.bad_habits.title';
+  static const onboarding_pages_bad_habits_description = 'onboarding.pages.bad_habits.description';
+  static const onboarding_pages_bad_habits = 'onboarding.pages.bad_habits';
+  static const onboarding_pages_become_person_title = 'onboarding.pages.become_person.title';
+  static const onboarding_pages_become_person_aristotleHabitQuote = 'onboarding.pages.become_person.aristotleHabitQuote';
+  static const onboarding_pages_become_person = 'onboarding.pages.become_person';
+  static const onboarding_pages = 'onboarding.pages';
   static const onboarding = 'onboarding';
   static const habit_add_habit = 'habit.add_habit';
   static const habit_edit_habit = 'habit.edit_habit';
@@ -98,7 +116,18 @@ abstract class  LocaleKeys {
   static const habit_detail_habitData = 'habit_detail.habitData';
   static const habit_detail_areYouSureToDeleteHabit = 'habit_detail.areYouSureToDeleteHabit';
   static const habit_detail_calendar = 'habit_detail.calendar';
+  static const habit_detail_detail = 'habit_detail.detail';
+  static const habit_detail_archive_title = 'habit_detail.archive_title';
+  static const habit_detail_archive_confirmation = 'habit_detail.archive_confirmation';
+  static const habit_detail_archive_info = 'habit_detail.archive_info';
   static const habit_detail = 'habit_detail';
+  static const edit_habit_edit_habit = 'edit_habit.edit_habit';
+  static const edit_habit_habit_name = 'edit_habit.habit_name';
+  static const edit_habit_habit_description = 'edit_habit.habit_description';
+  static const edit_habit_reminder = 'edit_habit.reminder';
+  static const edit_habit_add_reminder = 'edit_habit.add_reminder';
+  static const edit_habit_name_cannot_be_empty = 'edit_habit.name_cannot_be_empty';
+  static const edit_habit = 'edit_habit';
   static const settings_settings = 'settings.settings';
   static const settings_language = 'settings.language';
   static const settings_notifications = 'settings.notifications';
@@ -111,6 +140,7 @@ abstract class  LocaleKeys {
   static const settings_feedback = 'settings.feedback';
   static const settings_privacy = 'settings.privacy';
   static const settings_terms = 'settings.terms';
+  static const settings_habitArchive = 'settings.habitArchive';
   static const settings = 'settings';
   static const subscription_subscribe_to = 'subscription.subscribe_to';
   static const subscription_tap_advantages = 'subscription.tap_advantages';
@@ -174,6 +204,11 @@ abstract class  LocaleKeys {
   static const subscription_insufficientPermissions = 'subscription.insufficientPermissions';
   static const subscription_unknownError = 'subscription.unknownError';
   static const subscription_configurationError = 'subscription.configurationError';
+  static const subscription_restoreSuccessful = 'subscription.restoreSuccessful';
+  static const subscription_archiveSupportTitle = 'subscription.archiveSupportTitle';
+  static const subscription_archiveSupportDescription = 'subscription.archiveSupportDescription';
+  static const subscription_habitReminderTitle = 'subscription.habitReminderTitle';
+  static const subscription_habitReminderDescription = 'subscription.habitReminderDescription';
   static const subscription = 'subscription';
   static const share_share = 'share.share';
   static const share_share_image = 'share.share_image';
@@ -195,6 +230,7 @@ abstract class  LocaleKeys {
   static const reminder_deselect_all = 'reminder.deselect_all';
   static const reminder_select_time = 'reminder.select_time';
   static const reminder_time = 'reminder.time';
+  static const reminder_habit_reminder_message = 'reminder.habit_reminder_message';
   static const reminder = 'reminder';
   static const languages_english = 'languages.english';
   static const languages_turkish = 'languages.turkish';
@@ -212,5 +248,30 @@ abstract class  LocaleKeys {
   static const notifications_no_scheduled_notifications = 'notifications.no_scheduled_notifications';
   static const notifications_reminders = 'notifications.reminders';
   static const notifications = 'notifications';
-
+  static const archived_habits_title = 'archived_habits.title';
+  static const archived_habits_no_habits_found = 'archived_habits.no_habits_found';
+  static const archived_habits_no_habits_hint = 'archived_habits.no_habits_hint';
+  static const archived_habits_unarchive_success = 'archived_habits.unarchive_success';
+  static const archived_habits_marked_for_deletion = 'archived_habits.marked_for_deletion';
+  static const archived_habits_archived_on = 'archived_habits.archived_on';
+  static const archived_habits_restore = 'archived_habits.restore';
+  static const archived_habits_delete = 'archived_habits.delete';
+  static const archived_habits_recover_habit = 'archived_habits.recover_habit';
+  static const archived_habits_delete_confirmation_title = 'archived_habits.delete_confirmation_title';
+  static const archived_habits_delete_confirmation_message = 'archived_habits.delete_confirmation_message';
+  static const archived_habits_delete_confirmation_warning = 'archived_habits.delete_confirmation_warning';
+  static const archived_habits = 'archived_habits';
+  static const membership_info_title = 'membership_info.title';
+  static const membership_info_state = 'membership_info.state';
+  static const membership_info_active = 'membership_info.active';
+  static const membership_info_inactive = 'membership_info.inactive';
+  static const membership_info_plan = 'membership_info.plan';
+  static const membership_info_customer_id = 'membership_info.customer_id';
+  static const membership_info_expiration_date = 'membership_info.expiration_date';
+  static const membership_info_first_purchase_date = 'membership_info.first_purchase_date';
+  static const membership_info_last_purchase_date = 'membership_info.last_purchase_date';
+  static const membership_info_change_plan = 'membership_info.change_plan';
+  static const membership_info_change_plan_desc = 'membership_info.change_plan_desc';
+  static const membership_info = 'membership_info';
+  static const membership_info_billing_issue_detected_at = 'membership_info.billing_issue_detected_at';
 }

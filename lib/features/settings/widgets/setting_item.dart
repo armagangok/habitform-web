@@ -27,3 +27,30 @@ class SettingLeadingWidget extends StatelessWidget {
     );
   }
 }
+
+class SettingItem extends StatelessWidget {
+  const SettingItem({
+    super.key,
+    required this.title,
+    required this.onTap,
+    this.leading,
+    this.trailing,
+  });
+
+  final String title;
+  final VoidCallback onTap;
+  final Widget? leading;
+  final Widget? trailing;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: CupertinoListTile(
+        leading: leading,
+        title: Text(title),
+        onTap: onTap,
+        trailing: trailing ?? CupertinoListTileChevron(),
+      ),
+    );
+  }
+}

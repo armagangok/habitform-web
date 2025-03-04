@@ -27,6 +27,10 @@ final class Themes {
       shadowColor: Colors.transparent,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
+        side: BorderSide(
+          color: Colors.transparent,
+          width: 0,
+        ),
       ),
       elevation: 0,
     ),
@@ -69,6 +73,10 @@ final class Themes {
       shadowColor: Colors.transparent,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
+        side: BorderSide(
+          color: Colors.transparent,
+          width: 0,
+        ),
       ),
       elevation: 0,
     ),

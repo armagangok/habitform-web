@@ -1,11 +1,11 @@
 class KRoute {
   KRoute._();
 
-  static const onboardingGreeting = '/';
-  
-  static const home = '/home';
-  // static const onboardingPage = '/onboardingPage';
+  static const settings = '/settings';
+  static const notifications = '/notifications';
+  static const homePage = '/homePage';
+
   static const onboardingPaywall = '/onboardingPaywall';
-  static const onboardingFinalPage = '/onboardingFinalPage';
-  static const notifications = '/notificationsPage';
+  static const auth = '/auth';
+  static const archivedHabits = '/archivedHabits';
 }

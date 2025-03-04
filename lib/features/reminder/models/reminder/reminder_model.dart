@@ -36,4 +36,36 @@ class ReminderModel extends HiveObject {
 
   @override
   String toString() => 'ReminderModel(id: $id, reminderTime: $reminderTime, days: $days)';
+
+  factory ReminderModel.fromJson(Map<String, dynamic> json) {
+    return ReminderModel(
+      id: json['id'],
+      reminderTime: json['reminderTime'] != null ? DateTime.parse(json['reminderTime'] as String) : null,
+      days: json['days'] != null ? List<Days>.from(json['days'].map((e) => Days.values[e])) : null,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'reminderTime': reminderTime?.toIso8601String(),
+      'days': days?.map((e) => e.index).toList(),
+    };
+  }
+
+  factory ReminderModel.fromMap(Map<String, dynamic> map) {
+    return ReminderModel(
+      id: map['id'],
+      reminderTime: map['reminderTime'] != null ? DateTime.parse(map['reminderTime'] as String) : null,
+      days: map['days'] != null ? List<Days>.from(map['days'].map((e) => Days.values[e])) : null,
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'reminderTime': reminderTime?.toIso8601String(),
+      'days': days?.map((e) => e.index).toList(),
+    };
+  }
 }

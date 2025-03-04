@@ -1,52 +1,52 @@
-import '../../../core/core.dart';
-import '../bloc/day_selection/day_selection_cubit.dart';
-import '../bloc/picker_extend/picker_extend_cubit.dart';
-import '../bloc/remind_time/remind_time_cubit.dart';
-import '../bloc/reminder/reminder_bloc.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class SelectionButtons extends StatelessWidget {
-  const SelectionButtons({
-    super.key,
-  });
+import '../../../core/core.dart';
+import '../models/days/days_enum.dart';
+import '../provider/day_selection_provider.dart';
+import '../provider/picker_extend_provider.dart';
+import '../provider/remind_time_provider.dart';
+import '../provider/reminder_provider.dart';
+
+class SelectionButtons extends ConsumerWidget {
+  const SelectionButtons({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Padding(
       padding: const EdgeInsets.only(top: 8.0),
       child: Row(
         spacing: 10,
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          CupertinoButton.tinted(
-            sizeStyle: CupertinoButtonSize.small,
-            borderRadius: BorderRadius.circular(8),
+          CustomButton(
             onPressed: () {
-              context.read<DaySelectionCubit>().selectAll();
-              context.read<RemindTimeCubit>().updateTime(DateTime.now().copyWith(hour: 12, minute: 0));
-              context.read<ReminderBloc>().add(UpdateReminderDaysEvent(days: allDays.toList()));
+              ref.read(daySelectionProvider.notifier).setDays(Days.values.toList());
+              ref.read(remindTimeProvider.notifier).setTime(DateTime.now().copyWith(hour: 12, minute: 0));
+              ref.watch(reminderProvider.notifier).updateDays(Days.values.toList());
             },
-            child: Text(
-              LocaleKeys.reminder_select_all.tr(),
-              style: TextStyle(color: context.primary),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 5),
+              child: Text(
+                LocaleKeys.reminder_select_all.tr(),
+                style: TextStyle(color: context.primary),
+              ),
             ),
           ).animate().fadeIn(),
-          Padding(
-            padding: const EdgeInsets.only(right: 20.0),
-            child: CupertinoButton.tinted(
-              sizeStyle: CupertinoButtonSize.small,
-              borderRadius: BorderRadius.circular(8),
-              onPressed: () {
-                context.read<DaySelectionCubit>().deselectAll();
-                context.read<PickerExtendCubit>().setValue(false);
-                context.read<RemindTimeCubit>().updateTime(null);
-                context.read<ReminderBloc>().add(UpdateReminderDaysEvent(days: null));
-              },
+          CustomButton(
+            onPressed: () {
+              ref.watch(daySelectionProvider.notifier).clearDays();
+              ref.watch(pickerExtendProvider.notifier).collapse();
+              ref.watch(remindTimeProvider.notifier).clearTime();
+              ref.watch(reminderProvider.notifier).updateDays(null);
+            },
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 5),
               child: Text(
                 LocaleKeys.reminder_deselect_all.tr(),
                 style: TextStyle(color: context.primary),
-              ).animate().fadeIn(),
-            ).animate().fadeIn(),
-          ),
+              ),
+            ),
+          ).animate().fadeIn(),
         ],
       ),
     );

@@ -1,83 +1,63 @@
+import 'package:flutter/foundation.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:habitrise/core/widgets/category_widget/multi_selection_category_widget.dart';
+
 import '../../../core/core.dart';
-import '../bloc/day_selection/day_selection_cubit.dart';
-import '../bloc/reminder/reminder_bloc.dart';
 import '../extension/easy_day.dart';
 import '../models/days/days_enum.dart';
+import '../provider/day_selection_provider.dart';
+import '../provider/reminder_provider.dart';
 
-class DaysGridViewBuilder extends StatefulWidget {
+class DaysGridViewBuilder extends ConsumerStatefulWidget {
   const DaysGridViewBuilder({super.key});
 
   @override
-  State<DaysGridViewBuilder> createState() => _DaysGridViewBuilderState();
+  ConsumerState<DaysGridViewBuilder> createState() => _DaysGridViewBuilderState();
 }
 
-class _DaysGridViewBuilderState extends State<DaysGridViewBuilder> {
+class _DaysGridViewBuilderState extends ConsumerState<DaysGridViewBuilder> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      final reminderState = context.read<ReminderBloc>().state;
-      if (reminderState.reminder?.days != null) {
-        context.read<DaySelectionCubit>().initializeDays(reminderState.reminder!.days!);
-      }
-    });
+    // Initialize days from reminder state
+    _initializeDays();
+  }
+
+  void _initializeDays() {
+    final reminderState = ref.watch(reminderProvider);
+    final days = reminderState.reminder?.days;
+    if (days != null) {
+      ref.read(daySelectionProvider.notifier).setDays(days);
+    }
+  }
+
+  void _updateDays(List<Days> selectedDays) {
+    // Update both providers synchronously
+    ref.read(daySelectionProvider.notifier).setDays(selectedDays);
+    ref.watch(reminderProvider.notifier).updateDays(selectedDays);
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<DaySelectionCubit, List<Days>>(
-      builder: (context, selectedDays) {
-        return GridView.builder(
-          shrinkWrap: true,
-          physics: NeverScrollableScrollPhysics(),
-          itemCount: allDays.length,
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 7,
-            crossAxisSpacing: 8,
-          ),
-          itemBuilder: (context, index) {
-            final currentDay = allDays[index];
-            final isSelected = selectedDays.contains(currentDay);
-            final dayName = currentDay.getDayName;
+    // Watch both providers to ensure updates
+    final daySelectionState = ref.watch(daySelectionProvider);
+    final reminderState = ref.watch(reminderProvider);
 
-            return CupertinoButton(
-              padding: EdgeInsets.zero,
-              onPressed: () {
-                final daySelectionCubit = context.read<DaySelectionCubit>();
-                daySelectionCubit.selectOneByOne(currentDay, context);
-                // Güncel seçili günleri al ve ReminderBloc'u güncelle
-                final updatedDays = List<Days>.from(daySelectionCubit.state);
-                context.read<ReminderBloc>().add(UpdateReminderDaysEvent(days: updatedDays));
-              },
-              child: Card(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                  side: BorderSide(
-                    color: context.theme.dividerColor.withAlpha(75),
-                    width: .75,
-                  ),
-                ),
-                elevation: 0,
-                surfaceTintColor: Colors.transparent,
-                color: isSelected ? CupertinoColors.activeBlue : null,
-                child: Padding(
-                  padding: const EdgeInsets.all(1),
-                  child: Center(
-                    child: Text(
-                      dayName,
-                      maxLines: 1,
-                      style: context.bodySmall?.copyWith(
-                        color: isSelected ? Colors.white : null,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            );
-          },
-        );
-      },
+    final selectedDays = daySelectionState.selectedDays;
+
+    // Ensure synchronization between providers
+    if (!listEquals(selectedDays, reminderState.reminder?.days)) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _updateDays(selectedDays);
+      });
+    }
+
+    return MultiCategoryWidget<Days>(
+      categories: Days.values.toList(),
+      initialSelection: selectedDays,
+      onCategorySelected: _updateDays,
+      categoryLabelBuilder: (category) => category.getFullDayName,
+      selection: Colors.deepOrangeAccent,
     );
   }
 }

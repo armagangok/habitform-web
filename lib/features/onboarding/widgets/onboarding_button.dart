@@ -1,32 +1,33 @@
-import '../../../core/core.dart';
+import '/core/core.dart';
 
-class OnboardingButton extends StatefulWidget {
+class OnboardingButton extends StatelessWidget {
+  final VoidCallback onPressed;
+  final String buttonText;
+
   const OnboardingButton({
     super.key,
-    this.onPressed,
+    required this.onPressed,
     required this.buttonText,
   });
 
-  final dynamic Function()? onPressed;
-  final String buttonText;
-
-  @override
-  State<OnboardingButton> createState() => _OnboardingButtonState();
-}
-
-class _OnboardingButtonState extends State<OnboardingButton> {
   @override
   Widget build(BuildContext context) {
-    return CupertinoButton(
-      borderRadius: BorderRadius.circular(90),
-      sizeStyle: CupertinoButtonSize.large,
-      color: Colors.deepOrangeAccent,
-      onPressed: widget.onPressed,
-      child: Text(
-        widget.buttonText,
-        style: TextStyle(
-          fontWeight: FontWeight.bold,
-          color: Colors.white,
+    return CustomButton(
+      onPressed: onPressed,
+      child: Card(
+        color: Colors.deepOrangeAccent,
+        child: Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: Center(
+            child: Text(
+              buttonText,
+              style: context.titleMedium?.copyWith(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 18.5,
+              ),
+            ),
+          ),
         ),
       ),
     );

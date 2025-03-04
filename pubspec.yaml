@@ -64,6 +64,8 @@ dependencies:
   flutter_dotenv: ^5.2.1
   in_app_review: ^2.0.10
   emoji_picker_flutter: ^4.3.0  
+  flutter_riverpod: ^2.6.1
+  shared_preferences: ^2.5.2
 
 dev_dependencies:
   flutter_test:
@@ -99,6 +101,7 @@ flutter:
     - assets/app/
     - assets/translations/
     - assets/images/
+    - assets/images/onboarding/
     - .env
 
   # An image asset can refer to one or more resolution-specific "variants", see

@@ -30,22 +30,19 @@ class $AssetsAppGen {
 
   /// List of all assets
   List<AssetGenImage> get values => [
-    appLogoDark,
-    appLogoLight,
-    habitriseDarkTransparent,
-    habitriseLightTransparent,
-  ];
+        appLogoDark,
+        appLogoLight,
+        habitriseDarkTransparent,
+        habitriseLightTransparent
+      ];
 }
 
 class $AssetsImagesGen {
   const $AssetsImagesGen();
 
-  /// File path: assets/images/aristoteles.jpg
-  AssetGenImage get aristoteles =>
-      const AssetGenImage('assets/images/aristoteles.jpg');
-
-  /// List of all assets
-  List<AssetGenImage> get values => [aristoteles];
+  /// Directory path: assets/images/onboarding
+  $AssetsImagesOnboardingGen get onboarding =>
+      const $AssetsImagesOnboardingGen();
 }
 
 class $AssetsLottieGen {
@@ -71,6 +68,34 @@ class $AssetsTranslationsGen {
   List<String> get values => [enUS, trTR];
 }
 
+class $AssetsImagesOnboardingGen {
+  const $AssetsImagesOnboardingGen();
+
+  /// File path: assets/images/onboarding/aristoteles.png
+  AssetGenImage get aristoteles =>
+      const AssetGenImage('assets/images/onboarding/aristoteles.png');
+
+  /// File path: assets/images/onboarding/badHabits.png
+  AssetGenImage get badHabits =>
+      const AssetGenImage('assets/images/onboarding/badHabits.png');
+
+  /// File path: assets/images/onboarding/orangeFruit.png
+  AssetGenImage get orangeFruit =>
+      const AssetGenImage('assets/images/onboarding/orangeFruit.png');
+
+  /// File path: assets/images/onboarding/smallSteps.png
+  AssetGenImage get smallSteps =>
+      const AssetGenImage('assets/images/onboarding/smallSteps.png');
+
+  /// File path: assets/images/onboarding/waterTree.png
+  AssetGenImage get waterTree =>
+      const AssetGenImage('assets/images/onboarding/waterTree.png');
+
+  /// List of all assets
+  List<AssetGenImage> get values =>
+      [aristoteles, badHabits, orangeFruit, smallSteps, waterTree];
+}
+
 class Assets {
   const Assets._();
 
@@ -85,7 +110,11 @@ class Assets {
 }
 
 class AssetGenImage {
-  const AssetGenImage(this._assetName, {this.size, this.flavors = const {}});
+  const AssetGenImage(
+    this._assetName, {
+    this.size,
+    this.flavors = const {},
+  });
 
   final String _assetName;
 
@@ -145,8 +174,15 @@ class AssetGenImage {
     );
   }
 
-  ImageProvider provider({AssetBundle? bundle, String? package}) {
-    return AssetImage(_assetName, bundle: bundle, package: package);
+  ImageProvider provider({
+    AssetBundle? bundle,
+    String? package,
+  }) {
+    return AssetImage(
+      _assetName,
+      bundle: bundle,
+      package: package,
+    );
   }
 
   String get path => _assetName;

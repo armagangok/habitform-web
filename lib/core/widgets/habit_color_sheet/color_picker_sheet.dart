@@ -65,7 +65,7 @@ class ColorPickerSheetState extends State<ColorPickerSheet> with SingleTickerPro
       Colors.red.shade800,
       Colors.red.shade900,
     ],
-    LocaleKeys.colors_amber.tr(): [
+    LocaleKeys.colors_orange.tr(): [
       Colors.orange.shade50,
       Colors.orange.shade100,
       Colors.orange.shade200,
@@ -294,8 +294,15 @@ class ColorPickerSheetState extends State<ColorPickerSheet> with SingleTickerPro
             controller.forward(from: 0);
             setState(() {
               selectedCategoryIndex = val;
-              selectedColorIndex = null;
-              customColorForPicker = colorCategories[categoryNames[selectedCategoryIndex]]![7];
+              // Preserve selected color index if possible
+              if (selectedColorIndex != null && selectedColorIndex! < colorCategories[categoryNames[val]]!.length) {
+                // Keep the same shade index when changing categories
+                customColorForPicker = colorCategories[categoryNames[val]]![selectedColorIndex!];
+              } else {
+                // Default to a middle shade (index 5) if no color was selected
+                selectedColorIndex = null;
+                customColorForPicker = colorCategories[categoryNames[val]]![5];
+              }
             });
           },
         ),

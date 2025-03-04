@@ -3,7 +3,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 
 part 'user_goal_enum.g.dart';
 
-@HiveType(typeId: 2) // Make sure this typeId is unique across your Hive types
+@HiveType(typeId: 2)
 enum UserGoal {
   @HiveField(0)
   betterProductivity,

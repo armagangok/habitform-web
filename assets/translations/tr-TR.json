@@ -20,7 +20,8 @@
         "pick_your_emoji": "Kendi İkonunu Seç",
         "custom": "Özel",
         "done": "Tamam",
-        "no_recent_emojis": "Son Kullanılan Emoji Yok"
+        "no_recent_emojis": "Son Kullanılan Emoji Yok",
+        "loading_habits": "Alışkanlıklar yükleniyor..."
     },
     "colors": {
         "color": "Renk",
@@ -60,7 +61,8 @@
         "welcome": "Hoş Geldiniz",
         "get_started": "Haydi Başlayalım",
         "next": "İleri",
-        "aristotleHabitQuote": "“Tekrar tekrar yaptığımız şey ne ise, biz oyuz. O halde mükemmellik bir eylem değil, bir alışkanlıktır.”",
+        "start_button": "Başla 🚀",
+        "continue_button": "Devam Et →",
         "features": {
             "minimalist": "Minimalist.",
             "easy_to_use": "Kullanımı Kolay.",
@@ -75,6 +77,28 @@
             "time_management": "Zaman yönetimi",
             "reduce_stress": "Stresi azaltmak",
             "other": "Diğer"
+        },
+        "pages": {
+            "small_steps": {
+                "title": "Hayatını küçük bir adımla değiştir.",
+                "description": "HabitRise ile küçük ve yönetilebilir adımlarla başladığınızda, yeni alışkanlıklar geliştirmek daha kolay ve sürdürülebilir hale gelir."
+            },
+            "routine": {
+                "title": "Rutin ve tekrar, alışkanlıkların kök salmasına yardımcı olur.",
+                "description": "HabitRise ile tutarlı bir rutin oluşturmak ve eylemleri tekrarlamak, alışkanlıkların kalıcı olmasının anahtarıdır."
+            },
+            "patience": {
+                "title": "Sabır ve istikrar, alışkanlıkların meyve vermesine yardımcı olur.",
+                "description": "Bir alışkanlık oluşturmak zaman alır; HabitRise ile sürecin keyfini çıkarmak anahtardır."
+            },
+            "bad_habits": {
+                "title": "Kötü alışkanlıkları bırakmak kolaydır. Onları iyi olanlarla değiştirin.",
+                "description": "Olumsuz alışkanlıkları aktif olarak olumlu ve sağlıklı alternatiflerle değiştirdiğinizde bırakmak çok daha kolaydır."
+            },
+            "become_person": {
+                "title": "Olmak İstediğin Kişi Ol",
+                "aristotleHabitQuote": "“Tekrar tekrar yaptığımız şey ne ise, biz oyuz. O halde mükemmellik bir eylem değil, bir alışkanlıktır.”"
+            }
         }
     },
     "habit": {
@@ -102,7 +126,19 @@
         "reminder": "HATIRLATICI",
         "habitData": "ALIŞKANLIK VERİLERİ",
         "areYouSureToDeleteHabit": "Bu alışkanlığı silmek istediğinize emin misiniz?",
-        "calendar": "Takvim"
+        "calendar": "Takvim",
+        "detail": "Detaylar",
+        "archive_title": "Arşivle",
+        "archive_confirmation": "{{habitName}} alışkanlığını arşivlemek istediğinizden emin misiniz?",
+        "archive_info": "Arşivlenen alışkanlıklar ana ekranda görünmez"
+    },
+    "edit_habit": {
+        "edit_habit": "Alışkanlık Düzenle",
+        "habit_name": "Alışkanlık Adı",
+        "habit_description": "Açıklama",
+        "reminder": "HATIRLATICI",
+        "add_reminder": "HATIRLATICI EKLE",
+        "name_cannot_be_empty": "Alışkanlık adı boş olamaz"
     },
     "settings": {
         "settings": "Ayarlar",
@@ -116,7 +152,8 @@
         "support_subtitle": "HabitRise'ı sevdiniz mi? Puanlayın ve büyümemize yardımcı olun!",
         "feedback": "Geri Bildirim Gönder",
         "privacy": "Gizlilik",
-        "terms": "Şartlar"
+        "terms": "Şartlar",
+        "habitArchive": "Arşivlenmiş Alışkanlıklar"
     },
     "subscription": {
         "subscribe_to": "Abone Ol",
@@ -180,7 +217,13 @@
         "paymentPending": "Ödeme beklemede",
         "insufficientPermissions": "Bu satın alma için yetersiz izinler",
         "unknownError": "Bilinmeyen bir hata oluştu",
-        "configurationError": "Yapılandırma hatası oluştu"
+        "configurationError": "Yapılandırma hatası oluştu",
+        "restoreSuccessful": "Satın alımlar başarıyla geri yüklendi",
+        "archiveSupportTitle": "Arşiv Desteği",
+        "archiveSupportDescription": "Alışkanlıklarınızı arşivleyin ve yönetin",
+        "habitReminderTitle": "Hatırlatıcılar",
+        "habitReminderDescription": "Alışkanlıklarınız için hatırlatıcılar oluşturun",
+        "billingIssueDetectedAt": "Ödeme Sorunu Tespit Edilen Tarih"
     },
     "share": {
         "share": "Paylaş",
@@ -205,7 +248,8 @@
         "select_all": "Tümünü Seç",
         "deselect_all": "Seçimi Kaldır",
         "select_time": "Zaman Seç",
-        "time": "Zaman"
+        "time": "Zaman",
+        "habit_reminder_message": "Alışkanlığınızı tamamlamayı unutmayın!"
     },
     "languages": {
         "english": "İngilizce",
@@ -225,5 +269,32 @@
         "scheduled_notifications": "Planlanmış Bildirimler",
         "no_scheduled_notifications": "Planlanmış bildirim yok",
         "reminders": "hatırlatıcı"
+    },
+    "archived_habits": {
+        "title": "Arşivlenmiş Alışkanlıklar",
+        "no_habits_found": "Arşivlenmiş alışkanlık bulunamadı",
+        "no_habits_hint": "Arşivlediğiniz alışkanlıklar burada görünecek",
+        "unarchive_success": "Alışkanlık başarıyla arşivden çıkarıldı",
+        "marked_for_deletion": "Silinmek için işaretlendi",
+        "archived_on": "Arşivlenme tarihi:",
+        "restore": "Arşivden Çıkar",
+        "delete": "Sil",
+        "recover_habit": "Alışkanlığı Kurtar",
+        "delete_confirmation_title": "Alışkanlığı Sil",
+        "delete_confirmation_message": "Bu alışkanlığı silmek istediğinizden emin misiniz: ",
+        "delete_confirmation_warning": "Bu işlem geri alınamaz!"
+    },
+    "membership_info": {
+        "title": "Üyelik Bilgileri",
+        "state": "Durum",
+        "active": "Aktif",
+        "inactive": "Aktif Değil",
+        "plan": "Plan",
+        "customer_id": "Müşteri ID",
+        "expiration_date": "Bitiş Tarihi",
+        "first_purchase_date": "İlk Satın Alma Tarihi",
+        "last_purchase_date": "Son Satın Alma Tarihi",
+        "change_plan": "Planı Değiştir",
+        "change_plan_desc": "Abonelik planınızı değiştirmek için tıklayın"
     }
 }

@@ -1,9 +1,8 @@
-import 'package:flutter/cupertino.dart';
-
-import '../../features/habits/home_page.dart';
-import '../../features/onboarding/pages/onboarding_greeting_page.dart';
+import '../../features/archived_habits/pages/archived_habits_page.dart';
+import '../../features/home/views/pages/home_page.dart';
 import '../../features/settings/pages/notifications_page.dart';
-import 'constant/routes.dart';
+import '../../features/settings/settings_page.dart';
+import '../core.dart';
 
 @immutable
 final class NavigationRoute {
@@ -12,23 +11,29 @@ final class NavigationRoute {
 
   Route<dynamic> generateRoute(RouteSettings args) {
     switch (args.name) {
-      case KRoute.home:
+      case KRoute.homePage:
         return _getRoute(page: const HomePage(), settings: args);
 
+
+
+      case KRoute.settings:
+        return _getRoute(page: const SettingsPage(), settings: args);
+
       case KRoute.notifications:
-        return _normalNavigate(const NotificationsPage());
+        return _getRoute(page: const NotificationsPage(), settings: args);
+
+      case KRoute.archivedHabits:
+        return _getRoute(page: const ArchivedHabitsPage(), settings: args);
 
       default:
         return CupertinoPageRoute(
-          builder: (context) => const OnboardingGreetingPage(),
+          builder: (context) => const CupertinoPageScaffold(
+            child: Center(
+              child: Text("404"),
+            ),
+          ),
         );
     }
-  }
-
-  PageRoute _normalNavigate(Widget page) {
-    return CupertinoPageRoute(
-      builder: (context) => page,
-    );
   }
 
   PageRoute _getRoute({

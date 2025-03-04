@@ -5,7 +5,8 @@ import 'package:screenshot/screenshot.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '/core/core.dart';
-import '../../models/models.dart';
+import '/models/habit/habit_model.dart';
+import '../habit_detail/widget/habit_data_widget.dart';
 
 class ShareHabitPage extends StatefulWidget {
   final Habit habit;
@@ -23,20 +24,20 @@ class _ShareHabitPageState extends State<ShareHabitPage> {
   bool isShareLoading = false;
   final screenshotController = ScreenshotController();
 
-  Future<void> _shareHabitAsImage(ShareHabitPreview previewWidget, BuildContext contextFromWidget) async {
+  Future<void> _shareHabitAsImage(BuildContext context) async {
     setState(() {
       isShareLoading = true;
     });
 
     try {
-      final screenshotWidget = ShareHabitPreview(
-        habit: widget.habit,
+      // Capture the screenshot using the controller
+      final imageFile = await screenshotController.capture(
+        pixelRatio: 3.0, // Higher quality image
       );
 
-      final imageFile = await screenshotController.captureFromWidget(
-        screenshotWidget,
-        context: contextFromWidget,
-      );
+      if (imageFile == null) {
+        throw Exception('Failed to capture screenshot');
+      }
 
       final tempDir = await getTemporaryDirectory();
       final file = await File('${tempDir.path}/habit.png').create();
@@ -48,6 +49,7 @@ class _ShareHabitPageState extends State<ShareHabitPage> {
       );
     } catch (e) {
       debugPrint('Error sharing habit: $e');
+      AppFlushbar.shared.errorFlushbar('${LocaleKeys.common_error.tr()}: $e');
     }
 
     setState(() {
@@ -56,7 +58,8 @@ class _ShareHabitPageState extends State<ShareHabitPage> {
   }
 
   Future<void> _shareHabitAsText() async {
-    final completedDays = widget.habit.completionDates?.length ?? 0;
+    final completedDays = widget.habit.completions.values.where((completion) => completion.isCompleted).length;
+
     final shareText = '''
 🎯 ${LocaleKeys.habit_habit_name.tr()}: ${widget.habit.habitName}
 ✅ ${LocaleKeys.habit_complete.tr()}: $completedDays times
@@ -68,9 +71,6 @@ class _ShareHabitPageState extends State<ShareHabitPage> {
 
   @override
   Widget build(BuildContext context) {
-    final habitWidget = ShareHabitPreview(
-      habit: widget.habit,
-    );
     return CupertinoPageScaffold(
       navigationBar: SheetHeader(
         closeButtonPosition: CloseButtonPosition.left,
@@ -83,7 +83,16 @@ class _ShareHabitPageState extends State<ShareHabitPage> {
             children: [
               SafeArea(
                 bottom: false,
-                child: habitWidget,
+                child: Screenshot(
+                  controller: screenshotController,
+                  key: const Key('habit_screenshot'),
+                  child: Material(
+                    color: Colors.transparent,
+                    child: ShareHabitPreview(
+                      habit: widget.habit,
+                    ),
+                  ),
+                ),
               ),
               const SizedBox(height: 20),
             ],
@@ -91,57 +100,53 @@ class _ShareHabitPageState extends State<ShareHabitPage> {
           Positioned.fill(
             child: Align(
               alignment: Alignment.bottomCenter,
-              child: SafeArea(
-                child: Padding(
-                  padding: const EdgeInsets.all(15),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: CupertinoButton.tinted(
-                          color: Colors.indigoAccent.shade100,
-                          focusColor: Colors.indigoAccent.shade100,
-                          onPressed: isShareLoading
-                              ? null
-                              : () {
-                                  _shareHabitAsImage(habitWidget, context);
-                                },
-                          sizeStyle: CupertinoButtonSize.small,
-                          child: isShareLoading
-                              ? CircularProgressIndicator.adaptive()
-                              : Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Icon(
-                                      FontAwesomeIcons.solidFileImage,
-                                      color: Colors.indigoAccent.shade100,
-                                    ),
-                                    const SizedBox(width: 5),
-                                    Text(
-                                      LocaleKeys.share_share_image.tr(),
-                                      style: TextStyle(
-                                        color: Colors.indigoAccent.shade100,
+              child: Card(
+                child: SafeArea(
+                  top: false,
+                  child: Padding(
+                    padding: const EdgeInsets.all(20),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: CupertinoButton.tinted(
+                            onPressed: isShareLoading
+                                ? null
+                                : () {
+                                    _shareHabitAsImage(context);
+                                  },
+                            sizeStyle: CupertinoButtonSize.small,
+                            child: isShareLoading
+                                ? const CircularProgressIndicator.adaptive()
+                                : Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Icon(FontAwesomeIcons.solidFileImage),
+                                      const SizedBox(width: 5),
+                                      Text(
+                                        LocaleKeys.share_share_image.tr(),
+                                        style: TextStyle(fontWeight: FontWeight.w600),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                        ),
-                      ),
-                      const SizedBox(width: 20),
-                      Expanded(
-                        child: CupertinoButton.tinted(
-                          sizeStyle: CupertinoButtonSize.small,
-                          onPressed: _shareHabitAsText,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(FontAwesomeIcons.solidFileLines),
-                              SizedBox(width: 5),
-                              Text(LocaleKeys.share_share_text.tr()),
-                            ],
+                                    ],
+                                  ),
                           ),
                         ),
-                      ),
-                    ],
+                        const SizedBox(width: 20),
+                        Expanded(
+                          child: CupertinoButton.tinted(
+                            sizeStyle: CupertinoButtonSize.small,
+                            onPressed: _shareHabitAsText,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(FontAwesomeIcons.solidFileLines),
+                                SizedBox(width: 5),
+                                Text(LocaleKeys.share_share_text.tr()),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -177,7 +182,7 @@ class _ShareHabitPreviewState extends State<ShareHabitPreview> {
   void _scrollToEnd() async {
     // Wait for the widget to be fully built and laid out
     await Future.delayed(Duration(milliseconds: 100));
-    if (_scrollController.hasClients && mounted) {
+    if (_scrollController.hasClients) {
       _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
     }
   }
@@ -211,7 +216,7 @@ class _ShareHabitPreviewState extends State<ShareHabitPreview> {
         child: Stack(
           children: [
             Padding(
-              padding: const EdgeInsets.all(40.0),
+              padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 40),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -226,7 +231,7 @@ class _ShareHabitPreviewState extends State<ShareHabitPreview> {
                               Expanded(
                                 child: Column(
                                   mainAxisSize: MainAxisSize.min,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     Text(
                                       widget.habit.habitName,
@@ -234,19 +239,19 @@ class _ShareHabitPreviewState extends State<ShareHabitPreview> {
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
-                                    if (widget.habit.habitDescription != null) ...[
-                                      Text(
-                                        widget.habit.habitDescription!,
-                                        style: context.textTheme.bodyMedium,
-                                      ),
-                                    ],
+                                    // if (widget.habit.habitDescription != null) ...[
+                                    //   Text(
+                                    //     widget.habit.habitDescription!,
+                                    //     style: context.textTheme.bodyMedium,
+                                    //   ),
+                                    // ],
                                   ],
                                 ),
                               ),
                             ],
                           ),
                           const SizedBox(height: 10),
-                          _buildHabitGrid(),
+                          HabitDataWidget(habit: widget.habit),
                         ],
                       ),
                     ),
@@ -255,104 +260,36 @@ class _ShareHabitPreviewState extends State<ShareHabitPreview> {
               ),
             ),
             Positioned.fill(
+              bottom: 10,
+              left: 30,
               child: Align(
-                alignment: Alignment.bottomCenter,
-                child: Padding(
-                  padding: const EdgeInsets.only(bottom: 8, left: 40),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Card(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(4),
-                        ),
-                        child: Assets.app.appLogoDark.image(
-                          height: 24,
-                          width: 24,
-                        ),
+                alignment: Alignment.bottomLeft,
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Card(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(4),
                       ),
-                      const SizedBox(width: 5),
-                      Text(
-                        "HabitRise",
-                        style: context.bodySmall?.copyWith(
-                          color: Color(widget.habit.colorCode).colorRegardingToBrightness,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      )
-                    ],
-                  ),
+                      child: Assets.app.appLogoDark.image(
+                        height: 24,
+                        width: 24,
+                      ),
+                    ),
+                    const SizedBox(width: 5),
+                    Text(
+                      "HabitRise",
+                      style: context.bodySmall?.copyWith(
+                        color: Color(widget.habit.colorCode).colorRegardingToBrightness,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    )
+                  ],
                 ),
               ),
             ),
           ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildHabitGrid() {
-    final List<DateTime> last90Days = [];
-    DateTime today = DateTime.now();
-    for (int i = 90; i >= 0; i--) {
-      last90Days.add(today.subtract(Duration(days: i)));
-    }
-
-    final completionDates = widget.habit.completionDates?..sort();
-    DateTime? startDate;
-    DateTime? endDate;
-
-    if (completionDates != null && completionDates.length > 1) {
-      startDate = completionDates.first;
-      endDate = completionDates.last;
-    }
-
-    return FittedBox(
-      child: SizedBox(
-        height: 152,
-        child: GridView.builder(
-          controller: _scrollController,
-          scrollDirection: Axis.horizontal,
-          itemCount: last90Days.length,
-          shrinkWrap: true,
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 7,
-            crossAxisSpacing: 5,
-            mainAxisSpacing: 5,
-            childAspectRatio: 1,
-          ),
-          itemBuilder: (context, index) {
-            final dateTimeIn90Days = last90Days[index];
-            final isToday = dateTimeIn90Days.isToday;
-
-            bool isCompletedDate = completionDates?.any((d) => d.isSameDayWith(dateTimeIn90Days)) ?? false;
-
-            bool isBetweenDates = false;
-            if (startDate != null && endDate != null) {
-              isBetweenDates = dateTimeIn90Days.isAfter(startDate) && dateTimeIn90Days.isBefore(endDate);
-            }
-
-            return Card(
-              elevation: 0.1,
-              surfaceTintColor: Colors.transparent,
-              shadowColor: Colors.white.withValues(alpha: .5),
-              color: isCompletedDate
-                  ? Color(widget.habit.colorCode)
-                  : isBetweenDates
-                      ? Color(widget.habit.colorCode).withValues(alpha: .1)
-                      : context.theme.cardColor,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(4),
-                side: BorderSide(
-                  color: isToday ? context.primary : context.theme.dividerColor.withValues(alpha: .5),
-                  width: isToday ? 2.5 : .5,
-                ),
-              ),
-              child: const SizedBox(
-                height: 24,
-                width: 24,
-              ),
-            );
-          },
         ),
       ),
     );

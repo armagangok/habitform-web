@@ -24,7 +24,9 @@ final class ReminderService {
     }
   }
 
-  static Future<void> cancelReminderNotification(int id) async {
+  static Future<void> cancelReminderNotification(int? id) async {
+    if (id == null) return;
+
     // Tüm günlerin bildirimlerini iptal et
     final dummyReminder = ReminderModel(id: id, days: [], reminderTime: null);
     await NotificationHelper.shared.cancelReminderNotifications(dummyReminder);

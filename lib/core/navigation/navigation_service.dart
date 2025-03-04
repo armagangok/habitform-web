@@ -40,5 +40,7 @@ class NavigationService extends INavigationService {
   }
 
   @override
-  void pop() => navigatorKey.currentState?.pop();
+  void pop() async {
+    navigatorKey.currentState?.pop();
+  }
 }

@@ -3,14 +3,14 @@ abstract final class KDebug {
   static const debugModeEnabled = false;
 
   // enables rate debug mode for print
-  static const rateDebugMode = true;
+  static const rateDebugMode = false;
 
-  // enables service debug mode for print
-  static const serviceDebugMode = false;
+  // user becomes a pro member for a debug mode to test the app
+  static const purchaseDebugMode = false;
 
   // enables onboarding debug mode for print
   static const onboardingDebugMode = false;
 
   // enables log debug mode for print
-  static const logDebugMode = false;
+  static const logDebugMode = true;
 }

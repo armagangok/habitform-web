@@ -158,8 +158,9 @@ class _NotificationsPageState extends State<NotificationsPage> with SingleTicker
   Widget build(BuildContext context) {
     return Material(
       child: CupertinoPageScaffold(
-        navigationBar: const CupertinoNavigationBar(
-          middle: Text('Notifications'),
+        navigationBar: CupertinoNavigationBar(
+          backgroundColor: context.theme.scaffoldBackgroundColor.withValues(alpha: .4),
+          middle: Text(LocaleKeys.habit_reminder.tr()),
         ),
         child: SafeArea(
           child: CustomScrollView(

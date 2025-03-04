@@ -1,115 +1,76 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import '/core/core.dart';
-import '../bloc/picker_extend/picker_extend_cubit.dart';
-import '../bloc/remind_time/remind_time_cubit.dart';
-import '../bloc/reminder/reminder_bloc.dart';
+import '../provider/remind_time_provider.dart';
 import '../provider/reminder_provider.dart';
-import 'days_grid_view.dart';
-import 'select_time_item.dart';
+import 'days_selection_widget.dart';
+import 'select_time_widget.dart';
 import 'selection_buttons.dart';
 
-class ReminderPage extends StatelessWidget {
+class ReminderPage extends ConsumerWidget {
   const ReminderPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final reminderBloc = context.read<ReminderBloc>();
-    return BlocProvider.value(
-      value: reminderBloc,
-      child: ReminderProvider(
-        child: _ReminderPageContent(),
-      ),
-    );
+  Widget build(BuildContext context, WidgetRef ref) {
+    return _ReminderPageContent();
   }
 }
 
-class _ReminderPageContent extends StatefulWidget {
+class _ReminderPageContent extends ConsumerStatefulWidget {
   @override
-  State<_ReminderPageContent> createState() => _ReminderPageContentState();
+  ConsumerState<_ReminderPageContent> createState() => _ReminderPageContentState();
 }
 
-class _ReminderPageContentState extends State<_ReminderPageContent> {
+class _ReminderPageContentState extends ConsumerState<_ReminderPageContent> with SingleTickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final reminderState = context.read<ReminderBloc>().state;
-      if (reminderState.reminder?.reminderTime != null) {
-        context.read<RemindTimeCubit>().initializeTime(reminderState.reminder!.reminderTime);
+      final reminderTime = ref.watch(reminderProvider).reminder?.reminderTime;
+      if (reminderTime != null) {
+        ref.read(remindTimeProvider.notifier).setTime(reminderTime);
       }
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ReminderBloc, ReminderState>(
-      builder: (context, state) {
-        final reminder = state.reminder;
-        return CupertinoPageScaffold(
-          navigationBar: SheetHeader(
-            closeButtonPosition: CloseButtonPosition.left,
-            title: LocaleKeys.habit_reminder.tr(),
-          ),
+    return CupertinoPageScaffold(
+      navigationBar: SheetHeader(
+        closeButtonPosition: CloseButtonPosition.left,
+        title: LocaleKeys.habit_reminder.tr(),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        child: SafeArea(
           child: ListView(
+            physics: const BouncingScrollPhysics(),
             children: [
-              SafeArea(
-                bottom: false,
-                child: Column(
-                  spacing: 20,
-                  children: [
-                    Column(
-                      children: [
-                        CupertinoListSection(
-                          backgroundColor: Colors.transparent,
-                          header: Text(LocaleKeys.common_days.tr()),
-                          children: [
-                            CupertinoListTile(
-                              padding: EdgeInsets.all(10),
-                              title: DaysGridViewBuilder(),
-                            ),
-                          ],
-                        ),
-                        SelectionButtons(),
-                      ],
+              Column(
+                children: [
+                  CustomHeader(
+                    text: LocaleKeys.common_days.tr(),
+                    child: Card(
+                      child: Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: DaySelectionWidget(),
+                      ),
                     ),
-                    BlocBuilder<PickerExtendCubit, bool>(
-                      builder: (context, state) {
-                        final isExpanded = state;
-                        return AnimatedContainer(
-                          duration: 300.ms,
-                          child: Column(
-                            children: [
-                              CupertinoListSection(
-                                header: Text(LocaleKeys.reminder_time.tr().toUpperCase()),
-                                backgroundColor: Colors.transparent,
-                                children: [
-                                  SelectTimeItem(),
-                                ],
-                              ),
-                              AnimatedContainer(
-                                duration: 300.ms,
-                                height: isExpanded ? 300 : 0,
-                                child: CupertinoDatePicker(
-                                  mode: CupertinoDatePickerMode.time,
-                                  initialDateTime: reminder?.reminderTime ?? DateTime.now().copyWith(hour: 12, minute: 0, second: 0),
-                                  use24hFormat: true,
-                                  onDateTimeChanged: (val) {
-                                    context.read<RemindTimeCubit>().updateTime(val);
-                                    context.read<ReminderBloc>().add(UpdateReminderTimeEvent(time: val));
-                                  },
-                                ),
-                              ),
-                            ],
-                          ),
-                        );
-                      },
-                    ),
-                  ],
-                ),
+                  ),
+                  SelectionButtons(),
+                ],
               ),
+              const SizedBox(height: 30),
+              CustomHeader(
+                text: LocaleKeys.reminder_time.tr(),
+                child: SelectTimeWidget().animate(),
+              ),
+              const Padding(padding: EdgeInsets.only(bottom: 32)),
             ],
           ),
-        );
-      },
+        ),
+      ),
     );
   }
 }

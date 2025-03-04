@@ -4,7 +4,6 @@ import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../core.dart';
-import '../../widgets/flushbar_widget.dart';
 
 const _privacyPolicyLink = "https://docs.google.com/document/d/e/2PACX-1vQ76kvKNioMD6L4Y0JvxcBHB2AMr7tIZyN2O6WJeva1ZYkzybIFQsbLhRE3Qdj83ewC_ICzovvb8EmL/pub";
 const _termsOfUseLink = "https://docs.google.com/document/d/e/2PACX-1vRVAZkWkWzZjyxwR4ZKMxIxIowwKJPNWEI9BZTrpfYIuZlvwPUW9ZPNwU76V4yiOmw_ORaLlLuXXVjz/pub";

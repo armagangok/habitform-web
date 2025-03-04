@@ -21,6 +21,7 @@ class ShareHabitButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CupertinoButton.tinted(
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       sizeStyle: CupertinoButtonSize.small,
       onPressed: () {
         _scrollToEnd();
