@@ -333,8 +333,8 @@ class ColorPickerSheetState extends State<ColorPickerSheet> with SingleTickerPro
   }
 
   Widget _buildColorItem(Color color, int index, double size) {
-    return GestureDetector(
-      onTap: () {
+    return CustomButton(
+      onPressed: () {
         setState(() {
           selectedColorIndex = index;
           widget.onColorSelected(color);

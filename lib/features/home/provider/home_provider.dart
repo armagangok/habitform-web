@@ -43,6 +43,42 @@ class HomeNotifier extends AsyncNotifier<List<Habit>> {
   }
 
   Future<void> updateHabitCompletionStatus(String habitId, CompletionEntry completion) async {
+    // Mevcut state'i al
+    final currentState = state;
+    if (currentState is AsyncData<List<Habit>>) {
+      // Mevcut alışkanlıkları al
+      final habits = List<Habit>.from(currentState.value);
+
+      // Güncellenecek alışkanlığın indeksini bul
+      final habitIndex = habits.indexWhere((h) => h.id == habitId);
+
+      if (habitIndex != -1) {
+        // Alışkanlığı al
+        final habit = habits[habitIndex];
+
+        // Tamamlanma durumlarını güncelle
+        final updatedCompletions = Map<String, CompletionEntry>.from(habit.completions);
+        updatedCompletions[completion.id] = completion;
+
+        // Güncellenmiş alışkanlığı oluştur
+        final updatedHabit = habit.copyWith(
+          completions: updatedCompletions,
+        );
+
+        // Listedeki alışkanlığı güncelle
+        habits[habitIndex] = updatedHabit;
+
+        // State'i güncelle (yükleme durumu olmadan)
+        state = AsyncData(habits);
+
+        // Arka planda veritabanını güncelle
+        _habitService.updateHabitCompletionStatus(habitId, completion);
+        return;
+      }
+    }
+
+    // Eğer mevcut state AsyncData değilse veya alışkanlık bulunamazsa
+    // eski yöntemi kullan (yükleme durumu göster)
     state = const AsyncValue.loading();
 
     state = await AsyncValue.guard(() async {

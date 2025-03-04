@@ -32,35 +32,122 @@ class ReminderNotifier extends AutoDisposeNotifier<ReminderState> {
     }
   }
 
+  // İki hatırlatıcı modelinin farklı olup olmadığını kontrol et
+  bool isReminderChanged(ReminderModel? oldReminder, ReminderModel? newReminder) {
+    // Biri null diğeri değilse değişmiş demektir
+    if ((oldReminder == null && newReminder != null) || (oldReminder != null && newReminder == null)) {
+      return true;
+    }
+
+    // İkisi de null ise değişmemiş demektir
+    if (oldReminder == null && newReminder == null) {
+      return false;
+    }
+
+    // ID'ler farklıysa değişmiş demektir
+    if (oldReminder!.id != newReminder!.id) {
+      return true;
+    }
+
+    // Zaman değişmişse
+    final oldTime = oldReminder.reminderTime;
+    final newTime = newReminder.reminderTime;
+
+    if ((oldTime == null && newTime != null) || (oldTime != null && newTime == null)) {
+      return true;
+    }
+
+    if (oldTime != null && newTime != null) {
+      if (oldTime.hour != newTime.hour || oldTime.minute != newTime.minute) {
+        return true;
+      }
+    }
+
+    // Günler değişmişse
+    final oldDays = oldReminder.days ?? [];
+    final newDays = newReminder.days ?? [];
+
+    if (oldDays.length != newDays.length) {
+      return true;
+    }
+
+    // Günlerin içeriğini karşılaştır
+    for (final day in oldDays) {
+      if (!newDays.contains(day)) {
+        return true;
+      }
+    }
+
+    // Hiçbir değişiklik yoksa
+    return false;
+  }
+
   // Cancel existing notifications and schedule new reminder
-  void scheduleReminder({required String title, required String body}) async {
+  Future<void> scheduleReminder({
+    required String title,
+    required String body,
+    ReminderModel? oldReminder,
+  }) async {
     try {
       state = state.copyWith(isLoading: true);
       final reminder = state.reminder;
       final days = reminder?.days;
       final reminderTime = reminder?.reminderTime;
 
+      LogHelper.shared.debugPrint('Scheduling reminder: $reminder');
+      LogHelper.shared.debugPrint('Days: $days, Time: $reminderTime');
+
+      // Eğer eski hatırlatıcı verilmişse, değişiklik kontrolü yap
+      if (oldReminder != null) {
+        final hasChanged = isReminderChanged(oldReminder, reminder);
+        LogHelper.shared.debugPrint('Old reminder: $oldReminder');
+        LogHelper.shared.debugPrint('Is reminder changed: $hasChanged');
+
+        // Değişiklik yoksa işlemi sonlandır
+        if (!hasChanged) {
+          LogHelper.shared.debugPrint('Reminder has not changed, skipping schedule');
+          state = state.copyWith(isLoading: false);
+          return;
+        }
+      }
+
       if (reminder != null) {
         // Cancel existing notifications first
         await ReminderService.cancelReminderNotification(reminder.id);
+        LogHelper.shared.debugPrint('Cancelled existing notifications for ID: ${reminder.id}');
 
         // Create new notification if days and time are selected
         if (days != null && days.isNotEmpty && reminderTime != null) {
+          LogHelper.shared.debugPrint('Creating new notification with days: $days and time: $reminderTime');
           await ReminderService.createReminderNotification(
             reminder,
             title,
             body,
           );
-        } 
-      } 
+          LogHelper.shared.debugPrint('Notification scheduled successfully');
+          AppFlushbar.shared.successFlushbar("Hatırlatıcı başarıyla ayarlandı");
+        } else {
+          LogHelper.shared.debugPrint('Skipping notification creation: days or time is missing');
+          if (days == null || days.isEmpty) {
+            LogHelper.shared.debugPrint('Days are empty or null');
+          }
+          if (reminderTime == null) {
+            LogHelper.shared.debugPrint('Reminder time is null');
+          }
+        }
+      } else {
+        LogHelper.shared.debugPrint('Reminder is null, cannot schedule');
+      }
+
       state = state.copyWith(isLoading: false);
     } catch (e, s) {
-      LogHelper.shared.debugPrint('$e');
-      LogHelper.shared.debugPrint('$s');
+      LogHelper.shared.debugPrint('Error scheduling reminder: $e');
+      LogHelper.shared.debugPrint('Stack trace: $s');
       state = state.copyWith(
         isLoading: false,
-        errorMessage: 'Failed to schedule reminder',
+        errorMessage: 'Failed to schedule reminder: $e',
       );
+      AppFlushbar.shared.errorFlushbar('Failed to schedule reminder');
     }
   }
 

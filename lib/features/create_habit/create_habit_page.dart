@@ -51,7 +51,7 @@ class CreateHabitPage extends ConsumerWidget {
                     text: LocaleKeys.common_icon.tr().toUpperCase(),
                     child: IconPickerSheet(
                       onIconSelected: (icon) {
-                        ref.read(iconProvider.notifier).pickIcon(icon);
+                        ref.watch(iconProvider.notifier).pickIcon(icon);
                       },
                     ),
                   ),
@@ -59,7 +59,7 @@ class CreateHabitPage extends ConsumerWidget {
                     text: LocaleKeys.colors_color.tr().toUpperCase(),
                     child: ColorPickerSheet(
                       onColorSelected: (color) {
-                        ref.read(colorProvider.notifier).pickColor(color);
+                        ref.watch(colorProvider.notifier).pickColor(color);
                       },
                     ),
                   ),

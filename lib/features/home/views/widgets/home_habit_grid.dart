@@ -127,9 +127,9 @@ class _HomeHabitGridState extends ConsumerState<HomeHabitGrid> with SingleTicker
       ),
     );
 
-    return GestureDetector(
+    return CustomButton(
       key: _buttonKeys[dateTimeInDays],
-      onTap: () async {
+      onPressed: () async {
         final viewModel = ref.read(homeProvider.notifier);
 
         // Completion durumunu kontrol ederken isCompleted'ı da kontrol edelim
@@ -144,6 +144,14 @@ class _HomeHabitGridState extends ConsumerState<HomeHabitGrid> with SingleTicker
           isCompleted: !isCompleted,
         );
 
+        // Önce yerel state'i güncelle (UI'ın hemen yanıt vermesi için)
+        setState(() {
+          final updatedCompletions = Map<String, CompletionEntry>.from(currentHabit.completions);
+          updatedCompletions[dateKey] = completion;
+          currentHabit = currentHabit.copyWith(completions: updatedCompletions);
+        });
+
+        // Sonra provider'ı güncelle (veritabanı güncellemesi için)
         await viewModel.updateHabitCompletionStatus(currentHabit.id, completion);
       },
       child: gridItem,

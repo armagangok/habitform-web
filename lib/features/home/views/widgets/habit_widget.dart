@@ -42,16 +42,12 @@ class _HabitWidgetState extends ConsumerState<HabitWidget> {
     final habitDescription = currentHabit.habitDescription;
     final habitEmoji = currentHabit.emoji;
 
-    return Card(
-      child: CupertinoButton(
-        color: Colors.transparent,
-        focusColor: Colors.transparent,
-        disabledColor: Colors.transparent,
-        padding: EdgeInsets.zero,
-        onPressed: _openHabitDetail,
-        child: LayoutBuilder(
-          builder: (context, constraints) {
-            return SingleChildScrollView(
+    return CustomButton(
+      onPressed: _openHabitDetail,
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          return Card(
+            child: SingleChildScrollView(
               physics: const NeverScrollableScrollPhysics(),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -117,9 +113,9 @@ class _HabitWidgetState extends ConsumerState<HabitWidget> {
                   ),
                 ],
               ),
-            );
-          },
-        ),
+            ),
+          );
+        },
       ),
     );
   }

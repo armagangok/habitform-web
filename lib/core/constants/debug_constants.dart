@@ -6,7 +6,7 @@ abstract final class KDebug {
   static const rateDebugMode = false;
 
   // user becomes a pro member for a debug mode to test the app
-  static const purchaseDebugMode = false;
+  static const purchaseDebugMode = true;
 
   // enables onboarding debug mode for print
   static const onboardingDebugMode = false;

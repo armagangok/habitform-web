@@ -4,6 +4,7 @@ import '/core/core.dart';
 import '/features/reminder/extension/easy_day.dart';
 import '/features/reminder/models/days/days_enum.dart';
 import '/models/models.dart';
+import '../../../core/widgets/custom_list_tile.dart';
 import '../../edit_habit/edit_habit_page.dart';
 import '../../edit_habit/provider/edit_habit_provider.dart';
 import '../../home/provider/home_provider.dart';
@@ -182,7 +183,9 @@ class _HabitGeneralInfo extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return CustomButton(
+    return CustomListTile(
+      title: name,
+      description: description,
       onPressed: () {
         final habit = ref.read(habitDetailProvider);
         if (habit == null) return;
@@ -194,28 +197,6 @@ class _HabitGeneralInfo extends ConsumerWidget {
           builder: (context) => EditHabitPage(habit: habit),
         );
       },
-      child: Card(
-        child: Padding(
-          padding: const EdgeInsets.all(10),
-          child: SizedBox(
-            width: double.infinity,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  name,
-                  style: context.bodyLarge?.copyWith(fontWeight: FontWeight.w600),
-                ),
-                if (description.isNotNullAndNotEmpty)
-                  Text(
-                    description!,
-                    style: context.bodyMedium?.copyWith(color: context.bodyMedium?.color?.withValues(alpha: .72)),
-                  ),
-              ],
-            ),
-          ),
-        ),
-      ),
     );
   }
 }
@@ -233,7 +214,42 @@ class _ReminderInfo extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return SizedBox(
       width: double.infinity,
-      child: CustomButton(
+      child: CustomListTile(
+        title: remindTime ?? LocaleKeys.common_none.tr(),
+        additionalInfo: (days != null && days!.isNotEmpty)
+            ? SizedBox(
+                height: 20,
+                child: days!.length == 7
+                    ? Text(
+                        LocaleKeys.habit_daily.tr(),
+                        style: context.bodyLarge?.copyWith(
+                          color: context.primary.withValues(alpha: .72),
+                        ),
+                      )
+                    : ListView.separated(
+                        scrollDirection: Axis.horizontal,
+                        shrinkWrap: true,
+                        itemCount: days!.length,
+                        separatorBuilder: (context, index) {
+                          return Text(
+                            ", ",
+                            style: context.bodyMedium?.copyWith(
+                              color: context.primary.withAlpha(170),
+                            ),
+                          );
+                        },
+                        itemBuilder: (context, index) {
+                          final day = days![index];
+                          return Text(
+                            day.shortenDayName,
+                            style: context.bodyMedium?.copyWith(
+                              color: context.primary.withAlpha(170),
+                            ),
+                          );
+                        },
+                      ),
+              )
+            : null,
         onPressed: () {
           final habit = ref.read(habitDetailProvider);
 
@@ -245,56 +261,6 @@ class _ReminderInfo extends ConsumerWidget {
             ),
           );
         },
-        child: Card(
-          child: Padding(
-            padding: const EdgeInsets.all(10),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  remindTime ?? LocaleKeys.common_none.tr(),
-                  style: context.bodyLarge?.copyWith(
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                if (days != null && days!.isNotEmpty)
-                  SizedBox(
-                    height: 20,
-                    child: days!.length == 7
-                        ? Text(
-                            LocaleKeys.habit_daily.tr(),
-                            style: context.bodyLarge?.copyWith(
-                              color: context.primary.withValues(alpha: .72),
-                            ),
-                          )
-                        : ListView.separated(
-                            scrollDirection: Axis.horizontal,
-                            shrinkWrap: true,
-                            itemCount: days!.length,
-                            separatorBuilder: (context, index) {
-                              return Text(
-                                ", ",
-                                style: context.bodyMedium?.copyWith(
-                                  color: context.primary.withAlpha(170),
-                                ),
-                              );
-                            },
-                            itemBuilder: (context, index) {
-                              final day = days![index];
-                              return Text(
-                                day.shortenDayName,
-                                style: context.bodyMedium?.copyWith(
-                                  color: context.primary.withAlpha(170),
-                                ),
-                              );
-                            },
-                          ),
-                  ),
-              ],
-            ),
-          ),
-        ),
       ),
     );
   }

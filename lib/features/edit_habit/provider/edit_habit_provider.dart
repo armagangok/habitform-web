@@ -46,6 +46,14 @@ class EditHabitNotifier extends AutoDisposeNotifier<Habit?> {
     final habitColorState = ref.watch(colorProvider);
     final reminderModel = reminderState.reminder;
 
+    // Mevcut alışkanlığın hatırlatıcısını al
+    final currentReminderModel = state?.reminderModel;
+
+    // Store references to notifiers before making any state changes
+    final habitDetailNotifier = ref.read(habitDetailProvider.notifier);
+    final homeNotifier = ref.read(homeProvider.notifier);
+    final reminderNotifier = ref.read(reminderProvider.notifier);
+
     final updatedHabit = state?.copyWith(
       habitName: habitName,
       habitDescription: habitDescription,
@@ -55,11 +63,25 @@ class EditHabitNotifier extends AutoDisposeNotifier<Habit?> {
     );
 
     if (updatedHabit != null) {
+      // Update local state
       state = updatedHabit;
-      await ref.read(habitDetailProvider.notifier).updateHabit(updatedHabit);
-      await ref.read(homeProvider.notifier).updateHabit(updatedHabit);
-      await ref.read(homeProvider.notifier).fetchHabits();
-      navigator.pop();
+
+      // Use stored references to perform operations
+      await habitDetailNotifier.updateHabit(updatedHabit);
+      await homeNotifier.updateHabit(updatedHabit);
+
+      // Hatırlatıcı bildirimi ayarla (değişiklik kontrolü ReminderNotifier içinde yapılacak)
+      if (reminderModel != null) {
+        await reminderNotifier.scheduleReminder(
+          title: habitName,
+          body: LocaleKeys.reminder_habit_reminder_message.tr(),
+          oldReminder: currentReminderModel,
+        );
+      }
+
+      // Fetch habits before navigating back
+      await homeNotifier.fetchHabits();
     }
+    navigator.pop();
   }
 }

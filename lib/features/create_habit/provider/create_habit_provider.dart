@@ -27,8 +27,8 @@ class CreateHabitNotifier extends AutoDisposeAsyncNotifier<CreateHabitState> {
       return;
     }
 
-    final emoji = ref.read(iconProvider);
-    final colorCode = ref.read(colorProvider);
+    final emoji = ref.watch(iconProvider);
+    final color = ref.watch(colorProvider);
 
     final reminder = ref.watch(reminderProvider).reminder;
 
@@ -40,16 +40,21 @@ class CreateHabitNotifier extends AutoDisposeAsyncNotifier<CreateHabitState> {
         habitName: habitName,
         habitDescription: habitDescription,
         emoji: emoji,
-        colorCode: colorCode?.value ?? Colors.deepOrangeAccent.value,
+        colorCode: color?.value ?? Colors.deepOrangeAccent.value,
         reminderModel: reminder,
       );
 
       await ref.read(homeProvider.notifier).createHabit(habit);
 
-      ref.watch(reminderProvider.notifier).scheduleReminder(
-            title: habitName,
-            body: LocaleKeys.reminder_habit_reminder_message.tr(),
-          );
+      if (reminder != null) {
+        LogHelper.shared.debugPrint('Scheduling reminder for new habit: $reminder');
+        await ref.read(reminderProvider.notifier).scheduleReminder(
+              title: habitName,
+              body: LocaleKeys.reminder_habit_reminder_message.tr(),
+            );
+      } else {
+        LogHelper.shared.debugPrint('No reminder to schedule for new habit');
+      }
 
       state = AsyncValue.data(CreateHabitState());
 
