@@ -131,7 +131,6 @@ final class NotificationHelper {
       // Schedule notifications for each selected day
       for (final day in reminder.days!) {
         final scheduleDate = _nextInstanceOfDay(scheduledTime, day);
-        final notificationBody = "Alışkanlığı tamamlama zamanı geldi";
 
         final Map<String, dynamic> payloadData = {
           'time': timeString,
@@ -145,7 +144,7 @@ final class NotificationHelper {
         await _notificationPlugin.zonedSchedule(
           notificationId,
           title,
-          notificationBody,
+          body,
           scheduleDate,
           notificationDetails,
           payload: jsonEncode(payloadData),

@@ -252,13 +252,14 @@ class _ReminderInfo extends ConsumerWidget {
               )
             : null,
         onPressed: () {
-          final habit = ref.read(habitDetailProvider);
+          final habit = ref.watch(habitDetailProvider);
+          ref.watch(editHabitProvider.notifier).initHabit(habit!);
 
           showCupertinoModalBottomSheet(
             enableDrag: false,
             context: context,
             builder: (context) => EditHabitPage(
-              habit: habit!,
+              habit: habit,
             ),
           );
         },
