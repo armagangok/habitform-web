@@ -21,17 +21,24 @@ class _HabitDataWidgetState extends ConsumerState<HabitDataWidget> {
   late int selectedYear;
   late int initialPage;
 
-  final int currentYear = DateTime.now().year;
-  final int currentMonth = DateTime.now().month;
-  final int currentDay = DateTime.now().day;
+  late final int currentYear;
+  late final int currentMonth;
+  late final int currentDay;
 
   bool _isDisposed = false;
 
   @override
   void initState() {
     super.initState();
-    selectedYear = currentYear;
-    initialPage = ((currentYear - 2020) * 4) + (currentMonth - 1) ~/ 3;
+
+    final now = DateTime.now();
+
+    currentYear = now.year;
+    currentMonth = now.month;
+    currentDay = now.day;
+
+    selectedYear = now.year;
+    initialPage = ((now.year - 2020) * 4) + (now.month - 1) ~/ 3;
     _pageController = PageController(
       initialPage: initialPage,
       viewportFraction: 1.0,
@@ -56,7 +63,7 @@ class _HabitDataWidgetState extends ConsumerState<HabitDataWidget> {
     }
 
     setState(() {
-      selectedYear = 2020 + (page ~/ 4);
+      selectedYear = 2020 + ((page * 3 + (currentMonth - 1) ~/ 3 * 3) ~/ 12);
     });
   }
 
@@ -90,15 +97,9 @@ class _HabitDataWidgetState extends ConsumerState<HabitDataWidget> {
               const SizedBox(height: 10),
               LayoutBuilder(builder: (context, constraints) {
                 final screenWidth = constraints.maxWidth;
-
-                // Bir ayın genişliği (padding dahil)
-                final monthWidth = (screenWidth - 16) / 3; // 3 ay yan yana, 16 total padding
-
-                // Grid'deki bir karenin boyutu (sabit 6 sütun için)
-                final gridSquareSize = (monthWidth - 8) / 6; // 6 sütun, 8 padding
-
-                // Grid'in toplam yüksekliği (7 satır için)
-                final gridHeight = (gridSquareSize * 7) + 40; // 7 satır + ay ismi için 40px
+                final monthWidth = (screenWidth - 16) / 3;
+                final gridSquareSize = (monthWidth - 8) / 6;
+                final gridHeight = (gridSquareSize * 7) + 40;
 
                 return SizedBox(
                   height: gridHeight,
@@ -107,11 +108,11 @@ class _HabitDataWidgetState extends ConsumerState<HabitDataWidget> {
                     onPageChanged: _onPageChanged,
                     physics: ClampingScrollPhysics(),
                     itemBuilder: (context, index) {
-                      final startMonth = (index * 3) % 12;
-                      final year = 2020 + (index ~/ 4);
+                      final quarterStartMonth = ((index * 3) + (currentMonth - 1) ~/ 3 * 3) % 12;
+                      final year = 2020 + ((index * 3 + (currentMonth - 1) ~/ 3 * 3) ~/ 12);
                       return _buildQuarterView(
                         color: Color(widget.habit.colorCode),
-                        startMonth: startMonth,
+                        startMonth: quarterStartMonth,
                         year: year,
                         gridSquareSize: gridSquareSize,
                       );
