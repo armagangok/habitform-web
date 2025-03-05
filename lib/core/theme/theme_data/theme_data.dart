@@ -37,13 +37,10 @@ final class Themes {
     iconTheme: IconThemeData(color: CupertinoColors.white.withValues(alpha: .7)),
     cupertinoOverrideTheme: CupertinoThemeData(
       applyThemeToAll: true,
-      primaryColor: Colors.white,
       scaffoldBackgroundColor: Colors.black,
       brightness: Brightness.dark,
       barBackgroundColor: Colors.transparent.withAlpha(0),
-      textTheme: CupertinoTextThemeData(
-        primaryColor: Colors.white,
-      ),
+      textTheme: CupertinoTextThemeData(),
     ),
   );
 
@@ -85,10 +82,7 @@ final class Themes {
       barBackgroundColor: Color(0xffF2F2F7).withAlpha(0),
       scaffoldBackgroundColor: Color(0xffF2F2F7),
       brightness: Brightness.light,
-      primaryColor: Colors.black,
-      textTheme: CupertinoTextThemeData(
-        primaryColor: Colors.black,
-      ),
+      textTheme: CupertinoTextThemeData(),
     ),
     scaffoldBackgroundColor: const Color(0xffF2F2F7),
   );

@@ -4,14 +4,29 @@ import '/core/core.dart';
 import '../../core/widgets/habit_color_sheet/provider/habit_color_provider.dart';
 import '../../core/widgets/habit_icon/icon_picker_sheet.dart';
 import '../../core/widgets/habit_icon/provider/habit_icon_provider.dart';
+import '../reminder/provider/reminder_provider.dart';
 import '../reminder/widget/reminder_selection_widget.dart';
 import 'provider/create_habit_provider.dart';
 
-class CreateHabitPage extends ConsumerWidget {
+class CreateHabitPage extends ConsumerStatefulWidget {
   const CreateHabitPage({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<CreateHabitPage> createState() => _CreateHabitPageState();
+}
+
+class _CreateHabitPageState extends ConsumerState<CreateHabitPage> {
+  @override
+  void initState() {
+    super.initState();
+    // Initialize reminder provider with empty reminder
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(reminderProvider.notifier).initializeReminder(null);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final addHabitState = ref.watch(createHabitProvider);
 
     return GestureDetector(
@@ -78,12 +93,11 @@ class CreateHabitPage extends ConsumerWidget {
   }) {
     return Card(
       child: CupertinoTextField(
-        padding: EdgeInsets.all(10),
-        maxLines: maxLines,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12),
-        ),
         controller: controller,
+        maxLines: maxLines,
+        placeholder: maxLines == 1 ? LocaleKeys.habit_habit_name.tr() : LocaleKeys.habit_habit_description.tr(),
+        padding: const EdgeInsets.all(10),
+        decoration: null,
       ),
     );
   }

@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:habitrise/features/reminder/models/reminder/reminder_model.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import '/core/core.dart';
@@ -8,11 +9,25 @@ import '../models/days/days_enum.dart';
 import '../provider/reminder_provider.dart';
 import 'reminder_page_widget.dart';
 
-class ReminderSelectionWidget extends ConsumerWidget {
-  const ReminderSelectionWidget({super.key});
+class ReminderSelectionWidget extends ConsumerStatefulWidget {
+  final ReminderModel? reminderModel;
+  const ReminderSelectionWidget({super.key, this.reminderModel});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ReminderSelectionWidget> createState() => _ReminderSelectionWidgetState();
+}
+
+class _ReminderSelectionWidgetState extends ConsumerState<ReminderSelectionWidget> {
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.watch(reminderProvider.notifier).initializeReminder(widget.reminderModel);
+    });
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     // Watch the provider to ensure updates
     final reminderState = ref.watch(reminderProvider);
     final days = reminderState.reminder?.days;

@@ -57,7 +57,7 @@ class CustomButton extends StatefulWidget {
       key: key,
       onPressed: onPressed,
       onLongPressed: onLongPressed,
-      backgroundColor: backgroundColor?.withOpacity(0.1),
+      backgroundColor: backgroundColor?.withValues(alpha: .1),
       foregroundColor: foregroundColor,
       elevation: 0,
       padding: padding ?? EdgeInsets.zero,

@@ -22,20 +22,19 @@ class _DaysGridViewBuilderState extends ConsumerState<DaySelectionWidget> {
       final reminderState = ref.watch(reminderProvider);
       final days = reminderState.reminder?.days;
       if (days != null) {
-        ref.read(daySelectionProvider.notifier).setDays(days);
+        ref.watch(daySelectionProvider.notifier).setDays(days);
       }
     });
   }
 
   void _onDaysSelected(List<Days> selectedDays) {
-    ref.read(daySelectionProvider.notifier).setDays(selectedDays);
+    ref.watch(daySelectionProvider.notifier).setDays(selectedDays);
     ref.watch(reminderProvider.notifier).updateDays(selectedDays);
   }
 
   @override
   Widget build(BuildContext context) {
-    final daySelectionState = ref.watch(daySelectionProvider);
-    final selectedDays = daySelectionState.selectedDays;
+    final selectedDays = ref.watch(daySelectionProvider);
 
     return MultiCategoryWidget<Days>(
       categories: Days.values.toList(),

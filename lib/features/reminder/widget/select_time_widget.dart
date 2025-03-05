@@ -10,76 +10,83 @@ class SelectTimeWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final pickerExtendState = ref.watch(pickerExtendProvider);
+    final isExtended = ref.watch(pickerExtendProvider);
     final reminderState = ref.watch(reminderProvider);
     final remindTime = reminderState.reminder?.reminderTime;
+    final hasSelectedDays = reminderState.reminder?.days?.isNotEmpty ?? false;
 
-    return Column(
-      children: [
-        CustomButton(
-          onPressed: () {
-            ref.read(pickerExtendProvider.notifier).toggleExtend();
-          },
-          child: Card(
-            child: Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    LocaleKeys.reminder_select_time.tr(),
-                    style: context.titleMedium?.copyWith(
-                      fontWeight: FontWeight.w500,
-                      color: context.titleMedium?.color,
-                    ),
-                  ),
-                  Row(
+    return AnimatedOpacity(
+      duration: 350.ms,
+      opacity: hasSelectedDays ? 1.0 : 0.0,
+      child: AnimatedContainer(
+        duration: 350.ms,
+        height: hasSelectedDays ? null : 0,
+        child: Column(
+          children: [
+            CustomButton(
+              onPressed: hasSelectedDays ? ref.watch(pickerExtendProvider.notifier).toggleExtend : null,
+              child: Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        remindTime?.toHHMM() ?? LocaleKeys.common_none.tr(),
+                        LocaleKeys.reminder_select_time.tr(),
                         style: context.titleMedium?.copyWith(
                           fontWeight: FontWeight.w500,
-                          color: Colors.deepOrangeAccent,
+                          color: context.titleMedium?.color?.withValues(alpha: hasSelectedDays ? 1.0 : 0.5),
                         ),
                       ),
-                      const SizedBox(width: 10),
-                      Icon(
-                        pickerExtendState.isExtended ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down,
-                        color: context.titleMedium?.color,
+                      Row(
+                        children: [
+                          Text(
+                            remindTime?.toHHMM() ?? LocaleKeys.common_none.tr(),
+                            style: context.titleMedium?.copyWith(
+                              fontWeight: FontWeight.w500,
+                              color: hasSelectedDays ? Colors.deepOrangeAccent : Colors.grey,
+                            ),
+                          ),
+                          const SizedBox(width: 10),
+                          Icon(
+                            isExtended ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down,
+                            color: context.titleMedium?.color?.withValues(alpha: hasSelectedDays ? 1.0 : 0.5),
+                          ),
+                        ],
                       ),
                     ],
                   ),
-                ],
-              ),
-            ),
-          ),
-        ),
-        AnimatedContainer(
-          duration: 350.ms,
-          curve: Curves.easeOutCubic,
-          height: pickerExtendState.isExtended ? 200 : 0,
-          child: ClipRect(
-            child: OverflowBox(
-              maxHeight: 200,
-              child: AnimatedOpacity(
-                duration: 350.ms,
-                opacity: pickerExtendState.isExtended ? 1 : 0,
-                child: CupertinoDatePicker(
-                  mode: CupertinoDatePickerMode.time,
-                  initialDateTime: remindTime ?? DateTime.now().copyWith(hour: 12, minute: 0),
-                  use24hFormat: true,
-                  onDateTimeChanged: (DateTime value) {
-                    if (pickerExtendState.isExtended) {
-                      ref.watch(remindTimeProvider.notifier).setTime(value);
-                      ref.watch(reminderProvider.notifier).updateTime(value);
-                    }
-                  },
                 ),
               ),
             ),
-          ),
+            AnimatedContainer(
+              duration: 350.ms,
+              curve: Curves.easeOutCubic,
+              height: isExtended && hasSelectedDays ? 200 : 0,
+              child: ClipRect(
+                child: OverflowBox(
+                  maxHeight: 200,
+                  child: AnimatedOpacity(
+                    duration: 350.ms,
+                    opacity: isExtended && hasSelectedDays ? 1 : 0,
+                    child: CupertinoDatePicker(
+                      mode: CupertinoDatePickerMode.time,
+                      initialDateTime: remindTime ?? DateTime.now().copyWith(hour: 12, minute: 0),
+                      use24hFormat: true,
+                      onDateTimeChanged: (DateTime value) {
+                        if (isExtended && hasSelectedDays) {
+                          ref.watch(remindTimeProvider.notifier).setTime(value);
+                          ref.watch(reminderProvider.notifier).updateTime(value);
+                        }
+                      },
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
-      ],
+      ),
     );
   }
 }

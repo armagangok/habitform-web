@@ -191,6 +191,7 @@ class _HabitGeneralInfo extends ConsumerWidget {
         if (habit == null) return;
 
         ref.watch(editHabitProvider.notifier).initHabit(habit);
+
         showCupertinoModalBottomSheet(
           enableDrag: false,
           context: context,
@@ -342,6 +343,8 @@ class _EditButton extends ConsumerWidget {
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       sizeStyle: CupertinoButtonSize.small,
       onPressed: () {
+        ref.watch(editHabitProvider.notifier).initHabit(habit);
+
         showCupertinoModalBottomSheet(
           enableDrag: false,
           context: context,

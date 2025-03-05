@@ -1,8 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:habitrise/features/archived_habits/provider/archived_habits_provider.dart';
 
 import '/core/core.dart';
 import '/models/models.dart';
+import '../provider/archived_habits_provider.dart';
 
 class ArchivedHabitCard extends ConsumerWidget {
   final Habit habit;
@@ -44,68 +44,6 @@ class ArchivedHabitCard extends ConsumerWidget {
             trailing: CupertinoListTileChevron(),
           ),
         ),
-
-        // Positioned.fill(
-        //   child: CustomBlurWidget(
-        //     blurValue: 1.75,
-        //     child: CupertinoButton(
-        //       onPressed: () {
-        //         showModalPopUpForActions(context);
-        //       },
-        //       child: SizedBox(),
-        //     ),
-        //   ),
-        // ),
-
-        // Positioned.fill(
-        //   child: Transform.rotate(
-        //     angle: -0.075,
-        //     child: GestureDetector(
-        //       onTap: () {
-        //         showModalPopUpForActions(context);
-        //       },
-        //       child: Align(
-        //         alignment: Alignment.center,
-        //         child: Card(
-        //           shape: RoundedRectangleBorder(
-        //             borderRadius: BorderRadius.circular(10),
-        //             side: BorderSide(color: CupertinoColors.destructiveRed),
-        //           ),
-        //           color: Colors.transparent,
-        //           child: Padding(
-        //             padding: const EdgeInsets.all(6.0),
-        //             child: Text(
-        //               LocaleKeys.archived_habits_marked_for_deletion.tr(),
-        //               style: context.textTheme.titleSmall?.copyWith(
-        //                 color: CupertinoColors.destructiveRed,
-        //                 fontWeight: FontWeight.bold,
-        //               ),
-        //             ),
-        //           ),
-        //         ),
-        //       ),
-        //     ),
-        //   ),
-        // )
-        //     .animate(
-        //       delay: const Duration(milliseconds: 350),
-        //     )
-        //     .scale(
-        //       duration: const Duration(milliseconds: 350),
-        //       curve: Curves.easeOutBack,
-        //       alignment: Alignment.center,
-        //     )
-        //     .custom(
-        //       begin: 1.5,
-        //       end: 1.0,
-        //       curve: Curves.easeOutBack,
-        //       builder: (context, value, child) {
-        //         return Transform.scale(
-        //           scale: value,
-        //           child: child,
-        //         );
-        //       },
-        //     ),
       ],
     );
   }
@@ -122,8 +60,8 @@ class ArchivedHabitCard extends ConsumerWidget {
             actions: [
               CupertinoActionSheetAction(
                 onPressed: () {
-                  ref.read(archivedHabitsProvider.notifier).unarchiveHabit(habit.id);
                   navigator.pop();
+                  ref.read(archivedHabitsProvider.notifier).unarchiveHabit(habit.id);
                 },
                 child: Text(LocaleKeys.archived_habits_restore.tr()),
               ),

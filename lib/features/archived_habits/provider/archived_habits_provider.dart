@@ -5,6 +5,8 @@ import '../../../models/habit/habit_status.dart';
 import '../../../models/models.dart';
 import '../../../services/local_habit_service.dart';
 import '../../home/provider/home_provider.dart';
+import '../../purchase/providers/purchase_provider.dart';
+import '../../purchase/widgets/purchase_dialog.dart';
 import '../../reminder/service/reminder_service.dart';
 import 'archivated_habits_state.dart';
 
@@ -36,10 +38,22 @@ class ArchivedHabitsNotifier extends AutoDisposeAsyncNotifier<ArchivedHabitsStat
     }
   }
 
+  Future<bool> canUnarchiveHabit() async {
+    final subscriptionState = ref.read(purchaseProvider);
+    return subscriptionState.valueOrNull?.isSubscriptionActive ?? false;
+  }
+
   Future<void> unarchiveHabit(String habitId) async {
     state = AsyncValue.data(state.value!.copyWith(isLoading: true));
 
     try {
+      // Pro kontrolü yap
+      final isPro = await canUnarchiveHabit();
+      if (!isPro) {
+        showUnlockProDialog();
+        return;
+      }
+
       // Arşivden çıkarılmadan önce alışkanlık bilgilerini al
       final archivedHabit = state.value!.archivedHabits.firstWhere(
         (habit) => habit.id == habitId,

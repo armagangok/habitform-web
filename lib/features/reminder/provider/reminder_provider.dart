@@ -4,6 +4,7 @@ import '../../../core/core.dart';
 import '../models/days/days_enum.dart';
 import '../models/reminder/reminder_model.dart';
 import '../service/reminder_service.dart';
+import 'remind_time_provider.dart';
 import 'reminder_state.dart';
 
 // Provider for reminder state management
@@ -21,6 +22,12 @@ class ReminderNotifier extends AutoDisposeNotifier<ReminderState> {
   void initializeReminder(ReminderModel? initialReminder) {
     if (initialReminder != null) {
       state = ReminderState(reminder: initialReminder);
+
+      final reminderTime = initialReminder.reminderTime;
+
+      if (reminderTime != null) {
+        ref.watch(remindTimeProvider.notifier).setTime(reminderTime);
+      }
     } else {
       final reminderModelToInitialize = ReminderModel(
         id: UuidHelper.uidInt,

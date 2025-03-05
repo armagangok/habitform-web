@@ -209,6 +209,10 @@ abstract class LocaleKeys {
   static const subscription_archiveSupportDescription = 'subscription.archiveSupportDescription';
   static const subscription_habitReminderTitle = 'subscription.habitReminderTitle';
   static const subscription_habitReminderDescription = 'subscription.habitReminderDescription';
+  static const subscription_billingIssueDetectedAt = 'subscription.billingIssueDetectedAt';
+  static const subscription_title = 'subscription.title';
+  static const subscription_unarchive_message = 'subscription.unarchive_message';
+  static const subscription_upgrade = 'subscription.upgrade';
   static const subscription = 'subscription';
   static const share_share = 'share.share';
   static const share_share_image = 'share.share_image';

@@ -1,7 +1,8 @@
 import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
-import 'package:habitrise/core/navigation/contract/base_navigation_service.dart';
+
+import 'contract/base_navigation_service.dart';
 
 final navigator = NavigationService.shared;
 

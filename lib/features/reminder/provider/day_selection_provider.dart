@@ -1,40 +1,33 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../models/days/days_enum.dart';
-import 'day_selection_state.dart';
 
-final daySelectionProvider = NotifierProvider<DaySelectionNotifier, DaySelectionState>(() {
+final daySelectionProvider = AutoDisposeNotifierProvider<DaySelectionNotifier, List<Days>>(() {
   return DaySelectionNotifier();
 });
 
-class DaySelectionNotifier extends Notifier<DaySelectionState> {
+class DaySelectionNotifier extends AutoDisposeNotifier<List<Days>> {
   @override
-  DaySelectionState build() {
-    return const DaySelectionState();
-  }
+  List<Days> build() => [];
 
   void toggleDay(Days day) {
-    final currentDays = state.selectedDays;
+    final currentDays = state;
     if (currentDays.contains(day)) {
-      state = state.copyWith(
-        selectedDays: currentDays.where((d) => d != day).toList(),
-      );
+      state = currentDays.where((d) => d != day).toList();
     } else {
-      state = state.copyWith(
-        selectedDays: [...currentDays, day],
-      );
+      state = [...currentDays, day];
     }
   }
 
   void setDays(List<Days> days) {
-    state = state.copyWith(selectedDays: days);
+    state = days;
   }
 
   void clearDays() {
-    state = state.copyWith(selectedDays: []);
+    state = [];
   }
 
   bool isDaySelected(Days day) {
-    return state.selectedDays.contains(day);
+    return state.contains(day);
   }
 }

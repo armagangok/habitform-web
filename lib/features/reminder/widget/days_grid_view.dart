@@ -27,23 +27,21 @@ class _DaysGridViewBuilderState extends ConsumerState<DaysGridViewBuilder> {
     final reminderState = ref.watch(reminderProvider);
     final days = reminderState.reminder?.days;
     if (days != null) {
-      ref.read(daySelectionProvider.notifier).setDays(days);
+      ref.watch(daySelectionProvider.notifier).setDays(days);
     }
   }
 
   void _updateDays(List<Days> selectedDays) {
     // Update both providers synchronously
-    ref.read(daySelectionProvider.notifier).setDays(selectedDays);
+    ref.watch(daySelectionProvider.notifier).setDays(selectedDays);
     ref.watch(reminderProvider.notifier).updateDays(selectedDays);
   }
 
   @override
   Widget build(BuildContext context) {
     // Watch both providers to ensure updates
-    final daySelectionState = ref.watch(daySelectionProvider);
+    final selectedDays = ref.watch(daySelectionProvider);
     final reminderState = ref.watch(reminderProvider);
-
-    final selectedDays = daySelectionState.selectedDays;
 
     // Ensure synchronization between providers
     if (!listEquals(selectedDays, reminderState.reminder?.days)) {

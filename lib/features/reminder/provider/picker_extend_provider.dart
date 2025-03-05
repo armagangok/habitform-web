@@ -1,28 +1,20 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'picker_extend_state.dart';
-
-final pickerExtendProvider = NotifierProvider<PickerExtendNotifier, PickerExtendState>(() {
+final pickerExtendProvider = AutoDisposeNotifierProvider<PickerExtendNotifier, bool>(() {
   return PickerExtendNotifier();
 });
 
-class PickerExtendNotifier extends Notifier<PickerExtendState> {
+class PickerExtendNotifier extends AutoDisposeNotifier<bool> {
   @override
-  PickerExtendState build() {
-    return const PickerExtendState();
+  bool build() {
+    return false;
   }
 
   void toggleExtend() {
-    state = state.copyWith(
-      isExtended: !state.isExtended,
-    );
+    state = !state;
   }
 
-  void extend() {
-    state = state.copyWith(isExtended: true);
-  }
+  void extend() => state = true;
 
-  void collapse() {
-    state = state.copyWith(isExtended: false);
-  }
+  void collapse() => state = false;
 }

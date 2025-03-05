@@ -1,22 +1,14 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'remind_time_state.dart';
-
-final remindTimeProvider = NotifierProvider<RemindTimeNotifier, RemindTimeState>(() {
+final remindTimeProvider = AutoDisposeNotifierProvider<RemindTimeNotifier, DateTime?>(() {
   return RemindTimeNotifier();
 });
 
-class RemindTimeNotifier extends Notifier<RemindTimeState> {
+class RemindTimeNotifier extends AutoDisposeNotifier<DateTime?> {
   @override
-  RemindTimeState build() {
-    return const RemindTimeState();
-  }
+  DateTime? build() => null;
 
-  void setTime(DateTime? time) {
-    state = state.copyWith(time: time);
-  }
+  void setTime(DateTime? time) => state = time;
 
-  void clearTime() {
-    state = state.copyWith(time: null);
-  }
+  void clearTime() => state = null;
 }

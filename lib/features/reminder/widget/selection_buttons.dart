@@ -20,8 +20,8 @@ class SelectionButtons extends ConsumerWidget {
         children: [
           CustomButton(
             onPressed: () {
-              ref.read(daySelectionProvider.notifier).setDays(Days.values.toList());
-              ref.read(remindTimeProvider.notifier).setTime(DateTime.now().copyWith(hour: 12, minute: 0));
+              ref.watch(daySelectionProvider.notifier).setDays(Days.values.toList());
+              ref.watch(remindTimeProvider.notifier).setTime(DateTime.now().copyWith(hour: 12, minute: 0));
               ref.watch(reminderProvider.notifier).updateDays(Days.values.toList());
             },
             child: Padding(

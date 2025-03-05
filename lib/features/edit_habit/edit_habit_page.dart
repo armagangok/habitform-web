@@ -8,27 +8,15 @@ import '/models/models.dart';
 import '../reminder/widget/reminder_selection_widget.dart';
 import 'provider/edit_habit_provider.dart';
 
-class EditHabitPage extends ConsumerStatefulWidget {
+class EditHabitPage extends ConsumerWidget {
   final Habit habit;
 
   const EditHabitPage({super.key, required this.habit});
 
   @override
-  ConsumerState<EditHabitPage> createState() => _EditHabitPageState();
-}
-
-class _EditHabitPageState extends ConsumerState<EditHabitPage> {
-  @override
-  void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.watch(editHabitProvider.notifier).initHabit(widget.habit);
-    });
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final editHabitNotifier = ref.watch(editHabitProvider.notifier);
+    final editHabitState = ref.watch(editHabitProvider);
 
     return CupertinoPageScaffold(
       navigationBar: SheetHeader(
@@ -63,11 +51,11 @@ class _EditHabitPageState extends ConsumerState<EditHabitPage> {
                     controller: editHabitNotifier.habitDescriptionController,
                   ),
                 ),
-                ReminderSelectionWidget(),
+                ReminderSelectionWidget(reminderModel: editHabitState?.reminderModel),
                 CustomHeader(
                   text: LocaleKeys.common_icon.tr().toUpperCase(),
                   child: IconPickerSheet(
-                    selectedIcon: widget.habit.emoji,
+                    selectedIcon: habit.emoji,
                     onIconSelected: (icon) {
                       ref.watch(iconProvider.notifier).pickIcon(icon);
                     },
@@ -76,7 +64,7 @@ class _EditHabitPageState extends ConsumerState<EditHabitPage> {
                 CustomHeader(
                   text: LocaleKeys.colors_color.tr().toUpperCase(),
                   child: ColorPickerSheet(
-                    selectedColor: Color(widget.habit.colorCode),
+                    selectedColor: Color(habit.colorCode),
                     onColorSelected: (color) {
                       ref.watch(colorProvider.notifier).pickColor(color);
                     },
