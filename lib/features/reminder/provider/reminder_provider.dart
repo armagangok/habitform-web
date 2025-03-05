@@ -19,7 +19,6 @@ class ReminderNotifier extends AutoDisposeNotifier<ReminderState> {
 
   // Initialize reminder data
   void initializeReminder(ReminderModel? initialReminder) {
-    print(initialReminder);
     if (initialReminder != null) {
       state = ReminderState(reminder: initialReminder);
     } else {
@@ -34,52 +33,8 @@ class ReminderNotifier extends AutoDisposeNotifier<ReminderState> {
 
   // İki hatırlatıcı modelinin farklı olup olmadığını kontrol et
   bool isReminderChanged(ReminderModel? oldReminder, ReminderModel? newReminder) {
-    // Biri null diğeri değilse değişmiş demektir
-    if ((oldReminder == null && newReminder != null) || (oldReminder != null && newReminder == null)) {
-      return true;
-    }
-
-    // İkisi de null ise değişmemiş demektir
-    if (oldReminder == null && newReminder == null) {
-      return false;
-    }
-
-    // ID'ler farklıysa değişmiş demektir
-    if (oldReminder!.id != newReminder!.id) {
-      return true;
-    }
-
-    // Zaman değişmişse
-    final oldTime = oldReminder.reminderTime;
-    final newTime = newReminder.reminderTime;
-
-    if ((oldTime == null && newTime != null) || (oldTime != null && newTime == null)) {
-      return true;
-    }
-
-    if (oldTime != null && newTime != null) {
-      if (oldTime.hour != newTime.hour || oldTime.minute != newTime.minute) {
-        return true;
-      }
-    }
-
-    // Günler değişmişse
-    final oldDays = oldReminder.days ?? [];
-    final newDays = newReminder.days ?? [];
-
-    if (oldDays.length != newDays.length) {
-      return true;
-    }
-
-    // Günlerin içeriğini karşılaştır
-    for (final day in oldDays) {
-      if (!newDays.contains(day)) {
-        return true;
-      }
-    }
-
-    // Hiçbir değişiklik yoksa
-    return false;
+    // Direkt state'i kullan, geçici state oluşturmaya gerek yok
+    return state != ReminderState(reminder: oldReminder);
   }
 
   // Cancel existing notifications and schedule new reminder
@@ -89,54 +44,48 @@ class ReminderNotifier extends AutoDisposeNotifier<ReminderState> {
     ReminderModel? oldReminder,
   }) async {
     try {
-      state = state.copyWith(isLoading: true);
+      // Önce mevcut state'i kontrol et
+      if (oldReminder != null && !isReminderChanged(oldReminder, state.reminder)) {
+        LogHelper.shared.debugPrint('Reminder has not changed, skipping schedule');
+        return;
+      }
+
+      state = state.copyWith(isLoading: true, errorMessage: null);
       final reminder = state.reminder;
-      final days = reminder?.days;
-      final reminderTime = reminder?.reminderTime;
+
+      if (reminder == null) {
+        LogHelper.shared.debugPrint('Reminder is null, cannot schedule');
+        state = state.copyWith(isLoading: false);
+        return;
+      }
+
+      final days = reminder.days;
+      final reminderTime = reminder.reminderTime;
 
       LogHelper.shared.debugPrint('Scheduling reminder: $reminder');
       LogHelper.shared.debugPrint('Days: $days, Time: $reminderTime');
 
-      // Eğer eski hatırlatıcı verilmişse, değişiklik kontrolü yap
-      if (oldReminder != null) {
-        final hasChanged = isReminderChanged(oldReminder, reminder);
-        LogHelper.shared.debugPrint('Old reminder: $oldReminder');
-        LogHelper.shared.debugPrint('Is reminder changed: $hasChanged');
+      // Cancel existing notifications first
+      await ReminderService.cancelReminderNotification(reminder.id);
+      LogHelper.shared.debugPrint('Cancelled existing notifications for ID: ${reminder.id}');
 
-        // Değişiklik yoksa işlemi sonlandır
-        if (!hasChanged) {
-          LogHelper.shared.debugPrint('Reminder has not changed, skipping schedule');
-          state = state.copyWith(isLoading: false);
-          return;
-        }
-      }
-
-      if (reminder != null) {
-        // Cancel existing notifications first
-        await ReminderService.cancelReminderNotification(reminder.id);
-        LogHelper.shared.debugPrint('Cancelled existing notifications for ID: ${reminder.id}');
-
-        // Create new notification if days and time are selected
-        if (days != null && days.isNotEmpty && reminderTime != null) {
-          LogHelper.shared.debugPrint('Creating new notification with days: $days and time: $reminderTime');
-          await ReminderService.createReminderNotification(
-            reminder,
-            title,
-            body,
-          );
-          LogHelper.shared.debugPrint('Notification scheduled successfully');
-          AppFlushbar.shared.successFlushbar("Hatırlatıcı başarıyla ayarlandı");
-        } else {
-          LogHelper.shared.debugPrint('Skipping notification creation: days or time is missing');
-          if (days == null || days.isEmpty) {
-            LogHelper.shared.debugPrint('Days are empty or null');
-          }
-          if (reminderTime == null) {
-            LogHelper.shared.debugPrint('Reminder time is null');
-          }
-        }
+      // Create new notification if days and time are selected
+      if (days != null && days.isNotEmpty && reminderTime != null) {
+        LogHelper.shared.debugPrint('Creating new notification with days: $days and time: $reminderTime');
+        await ReminderService.createReminderNotification(
+          reminder,
+          title,
+          body,
+        );
+        LogHelper.shared.debugPrint('Notification scheduled successfully');
       } else {
-        LogHelper.shared.debugPrint('Reminder is null, cannot schedule');
+        LogHelper.shared.debugPrint('Skipping notification creation: days or time is missing');
+        if (days == null || days.isEmpty) {
+          LogHelper.shared.debugPrint('Days are empty or null');
+        }
+        if (reminderTime == null) {
+          LogHelper.shared.debugPrint('Reminder time is null');
+        }
       }
 
       state = state.copyWith(isLoading: false);
@@ -154,20 +103,19 @@ class ReminderNotifier extends AutoDisposeNotifier<ReminderState> {
   // Cancel reminder
   Future<void> cancelReminder() async {
     try {
-      state = state.copyWith(isLoading: true, errorMessage: null);
       final reminder = state.reminder;
+      if (reminder == null) return;
 
-      if (reminder != null) {
-        await ReminderService.cancelReminderNotification(reminder.id);
+      state = state.copyWith(isLoading: true, errorMessage: null);
+      await ReminderService.cancelReminderNotification(reminder.id);
 
-        // Keep ID but reset other values
-        final updatedReminder = reminder.copyWith(days: [], time: null);
-        state = state.copyWith(
-          reminder: updatedReminder,
-          isLoading: false,
-        );
-        AppFlushbar.shared.successFlushbar("Reminder cancelled successfuly");
-      }
+      // Keep ID but reset other values
+      final updatedReminder = reminder.copyWith(days: [], time: null);
+      state = state.copyWith(
+        reminder: updatedReminder,
+        isLoading: false,
+      );
+      AppFlushbar.shared.successFlushbar("Reminder cancelled successfuly");
     } catch (e) {
       LogHelper.shared.debugPrint('$e');
       state = state.copyWith(
@@ -180,59 +128,51 @@ class ReminderNotifier extends AutoDisposeNotifier<ReminderState> {
   // Update reminder days
   void updateDays(List<Days>? days) {
     final currentReminder = state.reminder;
+    if (currentReminder == null) return;
 
     if (days == null || days.isEmpty) {
       // Reset time as well but keep ID
-      final updatedReminder = currentReminder?.copyWith(
-            days: [],
-            time: null,
-          ) ??
-          ReminderModel(
-            id: UuidHelper.uidInt,
-            days: [],
-            reminderTime: null,
-          );
-      state = state.copyWith(reminder: updatedReminder);
+      state = state.copyWith(
+        reminder: currentReminder.copyWith(
+          days: [],
+          time: null,
+        ),
+      );
       return;
     }
 
     // If days are selected for the first time and time is null, set default time to 12:00
-    final DateTime reminderTime = currentReminder?.reminderTime ?? DateTime.now().copyWith(hour: 12, minute: 0, second: 0);
+    final DateTime reminderTime = currentReminder.reminderTime ?? DateTime.now().copyWith(hour: 12, minute: 0, second: 0);
 
-    final updatedReminder = currentReminder?.copyWith(
-          days: days,
-          time: reminderTime,
-        ) ??
-        ReminderModel(
-          id: UuidHelper.uidInt,
-          days: days,
-          reminderTime: reminderTime,
-        );
-
-    state = state.copyWith(reminder: updatedReminder);
+    state = state.copyWith(
+      reminder: currentReminder.copyWith(
+        days: days,
+        time: reminderTime,
+      ),
+    );
   }
 
   // Update reminder time
   void updateTime(DateTime? time) {
     final currentReminder = state.reminder;
+    if (currentReminder == null) return;
 
     if (time == null) {
       // Reset days as well but keep ID
-      final updatedReminder = ReminderModel(
-        id: currentReminder?.id ?? UuidHelper.uidInt,
-        days: [],
-        reminderTime: null,
+      state = state.copyWith(
+        reminder: currentReminder.copyWith(
+          days: [],
+          time: null,
+        ),
       );
-      state = state.copyWith(reminder: updatedReminder);
       return;
     }
 
-    final updatedReminder = ReminderModel(
-      id: currentReminder?.id ?? UuidHelper.uidInt,
-      days: currentReminder?.days ?? [],
-      reminderTime: time,
+    state = state.copyWith(
+      reminder: currentReminder.copyWith(
+        days: currentReminder.days,
+        time: time,
+      ),
     );
-
-    state = state.copyWith(reminder: updatedReminder);
   }
 }

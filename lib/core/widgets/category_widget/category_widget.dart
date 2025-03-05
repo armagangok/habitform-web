@@ -97,7 +97,7 @@ class CategoryWidgetState extends State<CategoryWidget> {
       }
     } catch (e) {
       // Handle any errors that might occur during scrolling
-      print('Error scrolling to selected item: $e');
+      LogHelper.shared.debugPrint('Error scrolling to selected item: $e');
     }
   }
 

@@ -795,7 +795,7 @@ class IconPickerSheetState extends State<IconPickerSheet> with SingleTickerProvi
             ),
             SizedBox(height: 10),
             SizedBox(
-              height: 140,
+              height: 150,
               child: GridView.builder(
                 controller: _gridScrollController,
                 shrinkWrap: true,

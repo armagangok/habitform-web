@@ -1,7 +1,9 @@
-// State class for reminder
+import 'package:equatable/equatable.dart';
+
 import '../models/reminder/reminder_model.dart';
 
-class ReminderState {
+// State class for reminder
+class ReminderState extends Equatable {
   final ReminderModel? reminder;
   final bool isLoading;
   final String? error;
@@ -12,6 +14,9 @@ class ReminderState {
     this.error,
   });
 
+  @override
+  List<Object?> get props => [reminder, isLoading, error];
+
   ReminderState copyWith({
     ReminderModel? reminder,
     bool? isLoading,
@@ -20,7 +25,7 @@ class ReminderState {
     return ReminderState(
       reminder: reminder ?? this.reminder,
       isLoading: isLoading ?? this.isLoading,
-      error: errorMessage ?? this.error,
+      error: errorMessage ?? error,
     );
   }
 }
