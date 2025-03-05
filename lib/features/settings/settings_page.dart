@@ -5,7 +5,6 @@ import '/core/helpers/url_laucher/url_launcher.dart';
 import '/core/theme/widget/theme_mode_widget.dart';
 import '../purchase/providers/purchase_provider.dart';
 import '../purchase/widgets/membership_info_widget.dart';
-import '../translation/widget/language_feature.dart';
 import 'widgets/setting_item.dart';
 import 'widgets/subscribe_button.dart';
 
@@ -56,7 +55,7 @@ class SettingsPage extends ConsumerWidget {
                           child: Column(
                             children: [
                               ThemeModeFeature(),
-                              LanguageFeature(),
+                              // LanguageFeature(),
                               CupertinoListTile(
                                 leading: SettingLeadingWidget(
                                   iconData: CupertinoIcons.bell_fill,

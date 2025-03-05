@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/core.dart';
 import '../../../models/habit/habit_status.dart';
 import '../../../models/models.dart';
-import '../../../services/local_habit_service.dart';
+import '../../../services/habit_service/habit_service_interface.dart';
 import '../../home/provider/home_provider.dart';
 import '../../purchase/providers/purchase_provider.dart';
 import '../../purchase/widgets/purchase_dialog.dart';
@@ -15,8 +15,6 @@ final archivedHabitsProvider = AutoDisposeAsyncNotifierProvider<ArchivedHabitsNo
 });
 
 class ArchivedHabitsNotifier extends AutoDisposeAsyncNotifier<ArchivedHabitsState> {
-  final LocalHabitService _habitService = LocalHabitService.instance;
-
   @override
   Future<ArchivedHabitsState> build() async {
     return fetchArchivedHabits();
@@ -24,7 +22,7 @@ class ArchivedHabitsNotifier extends AutoDisposeAsyncNotifier<ArchivedHabitsStat
 
   Future<ArchivedHabitsState> fetchArchivedHabits() async {
     try {
-      final archivedHabits = await _habitService.getArchivedHabits();
+      final archivedHabits = await habitService.getArchivedHabits();
 
       return ArchivedHabitsState(
         archivedHabits: archivedHabits,
@@ -61,7 +59,7 @@ class ArchivedHabitsNotifier extends AutoDisposeAsyncNotifier<ArchivedHabitsStat
       );
 
       // Alışkanlığı arşivden çıkar
-      await _habitService.unarchiveHabit(habitId);
+      await habitService.unarchiveHabit(habitId);
 
       // Arşivden çıkarılan alışkanlığın hatırlatıcısını yeniden oluştur
       if (archivedHabit.reminderModel != null) {
@@ -92,7 +90,7 @@ class ArchivedHabitsNotifier extends AutoDisposeAsyncNotifier<ArchivedHabitsStat
 
     try {
       // Alışkanlığı kalıcı olarak sil
-      await _habitService.permanentlyDeleteHabit(habit.id);
+      await habitService.permanentlyDeleteHabit(habit.id);
 
       // Silinen alışkanlığı listeden kaldır
       final updatedHabits = state.value!.archivedHabits.where((h) => h.id != habit.id).toList();
@@ -116,7 +114,7 @@ class ArchivedHabitsNotifier extends AutoDisposeAsyncNotifier<ArchivedHabitsStat
       final updatedHabit = habit.copyWith(
         status: HabitStatus.archived,
       );
-      await _habitService.updateArchivedHabit(updatedHabit);
+      await habitService.updateArchivedHabit(updatedHabit);
 
       final updatedHabits = state.value!.archivedHabits.map((h) {
         return h.id == habit.id ? updatedHabit : h;

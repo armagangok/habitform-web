@@ -1,12 +1,13 @@
 import 'package:habitrise/models/habit/habit_extension.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
-import '../core/core.dart';
-import '../models/completion_entry/completion_entry.dart';
-import '../models/habit/habit_model.dart';
-import '../models/habit/habit_status.dart';
+import '../../core/core.dart';
+import '../../models/completion_entry/completion_entry.dart';
+import '../../models/habit/habit_model.dart';
+import '../../models/habit/habit_status.dart';
+import 'habit_service_interface.dart';
 
-class LocalHabitService {
+class LocalHabitService extends HabitService {
   LocalHabitService._();
   static final LocalHabitService _instance = LocalHabitService._();
   static LocalHabitService get instance => _instance;
@@ -14,6 +15,7 @@ class LocalHabitService {
   final HiveHelper _hiveHelper = HiveHelper.shared;
 
   // Get all habits (both active and archived)
+  @override
   Future<List<Habit>> getAllHabits() async {
     LogHelper.shared.debugPrint('Fetching all habits from local storage');
     final activeHabits = await getHabits();
@@ -24,6 +26,7 @@ class LocalHabitService {
   }
 
   // Get all habits
+  @override
   Future<List<Habit>> getHabits() async {
     LogHelper.shared.debugPrint('Fetching habits from local storage');
     final habits = await _hiveHelper.getAll<Habit>(HiveBoxes.habitBox);
@@ -33,6 +36,7 @@ class LocalHabitService {
   }
 
   // Get archived habits
+  @override
   Future<List<Habit>> getArchivedHabits() async {
     LogHelper.shared.debugPrint('Fetching archived habits from local storage');
     final box = await Hive.openBox<Habit>(HiveBoxes.archivedHabitBox);
@@ -42,6 +46,7 @@ class LocalHabitService {
   }
 
   // Get a specific habit by ID (checks both active and archived habits)
+  @override
   Future<Habit?> getHabit(String habitId) async {
     LogHelper.shared.debugPrint('Fetching habit by ID: $habitId');
 
@@ -64,6 +69,7 @@ class LocalHabitService {
   }
 
   // Create a new habit
+  @override
   Future<void> createHabit(Habit habit) async {
     await _hiveHelper.putData<Habit>(
       HiveBoxes.habitBox,
@@ -73,6 +79,7 @@ class LocalHabitService {
   }
 
   // Update an existing habit
+  @override
   Future<void> updateHabit(Habit habit) async {
     await _hiveHelper.putData<Habit>(
       HiveBoxes.habitBox,
@@ -82,6 +89,7 @@ class LocalHabitService {
   }
 
   // Mark habit as complete/incomplete
+  @override
   Future<void> updateHabitCompletionStatus(String habitId, CompletionEntry completion) async {
     // Tüm habit'leri al ve kontrol et
     final allHabits = await _hiveHelper.getAll<Habit>(HiveBoxes.habitBox);
@@ -100,6 +108,7 @@ class LocalHabitService {
   }
 
   // Delete a habit (soft delete)
+  @override
   Future<void> deleteHabit(String habitId) async {
     final habit = _hiveHelper.getData<Habit>(HiveBoxes.habitBox, habitId);
     if (habit != null) {
@@ -114,6 +123,7 @@ class LocalHabitService {
   }
 
   // Archive a habit
+  @override
   Future<void> archiveHabit(Habit habit) async {
     LogHelper.shared.debugPrint('Starting archive process for habit: ${habit.id} - ${habit.habitName}');
 
@@ -146,6 +156,7 @@ class LocalHabitService {
   }
 
   // Unarchive a habit
+  @override
   Future<void> unarchiveHabit(String habitId) async {
     LogHelper.shared.debugPrint('Unarchiving habit: $habitId');
 
@@ -178,6 +189,7 @@ class LocalHabitService {
   }
 
   // Permanently delete a habit
+  @override
   Future<void> permanentlyDeleteHabit(String habitId) async {
     LogHelper.shared.debugPrint('Permanently deleting habit: $habitId');
 
@@ -188,6 +200,7 @@ class LocalHabitService {
   }
 
   // Update an archived habit
+  @override
   Future<void> updateArchivedHabit(Habit habit) async {
     LogHelper.shared.debugPrint('Updating archived habit: ${habit.id}');
 
@@ -261,6 +274,7 @@ class LocalHabitService {
   }
 
   /// Tüm alışkanlıkları temizler (aktif ve arşivlenmiş)
+  @override
   Future<void> clearAllHabits() async {
     try {
       LogHelper.shared.debugPrint('Clearing all habits from local storage');

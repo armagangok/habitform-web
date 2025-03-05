@@ -21,7 +21,8 @@
         "custom": "Custom",
         "done": "Done",
         "no_recent_emojis": "No Recent Emojis",
-        "loading_habits": "Loading habits..."
+        "loading_habits": "Loading habits...",
+        "later": "Later"
     },
     "colors": {
         "color": "Color",
@@ -97,7 +98,7 @@
             },
             "become_person": {
                 "title": "Become The Person You Want To Be",
-                "aristotleHabitQuote": "“We are what we repeatedly do. Therefore, excellence is not an act, but a habit.”"
+                "aristotleHabitQuote": "We are what we repeatedly do. Therefore, excellence is not an act, but a habit."
             }
         }
     },
@@ -249,7 +250,16 @@
     },
     "languages": {
         "english": "English",
-        "turkish": "Turkish"
+        "turkish": "Turkish",
+        "chinese": "Chinese",
+        "spanish": "Spanish",
+        "hindi": "Hindi",
+        "arabic": "Arabic",
+        "bengali": "Bengali",
+        "portuguese": "Portuguese",
+        "russian": "Russian",
+        "japanese": "Japanese",
+        "indonesian": "Indonesian"
     },
     "habit_data": {
         "longest_streak": "Longest Streak",

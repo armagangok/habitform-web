@@ -93,74 +93,23 @@ class _HomePageState extends ConsumerState<HomePage> {
   _homePageNavigationBar() {
     final paywallState = ref.watch(purchaseProvider);
     return CupertinoNavigationBar(
+      enableBackgroundFilterBlur: false,
+
       border: null, // Remove the bottom border
 
-      leading: Builder(builder: (context) {
-        return Align(
-          widthFactor: 1,
-          child: CustomButton(
-            onPressed: () {
-              CupertinoScaffold.showCupertinoModalBottomSheet(
-                enableDrag: false,
-                context: context,
-                builder: (contextFromSheet) {
-                  return SettingsPage();
-                },
-              );
-            },
-            child: Container(
-              width: 32,
-              height: 32,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: context.primary.withValues(alpha: .15),
-              ),
-              child: Icon(
-                FontAwesomeIcons.gear,
-                size: 20,
-                color: context.theme.primaryColor.withValues(alpha: .9),
-              ),
-            ),
-          ),
-        );
-      }),
-      middle: Row(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Text(
-            'HabitRise',
-            textAlign: TextAlign.center,
-          ).animate().fadeIn(
-                duration: Duration(milliseconds: 300),
-              ),
-        ],
-      ),
-      trailing: Builder(builder: (context) {
-        final isSubActive = paywallState.value?.isSubscriptionActive ?? false;
-        final isPurchasing = paywallState.value?.isPurchasing ?? false;
-        final isRestoring = paywallState.value?.isRestoring ?? false;
-        final bool isLoading = paywallState is AsyncLoading;
-
-        // Butonları bir liste olarak oluşturalım
-        List<Widget> buttons = [];
-
-        // Premium butonu veya yükleniyor göstergesi
-        if (isLoading || isPurchasing || isRestoring) {
-          buttons.add(
-            Container(
-              width: 32,
-              height: 32,
-              alignment: Alignment.center,
-              child: CupertinoActivityIndicator(),
-            ),
-          );
-        } else if (!isSubActive) {
-          buttons.add(
-            CustomButton(
+      leading: Builder(
+        builder: (context) {
+          return Align(
+            widthFactor: 1,
+            child: CustomButton(
               onPressed: () {
-                _handlePaywallAction(context);
+                CupertinoScaffold.showCupertinoModalBottomSheet(
+                  enableDrag: false,
+                  context: context,
+                  builder: (contextFromSheet) {
+                    return SettingsPage();
+                  },
+                );
               },
               child: Container(
                 width: 32,
@@ -170,81 +119,139 @@ class _HomePageState extends ConsumerState<HomePage> {
                   color: context.primary.withValues(alpha: .15),
                 ),
                 child: Icon(
-                  FontAwesomeIcons.crown,
-                  color: Colors.yellow,
+                  FontAwesomeIcons.gear,
                   size: 20,
+                  color: context.theme.primaryColor.withValues(alpha: .9),
                 ),
               ),
-            ).animate().fadeIn(duration: Duration(milliseconds: 300)),
+            ).animate().fadeIn(
+                  curve: Curves.easeInOutCubic,
+                  duration: Duration(milliseconds: 350),
+                ),
           );
-        }
+        },
+      ),
+      middle: Row(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Text(
+            'HabitRise',
+            textAlign: TextAlign.center,
+          ).animate().fadeIn(
+                curve: Curves.easeInOutCubic,
+                duration: Duration(milliseconds: 350),
+              ),
+        ],
+      ),
+      trailing: Builder(
+        builder: (context) {
+          final isSubActive = paywallState.value?.isSubscriptionActive ?? false;
+          final isPurchasing = paywallState.value?.isPurchasing ?? false;
+          final isRestoring = paywallState.value?.isRestoring ?? false;
+          final bool isLoading = paywallState is AsyncLoading;
 
-        // Alışkanlık ekleme butonu
-        buttons.add(
-          CustomButton(
-            onPressed: () {
-              if (isSubActive) {
-                _openAddHabitPage(context);
-              } else {
-                final habits = ref.read(homeProvider).value;
-                if (habits != null && habits.length <= 3) {
+          // Butonları bir liste olarak oluşturalım
+          List<Widget> buttons = [];
+
+          // Premium butonu veya yükleniyor göstergesi
+          if (isLoading || isPurchasing || isRestoring) {
+            buttons.add(
+              Container(
+                width: 32,
+                height: 32,
+                alignment: Alignment.center,
+                child: CupertinoActivityIndicator(),
+              ),
+            );
+          } else if (!isSubActive) {
+            buttons.add(
+              CustomButton(
+                onPressed: () {
+                  _handlePaywallAction(context);
+                },
+                child: Container(
+                  width: 32,
+                  height: 32,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: context.primary.withValues(alpha: .15),
+                  ),
+                  child: Icon(
+                    FontAwesomeIcons.crown,
+                    color: Colors.yellow,
+                    size: 20,
+                  ),
+                ),
+              ).animate().fadeIn(
+                    curve: Curves.easeInOutCubic,
+                    duration: Duration(milliseconds: 350),
+                  ),
+            );
+          }
+
+          // Alışkanlık ekleme butonu
+          buttons.add(
+            CustomButton(
+              onPressed: () {
+                if (isSubActive) {
                   _openAddHabitPage(context);
                 } else {
-                  _handlePaywallAction(context);
+                  final habits = ref.read(homeProvider).value;
+                  if (habits != null && habits.length <= 3) {
+                    _openAddHabitPage(context);
+                  } else {
+                    _handlePaywallAction(context);
+                  }
                 }
-              }
-            },
-            child: Container(
-              width: 32,
-              height: 32,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: context.primary.withValues(alpha: .15),
+              },
+              child: Container(
+                width: 32,
+                height: 32,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: context.primary.withValues(alpha: .15),
+                ),
+                child: Icon(
+                  CupertinoIcons.plus_circle_fill,
+                  size: 24,
+                  color: context.theme.primaryColor.withValues(alpha: .9),
+                ),
               ),
-              child: Icon(
-                CupertinoIcons.plus_circle,
-                size: 24,
-                color: context.theme.primaryColor.withValues(alpha: .9),
-              ),
-            ),
-          ).animate().fadeIn(duration: Duration(milliseconds: 300)),
-        );
+            ).animate().fadeIn(duration: Duration(milliseconds: 350)),
+          );
 
-        // Butonlar arasına boşluk ekleyerek Row içinde gösterelim
-        List<Widget> rowChildren = [];
-        for (int i = 0; i < buttons.length; i++) {
-          rowChildren.add(buttons[i]);
-          if (i < buttons.length - 1) {
-            rowChildren.add(SizedBox(width: 10));
+          // Butonlar arasına boşluk ekleyerek Row içinde gösterelim
+          List<Widget> rowChildren = [];
+          for (int i = 0; i < buttons.length; i++) {
+            rowChildren.add(buttons[i]);
+            if (i < buttons.length - 1) {
+              rowChildren.add(SizedBox(width: 10));
+            }
           }
-        }
 
-        return Row(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: rowChildren,
-        );
-      }),
+          return Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: rowChildren,
+          );
+        },
+      ),
     );
   }
 
   Future<void> _handlePaywallAction(BuildContext context) async {
-    final paywallNotifier = ref.read(purchaseProvider.notifier);
-
-    showCupertinoModalBottomSheet(
+    return CupertinoScaffold.showCupertinoModalBottomSheet(
       enableDrag: false,
       context: context,
       builder: (_) => PaywallPage(),
-    ).then((_) async {
-      // Refresh subscription status after paywall is closed
-      await paywallNotifier.checkSubscriptionStatus();
-    });
+    );
   }
 
   Future<dynamic> _openAddHabitPage(BuildContext context) {
     return CupertinoScaffold.showCupertinoModalBottomSheet(
       enableDrag: false,
-      expand: false,
       context: context,
       builder: (contextFromSheet) {
         return CreateHabitPage();

@@ -6,7 +6,6 @@ import '/core/theme/theme_data/theme_data.dart';
 import '/features/onboarding/providers/onboarding_provider.dart';
 import '/features/purchase/services/purchase_service.dart';
 import '/services/app_default.dart';
-import '/services/local_habit_service.dart';
 import 'core/constants/debug_constants.dart';
 import 'core/helpers/notifications/notification_helper.dart';
 import 'core/helpers/notifications/timezone.dart';
@@ -15,6 +14,7 @@ import 'features/home/views/pages/home_page.dart';
 import 'features/onboarding/pages/onboarding_main_page.dart';
 import 'features/onboarding/providers/onboarding_state.dart';
 import 'features/purchase/providers/purchase_provider.dart';
+import 'services/habit_service/habit_service_interface.dart';
 
 // Flag to enable debug mode
 const bool enableDebugMode = true;
@@ -25,7 +25,7 @@ void main() async {
   await HiveHelper.shared.initializeHive();
 
   // Run habit migration
-  await LocalHabitService.instance.migrateHabitsToNewModel();
+  await habitService.migrateHabitsToNewModel();
 
   await dotenv.load(fileName: ".env");
 
@@ -47,6 +47,28 @@ void main() async {
         supportedLocales: const [
           Locale('en', 'US'),
           Locale('tr', 'TR'),
+          Locale('zh', 'CN'),
+          Locale('es', 'ES'),
+          Locale('hi', 'IN'),
+          Locale('ar', 'SA'),
+          Locale('bn', 'BD'),
+          Locale('pt', 'BR'),
+          Locale('ru', 'RU'),
+          Locale('ja', 'JP'),
+          Locale('id', 'ID'),
+          Locale('it', 'IT'),
+          Locale('nl', 'NL'),
+          Locale('sv', 'SE'),
+          Locale('no', 'NO'),
+          Locale('fi', 'FI'),
+          Locale('he', 'IL'),
+          Locale('ko', 'KR'),
+          Locale('da', 'DK'),
+          Locale('ca', 'ES'),
+          Locale('th', 'TH'),
+          Locale('vi', 'VN'),
+          Locale('cs', 'CZ'),
+          Locale('pl', 'PL'),
         ],
         path: 'assets/translations',
         fallbackLocale: const Locale('en', 'US'),

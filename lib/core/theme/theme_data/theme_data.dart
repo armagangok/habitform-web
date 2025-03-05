@@ -79,7 +79,7 @@ final class Themes {
     ),
     cupertinoOverrideTheme: CupertinoThemeData(
       applyThemeToAll: true,
-      barBackgroundColor: Color(0xffF2F2F7).withAlpha(0),
+      barBackgroundColor: Color(0xffF2F2F7),
       scaffoldBackgroundColor: Color(0xffF2F2F7),
       brightness: Brightness.light,
       textTheme: CupertinoTextThemeData(),

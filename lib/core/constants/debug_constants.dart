@@ -1,6 +1,6 @@
 abstract final class KDebug {
   // enables debug mode for print
-  static const debugModeEnabled = false;
+  static const debugModeEnabled = true;
 
   // enables rate debug mode for print
   static const rateDebugMode = false;
@@ -12,5 +12,5 @@ abstract final class KDebug {
   static const onboardingDebugMode = false;
 
   // enables log debug mode for print
-  static const logDebugMode = true;
+  static const logDebugMode = false;
 }

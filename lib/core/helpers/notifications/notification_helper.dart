@@ -42,9 +42,9 @@ final class NotificationHelper {
       // Initialize the plugin
       const android = AndroidInitializationSettings("ic_launcher");
       const iOS = DarwinInitializationSettings(
-        requestAlertPermission: true,
+        requestAlertPermission: false,
         requestBadgePermission: false,
-        requestSoundPermission: true,
+        requestSoundPermission: false,
         defaultPresentBadge: false,
       );
 
@@ -105,7 +105,7 @@ final class NotificationHelper {
       // If no days are selected, schedule a one-time notification
       if (reminder.days == null || reminder.days!.isEmpty) {
         final scheduledDateTime = tz.TZDateTime.from(scheduledTime, tz.local);
-        final notificationBody = "Alışkanlığı tamamlama zamanı geldi";
+        final notificationBody = LocaleKeys.habit_timeToCompleteYourHabit.tr();
 
         final Map<String, dynamic> payloadData = {
           'time': timeString,

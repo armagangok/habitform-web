@@ -2,7 +2,7 @@
 
 // ignore_for_file: constant_identifier_names
 
-abstract class LocaleKeys {
+abstract class  LocaleKeys {
   static const common_ok = 'common.ok';
   static const common_save = 'common.save';
   static const common_cancel = 'common.cancel';
@@ -25,6 +25,7 @@ abstract class LocaleKeys {
   static const common_done = 'common.done';
   static const common_no_recent_emojis = 'common.no_recent_emojis';
   static const common_loading_habits = 'common.loading_habits';
+  static const common_later = 'common.later';
   static const common = 'common';
   static const colors_color = 'colors.color';
   static const colors_blue = 'colors.blue';
@@ -112,11 +113,10 @@ abstract class LocaleKeys {
   static const habit_timeToCompleteYourHabit = 'habit.timeToCompleteYourHabit';
   static const habit = 'habit';
   static const habit_detail_habitDetail = 'habit_detail.habitDetail';
-  static const habit_detail_reminder = 'habit_detail.reminder';
-  static const habit_detail_habitData = 'habit_detail.habitData';
   static const habit_detail_areYouSureToDeleteHabit = 'habit_detail.areYouSureToDeleteHabit';
   static const habit_detail_calendar = 'habit_detail.calendar';
   static const habit_detail_detail = 'habit_detail.detail';
+  static const habit_detail_habitData = 'habit_detail.habitData';
   static const habit_detail_archive_title = 'habit_detail.archive_title';
   static const habit_detail_archive_confirmation = 'habit_detail.archive_confirmation';
   static const habit_detail_archive_info = 'habit_detail.archive_info';
@@ -145,18 +145,14 @@ abstract class LocaleKeys {
   static const subscription_subscribe_to = 'subscription.subscribe_to';
   static const subscription_tap_advantages = 'subscription.tap_advantages';
   static const subscription_popular = 'subscription.popular';
-  static const subscription_yearly = 'subscription.yearly';
-  static const subscription_monthly = 'subscription.monthly';
-  static const subscription_month = 'subscription.month';
-  static const subscription_year = 'subscription.year';
   static const subscription_billed = 'subscription.billed';
   static const subscription_restore = 'subscription.restore';
+  static const subscription_myMembership = 'subscription.myMembership';
   static const subscription_continue = 'subscription.continue';
   static const subscription_whatYouWillUnlock = 'subscription.whatYouWillUnlock';
   static const subscription_unlimitiedHabits = 'subscription.unlimitiedHabits';
   static const subscription_unlimitiedHabitsDescription = 'subscription.unlimitiedHabitsDescription';
   static const subscription_unlimitiedCustomization = 'subscription.unlimitiedCustomization';
-  static const subscription_myMembership = 'subscription.myMembership';
   static const subscription_unlimitiedCustomizationDescription = 'subscription.unlimitiedCustomizationDescription';
   static const subscription_noBoringAds = 'subscription.noBoringAds';
   static const subscription_noBoringAdsDescription = 'subscription.noBoringAdsDescription';
@@ -199,6 +195,7 @@ abstract class LocaleKeys {
   static const subscription_unexpectedResponse = 'subscription.unexpectedResponse';
   static const subscription_accountAlreadyUsed = 'subscription.accountAlreadyUsed';
   static const subscription_purchaseNotAllowed = 'subscription.purchaseNotAllowed';
+  static const subscription_purchaseInvalid = 'subscription.purchaseInvalid';
   static const subscription_receiptAlreadyInUse = 'subscription.receiptAlreadyInUse';
   static const subscription_paymentPending = 'subscription.paymentPending';
   static const subscription_insufficientPermissions = 'subscription.insufficientPermissions';
@@ -210,9 +207,6 @@ abstract class LocaleKeys {
   static const subscription_habitReminderTitle = 'subscription.habitReminderTitle';
   static const subscription_habitReminderDescription = 'subscription.habitReminderDescription';
   static const subscription_billingIssueDetectedAt = 'subscription.billingIssueDetectedAt';
-  static const subscription_title = 'subscription.title';
-  static const subscription_unarchive_message = 'subscription.unarchive_message';
-  static const subscription_upgrade = 'subscription.upgrade';
   static const subscription = 'subscription';
   static const share_share = 'share.share';
   static const share_share_image = 'share.share_image';
@@ -238,6 +232,23 @@ abstract class LocaleKeys {
   static const reminder = 'reminder';
   static const languages_english = 'languages.english';
   static const languages_turkish = 'languages.turkish';
+  static const languages_chinese = 'languages.chinese';
+  static const languages_spanish = 'languages.spanish';
+  static const languages_hindi = 'languages.hindi';
+  static const languages_arabic = 'languages.arabic';
+  static const languages_bengali = 'languages.bengali';
+  static const languages_portuguese = 'languages.portuguese';
+  static const languages_russian = 'languages.russian';
+  static const languages_japanese = 'languages.japanese';
+  static const languages_indonesian = 'languages.indonesian';
+  static const languages_korean = 'languages.korean';
+  static const languages_italian = 'languages.italian';
+  static const languages_dutch = 'languages.dutch';
+  static const languages_swedish = 'languages.swedish';
+  static const languages_norwegian = 'languages.norwegian';
+  static const languages_danish = 'languages.danish';
+  static const languages_finnish = 'languages.finnish';
+  static const languages_hebrew = 'languages.hebrew';
   static const languages = 'languages';
   static const habit_data_longest_streak = 'habit_data.longest_streak';
   static const habit_data_current_streak = 'habit_data.current_streak';
@@ -277,5 +288,5 @@ abstract class LocaleKeys {
   static const membership_info_change_plan = 'membership_info.change_plan';
   static const membership_info_change_plan_desc = 'membership_info.change_plan_desc';
   static const membership_info = 'membership_info';
-  static const membership_info_billing_issue_detected_at = 'membership_info.billing_issue_detected_at';
+
 }

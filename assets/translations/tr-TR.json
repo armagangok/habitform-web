@@ -21,7 +21,8 @@
         "custom": "Özel",
         "done": "Tamam",
         "no_recent_emojis": "Son Kullanılan Emoji Yok",
-        "loading_habits": "Alışkanlıklar yükleniyor..."
+        "loading_habits": "Alışkanlıklar yükleniyor...",
+        "later": "Sonra"
     },
     "colors": {
         "color": "Renk",
@@ -253,7 +254,16 @@
     },
     "languages": {
         "english": "İngilizce",
-        "turkish": "Türkçe"
+        "turkish": "Türkçe",
+        "chinese": "Çince",
+        "spanish": "İspanyolca",
+        "hindi": "Hintçe",
+        "arabic": "Arapça",
+        "bengali": "Bengalce",
+        "portuguese": "Portekizce",
+        "russian": "Rusça",
+        "japanese": "Japonca",
+        "indonesian": "Endonezce"
     },
     "habit_data": {
         "longest_streak": "En Uzun Seri",

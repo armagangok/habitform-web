@@ -1,16 +1,14 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:habitrise/services/habit_service/habit_service_interface.dart';
 
 import '/models/completion_entry/completion_entry.dart';
 import '/models/habit/habit_model.dart';
-import '../../../services/local_habit_service.dart';
 
 final homeProvider = AsyncNotifierProvider<HomeNotifier, List<Habit>>(() {
   return HomeNotifier();
 });
 
 class HomeNotifier extends AsyncNotifier<List<Habit>> {
-  final LocalHabitService _habitService = LocalHabitService.instance;
-
   @override
   Future<List<Habit>> build() async {
     // İnternet bağlantısı varsa senkronizasyon yap
@@ -22,7 +20,7 @@ class HomeNotifier extends AsyncNotifier<List<Habit>> {
     state = const AsyncValue.loading();
 
     try {
-      final habits = await _habitService.getHabits();
+      final habits = await habitService.getHabits();
       state = AsyncValue.data(habits);
       return habits;
     } catch (e) {
@@ -36,7 +34,7 @@ class HomeNotifier extends AsyncNotifier<List<Habit>> {
 
     state = await AsyncValue.guard(() async {
       // Önce LocalHabitService ile arşivleme işlemini gerçekleştir
-      await _habitService.archiveHabit(habit);
+      await habitService.archiveHabit(habit);
 
       return fetchHabits();
     });
@@ -72,7 +70,7 @@ class HomeNotifier extends AsyncNotifier<List<Habit>> {
         state = AsyncData(habits);
 
         // Arka planda veritabanını güncelle
-        _habitService.updateHabitCompletionStatus(habitId, completion);
+        habitService.updateHabitCompletionStatus(habitId, completion);
         return;
       }
     }
@@ -83,7 +81,7 @@ class HomeNotifier extends AsyncNotifier<List<Habit>> {
 
     state = await AsyncValue.guard(() async {
       // Önce LocalHabitService ile tamamlanma durumunu güncelle
-      await _habitService.updateHabitCompletionStatus(habitId, completion);
+      await habitService.updateHabitCompletionStatus(habitId, completion);
 
       return fetchHabits();
     });
@@ -94,7 +92,7 @@ class HomeNotifier extends AsyncNotifier<List<Habit>> {
 
     state = await AsyncValue.guard(() async {
       // Önce LocalHabitService ile yeni alışkanlık oluştur
-      await _habitService.createHabit(habit);
+      await habitService.createHabit(habit);
 
       return fetchHabits();
     });
@@ -105,7 +103,7 @@ class HomeNotifier extends AsyncNotifier<List<Habit>> {
 
     state = await AsyncValue.guard(() async {
       // Önce LocalHabitService ile alışkanlığı güncelle
-      await _habitService.updateHabit(habit);
+      await habitService.updateHabit(habit);
 
       return fetchHabits();
     });
@@ -116,7 +114,7 @@ class HomeNotifier extends AsyncNotifier<List<Habit>> {
 
     state = await AsyncValue.guard(() async {
       // Önce LocalHabitService ile alışkanlığı sil
-      await _habitService.deleteHabit(habitId);
+      await habitService.deleteHabit(habitId);
 
       return fetchHabits();
     });

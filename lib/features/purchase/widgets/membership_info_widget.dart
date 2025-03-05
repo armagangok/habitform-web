@@ -33,7 +33,7 @@ class MembershipInfoWidget extends ConsumerWidget {
             final String? originalPurchaseDate = entitlements?.all[entitlementID]?.originalPurchaseDate;
             final String? productPlanIdentifier = entitlements?.all[entitlementID]?.productIdentifier;
             final String? expirationDate = entitlements?.all[entitlementID]?.expirationDate;
-            final String? billingIssueDetectedAt = entitlements?.all[entitlementID]?.billingIssueDetectedAt;
+
             final bool? isActive = entitlements?.all[entitlementID]?.isActive;
             final String? originalAppUserId = state.customerInfo?.originalAppUserId;
 
@@ -61,7 +61,6 @@ class MembershipInfoWidget extends ConsumerWidget {
                             onTap: () => onCopyCustomerId(),
                             trailing: CupertinoListTileChevron(),
                           ),
-                          _infoItemWidget(infoText: LocaleKeys.membership_info_billing_issue_detected_at.tr(), text: billingIssueDetectedAt),
                           _infoItemWidget(infoText: LocaleKeys.membership_info_expiration_date.tr(), text: expirationDate),
                           _infoItemWidget(infoText: LocaleKeys.membership_info_first_purchase_date.tr(), text: originalPurchaseDate),
                           _infoItemWidget(infoText: LocaleKeys.membership_info_last_purchase_date.tr(), text: latestPurchaseDate),
