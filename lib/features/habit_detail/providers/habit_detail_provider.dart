@@ -29,19 +29,42 @@ class HabitDetailNotifier extends AutoDisposeNotifier<Habit?> {
 
   Future<void> markHabitAsComplete(String habitId, CompletionEntry completion) async {
     try {
-      await habitService.updateHabitCompletionStatus(habitId, completion);
+      LogHelper.shared.debugPrint("Marking habit $habitId as ${completion.isCompleted ? 'completed' : 'not completed'} for date ${completion.date}");
 
-      if (state != null) {
+      // Önce habit service ile güncelleme yap
+      await habitService.updateHabitCompletionStatus(habitId, completion);
+      LogHelper.shared.debugPrint("Habit service updated successfully");
+
+      // Yerel state'i güncelle, eğer bu habit şu anda açıksa
+      if (state != null && state!.id == habitId) {
+        LogHelper.shared.debugPrint("Updating local state for the habit");
+
+        // Güncel habit'i db'den al
         final habits = await habitService.getHabits();
 
-        final updatedHabit = habits.firstWhere((h) => h.id == habitId);
+        try {
+          // Güncellenmiş habit'i bul
+          final updatedHabit = habits.firstWhere((h) => h.id == habitId);
+          LogHelper.shared.debugPrint("Updated habit found, updating state");
 
-        state = updatedHabit;
+          // State'i güncelle
+          state = updatedHabit;
 
+          // Home provider'ı da güncelle
+          ref.read(homeProvider.notifier).fetchHabits();
+          LogHelper.shared.debugPrint("State and home provider updated successfully");
+        } catch (e) {
+          LogHelper.shared.debugPrint("Could not find the updated habit: $e");
+        }
+      } else {
+        LogHelper.shared.debugPrint("Current habit is not being viewed, only updating home provider");
+        // Sadece home provider'ı güncelle
         ref.read(homeProvider.notifier).fetchHabits();
       }
     } catch (e, s) {
-      LogHelper.shared.debugPrint("$e\n$s");
+      LogHelper.shared.debugPrint("Error marking habit as complete: $e\n$s");
+      // Hatayı yukarı ilet, widget layer'da handling yapılabilir
+      rethrow;
     }
   }
 }

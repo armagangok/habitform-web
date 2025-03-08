@@ -2,7 +2,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '/core/core.dart';
 import '/models/models.dart';
-import '../../../../models/completion_entry/completion_entry.dart';
 import '../../../reminder/extension/easy_day.dart';
 import '../../../reminder/models/days/days_enum.dart';
 import '../../provider/home_provider.dart';
@@ -72,15 +71,14 @@ class _HomeHabitGridState extends ConsumerState<HomeHabitGrid> with SingleTicker
     required int index,
     required int numberOfItems,
   }) {
-    final isToday = dateTimeInDays.year == DateTime.now().year && dateTimeInDays.month == DateTime.now().month && dateTimeInDays.day == DateTime.now().day;
+    final isToday = dateTimeInDays.isToday;
     final habitColor = Color(currentHabit.colorCode);
     final emoji = currentHabit.emoji;
 
     // Grid item oluşturma kısmında isCompletedDate kontrolünü düzeltelim
     final completions = currentHabit.completions;
     if (completions.isNotEmpty) {
-      isCompletedDate = completions.values.any((completion) => completion.date.year == dateTimeInDays.year && completion.date.month == dateTimeInDays.month && completion.date.day == dateTimeInDays.day && completion.isCompleted // Bu kontrolü ekleyelim
-          );
+      isCompletedDate = dateTimeInDays.isCompletedInEntries(completions);
     }
 
     Widget gridItem = Container(
@@ -130,29 +128,7 @@ class _HomeHabitGridState extends ConsumerState<HomeHabitGrid> with SingleTicker
     return CustomButton(
       key: _buttonKeys[dateTimeInDays],
       onPressed: () async {
-        final viewModel = ref.read(homeProvider.notifier);
-
-        // Completion durumunu kontrol ederken isCompleted'ı da kontrol edelim
-        final isCompleted = currentHabit.completions.values.any((completion) => completion.date.year == dateTimeInDays.year && completion.date.month == dateTimeInDays.month && completion.date.day == dateTimeInDays.day && completion.isCompleted);
-
-        final normalizedDate = DateTime(dateTimeInDays.year, dateTimeInDays.month, dateTimeInDays.day);
-        final dateKey = normalizedDate.toIso8601String().split('T')[0];
-
-        final completion = CompletionEntry(
-          id: dateKey,
-          date: dateTimeInDays,
-          isCompleted: !isCompleted,
-        );
-
-        // Önce yerel state'i güncelle (UI'ın hemen yanıt vermesi için)
-        setState(() {
-          final updatedCompletions = Map<String, CompletionEntry>.from(currentHabit.completions);
-          updatedCompletions[dateKey] = completion;
-          currentHabit = currentHabit.copyWith(completions: updatedCompletions);
-        });
-
-        // Sonra provider'ı güncelle (veritabanı güncellemesi için)
-        await viewModel.updateHabitCompletionStatus(currentHabit.id, completion);
+        await ref.read(homeProvider.notifier).toggleHabitCompletion(currentHabit.id, dateTimeInDays);
       },
       child: gridItem,
     );
@@ -236,7 +212,7 @@ class _HomeHabitGridState extends ConsumerState<HomeHabitGrid> with SingleTicker
 
                       final completions = currentHabit.completions;
                       if (completions.isNotEmpty) {
-                        isCompletedDate = completions.values.any((completion) => completion.date.year == dateTimeInDays.year && completion.date.month == dateTimeInDays.month && completion.date.day == dateTimeInDays.day);
+                        isCompletedDate = dateTimeInDays.isCompletedInEntries(completions);
                       }
 
                       return _buildGridItem(

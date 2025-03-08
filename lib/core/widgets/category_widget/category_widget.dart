@@ -105,10 +105,10 @@ class CategoryWidgetState extends State<CategoryWidget> {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        const double horizontalPadding = 5.5;
+        const double horizontalPadding = 8.0;
         const double verticalPadding = 4.0;
         const double spacing = 8.0;
-        const double itemHeight = 32.0;
+        const double minItemHeight = 32.0;
 
         final totalItems = widget.categories.length;
         final itemsPerRow = (totalItems / 2).ceil();
@@ -116,8 +116,7 @@ class CategoryWidgetState extends State<CategoryWidget> {
         final firstRow = widget.categories.take(itemsPerRow).toList();
         final secondRow = widget.categories.skip(itemsPerRow).toList();
 
-        return SizedBox(
-          height: (itemHeight * 2) + spacing,
+        return IntrinsicHeight(
           child: SingleChildScrollView(
             physics: BouncingScrollPhysics(),
             controller: _scrollController,
@@ -126,9 +125,9 @@ class CategoryWidgetState extends State<CategoryWidget> {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _buildRow(firstRow, 0, itemHeight, horizontalPadding, verticalPadding, spacing),
+                _buildRow(firstRow, 0, minItemHeight, horizontalPadding, verticalPadding, spacing),
                 SizedBox(height: spacing),
-                _buildRow(secondRow, itemsPerRow, itemHeight, horizontalPadding, verticalPadding, spacing),
+                _buildRow(secondRow, itemsPerRow, minItemHeight, horizontalPadding, verticalPadding, spacing),
               ],
             ),
           ),
@@ -137,80 +136,71 @@ class CategoryWidgetState extends State<CategoryWidget> {
     );
   }
 
-  Widget _buildRow(List<String> items, int startIndex, double itemHeight, double horizontalPadding, double verticalPadding, double spacing) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: items.asMap().entries.map((entry) {
-        final index = startIndex + entry.key;
-        final text = entry.value;
+  Widget _buildRow(List<String> items, int startIndex, double minItemHeight, double horizontalPadding, double verticalPadding, double spacing) {
+    return IntrinsicHeight(
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: items.asMap().entries.map((entry) {
+          final index = startIndex + entry.key;
+          final text = entry.value;
 
-        final textWidth = _calculateTextWidth(
-          text,
-          const TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
-          context,
-        );
+          return Padding(
+            key: _itemKeys[index],
+            padding: EdgeInsets.only(right: entry.key == items.length - 1 ? 0 : 5),
+            child: CupertinoButton(
+              minSize: 0,
+              pressedOpacity: .8,
+              padding: EdgeInsets.zero,
+              borderRadius: BorderRadius.circular(8),
+              color: Colors.transparent,
+              onPressed: () {
+                HapticFeedback.selectionClick();
+                setState(() => selectedIndex = index);
+                widget.onCategorySelected(index);
 
-        final buttonWidth = textWidth + (horizontalPadding * 4);
-
-        return Padding(
-          key: _itemKeys[index], // GlobalKey'leri burada kullan
-          padding: EdgeInsets.only(right: entry.key == items.length - 1 ? 0 : 5),
-          child: CupertinoButton(
-            minSize: 0,
-            pressedOpacity: .8,
-            padding: EdgeInsets.zero,
-            borderRadius: BorderRadius.circular(8),
-            color: Colors.transparent,
-            onPressed: () {
-              HapticFeedback.selectionClick();
-              setState(() => selectedIndex = index);
-              widget.onCategorySelected(index);
-
-              // Delay scrolling slightly to ensure UI updates first
-              Future.delayed(Duration(milliseconds: 50), () {
-                if (mounted) _scrollSelectedItemIntoView();
-              });
-            },
-            child: Card(
-              elevation: .1,
-              color: selectedIndex == index ? widget.customColor ?? context.primary.withValues(alpha: .9) : Colors.transparent,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
-                side: BorderSide(
-                  color: selectedIndex == index ? Colors.transparent : Theme.of(context).primaryColor.withValues(alpha: .2),
-                  width: 1,
+                // Delay scrolling slightly to ensure UI updates first
+                Future.delayed(Duration(milliseconds: 50), () {
+                  if (mounted) _scrollSelectedItemIntoView();
+                });
+              },
+              child: Card(
+                elevation: .1,
+                color: selectedIndex == index ? widget.customColor ?? context.primary.withValues(alpha: .9) : Colors.transparent,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  side: BorderSide(
+                    color: selectedIndex == index ? Colors.transparent : Theme.of(context).primaryColor.withValues(alpha: .2),
+                    width: 1,
+                  ),
                 ),
-              ),
-              child: Container(
-                width: buttonWidth,
-                padding: EdgeInsets.symmetric(
-                  horizontal: horizontalPadding,
-                  vertical: verticalPadding,
-                ),
-                child: Center(
-                  child: Text(
-                    text,
-                    style: TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.w600,
-                      color: selectedIndex == index ? (widget.customColor ?? context.primary.withValues(alpha: .9)).colorRegardingToBrightness : context.primary.withValues(alpha: .75),
+                child: IntrinsicWidth(
+                  child: Container(
+                    constraints: BoxConstraints(minHeight: minItemHeight),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: horizontalPadding,
+                      vertical: verticalPadding,
+                    ),
+                    child: Center(
+                      child: Text(
+                        text,
+                        style: TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w600,
+                          color: selectedIndex == index ? (widget.customColor ?? context.primary.withValues(alpha: .9)).colorRegardingToBrightness : context.primary.withValues(alpha: .75),
+                        ),
+                        textAlign: TextAlign.center,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     ),
                   ),
                 ),
               ),
             ),
-          ),
-        );
-      }).toList(),
+          );
+        }).toList(),
+      ),
     );
-  }
-
-  double _calculateTextWidth(String text, TextStyle style, BuildContext context) {
-    final TextPainter textPainter = TextPainter(
-      text: TextSpan(text: text, style: style),
-      maxLines: 1,
-      textDirection: TextDirection.ltr,
-    )..layout();
-    return textPainter.width;
   }
 }

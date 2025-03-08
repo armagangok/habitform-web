@@ -1,7 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/core.dart';
-import '../../../../models/completion_entry/completion_entry.dart';
 import '../../../../models/models.dart';
 import '../../provider/home_provider.dart';
 
@@ -57,7 +56,7 @@ class _MarkTodayHomeButtonState extends ConsumerState<MarkTodayHomeButton> with 
 
         final habitColor = Color(currentHabit.colorCode);
         final today = DateTime.now();
-        final isCompletedToday = currentHabit.completions.values.any((completion) => completion.date.year == today.year && completion.date.month == today.month && completion.date.day == today.day && completion.isCompleted);
+        final isCompletedToday = today.isCompletedInEntries(currentHabit.completions);
 
         if (isCompletedToday) {
           return CupertinoButton(
@@ -70,18 +69,7 @@ class _MarkTodayHomeButtonState extends ConsumerState<MarkTodayHomeButton> with 
               controller1.forward(from: 0);
               controller2.forward(from: 0);
 
-              final viewModel = ref.read(homeProvider.notifier);
-
-              final normalizedDate = DateTime(today.year, today.month, today.day);
-              final dateKey = normalizedDate.toIso8601String().split('T')[0];
-
-              final completion = CompletionEntry(
-                id: dateKey,
-                date: today,
-                isCompleted: false,
-              );
-
-              await viewModel.updateHabitCompletionStatus(currentHabit.id, completion);
+              await ref.read(homeProvider.notifier).toggleHabitCompletion(currentHabit.id, today);
             },
             child: Icon(
               CupertinoIcons.checkmark_circle,
@@ -100,18 +88,7 @@ class _MarkTodayHomeButtonState extends ConsumerState<MarkTodayHomeButton> with 
               controller1.forward(from: 0);
               controller2.forward(from: 0);
 
-              final viewModel = ref.read(homeProvider.notifier);
-
-              final normalizedDate = DateTime(today.year, today.month, today.day);
-              final dateKey = normalizedDate.toIso8601String().split('T')[0];
-
-              final completion = CompletionEntry(
-                id: dateKey,
-                date: today,
-                isCompleted: true,
-              );
-
-              await viewModel.updateHabitCompletionStatus(currentHabit.id, completion);
+              await ref.read(homeProvider.notifier).toggleHabitCompletion(currentHabit.id, today);
             },
             child: Icon(
               CupertinoIcons.circle,

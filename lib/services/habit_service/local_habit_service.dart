@@ -1,8 +1,8 @@
-import 'package:habitrise/models/habit/habit_extension.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 import '../../core/core.dart';
 import '../../models/completion_entry/completion_entry.dart';
+import '../../models/habit/habit_extension.dart';
 import '../../models/habit/habit_model.dart';
 import '../../models/habit/habit_status.dart';
 import 'habit_service_interface.dart';
@@ -94,17 +94,53 @@ class LocalHabitService extends HabitService {
     // Tüm habit'leri al ve kontrol et
     final allHabits = await _hiveHelper.getAll<Habit>(HiveBoxes.habitBox);
 
+    // Habit'i ID'sine göre bul
     Habit? habit;
     habit = allHabits.firstWhere((h) => h.id == habitId);
 
+    // Completion'ları güncelle
     final updatedCompletions = Map<String, CompletionEntry>.from(habit.completions);
-    updatedCompletions[completion.id] = completion;
+
+    // Aynı tarih için mevcut bir kayıt var mı kontrol et (ID farklı olabilir)
+    CompletionEntry? existingEntryWithSameDate;
+    String? existingKey;
+
+    for (var entry in updatedCompletions.entries) {
+      if (entry.value.date.normalized.isSameDayWith(completion.date.normalized) && entry.key != completion.id) {
+        existingEntryWithSameDate = entry.value;
+        existingKey = entry.key;
+        LogHelper.shared.debugPrint('Found existing entry with same date but different ID. Existing ID: ${entry.key}, New ID: ${completion.id}');
+        break;
+      }
+    }
+
+    if (existingEntryWithSameDate != null && existingKey != null) {
+      // Var olan kaydı güncelle, yeni kayıt ekleme - ID'yi koru
+      final updatedEntry = existingEntryWithSameDate.copyWith(isCompleted: completion.isCompleted);
+
+      // Mevcut ID ile kaydet
+      updatedCompletions[existingKey] = updatedEntry;
+      LogHelper.shared.debugPrint('Updated existing entry with ID: $existingKey and kept the original ID');
+
+      // Gelen completion'ın ID'si ile bir kayıt varsa, onu kaldır (tutarsızlığı önlemek için)
+      if (completion.id != existingKey && updatedCompletions.containsKey(completion.id)) {
+        updatedCompletions.remove(completion.id);
+        LogHelper.shared.debugPrint('Removed duplicate entry with ID: ${completion.id}');
+      }
+    } else {
+      // Aynı tarihte başka bir kayıt yoksa, yeni kaydı ekle
+      updatedCompletions[completion.id] = completion;
+      LogHelper.shared.debugPrint('Added new entry with ID: ${completion.id}');
+    }
 
     final updatedHabit = habit.copyWith(
       completions: updatedCompletions,
     );
 
+    // Habit'i güncelle
     await _hiveHelper.putData<Habit>(HiveBoxes.habitBox, habitId, updatedHabit);
+
+    LogHelper.shared.debugPrint('Successfully updated completion status for habit: $habitId, date: ${completion.date}, completed: ${completion.isCompleted}');
   }
 
   // Delete a habit (soft delete)
@@ -238,17 +274,20 @@ class LocalHabitService extends HabitService {
     LogHelper.shared.debugPrint('Archived habit updated successfully: ${habit.id}');
   }
 
+  @override
   Future<void> migrateHabitsToNewModel() async {
     LogHelper.shared.debugPrint('Starting habit migration process...');
 
-    try {
-      // Get all habits (both active and archived)
-      final allHabits = await getAllHabits();
+    // Get all habits (both active and archived)
+    final allHabits = await getAllHabits();
 
-      for (final habit in allHabits) {
-        if (habit.completionDates?.isNotEmpty ?? false) {
-          LogHelper.shared.debugPrint('Migrating habit: ${habit.id}');
+    for (final habit in allHabits) {
+      if (habit.completionDates?.isNotEmpty ?? false) {
+        LogHelper.shared.debugPrint('Migrating habit: ${habit.id}');
 
+        final habitCompletionDates = habit.completionDates;
+
+        if (habitCompletionDates != null && habitCompletionDates.isNotEmpty) {
           // Convert old completion dates to new completion entries
           final newCompletions = habit.toCompletionEntry(habit.completionDates!);
 
@@ -263,34 +302,20 @@ class LocalHabitService extends HabitService {
           }
 
           LogHelper.shared.debugPrint('Successfully migrated habit: ${habit.id}');
+        } else {
+          LogHelper.shared.debugPrint('No completion dates found to migrate.');
         }
       }
-
-      LogHelper.shared.debugPrint('Habit migration completed successfully');
-    } catch (e) {
-      LogHelper.shared.debugPrint('Error during habit migration: $e');
-      rethrow;
     }
+
+    LogHelper.shared.debugPrint('Habit migration completed successfully');
   }
 
-  /// Tüm alışkanlıkları temizler (aktif ve arşivlenmiş)
-  @override
-  Future<void> clearAllHabits() async {
-    try {
-      LogHelper.shared.debugPrint('Clearing all habits from local storage');
-
-      // Aktif alışkanlıkları temizle
-      await _hiveHelper.clearBox(HiveBoxes.habitBox);
-      LogHelper.shared.debugPrint('Cleared active habits box');
-
-      // Arşivlenmiş alışkanlıkları temizle
-      await _hiveHelper.clearBox(HiveBoxes.archivedHabitBox);
-      LogHelper.shared.debugPrint('Cleared archived habits box');
-
-      LogHelper.shared.debugPrint('All habits cleared successfully from local storage');
-    } catch (e) {
-      LogHelper.shared.debugPrint('Error clearing habits from local storage: $e');
-      rethrow;
-    }
+  Future<void> saveHabit(Habit habit) async {
+    await _hiveHelper.putData<Habit>(
+      HiveBoxes.habitBox,
+      habit.id,
+      habit.copyWith(),
+    );
   }
 }

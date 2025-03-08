@@ -1,7 +1,7 @@
-import 'package:habitrise/models/completion_entry/completion_entry.dart';
-import 'package:habitrise/models/habit/habit_model.dart';
-import 'package:habitrise/models/habit/habit_status.dart';
-
+import '../../core/core.dart';
+import '../../models/completion_entry/completion_entry.dart';
+import '../../models/habit/habit_model.dart';
+import '../../models/habit/habit_status.dart';
 import 'habit_service_interface.dart';
 import 'mock_habit_data.dart';
 
@@ -107,15 +107,10 @@ class MockHabitService extends HabitService {
   }
 
   @override
-  Future<void> clearAllHabits() async {
-    _habits.clear();
-  }
-
-  @override
   Future<void> migrateHabitsToNewModel() async {
     // This is a mock implementation, so we don't need to do any actual migration
     // The mock data is already in the correct format
-    print('Mock migration: No migration needed for mock data');
+    LogHelper.shared.debugPrint('Mock migration: No migration needed for mock data');
     return;
   }
 }

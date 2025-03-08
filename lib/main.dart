@@ -10,14 +10,12 @@ import 'core/constants/debug_constants.dart';
 import 'core/helpers/notifications/notification_helper.dart';
 import 'core/helpers/notifications/timezone.dart';
 import 'core/theme/providers/theme_provider.dart';
+import 'features/home/provider/home_provider.dart';
 import 'features/home/views/pages/home_page.dart';
 import 'features/onboarding/pages/onboarding_main_page.dart';
 import 'features/onboarding/providers/onboarding_state.dart';
 import 'features/purchase/providers/purchase_provider.dart';
 import 'services/habit_service/habit_service_interface.dart';
-
-// Flag to enable debug mode
-const bool enableDebugMode = true;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -90,11 +88,7 @@ class _MyAppState extends ConsumerState<MyApp> {
   void initState() {
     super.initState();
     ref.read(purchaseProvider);
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
+    ref.read(homeProvider);
   }
 
   @override
@@ -106,7 +100,7 @@ class _MyAppState extends ConsumerState<MyApp> {
       darkTheme: Themes.darkTheme,
       theme: Themes.lightTheme,
       themeMode: themeMode,
-      debugShowCheckedModeBanner: false,
+      debugShowCheckedModeBanner: true,
       navigatorKey: NavigationService.shared.navigatorKey,
       onGenerateRoute: NavigationRoute.shared.generateRoute,
       localizationsDelegates: context.localizationDelegates,

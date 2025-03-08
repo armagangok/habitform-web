@@ -68,12 +68,12 @@ class _HabitDataWidgetState extends ConsumerState<HabitDataWidget> {
   }
 
   Map<String, int> _calculateMonthlyStats(int year, int month) {
-    final completions = widget.habit.completions.values.where((completion) => completion.isCompleted && completion.date.year == year && completion.date.month == month + 1).toList();
+    final completionsForMonth = widget.habit.completions.getCompletionsForMonth(year, month + 1);
 
     return {
-      'total': completions.length,
-      'weekdays': completions.where((completion) => completion.date.weekday <= 5).length,
-      'weekends': completions.where((completion) => completion.date.weekday > 5).length,
+      'total': completionsForMonth.length,
+      'weekdays': completionsForMonth.where((date) => date.weekday <= 5).length,
+      'weekends': completionsForMonth.where((date) => date.weekday > 5).length,
     };
   }
 
@@ -265,7 +265,8 @@ class _HabitDataWidgetState extends ConsumerState<HabitDataWidget> {
     const numberOfWeeks = 6;
 
     // Get all completion dates for this month
-    final completions = widget.habit.completions.values.where((completion) => completion.isCompleted && completion.date.year == year && completion.date.month == monthIndex + 1).map((completion) => completion.date).toList()..sort((a, b) => a.compareTo(b));
+    final completions = widget.habit.completions.getCompletionsForMonth(year, monthIndex + 1);
+    completions.sort((a, b) => a.compareTo(b));
 
     return GridView.builder(
       physics: NeverScrollableScrollPhysics(),
@@ -295,13 +296,13 @@ class _HabitDataWidgetState extends ConsumerState<HabitDataWidget> {
         bool isBetweenCompletions = false;
 
         if (!isInFuture) {
-          isCompleted = completions.any((date) => date.year == currentDate.year && date.month == currentDate.month && date.day == currentDate.day);
+          isCompleted = completions.any((date) => date.isSameDayWith(currentDate));
 
           if (!isCompleted && completions.length >= 2) {
             for (int i = 0; i < completions.length - 1; i++) {
               final startDate = completions[i];
               final endDate = completions[i + 1];
-              if (currentDate.isAfter(startDate) && currentDate.isBefore(endDate)) {
+              if (currentDate.isBetween(startDate, endDate)) {
                 isBetweenCompletions = true;
                 break;
               }
@@ -411,69 +412,11 @@ class _HabitDataWidgetState extends ConsumerState<HabitDataWidget> {
   }
 
   int _calculateStreak() {
-    final completions = widget.habit.completions.values.where((completion) => completion.isCompleted).map((completion) => completion.date).toList()..sort((a, b) => b.compareTo(a));
-
-    if (completions.isEmpty) return 0;
-
-    final today = DateTime.now();
-    final todayStart = DateTime(today.year, today.month, today.day);
-
-    // Check if there is a gap between today and the last completion date
-    final lastCompletion = completions.first;
-    final lastCompletionStart = DateTime(
-      lastCompletion.year,
-      lastCompletion.month,
-      lastCompletion.day,
-    );
-    final daysSinceLastCompletion = todayStart.difference(lastCompletionStart).inDays;
-
-    // If there is a gap of more than 1 day between today and the last completion, streak is broken
-    if (daysSinceLastCompletion > 1) {
-      return 0;
-    }
-
-    int streak = 1;
-    DateTime? lastDate;
-
-    for (var date in completions) {
-      if (lastDate == null) {
-        lastDate = date;
-        continue;
-      }
-
-      if (lastDate.difference(date).inDays == 1) {
-        streak++;
-        lastDate = date;
-      } else {
-        break;
-      }
-    }
-
-    return streak;
+    return widget.habit.completions.calculateCurrentStreak();
   }
 
   int _calculateLongestStreak() {
-    final completions = widget.habit.completions.values.where((completion) => completion.isCompleted).map((completion) => completion.date).toList()..sort((a, b) => a.compareTo(b));
-
-    if (completions.isEmpty) return 0;
-
-    int currentStreak = 1;
-    int longestStreak = 1;
-    DateTime lastDate = completions.first;
-
-    for (int i = 1; i < completions.length; i++) {
-      if (completions[i].difference(lastDate).inDays == 1) {
-        currentStreak++;
-        if (currentStreak > longestStreak) {
-          longestStreak = currentStreak;
-        }
-      } else {
-        currentStreak = 1;
-      }
-      lastDate = completions[i];
-    }
-
-    return longestStreak;
+    return widget.habit.completions.calculateLongestStreak();
   }
 
   String _getLocalizedMonth(int monthIndex) {

@@ -67,6 +67,7 @@ class HiveHelper {
     try {
       final box = Hive.box<T>(boxName);
       await box.put(key, value);
+      await box.flush();
     } catch (e, stack) {
       LogHelper.shared.debugPrint('Error setting data in Hive box $boxName: $e');
       LogHelper.shared.debugPrint('Stack trace: $stack');
@@ -89,26 +90,31 @@ class HiveHelper {
   Future<void> deleteData<T>(String boxName, dynamic key) async {
     var box = Hive.box<T>(boxName);
     await box.delete(key);
+    await box.flush();
   }
 
   Future<void> deleteDataAt<T>(String boxName, int index) async {
     var box = Hive.box<T>(boxName);
     await box.deleteAt(index);
+    await box.flush();
   }
 
   Future<void> deleteAll<T>(String boxName, Iterable<dynamic> keys) async {
     var box = Hive.box<T>(boxName);
     await box.deleteAll(keys);
+    await box.flush();
   }
 
   Future<void> putData<T>(String boxName, dynamic key, T data) async {
     var box = Hive.box<T>(boxName);
     await box.put(key, data);
+    await box.flush();
   }
 
   Future<void> putAllData<T>(String boxName, Map<dynamic, T> data) async {
     var box = Hive.box<T>(boxName);
     await box.putAll(data);
+    await box.flush();
   }
 
   Future<List<T>> getAll<T>(String boxName) async {
@@ -127,16 +133,32 @@ class HiveHelper {
 
   Future<int> addData<T>(String boxName, T dataToAdd) async {
     var box = Hive.box<T>(boxName);
-    return box.add(dataToAdd);
+    final result = box.add(dataToAdd);
+    await box.flush();
+    return result;
   }
 
   Future<void> clearBox<T>(String boxName) async {
     var box = Hive.box<T>(boxName);
     await box.clear();
+    await box.flush();
   }
 
   Future<void> putDataAt<T>(String boxName, T dataToAdd, int index) async {
     var box = Hive.box<T>(boxName);
     await box.putAt(index, dataToAdd);
+    await box.flush();
+  }
+
+  Future<void> flushBox<T>(String boxName) async {
+    try {
+      var box = Hive.box<T>(boxName);
+      await box.flush();
+      LogHelper.shared.debugPrint('Successfully flushed box: $boxName');
+    } catch (e, stack) {
+      LogHelper.shared.debugPrint('Error flushing box $boxName: $e');
+      LogHelper.shared.debugPrint('Stack trace: $stack');
+      rethrow;
+    }
   }
 }

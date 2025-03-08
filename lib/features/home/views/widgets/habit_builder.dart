@@ -48,22 +48,20 @@ class HabitBuilder extends StatelessWidget {
   Widget _buildHabitList(List<Habit> habits) {
     return Builder(
       builder: (context) {
-        if (context.isLandscape) {
-          return GridView.builder(
-            shrinkWrap: true,
-            padding: EdgeInsets.zero,
+        if (context.isTabletOrLandscape) {
+          return SingleChildScrollView(
             physics: ClampingScrollPhysics(),
-            itemCount: habits.length,
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              mainAxisSpacing: 20,
-              childAspectRatio: 2.5,
-              crossAxisSpacing: 20,
+            child: Wrap(
+              spacing: 20,
+              runSpacing: 20,
+              alignment: WrapAlignment.start,
+              children: habits.map((habit) {
+                return SizedBox(
+                  width: (context.dynamicWidth - 185) / 2,
+                  child: HabitWidget(habit: habit),
+                );
+              }).toList(),
             ),
-            itemBuilder: (context, index) {
-              final habit = habits[index];
-              return HabitWidget(habit: habit);
-            },
           );
         }
 

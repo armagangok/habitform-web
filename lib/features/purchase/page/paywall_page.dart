@@ -195,9 +195,7 @@ class _PaywallWidgetState extends ConsumerState<PaywallPage> with SingleTickerPr
   Widget _monthlyButton(PaywallState state) {
     final monthlyPackage = state.offerings?.current?.monthly;
 
-    if (monthlyPackage == null) {
-      return const SizedBox.shrink();
-    }
+    if (monthlyPackage == null) return const SizedBox.shrink();
 
     return Align(
       alignment: Alignment.bottomCenter,
@@ -244,10 +242,9 @@ class _PaywallWidgetState extends ConsumerState<PaywallPage> with SingleTickerPr
                     ],
                   ),
                 ),
-                const SizedBox(height: 10),
                 FittedBox(
                   child: SizedBox(
-                    height: 40,
+                    height: 24,
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 20.0),
                       child: IntrinsicHeight(

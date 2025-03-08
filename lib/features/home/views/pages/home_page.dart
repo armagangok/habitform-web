@@ -30,6 +30,13 @@ class _HomePageState extends ConsumerState<HomePage> {
     final statusBarHeight = MediaQuery.of(context).padding.top;
     final navBarHeight = 44.0; // CupertinoNavigationBar default height
 
+    ref.listen(homeProvider, (previous, next) {
+      if (next.hasError) {
+        // Show error message using AppFlushbar
+        AppFlushbar.shared.errorFlushbar(next.error.toString().contains('Exception:') ? next.error.toString().split('Exception:')[1].trim() : 'An error occurred while managing habits');
+      }
+    });
+
     return CupertinoScaffold(
       body: Stack(
         children: [
@@ -90,13 +97,11 @@ class _HomePageState extends ConsumerState<HomePage> {
     );
   }
 
-  _homePageNavigationBar() {
+  CupertinoNavigationBar _homePageNavigationBar() {
     final paywallState = ref.watch(purchaseProvider);
     return CupertinoNavigationBar(
       enableBackgroundFilterBlur: false,
-
       border: null, // Remove the bottom border
-
       leading: Builder(
         builder: (context) {
           return Align(
@@ -134,7 +139,6 @@ class _HomePageState extends ConsumerState<HomePage> {
       middle: Row(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text(
             'HabitRise',
@@ -152,10 +156,10 @@ class _HomePageState extends ConsumerState<HomePage> {
           final isRestoring = paywallState.value?.isRestoring ?? false;
           final bool isLoading = paywallState is AsyncLoading;
 
-          // Butonları bir liste olarak oluşturalım
+          // Create buttons as a list
           List<Widget> buttons = [];
 
-          // Premium butonu veya yükleniyor göstergesi
+          // Premium button or loading indicator
           if (isLoading || isPurchasing || isRestoring) {
             buttons.add(
               Container(
@@ -191,7 +195,7 @@ class _HomePageState extends ConsumerState<HomePage> {
             );
           }
 
-          // Alışkanlık ekleme butonu
+          // Add habit button
           buttons.add(
             CustomButton(
               onPressed: () {
@@ -222,7 +226,7 @@ class _HomePageState extends ConsumerState<HomePage> {
             ).animate().fadeIn(duration: Duration(milliseconds: 350)),
           );
 
-          // Butonlar arasına boşluk ekleyerek Row içinde gösterelim
+          // Add spacing between buttons and display in Row
           List<Widget> rowChildren = [];
           for (int i = 0; i < buttons.length; i++) {
             rowChildren.add(buttons[i]);

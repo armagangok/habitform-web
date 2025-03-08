@@ -60,7 +60,7 @@ class _HabitCalendarCompletionSheetState extends ConsumerState<HabitCalendarComp
     super.initState();
     _today = DateTime.now();
     _focusedDay = _today;
-    _completedDays = widget.habit.completions.values.where((completion) => completion.isCompleted).map((completion) => DateTime(completion.date.year, completion.date.month, completion.date.day)).toSet();
+    _completedDays = widget.habit.completions.values.where((completion) => completion.isCompleted).map((completion) => completion.date.normalized).toSet();
 
     // Initialize calendar style
     _calendarStyle = CalendarStyle(
@@ -101,7 +101,7 @@ class _HabitCalendarCompletionSheetState extends ConsumerState<HabitCalendarComp
   }
 
   void _onDaySelected(DateTime selectedDay, DateTime focusedDay) async {
-    final selectedDateTime = DateTime(selectedDay.year, selectedDay.month, selectedDay.day);
+    final selectedDateTime = selectedDay.normalized;
     final wasCompleted = _completedDays.contains(selectedDateTime);
     final willBeCompleted = !wasCompleted;
 
@@ -116,11 +116,24 @@ class _HabitCalendarCompletionSheetState extends ConsumerState<HabitCalendarComp
       }
     });
 
-    final completion = CompletionEntry(
-      id: selectedDateTime.toIso8601String().split('T')[0],
-      date: selectedDateTime,
-      isCompleted: willBeCompleted,
-    );
+    // Mevcut bir tamamlama kaydı var mı kontrol et
+    CompletionEntry? existingEntry;
+    for (var entry in widget.habit.completions.values) {
+      if (entry.date.normalized.isSameDayWith(selectedDateTime)) {
+        existingEntry = entry;
+        LogHelper.shared.debugPrint('Found existing completion entry for the selected date');
+        break;
+      }
+    }
+
+    // Var olan kaydı güncelle veya yeni oluştur
+    final completion = existingEntry != null
+        ? existingEntry.copyWith(isCompleted: willBeCompleted)
+        : CompletionEntry(
+            id: selectedDateTime.toIso8601DateString,
+            date: selectedDateTime,
+            isCompleted: willBeCompleted,
+          );
 
     try {
       // Update the habit with new completion using habitDetailProvider
