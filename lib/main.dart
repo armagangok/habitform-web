@@ -97,6 +97,16 @@ class _MyAppState extends ConsumerState<MyApp> {
     final onboardingState = ref.watch(onboardingProvider);
 
     return MaterialApp(
+      builder: (context, child) {
+        return MediaQuery(
+          data: MediaQuery.of(context).copyWith(
+            textScaler: const TextScaler.linear(
+              1,
+            ),
+          ),
+          child: child!,
+        );
+      },
       darkTheme: Themes.darkTheme,
       theme: Themes.lightTheme,
       themeMode: themeMode,

@@ -111,6 +111,11 @@ abstract class  LocaleKeys {
   static const habit_calendar_completion = 'habit.calendar_completion';
   static const habit_calendar_tap_info = 'habit.calendar_tap_info';
   static const habit_timeToCompleteYourHabit = 'habit.timeToCompleteYourHabit';
+  static const habit_filter_all = 'habit.filter.all';
+  static const habit_filter_morning = 'habit.filter.morning';
+  static const habit_filter_afternoon = 'habit.filter.afternoon';
+  static const habit_filter_evening = 'habit.filter.evening';
+  static const habit_filter = 'habit.filter';
   static const habit = 'habit';
   static const habit_detail_habitDetail = 'habit_detail.habitDetail';
   static const habit_detail_areYouSureToDeleteHabit = 'habit_detail.areYouSureToDeleteHabit';

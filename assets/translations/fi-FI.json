@@ -120,7 +120,13 @@
         "complete": "Suorita",
         "calendar_completion": "Kalenterin täyttö",
         "calendar_tap_info": "Napauta päivämäärää merkitäksesi tai poistaaksesi suorituksen",
-        "timeToCompleteYourHabit": "Aika suorittaa tapasi"
+        "timeToCompleteYourHabit": "Aika suorittaa tapasi",
+        "filter": {
+            "all": "Kaikki",
+            "morning": "Aamu",
+            "afternoon": "Iltapäivä",
+            "evening": "Ilta"
+        }
     },
     "habit_detail": {
         "habitDetail": "Tavan tiedot",

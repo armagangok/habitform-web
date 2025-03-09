@@ -120,7 +120,13 @@
         "complete": "Выполнить",
         "calendar_completion": "Завершение в календаре",
         "calendar_tap_info": "Нажмите на даты, чтобы отметить или снять отметку о выполнении",
-        "timeToCompleteYourHabit": "Время выполнить вашу привычку"
+        "timeToCompleteYourHabit": "Время выполнить вашу привычку",
+        "filter": {
+            "all": "Все",
+            "morning": "Утро",
+            "afternoon": "День",
+            "evening": "Вечер"
+        }
     },
     "habit_detail": {
         "habitDetail": "Детали привычки",
@@ -303,4 +309,4 @@
         "change_plan": "Изменить план",
         "change_plan_desc": "Нажмите, чтобы изменить ваш план подписки"
     }
-}
+}   

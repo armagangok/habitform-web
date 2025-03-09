@@ -139,9 +139,9 @@ class _HomeHabitGridState extends ConsumerState<HomeHabitGrid> with SingleTicker
     final habitsAsyncValue = ref.watch(homeProvider);
 
     return habitsAsyncValue.when(
-      data: (habits) {
+      data: (homeState) {
         // Güncel habit'i al
-        final updatedHabit = habits.firstWhere(
+        final updatedHabit = homeState.habits.firstWhere(
           (h) => h.id == currentHabit.id,
           orElse: () => currentHabit,
         );

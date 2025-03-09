@@ -120,7 +120,13 @@
         "complete": "完成",
         "calendar_completion": "日历完成情况",
         "calendar_tap_info": "点击日期标记或取消标记完成",
-        "timeToCompleteYourHabit": "是时候完成你的习惯了"
+        "timeToCompleteYourHabit": "是时候完成你的习惯了",
+        "filter": {
+            "all": "全部",
+            "morning": "早上",
+            "afternoon": "下午",
+            "evening": "晚上"
+        }
     },
     "habit_detail": {
         "habitDetail": "习惯详情",

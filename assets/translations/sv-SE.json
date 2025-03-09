@@ -120,7 +120,13 @@
         "complete": "Slutför",
         "calendar_completion": "Kalenderslutförande",
         "calendar_tap_info": "Tryck på ett datum för att markera eller ta bort slutförande",
-        "timeToCompleteYourHabit": "Dags att slutföra din vana"
+        "timeToCompleteYourHabit": "Dags att slutföra din vana",
+        "filter": {
+            "all": "Alla",
+            "morning": "Morgon",
+            "afternoon": "Eftermiddag",
+            "evening": "Kväll"
+        }
     },
     "habit_detail": {
         "habitDetail": "Vanedetaljer",

@@ -120,7 +120,13 @@
         "complete": "เสร็จสิ้น",
         "calendar_completion": "การเสร็จสิ้นในปฏิทิน",
         "calendar_tap_info": "แตะวันที่เพื่อเลือกหรือยกเลิกการเสร็จสิ้น",
-        "timeToCompleteYourHabit": "ถึงเวลาที่จะทำนิสัยของคุณให้เสร็จสิ้น"
+        "timeToCompleteYourHabit": "ถึงเวลาที่จะทำนิสัยของคุณให้เสร็จสิ้น",
+        "filter": {
+            "all": "ทั้งหมด",
+            "morning": "เช้า",
+            "afternoon": "บ่าย",
+            "evening": "เย็น"
+        }
     },
     "habit_detail": {
         "habitDetail": "รายละเอียดนิสัย",

@@ -120,7 +120,13 @@
         "complete": "إكمال",
         "calendar_completion": "إكمال التقويم",
         "calendar_tap_info": "انقر على التواريخ لتحديد أو إلغاء تحديد الإكمال",
-        "timeToCompleteYourHabit": "حان وقت إكمال عادتك"
+        "timeToCompleteYourHabit": "حان وقت إكمال عادتك",
+        "filter": {
+            "all": "الكل",
+            "morning": "صباح",
+            "afternoon": "ظهر",
+            "evening": "مساء"
+        }
     },
     "habit_detail": {
         "habitDetail": "تفاصيل العادة",

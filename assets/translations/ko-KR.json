@@ -120,7 +120,13 @@
         "complete": "완료",
         "calendar_completion": "캘린더 완료",
         "calendar_tap_info": "날짜를 탭하여 완료 표시하거나 해제",
-        "timeToCompleteYourHabit": "습관을 완료할 시간입니다"
+        "timeToCompleteYourHabit": "습관을 완료할 시간입니다",
+        "filter": {
+            "all": "모든 습관",
+            "morning": "아침",
+            "afternoon": "오후",
+            "evening": "저녁"
+        }
     },
     "habit_detail": {
         "habitDetail": "습관 상세",
@@ -311,4 +317,4 @@
         "change_plan": "플랜 변경",
         "change_plan_desc": "구독 플랜을 변경하려면 클릭하세요"
     }
-}
+}   

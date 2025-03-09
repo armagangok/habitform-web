@@ -120,7 +120,13 @@
         "complete": "完了",
         "calendar_completion": "カレンダー完了",
         "calendar_tap_info": "日付をタップして完了をマークまたは解除",
-        "timeToCompleteYourHabit": "習慣を完了する時間です"
+        "timeToCompleteYourHabit": "習慣を完了する時間です",
+        "filter": {
+            "all": "すべて",
+            "morning": "朝",
+            "afternoon": "午後",
+            "evening": "夕方"
+        }
     },
     "habit_detail": {
         "habitDetail": "習慣の詳細",

@@ -120,7 +120,13 @@
         "complete": "השלם",
         "calendar_completion": "השלמת לוח שנה",
         "calendar_tap_info": "הקש על תאריך כדי לסמן או להסיר השלמה",
-        "timeToCompleteYourHabit": "הגיע הזמן להשלים את ההרגל שלך"
+        "timeToCompleteYourHabit": "הגיע הזמן להשלים את ההרגל שלך",
+        "filter": {
+            "all": "כולם",
+            "morning": "בבוקר",
+            "afternoon": "בצהריים",
+            "evening": "בערב"
+        }
     },
     "habit_detail": {
         "habitDetail": "פרטי הרגל",
@@ -311,4 +317,4 @@
         "change_plan": "שנה תכנית",
         "change_plan_desc": "לחץ כדי לשנות את תכנית המנוי שלך"
     }
-}
+}   

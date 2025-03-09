@@ -120,7 +120,13 @@
         "complete": "সম্পন্ন",
         "calendar_completion": "ক্যালেন্ডার সমাপ্তি",
         "calendar_tap_info": "সম্পন্ন করা চিহ্নিত বা অচিহ্নিত করতে তারিখগুলিতে ট্যাপ করুন",
-        "timeToCompleteYourHabit": "আপনার অভ্যাস সম্পন্ন করার সময় হয়েছে"
+        "timeToCompleteYourHabit": "আপনার অভ্যাস সম্পন্ন করার সময় হয়েছে",
+        "filter": {
+            "all": "সব",
+            "morning": "সকাল",
+            "afternoon": "দুপুর",
+            "evening": "সন্ধ্যা"
+        }
     },
     "habit_detail": {
         "habitDetail": "অভ্যাসের বিস্তারিত",

@@ -120,7 +120,13 @@
         "complete": "Ukończ",
         "calendar_completion": "Ukończenie w kalendarzu",
         "calendar_tap_info": "Dotknij dnia, aby zaznaczyć lub odznaczyć ukończenie",
-        "timeToCompleteYourHabit": "Czas ukończyć Twój nawyk"
+        "timeToCompleteYourHabit": "Czas ukończyć Twój nawyk",
+        "filter": {
+            "all": "Wszystkie",
+            "morning": "Rano",
+            "afternoon": "Popołudniu",
+            "evening": "Wieczorem"
+        }
     },
     "habit_detail": {
         "habitDetail": "Szczegóły nawyku",

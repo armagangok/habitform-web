@@ -98,7 +98,7 @@
             },
             "become_person": {
                 "title": "Bliv den person, du vil være",
-                "aristotleHabitQuote": ""Vi er det, vi gentagne gange gør. Dygtighed er derfor ikke en handling, men en vane.""
+                "aristotleHabitQuote": "Vi er det, vi gentagne gange gør. Dygtighed er derfor ikke en handling, men en vane."
             }
         }
     },
@@ -120,7 +120,13 @@
         "complete": "Fuldfør",
         "calendar_completion": "Kalenderfuldførelse",
         "calendar_tap_info": "Tryk på en dato for at markere eller fjerne fuldførelse",
-        "timeToCompleteYourHabit": "Tid til at fuldføre din vane"
+        "timeToCompleteYourHabit": "Tid til at fuldføre din vane",
+        "filter": {
+            "all": "Alle",
+            "morning": "Morgen",
+            "afternoon": "På eftermiddagen",
+            "evening": "Aften"
+        }
     },
     "habit_detail": {
         "habitDetail": "Vanedetaljer",

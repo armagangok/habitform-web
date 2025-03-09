@@ -31,7 +31,7 @@ class _HabitWidgetState extends ConsumerState<HabitWidget> {
   @override
   Widget build(BuildContext context) {
     final currentHabit = ref.watch(homeProvider).maybeWhen(
-          data: (habits) => habits.firstWhere(
+          data: (homeState) => homeState.habits.firstWhere(
             (h) => h.id == widget.habit.id,
             orElse: () => widget.habit,
           ),

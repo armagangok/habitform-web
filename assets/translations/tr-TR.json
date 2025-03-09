@@ -98,7 +98,7 @@
             },
             "become_person": {
                 "title": "Olmak İstediğin Kişi Ol",
-                "aristotleHabitQuote": "“Tekrar tekrar yaptığımız şey ne ise, biz oyuz. O halde mükemmellik bir eylem değil, bir alışkanlıktır.”"
+                "aristotleHabitQuote": "Tekrar tekrar yaptığımız şey ne ise, biz oyuz. O halde mükemmellik bir eylem değil, bir alışkanlıktır."
             }
         }
     },
@@ -120,7 +120,13 @@
         "complete": "Tamamla",
         "calendar_completion": "Takvim Tamamlama",
         "calendar_tap_info": "Tarihlere dokunarak tamamlama durumunu değiştirebilirsiniz",
-        "timeToCompleteYourHabit": "Alışkanlığı tamamlama zamanı geldi"
+        "timeToCompleteYourHabit": "Alışkanlığı tamamlama zamanı geldi",
+        "filter": {
+            "all": "Hepsi",
+            "morning": "Sabah",
+            "afternoon": "Öğle",
+            "evening": "Akşam"
+        }
     },
     "habit_detail": {
         "habitDetail": "Alışkanlık Detayı",

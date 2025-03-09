@@ -120,7 +120,13 @@
         "complete": "Fullfør",
         "calendar_completion": "Kalenderfulføring",
         "calendar_tap_info": "Trykk på en dato for å markere eller fjerne fullføring",
-        "timeToCompleteYourHabit": "På tide å fullføre vanen din"
+        "timeToCompleteYourHabit": "På tide å fullføre vanen din",
+        "filter": {
+            "all": "Alle",
+            "morning": "Morgen",
+            "afternoon": "På eftermiddagen",
+            "evening": "Aften"
+        }
     },
     "habit_detail": {
         "habitDetail": "Vanedetaljer",

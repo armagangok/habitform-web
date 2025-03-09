@@ -99,7 +99,7 @@
             "become_person": {
                 "title": "वह व्यक्ति बनें जो आप बनना चाहते हैं",
                 "aristotleHabitQuote": "हम वही हैं जो हम बार-बार करते हैं। इसलिए, उत्कृष्टता कोई कार्य नहीं, बल्कि एक आदत है।"
-            }
+            }   
         }
     },
     "habit": {
@@ -120,7 +120,13 @@
         "complete": "पूर्ण",
         "calendar_completion": "कैलेंडर पूर्णता",
         "calendar_tap_info": "पूर्णता को चिह्नित या अचिह्नित करने के लिए तिथियों पर टैप करें",
-        "timeToCompleteYourHabit": "अपनी आदत को पूरा करने का समय"
+        "timeToCompleteYourHabit": "अपनी आदत को पूरा करने का समय",
+        "filter": {
+            "all": "सभी",
+            "morning": "सुबह",
+            "afternoon": "दोपहर",
+            "evening": "सायं"
+        }
     },
     "habit_detail": {
         "habitDetail": "आदत विवरण",

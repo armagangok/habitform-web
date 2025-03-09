@@ -1,37 +1,56 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '/core/core.dart';
 import '/models/completion_entry/completion_entry.dart';
 import '/models/habit/habit_model.dart';
-import '../../../core/core.dart';
-import '../../../services/habit_service/habit_service_interface.dart';
+import '/services/habit_service/habit_service_interface.dart';
+import 'home_state.dart';
 
 /// Provider for managing habits in the home screen
-/// Returns an async list of habits
-final homeProvider = AsyncNotifierProvider<HomeNotifier, List<Habit>>(() {
+/// Returns an async state containing habits and error info
+final homeProvider = AsyncNotifierProvider<HomeNotifier, HomeState>(() {
   return HomeNotifier();
 });
 
 /// Notifier class that handles all habit-related operations
-class HomeNotifier extends AsyncNotifier<List<Habit>> {
+class HomeNotifier extends AsyncNotifier<HomeState> {
   @override
-  Future<List<Habit>> build() async {
+  Future<HomeState> build() async {
     // Initial fetch of habits when the provider is created
-    return fetchHabits();
+    final habits = await fetchHabits();
+
+    // Set the initial filter based on current time of day
+    final currentHour = DateTime.now().hour;
+    TimeOfDayFilter initialFilter;
+
+    if (currentHour >= 5 && currentHour < 12) {
+      // Morning: 5:00 AM - 11:59 AM
+      initialFilter = TimeOfDayFilter.morning;
+    } else if (currentHour >= 12 && currentHour < 18) {
+      // Afternoon: 12:00 PM - 5:59 PM
+      initialFilter = TimeOfDayFilter.afternoon;
+    } else {
+      // Evening: 6:00 PM - 4:59 AM
+      initialFilter = TimeOfDayFilter.evening;
+    }
+
+    return habits.copyWith(timeFilter: initialFilter);
   }
 
   /// Fetches all active habits from the service layer
   /// Updates the state with loading and result/error
-  Future<List<Habit>> fetchHabits() async {
-    state = const AsyncValue.loading();
+  Future<HomeState> fetchHabits() async {
     final habits = await habitService.getHabits();
-    return habits;
+    return HomeState(habits: habits);
   }
 
   /// Archives a habit by moving it to the archived habits storage
   Future<void> archiveHabit(Habit habit) async {
     state = const AsyncValue.loading();
-    await habitService.archiveHabit(habit);
-    state = AsyncValue.data(await fetchHabits());
+    state = await AsyncValue.guard(() async {
+      await habitService.archiveHabit(habit);
+      return await fetchHabits();
+    });
   }
 
   /// Toggles the completion status of a habit for a specific date
@@ -47,19 +66,21 @@ class HomeNotifier extends AsyncNotifier<List<Habit>> {
 
     // Check current state
     final currentState = state;
-    if (currentState is! AsyncData<List<Habit>>) {
+    if (currentState is! AsyncData<HomeState>) {
       LogHelper.shared.debugPrint('Cannot toggle habit completion: State is not loaded yet');
       return;
     }
 
+    final currentHabits = currentState.value.habits;
+
     // Find the habit by ID
-    final habitIndex = currentState.value.indexWhere((h) => h.id == habitId);
+    final habitIndex = currentHabits.indexWhere((h) => h.id == habitId);
     if (habitIndex == -1) {
       LogHelper.shared.debugPrint('Habit not found with ID: $habitId');
       throw Exception('Habit not found');
     }
 
-    final habit = currentState.value[habitIndex];
+    final habit = currentHabits[habitIndex];
 
     // Check for existing completion entry for this date
     CompletionEntry? existingEntry;
@@ -107,16 +128,15 @@ class HomeNotifier extends AsyncNotifier<List<Habit>> {
 
     // Get current state
     final currentState = state;
-    if (currentState is AsyncData<List<Habit>>) {
-      // Get current habits
-      final habits = List<Habit>.from(currentState.value);
+    if (currentState is AsyncData<HomeState>) {
+      final currentHabits = List<Habit>.from(currentState.value.habits);
 
       // Find habit to update by index
-      final habitIndex = habits.indexWhere((h) => h.id == habitId);
+      final habitIndex = currentHabits.indexWhere((h) => h.id == habitId);
 
       if (habitIndex != -1) {
         // Get the habit
-        final habit = habits[habitIndex];
+        final habit = currentHabits[habitIndex];
 
         // Update completions
         final updatedCompletions = Map<String, CompletionEntry>.from(habit.completions);
@@ -159,14 +179,18 @@ class HomeNotifier extends AsyncNotifier<List<Habit>> {
         );
 
         // Update habit in the list
-        habits[habitIndex] = updatedHabit;
+        currentHabits[habitIndex] = updatedHabit;
 
-        // Update state (without loading state)
-        state = AsyncData(habits);
+        // Update state (optimistic update)
+        final optimisticState = HomeState(habits: currentHabits);
+        state = AsyncData(optimisticState);
 
-        // Update database
-        await habitService.updateHabitCompletionStatus(habitId, updatedHabit.completions.values.firstWhere((e) => e.date.normalized.isSameDayWith(completion.date.normalized), orElse: () => completion));
-        LogHelper.shared.debugPrint('Habit completion status updated successfully');
+        // Update database and handle any errors
+        state = await AsyncValue.guard(() async {
+          await habitService.updateHabitCompletionStatus(habitId, updatedHabit.completions.values.firstWhere((e) => e.date.normalized.isSameDayWith(completion.date.normalized), orElse: () => completion));
+          LogHelper.shared.debugPrint('Habit completion status updated successfully');
+          return optimisticState;
+        });
         return;
       }
     }
@@ -176,28 +200,45 @@ class HomeNotifier extends AsyncNotifier<List<Habit>> {
     state = const AsyncValue.loading();
 
     // Update completion status with the habit service
-    await habitService.updateHabitCompletionStatus(habitId, completion);
-    state = AsyncValue.data(await fetchHabits());
+    state = await AsyncValue.guard(() async {
+      await habitService.updateHabitCompletionStatus(habitId, completion);
+      return await fetchHabits();
+    });
   }
 
   /// Creates a new habit
   Future<void> createHabit(Habit habit) async {
     state = const AsyncValue.loading();
-    await habitService.createHabit(habit);
-    state = AsyncValue.data(await fetchHabits());
+    state = await AsyncValue.guard(() async {
+      await habitService.createHabit(habit);
+      return await fetchHabits();
+    });
   }
 
   /// Updates an existing habit
   Future<void> updateHabit(Habit habit) async {
     state = const AsyncValue.loading();
-    await habitService.updateHabit(habit);
-    state = AsyncValue.data(await fetchHabits());
+    state = await AsyncValue.guard(() async {
+      await habitService.updateHabit(habit);
+      return await fetchHabits();
+    });
   }
 
   /// Deletes (archives) a habit
   Future<void> deleteHabit(String habitId) async {
     state = const AsyncValue.loading();
-    await habitService.deleteHabit(habitId);
-    state = AsyncValue.data(await fetchHabits());
+    state = await AsyncValue.guard(() async {
+      await habitService.deleteHabit(habitId);
+      return await fetchHabits();
+    });
+  }
+
+  /// Sets the time of day filter
+  Future<void> setTimeFilter(TimeOfDayFilter filter) async {
+    final currentState = state;
+    if (currentState is AsyncData<HomeState>) {
+      // Update state with new filter but keep same habits
+      state = AsyncData(currentState.value.copyWith(timeFilter: filter));
+    }
   }
 }

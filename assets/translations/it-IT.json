@@ -120,7 +120,13 @@
         "complete": "Completa",
         "calendar_completion": "Completamento Calendario",
         "calendar_tap_info": "Tocca una data per segnare o rimuovere il completamento",
-        "timeToCompleteYourHabit": "È ora di completare la tua abitudine"
+        "timeToCompleteYourHabit": "È ora di completare la tua abitudine",
+        "filter": {
+            "all": "Tutti",
+            "morning": "Mattina",
+            "afternoon": "Pomeriggio",
+            "evening": "Sera"
+        }
     },
     "habit_detail": {
         "habitDetail": "Dettagli Abitudine",

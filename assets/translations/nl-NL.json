@@ -120,7 +120,13 @@
         "complete": "Voltooien",
         "calendar_completion": "Kalender Voltooiing",
         "calendar_tap_info": "Tik op een datum om voltooiing te markeren of te verwijderen",
-        "timeToCompleteYourHabit": "Tijd om je gewoonte te voltooien"
+        "timeToCompleteYourHabit": "Tijd om je gewoonte te voltooien",
+        "filter": {
+            "all": "Alle",
+            "morning": "Ochtend",
+            "afternoon": "Middag",
+            "evening": "Avond"
+        }
     },
     "habit_detail": {
         "habitDetail": "Gewoonte Details",

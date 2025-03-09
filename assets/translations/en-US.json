@@ -120,7 +120,13 @@
         "complete": "Complete",
         "calendar_completion": "Calendar Completion",
         "calendar_tap_info": "Tap on dates to mark or unmark completion",
-        "timeToCompleteYourHabit": "Time to complete your habit"
+        "timeToCompleteYourHabit": "Time to complete your habit",
+        "filter": {
+            "all": "All",
+            "morning": "Morning",
+            "afternoon": "Afternoon",
+            "evening": "Evening"
+        }
     },
     "habit_detail": {
         "habitDetail": "Habit Detail",

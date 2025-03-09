@@ -120,7 +120,13 @@
         "complete": "Completar",
         "calendar_completion": "Completado en calendario",
         "calendar_tap_info": "Toca las fechas para marcar o desmarcar completado",
-        "timeToCompleteYourHabit": "Es hora de completar tu hábito"
+        "timeToCompleteYourHabit": "Es hora de completar tu hábito",
+        "filter": {
+            "all": "Todos",
+            "morning": "Mañana",
+            "afternoon": "Tarde",
+            "evening": "Noche"
+        }
     },
     "habit_detail": {
         "habitDetail": "Detalles del hábito",

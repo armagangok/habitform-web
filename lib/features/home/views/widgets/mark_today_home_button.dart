@@ -46,10 +46,10 @@ class _MarkTodayHomeButtonState extends ConsumerState<MarkTodayHomeButton> with 
     final habitsAsyncValue = ref.watch(homeProvider);
 
     return habitsAsyncValue.when(
-      data: (habits) {
+      data: (homeState) {
         // Get the updated habit from state
         Habit currentHabit = widget.currentHabit;
-        currentHabit = habits.firstWhere(
+        currentHabit = homeState.habits.firstWhere(
           (h) => h.id == widget.currentHabit.id,
           orElse: () => widget.currentHabit,
         );

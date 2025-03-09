@@ -120,7 +120,13 @@
         "complete": "Completar",
         "calendar_completion": "Completat al calendari",
         "calendar_tap_info": "Toca les dates per marcar o desmarcar la finalització",
-        "timeToCompleteYourHabit": "És hora de completar el teu hàbit"
+        "timeToCompleteYourHabit": "És hora de completar el teu hàbit",
+        "filter": {
+            "all": "Tots",
+            "morning": "Matí",
+            "afternoon": "Tarda",
+            "evening": "Vespre"
+        }
     },
     "habit_detail": {
         "habitDetail": "Detall de l'hàbit",

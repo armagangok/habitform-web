@@ -120,7 +120,13 @@
         "complete": "Hoàn thành",
         "calendar_completion": "Hoàn thành lịch",
         "calendar_tap_info": "Nhấn vào ngày để chọn hoặc bỏ chọn hoàn thành",
-        "timeToCompleteYourHabit": "Đã đến lúc hoàn thành thói quen của bạn"
+        "timeToCompleteYourHabit": "Đã đến lúc hoàn thành thói quen của bạn",
+        "filter": {
+            "all": "Tất cả",
+            "morning": "Sáng",
+            "afternoon": "Chiều",
+            "evening": "Tối"
+        }
     },
     "habit_detail": {
         "habitDetail": "Chi tiết thói quen",
