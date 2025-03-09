@@ -124,7 +124,7 @@
         "filter": {
             "all": "Tất cả",
             "morning": "Sáng",
-            "afternoon": "Chiều",
+            "noon": "Trưa",
             "evening": "Tối"
         }
     },

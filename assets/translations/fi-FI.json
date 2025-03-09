@@ -124,7 +124,7 @@
         "filter": {
             "all": "Kaikki",
             "morning": "Aamu",
-            "afternoon": "Iltapäivä",
+            "noon": "Keskipäivä",
             "evening": "Ilta"
         }
     },

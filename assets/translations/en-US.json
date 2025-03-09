@@ -124,7 +124,7 @@
         "filter": {
             "all": "All",
             "morning": "Morning",
-            "afternoon": "Afternoon",
+            "noon": "Noon",
             "evening": "Evening"
         }
     },

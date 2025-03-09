@@ -124,7 +124,7 @@
         "filter": {
             "all": "الكل",
             "morning": "صباح",
-            "afternoon": "ظهر",
+            "noon": "ظهر",
             "evening": "مساء"
         }
     },

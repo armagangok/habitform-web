@@ -124,7 +124,7 @@
         "filter": {
             "all": "全部",
             "morning": "早上",
-            "afternoon": "下午",
+            "noon": "中午",
             "evening": "晚上"
         }
     },

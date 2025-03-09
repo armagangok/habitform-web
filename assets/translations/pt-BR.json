@@ -124,7 +124,7 @@
         "filter": {
             "all": "Todos",
             "morning": "Manhã",
-            "afternoon": "Tarde",
+            "noon": "Meio-dia",
             "evening": "Noite"
         }
     },

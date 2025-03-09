@@ -124,7 +124,7 @@
         "filter": {
             "all": "Hepsi",
             "morning": "Sabah",
-            "afternoon": "Öğle",
+            "noon": "Öğle",
             "evening": "Akşam"
         }
     },

@@ -124,7 +124,7 @@
         "filter": {
             "all": "সব",
             "morning": "সকাল",
-            "afternoon": "দুপুর",
+            "noon": "দুপুর",
             "evening": "সন্ধ্যা"
         }
     },

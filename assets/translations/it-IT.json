@@ -124,7 +124,7 @@
         "filter": {
             "all": "Tutti",
             "morning": "Mattina",
-            "afternoon": "Pomeriggio",
+            "noon": "Mezzogiorno",
             "evening": "Sera"
         }
     },

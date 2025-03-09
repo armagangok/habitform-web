@@ -124,7 +124,7 @@
         "filter": {
             "all": "Alle",
             "morning": "Morgen",
-            "afternoon": "På eftermiddagen",
+            "noon": "Middag",
             "evening": "Aften"
         }
     },

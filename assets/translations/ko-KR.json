@@ -124,7 +124,7 @@
         "filter": {
             "all": "모든 습관",
             "morning": "아침",
-            "afternoon": "오후",
+            "noon": "오후",
             "evening": "저녁"
         }
     },
@@ -317,4 +317,4 @@
         "change_plan": "플랜 변경",
         "change_plan_desc": "구독 플랜을 변경하려면 클릭하세요"
     }
-}   
+}

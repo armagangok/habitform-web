@@ -124,7 +124,7 @@
         "filter": {
             "all": "すべて",
             "morning": "朝",
-            "afternoon": "午後",
+            "noon": "正午",
             "evening": "夕方"
         }
     },

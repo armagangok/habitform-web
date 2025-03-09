@@ -124,7 +124,7 @@
         "filter": {
             "all": "Tots",
             "morning": "Matí",
-            "afternoon": "Tarda",
+            "noon": "Migdia",
             "evening": "Vespre"
         }
     },

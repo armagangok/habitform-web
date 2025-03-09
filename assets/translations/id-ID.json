@@ -102,7 +102,7 @@
             }
         }
     },
-    "habit": {  
+    "habit": {
         "add_habit": "Tambah Kebiasaan",
         "edit_habit": "Edit Kebiasaan",
         "habit_name": "Nama Kebiasaan",
@@ -124,7 +124,7 @@
         "filter": {
             "all": "Semua",
             "morning": "Pagi",
-            "afternoon": "Sore",
+            "noon": "Siang",
             "evening": "Malam"
         }
     },

@@ -23,7 +23,7 @@
         "no_recent_emojis": "Žádné nedávné emoji",
         "loading_habits": "Načítání návyků...",
         "later": "Později"
-    },  
+    },
     "colors": {
         "color": "Barva",
         "blue": "Modrá",
@@ -124,7 +124,7 @@
         "filter": {
             "all": "Vše",
             "morning": "Ráno",
-            "afternoon": "Odpoledne",
+            "noon": "Poledne",
             "evening": "Večer"
         }
     },

@@ -124,7 +124,7 @@
         "filter": {
             "all": "ทั้งหมด",
             "morning": "เช้า",
-            "afternoon": "บ่าย",
+            "noon": "เที่ยง",
             "evening": "เย็น"
         }
     },

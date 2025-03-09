@@ -2,7 +2,7 @@
 
 // ignore_for_file: constant_identifier_names
 
-abstract class LocaleKeys {
+abstract class  LocaleKeys {
   static const common_ok = 'common.ok';
   static const common_save = 'common.save';
   static const common_cancel = 'common.cancel';
@@ -113,7 +113,7 @@ abstract class LocaleKeys {
   static const habit_timeToCompleteYourHabit = 'habit.timeToCompleteYourHabit';
   static const habit_filter_all = 'habit.filter.all';
   static const habit_filter_morning = 'habit.filter.morning';
-  static const habit_filter_afternoon = 'habit.filter.afternoon';
+  static const habit_filter_noon = 'habit.filter.noon';
   static const habit_filter_evening = 'habit.filter.evening';
   static const habit_filter = 'habit.filter';
   static const habit = 'habit';
@@ -293,4 +293,5 @@ abstract class LocaleKeys {
   static const membership_info_change_plan = 'membership_info.change_plan';
   static const membership_info_change_plan_desc = 'membership_info.change_plan_desc';
   static const membership_info = 'membership_info';
+
 }

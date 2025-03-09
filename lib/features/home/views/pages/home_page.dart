@@ -50,15 +50,14 @@ class _HomePageState extends ConsumerState<HomePage> with SingleTickerProviderSt
             navigationBar: _homePageNavigationBar(),
             child: ListView(
               physics: AlwaysScrollableScrollPhysics(),
-              padding: EdgeInsets.symmetric(vertical: 8),
               children: <Widget>[
                 // Time of day filter
-                SafeArea(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-                    child: _buildTimeFilterWidget(),
-                  ),
+                SizedBox(height: 16),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: _buildTimeFilterWidget(),
                 ),
+                SizedBox(height: 16),
 
                 // Habits list
                 homeStateAsyncValue.when(
@@ -67,9 +66,7 @@ class _HomePageState extends ConsumerState<HomePage> with SingleTickerProviderSt
                     return HabitBuilder(
                       habits: homeState.filteredHabits,
                       isLoading: false,
-                    ).animate(controller: controller).fadeIn(
-                          duration: 350.ms,
-                        );
+                    ).animate(controller: controller).fadeIn(curve: Curves.easeIn);
                   },
                   loading: () => Column(
                     children: [
@@ -127,7 +124,7 @@ class _HomePageState extends ConsumerState<HomePage> with SingleTickerProviderSt
     final filterNames = {
       TimeOfDayFilter.all: LocaleKeys.habit_filter_all.tr(),
       TimeOfDayFilter.morning: LocaleKeys.habit_filter_morning.tr(),
-      TimeOfDayFilter.afternoon: LocaleKeys.habit_filter_afternoon.tr(),
+      TimeOfDayFilter.afternoon: LocaleKeys.habit_filter_noon.tr(),
       TimeOfDayFilter.evening: LocaleKeys.habit_filter_evening.tr(),
     };
 
@@ -176,6 +173,7 @@ class _HomePageState extends ConsumerState<HomePage> with SingleTickerProviderSt
 
     return CupertinoNavigationBar(
       enableBackgroundFilterBlur: true,
+      backgroundColor: context.theme.scaffoldBackgroundColor.withValues(alpha: .1),
       border: Border(
         bottom: BorderSide(
           color: context.theme.dividerColor.withValues(alpha: .25),
@@ -216,9 +214,13 @@ class _HomePageState extends ConsumerState<HomePage> with SingleTickerProviderSt
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(
-            LocaleKeys.common_app.tr(),
-            textAlign: TextAlign.center,
+          SizedBox(width: 10),
+          Text.rich(
+            TextSpan(children: [
+                
+                
+              ]
+            ),
           ).animate().fadeIn(
                 curve: Curves.easeInOutCubic,
                 duration: Duration(milliseconds: 350),
