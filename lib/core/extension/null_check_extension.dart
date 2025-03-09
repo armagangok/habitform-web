@@ -1,5 +1,6 @@
 extension EasyList on List {
   bool isLast(int index) => length - 1 == index;
+  bool isNotLast(int index) => length - 1 != index;
 }
 
 

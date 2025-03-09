@@ -2,7 +2,7 @@
 
 // ignore_for_file: constant_identifier_names
 
-abstract class  LocaleKeys {
+abstract class LocaleKeys {
   static const common_ok = 'common.ok';
   static const common_save = 'common.save';
   static const common_cancel = 'common.cancel';
@@ -293,5 +293,4 @@ abstract class  LocaleKeys {
   static const membership_info_change_plan = 'membership_info.change_plan';
   static const membership_info_change_plan_desc = 'membership_info.change_plan_desc';
   static const membership_info = 'membership_info';
-
 }

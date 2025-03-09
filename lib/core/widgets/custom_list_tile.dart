@@ -66,7 +66,7 @@ class _CustomListTileState extends State<CustomListTile> {
                         Text(
                           widget.description!,
                           textAlign: TextAlign.left,
-                          maxLines: 1,
+                          maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                           style: context.bodyMedium?.copyWith(
                             color: context.bodyMedium?.color?.withValues(alpha: 0.6),

@@ -77,7 +77,36 @@ class HabitBuilder extends StatelessWidget {
                 itemCount: habits.length,
                 itemBuilder: (context, index) {
                   final habit = habits[index];
-                  return HabitWidget(habit: habit);
+                  final remindTime = habit.reminderModel?.reminderTime;
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      HabitWidget(habit: habit),
+                      SizedBox(
+                        width: 50,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            SizedBox(height: 5),
+                            if (remindTime != null) ...[
+                              SizedBox(height: 4),
+                              Text(
+                                remindTime.toHHMM(),
+                                style: context.bodySmall,
+                              ),
+                            ],
+                            if (habits.isNotLast(index)) ...[
+                              SizedBox(height: 10),
+                              SizedBox(
+                                height: 20,
+                                child: VerticalDivider(),
+                              ),
+                            ]
+                          ],
+                        ),
+                      ),
+                    ],
+                  );
                 },
                 separatorBuilder: (context, index) {
                   return Padding(

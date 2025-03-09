@@ -130,6 +130,7 @@ class HomeNotifier extends AsyncNotifier<HomeState> {
     final currentState = state;
     if (currentState is AsyncData<HomeState>) {
       final currentHabits = List<Habit>.from(currentState.value.habits);
+      final currentTimeFilter = currentState.value.timeFilter; // Preserve current filter
 
       // Find habit to update by index
       final habitIndex = currentHabits.indexWhere((h) => h.id == habitId);
@@ -181,8 +182,11 @@ class HomeNotifier extends AsyncNotifier<HomeState> {
         // Update habit in the list
         currentHabits[habitIndex] = updatedHabit;
 
-        // Update state (optimistic update)
-        final optimisticState = HomeState(habits: currentHabits);
+        // Update state (optimistic update) with preserved filter
+        final optimisticState = HomeState(
+          habits: currentHabits,
+          timeFilter: currentTimeFilter, // Explicitly preserve the time filter
+        );
         state = AsyncData(optimisticState);
 
         // Update database and handle any errors
@@ -197,12 +201,25 @@ class HomeNotifier extends AsyncNotifier<HomeState> {
 
     // If current state is not AsyncData or habit not found
     LogHelper.shared.debugPrint('Falling back to loading state for habit update');
+
+    // Save current filter if available
+    TimeOfDayFilter? currentFilter;
+    if (state.value != null) {
+      currentFilter = state.value!.timeFilter;
+    }
+
     state = const AsyncValue.loading();
 
     // Update completion status with the habit service
     state = await AsyncValue.guard(() async {
       await habitService.updateHabitCompletionStatus(habitId, completion);
-      return await fetchHabits();
+      final newState = await fetchHabits();
+
+      // Restore the filter if it was saved
+      if (currentFilter != null) {
+        return newState.copyWith(timeFilter: currentFilter);
+      }
+      return newState;
     });
   }
 
