@@ -22,7 +22,6 @@ class HabitAdapter extends TypeAdapter<Habit> {
       habitDescription: fields[2] as String?,
       reminderModel: fields[4] as ReminderModel?,
       emoji: fields[3] as String?,
-      completionDates: (fields[5] as List?)?.cast<DateTime>(),
       completions: fields[7] == null
           ? {}
           : (fields[7] as Map).cast<String, CompletionEntry>(),
@@ -36,7 +35,7 @@ class HabitAdapter extends TypeAdapter<Habit> {
   @override
   void write(BinaryWriter writer, Habit obj) {
     writer
-      ..writeByte(10)
+      ..writeByte(9)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -47,8 +46,6 @@ class HabitAdapter extends TypeAdapter<Habit> {
       ..write(obj.emoji)
       ..writeByte(4)
       ..write(obj.reminderModel)
-      ..writeByte(5)
-      ..write(obj.completionDates)
       ..writeByte(6)
       ..write(obj.colorCode)
       ..writeByte(7)

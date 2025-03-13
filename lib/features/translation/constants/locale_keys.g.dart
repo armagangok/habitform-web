@@ -2,7 +2,7 @@
 
 // ignore_for_file: constant_identifier_names
 
-abstract class LocaleKeys {
+abstract class  LocaleKeys {
   static const common_ok = 'common.ok';
   static const common_save = 'common.save';
   static const common_cancel = 'common.cancel';
@@ -142,9 +142,14 @@ abstract class LocaleKeys {
   static const settings_privacy = 'settings.privacy';
   static const settings_terms = 'settings.terms';
   static const settings_habitArchive = 'settings.habitArchive';
+  static const settings_data_export_import = 'settings.data_export_import';
+  static const settings_about_data_management = 'settings.about_data_management';
+  static const settings_data_management_description = 'settings.data_management_description';
   static const settings_export_data = 'settings.export_data';
-  static const settings_exporting = 'settings.exporting';
+  static const settings_export_description = 'settings.export_description';
   static const settings_import_data = 'settings.import_data';
+  static const settings_import_description = 'settings.import_description';
+  static const settings_exporting = 'settings.exporting';
   static const settings_importing = 'settings.importing';
   static const settings_export_success = 'settings.export_success';
   static const settings_export_error = 'settings.export_error';
@@ -152,11 +157,6 @@ abstract class LocaleKeys {
   static const settings_import_error = 'settings.import_error';
   static const settings_habits_imported = 'settings.habits_imported';
   static const settings_no_habits_imported = 'settings.no_habits_imported';
-  static const settings_data_export_import = 'settings.data_export_import';
-  static const settings_about_data_management = 'settings.about_data_management';
-  static const settings_data_management_description = 'settings.data_management_description';
-  static const settings_export_description = 'settings.export_description';
-  static const settings_import_description = 'settings.import_description';
   static const settings = 'settings';
   static const subscription_subscribe_to = 'subscription.subscribe_to';
   static const subscription_tap_advantages = 'subscription.tap_advantages';
@@ -282,4 +282,5 @@ abstract class LocaleKeys {
   static const membership_info_change_plan = 'membership_info.change_plan';
   static const membership_info_change_plan_desc = 'membership_info.change_plan_desc';
   static const membership_info = 'membership_info';
+
 }

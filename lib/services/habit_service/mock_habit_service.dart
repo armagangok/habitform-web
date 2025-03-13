@@ -1,4 +1,3 @@
-import '../../core/core.dart';
 import '../../models/completion_entry/completion_entry.dart';
 import '../../models/habit/habit_model.dart';
 import '../../models/habit/habit_status.dart';
@@ -104,13 +103,5 @@ class MockHabitService extends HabitService {
       archiveDate: habit.archiveDate ?? DateTime.now(),
     );
     await updateHabit(updatedHabit);
-  }
-
-  @override
-  Future<void> migrateHabitsToNewModel() async {
-    // This is a mock implementation, so we don't need to do any actual migration
-    // The mock data is already in the correct format
-    LogHelper.shared.debugPrint('Mock migration: No migration needed for mock data');
-    return;
   }
 }

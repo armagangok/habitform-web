@@ -41,9 +41,4 @@ abstract class HabitService {
 
   // Update an archived habit
   Future<void> updateArchivedHabit(Habit habit);
-
-
-
-  // Migrate habits to new model
-  Future<void> migrateHabitsToNewModel();
 }

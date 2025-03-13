@@ -38,68 +38,45 @@ class _HabitWidgetState extends ConsumerState<HabitWidget> {
         );
 
     final habitName = currentHabit.habitName;
-    final habitDescription = currentHabit.habitDescription;
 
     return CustomButton(
       onPressed: _openHabitDetail,
       child: LayoutBuilder(
         builder: (context, constraints) {
-          return Card(
-            child: SingleChildScrollView(
-              physics: const NeverScrollableScrollPhysics(),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(12.5),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Row(
+          return Column(
+            children: [
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  habitName,
+                  style: context.bodyMedium?.copyWith(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18,
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                ),
+              ),
+              Card(
+                child: SingleChildScrollView(
+                  physics: const NeverScrollableScrollPhysics(),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(10),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
                           children: [
-                            Expanded(
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Text(
-                                          habitName,
-                                          style: context.bodyMedium?.copyWith(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 18,
-                                          ),
-                                          overflow: TextOverflow.ellipsis,
-                                          maxLines: 1,
-                                        ),
-                                        if (habitDescription != null && habitDescription.isNotEmpty)
-                                          Text(
-                                            habitDescription,
-                                            style: context.bodySmall?.copyWith(
-                                              fontWeight: FontWeight.w500,
-                                              color: context.bodySmall?.color?.withAlpha(175),
-                                            ),
-                                            overflow: TextOverflow.ellipsis,
-                                            maxLines: 1,
-                                          ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
+                            HomeHabitGrid(habit: currentHabit),
                           ],
                         ),
-                        SizedBox(height: 10),
-                        HomeHabitGrid(habit: currentHabit),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                ],
+                ),
               ),
-            ),
+            ],
           );
         },
       ),

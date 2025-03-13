@@ -1,7 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../core/core.dart';
-import '../../../services/csv_service/csv_service.dart';
+import '../../core/core.dart';
+import '../home/provider/home_provider.dart';
+import 'csv_service.dart';
+import 'permission_helper.dart';
 
 class DataExportImportPage extends ConsumerStatefulWidget {
   const DataExportImportPage({super.key});
@@ -12,6 +14,8 @@ class DataExportImportPage extends ConsumerStatefulWidget {
 
 class _DataExportImportPageState extends ConsumerState<DataExportImportPage> {
   final _csvService = CSVService.instance;
+  final _permissionHelper = PermissionHelper();
+
   bool _isExporting = false;
   bool _isImporting = false;
 
@@ -70,11 +74,28 @@ class _DataExportImportPageState extends ConsumerState<DataExportImportPage> {
 
   Future<void> _importData() async {
     try {
+      // Check for storage permissions first
+      final hasPermission = await _permissionHelper.checkAndRequestStoragePermission(context);
+      if (!hasPermission) {
+        debugPrint('Storage permission denied');
+        return;
+      }
+
+      debugPrint('Starting CSV import process...');
       setState(() {
         _isImporting = true;
       });
 
       final importedCount = await _csvService.importHabitsFromCSV();
+      debugPrint('CSV import completed. Imported count: $importedCount');
+
+      if (importedCount > 0) {
+        // Ana ekran verilerini yenile
+        ref.invalidate(homeProvider);
+
+        // Verileri yeniden yükle
+        await ref.read(homeProvider.notifier).fetchHabits();
+      }
 
       if (mounted) {
         setState(() {
@@ -99,6 +120,7 @@ class _DataExportImportPageState extends ConsumerState<DataExportImportPage> {
         );
       }
     } catch (e) {
+      debugPrint('Error in _importData: $e');
       if (mounted) {
         setState(() {
           _isImporting = false;

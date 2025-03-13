@@ -23,9 +23,6 @@ class Habit extends HiveObject {
   @HiveField(4)
   final ReminderModel? reminderModel;
 
-  @HiveField(5)
-  List<DateTime>? completionDates;
-
   @HiveField(6)
   final int colorCode;
 
@@ -44,7 +41,6 @@ class Habit extends HiveObject {
     this.habitDescription,
     this.reminderModel,
     this.emoji,
-    this.completionDates,
     this.completions = const {},
     required this.colorCode,
     this.archiveDate,
@@ -58,7 +54,6 @@ class Habit extends HiveObject {
     ReminderModel? reminderModel,
     String? emoji,
     int? colorCode,
-    List<DateTime>? completionDates,
     Map<String, CompletionEntry>? completions,
     DateTime? archiveDate,
     HabitStatus? status,
@@ -69,7 +64,6 @@ class Habit extends HiveObject {
       habitDescription: habitDescription ?? this.habitDescription,
       reminderModel: reminderModel ?? this.reminderModel,
       emoji: emoji ?? this.emoji,
-      completionDates: completionDates ?? this.completionDates,
       completions: completions ?? this.completions,
       colorCode: colorCode ?? this.colorCode,
       archiveDate: archiveDate ?? this.archiveDate,

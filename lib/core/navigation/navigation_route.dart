@@ -1,6 +1,6 @@
 import '../../features/archived_habits/pages/archived_habits_page.dart';
 import '../../features/home/views/pages/home_page.dart';
-import '../../features/settings/pages/data_export_import_page.dart';
+import '../../features/export_import_data/data_export_import_page.dart';
 import '../../features/settings/pages/notifications_page.dart';
 import '../../features/settings/settings_page.dart';
 import '../core.dart';

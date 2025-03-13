@@ -274,9 +274,6 @@ class LocalHabitService extends HabitService {
     LogHelper.shared.debugPrint('Archived habit updated successfully: ${habit.id}');
   }
 
-  @override
-  Future<void> migrateHabitsToNewModel() async {}
-
   Future<void> saveHabit(Habit habit) async {
     await _hiveHelper.putData<Habit>(
       HiveBoxes.habitBox,

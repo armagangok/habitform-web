@@ -12,45 +12,11 @@ import 'package:flutter/widgets.dart';
 class $AssetsAnimationsGen {
   const $AssetsAnimationsGen();
 
-  /// File path: assets/animations/achievement.json
-  String get achievement => 'assets/animations/achievement.json';
-
   /// File path: assets/animations/astronout.json
   String get astronout => 'assets/animations/astronout.json';
 
-  /// File path: assets/animations/celebration.json
-  String get celebration => 'assets/animations/celebration.json';
-
-  /// File path: assets/animations/completion.json
-  String get completion => 'assets/animations/completion.json';
-
-  /// File path: assets/animations/fireworks.json
-  String get fireworks => 'assets/animations/fireworks.json';
-
-  /// File path: assets/animations/progress.json
-  String get progress => 'assets/animations/progress.json';
-
-  /// File path: assets/animations/streak.json
-  String get streak => 'assets/animations/streak.json';
-
-  /// File path: assets/animations/success.json
-  String get success => 'assets/animations/success.json';
-
-  /// File path: assets/animations/trophy.json
-  String get trophy => 'assets/animations/trophy.json';
-
   /// List of all assets
-  List<String> get values => [
-    achievement,
-    astronout,
-    celebration,
-    completion,
-    fireworks,
-    progress,
-    streak,
-    success,
-    trophy,
-  ];
+  List<String> get values => [astronout];
 }
 
 class $AssetsAppGen {
@@ -74,11 +40,11 @@ class $AssetsAppGen {
 
   /// List of all assets
   List<AssetGenImage> get values => [
-    appLogoDark,
-    appLogoLight,
-    habitriseDarkTransparent,
-    habitriseLightTransparent,
-  ];
+        appLogoDark,
+        appLogoLight,
+        habitriseDarkTransparent,
+        habitriseLightTransparent
+      ];
 }
 
 class $AssetsImagesGen {
@@ -179,32 +145,32 @@ class $AssetsTranslationsGen {
 
   /// List of all assets
   List<String> get values => [
-    arSA,
-    bnBD,
-    caES,
-    csCZ,
-    daDK,
-    enUS,
-    esES,
-    fiFI,
-    frFR,
-    heIL,
-    hiIN,
-    idID,
-    itIT,
-    jaJP,
-    koKR,
-    nlNL,
-    noNO,
-    plPL,
-    ptBR,
-    ruRU,
-    svSE,
-    thTH,
-    trTR,
-    viVN,
-    zhCN,
-  ];
+        arSA,
+        bnBD,
+        caES,
+        csCZ,
+        daDK,
+        enUS,
+        esES,
+        fiFI,
+        frFR,
+        heIL,
+        hiIN,
+        idID,
+        itIT,
+        jaJP,
+        koKR,
+        nlNL,
+        noNO,
+        plPL,
+        ptBR,
+        ruRU,
+        svSE,
+        thTH,
+        trTR,
+        viVN,
+        zhCN
+      ];
 }
 
 class $AssetsImagesOnboardingGen {
@@ -231,13 +197,8 @@ class $AssetsImagesOnboardingGen {
       const AssetGenImage('assets/images/onboarding/waterTree.png');
 
   /// List of all assets
-  List<AssetGenImage> get values => [
-    aristoteles,
-    badHabits,
-    orangeFruit,
-    smallSteps,
-    waterTree,
-  ];
+  List<AssetGenImage> get values =>
+      [aristoteles, badHabits, orangeFruit, smallSteps, waterTree];
 }
 
 class Assets {
@@ -255,7 +216,11 @@ class Assets {
 }
 
 class AssetGenImage {
-  const AssetGenImage(this._assetName, {this.size, this.flavors = const {}});
+  const AssetGenImage(
+    this._assetName, {
+    this.size,
+    this.flavors = const {},
+  });
 
   final String _assetName;
 
@@ -315,8 +280,15 @@ class AssetGenImage {
     );
   }
 
-  ImageProvider provider({AssetBundle? bundle, String? package}) {
-    return AssetImage(_assetName, bundle: bundle, package: package);
+  ImageProvider provider({
+    AssetBundle? bundle,
+    String? package,
+  }) {
+    return AssetImage(
+      _assetName,
+      bundle: bundle,
+      package: package,
+    );
   }
 
   String get path => _assetName;
