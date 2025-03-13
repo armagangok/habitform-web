@@ -6,7 +6,6 @@ import '../../../habit_detail/page/habit_detail.dart';
 import '../../../habit_detail/providers/habit_detail_provider.dart';
 import '../../provider/home_provider.dart';
 import 'home_habit_grid.dart';
-import 'mark_today_home_button.dart';
 
 class HabitWidget extends ConsumerStatefulWidget {
   const HabitWidget({super.key, required this.habit});
@@ -40,7 +39,6 @@ class _HabitWidgetState extends ConsumerState<HabitWidget> {
 
     final habitName = currentHabit.habitName;
     final habitDescription = currentHabit.habitDescription;
-    final habitEmoji = currentHabit.emoji;
 
     return CustomButton(
       onPressed: _openHabitDetail,
@@ -62,16 +60,6 @@ class _HabitWidgetState extends ConsumerState<HabitWidget> {
                             Expanded(
                               child: Row(
                                 children: [
-                                  if (habitEmoji != null) ...[
-                                    Text(
-                                      habitEmoji,
-                                      style: TextStyle(
-                                        fontSize: 36,
-                                      ),
-                                      maxLines: 1,
-                                    ),
-                                    SizedBox(width: 5),
-                                  ],
                                   Expanded(
                                     child: Column(
                                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -102,8 +90,6 @@ class _HabitWidgetState extends ConsumerState<HabitWidget> {
                                 ],
                               ),
                             ),
-                            SizedBox(width: 5),
-                            MarkTodayHomeButton(currentHabit: currentHabit),
                           ],
                         ),
                         SizedBox(height: 10),

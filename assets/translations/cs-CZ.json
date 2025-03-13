@@ -64,11 +64,6 @@
         "next": "Další",
         "start_button": "Začít 🚀",
         "continue_button": "Pokračovat →",
-        "features": {
-            "minimalist": "Minimalistický.",
-            "easy_to_use": "Snadné použití.",
-            "science_based": "Založeno na vědě."
-        },
         "goals": {
             "title": "Jaký je váš hlavní cíl?",
             "better_productivity": "Lepší produktivita",
@@ -159,7 +154,22 @@
         "feedback": "Poslat zpětnou vazbu",
         "privacy": "Soukromí",
         "terms": "Podmínky",
-        "habitArchive": "Archiv návyků"
+        "habitArchive": "Archiv návyků",
+        "data_export_import": "Správa dat",
+        "about_data_management": "O správě dat",
+        "data_management_description": "Exportujte svá data o návycích do CSV souboru pro zálohování nebo přenos na jiné zařízení. Můžete také importovat dříve exportovaná data.",
+        "export_data": "Exportovat data",
+        "export_description": "Exportujte všechny své návyky a data o jejich plnění do CSV souboru. Tento soubor lze použít jako zálohu nebo pro přenos dat na jiné zařízení.",
+        "import_data": "Importovat data",
+        "import_description": "Importujte návyky z dříve exportovaného CSV souboru. Toto přidá nebo aktualizuje návyky ve vaší aktuální sbírce.",
+        "exporting": "Exportuje se...",
+        "importing": "Importuje se...",
+        "export_success": "Data byla úspěšně exportována",
+        "export_error": "Chyba při exportu dat",
+        "import_success": "Data byla úspěšně importována",
+        "import_error": "Chyba při importu dat",
+        "habits_imported": "návyků importováno",
+        "no_habits_imported": "Žádné návyky nebyly importovány"
     },
     "subscription": {
         "subscribe_to": "Předplatit",
@@ -254,38 +264,9 @@
         "time": "Čas",
         "habit_reminder_message": "Nezapomeňte dokončit svůj návyk!"
     },
-    "languages": {
-        "english": "Angličtina",
-        "turkish": "Turečtina",
-        "chinese": "Čínština",
-        "spanish": "Španělština",
-        "hindi": "Hindština",
-        "arabic": "Arabština",
-        "bengali": "Bengálština",
-        "portuguese": "Portugalština",
-        "russian": "Ruština",
-        "japanese": "Japonština",
-        "indonesian": "Indonéština",
-        "korean": "Korejština",
-        "italian": "Italština",
-        "dutch": "Nizozemština",
-        "swedish": "Švédština",
-        "norwegian": "Norština",
-        "danish": "Dánština",
-        "finnish": "Finština",
-        "hebrew": "Hebrejština",
-        "catalan": "Katalánština",
-        "thai": "Thajština",
-        "vietnamese": "Vietnamština",
-        "czech": "Čeština",
-        "polish": "Polština"
-    },
     "habit_data": {
         "longest_streak": "Nejdelší série",
-        "current_streak": "Aktuální série",
-        "select_year": "Vybrat rok",
-        "marked": "Označeno",
-        "mark_today": "Označit dnešek"
+        "current_streak": "Aktuální série"
     },
     "notifications": {
         "title": "Oznámení",

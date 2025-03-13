@@ -64,11 +64,6 @@
         "next": "Neste",
         "start_button": "Start 🚀",
         "continue_button": "Fortsett →",
-        "features": {
-            "minimalist": "Minimalistisk.",
-            "easy_to_use": "Enkel å bruke.",
-            "science_based": "Vitenskapelig basert."
-        },
         "goals": {
             "title": "Hva er ditt hovedmål?",
             "better_productivity": "Bedre Produktivitet",
@@ -159,7 +154,22 @@
         "feedback": "Send Tilbakemelding",
         "privacy": "Personvern",
         "terms": "Brukervilkår",
-        "habitArchive": "Vanearkiv"
+        "habitArchive": "Vanearkiv",
+        "data_export_import": "Databehandling",
+        "about_data_management": "Om Databehandling",
+        "data_management_description": "Eksporter vanedataene dine til en CSV-fil for sikkerhetskopiering eller overføring til en annen enhet. Du kan også importere tidligere eksporterte data.",
+        "export_data": "Eksporter Data",
+        "export_description": "Eksporter alle vanene dine og fullføringsdata til en CSV-fil. Denne filen kan brukes som sikkerhetskopi eller for å overføre dataene dine til en annen enhet.",
+        "import_data": "Importer Data",
+        "import_description": "Importer vaner fra en tidligere eksportert CSV-fil. Dette vil legge til eller oppdatere vaner i din nåværende samling.",
+        "exporting": "Eksporterer...",
+        "importing": "Importerer...",
+        "export_success": "Data eksportert vellykket",
+        "export_error": "Feil ved eksportering av data",
+        "import_success": "Data importert vellykket",
+        "import_error": "Feil ved importering av data",
+        "habits_imported": "vaner importert",
+        "no_habits_imported": "Ingen vaner importert"
     },
     "subscription": {
         "subscribe_to": "Abonner på",
@@ -254,33 +264,9 @@
         "time": "Tid",
         "habit_reminder_message": "Ikke glem å fullføre vanen din!"
     },
-    "languages": {
-        "english": "Engelsk",
-        "turkish": "Tyrkisk",
-        "chinese": "Kinesisk",
-        "spanish": "Spansk",
-        "hindi": "Hindi",
-        "arabic": "Arabisk",
-        "bengali": "Bengali",
-        "portuguese": "Portugisisk",
-        "russian": "Russisk",
-        "japanese": "Japansk",
-        "indonesian": "Indonesisk",
-        "korean": "Koreansk",
-        "italian": "Italiensk",
-        "dutch": "Nederlandsk",
-        "swedish": "Svensk",
-        "norwegian": "Norsk",
-        "danish": "Dansk",
-        "finnish": "Finsk",
-        "hebrew": "Hebraisk"
-    },
     "habit_data": {
         "longest_streak": "Lengste Streak",
-        "current_streak": "Nåværende Streak",
-        "select_year": "Velg År",
-        "marked": "Markert",
-        "mark_today": "Marker I Dag"
+        "current_streak": "Nåværende Streak"
     },
     "notifications": {
         "title": "Varsler",

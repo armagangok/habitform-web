@@ -64,11 +64,6 @@
         "next": "Próximo",
         "start_button": "Iniciar 🚀",
         "continue_button": "Continuar →",
-        "features": {
-            "minimalist": "Minimalista.",
-            "easy_to_use": "Fácil de usar.",
-            "science_based": "Baseado em ciência."
-        },
         "goals": {
             "title": "Qual é seu objetivo principal?",
             "better_productivity": "Melhor produtividade",
@@ -155,11 +150,26 @@
         "dark_mode": "Modo Escuro",
         "light_mode": "Modo Claro",
         "support": "Apoie o HabitRise",
-        "support_subtitle": "Gostou do HabitRise? Avalie e ajude-nos a crescer!",
+        "support_subtitle": "Gosta do HabitRise? Avalie-nos e ajude-nos a crescer!",
         "feedback": "Enviar Feedback",
         "privacy": "Privacidade",
         "terms": "Termos",
-        "habitArchive": "Hábitos Arquivados"
+        "habitArchive": "Hábitos Arquivados",
+        "data_export_import": "Gerenciamento de Dados",
+        "about_data_management": "Sobre o Gerenciamento de Dados",
+        "data_management_description": "Exporte seus dados de hábitos para um arquivo CSV para backup ou transferência para outro dispositivo. Você também pode importar dados exportados anteriormente.",
+        "export_data": "Exportar Dados",
+        "export_description": "Exporte todos os seus hábitos e dados de conclusão para um arquivo CSV. Este arquivo pode ser usado como backup ou para transferir seus dados para outro dispositivo.",
+        "import_data": "Importar Dados",
+        "import_description": "Importe hábitos de um arquivo CSV exportado anteriormente. Isso adicionará ou atualizará hábitos em sua coleção atual.",
+        "exporting": "Exportando...",
+        "importing": "Importando...",
+        "export_success": "Dados exportados com sucesso",
+        "export_error": "Erro ao exportar dados",
+        "import_success": "Dados importados com sucesso",
+        "import_error": "Erro ao importar dados",
+        "habits_imported": "hábitos importados",
+        "no_habits_imported": "Nenhum hábito importado"
     },
     "subscription": {
         "subscribe_to": "Assinar",
@@ -254,25 +264,9 @@
         "time": "Horário",
         "habit_reminder_message": "Não se esqueça de completar seu hábito!"
     },
-    "languages": {
-        "english": "Inglês",
-        "turkish": "Turco",
-        "chinese": "Chinês",
-        "spanish": "Espanhol",
-        "hindi": "Hindi",
-        "arabic": "Árabe",
-        "bengali": "Bengali",
-        "portuguese": "Português",
-        "russian": "Russo",
-        "japanese": "Japonês",
-        "indonesian": "Indonésio"
-    },
     "habit_data": {
         "longest_streak": "Maior Sequência",
-        "current_streak": "Sequência Atual",
-        "select_year": "Selecionar Ano",
-        "marked": "Marcado",
-        "mark_today": "Marcar Hoje"
+        "current_streak": "Sequência Atual"
     },
     "notifications": {
         "title": "Notificações",

@@ -64,11 +64,6 @@
         "next": "Nästa",
         "start_button": "Starta 🚀",
         "continue_button": "Fortsätt →",
-        "features": {
-            "minimalist": "Minimalistisk.",
-            "easy_to_use": "Lätt att använda.",
-            "science_based": "Vetenskapligt baserad."
-        },
         "goals": {
             "title": "Vad är ditt huvudmål?",
             "better_productivity": "Bättre Produktivitet",
@@ -152,14 +147,29 @@
         "notifications": "Aviseringar",
         "theme": "Tema",
         "system": "System",
-        "dark_mode": "Mörkt Läge",
-        "light_mode": "Ljust Läge",
+        "dark_mode": "Mörkt läge",
+        "light_mode": "Ljust läge",
         "support": "Stöd HabitRise",
         "support_subtitle": "Gillar du HabitRise? Betygsätt oss och hjälp oss att växa!",
-        "feedback": "Skicka Feedback",
+        "feedback": "Skicka feedback",
         "privacy": "Integritet",
-        "terms": "Användarvillkor",
-        "habitArchive": "Vanearkiv"
+        "terms": "Villkor",
+        "habitArchive": "Vanearkiv",
+        "data_export_import": "Datahantering",
+        "about_data_management": "Om Datahantering",
+        "data_management_description": "Exportera dina vanedata till en CSV-fil för säkerhetskopiering eller överföring till en annan enhet. Du kan också importera tidigare exporterad data.",
+        "export_data": "Exportera Data",
+        "export_description": "Exportera alla dina vanor och slutförda data till en CSV-fil. Denna fil kan användas som säkerhetskopia eller för att överföra din data till en annan enhet.",
+        "import_data": "Importera Data",
+        "import_description": "Importera vanor från en tidigare exporterad CSV-fil. Detta kommer att lägga till eller uppdatera vanor i din nuvarande samling.",
+        "exporting": "Exporterar...",
+        "importing": "Importerar...",
+        "export_success": "Data exporterad framgångsrikt",
+        "export_error": "Fel vid export av data",
+        "import_success": "Data importerad framgångsrikt",
+        "import_error": "Fel vid import av data",
+        "habits_imported": "vanor importerade",
+        "no_habits_imported": "Inga vanor importerade"
     },
     "subscription": {
         "subscribe_to": "Prenumerera på",
@@ -254,33 +264,9 @@
         "time": "Tid",
         "habit_reminder_message": "Glöm inte att slutföra din vana!"
     },
-    "languages": {
-        "english": "Engelska",
-        "turkish": "Turkiska",
-        "chinese": "Kinesiska",
-        "spanish": "Spanska",
-        "hindi": "Hindi",
-        "arabic": "Arabiska",
-        "bengali": "Bengali",
-        "portuguese": "Portugisiska",
-        "russian": "Ryska",
-        "japanese": "Japanska",
-        "indonesian": "Indonesiska",
-        "korean": "Koreanska",
-        "italian": "Italienska",
-        "dutch": "Nederländska",
-        "swedish": "Svenska",
-        "norwegian": "Norska",
-        "danish": "Danska",
-        "finnish": "Finska",
-        "hebrew": "Hebreiska"
-    },
     "habit_data": {
         "longest_streak": "Längsta Svit",
-        "current_streak": "Nuvarande Svit",
-        "select_year": "Välj År",
-        "marked": "Markerad",
-        "mark_today": "Markera Idag"
+        "current_streak": "Nuvarande Svit"
     },
     "notifications": {
         "title": "Aviseringar",

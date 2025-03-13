@@ -64,11 +64,6 @@
         "next": "Volgende",
         "start_button": "Start 🚀",
         "continue_button": "Doorgaan →",
-        "features": {
-            "minimalist": "Minimalistisch.",
-            "easy_to_use": "Gebruiksvriendelijk.",
-            "science_based": "Wetenschappelijk onderbouwd."
-        },
         "goals": {
             "title": "Wat is je belangrijkste doel?",
             "better_productivity": "Betere Productiviteit",
@@ -152,14 +147,29 @@
         "notifications": "Meldingen",
         "theme": "Thema",
         "system": "Systeem",
-        "dark_mode": "Donkere Modus",
-        "light_mode": "Lichte Modus",
+        "dark_mode": "Donkere modus",
+        "light_mode": "Lichte modus",
         "support": "Steun HabitRise",
         "support_subtitle": "Vind je HabitRise leuk? Beoordeel ons en help ons groeien!",
-        "feedback": "Feedback Versturen",
+        "feedback": "Feedback versturen",
         "privacy": "Privacy",
-        "terms": "Servicevoorwaarden",
-        "habitArchive": "Gewoonte Archief"
+        "terms": "Voorwaarden",
+        "habitArchive": "Gearchiveerde gewoontes",
+        "data_export_import": "Gegevensbeheer",
+        "about_data_management": "Over Gegevensbeheer",
+        "data_management_description": "Exporteer je gewoontegegevens naar een CSV-bestand voor back-up of overdracht naar een ander apparaat. Je kunt ook eerder geëxporteerde gegevens importeren.",
+        "export_data": "Gegevens exporteren",
+        "export_description": "Exporteer al je gewoontes en voltooiingsgegevens naar een CSV-bestand. Dit bestand kan worden gebruikt als back-up of om je gegevens over te dragen naar een ander apparaat.",
+        "import_data": "Gegevens importeren",
+        "import_description": "Importeer gewoontes uit een eerder geëxporteerd CSV-bestand. Dit zal gewoontes toevoegen of bijwerken in je huidige collectie.",
+        "exporting": "Exporteren...",
+        "importing": "Importeren...",
+        "export_success": "Gegevens succesvol geëxporteerd",
+        "export_error": "Fout bij exporteren van gegevens",
+        "import_success": "Gegevens succesvol geïmporteerd",
+        "import_error": "Fout bij importeren van gegevens",
+        "habits_imported": "gewoontes geïmporteerd",
+        "no_habits_imported": "Geen gewoontes geïmporteerd"
     },
     "subscription": {
         "subscribe_to": "Abonneren op",
@@ -254,33 +264,10 @@
         "time": "Tijd",
         "habit_reminder_message": "Vergeet niet je gewoonte te voltooien!"
     },
-    "languages": {
-        "english": "Engels",
-        "turkish": "Turks",
-        "chinese": "Chinees",
-        "spanish": "Spaans",
-        "hindi": "Hindi",
-        "arabic": "Arabisch",
-        "bengali": "Bengaals",
-        "portuguese": "Portugees",
-        "russian": "Russisch",
-        "japanese": "Japans",
-        "indonesian": "Indonesisch",
-        "korean": "Koreaans",
-        "italian": "Italiaans",
-        "dutch": "Nederlands",
-        "swedish": "Zweeds",
-        "norwegian": "Noors",
-        "danish": "Deens",
-        "finnish": "Fins",
-        "hebrew": "Hebreeuws"
-    },
     "habit_data": {
         "longest_streak": "Langste Reeks",
         "current_streak": "Huidige Reeks",
-        "select_year": "Selecteer Jaar",
-        "marked": "Gemarkeerd",
-        "mark_today": "Markeer Vandaag"
+        "select_year": "Selecteer Jaar"
     },
     "notifications": {
         "title": "Meldingen",

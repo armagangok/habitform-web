@@ -64,11 +64,6 @@
         "next": "次へ",
         "start_button": "スタート 🚀",
         "continue_button": "続ける →",
-        "features": {
-            "minimalist": "ミニマリスト.",
-            "easy_to_use": "使いやすい.",
-            "science_based": "科学的根拠に基づく."
-        },
         "goals": {
             "title": "あなたの主な目標は何ですか？",
             "better_productivity": "生産性の向上",
@@ -159,7 +154,22 @@
         "feedback": "フィードバックを送信",
         "privacy": "プライバシー",
         "terms": "利用規約",
-        "habitArchive": "アーカイブされた習慣"
+        "habitArchive": "アーカイブされた習慣",
+        "data_export_import": "データ管理",
+        "about_data_management": "データ管理について",
+        "data_management_description": "習慣データをCSVファイルにエクスポートしてバックアップや他のデバイスへの転送ができます。以前エクスポートしたデータをインポートすることもできます。",
+        "export_data": "データのエクスポート",
+        "export_description": "すべての習慣とその完了データをCSVファイルにエクスポートします。このファイルはバックアップや他のデバイスへのデータ転送に使用できます。",
+        "import_data": "データのインポート",
+        "import_description": "以前エクスポートしたCSVファイルから習慣をインポートします。これにより現在のコレクションに習慣が追加または更新されます。",
+        "exporting": "エクスポート中...",
+        "importing": "インポート中...",
+        "export_success": "データのエクスポートに成功しました",
+        "export_error": "データのエクスポートに失敗しました",
+        "import_success": "データのインポートに成功しました",
+        "import_error": "データのインポートに失敗しました",
+        "habits_imported": "件の習慣をインポートしました",
+        "no_habits_imported": "インポートされた習慣はありません"
     },
     "subscription": {
         "subscribe_to": "購読する",
@@ -254,25 +264,9 @@
         "time": "時間",
         "habit_reminder_message": "習慣を完了するのを忘れずに！"
     },
-    "languages": {
-        "english": "英語",
-        "turkish": "トルコ語",
-        "chinese": "中国語",
-        "spanish": "スペイン語",
-        "hindi": "ヒンディー語",
-        "arabic": "アラビア語",
-        "bengali": "ベンガル語",
-        "portuguese": "ポルトガル語",
-        "russian": "ロシア語",
-        "japanese": "日本語",
-        "indonesian": "インドネシア語"
-    },
     "habit_data": {
         "longest_streak": "最長連続記録",
-        "current_streak": "現在の連続記録",
-        "select_year": "年を選択",
-        "marked": "マーク済み",
-        "mark_today": "今日をマーク"
+        "current_streak": "現在の連続記録"
     },
     "notifications": {
         "title": "通知",

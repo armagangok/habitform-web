@@ -64,11 +64,6 @@
         "next": "التالي",
         "start_button": "ابدأ 🚀",
         "continue_button": "استمر →",
-        "features": {
-            "minimalist": "بسيط.",
-            "easy_to_use": "سهل الاستخدام.",
-            "science_based": "مبني على العلم."
-        },
         "goals": {
             "title": "ما هو هدفك الرئيسي؟",
             "better_productivity": "إنتاجية أفضل",
@@ -156,10 +151,25 @@
         "light_mode": "الوضع الفاتح",
         "support": "دعم HabitRise",
         "support_subtitle": "هل أعجبك HabitRise؟ قيّمنا وساعدنا على النمو!",
-        "feedback": "إرسال تعليق",
+        "feedback": "إرسال ملاحظات",
         "privacy": "الخصوصية",
         "terms": "الشروط",
-        "habitArchive": "العادات المؤرشفة"
+        "habitArchive": "أرشيف العادات",
+        "data_export_import": "إدارة البيانات",
+        "about_data_management": "حول إدارة البيانات",
+        "data_management_description": "قم بتصدير بيانات عاداتك إلى ملف CSV للنسخ الاحتياطي أو النقل إلى جهاز آخر. يمكنك أيضًا استيراد البيانات المصدرة سابقًا.",
+        "export_data": "تصدير البيانات",
+        "export_description": "قم بتصدير جميع عاداتك وبيانات الإنجاز إلى ملف CSV. يمكن استخدام هذا الملف كنسخة احتياطية أو لنقل بياناتك إلى جهاز آخر.",
+        "import_data": "استيراد البيانات",
+        "import_description": "استيراد العادات من ملف CSV تم تصديره سابقًا. سيؤدي هذا إلى إضافة أو تحديث العادات في مجموعتك الحالية.",
+        "exporting": "جارٍ التصدير...",
+        "importing": "جارٍ الاستيراد...",
+        "export_success": "تم تصدير البيانات بنجاح",
+        "export_error": "خطأ في تصدير البيانات",
+        "import_success": "تم استيراد البيانات بنجاح",
+        "import_error": "خطأ في استيراد البيانات",
+        "habits_imported": "تم استيراد العادات",
+        "no_habits_imported": "لم يتم استيراد أي عادات"
     },
     "subscription": {
         "subscribe_to": "اشترك في",
@@ -254,33 +264,9 @@
         "time": "الوقت",
         "habit_reminder_message": "لا تنس إكمال عادتك!"
     },
-    "languages": {
-        "english": "الإنجليزية",
-        "turkish": "التركية",
-        "chinese": "الصينية",
-        "spanish": "الإسبانية",
-        "hindi": "الهندية",
-        "arabic": "العربية",
-        "bengali": "البنغالية",
-        "portuguese": "البرتغالية",
-        "russian": "الروسية",
-        "japanese": "اليابانية",
-        "indonesian": "الإندونيسية",
-        "korean": "الكورية",
-        "italian": "الإيطالية",
-        "dutch": "الهولندية",
-        "swedish": "السويدية",
-        "norwegian": "النرويجية",
-        "danish": "الدنماركية",
-        "finnish": "الفنلندية",
-        "hebrew": "العبرية"
-    },
     "habit_data": {
         "longest_streak": "أطول تتابع",
-        "current_streak": "التتابع الحالي",
-        "select_year": "اختر السنة",
-        "marked": "محدد",
-        "mark_today": "تحديد اليوم"
+        "current_streak": "التتابع الحالي"
     },
     "notifications": {
         "title": "الإشعارات",

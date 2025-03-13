@@ -9,6 +9,50 @@
 
 import 'package:flutter/widgets.dart';
 
+class $AssetsAnimationsGen {
+  const $AssetsAnimationsGen();
+
+  /// File path: assets/animations/achievement.json
+  String get achievement => 'assets/animations/achievement.json';
+
+  /// File path: assets/animations/astronout.json
+  String get astronout => 'assets/animations/astronout.json';
+
+  /// File path: assets/animations/celebration.json
+  String get celebration => 'assets/animations/celebration.json';
+
+  /// File path: assets/animations/completion.json
+  String get completion => 'assets/animations/completion.json';
+
+  /// File path: assets/animations/fireworks.json
+  String get fireworks => 'assets/animations/fireworks.json';
+
+  /// File path: assets/animations/progress.json
+  String get progress => 'assets/animations/progress.json';
+
+  /// File path: assets/animations/streak.json
+  String get streak => 'assets/animations/streak.json';
+
+  /// File path: assets/animations/success.json
+  String get success => 'assets/animations/success.json';
+
+  /// File path: assets/animations/trophy.json
+  String get trophy => 'assets/animations/trophy.json';
+
+  /// List of all assets
+  List<String> get values => [
+    achievement,
+    astronout,
+    celebration,
+    completion,
+    fireworks,
+    progress,
+    streak,
+    success,
+    trophy,
+  ];
+}
+
 class $AssetsAppGen {
   const $AssetsAppGen();
 
@@ -30,11 +74,11 @@ class $AssetsAppGen {
 
   /// List of all assets
   List<AssetGenImage> get values => [
-        appLogoDark,
-        appLogoLight,
-        habitriseDarkTransparent,
-        habitriseLightTransparent
-      ];
+    appLogoDark,
+    appLogoLight,
+    habitriseDarkTransparent,
+    habitriseLightTransparent,
+  ];
 }
 
 class $AssetsImagesGen {
@@ -58,14 +102,109 @@ class $AssetsLottieGen {
 class $AssetsTranslationsGen {
   const $AssetsTranslationsGen();
 
+  /// File path: assets/translations/ar-SA.json
+  String get arSA => 'assets/translations/ar-SA.json';
+
+  /// File path: assets/translations/bn-BD.json
+  String get bnBD => 'assets/translations/bn-BD.json';
+
+  /// File path: assets/translations/ca-ES.json
+  String get caES => 'assets/translations/ca-ES.json';
+
+  /// File path: assets/translations/cs-CZ.json
+  String get csCZ => 'assets/translations/cs-CZ.json';
+
+  /// File path: assets/translations/da-DK.json
+  String get daDK => 'assets/translations/da-DK.json';
+
   /// File path: assets/translations/en-US.json
   String get enUS => 'assets/translations/en-US.json';
+
+  /// File path: assets/translations/es-ES.json
+  String get esES => 'assets/translations/es-ES.json';
+
+  /// File path: assets/translations/fi-FI.json
+  String get fiFI => 'assets/translations/fi-FI.json';
+
+  /// File path: assets/translations/fr-FR.json
+  String get frFR => 'assets/translations/fr-FR.json';
+
+  /// File path: assets/translations/he-IL.json
+  String get heIL => 'assets/translations/he-IL.json';
+
+  /// File path: assets/translations/hi-IN.json
+  String get hiIN => 'assets/translations/hi-IN.json';
+
+  /// File path: assets/translations/id-ID.json
+  String get idID => 'assets/translations/id-ID.json';
+
+  /// File path: assets/translations/it-IT.json
+  String get itIT => 'assets/translations/it-IT.json';
+
+  /// File path: assets/translations/ja-JP.json
+  String get jaJP => 'assets/translations/ja-JP.json';
+
+  /// File path: assets/translations/ko-KR.json
+  String get koKR => 'assets/translations/ko-KR.json';
+
+  /// File path: assets/translations/nl-NL.json
+  String get nlNL => 'assets/translations/nl-NL.json';
+
+  /// File path: assets/translations/no-NO.json
+  String get noNO => 'assets/translations/no-NO.json';
+
+  /// File path: assets/translations/pl-PL.json
+  String get plPL => 'assets/translations/pl-PL.json';
+
+  /// File path: assets/translations/pt-BR.json
+  String get ptBR => 'assets/translations/pt-BR.json';
+
+  /// File path: assets/translations/ru-RU.json
+  String get ruRU => 'assets/translations/ru-RU.json';
+
+  /// File path: assets/translations/sv-SE.json
+  String get svSE => 'assets/translations/sv-SE.json';
+
+  /// File path: assets/translations/th-TH.json
+  String get thTH => 'assets/translations/th-TH.json';
 
   /// File path: assets/translations/tr-TR.json
   String get trTR => 'assets/translations/tr-TR.json';
 
+  /// File path: assets/translations/vi-VN.json
+  String get viVN => 'assets/translations/vi-VN.json';
+
+  /// File path: assets/translations/zh-CN.json
+  String get zhCN => 'assets/translations/zh-CN.json';
+
   /// List of all assets
-  List<String> get values => [enUS, trTR];
+  List<String> get values => [
+    arSA,
+    bnBD,
+    caES,
+    csCZ,
+    daDK,
+    enUS,
+    esES,
+    fiFI,
+    frFR,
+    heIL,
+    hiIN,
+    idID,
+    itIT,
+    jaJP,
+    koKR,
+    nlNL,
+    noNO,
+    plPL,
+    ptBR,
+    ruRU,
+    svSE,
+    thTH,
+    trTR,
+    viVN,
+    zhCN,
+  ];
 }
 
 class $AssetsImagesOnboardingGen {
@@ -92,14 +231,20 @@ class $AssetsImagesOnboardingGen {
       const AssetGenImage('assets/images/onboarding/waterTree.png');
 
   /// List of all assets
-  List<AssetGenImage> get values =>
-      [aristoteles, badHabits, orangeFruit, smallSteps, waterTree];
+  List<AssetGenImage> get values => [
+    aristoteles,
+    badHabits,
+    orangeFruit,
+    smallSteps,
+    waterTree,
+  ];
 }
 
 class Assets {
   const Assets._();
 
   static const String aEnv = '.env';
+  static const $AssetsAnimationsGen animations = $AssetsAnimationsGen();
   static const $AssetsAppGen app = $AssetsAppGen();
   static const $AssetsImagesGen images = $AssetsImagesGen();
   static const $AssetsLottieGen lottie = $AssetsLottieGen();
@@ -110,11 +255,7 @@ class Assets {
 }
 
 class AssetGenImage {
-  const AssetGenImage(
-    this._assetName, {
-    this.size,
-    this.flavors = const {},
-  });
+  const AssetGenImage(this._assetName, {this.size, this.flavors = const {}});
 
   final String _assetName;
 
@@ -174,15 +315,8 @@ class AssetGenImage {
     );
   }
 
-  ImageProvider provider({
-    AssetBundle? bundle,
-    String? package,
-  }) {
-    return AssetImage(
-      _assetName,
-      bundle: bundle,
-      package: package,
-    );
+  ImageProvider provider({AssetBundle? bundle, String? package}) {
+    return AssetImage(_assetName, bundle: bundle, package: package);
   }
 
   String get path => _assetName;

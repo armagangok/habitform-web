@@ -87,6 +87,17 @@ class SettingsPage extends ConsumerWidget {
                             ),
                             CupertinoListTile(
                               leading: const SettingLeadingWidget(
+                                iconData: CupertinoIcons.arrow_up_arrow_down,
+                                cardColor: CupertinoColors.systemTeal,
+                              ),
+                              title: Text(LocaleKeys.settings_data_export_import.tr()),
+                              onTap: () {
+                                navigator.navigateTo(path: KRoute.dataManagement);
+                              },
+                              trailing: CupertinoListTileChevron(),
+                            ),
+                            CupertinoListTile(
+                              leading: const SettingLeadingWidget(
                                 iconData: CupertinoIcons.doc_person_fill,
                                 cardColor: Colors.deepOrangeAccent,
                               ),
@@ -101,15 +112,6 @@ class SettingsPage extends ConsumerWidget {
                                 ),
                                 onPressed: () => ref.read(purchaseProvider.notifier).copyCustomerId(),
                               ),
-                            ),
-                            CupertinoListTile(
-                              leading: const SettingLeadingWidget(
-                                iconData: CupertinoIcons.mail_solid,
-                                cardColor: CupertinoColors.activeBlue,
-                              ),
-                              title: Text(LocaleKeys.settings_feedback.tr()),
-                              onTap: UrlLauncherHelper.requestEmail,
-                              trailing: CupertinoListTileChevron(),
                             ),
                           ],
                         ),
@@ -135,6 +137,15 @@ class SettingsPage extends ConsumerWidget {
                             ),
                             title: Text(LocaleKeys.settings_terms.tr()),
                             onTap: UrlLauncherHelper.openTermsOfUse,
+                            trailing: CupertinoListTileChevron(),
+                          ),
+                          CupertinoListTile(
+                            leading: const SettingLeadingWidget(
+                              iconData: CupertinoIcons.mail_solid,
+                              cardColor: CupertinoColors.activeBlue,
+                            ),
+                            title: Text(LocaleKeys.settings_feedback.tr()),
+                            onTap: UrlLauncherHelper.requestEmail,
                             trailing: CupertinoListTileChevron(),
                           ),
                         ],

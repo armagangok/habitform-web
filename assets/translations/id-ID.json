@@ -64,11 +64,6 @@
         "next": "Selanjutnya",
         "start_button": "Mulai 🚀",
         "continue_button": "Lanjutkan →",
-        "features": {
-            "minimalist": "Minimalis.",
-            "easy_to_use": "Mudah digunakan.",
-            "science_based": "Berbasis ilmiah."
-        },
         "goals": {
             "title": "Apa tujuan utama Anda?",
             "better_productivity": "Produktivitas Lebih Baik",
@@ -155,11 +150,26 @@
         "dark_mode": "Mode Gelap",
         "light_mode": "Mode Terang",
         "support": "Dukung HabitRise",
-        "support_subtitle": "Suka HabitRise? Beri nilai dan bantu kami berkembang!",
+        "support_subtitle": "Suka HabitRise? Beri rating dan bantu kami berkembang!",
         "feedback": "Kirim Masukan",
         "privacy": "Privasi",
-        "terms": "Ketentuan Layanan",
-        "habitArchive": "Arsip Kebiasaan"
+        "terms": "Ketentuan",
+        "habitArchive": "Kebiasaan Terarsip",
+        "data_export_import": "Manajemen Data",
+        "about_data_management": "Tentang Manajemen Data",
+        "data_management_description": "Ekspor data kebiasaan Anda ke file CSV untuk cadangan atau transfer ke perangkat lain. Anda juga dapat mengimpor data yang sebelumnya diekspor.",
+        "export_data": "Ekspor Data",
+        "export_description": "Ekspor semua kebiasaan dan data penyelesaian mereka ke file CSV. File ini dapat digunakan sebagai cadangan atau untuk mentransfer data Anda ke perangkat lain.",
+        "import_data": "Impor Data",
+        "import_description": "Impor kebiasaan dari file CSV yang sebelumnya diekspor. Ini akan menambah atau memperbarui kebiasaan dalam koleksi Anda saat ini.",
+        "exporting": "Mengekspor...",
+        "importing": "Mengimpor...",
+        "export_success": "Data berhasil diekspor",
+        "export_error": "Kesalahan saat mengekspor data",
+        "import_success": "Data berhasil diimpor",
+        "import_error": "Kesalahan saat mengimpor data",
+        "habits_imported": "kebiasaan diimpor",
+        "no_habits_imported": "Tidak ada kebiasaan yang diimpor"
     },
     "subscription": {
         "subscribe_to": "Berlangganan",
@@ -254,25 +264,9 @@
         "time": "Waktu",
         "habit_reminder_message": "Jangan lupa menyelesaikan kebiasaan Anda!"
     },
-    "languages": {
-        "english": "Bahasa Inggris",
-        "turkish": "Bahasa Turki",
-        "chinese": "Bahasa Mandarin",
-        "spanish": "Bahasa Spanyol",
-        "hindi": "Bahasa Hindi",
-        "arabic": "Bahasa Arab",
-        "bengali": "Bahasa Bengali",
-        "portuguese": "Bahasa Portugis",
-        "russian": "Bahasa Rusia",
-        "japanese": "Bahasa Jepang",
-        "indonesian": "Bahasa Indonesia"
-    },
     "habit_data": {
         "longest_streak": "Rekor Terpanjang",
-        "current_streak": "Rekor Saat Ini",
-        "select_year": "Pilih Tahun",
-        "marked": "Ditandai",
-        "mark_today": "Tandai Hari Ini"
+        "current_streak": "Rekor Saat Ini"
     },
     "notifications": {
         "title": "Notifikasi",

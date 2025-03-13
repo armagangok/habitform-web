@@ -64,11 +64,6 @@
         "next": "다음",
         "start_button": "시작하기 🚀",
         "continue_button": "계속하기 →",
-        "features": {
-            "minimalist": "미니멀리스트.",
-            "easy_to_use": "사용하기 쉬움.",
-            "science_based": "과학적 근거 기반."
-        },
         "goals": {
             "title": "당신의 주요 목표는 무엇인가요?",
             "better_productivity": "생산성 향상",
@@ -159,7 +154,22 @@
         "feedback": "피드백 보내기",
         "privacy": "개인정보 처리방침",
         "terms": "이용약관",
-        "habitArchive": "보관된 습관"
+        "habitArchive": "보관된 습관",
+        "data_export_import": "데이터 관리",
+        "about_data_management": "데이터 관리 정보",
+        "data_management_description": "습관 데이터를 CSV 파일로 내보내 백업하거나 다른 기기로 전송할 수 있습니다. 이전에 내보낸 데이터를 가져올 수도 있습니다.",
+        "export_data": "데이터 내보내기",
+        "export_description": "모든 습관과 완료 데이터를 CSV 파일로 내보냅니다. 이 파일은 백업용으로 사용하거나 다른 기기로 데이터를 전송하는 데 사용할 수 있습니다.",
+        "import_data": "데이터 가져오기",
+        "import_description": "이전에 내보낸 CSV 파일에서 습관을 가져옵니다. 현재 컬렉션에 습관이 추가되거나 업데이트됩니다.",
+        "exporting": "내보내는 중...",
+        "importing": "가져오는 중...",
+        "export_success": "데이터를 성공적으로 내보냈습니다",
+        "export_error": "데이터 내보내기 오류",
+        "import_success": "데이터를 성공적으로 가져왔습니다",
+        "import_error": "데이터 가져오기 오류",
+        "habits_imported": "개의 습관을 가져왔습니다",
+        "no_habits_imported": "가져온 습관이 없습니다"
     },
     "subscription": {
         "subscribe_to": "구독하기",
@@ -254,33 +264,9 @@
         "time": "시간",
         "habit_reminder_message": "습관을 완료하는 것을 잊지 마세요!"
     },
-    "languages": {
-        "english": "영어",
-        "turkish": "터키어",
-        "chinese": "중국어",
-        "spanish": "스페인어",
-        "hindi": "힌디어",
-        "arabic": "아랍어",
-        "bengali": "벵골어",
-        "portuguese": "포르투갈어",
-        "russian": "러시아어",
-        "japanese": "일본어",
-        "indonesian": "인도네시아어",
-        "korean": "한국어",
-        "italian": "이탈리아어",
-        "dutch": "네덜란드어",
-        "swedish": "스웨덴어",
-        "norwegian": "노르웨이어",
-        "danish": "덴마크어",
-        "finnish": "핀란드어",
-        "hebrew": "히브리어"
-    },
     "habit_data": {
         "longest_streak": "최장 연속 기록",
-        "current_streak": "현재 연속 기록",
-        "select_year": "연도 선택",
-        "marked": "표시됨",
-        "mark_today": "오늘 표시"
+        "current_streak": "현재 연속 기록"
     },
     "notifications": {
         "title": "알림",

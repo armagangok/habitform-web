@@ -2,7 +2,7 @@
 
 // ignore_for_file: constant_identifier_names
 
-abstract class  LocaleKeys {
+abstract class LocaleKeys {
   static const common_ok = 'common.ok';
   static const common_save = 'common.save';
   static const common_cancel = 'common.cancel';
@@ -64,10 +64,6 @@ abstract class  LocaleKeys {
   static const onboarding_next = 'onboarding.next';
   static const onboarding_start_button = 'onboarding.start_button';
   static const onboarding_continue_button = 'onboarding.continue_button';
-  static const onboarding_features_minimalist = 'onboarding.features.minimalist';
-  static const onboarding_features_easy_to_use = 'onboarding.features.easy_to_use';
-  static const onboarding_features_science_based = 'onboarding.features.science_based';
-  static const onboarding_features = 'onboarding.features';
   static const onboarding_goals_title = 'onboarding.goals.title';
   static const onboarding_goals_better_productivity = 'onboarding.goals.better_productivity';
   static const onboarding_goals_build_routine = 'onboarding.goals.build_routine';
@@ -146,6 +142,21 @@ abstract class  LocaleKeys {
   static const settings_privacy = 'settings.privacy';
   static const settings_terms = 'settings.terms';
   static const settings_habitArchive = 'settings.habitArchive';
+  static const settings_export_data = 'settings.export_data';
+  static const settings_exporting = 'settings.exporting';
+  static const settings_import_data = 'settings.import_data';
+  static const settings_importing = 'settings.importing';
+  static const settings_export_success = 'settings.export_success';
+  static const settings_export_error = 'settings.export_error';
+  static const settings_import_success = 'settings.import_success';
+  static const settings_import_error = 'settings.import_error';
+  static const settings_habits_imported = 'settings.habits_imported';
+  static const settings_no_habits_imported = 'settings.no_habits_imported';
+  static const settings_data_export_import = 'settings.data_export_import';
+  static const settings_about_data_management = 'settings.about_data_management';
+  static const settings_data_management_description = 'settings.data_management_description';
+  static const settings_export_description = 'settings.export_description';
+  static const settings_import_description = 'settings.import_description';
   static const settings = 'settings';
   static const subscription_subscribe_to = 'subscription.subscribe_to';
   static const subscription_tap_advantages = 'subscription.tap_advantages';
@@ -235,31 +246,9 @@ abstract class  LocaleKeys {
   static const reminder_time = 'reminder.time';
   static const reminder_habit_reminder_message = 'reminder.habit_reminder_message';
   static const reminder = 'reminder';
-  static const languages_english = 'languages.english';
-  static const languages_turkish = 'languages.turkish';
-  static const languages_chinese = 'languages.chinese';
-  static const languages_spanish = 'languages.spanish';
-  static const languages_hindi = 'languages.hindi';
-  static const languages_arabic = 'languages.arabic';
-  static const languages_bengali = 'languages.bengali';
-  static const languages_portuguese = 'languages.portuguese';
-  static const languages_russian = 'languages.russian';
-  static const languages_japanese = 'languages.japanese';
-  static const languages_indonesian = 'languages.indonesian';
-  static const languages_korean = 'languages.korean';
-  static const languages_italian = 'languages.italian';
-  static const languages_dutch = 'languages.dutch';
-  static const languages_swedish = 'languages.swedish';
-  static const languages_norwegian = 'languages.norwegian';
-  static const languages_danish = 'languages.danish';
-  static const languages_finnish = 'languages.finnish';
-  static const languages_hebrew = 'languages.hebrew';
-  static const languages = 'languages';
   static const habit_data_longest_streak = 'habit_data.longest_streak';
   static const habit_data_current_streak = 'habit_data.current_streak';
   static const habit_data_select_year = 'habit_data.select_year';
-  static const habit_data_marked = 'habit_data.marked';
-  static const habit_data_mark_today = 'habit_data.mark_today';
   static const habit_data = 'habit_data';
   static const notifications_title = 'notifications.title';
   static const notifications_settings = 'notifications.settings';
@@ -293,5 +282,4 @@ abstract class  LocaleKeys {
   static const membership_info_change_plan = 'membership_info.change_plan';
   static const membership_info_change_plan_desc = 'membership_info.change_plan_desc';
   static const membership_info = 'membership_info';
-
 }

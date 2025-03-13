@@ -15,15 +15,11 @@ import 'features/home/views/pages/home_page.dart';
 import 'features/onboarding/pages/onboarding_main_page.dart';
 import 'features/onboarding/providers/onboarding_state.dart';
 import 'features/purchase/providers/purchase_provider.dart';
-import 'services/habit_service/habit_service_interface.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
   await HiveHelper.shared.initializeHive();
-
-  // Run habit migration
-  await habitService.migrateHabitsToNewModel();
 
   await dotenv.load(fileName: ".env");
 

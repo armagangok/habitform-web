@@ -8,4 +8,5 @@ class KRoute {
   static const onboardingPaywall = '/onboardingPaywall';
   static const auth = '/auth';
   static const archivedHabits = '/archivedHabits';
+  static const dataManagement = '/dataManagement';
 }

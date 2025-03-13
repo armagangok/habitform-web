@@ -1,3 +1,5 @@
+import 'package:lottie/lottie.dart';
+
 import '/core/core.dart';
 import '../../../../models/models.dart';
 import '../../../create_habit/create_habit_page.dart';
@@ -15,7 +17,7 @@ class HabitBuilder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (isLoading || habits == null) {
+    if (isLoading) {
       return Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -33,7 +35,7 @@ class HabitBuilder extends StatelessWidget {
       );
     }
 
-    if (habits!.isEmpty) return _noDataWidget();
+    if (habits != null && habits!.isEmpty) return _noDataWidget();
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15.0),
@@ -121,52 +123,50 @@ class HabitBuilder extends StatelessWidget {
     );
   }
 
-  Widget _noDataWidget() => Align(
-        alignment: Alignment.center,
-        child: Builder(
-          builder: (context) {
-            return Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                SizedBox(height: context.height(.075)),
-                Image.asset(
-                  context.theme.brightness == Brightness.dark ? Assets.app.habitriseDarkTransparent.path : Assets.app.habitriseLightTransparent.path,
-                  height: 120,
-                  width: 120,
+  Widget _noDataWidget() => Builder(
+        builder: (context) {
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              SizedBox(height: 100),
+              Lottie.asset(
+                Assets.animations.astronout,
+                width: context.width(.75),
+                height: 100,
+                fit: BoxFit.cover,
+              ),
+              SizedBox(height: 30),
+              Text(
+                LocaleKeys.habit_no_habit_found.tr(),
+                style: context.titleLarge?.copyWith(
+                  fontWeight: FontWeight.w500,
                 ),
-                SizedBox(height: 10),
-                Text(
-                  LocaleKeys.habit_no_habit_found.tr(),
-                  style: context.titleLarge?.copyWith(
+                textAlign: TextAlign.center,
+              ),
+              SizedBox(height: 15),
+              CupertinoButton.tinted(
+                color: Colors.deepOrangeAccent,
+                sizeStyle: CupertinoButtonSize.medium,
+                child: Text(
+                  LocaleKeys.habit_create_habit.tr(),
+                  style: TextStyle(
                     fontWeight: FontWeight.w500,
+                    color: Colors.deepOrangeAccent,
                   ),
-                  textAlign: TextAlign.center,
                 ),
-                SizedBox(height: 15),
-                CupertinoButton.tinted(
-                  color: Colors.deepOrangeAccent,
-                  sizeStyle: CupertinoButtonSize.medium,
-                  child: Text(
-                    LocaleKeys.habit_create_habit.tr(),
-                    style: TextStyle(
-                      fontWeight: FontWeight.w500,
-                      color: Colors.deepOrangeAccent,
-                    ),
-                  ),
-                  onPressed: () {
-                    CupertinoScaffold.showCupertinoModalBottomSheet(
-                      enableDrag: false,
-                      context: context,
-                      builder: (contextFromSheet) {
-                        return CreateHabitPage();
-                      },
-                    );
-                  },
-                ),
-              ],
-            );
-          },
-        ),
+                onPressed: () {
+                  CupertinoScaffold.showCupertinoModalBottomSheet(
+                    enableDrag: false,
+                    context: context,
+                    builder: (contextFromSheet) {
+                      return CreateHabitPage();
+                    },
+                  );
+                },
+              ),
+            ],
+          );
+        },
       );
 }

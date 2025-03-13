@@ -64,11 +64,6 @@
         "next": "Suivant",
         "start_button": "Démarrer 🚀",
         "continue_button": "Continuer →",
-        "features": {
-            "minimalist": "Minimaliste.",
-            "easy_to_use": "Facile à utiliser.",
-            "science_based": "Basé sur la science."
-        },
         "goals": {
             "title": "Quel est votre objectif principal ?",
             "better_productivity": "Meilleure productivité",
@@ -159,7 +154,22 @@
         "feedback": "Envoyer des commentaires",
         "privacy": "Confidentialité",
         "terms": "Conditions",
-        "habitArchive": "Habitudes archivées"
+        "habitArchive": "Habitudes Archivées",
+        "data_export_import": "Gestion des Données",
+        "about_data_management": "À propos de la Gestion des Données",
+        "data_management_description": "Exportez vos données d'habitudes vers un fichier CSV pour la sauvegarde ou le transfert vers un autre appareil. Vous pouvez également importer des données précédemment exportées.",
+        "export_data": "Exporter les Données",
+        "export_description": "Exportez toutes vos habitudes et leurs données de complétion vers un fichier CSV. Ce fichier peut être utilisé comme sauvegarde ou pour transférer vos données vers un autre appareil.",
+        "import_data": "Importer les Données",
+        "import_description": "Importez des habitudes depuis un fichier CSV précédemment exporté. Cela ajoutera ou mettra à jour les habitudes dans votre collection actuelle.",
+        "exporting": "Exportation en cours...",
+        "importing": "Importation en cours...",
+        "export_success": "Données exportées avec succès",
+        "export_error": "Erreur lors de l'exportation des données",
+        "import_success": "Données importées avec succès",
+        "import_error": "Erreur lors de l'importation des données",
+        "habits_imported": "habitudes importées",
+        "no_habits_imported": "Aucune habitude n'a été importée"
     },
     "subscription": {
         "subscribe_to": "S'abonner à",
@@ -254,34 +264,9 @@
         "time": "Heure",
         "habit_reminder_message": "N'oubliez pas de compléter votre habitude !"
     },
-    "languages": {
-        "english": "Anglais",
-        "turkish": "Turc",
-        "chinese": "Chinois",
-        "spanish": "Espagnol",
-        "hindi": "Hindi",
-        "arabic": "Arabe",
-        "bengali": "Bengali",
-        "portuguese": "Portugais",
-        "russian": "Russe",
-        "japanese": "Japonais",
-        "indonesian": "Indonésien",
-        "korean": "Coréen",
-        "italian": "Italien",
-        "dutch": "Néerlandais",
-        "swedish": "Suédois",
-        "norwegian": "Norvégien",
-        "danish": "Danois",
-        "finnish": "Finnois",
-        "hebrew": "Hébreu",
-        "french": "Français"
-    },
     "habit_data": {
         "longest_streak": "Plus longue série",
-        "current_streak": "Série actuelle",
-        "select_year": "Sélectionner l'année",
-        "marked": "Marqué",
-        "mark_today": "Marquer aujourd'hui"
+        "current_streak": "Série actuelle"
     },
     "notifications": {
         "title": "Notifications",

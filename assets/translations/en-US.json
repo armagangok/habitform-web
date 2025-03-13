@@ -64,11 +64,6 @@
         "next": "Next",
         "start_button": "Start 🚀",
         "continue_button": "Continue →",
-        "features": {
-            "minimalist": "Minimalist.",
-            "easy_to_use": "Easy to Use.",
-            "science_based": "Science-Based."
-        },
         "goals": {
             "title": "What's your main goal?",
             "better_productivity": "Better productivity",
@@ -159,7 +154,22 @@
         "feedback": "Send Feedback",
         "privacy": "Privacy",
         "terms": "Terms",
-        "habitArchive": "Archived Habits"
+        "habitArchive": "Archived Habits",
+        "data_export_import": "Data Management",
+        "about_data_management": "About Data Management",
+        "data_management_description": "Export your habits data to a CSV file for backup or transfer to another device. You can also import previously exported data.",
+        "export_data": "Export Data",
+        "export_description": "Export all your habits and their completion data to a CSV file. This file can be used as a backup or to transfer your data to another device.",
+        "import_data": "Import Data",
+        "import_description": "Import habits from a previously exported CSV file. This will add or update habits in your current collection.",
+        "exporting": "Exporting...",
+        "importing": "Importing...",
+        "export_success": "Data exported successfully",
+        "export_error": "Error exporting data",
+        "import_success": "Data imported successfully",
+        "import_error": "Error importing data",
+        "habits_imported": "habits imported",
+        "no_habits_imported": "No habits were imported"
     },
     "subscription": {
         "subscribe_to": "Subscribe to",
@@ -254,25 +264,9 @@
         "time": "Time",
         "habit_reminder_message": "Don't forget to complete your habit!"
     },
-    "languages": {
-        "english": "English",
-        "turkish": "Turkish",
-        "chinese": "Chinese",
-        "spanish": "Spanish",
-        "hindi": "Hindi",
-        "arabic": "Arabic",
-        "bengali": "Bengali",
-        "portuguese": "Portuguese",
-        "russian": "Russian",
-        "japanese": "Japanese",
-        "indonesian": "Indonesian"
-    },
     "habit_data": {
         "longest_streak": "Longest Streak",
-        "current_streak": "Current Streak",
-        "select_year": "Select Year",
-        "marked": "Marked",
-        "mark_today": "Mark Today"
+        "current_streak": "Current Streak"
     },
     "notifications": {
         "title": "Notifications",

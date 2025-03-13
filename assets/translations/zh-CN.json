@@ -64,11 +64,6 @@
         "next": "下一步",
         "start_button": "开始 🚀",
         "continue_button": "继续 →",
-        "features": {
-            "minimalist": "简约.",
-            "easy_to_use": "易用.",
-            "science_based": "科学."
-        },
         "goals": {
             "title": "你的主要目标是什么？",
             "better_productivity": "提高生产力",
@@ -159,7 +154,22 @@
         "feedback": "发送反馈",
         "privacy": "隐私",
         "terms": "条款",
-        "habitArchive": "已归档的习惯"
+        "habitArchive": "已归档的习惯",
+        "data_export_import": "数据管理",
+        "about_data_management": "关于数据管理",
+        "data_management_description": "将您的习惯数据导出到CSV文件以备份或传输到其他设备。您也可以导入之前导出的数据。",
+        "export_data": "导出数据",
+        "export_description": "将所有习惯及其完成数据导出到CSV文件。此文件可用作备份或将数据传输到其他设备。",
+        "import_data": "导入数据",
+        "import_description": "从之前导出的CSV文件导入习惯。这将在您当前的集合中添加或更新习惯。",
+        "exporting": "导出中...",
+        "importing": "导入中...",
+        "export_success": "数据导出成功",
+        "export_error": "导出数据时出错",
+        "import_success": "数据导入成功",
+        "import_error": "导入数据时出错",
+        "habits_imported": "个习惯已导入",
+        "no_habits_imported": "未导入任何习惯"
     },
     "subscription": {
         "subscribe_to": "订阅",
@@ -254,33 +264,9 @@
         "time": "时间",
         "habit_reminder_message": "别忘了完成你的习惯！"
     },
-    "languages": {
-        "english": "英语",
-        "turkish": "土耳其语",
-        "chinese": "中文",
-        "spanish": "西班牙语",
-        "hindi": "印地语",
-        "arabic": "阿拉伯语",
-        "bengali": "孟加拉语",
-        "portuguese": "葡萄牙语",
-        "russian": "俄语",
-        "japanese": "日语",
-        "indonesian": "印尼语",
-        "korean": "韩语",
-        "italian": "意大利语",
-        "dutch": "荷兰语",
-        "swedish": "瑞典语",
-        "norwegian": "挪威语",
-        "danish": "丹麦语",
-        "finnish": "芬兰语",
-        "hebrew": "希伯来语"
-    },
     "habit_data": {
         "longest_streak": "最长连续",
-        "current_streak": "当前连续",
-        "select_year": "选择年份",
-        "marked": "已标记",
-        "mark_today": "标记今天"
+        "current_streak": "当前连续"
     },
     "notifications": {
         "title": "通知",

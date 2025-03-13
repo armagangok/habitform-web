@@ -275,41 +275,7 @@ class LocalHabitService extends HabitService {
   }
 
   @override
-  Future<void> migrateHabitsToNewModel() async {
-    LogHelper.shared.debugPrint('Starting habit migration process...');
-
-    // Get all habits (both active and archived)
-    final allHabits = await getAllHabits();
-
-    for (final habit in allHabits) {
-      if (habit.completionDates?.isNotEmpty ?? false) {
-        LogHelper.shared.debugPrint('Migrating habit: ${habit.id}');
-
-        final habitCompletionDates = habit.completionDates;
-
-        if (habitCompletionDates != null && habitCompletionDates.isNotEmpty) {
-          // Convert old completion dates to new completion entries
-          final newCompletions = habit.toCompletionEntry(habit.completionDates!);
-
-          // Create updated habit with new model
-          final updatedHabit = habit.toNewHabitModel(newCompletions);
-
-          // Save the updated habit
-          if (habit.isActive) {
-            await updateHabit(updatedHabit);
-          } else {
-            await updateArchivedHabit(updatedHabit);
-          }
-
-          LogHelper.shared.debugPrint('Successfully migrated habit: ${habit.id}');
-        } else {
-          LogHelper.shared.debugPrint('No completion dates found to migrate.');
-        }
-      }
-    }
-
-    LogHelper.shared.debugPrint('Habit migration completed successfully');
-  }
+  Future<void> migrateHabitsToNewModel() async {}
 
   Future<void> saveHabit(Habit habit) async {
     await _hiveHelper.putData<Habit>(

@@ -64,11 +64,6 @@
         "next": "পরবর্তী",
         "start_button": "শুরু করুন 🚀",
         "continue_button": "চালিয়ে যান →",
-        "features": {
-            "minimalist": "মিনিমালিস্ট.",
-            "easy_to_use": "ব্যবহার করা সহজ.",
-            "science_based": "বিজ্ঞান-ভিত্তিক."
-        },
         "goals": {
             "title": "আপনার মূল লক্ষ্য কি?",
             "better_productivity": "উন্নত উৎপাদনশীলতা",
@@ -155,11 +150,26 @@
         "dark_mode": "ডার্ক মোড",
         "light_mode": "লাইট মোড",
         "support": "HabitRise সমর্থন করুন",
-        "support_subtitle": "HabitRise পছন্দ হয়েছে? রেটিং দিন এবং আমাদের বৃদ্ধিতে সাহায্য করুন!",
-        "feedback": "প্রতিক্রিয়া পাঠান",
+        "support_subtitle": "HabitRise পছন্দ হয়েছে? আমাদের রেটিং দিন এবং বাড়তে সাহায্য করুন!",
+        "feedback": "মতামত পাঠান",
         "privacy": "গোপনীয়তা",
         "terms": "শর্তাবলী",
-        "habitArchive": "আর্কাইভ করা অভ্যাস"
+        "habitArchive": "অভ্যাস আর্কাইভ",
+        "data_export_import": "ডেটা ব্যবস্থাপনা",
+        "about_data_management": "ডেটা ব্যবস্থাপনা সম্পর্কে",
+        "data_management_description": "আপনার অভ্যাসের ডেটা ব্যাকআপ বা অন্য ডিভাইসে স্থানান্তরের জন্য CSV ফাইলে রপ্তানি করুন। আপনি পূর্বে রপ্তানি করা ডেটাও আমদানি করতে পারেন।",
+        "export_data": "ডেটা রপ্তানি করুন",
+        "export_description": "আপনার সমস্ত অভ্যাস এবং সম্পন্ন করার ডেটা CSV ফাইলে রপ্তানি করুন। এই ফাইলটি ব্যাকআপ হিসেবে বা আপনার ডেটা অন্য ডিভাইসে স্থানান্তর করতে ব্যবহার করা যেতে পারে।",
+        "import_data": "ডেটা আমদানি করুন",
+        "import_description": "পূর্বে রপ্তানি করা CSV ফাইল থেকে অভ্যাস আমদানি করুন। এটি আপনার বর্তমান সংগ্রহে অভ্যাস যোগ করবে বা আপডেট করবে।",
+        "exporting": "রপ্তানি হচ্ছে...",
+        "importing": "আমদানি হচ্ছে...",
+        "export_success": "ডেটা সফলভাবে রপ্তানি করা হয়েছে",
+        "export_error": "ডেটা রপ্তানিতে ত্রুটি",
+        "import_success": "ডেটা সফলভাবে আমদানি করা হয়েছে",
+        "import_error": "ডেটা আমদানিতে ত্রুটি",
+        "habits_imported": "অভ্যাস আমদানি করা হয়েছে",
+        "no_habits_imported": "কোন অভ্যাস আমদানি করা হয়নি"
     },
     "subscription": {
         "subscribe_to": "সাবস্ক্রাইব করুন",
@@ -254,25 +264,9 @@
         "time": "সময়",
         "habit_reminder_message": "আপনার অভ্যাস সম্পন্ন করতে ভুলবেন না!"
     },
-    "languages": {
-        "english": "ইংরেজি",
-        "turkish": "তুর্কি",
-        "chinese": "চাইনিজ",
-        "spanish": "স্প্যানিশ",
-        "hindi": "হিন্দি",
-        "arabic": "আরবি",
-        "bengali": "বাংলা",
-        "portuguese": "পর্তুগিজ",
-        "russian": "রাশিয়ান",
-        "japanese": "জাপানি",
-        "indonesian": "ইন্দোনেশীয়"
-    },
     "habit_data": {
         "longest_streak": "সর্বোচ্চ স্ট্রিক",
-        "current_streak": "বর্তমান স্ট্রিক",
-        "select_year": "বছর নির্বাচন করুন",
-        "marked": "চিহ্নিত",
-        "mark_today": "আজ চিহ্নিত করুন"
+        "current_streak": "বর্তমান স্ট্রিক"
     },
     "notifications": {
         "title": "বিজ্ঞপ্তি",

@@ -64,11 +64,6 @@
         "next": "Avanti",
         "start_button": "Inizia 🚀",
         "continue_button": "Continua →",
-        "features": {
-            "minimalist": "Minimalista.",
-            "easy_to_use": "Facile da usare.",
-            "science_based": "Basato sulla scienza."
-        },
         "goals": {
             "title": "Qual è il tuo obiettivo principale?",
             "better_productivity": "Migliore Produttività",
@@ -159,7 +154,22 @@
         "feedback": "Invia Feedback",
         "privacy": "Privacy",
         "terms": "Termini di Servizio",
-        "habitArchive": "Archivio Abitudini"
+        "habitArchive": "Abitudini Archiviate",
+        "data_export_import": "Gestione Dati",
+        "about_data_management": "Informazioni sulla Gestione Dati",
+        "data_management_description": "Esporta i tuoi dati delle abitudini in un file CSV per il backup o il trasferimento su un altro dispositivo. Puoi anche importare dati precedentemente esportati.",
+        "export_data": "Esporta Dati",
+        "export_description": "Esporta tutte le tue abitudini e i loro dati di completamento in un file CSV. Questo file può essere utilizzato come backup o per trasferire i tuoi dati su un altro dispositivo.",
+        "import_data": "Importa Dati",
+        "import_description": "Importa abitudini da un file CSV precedentemente esportato. Questo aggiungerà o aggiornerà le abitudini nella tua collezione attuale.",
+        "exporting": "Esportazione in corso...",
+        "importing": "Importazione in corso...",
+        "export_success": "Dati esportati con successo",
+        "export_error": "Errore durante l'esportazione dei dati",
+        "import_success": "Dati importati con successo",
+        "import_error": "Errore durante l'importazione dei dati",
+        "habits_imported": "abitudini importate",
+        "no_habits_imported": "Nessuna abitudine importata"
     },
     "subscription": {
         "subscribe_to": "Abbonati a",
@@ -254,33 +264,10 @@
         "time": "Orario",
         "habit_reminder_message": "Non dimenticare di completare la tua abitudine!"
     },
-    "languages": {
-        "english": "Inglese",
-        "turkish": "Turco",
-        "chinese": "Cinese",
-        "spanish": "Spagnolo",
-        "hindi": "Hindi",
-        "arabic": "Arabo",
-        "bengali": "Bengali",
-        "portuguese": "Portoghese",
-        "russian": "Russo",
-        "japanese": "Giapponese",
-        "indonesian": "Indonesiano",
-        "korean": "Coreano",
-        "italian": "Italiano",
-        "dutch": "Olandese",
-        "swedish": "Svedese",
-        "norwegian": "Norvegese",
-        "danish": "Danese",
-        "finnish": "Finlandese",
-        "hebrew": "Ebraico"
-    },
     "habit_data": {
         "longest_streak": "Serie più Lunga",
         "current_streak": "Serie Attuale",
-        "select_year": "Seleziona Anno",
-        "marked": "Segnato",
-        "mark_today": "Segna Oggi"
+        "select_year": "Seleziona Anno"
     },
     "notifications": {
         "title": "Notifiche",

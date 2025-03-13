@@ -64,11 +64,6 @@
         "next": "İleri",
         "start_button": "Başla 🚀",
         "continue_button": "Devam Et →",
-        "features": {
-            "minimalist": "Minimalist.",
-            "easy_to_use": "Kullanımı Kolay.",
-            "science_based": "Bilim Temelli."
-        },
         "goals": {
             "title": "Ana hedefiniz nedir?",
             "better_productivity": "Daha iyi üretkenlik",
@@ -160,7 +155,22 @@
         "feedback": "Geri Bildirim Gönder",
         "privacy": "Gizlilik",
         "terms": "Şartlar",
-        "habitArchive": "Arşivlenmiş Alışkanlıklar"
+        "habitArchive": "Arşivlenmiş Alışkanlıklar",
+        "data_export_import": "Veri Yönetimi",
+        "about_data_management": "Veri Yönetimi Hakkında",
+        "data_management_description": "Alışkanlık verilerinizi yedekleme veya başka bir cihaza aktarma için CSV dosyasına aktarın. Daha önce dışa aktarılan verileri de içe aktarabilirsiniz.",
+        "export_data": "Verileri Dışa Aktar",
+        "export_description": "Tüm alışkanlıklarınızı ve tamamlanma verilerini CSV dosyasına aktarın. Bu dosya yedekleme veya verilerinizi başka bir cihaza aktarmak için kullanılabilir.",
+        "import_data": "Verileri İçe Aktar",
+        "import_description": "Daha önce dışa aktarılmış CSV dosyasından alışkanlıkları içe aktarın. Bu, mevcut koleksiyonunuza alışkanlıklar ekleyecek veya güncelleyecektir.",
+        "exporting": "Dışa aktarılıyor...",
+        "importing": "İçe aktarılıyor...",
+        "export_success": "Veriler başarıyla dışa aktarıldı",
+        "export_error": "Veri dışa aktarma hatası",
+        "import_success": "Veriler başarıyla içe aktarıldı",
+        "import_error": "Veri içe aktarma hatası",
+        "habits_imported": "alışkanlık içe aktarıldı",
+        "no_habits_imported": "Hiç alışkanlık içe aktarılmadı"
     },
     "subscription": {
         "subscribe_to": "Abone Ol",
@@ -258,25 +268,9 @@
         "time": "Zaman",
         "habit_reminder_message": "Alışkanlığınızı tamamlamayı unutmayın!"
     },
-    "languages": {
-        "english": "İngilizce",
-        "turkish": "Türkçe",
-        "chinese": "Çince",
-        "spanish": "İspanyolca",
-        "hindi": "Hintçe",
-        "arabic": "Arapça",
-        "bengali": "Bengalce",
-        "portuguese": "Portekizce",
-        "russian": "Rusça",
-        "japanese": "Japonca",
-        "indonesian": "Endonezce"
-    },
     "habit_data": {
         "longest_streak": "En Uzun Seri",
-        "current_streak": "Mevcut Seri",
-        "select_year": "Yıl Seç",
-        "marked": "Tamamlandı",
-        "mark_today": "Bugünü İşaretle"
+        "current_streak": "Mevcut Seri"
     },
     "notifications": {
         "title": "Bildirimler",

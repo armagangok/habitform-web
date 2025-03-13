@@ -64,11 +64,6 @@
         "next": "הבא",
         "start_button": "התחל 🚀",
         "continue_button": "המשך →",
-        "features": {
-            "minimalist": "מינימליסטי.",
-            "easy_to_use": "קל לשימוש.",
-            "science_based": "מבוסס מדע."
-        },
         "goals": {
             "title": "מה המטרה העיקרית שלך?",
             "better_productivity": "פרודוקטיביות טובה יותר",
@@ -154,12 +149,27 @@
         "system": "מערכת",
         "dark_mode": "מצב כהה",
         "light_mode": "מצב בהיר",
-        "support": "תמוך ב-HabitRise",
-        "support_subtitle": "אוהב את HabitRise? דרג אותנו ועזור לנו לצמוח!",
-        "feedback": "שלח משוב",
+        "support": "תמכו ב-HabitRise",
+        "support_subtitle": "אוהבים את HabitRise? דרגו אותנו ועזרו לנו לצמוח!",
+        "feedback": "שלחו משוב",
         "privacy": "פרטיות",
-        "terms": "תנאי שימוש",
-        "habitArchive": "ארכיון הרגלים"
+        "terms": "תנאים",
+        "habitArchive": "ארכיון הרגלים",
+        "data_export_import": "ניהול נתונים",
+        "about_data_management": "אודות ניהול נתונים",
+        "data_management_description": "ייצאו את נתוני ההרגלים שלכם לקובץ CSV לגיבוי או העברה למכשיר אחר. תוכלו גם לייבא נתונים שיוצאו בעבר.",
+        "export_data": "ייצוא נתונים",
+        "export_description": "ייצאו את כל ההרגלים ונתוני ההשלמה שלכם לקובץ CSV. ניתן להשתמש בקובץ זה כגיבוי או להעברת הנתונים שלכם למכשיר אחר.",
+        "import_data": "ייבוא נתונים",
+        "import_description": "ייבאו הרגלים מקובץ CSV שיוצא בעבר. פעולה זו תוסיף או תעדכן הרגלים באוסף הנוכחי שלכם.",
+        "exporting": "מייצא...",
+        "importing": "מייבא...",
+        "export_success": "הנתונים יוצאו בהצלחה",
+        "export_error": "שגיאה בייצוא הנתונים",
+        "import_success": "הנתונים יובאו בהצלחה",
+        "import_error": "שגיאה בייבוא הנתונים",
+        "habits_imported": "הרגלים יובאו",
+        "no_habits_imported": "לא יובאו הרגלים"
     },
     "subscription": {
         "subscribe_to": "הירשם ל",
@@ -254,33 +264,9 @@
         "time": "זמן",
         "habit_reminder_message": "אל תשכח להשלים את ההרגל שלך!"
     },
-    "languages": {
-        "english": "אנגלית",
-        "turkish": "טורקית",
-        "chinese": "סינית",
-        "spanish": "ספרדית",
-        "hindi": "הינדי",
-        "arabic": "ערבית",
-        "bengali": "בנגלית",
-        "portuguese": "פורטוגזית",
-        "russian": "רוסית",
-        "japanese": "יפנית",
-        "indonesian": "אינדונזית",
-        "korean": "קוריאנית",
-        "italian": "איטלקית",
-        "dutch": "הולנדית",
-        "swedish": "שוודית",
-        "norwegian": "נורווגית",
-        "danish": "דנית",
-        "finnish": "פינית",
-        "hebrew": "עברית"
-    },
     "habit_data": {
         "longest_streak": "רצף הארוך ביותר",
-        "current_streak": "רצף נוכחי",
-        "select_year": "בחר שנה",
-        "marked": "מסומן",
-        "mark_today": "סמן היום"
+        "current_streak": "רצף נוכחי"
     },
     "notifications": {
         "title": "התראות",

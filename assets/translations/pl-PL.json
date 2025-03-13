@@ -64,11 +64,6 @@
         "next": "Dalej",
         "start_button": "Start 🚀",
         "continue_button": "Kontynuuj →",
-        "features": {
-            "minimalist": "Minimalistyczny.",
-            "easy_to_use": "Łatwy w użyciu.",
-            "science_based": "Oparty na nauce."
-        },
         "goals": {
             "title": "Jaki jest Twój główny cel?",
             "better_productivity": "Lepsza produktywność",
@@ -155,11 +150,26 @@
         "dark_mode": "Tryb ciemny",
         "light_mode": "Tryb jasny",
         "support": "Wesprzyj HabitRise",
-        "support_subtitle": "Lubisz HabitRise? Oceń nas i pomóż nam się rozwijać!",
+        "support_subtitle": "Podoba Ci się HabitRise? Oceń nas i pomóż nam się rozwijać!",
         "feedback": "Wyślij opinię",
         "privacy": "Prywatność",
         "terms": "Warunki",
-        "habitArchive": "Archiwum nawyków"
+        "habitArchive": "Zarchiwizowane nawyki",
+        "data_export_import": "Zarządzanie danymi",
+        "about_data_management": "O zarządzaniu danymi",
+        "data_management_description": "Eksportuj swoje dane nawyków do pliku CSV w celu utworzenia kopii zapasowej lub przeniesienia na inne urządzenie. Możesz także importować wcześniej wyeksportowane dane.",
+        "export_data": "Eksportuj dane",
+        "export_description": "Eksportuj wszystkie swoje nawyki i dane o ich ukończeniu do pliku CSV. Ten plik może służyć jako kopia zapasowa lub do przeniesienia danych na inne urządzenie.",
+        "import_data": "Importuj dane",
+        "import_description": "Importuj nawyki z wcześniej wyeksportowanego pliku CSV. Spowoduje to dodanie lub zaktualizowanie nawyków w twojej obecnej kolekcji.",
+        "exporting": "Eksportowanie...",
+        "importing": "Importowanie...",
+        "export_success": "Pomyślnie wyeksportowano dane",
+        "export_error": "Błąd podczas eksportowania danych",
+        "import_success": "Pomyślnie zaimportowano dane",
+        "import_error": "Błąd podczas importowania danych",
+        "habits_imported": "zaimportowanych nawyków",
+        "no_habits_imported": "Nie zaimportowano żadnych nawyków"
     },
     "subscription": {
         "subscribe_to": "Subskrybuj",
@@ -254,38 +264,9 @@
         "time": "Czas",
         "habit_reminder_message": "Nie zapomnij ukończyć swojego nawyku!"
     },
-    "languages": {
-        "english": "Angielski",
-        "turkish": "Turecki",
-        "chinese": "Chiński",
-        "spanish": "Hiszpański",
-        "hindi": "Hindi",
-        "arabic": "Arabski",
-        "bengali": "Bengalski",
-        "portuguese": "Portugalski",
-        "russian": "Rosyjski",
-        "japanese": "Japoński",
-        "indonesian": "Indonezyjski",
-        "korean": "Koreański",
-        "italian": "Włoski",
-        "dutch": "Holenderski",
-        "swedish": "Szwedzki",
-        "norwegian": "Norweski",
-        "danish": "Duński",
-        "finnish": "Fiński",
-        "hebrew": "Hebrajski",
-        "catalan": "Kataloński",
-        "thai": "Tajski",
-        "vietnamese": "Wietnamski",
-        "czech": "Czeski",
-        "polish": "Polski"
-    },
     "habit_data": {
         "longest_streak": "Najdłuższa seria",
-        "current_streak": "Aktualna seria",
-        "select_year": "Wybierz rok",
-        "marked": "Zaznaczone",
-        "mark_today": "Zaznacz dzisiaj"
+        "current_streak": "Aktualna seria"
     },
     "notifications": {
         "title": "Powiadomienia",

@@ -1,5 +1,6 @@
 import '../../features/archived_habits/pages/archived_habits_page.dart';
 import '../../features/home/views/pages/home_page.dart';
+import '../../features/settings/pages/data_export_import_page.dart';
 import '../../features/settings/pages/notifications_page.dart';
 import '../../features/settings/settings_page.dart';
 import '../core.dart';
@@ -14,8 +15,6 @@ final class NavigationRoute {
       case KRoute.homePage:
         return _getRoute(page: const HomePage(), settings: args);
 
-
-
       case KRoute.settings:
         return _getRoute(page: const SettingsPage(), settings: args);
 
@@ -24,6 +23,9 @@ final class NavigationRoute {
 
       case KRoute.archivedHabits:
         return _getRoute(page: const ArchivedHabitsPage(), settings: args);
+
+      case KRoute.dataManagement:
+        return _getRoute(page: const DataExportImportPage(), settings: args);
 
       default:
         return CupertinoPageRoute(

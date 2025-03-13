@@ -64,11 +64,6 @@
         "next": "Siguiente",
         "start_button": "Empezar 🚀",
         "continue_button": "Continuar →",
-        "features": {
-            "minimalist": "Minimalista.",
-            "easy_to_use": "Fácil de usar.",
-            "science_based": "Basado en la ciencia."
-        },
         "goals": {
             "title": "¿Cuál es tu objetivo principal?",
             "better_productivity": "Mejor productividad",
@@ -159,7 +154,22 @@
         "feedback": "Enviar comentarios",
         "privacy": "Privacidad",
         "terms": "Términos",
-        "habitArchive": "Hábitos archivados"
+        "habitArchive": "Hábitos Archivados",
+        "data_export_import": "Gestión de Datos",
+        "about_data_management": "Acerca de la Gestión de Datos",
+        "data_management_description": "Exporta tus datos de hábitos a un archivo CSV para hacer copias de seguridad o transferir a otro dispositivo. También puedes importar datos exportados previamente.",
+        "export_data": "Exportar Datos",
+        "export_description": "Exporta todos tus hábitos y sus datos de completado a un archivo CSV. Este archivo puede usarse como copia de seguridad o para transferir tus datos a otro dispositivo.",
+        "import_data": "Importar Datos",
+        "import_description": "Importa hábitos desde un archivo CSV exportado previamente. Esto añadirá o actualizará hábitos en tu colección actual.",
+        "exporting": "Exportando...",
+        "importing": "Importando...",
+        "export_success": "Datos exportados con éxito",
+        "export_error": "Error al exportar datos",
+        "import_success": "Datos importados con éxito",
+        "import_error": "Error al importar datos",
+        "habits_imported": "hábitos importados",
+        "no_habits_imported": "No se importaron hábitos"
     },
     "subscription": {
         "subscribe_to": "Suscribirse a",
@@ -254,33 +264,9 @@
         "time": "Hora",
         "habit_reminder_message": "¡No olvides completar tu hábito!"
     },
-    "languages": {
-        "english": "Inglés",
-        "turkish": "Turco",
-        "chinese": "Chino",
-        "spanish": "Español",
-        "hindi": "Hindi",
-        "arabic": "Árabe",
-        "bengali": "Bengalí",
-        "portuguese": "Portugués",
-        "russian": "Ruso",
-        "japanese": "Japonés",
-        "indonesian": "Indonesio",
-        "korean": "Coreano",
-        "italian": "Italiano",
-        "dutch": "Holandés",
-        "swedish": "Sueco",
-        "norwegian": "Noruego",
-        "danish": "Danés",
-        "finnish": "Finés",
-        "hebrew": "Hebreo"
-    },
     "habit_data": {
         "longest_streak": "Racha más larga",
-        "current_streak": "Racha actual",
-        "select_year": "Seleccionar año",
-        "marked": "Marcado",
-        "mark_today": "Marcar hoy"
+        "current_streak": "Racha actual"
     },
     "notifications": {
         "title": "Notificaciones",

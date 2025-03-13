@@ -64,11 +64,6 @@
         "next": "Seuraava",
         "start_button": "Aloita 🚀",
         "continue_button": "Jatka →",
-        "features": {
-            "minimalist": "Minimalistinen.",
-            "easy_to_use": "Helppo käyttää.",
-            "science_based": "Tieteeseen perustuva."
-        },
         "goals": {
             "title": "Mikä on päätavoitteesi?",
             "better_productivity": "Parempi Tuottavuus",
@@ -152,14 +147,29 @@
         "notifications": "Ilmoitukset",
         "theme": "Teema",
         "system": "Järjestelmä",
-        "dark_mode": "Tumma Tila",
-        "light_mode": "Vaalea Tila",
+        "dark_mode": "Tumma tila",
+        "light_mode": "Vaalea tila",
         "support": "Tue HabitRisea",
-        "support_subtitle": "Pidätkö HabitRisesta? Arvioi meitä ja auta meitä kasvamaan!",
-        "feedback": "Lähetä Palautetta",
+        "support_subtitle": "Pidätkö HabitRisesta? Arvostele meitä ja auta meitä kasvamaan!",
+        "feedback": "Lähetä palautetta",
         "privacy": "Tietosuoja",
         "terms": "Käyttöehdot",
-        "habitArchive": "Tapa-arkisto"
+        "habitArchive": "Tapojen arkisto",
+        "data_export_import": "Tietojen hallinta",
+        "about_data_management": "Tietoja tietojen hallinnasta",
+        "data_management_description": "Vie tapatietosi CSV-tiedostoon varmuuskopiointia tai toiseen laitteeseen siirtämistä varten. Voit myös tuoda aiemmin vietyjä tietoja.",
+        "export_data": "Vie tiedot",
+        "export_description": "Vie kaikki tapasi ja suoritustiedot CSV-tiedostoon. Tätä tiedostoa voidaan käyttää varmuuskopiona tai tietojesi siirtämiseen toiseen laitteeseen.",
+        "import_data": "Tuo tiedot",
+        "import_description": "Tuo tapoja aiemmin viedystä CSV-tiedostosta. Tämä lisää tai päivittää tapoja nykyiseen kokoelmaasi.",
+        "exporting": "Viedään...",
+        "importing": "Tuodaan...",
+        "export_success": "Tiedot viety onnistuneesti",
+        "export_error": "Virhe tietojen viennissä",
+        "import_success": "Tiedot tuotu onnistuneesti",
+        "import_error": "Virhe tietojen tuonnissa",
+        "habits_imported": "tapaa tuotu",
+        "no_habits_imported": "Ei tuotuja tapoja"
     },
     "subscription": {
         "subscribe_to": "Tilaa",
@@ -254,33 +264,9 @@
         "time": "Aika",
         "habit_reminder_message": "Älä unohda suorittaa tapaasi!"
     },
-    "languages": {
-        "english": "Englanti",
-        "turkish": "Turkki",
-        "chinese": "Kiina",
-        "spanish": "Espanja",
-        "hindi": "Hindi",
-        "arabic": "Arabia",
-        "bengali": "Bengali",
-        "portuguese": "Portugali",
-        "russian": "Venäjä",
-        "japanese": "Japani",
-        "indonesian": "Indonesia",
-        "korean": "Korea",
-        "italian": "Italia",
-        "dutch": "Hollanti",
-        "swedish": "Ruotsi",
-        "norwegian": "Norja",
-        "danish": "Tanska",
-        "finnish": "Suomi",
-        "hebrew": "Heprea"
-    },
     "habit_data": {
         "longest_streak": "Pisin Putki",
-        "current_streak": "Nykyinen Putki",
-        "select_year": "Valitse Vuosi",
-        "marked": "Merkitty",
-        "mark_today": "Merkitse Tänään"
+        "current_streak": "Nykyinen Putki"
     },
     "notifications": {
         "title": "Ilmoitukset",

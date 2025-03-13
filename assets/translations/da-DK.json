@@ -64,11 +64,6 @@
         "next": "Næste",
         "start_button": "Start 🚀",
         "continue_button": "Fortsæt →",
-        "features": {
-            "minimalist": "Minimalistisk.",
-            "easy_to_use": "Nem at bruge.",
-            "science_based": "Videnskabeligt baseret."
-        },
         "goals": {
             "title": "Hvad er dit hovedmål?",
             "better_productivity": "Bedre Produktivitet",
@@ -152,14 +147,29 @@
         "notifications": "Notifikationer",
         "theme": "Tema",
         "system": "System",
-        "dark_mode": "Mørk Tilstand",
-        "light_mode": "Lys Tilstand",
+        "dark_mode": "Mørk tilstand",
+        "light_mode": "Lys tilstand",
         "support": "Støt HabitRise",
         "support_subtitle": "Kan du lide HabitRise? Bedøm os og hjælp os med at vokse!",
-        "feedback": "Send Feedback",
-        "privacy": "Privatliv",
-        "terms": "Brugervilkår",
-        "habitArchive": "Vanearkiv"
+        "feedback": "Send feedback",
+        "privacy": "Privatlivspolitik",
+        "terms": "Vilkår",
+        "habitArchive": "Vanearkiv",
+        "data_export_import": "Datahåndtering",
+        "about_data_management": "Om datahåndtering",
+        "data_management_description": "Eksportér dine vanedata til en CSV-fil til backup eller overførsel til en anden enhed. Du kan også importere tidligere eksporterede data.",
+        "export_data": "Eksportér data",
+        "export_description": "Eksportér alle dine vaner og fuldførelsesdata til en CSV-fil. Denne fil kan bruges som backup eller til at overføre dine data til en anden enhed.",
+        "import_data": "Importér data",
+        "import_description": "Importér vaner fra en tidligere eksporteret CSV-fil. Dette vil tilføje eller opdatere vaner i din nuværende samling.",
+        "exporting": "Eksporterer...",
+        "importing": "Importerer...",
+        "export_success": "Data eksporteret med succes",
+        "export_error": "Fejl ved eksport af data",
+        "import_success": "Data importeret med succes",
+        "import_error": "Fejl ved import af data",
+        "habits_imported": "vaner importeret",
+        "no_habits_imported": "Ingen vaner importeret"
     },
     "subscription": {
         "subscribe_to": "Abonner på",
@@ -254,33 +264,9 @@
         "time": "Tid",
         "habit_reminder_message": "Glem ikke at fuldføre din vane!"
     },
-    "languages": {
-        "english": "Engelsk",
-        "turkish": "Tyrkisk",
-        "chinese": "Kinesisk",
-        "spanish": "Spansk",
-        "hindi": "Hindi",
-        "arabic": "Arabisk",
-        "bengali": "Bengali",
-        "portuguese": "Portugisisk",
-        "russian": "Russisk",
-        "japanese": "Japansk",
-        "indonesian": "Indonesisk",
-        "korean": "Koreansk",
-        "italian": "Italiensk",
-        "dutch": "Hollandsk",
-        "swedish": "Svensk",
-        "norwegian": "Norsk",
-        "danish": "Dansk",
-        "finnish": "Finsk",
-        "hebrew": "Hebraisk"
-    },
     "habit_data": {
         "longest_streak": "Længste Streak",
-        "current_streak": "Nuværende Streak",
-        "select_year": "Vælg År",
-        "marked": "Markeret",
-        "mark_today": "Marker I Dag"
+        "current_streak": "Nuværende Streak"
     },
     "notifications": {
         "title": "Notifikationer",
