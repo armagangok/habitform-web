@@ -27,33 +27,8 @@ class _DataExportImportPageState extends ConsumerState<DataExportImportPage> {
 
       final filePath = await _csvService.exportHabitsToCSV();
       await _csvService.shareCSVFile(filePath);
-
-      if (mounted) {
-        setState(() {
-          _isExporting = false;
-        });
-
-        // Show success message
-        showCupertinoDialog(
-          context: context,
-          builder: (context) => CupertinoAlertDialog(
-            title: Text(LocaleKeys.common_Information.tr()),
-            content: Text(LocaleKeys.settings_export_success.tr()),
-            actions: [
-              CupertinoDialogAction(
-                child: Text(LocaleKeys.common_ok.tr()),
-                onPressed: () => Navigator.of(context).pop(),
-              ),
-            ],
-          ),
-        );
-      }
     } catch (e) {
       if (mounted) {
-        setState(() {
-          _isExporting = false;
-        });
-
         // Show error message
         showCupertinoDialog(
           context: context,
@@ -69,6 +44,12 @@ class _DataExportImportPageState extends ConsumerState<DataExportImportPage> {
           ),
         );
       }
+    }
+
+    if (mounted) {
+      setState(() {
+        _isExporting = false;
+      });
     }
   }
 
@@ -158,34 +139,34 @@ class _DataExportImportPageState extends ConsumerState<DataExportImportPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Info section
-              Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          Icon(
-                            CupertinoIcons.info_circle_fill,
-                            color: context.primary,
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Icon(
+                          CupertinoIcons.info_circle_fill,
+                          color: context.primary,
+                        ),
+                        SizedBox(width: 8),
+                        Text(
+                          LocaleKeys.settings_about_data_management.tr(),
+                          style: context.titleSmall?.copyWith(
+                            fontWeight: FontWeight.bold,
                           ),
-                          SizedBox(width: 8),
-                          Text(
-                            LocaleKeys.settings_about_data_management.tr(),
-                            style: context.titleMedium?.copyWith(
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 12),
+                    Text(
+                      LocaleKeys.settings_data_management_description.tr(),
+                      style: context.bodySmall?.copyWith(
+                        color: context.bodySmall?.color?.withValues(alpha: .7),
                       ),
-                      SizedBox(height: 12),
-                      Text(
-                        LocaleKeys.settings_data_management_description.tr(),
-                        style: context.bodyMedium,
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
 
