@@ -54,25 +54,29 @@ class HabitSelector extends ConsumerWidget {
       });
     }
 
-    return Container(
-      padding: const EdgeInsets.only(top: 16, bottom: 8),
-      width: double.infinity,
-      child: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Row(
-          children: [
-            // Alışkanlık butonları
-            for (int i = 0; i < habitStats.length; i++)
-              HabitSelectorButton(
-                isSelected: i == selectedHabitIndex,
-                emoji: _getEmojiForHabit(habitStats[i].habitName, ref),
-                habitName: habitStats[i].habitName,
-                onTap: () => onHabitSelected(i),
-              ),
-          ],
+    return Column(
+      children: [
+        Container(
+          padding: const EdgeInsets.only(top: 16, bottom: 8),
+          width: double.infinity,
+          child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Row(
+              children: [
+                // Alışkanlık butonları
+                for (int i = 0; i < habitStats.length; i++)
+                  HabitSelectorButton(
+                    isSelected: i == selectedHabitIndex,
+                    emoji: _getEmojiForHabit(habitStats[i].habitName, ref),
+                    habitName: habitStats[i].habitName,
+                    onTap: () => onHabitSelected(i),
+                  ),
+              ],
+            ),
+          ),
         ),
-      ),
+      ],
     );
   }
 }

@@ -16,34 +16,38 @@ class HabitSelectorButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: Colors.transparent,
-      child: CupertinoButton(
-        onPressed: onTap,
-        borderRadius: BorderRadius.circular(24),
-        padding: const EdgeInsets.only(right: 20),
-        child: Card(
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: AnimatedSize(
-              duration: const Duration(milliseconds: 350),
-              curve: Curves.easeInOut,
-              alignment: Alignment.centerLeft,
-              child: Row(
-                children: [
-                  Text(
-                    emoji,
-                    style: const TextStyle(fontSize: 18),
-                  ),
+    return Padding(
+      padding: const EdgeInsets.only(right: 20),
+      child: Material(
+        color: Colors.transparent,
+        child: CupertinoButton(
+          onPressed: onTap,
+          minSize: 0,
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+          borderRadius: BorderRadius.circular(12),
+          color: isSelected ? Colors.deepOrangeAccent : context.theme.cardTheme.color,
+          pressedOpacity: .9,
+          child: AnimatedSize(
+            duration: const Duration(milliseconds: 350),
+            curve: Curves.easeInOut,
+            alignment: Alignment.centerLeft,
+            child: Row(
+              children: [
+                Text(
+                  emoji,
+                  style: const TextStyle(fontSize: 24),
+                ),
+                if (isSelected) ...[
                   const SizedBox(width: 8),
                   Text(
                     isSelected ? habitName : "",
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
                           fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                          color: isSelected ? CupertinoColors.white : null,
                         ),
                   ),
-                ],
-              ),
+                ]
+              ],
             ),
           ),
         ),

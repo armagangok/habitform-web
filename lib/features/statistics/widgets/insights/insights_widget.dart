@@ -6,45 +6,9 @@ import 'package:habitrise/core/extension/extensions.dart';
 
 import '../../page/statistics_page.dart';
 import '../../provider/statistics_provider.dart';
-import '../../provider/statistics_state.dart';
 
 class InsightsWidget extends ConsumerWidget {
   const InsightsWidget({super.key});
-
-  String _formatDayName(String shortDay) {
-    // Kısa gün adlarını tam formata çevir
-    final Map<String, String> dayNames = {
-      'Mon': 'Pazartesi',
-      'Tue': 'Salı',
-      'Wed': 'Çarşamba',
-      'Thu': 'Perşembe',
-      'Fri': 'Cuma',
-      'Sat': 'Cumartesi',
-      'Sun': 'Pazar',
-      'Pzt': 'Pazartesi',
-      'Sal': 'Salı',
-      'Çar': 'Çarşamba',
-      'Per': 'Perşembe',
-      'Cum': 'Cuma',
-      'Cmt': 'Cumartesi',
-      'Paz': 'Pazar',
-    };
-    return dayNames[shortDay] ?? shortDay;
-  }
-
-  (String day, double rate) _getMostProductiveDay(Map<String, double> progress) {
-    if (progress.isEmpty) return ('', 0);
-
-    var maxEntry = progress.entries.reduce((a, b) => a.value > b.value ? a : b);
-    return (maxEntry.key, maxEntry.value);
-  }
-
-  (String day, double rate) _getMostSkippedDay(Map<String, double> progress) {
-    if (progress.isEmpty) return ('', 0);
-
-    var minEntry = progress.entries.reduce((a, b) => a.value < b.value ? a : b);
-    return (minEntry.key, minEntry.value);
-  }
 
   // Alışkanlık oturma durumunu hesapla
   String _getHabitFormationStatus(double completionRate, int completedDays) {
@@ -107,7 +71,7 @@ class InsightsWidget extends ConsumerWidget {
         if (data.weeklyProgress.isEmpty || data.totalCompletedDays == 0) {
           return CupertinoListSection.insetGrouped(
             backgroundColor: Colors.transparent,
-            header: Text('Alışkanlık Oluşum'),
+            header: Text('Alışkanlık Oluşumu'),
             children: [
               CupertinoListTile(
                 backgroundColor: Colors.transparent,
@@ -144,18 +108,9 @@ class InsightsWidget extends ConsumerWidget {
         }
 
         // Seçili alışkanlığa göre filtreleme yap
-        final StatisticsState filteredState = selectedHabitIndex == -1
-            ? data
-            : data.filterByHabit(
-                data.habitStatistics.values.elementAt(selectedHabitIndex).habitId,
-              );
 
         // Başlık metnini belirle
-        String headerText = 'Alışkanlık Oluşum';
-
-        // Seçili alışkanlık için en verimli ve en az verimli günleri hesapla
-        final (productiveDay, productiveRate) = _getMostProductiveDay(filteredState.weeklyProgress);
-        final (skippedDay, skippedRate) = _getMostSkippedDay(filteredState.weeklyProgress);
+        String headerText = 'Alışkanlık Oluşumu';
 
         // Alışkanlık oturma durumu ve tahmini süre
         String habitFormationStatus = '';
@@ -174,11 +129,12 @@ class InsightsWidget extends ConsumerWidget {
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
+                spacing: 16,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   if (selectedHabitIndex != -1) ...[
                     _buildHabitFormationChart(context, data.habitStatistics.values.elementAt(selectedHabitIndex).progressPercentage),
-                    const SizedBox(height: 30),
+                    const SizedBox(height: 10),
                     Text(
                       'Alışkanlık Oluşumu Hakkında',
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
@@ -186,43 +142,41 @@ class InsightsWidget extends ConsumerWidget {
                           ),
                       maxLines: 3,
                     ),
-                    const SizedBox(height: 8),
                     Text(
                       habitFormationStatus,
                       style: Theme.of(context).textTheme.bodyMedium,
                       maxLines: 10,
                     ),
-                    const SizedBox(height: 8),
                     Text(
                       estimatedFormationTime,
                       style: Theme.of(context).textTheme.bodyMedium,
                       maxLines: 10,
                     ),
-                    const SizedBox(height: 8),
-                    Text(
-                      'Araştırmalara göre, bir alışkanlığın yerleşmesi için gereken ortalama süre 66 gündür. Bu süre boyunca düzenli tekrar, alışkanlığın otomatik hale gelmesini sağlar.',
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: context.bodySmall?.color?.withValues(alpha: .75),
-                          ),
-                      maxLines: 10,
+                    Card(
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.info_outline,
+                              size: 24,
+                              color: context.theme.hintColor,
+                            ),
+                            const SizedBox(width: 16),
+                            Expanded(
+                              child: Text(
+                                'Araştırmalara göre, bir alışkanlığın yerleşmesi için gereken ortalama süre 66 gündür. Bu süre boyunca düzenli tekrar, alışkanlığın otomatik hale gelmesini sağlar.',
+                                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                      color: context.bodySmall?.color?.withValues(alpha: .75),
+                                    ),
+                                maxLines: 10,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
-                    const SizedBox(height: 24),
-                    const Divider(),
-                    const SizedBox(height: 16),
                   ],
-                  _buildInsightItem(
-                    context,
-                    icon: Icons.calendar_today,
-                    title: 'En Verimli Gün',
-                    value: productiveDay.isNotEmpty ? '${_formatDayName(productiveDay)} (%${(productiveRate * 100).toStringAsFixed(0)})' : 'Henüz yeterli veri yok',
-                  ),
-                  const SizedBox(height: 16),
-                  _buildInsightItem(
-                    context,
-                    icon: Icons.skip_next,
-                    title: 'En Çok Atlanan Gün',
-                    value: skippedDay.isNotEmpty ? '${_formatDayName(skippedDay)} (%${(skippedRate * 100).toStringAsFixed(0)})' : 'Henüz yeterli veri yok',
-                  ),
                 ],
               ),
             ),
@@ -437,49 +391,6 @@ class InsightsWidget extends ConsumerWidget {
                 color: isSelected ? Theme.of(context).colorScheme.primary : Theme.of(context).hintColor,
                 fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
               ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildInsightItem(
-    BuildContext context, {
-    required IconData icon,
-    required String title,
-    required String value,
-  }) {
-    return Row(
-      children: [
-        Container(
-          padding: const EdgeInsets.all(12),
-          decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: Icon(
-            icon,
-            color: Theme.of(context).colorScheme.primary,
-          ),
-        ),
-        const SizedBox(width: 16),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                title,
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: Theme.of(context).hintColor,
-                    ),
-              ),
-              Text(
-                value,
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
-              ),
-            ],
-          ),
         ),
       ],
     );
