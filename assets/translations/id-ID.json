@@ -302,5 +302,45 @@
         "last_purchase_date": "Tanggal Pembelian Terakhir",
         "change_plan": "Ubah Paket",
         "change_plan_desc": "Klik untuk mengubah paket langganan Anda"
+    },
+    "statistics": {
+        "title": "Statistik",
+        "no_data_title": "Belum ada statistik",
+        "no_data_description": "Anda akan melihat statistik terperinci di sini ketika Anda mulai melacak kebiasaan Anda.",
+        "overview": "Ikhtisar",
+        "no_data_for_habit": "Belum ada data statistik",
+        "start_tracking_habit": "Mulai melacak kebiasaan ini",
+        "habit_formation": "Pembentukan Kebiasaan",
+        "completed": "Selesai",
+        "total_days": "Total Hari",
+        "longest_streak": "Rangkaian Terpanjang",
+        "current_streak": "Rangkaian Saat Ini",
+        "about_formation": "Tentang Pembentukan Kebiasaan",
+        "formation_info": "Menurut penelitian, dibutuhkan rata-rata 66 hari agar kebiasaan menjadi otomatis. Pengulangan rutin selama periode ini membantu kebiasaan menjadi otomatis.",
+        "formation_status": {
+            "early": "Anda masih dalam tahap awal. Diperlukan 18-66 hari pengulangan rutin untuk membentuk kebiasaan.",
+            "excellent": "Luar biasa! Dengan tingkat penyelesaian {percentage}%, kebiasaan Anda sebagian besar telah otomatis.",
+            "very_good": "Sangat bagus! Dengan tingkat penyelesaian {percentage}%, kebiasaan Anda mulai terbentuk.",
+            "good": "Berjalan baik! Tingkat penyelesaian {percentage}% cukup untuk pembentukan kebiasaan.",
+            "improving": "Anda meningkat. Coba tingkatkan tingkat penyelesaian {percentage}% di atas 70%.",
+            "needs_work": "Anda perlu meningkatkan tingkat penyelesaian untuk membentuk kebiasaan. Saat ini di {percentage}%."
+        },
+        "formation_time": {
+            "not_enough_data": "Belum cukup data.",
+            "completed_successful": "Selamat! Kebiasaan Anda kemungkinan sudah terbentuk.",
+            "completed_good": "Selamat! Anda telah menyelesaikan periode rata-rata 66 hari dengan tingkat penyelesaian {percentage}%, dan kebiasaan Anda kemungkinan sudah terbentuk.",
+            "completed_needs_work": "Anda telah menyelesaikan periode rata-rata 66 hari, tetapi disarankan untuk meningkatkan tingkat penyelesaian di atas 70% agar kebiasaan terbentuk sepenuhnya.",
+            "remaining_days": "Diperkirakan {days} hari tersisa untuk pembentukan kebiasaan. Pertahankan pengulangan rutin."
+        },
+        "chart_labels": {
+            "insufficient": "Tidak Cukup",
+            "moderate": "Sedang",
+            "good": "Baik",
+            "excellent": "Sangat Baik",
+            "below_50": "< 50%",
+            "between_50_70": "50-70%",
+            "between_70_90": "70-90%",
+            "above_90": "> 90%"
+        }
     }
 }

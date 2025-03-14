@@ -5,10 +5,6 @@ class StatisticsState {
   final double completionRate;
   final int longestStreak;
 
-  // Progress Charts Data - Genel ilerleme verileri (tüm alışkanlıklar)
-  final Map<String, double> weeklyProgress;
-  final Map<String, double> monthlyProgress;
-
   // Habit-specific Statistics
   final Map<String, HabitStatistic> habitStatistics;
 
@@ -16,8 +12,6 @@ class StatisticsState {
     required this.totalCompletedDays,
     required this.completionRate,
     required this.longestStreak,
-    required this.weeklyProgress,
-    required this.monthlyProgress,
     required this.habitStatistics,
   });
 
@@ -26,8 +20,6 @@ class StatisticsState {
         totalCompletedDays: 0,
         completionRate: 0,
         longestStreak: 0,
-        weeklyProgress: {},
-        monthlyProgress: {},
         habitStatistics: {},
       );
 
@@ -36,16 +28,12 @@ class StatisticsState {
     int? totalCompletedDays,
     double? completionRate,
     int? longestStreak,
-    Map<String, double>? weeklyProgress,
-    Map<String, double>? monthlyProgress,
     Map<String, HabitStatistic>? habitStatistics,
   }) {
     return StatisticsState(
       totalCompletedDays: totalCompletedDays ?? this.totalCompletedDays,
       completionRate: completionRate ?? this.completionRate,
       longestStreak: longestStreak ?? this.longestStreak,
-      weeklyProgress: weeklyProgress ?? this.weeklyProgress,
-      monthlyProgress: monthlyProgress ?? this.monthlyProgress,
       habitStatistics: habitStatistics ?? this.habitStatistics,
     );
   }

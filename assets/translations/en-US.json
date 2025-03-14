@@ -302,5 +302,45 @@
         "last_purchase_date": "Last Purchase Date",
         "change_plan": "Change Plan",
         "change_plan_desc": "Click to change your subscription plan"
+    },
+    "statistics": {
+        "title": "Statistics",
+        "no_data_title": "No Statistics Yet",
+        "no_data_description": "You'll see detailed statistics here when you start tracking your habits.",
+        "overview": "Overview",
+        "no_data_for_habit": "No statistics data yet",
+        "start_tracking_habit": "Start tracking this habit",
+        "habit_formation": "Habit Formation",
+        "completed": "Completed",
+        "total_days": "Total Days",
+        "longest_streak": "Longest Streak",
+        "current_streak": "Current Streak",
+        "about_formation": "About Habit Formation",
+        "formation_info": "According to research, it takes an average of 66 days for a habit to become automatic. Regular repetition during this period helps the habit become automatic.",
+        "formation_status": {
+            "early": "You're still in the early stages. It takes 18-66 days of regular repetition for a habit to form.",
+            "excellent": "Excellent! With a {percentage}% completion rate, your habit is largely automated.",
+            "very_good": "Very good! With a {percentage}% completion rate, your habit is starting to settle.",
+            "good": "Going well! A {percentage}% completion rate is sufficient for habit formation.",
+            "improving": "You're improving. Try to increase the {percentage}% completion rate above 70%.",
+            "needs_work": "You need to increase your completion rate to form a habit. Currently at {percentage}%."
+        },
+        "formation_time": {
+            "not_enough_data": "Not enough data yet.",
+            "completed_successful": "Congratulations! Your habit is most likely established.",
+            "completed_good": "Congratulations! You've completed the average 66-day period with a {percentage}% completion rate, and your habit is likely established.",
+            "completed_needs_work": "You've completed the 66-day average period, but it's recommended to increase your completion rate above 70% for the habit to fully establish.",
+            "remaining_days": "Estimated {days} days left for habit formation. Keep up the regular repetition."
+        },
+        "chart_labels": {
+            "insufficient": "Insufficient",
+            "moderate": "Moderate",
+            "good": "Good",
+            "excellent": "Excellent",
+            "below_50": "< 50%",
+            "between_50_70": "50-70%",
+            "between_70_90": "70-90%",
+            "above_90": "> 90%"
+        }
     }
 }

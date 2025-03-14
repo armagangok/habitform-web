@@ -302,5 +302,45 @@
         "last_purchase_date": "最終購入日",
         "change_plan": "プランを変更",
         "change_plan_desc": "購読プランを変更するにはクリック"
+    },
+    "statistics": {
+        "title": "統計",
+        "no_data_title": "まだ統計データがありません",
+        "no_data_description": "習慣の追跡を開始すると、ここに詳細な統計が表示されます。",
+        "overview": "概要",
+        "no_data_for_habit": "まだ統計データがありません",
+        "start_tracking_habit": "この習慣の追跡を開始",
+        "habit_formation": "習慣形成",
+        "completed": "完了",
+        "total_days": "合計日数",
+        "longest_streak": "最長連続記録",
+        "current_streak": "現在の連続記録",
+        "about_formation": "習慣形成について",
+        "formation_info": "研究によると、習慣が自動化されるまでに平均66日かかります。この期間中の定期的な繰り返しが、習慣の自動化を助けます。",
+        "formation_status": {
+            "early": "まだ初期段階です。習慣を形成するには18-66日の定期的な繰り返しが必要です。",
+            "excellent": "素晴らしい！達成率{percentage}%で、あなたの習慣はほぼ自動化されています。",
+            "very_good": "とても良い！達成率{percentage}%で、あなたの習慣が定着し始めています。",
+            "good": "順調です！達成率{percentage}%は習慣形成に十分です。",
+            "improving": "改善中です。達成率{percentage}%を70%以上に上げてみましょう。",
+            "needs_work": "習慣を形成するには達成率を上げる必要があります。現在{percentage}%です。"
+        },
+        "formation_time": {
+            "not_enough_data": "まだ十分なデータがありません。",
+            "completed_successful": "おめでとうございます！あなたの習慣は恐らく定着しました。",
+            "completed_good": "おめでとうございます！達成率{percentage}%で平均66日間を完了し、あなたの習慣は恐らく定着しました。",
+            "completed_needs_work": "平均66日間は完了しましたが、習慣を完全に定着させるには達成率を70%以上に上げることをお勧めします。",
+            "remaining_days": "習慣形成まで約{days}日残っています。定期的な繰り返しを維持してください。"
+        },
+        "chart_labels": {
+            "insufficient": "不十分",
+            "moderate": "普通",
+            "good": "良好",
+            "excellent": "優秀",
+            "below_50": "50%未満",
+            "between_50_70": "50-70%",
+            "between_70_90": "70-90%",
+            "above_90": "90%以上"
+        }
     }
 }

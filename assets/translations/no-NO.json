@@ -302,5 +302,85 @@
         "last_purchase_date": "Dato for Siste Kjøp",
         "change_plan": "Endre Plan",
         "change_plan_desc": "Klikk for å endre abonnementsplanen din"
+    },
+    "habit_statistics": {
+        "title": "Statistikk",
+        "no_data_title": "Ingen statistikk funnet",
+        "no_data_description": "Du vil se detaljerte statistikker her når du begynner å spore din vane.",
+        "overview": "Oversikt",
+        "no_data_for_habit": "Ingen statistiske data funnet",
+        "start_tracking_habit": "Start å spore denne vanen",
+        "habit_formation": "Vaneformasjon",
+        "completed": "Fullført",
+        "total_days": "Totale dager",
+        "longest_streak": "Lengste rekke",
+        "current_streak": "Nåværende rekke",
+        "about_formation": "Om Vaneformasjon",
+        "formation_info": "Ifølge undersøkelser tar det i gjennomsnitt 66 dager å forme en vane. Gjentakelse i denne perioden hjelper til å forme vanen.",
+        "formation_status": {
+            "early": "Du er i de første stadiene. Det tar 18-66 dager med gjentakelse for å forme en vane.",
+            "excellent": "Utmerket! Med et fullføringsnivå på {percentage}% er din vane nesten automatisk formet.",
+            "very_good": "Utmerket! Med et fullføringsnivå på {percentage}% er din vane nesten automatisk formet.",
+            "good": "Bra! Et fullføringsnivå på {percentage}% er tilstrekkelig for å forme en vane.",
+            "improving": "Du forbedrer deg. Prøv å øke fullføringsnivået til {percentage}% over 70% for å forme en vane.",
+            "needs_work": "Du må øke fullføringsnivået til {percentage}% for å forme en vane. Du er momentant på {percentage}%."
+        },
+        "formation_time": {
+            "not_enough_data": "Ikke nok data tilgjengelig",
+            "completed_successful": "Gratulerer! Din vane er sannsynligvis formet.",
+            "completed_good": "Gratulerer! Du har fullført gjennomsnittlig 66-dagperiode med et fullføringsnivå på {percentage}% og din vane er sannsynligvis formet.",
+            "completed_needs_work": "Du har fullført gjennomsnittlig 66-dagperiode, men det anbefales å øke fullføringsnivået til over 70% for å forme en vane.",
+            "remaining_days": "Gjettet {days} dager til vaneformasjon. Fortsett å gjenta."
+        },
+        "chart_labels": {
+            "insufficient": "Uvoldoende",
+            "moderate": "Matig",
+            "good": "Bra",
+            "excellent": "Utmerket",
+            "below_50": "< 50%",
+            "between_50_70": "50-70%",
+            "between_70_90": "70-90%",
+            "above_90": "> 90%"
+        }
+    },
+    "statistics": {
+        "title": "Statistikk",
+        "no_data_title": "Ingen statistikk ennå",
+        "no_data_description": "Du vil se detaljert statistikk her når du begynner å spore vanene dine.",
+        "overview": "Oversikt",
+        "no_data_for_habit": "Ingen statistiske data ennå",
+        "start_tracking_habit": "Begynn å spore denne vanen",
+        "habit_formation": "Vanedannelse",
+        "completed": "Fullført",
+        "total_days": "Totalt Antall Dager",
+        "longest_streak": "Lengste Streak",
+        "current_streak": "Nåværende Streak",
+        "about_formation": "Om Vanedannelse",
+        "formation_info": "Ifølge forskning tar det i gjennomsnitt 66 dager før en vane blir automatisk. Regelmessig gjentakelse i denne perioden hjelper vanen å bli automatisk.",
+        "formation_status": {
+            "early": "Du er fortsatt i tidlige stadier. Det kreves 18-66 dager med regelmessig gjentakelse for å danne en vane.",
+            "excellent": "Utmerket! Med en fullføringsrate på {percentage}% er vanen din i stor grad automatisert.",
+            "very_good": "Veldig bra! Med en fullføringsrate på {percentage}% begynner vanen din å etablere seg.",
+            "good": "Bra! En fullføringsrate på {percentage}% er tilstrekkelig for vanedannelse.",
+            "improving": "Du forbedrer deg. Prøv å øke fullføringsraten på {percentage}% over 70%.",
+            "needs_work": "Du må øke fullføringsraten for å danne en vane. For øyeblikket på {percentage}%."
+        },
+        "formation_time": {
+            "not_enough_data": "Ikke nok data ennå.",
+            "completed_successful": "Gratulerer! Vanen din er sannsynligvis etablert.",
+            "completed_good": "Gratulerer! Du har fullført den gjennomsnittlige 66-dagersperioden med en fullføringsrate på {percentage}%, og vanen din er sannsynligvis etablert.",
+            "completed_needs_work": "Du har fullført den gjennomsnittlige 66-dagersperioden, men det anbefales å øke fullføringsraten over 70% for at vanen skal være fullstendig etablert.",
+            "remaining_days": "Omtrent {days} dager igjen til vanedannelse. Fortsett med regelmessig gjentakelse."
+        },
+        "chart_labels": {
+            "insufficient": "Utilstrekkelig",
+            "moderate": "Moderat",
+            "good": "Bra",
+            "excellent": "Utmerket",
+            "below_50": "< 50%",
+            "between_50_70": "50-70%",
+            "between_70_90": "70-90%",
+            "above_90": "> 90%"
+        }
     }
 }

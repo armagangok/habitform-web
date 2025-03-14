@@ -1,9 +1,11 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:habitrise/core/extension/extensions.dart';
 
+import '/features/translation/constants/locale_keys.g.dart';
 import '../../page/statistics_page.dart';
 import '../../provider/statistics_provider.dart';
 
@@ -13,26 +15,27 @@ class InsightsWidget extends ConsumerWidget {
   // Alışkanlık oturma durumunu hesapla
   String _getHabitFormationStatus(double completionRate, int completedDays) {
     if (completedDays < 10) {
-      return 'Henüz başlangıç aşamasındasınız. Alışkanlığın oturması için en az 18-66 gün düzenli tekrar gerekiyor.';
+      return LocaleKeys.statistics_formation_status_early.tr();
     }
 
+    final percentage = completionRate.toStringAsFixed(0);
     if (completionRate >= 90) {
-      return 'Harika! %${completionRate.toStringAsFixed(0)} tamamlama oranıyla alışkanlığınız büyük ölçüde otomatikleşmiş durumda.';
+      return LocaleKeys.statistics_formation_status_excellent.tr(namedArgs: {'percentage': percentage});
     } else if (completionRate >= 80) {
-      return 'Çok iyi! %${completionRate.toStringAsFixed(0)} tamamlama oranıyla alışkanlığınız yerleşmeye başlamış.';
+      return LocaleKeys.statistics_formation_status_very_good.tr(namedArgs: {'percentage': percentage});
     } else if (completionRate >= 70) {
-      return 'İyi gidiyorsunuz. %${completionRate.toStringAsFixed(0)} tamamlama oranı alışkanlık oluşturmak için yeterli bir seviye.';
+      return LocaleKeys.statistics_formation_status_good.tr(namedArgs: {'percentage': percentage});
     } else if (completionRate >= 50) {
-      return 'Gelişme gösteriyorsunuz. %${completionRate.toStringAsFixed(0)} tamamlama oranını %70\'in üzerine çıkarmaya çalışın.';
+      return LocaleKeys.statistics_formation_status_improving.tr(namedArgs: {'percentage': percentage});
     } else {
-      return 'Alışkanlık oluşturmak için tamamlama oranınızı artırmanız gerekiyor. Şu an %${completionRate.toStringAsFixed(0)}.';
+      return LocaleKeys.statistics_formation_status_needs_work.tr(namedArgs: {'percentage': percentage});
     }
   }
 
   // Tahmini alışkanlık oturma süresini hesapla
   String _getEstimatedFormationTime(double completionRate, int completedDays, DateTime startDate) {
     if (completedDays < 5) {
-      return 'Henüz yeterli veri yok.';
+      return LocaleKeys.statistics_formation_time_not_enough_data.tr();
     }
 
     // Başlangıçtan bugüne kadar geçen gün sayısı
@@ -47,14 +50,14 @@ class InsightsWidget extends ConsumerWidget {
 
     if (remainingDays == 0) {
       if (completionRate >= 90) {
-        return "Tebrikler! Alışkanlığınız büyük olasılıkla yerleşmiş durumda.";
+        return LocaleKeys.statistics_formation_time_completed_successful.tr();
       } else if (completionRate >= 70) {
-        return 'Tebrikler! 66 günlük ortalama süreyi tamamladınız ve %${completionRate.toStringAsFixed(0)} tamamlama oranıyla alışkanlığınız tahmini olarak, büyük olasılıkla yerleşmiş durumda.';
+        return LocaleKeys.statistics_formation_time_completed_good.tr(namedArgs: {'percentage': completionRate.toStringAsFixed(0)});
       } else {
-        return '66 günlük ortalama süreyi tamamladınız, ancak alışkanlığın tam olarak yerleşmesi için tamamlama oranınızı %70\'in üzerine çıkarmanız önerilir.';
+        return LocaleKeys.statistics_formation_time_completed_needs_work.tr();
       }
     } else {
-      return 'Alışkanlığın oluşması için, tahmini $remainingDays gününüz kaldı. Düzenli tekrar etmeye devam edin.';
+      return LocaleKeys.statistics_formation_time_remaining_days.tr(namedArgs: {'days': remainingDays.toString()});
     }
   }
 
@@ -65,13 +68,13 @@ class InsightsWidget extends ConsumerWidget {
 
     return state.when(
       loading: () => const Center(child: CircularProgressIndicator()),
-      error: (error, stackTrace) => Center(child: Text('Hata: $error')),
+      error: (error, stackTrace) => Center(child: Text('${LocaleKeys.errors_something_went_wrong.tr()}: $error')),
       data: (data) {
         // Veri kontrolü
-        if (data.weeklyProgress.isEmpty || data.totalCompletedDays == 0) {
+        if (data.totalCompletedDays == 0) {
           return CupertinoListSection.insetGrouped(
             backgroundColor: Colors.transparent,
-            header: Text('Alışkanlık Oluşumu'),
+            header: Text(LocaleKeys.statistics_habit_formation.tr()),
             children: [
               CupertinoListTile(
                 backgroundColor: Colors.transparent,
@@ -86,14 +89,14 @@ class InsightsWidget extends ConsumerWidget {
                       ),
                       const SizedBox(height: 16),
                       Text(
-                        'Henüz yeterli veri yok',
+                        LocaleKeys.statistics_no_data_for_habit.tr(),
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                               color: Theme.of(context).hintColor,
                             ),
                       ),
                       const SizedBox(height: 8),
                       Text(
-                        'Alışkanlıklarınızı takip etmeye devam edin',
+                        LocaleKeys.statistics_start_tracking_habit.tr(),
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
                               color: Theme.of(context).hintColor.withValues(alpha: 0.7),
                             ),
@@ -108,9 +111,7 @@ class InsightsWidget extends ConsumerWidget {
         }
 
         // Seçili alışkanlığa göre filtreleme yap
-
-        // Başlık metnini belirle
-        String headerText = 'Alışkanlık Oluşumu';
+        String headerText = LocaleKeys.statistics_habit_formation.tr();
 
         // Alışkanlık oturma durumu ve tahmini süre
         String habitFormationStatus = '';
@@ -136,7 +137,7 @@ class InsightsWidget extends ConsumerWidget {
                     _buildHabitFormationChart(context, data.habitStatistics.values.elementAt(selectedHabitIndex).progressPercentage),
                     const SizedBox(height: 10),
                     Text(
-                      'Alışkanlık Oluşumu Hakkında',
+                      LocaleKeys.statistics_about_formation.tr(),
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
                             fontWeight: FontWeight.bold,
                           ),
@@ -165,7 +166,7 @@ class InsightsWidget extends ConsumerWidget {
                             const SizedBox(width: 16),
                             Expanded(
                               child: Text(
-                                'Araştırmalara göre, bir alışkanlığın yerleşmesi için gereken ortalama süre 66 gündür. Bu süre boyunca düzenli tekrar, alışkanlığın otomatik hale gelmesini sağlar.',
+                                LocaleKeys.statistics_formation_info.tr(),
                                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
                                       color: context.bodySmall?.color?.withValues(alpha: .75),
                                     ),
@@ -296,7 +297,7 @@ class InsightsWidget extends ConsumerWidget {
                       Padding(
                         padding: const EdgeInsets.all(10.0),
                         child: Text(
-                          '%${progressPercentage.toStringAsFixed(0)}',
+                          '${progressPercentage.toStringAsFixed(0)}%',
                           style: TextStyle(
                             fontSize: 24,
                             fontWeight: FontWeight.bold,
@@ -321,29 +322,29 @@ class InsightsWidget extends ConsumerWidget {
                 _buildLegendItem(
                   context,
                   const Color(0xFFF44336),
-                  '< %50',
-                  'Yetersiz',
+                  LocaleKeys.statistics_chart_labels_below_50.tr(),
+                  LocaleKeys.statistics_chart_labels_insufficient.tr(),
                   isSelected: progressPercentage < 50,
                 ),
                 _buildLegendItem(
                   context,
                   const Color(0xFFFFC107),
-                  '%50-70',
-                  'Orta',
+                  LocaleKeys.statistics_chart_labels_between_50_70.tr(),
+                  LocaleKeys.statistics_chart_labels_moderate.tr(),
                   isSelected: progressPercentage >= 50 && progressPercentage < 70,
                 ),
                 _buildLegendItem(
                   context,
                   const Color(0xFF8BC34A),
-                  '%70-90',
-                  'İyi',
+                  LocaleKeys.statistics_chart_labels_between_70_90.tr(),
+                  LocaleKeys.statistics_chart_labels_good.tr(),
                   isSelected: progressPercentage >= 70 && progressPercentage < 90,
                 ),
                 _buildLegendItem(
                   context,
                   const Color(0xFF4CAF50),
-                  '> %90',
-                  'Mükemmel',
+                  LocaleKeys.statistics_chart_labels_above_90.tr(),
+                  LocaleKeys.statistics_chart_labels_excellent.tr(),
                   isSelected: progressPercentage >= 90,
                 ),
               ],

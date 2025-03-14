@@ -302,5 +302,45 @@
         "last_purchase_date": "Datum posledního nákupu",
         "change_plan": "Změnit plán",
         "change_plan_desc": "Klepnutím změníte svůj plán předplatného"
+    },
+    "statistics": {
+        "title": "Statistiky",
+        "no_data_title": "Zatím žádné statistiky",
+        "no_data_description": "Podrobné statistiky zde uvidíte, až začnete sledovat své návyky.",
+        "overview": "Přehled",
+        "no_data_for_habit": "Zatím žádná statistická data",
+        "start_tracking_habit": "Začněte sledovat tento návyk",
+        "habit_formation": "Formování návyku",
+        "completed": "Dokončeno",
+        "total_days": "Celkem dnů",
+        "longest_streak": "Nejdelší série",
+        "current_streak": "Aktuální série",
+        "about_formation": "O formování návyku",
+        "formation_info": "Podle výzkumu trvá v průměru 66 dní, než se návyk stane automatickým. Pravidelné opakování během tohoto období pomáhá návyku stát se automatickým.",
+        "formation_status": {
+            "early": "Jste stále v počátečních fázích. Vytvoření návyku vyžaduje 18-66 dní pravidelného opakování.",
+            "excellent": "Vynikající! S mírou dokončení {percentage}% je váš návyk z velké části automatizovaný.",
+            "very_good": "Velmi dobře! S mírou dokončení {percentage}% se váš návyk začíná usazovat.",
+            "good": "Jde to dobře! Míra dokončení {percentage}% je dostatečná pro vytvoření návyku.",
+            "improving": "Zlepšujete se. Zkuste zvýšit míru dokončení {percentage}% nad 70%.",
+            "needs_work": "Pro vytvoření návyku potřebujete zvýšit míru dokončení. Aktuálně na {percentage}%."
+        },
+        "formation_time": {
+            "not_enough_data": "Zatím není dostatek dat.",
+            "completed_successful": "Gratulujeme! Váš návyk je pravděpodobně ustanoven.",
+            "completed_good": "Gratulujeme! Dokončili jste průměrné období 66 dnů s mírou dokončení {percentage}% a váš návyk je pravděpodobně ustanoven.",
+            "completed_needs_work": "Dokončili jste průměrné období 66 dnů, ale pro úplné ustanovení návyku se doporučuje zvýšit míru dokončení nad 70%.",
+            "remaining_days": "Odhaduje se {days} dnů do vytvoření návyku. Pokračujte v pravidelném opakování."
+        },
+        "chart_labels": {
+            "insufficient": "Nedostatečné",
+            "moderate": "Průměrné",
+            "good": "Dobré",
+            "excellent": "Vynikající",
+            "below_50": "< 50%",
+            "between_50_70": "50-70%",
+            "between_70_90": "70-90%",
+            "above_90": "> 90%"
+        }
     }
 }

@@ -302,5 +302,45 @@
         "last_purchase_date": "Data d'última compra",
         "change_plan": "Canviar pla",
         "change_plan_desc": "Fes clic per canviar el teu pla de subscripció"
+    },
+    "statistics": {
+        "title": "Estadístiques",
+        "no_data_title": "Encara no hi ha estadístiques",
+        "no_data_description": "Veuràs estadístiques detallades aquí quan comencis a fer seguiment dels teus hàbits.",
+        "overview": "Resum",
+        "no_data_for_habit": "Encara no hi ha dades estadístiques",
+        "start_tracking_habit": "Comença a fer seguiment d'aquest hàbit",
+        "habit_formation": "Formació d'hàbits",
+        "completed": "Completat",
+        "total_days": "Dies totals",
+        "longest_streak": "Ratxa més llarga",
+        "current_streak": "Ratxa actual",
+        "about_formation": "Sobre la formació d'hàbits",
+        "formation_info": "Segons la recerca, es necessita una mitjana de 66 dies perquè un hàbit es torni automàtic. La repetició regular durant aquest període ajuda a que l'hàbit es torni automàtic.",
+        "formation_status": {
+            "early": "Encara estàs en les primeres etapes. Es necessiten 18-66 dies de repetició regular per formar un hàbit.",
+            "excellent": "Excel·lent! Amb una taxa de compleció del {percentage}%, el teu hàbit està majoritàriament automatitzat.",
+            "very_good": "Molt bé! Amb una taxa de compleció del {percentage}%, el teu hàbit comença a establir-se.",
+            "good": "Va bé! Una taxa de compleció del {percentage}% és suficient per a la formació de l'hàbit.",
+            "improving": "Estàs millorant. Intenta augmentar la taxa de compleció del {percentage}% per sobre del 70%.",
+            "needs_work": "Necessites augmentar la teva taxa de compleció per formar l'hàbit. Actualment al {percentage}%."
+        },
+        "formation_time": {
+            "not_enough_data": "Encara no hi ha prou dades.",
+            "completed_successful": "Felicitats! El teu hàbit probablement està establert.",
+            "completed_good": "Felicitats! Has completat el període mitjà de 66 dies amb una taxa de compleció del {percentage}%, i el teu hàbit probablement està establert.",
+            "completed_needs_work": "Has completat el període mitjà de 66 dies, però es recomana augmentar la teva taxa de compleció per sobre del 70% perquè l'hàbit s'estableixi completament.",
+            "remaining_days": "S'estima que falten {days} dies per a la formació de l'hàbit. Mantén la repetició regular."
+        },
+        "chart_labels": {
+            "insufficient": "Insuficient",
+            "moderate": "Moderat",
+            "good": "Bo",
+            "excellent": "Excel·lent",
+            "below_50": "< 50%",
+            "between_50_70": "50-70%",
+            "between_70_90": "70-90%",
+            "above_90": "> 90%"
+        }
     }
 }

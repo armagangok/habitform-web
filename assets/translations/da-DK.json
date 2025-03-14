@@ -302,5 +302,45 @@
         "last_purchase_date": "Dato for Sidste Køb",
         "change_plan": "Skift Plan",
         "change_plan_desc": "Klik for at ændre din abonnementsplan"
+    },
+    "statistics": {
+        "title": "Statistik",
+        "no_data_title": "Ingen statistik endnu",
+        "no_data_description": "Du vil se detaljeret statistik her, når du begynder at spore dine vaner.",
+        "overview": "Oversigt",
+        "no_data_for_habit": "Ingen statistiske data endnu",
+        "start_tracking_habit": "Begynd at spore denne vane",
+        "habit_formation": "Vanedannelse",
+        "completed": "Gennemført",
+        "total_days": "Samlede dage",
+        "longest_streak": "Længste streak",
+        "current_streak": "Nuværende streak",
+        "about_formation": "Om vanedannelse",
+        "formation_info": "Ifølge forskning tager det i gennemsnit 66 dage for en vane at blive automatisk. Regelmæssig gentagelse i denne periode hjælper vanen med at blive automatisk.",
+        "formation_status": {
+            "early": "Du er stadig i de tidlige stadier. Det tager 18-66 dage med regelmæssig gentagelse at danne en vane.",
+            "excellent": "Fremragende! Med en gennemførelsesrate på {percentage}% er din vane stort set automatiseret.",
+            "very_good": "Meget godt! Med en gennemførelsesrate på {percentage}% begynder din vane at etablere sig.",
+            "good": "Det går godt! En gennemførelsesrate på {percentage}% er tilstrækkelig til vanedannelse.",
+            "improving": "Du forbedrer dig. Prøv at øge gennemførelsesraten på {percentage}% til over 70%.",
+            "needs_work": "Du skal øge din gennemførelsesrate for at danne en vane. I øjeblikket på {percentage}%."
+        },
+        "formation_time": {
+            "not_enough_data": "Ikke nok data endnu.",
+            "completed_successful": "Tillykke! Din vane er sandsynligvis etableret.",
+            "completed_good": "Tillykke! Du har gennemført den gennemsnitlige 66-dages periode med en gennemførelsesrate på {percentage}%, og din vane er sandsynligvis etableret.",
+            "completed_needs_work": "Du har gennemført den gennemsnitlige 66-dages periode, men det anbefales at øge din gennemførelsesrate til over 70% for at vanen kan etableres fuldt ud.",
+            "remaining_days": "Anslået {days} dage tilbage til vanedannelse. Fortsæt med regelmæssig gentagelse."
+        },
+        "chart_labels": {
+            "insufficient": "Utilstrækkelig",
+            "moderate": "Moderat",
+            "good": "God",
+            "excellent": "Fremragende",
+            "below_50": "< 50%",
+            "between_50_70": "50-70%",
+            "between_70_90": "70-90%",
+            "above_90": "> 90%"
+        }
     }
 }

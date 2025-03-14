@@ -306,5 +306,45 @@
         "last_purchase_date": "Son Satın Alma Tarihi",
         "change_plan": "Planı Değiştir",
         "change_plan_desc": "Abonelik planınızı değiştirmek için tıklayın"
+    },
+    "statistics": {
+        "title": "İstatistikler",
+        "no_data_title": "Henüz istatistik yok",
+        "no_data_description": "Alışkanlıklarınızı takip etmeye başladığınızda burada detaylı istatistikleri göreceksiniz",
+        "overview": "Genel Bakış",
+        "no_data_for_habit": "Henüz istatistik verisi yok",
+        "start_tracking_habit": "Bu alışkanlığı takip etmeye başla",
+        "habit_formation": "Alışkanlık Oluşumu",
+        "completed": "Tamamlandı",
+        "total_days": "Toplam Gün",
+        "longest_streak": "En Uzun Seri",
+        "current_streak": "Mevcut Seri",
+        "about_formation": "Alışkanlık Oluşumu Hakkında",
+        "formation_info": "Araştırmalara göre, bir alışkanlığın otomatik hale gelmesi ortalama 66 gün sürer. Bu süre boyunca düzenli tekrar, alışkanlığın otomatikleşmesine yardımcı olur",
+        "formation_status": {
+            "early": "Henüz başlangıç aşamasındasınız. Bir alışkanlık oluşturmak için 18-66 gün düzenli tekrar gerekir",
+            "excellent": "Mükemmel! %{percentage} tamamlama oranıyla alışkanlığınız büyük ölçüde otomatikleşmiş durumda",
+            "very_good": "Çok iyi! %{percentage} tamamlama oranıyla alışkanlığınız oluşmaya başlıyor",
+            "good": "İyi! %{percentage} tamamlama oranı alışkanlık oluşumu için yeterli",
+            "improving": "Gelişiyorsunuz. %{percentage} tamamlama oranını %70'in üzerine çıkarmaya çalışın",
+            "needs_work": "Alışkanlık oluşturmak için tamamlama oranınızı artırmanız gerekiyor. Şu anki oran: %{percentage}"
+        },
+        "formation_time": {
+            "not_enough_data": "Henüz yeterli veri yok",
+            "completed_successful": "Tebrikler! Alışkanlığınız muhtemelen oluşmuş durumda",
+            "completed_good": "Tebrikler! 66 günü %{percentage} tamamlama oranıyla tamamladınız ve alışkanlığınız muhtemelen oluşmuş durumda",
+            "completed_needs_work": "66 günü tamamladınız, ancak alışkanlığın tam olarak oluşması için tamamlama oranını %70'in üzerine çıkarmanız önerilir",
+            "remaining_days": "Alışkanlık oluşumu için yaklaşık {days} gün kaldı. Düzenli olarak devam edin"
+        },
+        "chart_labels": {
+            "insufficient": "Yetersiz",
+            "moderate": "Orta",
+            "good": "İyi",
+            "excellent": "Mükemmel",
+            "below_50": "< %50",
+            "between_50_70": "%50-70",
+            "between_70_90": "%70-90",
+            "above_90": "> %90"
+        }
     }
 }

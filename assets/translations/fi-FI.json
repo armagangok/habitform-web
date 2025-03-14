@@ -302,5 +302,45 @@
         "last_purchase_date": "Viimeisen oston päivämäärä",
         "change_plan": "Vaihda Suunnitelmaa",
         "change_plan_desc": "Napsauta vaihtaaksesi tilaussuunnitelmaasi"
+    },
+    "statistics": {
+        "title": "Tilastot",
+        "no_data_title": "Ei tilastoja vielä",
+        "no_data_description": "Näet yksityiskohtaiset tilastot täällä, kun aloitat tapojesi seurannan.",
+        "overview": "Yleiskatsaus",
+        "no_data_for_habit": "Ei tilastotietoja vielä",
+        "start_tracking_habit": "Aloita tämän tavan seuranta",
+        "habit_formation": "Tavan muodostuminen",
+        "completed": "Suoritettu",
+        "total_days": "Päiviä yhteensä",
+        "longest_streak": "Pisin putki",
+        "current_streak": "Nykyinen putki",
+        "about_formation": "Tietoa tavan muodostumisesta",
+        "formation_info": "Tutkimusten mukaan tavan automatisoitumiseen menee keskimäärin 66 päivää. Säännöllinen toisto tänä aikana auttaa tapaa muuttumaan automaattiseksi.",
+        "formation_status": {
+            "early": "Olet vielä alkuvaiheessa. Tavan muodostumiseen tarvitaan 18-66 päivää säännöllistä toistoa.",
+            "excellent": "Erinomaista! {percentage}% suoritusasteella tapasi on pitkälti automatisoitunut.",
+            "very_good": "Erittäin hyvä! {percentage}% suoritusasteella tapasi alkaa vakiintua.",
+            "good": "Menee hyvin! {percentage}% suoritusaste on riittävä tavan muodostumiseen.",
+            "improving": "Kehityt. Yritä nostaa {percentage}% suoritusaste yli 70%:n.",
+            "needs_work": "Sinun täytyy nostaa suoritusastetta muodostaaksesi tavan. Tällä hetkellä {percentage}%."
+        },
+        "formation_time": {
+            "not_enough_data": "Ei vielä tarpeeksi tietoja.",
+            "completed_successful": "Onnittelut! Tapasi on todennäköisesti vakiintunut.",
+            "completed_good": "Onnittelut! Olet suorittanut keskimääräisen 66 päivän jakson {percentage}% suoritusasteella, ja tapasi on todennäköisesti vakiintunut.",
+            "completed_needs_work": "Olet suorittanut keskimääräisen 66 päivän jakson, mutta suositellaan nostamaan suoritusaste yli 70%:n tavan täydelliseksi vakiintumiseksi.",
+            "remaining_days": "Arviolta {days} päivää jäljellä tavan muodostumiseen. Jatka säännöllistä toistoa."
+        },
+        "chart_labels": {
+            "insufficient": "Riittämätön",
+            "moderate": "Kohtalainen",
+            "good": "Hyvä",
+            "excellent": "Erinomainen",
+            "below_50": "< 50%",
+            "between_50_70": "50-70%",
+            "between_70_90": "70-90%",
+            "above_90": "> 90%"
+        }
     }
 }

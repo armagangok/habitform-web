@@ -302,5 +302,45 @@
         "last_purchase_date": "Ngày mua gần nhất",
         "change_plan": "Thay đổi gói",
         "change_plan_desc": "Nhấn để thay đổi gói đăng ký của bạn"
+    },
+    "statistics": {
+        "title": "Thống kê",
+        "no_data_title": "Chưa có thống kê",
+        "no_data_description": "Bạn sẽ thấy thống kê chi tiết ở đây khi bạn bắt đầu theo dõi thói quen của mình",
+        "overview": "Tổng quan",
+        "no_data_for_habit": "Chưa có dữ liệu thống kê",
+        "start_tracking_habit": "Bắt đầu theo dõi thói quen này",
+        "habit_formation": "Hình thành Thói quen",
+        "completed": "Đã hoàn thành",
+        "total_days": "Tổng số ngày",
+        "longest_streak": "Chuỗi dài nhất",
+        "current_streak": "Chuỗi hiện tại",
+        "about_formation": "Về việc Hình thành Thói quen",
+        "formation_info": "Theo nghiên cứu, trung bình mất 66 ngày để một thói quen trở nên tự động. Việc lặp lại đều đặn trong thời gian này giúp thói quen trở nên tự động",
+        "formation_status": {
+            "early": "Bạn vẫn đang ở giai đoạn đầu. Cần 18-66 ngày lặp lại đều đặn để hình thành thói quen",
+            "excellent": "Tuyệt vời! Với tỷ lệ hoàn thành {percentage}%, thói quen của bạn đã phần lớn trở nên tự động",
+            "very_good": "Rất tốt! Với tỷ lệ hoàn thành {percentage}%, thói quen của bạn đang bắt đầu hình thành",
+            "good": "Tốt! Tỷ lệ hoàn thành {percentage}% đủ để hình thành thói quen",
+            "improving": "Bạn đang tiến bộ. Cố gắng tăng tỷ lệ hoàn thành {percentage}% lên trên 70%",
+            "needs_work": "Bạn cần tăng tỷ lệ hoàn thành để hình thành thói quen. Hiện tại là {percentage}%"
+        },
+        "formation_time": {
+            "not_enough_data": "Chưa đủ dữ liệu",
+            "completed_successful": "Chúc mừng! Thói quen của bạn có thể đã được hình thành",
+            "completed_good": "Chúc mừng! Bạn đã hoàn thành 66 ngày với tỷ lệ hoàn thành {percentage}% và thói quen của bạn có thể đã được hình thành",
+            "completed_needs_work": "Bạn đã hoàn thành 66 ngày, nhưng nên tăng tỷ lệ hoàn thành lên trên 70% để thói quen được hình thành hoàn toàn",
+            "remaining_days": "Còn khoảng {days} ngày để hình thành thói quen. Tiếp tục duy trì đều đặn"
+        },
+        "chart_labels": {
+            "insufficient": "Không đủ",
+            "moderate": "Trung bình",
+            "good": "Tốt",
+            "excellent": "Tuyệt vời",
+            "below_50": "< 50%",
+            "between_50_70": "50-70%",
+            "between_70_90": "70-90%",
+            "above_90": "> 90%"
+        }
     }
 }

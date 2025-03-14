@@ -302,5 +302,45 @@
         "last_purchase_date": "마지막 구매일",
         "change_plan": "플랜 변경",
         "change_plan_desc": "구독 플랜을 변경하려면 클릭하세요"
+    },
+    "statistics": {
+        "title": "통계",
+        "no_data_title": "아직 통계가 없습니다",
+        "no_data_description": "습관을 추적하기 시작하면 여기에서 자세한 통계를 볼 수 있습니다.",
+        "overview": "개요",
+        "no_data_for_habit": "아직 통계 데이터가 없습니다",
+        "start_tracking_habit": "이 습관 추적 시작하기",
+        "habit_formation": "습관 형성",
+        "completed": "완료됨",
+        "total_days": "전체 일수",
+        "longest_streak": "최장 연속",
+        "current_streak": "현재 연속",
+        "about_formation": "습관 형성에 대하여",
+        "formation_info": "연구에 따르면, 습관이 자동화되기까지 평균 66일이 걸립니다. 이 기간 동안의 규칙적인 반복이 습관의 자동화를 돕습니다.",
+        "formation_status": {
+            "early": "아직 초기 단계입니다. 습관을 형성하려면 18-66일의 규칙적인 반복이 필요합니다.",
+            "excellent": "훌륭합니다! {percentage}%의 완료율로, 당신의 습관은 대부분 자동화되었습니다.",
+            "very_good": "매우 좋습니다! {percentage}%의 완료율로, 당신의 습관이 자리잡기 시작했습니다.",
+            "good": "좋습니다! {percentage}%의 완료율은 습관 형성에 충분합니다.",
+            "improving": "개선 중입니다. {percentage}%의 완료율을 70% 이상으로 높여보세요.",
+            "needs_work": "습관을 형성하려면 완료율을 높여야 합니다. 현재 {percentage}%입니다."
+        },
+        "formation_time": {
+            "not_enough_data": "아직 충분한 데이터가 없습니다.",
+            "completed_successful": "축하합니다! 당신의 습관이 형성되었을 것 같습니다.",
+            "completed_good": "축하합니다! {percentage}%의 완료율로 평균 66일을 완료했으며, 당신의 습관이 형성되었을 것 같습니다.",
+            "completed_needs_work": "평균 66일을 완료했지만, 습관이 완전히 형성되려면 완료율을 70% 이상으로 높이는 것이 좋습니다.",
+            "remaining_days": "습관 형성까지 약 {days}일 남았습니다. 규칙적인 반복을 유지하세요."
+        },
+        "chart_labels": {
+            "insufficient": "불충분",
+            "moderate": "보통",
+            "good": "좋음",
+            "excellent": "훌륭함",
+            "below_50": "50% 미만",
+            "between_50_70": "50-70%",
+            "between_70_90": "70-90%",
+            "above_90": "90% 이상"
+        }
     }
 }

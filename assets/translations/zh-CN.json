@@ -302,5 +302,45 @@
         "last_purchase_date": "最后购买日期",
         "change_plan": "更改计划",
         "change_plan_desc": "点击更改你的订阅计划"
+    },
+    "statistics": {
+        "title": "统计",
+        "no_data_title": "暂无统计数据",
+        "no_data_description": "当您开始跟踪习惯时，您将在此处看到详细的统计数据",
+        "overview": "概览",
+        "no_data_for_habit": "暂无统计数据",
+        "start_tracking_habit": "开始跟踪此习惯",
+        "habit_formation": "习惯养成",
+        "completed": "已完成",
+        "total_days": "总天数",
+        "longest_streak": "最长连续",
+        "current_streak": "当前连续",
+        "about_formation": "关于习惯养成",
+        "formation_info": "根据研究，一个习惯平均需要66天才能形成自动化。在此期间保持规律重复有助于习惯自动化",
+        "formation_status": {
+            "early": "您仍处于初始阶段。养成一个习惯需要18-66天的规律重复",
+            "excellent": "太棒了！以{percentage}%的完成率，您的习惯已基本自动化",
+            "very_good": "非常好！以{percentage}%的完成率，您的习惯正在形成",
+            "good": "不错！{percentage}%的完成率足以形成习惯",
+            "improving": "您在进步。试着将{percentage}%的完成率提高到70%以上",
+            "needs_work": "您需要提高完成率以形成习惯。目前为{percentage}%"
+        },
+        "formation_time": {
+            "not_enough_data": "数据不足",
+            "completed_successful": "恭喜！您的习惯可能已经形成",
+            "completed_good": "恭喜！您已完成66天，完成率为{percentage}%，您的习惯可能已经形成",
+            "completed_needs_work": "您已完成66天，但建议将完成率提高到70%以上以完全形成习惯",
+            "remaining_days": "距离习惯养成还需约{days}天。请保持规律"
+        },
+        "chart_labels": {
+            "insufficient": "不足",
+            "moderate": "一般",
+            "good": "良好",
+            "excellent": "优秀",
+            "below_50": "< 50%",
+            "between_50_70": "50-70%",
+            "between_70_90": "70-90%",
+            "above_90": "> 90%"
+        }
     }
 }

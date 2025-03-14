@@ -303,5 +303,45 @@
         "last_purchase_date": "Datum Laatste Aankoop",
         "change_plan": "Plan Wijzigen",
         "change_plan_desc": "Klik om je abonnementsplan te wijzigen"
+    },
+    "statistics": {
+        "title": "Statistieken",
+        "no_data_title": "Geen statistieken nog",
+        "no_data_description": "Je zult detaillierte statistieken hier zien wanneer je begint met het volgen van je gewoontes.",
+        "overview": "Overzicht",
+        "no_data_for_habit": "Geen statistische gegevens nog",
+        "start_tracking_habit": "Begin het volgen van deze gewoonte",
+        "habit_formation": "Gewoontevorming",
+        "completed": "Voltooid",
+        "total_days": "Totaal dagen",
+        "longest_streak": "Langste reeks",
+        "current_streak": "Huidige reeks",
+        "about_formation": "Over gewoontevorming",
+        "formation_info": "Volgens onderzoek duurt het gemiddeld 66 dagen voordat een gewoonte automatisch wordt gevormd. Regelmatige herhaling in deze periode helpt de gewoonte te vormen.",
+        "formation_status": {
+            "early": "Je bent nog in de eerste stadia. Het duurt 18-66 dagen met regelmatige herhaling om een gewoonte te vormen.",
+            "excellent": "Uitstekend! Met een complecijfer van {percentage}% is je gewoonte grotendeels automatisch gevormd.",
+            "very_good": "Uitstekend! Met een complecijfer van {percentage}% is je gewoonte grotendeels automatisch gevormd.",
+            "good": "Goed! Een complecijfer van {percentage}% is voldoende om een gewoonte te vormen.",
+            "improving": "Je verbetert. Probeer de complecijfer van {percentage}% te verhogen boven 70%.",
+            "needs_work": "Je moet je complecijfer verhogen om een gewoonte te vormen. Je bent momenteel op {percentage}%."
+        },
+        "formation_time": {
+            "not_enough_data": "Niet genoeg gegevens nog.",
+            "completed_successful": "Gefeliciteerd! Je gewoonte is waarschijnlijk gevormd.",
+            "completed_good": "Gefeliciteerd! Je hebt de gemiddelde 66-dagperiode voltooid met een complecijfer van {percentage}% en je gewoonte is waarschijnlijk gevormd.",
+            "completed_needs_work": "Je hebt de gemiddelde 66-dagperiode voltooid, maar het wordt aanbevolen om je complecijfer te verhogen boven 70% om je gewoonte te vormen.",
+            "remaining_days": "Geschatte {days} dagen tot gewoontevorming. Blijf regelmatig herhalen."
+        },
+        "chart_labels": {
+            "insufficient": "Onvoldoende",
+            "moderate": "Matig",
+            "good": "Goed",
+            "excellent": "Uitstekend",
+            "below_50": "< 50%",
+            "between_50_70": "50-70%",
+            "between_70_90": "70-90%",
+            "above_90": "> 90%"
+        }
     }
 }

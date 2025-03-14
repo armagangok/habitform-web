@@ -302,5 +302,45 @@
         "last_purchase_date": "Date du dernier achat",
         "change_plan": "Changer de plan",
         "change_plan_desc": "Appuyez pour changer votre plan d'abonnement"
+    },
+    "statistics": {
+        "title": "Statistiques",
+        "no_data_title": "Pas encore de statistiques",
+        "no_data_description": "Vous verrez des statistiques détaillées ici lorsque vous commencerez à suivre vos habitudes.",
+        "overview": "Aperçu",
+        "no_data_for_habit": "Pas encore de données statistiques",
+        "start_tracking_habit": "Commencez à suivre cette habitude",
+        "habit_formation": "Formation de l'habitude",
+        "completed": "Terminé",
+        "total_days": "Jours totaux",
+        "longest_streak": "Plus longue série",
+        "current_streak": "Série actuelle",
+        "about_formation": "À propos de la formation d'habitudes",
+        "formation_info": "Selon la recherche, il faut en moyenne 66 jours pour qu'une habitude devienne automatique. La répétition régulière pendant cette période aide l'habitude à devenir automatique.",
+        "formation_status": {
+            "early": "Vous en êtes encore aux premiers stades. Il faut 18-66 jours de répétition régulière pour former une habitude.",
+            "excellent": "Excellent ! Avec un taux de réussite de {percentage}%, votre habitude est largement automatisée.",
+            "very_good": "Très bien ! Avec un taux de réussite de {percentage}%, votre habitude commence à s'établir.",
+            "good": "Ça va bien ! Un taux de réussite de {percentage}% est suffisant pour la formation de l'habitude.",
+            "improving": "Vous vous améliorez. Essayez d'augmenter le taux de réussite de {percentage}% au-dessus de 70%.",
+            "needs_work": "Vous devez augmenter votre taux de réussite pour former l'habitude. Actuellement à {percentage}%."
+        },
+        "formation_time": {
+            "not_enough_data": "Pas encore assez de données.",
+            "completed_successful": "Félicitations ! Votre habitude est probablement établie.",
+            "completed_good": "Félicitations ! Vous avez complété la période moyenne de 66 jours avec un taux de réussite de {percentage}%, et votre habitude est probablement établie.",
+            "completed_needs_work": "Vous avez complété la période moyenne de 66 jours, mais il est recommandé d'augmenter votre taux de réussite au-dessus de 70% pour que l'habitude soit pleinement établie.",
+            "remaining_days": "Environ {days} jours restants pour la formation de l'habitude. Maintenez la répétition régulière."
+        },
+        "chart_labels": {
+            "insufficient": "Insuffisant",
+            "moderate": "Modéré",
+            "good": "Bon",
+            "excellent": "Excellent",
+            "below_50": "< 50%",
+            "between_50_70": "50-70%",
+            "between_70_90": "70-90%",
+            "above_90": "> 90%"
+        }
     }
 }

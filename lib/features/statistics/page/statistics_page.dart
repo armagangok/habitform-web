@@ -22,9 +22,9 @@ class StatisticsPage extends ConsumerWidget {
       color: Colors.transparent,
       child: CupertinoPageScaffold(
         backgroundColor: Colors.transparent,
-        navigationBar: const SheetHeader(
+        navigationBar: SheetHeader(
           closeButtonPosition: CloseButtonPosition.left,
-          middle: Text('İstatistikler'),
+          middle: Text(LocaleKeys.statistics_title.tr()),
         ),
         child: SafeArea(
           bottom: false,
@@ -48,7 +48,7 @@ class StatisticsPage extends ConsumerWidget {
 
                         return statisticsAsyncValue.when(
                           loading: () => const Center(child: CircularProgressIndicator()),
-                          error: (error, stackTrace) => Center(child: Text('Hata: $error')),
+                          error: (error, stackTrace) => Center(child: Text('${LocaleKeys.errors_something_went_wrong.tr()}: $error')),
                           data: (state) {
                             if (state.habitStatistics.isEmpty) {
                               return Padding(
@@ -77,7 +77,7 @@ class StatisticsPage extends ConsumerWidget {
                                     ),
                                     const SizedBox(height: 24),
                                     Text(
-                                      'Henüz İstatistik Yok',
+                                      LocaleKeys.statistics_no_data_title.tr(),
                                       style: TextStyle(
                                         fontSize: 24,
                                         fontWeight: FontWeight.bold,
@@ -86,7 +86,7 @@ class StatisticsPage extends ConsumerWidget {
                                     ),
                                     const SizedBox(height: 12),
                                     Text(
-                                      'Alışkanlıklarınızı takip etmeye başladığınızda burada detaylı istatistiklerinizi görebilirsiniz.',
+                                      LocaleKeys.statistics_no_data_description.tr(),
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
                                         fontSize: 16,
@@ -102,9 +102,9 @@ class StatisticsPage extends ConsumerWidget {
                                         onPressed: () {
                                           navigator.pop();
                                         },
-                                        child: const Text(
-                                          'Alışkanlık Ekle',
-                                          style: TextStyle(
+                                        child: Text(
+                                          LocaleKeys.habit_add_habit.tr(),
+                                          style: const TextStyle(
                                             fontSize: 16,
                                             fontWeight: FontWeight.w700,
                                             color: Colors.white,

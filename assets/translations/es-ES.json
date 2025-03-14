@@ -302,5 +302,45 @@
         "last_purchase_date": "Fecha de última compra",
         "change_plan": "Cambiar plan",
         "change_plan_desc": "Haz clic para cambiar tu plan de suscripción"
+    },
+    "statistics": {
+        "title": "Estadísticas",
+        "no_data_title": "No hay estadísticas aún",
+        "no_data_description": "Verás estadísticas detalladas aquí cuando empieces a seguir tus hábitos.",
+        "overview": "Resumen",
+        "no_data_for_habit": "No hay datos estadísticos aún",
+        "start_tracking_habit": "Empieza a seguir este hábito",
+        "habit_formation": "Formación del hábito",
+        "completed": "Completado",
+        "total_days": "Días totales",
+        "longest_streak": "Racha más larga",
+        "current_streak": "Racha actual",
+        "about_formation": "Sobre la formación de hábitos",
+        "formation_info": "Según la investigación, se necesita un promedio de 66 días para que un hábito se vuelva automático. La repetición regular durante este período ayuda a que el hábito se vuelva automático.",
+        "formation_status": {
+            "early": "Todavía estás en las primeras etapas. Se necesitan 18-66 días de repetición regular para formar un hábito.",
+            "excellent": "¡Excelente! Con una tasa de finalización del {percentage}%, tu hábito está en gran parte automatizado.",
+            "very_good": "¡Muy bien! Con una tasa de finalización del {percentage}%, tu hábito está empezando a establecerse.",
+            "good": "¡Va bien! Una tasa de finalización del {percentage}% es suficiente para la formación del hábito.",
+            "improving": "Estás mejorando. Intenta aumentar la tasa de finalización del {percentage}% por encima del 70%.",
+            "needs_work": "Necesitas aumentar tu tasa de finalización para formar el hábito. Actualmente en {percentage}%."
+        },
+        "formation_time": {
+            "not_enough_data": "No hay suficientes datos aún.",
+            "completed_successful": "¡Felicitaciones! Tu hábito probablemente está establecido.",
+            "completed_good": "¡Felicitaciones! Has completado el período promedio de 66 días con una tasa de finalización del {percentage}%, y tu hábito probablemente está establecido.",
+            "completed_needs_work": "Has completado el período promedio de 66 días, pero se recomienda aumentar tu tasa de finalización por encima del 70% para que el hábito se establezca completamente.",
+            "remaining_days": "Se estiman {days} días restantes para la formación del hábito. Mantén la repetición regular."
+        },
+        "chart_labels": {
+            "insufficient": "Insuficiente",
+            "moderate": "Moderado",
+            "good": "Bueno",
+            "excellent": "Excelente",
+            "below_50": "< 50%",
+            "between_50_70": "50-70%",
+            "between_70_90": "70-90%",
+            "above_90": "> 90%"
+        }
     }
 }

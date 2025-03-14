@@ -8,7 +8,7 @@ import '/models/completion_entry/completion_extension.dart';
 import '/models/habit/habit_model.dart';
 import '../../page/statistics_page.dart'; // selectedHabitIndexProvider için
 import '../../provider/statistics_provider.dart';
-import '../statistic_card.dart';
+import 'statistic_card.dart';
 
 class GeneralProgressStats extends ConsumerWidget {
   const GeneralProgressStats({
@@ -58,7 +58,7 @@ class GeneralProgressStats extends ConsumerWidget {
 
     return statisticsAsyncValue.when(
       loading: () => const Center(child: CircularProgressIndicator()),
-      error: (error, stackTrace) => Center(child: Text('Hata: $error')),
+      error: (error, stackTrace) => Center(child: Text('${LocaleKeys.errors_something_went_wrong.tr()}: $error')),
       data: (statisticsState) {
         // Seçili alışkanlığı al
         final habitStats = statisticsState.habitStatistics.values.toList();
@@ -73,7 +73,7 @@ class GeneralProgressStats extends ConsumerWidget {
 
         return homeAsyncValue.when(
           loading: () => const Center(child: CircularProgressIndicator()),
-          error: (error, stackTrace) => Center(child: Text('Hata: $error')),
+          error: (error, stackTrace) => Center(child: Text('${LocaleKeys.errors_something_went_wrong.tr()}: $error')),
           data: (homeState) {
             // Seçili alışkanlığın tam modelini bul
             final habitModel = homeState.habits.firstWhere(
@@ -101,7 +101,7 @@ class GeneralProgressStats extends ConsumerWidget {
             if (selectedHabit.totalDays == 0) {
               return CupertinoListSection.insetGrouped(
                 backgroundColor: Colors.transparent,
-                header: Text('${selectedHabit.habitName} İlerleme'),
+                header: Text(LocaleKeys.statistics_overview.tr()),
                 children: [
                   Padding(
                     padding: const EdgeInsets.all(16.0),
@@ -115,14 +115,14 @@ class GeneralProgressStats extends ConsumerWidget {
                           ),
                           const SizedBox(height: 16),
                           Text(
-                            'Henüz istatistik verisi yok',
+                            LocaleKeys.statistics_no_data_for_habit.tr(),
                             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                                   color: Theme.of(context).hintColor,
                                 ),
                           ),
                           const SizedBox(height: 8),
                           Text(
-                            'Bu alışkanlığı takip etmeye başlayın',
+                            LocaleKeys.statistics_start_tracking_habit.tr(),
                             style: Theme.of(context).textTheme.bodySmall?.copyWith(
                                   color: Theme.of(context).hintColor.withOpacity(0.7),
                                 ),
@@ -138,7 +138,7 @@ class GeneralProgressStats extends ConsumerWidget {
 
             return CupertinoListSection.insetGrouped(
               backgroundColor: Colors.transparent,
-              header: Text('${selectedHabit.habitName} İlerleme'),
+              header: Text(LocaleKeys.statistics_overview.tr()),
               children: [
                 Padding(
                   padding: const EdgeInsets.all(16.0),
@@ -149,7 +149,7 @@ class GeneralProgressStats extends ConsumerWidget {
                           Expanded(
                             child: StatisticCard(
                               icon: Icons.check_circle_outline,
-                              title: 'Tamamlanan',
+                              title: LocaleKeys.statistics_completed.tr(),
                               value: selectedHabit.completedDays.toString(),
                             ),
                           ),
@@ -157,7 +157,7 @@ class GeneralProgressStats extends ConsumerWidget {
                           Expanded(
                             child: StatisticCard(
                               icon: Icons.calendar_today,
-                              title: 'Toplam Gün',
+                              title: LocaleKeys.statistics_total_days.tr(),
                               value: selectedHabit.totalDays.toString(),
                             ),
                           ),
@@ -169,7 +169,7 @@ class GeneralProgressStats extends ConsumerWidget {
                           Expanded(
                             child: StatisticCard(
                               icon: Icons.local_fire_department,
-                              title: 'En Uzun Seri',
+                              title: LocaleKeys.statistics_longest_streak.tr(),
                               value: longestStreak.toString(),
                             ),
                           ),
@@ -177,7 +177,7 @@ class GeneralProgressStats extends ConsumerWidget {
                           Expanded(
                             child: StatisticCard(
                               icon: Icons.trending_up,
-                              title: 'Mevcut Seri',
+                              title: LocaleKeys.statistics_current_streak.tr(),
                               value: currentStreak.toString(),
                             ),
                           ),

@@ -302,5 +302,45 @@
         "last_purchase_date": "Datum för Senaste Köp",
         "change_plan": "Ändra Plan",
         "change_plan_desc": "Klicka för att ändra din prenumerationsplan"
+    },
+    "statistics": {
+        "title": "Statistik",
+        "no_data_title": "Ingen statistik ännu",
+        "no_data_description": "Du kommer att se detaljerad statistik här när du börjar spåra dina vanor.",
+        "overview": "Översikt",
+        "no_data_for_habit": "Ingen statistik ännu",
+        "start_tracking_habit": "Börja spåra denna vana",
+        "habit_formation": "Vanebildning",
+        "completed": "Slutfört",
+        "total_days": "Totalt Antal Dagar",
+        "longest_streak": "Längsta Svit",
+        "current_streak": "Nuvarande Svit",
+        "about_formation": "Om Vanebildning",
+        "formation_info": "Enligt forskning tar det i genomsnitt 66 dagar för en vana att bli automatisk. Regelbunden upprepning under denna period hjälper vanan att bli automatisk.",
+        "formation_status": {
+            "early": "Du är fortfarande i tidiga stadier. Det krävs 18-66 dagar av regelbunden upprepning för att bilda en vana.",
+            "excellent": "Utmärkt! Med en slutförandegrad på {percentage}% är din vana till stor del automatiserad.",
+            "very_good": "Mycket bra! Med en slutförandegrad på {percentage}% börjar din vana etablera sig.",
+            "good": "Bra! En slutförandegrad på {percentage}% är tillräcklig för vanebildning.",
+            "improving": "Du förbättras. Försök öka slutförandegraden på {percentage}% över 70%.",
+            "needs_work": "Du behöver öka din slutförandegrad för att bilda en vana. För närvarande på {percentage}%."
+        },
+        "formation_time": {
+            "not_enough_data": "Inte tillräckligt med data ännu.",
+            "completed_successful": "Grattis! Din vana är troligen etablerad.",
+            "completed_good": "Grattis! Du har slutfört den genomsnittliga 66-dagarsperioden med en slutförandegrad på {percentage}%, och din vana är troligen etablerad.",
+            "completed_needs_work": "Du har slutfört den genomsnittliga 66-dagarsperioden, men det rekommenderas att öka slutförandegraden över 70% för att vanan ska vara helt etablerad.",
+            "remaining_days": "Ungefär {days} dagar kvar till vanebildning. Fortsätt med regelbunden upprepning."
+        },
+        "chart_labels": {
+            "insufficient": "Otillräcklig",
+            "moderate": "Måttlig",
+            "good": "Bra",
+            "excellent": "Utmärkt",
+            "below_50": "< 50%",
+            "between_50_70": "50-70%",
+            "between_70_90": "70-90%",
+            "above_90": "> 90%"
+        }
     }
 }

@@ -2,7 +2,7 @@
 
 // ignore_for_file: constant_identifier_names
 
-abstract class  LocaleKeys {
+abstract class LocaleKeys {
   static const common_ok = 'common.ok';
   static const common_save = 'common.save';
   static const common_cancel = 'common.cancel';
@@ -282,5 +282,36 @@ abstract class  LocaleKeys {
   static const membership_info_change_plan = 'membership_info.change_plan';
   static const membership_info_change_plan_desc = 'membership_info.change_plan_desc';
   static const membership_info = 'membership_info';
-
+  static const statistics_title = 'statistics.title';
+  static const statistics_no_data_title = 'statistics.no_data_title';
+  static const statistics_no_data_description = 'statistics.no_data_description';
+  static const statistics_overview = 'statistics.overview';
+  static const statistics_no_data_for_habit = 'statistics.no_data_for_habit';
+  static const statistics_start_tracking_habit = 'statistics.start_tracking_habit';
+  static const statistics_habit_formation = 'statistics.habit_formation';
+  static const statistics_completed = 'statistics.completed';
+  static const statistics_total_days = 'statistics.total_days';
+  static const statistics_longest_streak = 'statistics.longest_streak';
+  static const statistics_current_streak = 'statistics.current_streak';
+  static const statistics_about_formation = 'statistics.about_formation';
+  static const statistics_formation_info = 'statistics.formation_info';
+  static const statistics_formation_status_early = 'statistics.formation_status.early';
+  static const statistics_formation_status_excellent = 'statistics.formation_status.excellent';
+  static const statistics_formation_status_very_good = 'statistics.formation_status.very_good';
+  static const statistics_formation_status_good = 'statistics.formation_status.good';
+  static const statistics_formation_status_improving = 'statistics.formation_status.improving';
+  static const statistics_formation_status_needs_work = 'statistics.formation_status.needs_work';
+  static const statistics_formation_time_not_enough_data = 'statistics.formation_time.not_enough_data';
+  static const statistics_formation_time_completed_successful = 'statistics.formation_time.completed_successful';
+  static const statistics_formation_time_completed_good = 'statistics.formation_time.completed_good';
+  static const statistics_formation_time_completed_needs_work = 'statistics.formation_time.completed_needs_work';
+  static const statistics_formation_time_remaining_days = 'statistics.formation_time.remaining_days';
+  static const statistics_chart_labels_insufficient = 'statistics.chart_labels.insufficient';
+  static const statistics_chart_labels_moderate = 'statistics.chart_labels.moderate';
+  static const statistics_chart_labels_good = 'statistics.chart_labels.good';
+  static const statistics_chart_labels_excellent = 'statistics.chart_labels.excellent';
+  static const statistics_chart_labels_below_50 = 'statistics.chart_labels.below_50';
+  static const statistics_chart_labels_between_50_70 = 'statistics.chart_labels.between_50_70';
+  static const statistics_chart_labels_between_70_90 = 'statistics.chart_labels.between_70_90';
+  static const statistics_chart_labels_above_90 = 'statistics.chart_labels.above_90';
 }

@@ -303,5 +303,45 @@
         "last_purchase_date": "Data Ultimo Acquisto",
         "change_plan": "Cambia Piano",
         "change_plan_desc": "Clicca per cambiare il tuo piano di abbonamento"
+    },
+    "statistics": {
+        "title": "Statistiche",
+        "no_data_title": "Nessuna statistica ancora",
+        "no_data_description": "Vedrai statistiche dettagliate qui quando inizierai a monitorare le tue abitudini.",
+        "overview": "Panoramica",
+        "no_data_for_habit": "Nessun dato statistico ancora",
+        "start_tracking_habit": "Inizia a monitorare questa abitudine",
+        "habit_formation": "Formazione dell'Abitudine",
+        "completed": "Completato",
+        "total_days": "Giorni Totali",
+        "longest_streak": "Serie Più Lunga",
+        "current_streak": "Serie Attuale",
+        "about_formation": "Sulla Formazione delle Abitudini",
+        "formation_info": "Secondo la ricerca, ci vogliono in media 66 giorni perché un'abitudine diventi automatica. La ripetizione regolare durante questo periodo aiuta l'abitudine a diventare automatica.",
+        "formation_status": {
+            "early": "Sei ancora nelle fasi iniziali. Sono necessari 18-66 giorni di ripetizione regolare per formare un'abitudine.",
+            "excellent": "Eccellente! Con un tasso di completamento del {percentage}%, la tua abitudine è in gran parte automatizzata.",
+            "very_good": "Molto bene! Con un tasso di completamento del {percentage}%, la tua abitudine sta iniziando a stabilirsi.",
+            "good": "Va bene! Un tasso di completamento del {percentage}% è sufficiente per la formazione dell'abitudine.",
+            "improving": "Stai migliorando. Prova ad aumentare il tasso di completamento del {percentage}% sopra il 70%.",
+            "needs_work": "Devi aumentare il tuo tasso di completamento per formare l'abitudine. Attualmente al {percentage}%."
+        },
+        "formation_time": {
+            "not_enough_data": "Non ci sono ancora abbastanza dati.",
+            "completed_successful": "Congratulazioni! La tua abitudine è probabilmente stabilita.",
+            "completed_good": "Congratulazioni! Hai completato il periodo medio di 66 giorni con un tasso di completamento del {percentage}%, e la tua abitudine è probabilmente stabilita.",
+            "completed_needs_work": "Hai completato il periodo medio di 66 giorni, ma si consiglia di aumentare il tasso di completamento sopra il 70% perché l'abitudine sia completamente stabilita.",
+            "remaining_days": "Circa {days} giorni rimanenti per la formazione dell'abitudine. Mantieni la ripetizione regolare."
+        },
+        "chart_labels": {
+            "insufficient": "Insufficiente",
+            "moderate": "Moderato",
+            "good": "Buono",
+            "excellent": "Eccellente",
+            "below_50": "< 50%",
+            "between_50_70": "50-70%",
+            "between_70_90": "70-90%",
+            "above_90": "> 90%"
+        }
     }
 }

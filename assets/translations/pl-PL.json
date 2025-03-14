@@ -302,5 +302,45 @@
         "last_purchase_date": "Data ostatniego zakupu",
         "change_plan": "Zmień plan",
         "change_plan_desc": "Dotknij, aby zmienić swój plan subskrypcji"
+    },
+    "statistics": {
+        "title": "Statystyki",
+        "no_data_title": "Brak statystyk",
+        "no_data_description": "Zobaczysz szczegółowe statystyki tutaj, gdy zaczniesz śledzić swoje nawyki.",
+        "overview": "Przegląd",
+        "no_data_for_habit": "Brak danych statystycznych",
+        "start_tracking_habit": "Zacznij śledzić ten nawyk",
+        "habit_formation": "Kształtowanie Nawyku",
+        "completed": "Ukończone",
+        "total_days": "Łączna Liczba Dni",
+        "longest_streak": "Najdłuższa Seria",
+        "current_streak": "Obecna Seria",
+        "about_formation": "O Kształtowaniu Nawyków",
+        "formation_info": "Według badań, średnio potrzeba 66 dni, aby nawyk stał się automatyczny. Regularne powtarzanie w tym okresie pomaga nawykowi stać się automatycznym.",
+        "formation_status": {
+            "early": "Jesteś wciąż na wczesnym etapie. Potrzeba 18-66 dni regularnego powtarzania, aby ukształtować nawyk.",
+            "excellent": "Doskonale! Przy wskaźniku ukończenia {percentage}%, twój nawyk jest w dużej mierze zautomatyzowany.",
+            "very_good": "Bardzo dobrze! Przy wskaźniku ukończenia {percentage}%, twój nawyk zaczyna się utrwalać.",
+            "good": "Dobrze! Wskaźnik ukończenia {percentage}% jest wystarczający do ukształtowania nawyku.",
+            "improving": "Poprawiasz się. Spróbuj zwiększyć wskaźnik ukończenia {percentage}% powyżej 70%.",
+            "needs_work": "Musisz zwiększyć wskaźnik ukończenia, aby ukształtować nawyk. Obecnie na poziomie {percentage}%."
+        },
+        "formation_time": {
+            "not_enough_data": "Za mało danych.",
+            "completed_successful": "Gratulacje! Twój nawyk prawdopodobnie się utrwalił.",
+            "completed_good": "Gratulacje! Ukończyłeś średni okres 66 dni ze wskaźnikiem ukończenia {percentage}%, i twój nawyk prawdopodobnie się utrwalił.",
+            "completed_needs_work": "Ukończyłeś średni okres 66 dni, ale zaleca się zwiększenie wskaźnika ukończenia powyżej 70%, aby nawyk w pełni się utrwalił.",
+            "remaining_days": "Około {days} dni pozostało do ukształtowania nawyku. Kontynuuj regularne powtarzanie."
+        },
+        "chart_labels": {
+            "insufficient": "Niewystarczający",
+            "moderate": "Umiarkowany",
+            "good": "Dobry",
+            "excellent": "Doskonały",
+            "below_50": "< 50%",
+            "between_50_70": "50-70%",
+            "between_70_90": "70-90%",
+            "above_90": "> 90%"
+        }
     }
 }

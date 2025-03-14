@@ -72,10 +72,6 @@ class StatisticsNotifier extends AutoDisposeAsyncNotifier<StatisticsState> {
 
     final longestStreak = _calculateLongestStreak(habits);
 
-    // Calculate weekly/monthly progress
-    final weeklyProgress = _calculateWeeklyProgress(habits);
-    final monthlyProgress = _calculateMonthlyProgress(habits);
-
     // Calculate habit-specific statistics
     final habitStatistics = _calculateHabitStatistics(habits);
 
@@ -83,8 +79,6 @@ class StatisticsNotifier extends AutoDisposeAsyncNotifier<StatisticsState> {
       totalCompletedDays: totalCompletions,
       completionRate: completionRate,
       longestStreak: longestStreak,
-      weeklyProgress: weeklyProgress,
-      monthlyProgress: monthlyProgress,
       habitStatistics: habitStatistics,
     );
   }
@@ -138,109 +132,6 @@ class StatisticsNotifier extends AutoDisposeAsyncNotifier<StatisticsState> {
     }
 
     return maxStreak;
-  }
-
-  /// Calculates weekly progress for chart display
-  Map<String, double> _calculateWeeklyProgress(List<Habit> habits) {
-    final Map<String, int> completedByDay = {};
-    final Map<String, int> totalByDay = {};
-    final Map<String, double> progressByDay = {};
-
-    // Initialize days of week
-    for (int i = 0; i < 7; i++) {
-      final dayName = DateFormat('E').format(DateTime.now().subtract(Duration(days: DateTime.now().weekday - 1)).add(Duration(days: i)));
-      completedByDay[dayName] = 0;
-      totalByDay[dayName] = 0;
-    }
-
-    // Get start of current week
-    final startOfWeek = DateTime.now().subtract(Duration(days: DateTime.now().weekday - 1));
-    final endOfWeek = startOfWeek.add(const Duration(days: 6));
-
-    bool hasData = false;
-
-    for (final habit in habits) {
-      for (final entry in habit.completions.values) {
-        if (entry.date.isAfter(startOfWeek.subtract(const Duration(days: 1))) && entry.date.isBefore(endOfWeek.add(const Duration(days: 1)))) {
-          final dayName = DateFormat('E').format(entry.date);
-          totalByDay[dayName] = (totalByDay[dayName] ?? 0) + 1;
-          hasData = true;
-
-          if (entry.isCompleted) {
-            completedByDay[dayName] = (completedByDay[dayName] ?? 0) + 1;
-          }
-        }
-      }
-    }
-
-    // Eğer hiç veri yoksa boş harita döndür
-    if (!hasData) {
-      return {};
-    }
-
-    // Calculate progress percentage for each day
-    for (final day in totalByDay.keys) {
-      if (totalByDay[day]! > 0) {
-        progressByDay[day] = (completedByDay[day] ?? 0) / totalByDay[day]!;
-      } else {
-        progressByDay[day] = 0;
-      }
-    }
-
-    return progressByDay;
-  }
-
-  /// Calculates monthly progress for chart display
-  Map<String, double> _calculateMonthlyProgress(List<Habit> habits) {
-    final Map<String, int> completedByDay = {};
-    final Map<String, int> totalByDay = {};
-    final Map<String, double> progressByDay = {};
-
-    // Initialize days of month
-    final now = DateTime.now();
-    final daysInMonth = DateUtils.getDaysInMonth(now.year, now.month);
-
-    for (int i = 1; i <= daysInMonth; i++) {
-      final dayString = i.toString();
-      completedByDay[dayString] = 0;
-      totalByDay[dayString] = 0;
-    }
-
-    // Get start and end of current month
-    final startOfMonth = DateTime(now.year, now.month, 1);
-    final endOfMonth = DateTime(now.year, now.month + 1, 0);
-
-    bool hasData = false;
-
-    for (final habit in habits) {
-      for (final entry in habit.completions.values) {
-        if (entry.date.isAfter(startOfMonth.subtract(const Duration(days: 1))) && entry.date.isBefore(endOfMonth.add(const Duration(days: 1)))) {
-          final dayString = entry.date.day.toString();
-          totalByDay[dayString] = (totalByDay[dayString] ?? 0) + 1;
-          hasData = true;
-
-          if (entry.isCompleted) {
-            completedByDay[dayString] = (completedByDay[dayString] ?? 0) + 1;
-          }
-        }
-      }
-    }
-
-    // Eğer hiç veri yoksa boş harita döndür
-    if (!hasData) {
-      return {};
-    }
-
-    // Calculate progress percentage for each day
-    for (final day in totalByDay.keys) {
-      if (totalByDay[day]! > 0) {
-        progressByDay[day] = (completedByDay[day] ?? 0) / totalByDay[day]!;
-      } else {
-        progressByDay[day] = 0;
-      }
-    }
-
-    return progressByDay;
   }
 
   /// Calculates per-habit statistics
