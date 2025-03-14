@@ -121,8 +121,6 @@ class _HabitDataWidgetState extends ConsumerState<HabitDataWidget> {
                   ),
                 );
               }),
-              const SizedBox(height: 12),
-              _buildStreakInfo(),
             ],
           ),
         ),
@@ -346,78 +344,6 @@ class _HabitDataWidgetState extends ConsumerState<HabitDataWidget> {
         );
       },
     );
-  }
-
-  Widget _buildStreakInfo() {
-    final longestStreak = _calculateLongestStreak();
-    final currentStreak = _calculateStreak();
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: Row(
-        children: [
-          if (longestStreak > 0)
-            Expanded(
-              child: _buildStreakCard(
-                title: LocaleKeys.habit_data_longest_streak.tr(),
-                value: longestStreak,
-                emoji: '⭐️',
-              ),
-            ),
-          if (currentStreak > 0) ...[
-            if (longestStreak > 0) SizedBox(width: 12),
-            Expanded(
-              child: _buildStreakCard(
-                title: LocaleKeys.habit_data_current_streak.tr(),
-                value: currentStreak,
-                emoji: '🏆',
-              ),
-            ),
-          ],
-        ],
-      ),
-    );
-  }
-
-  Widget _buildStreakCard({
-    required String title,
-    required int value,
-    required String emoji,
-  }) {
-    return Card(
-      color: context.theme.dividerTheme.color?.withValues(alpha: 0.35),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Flexible(
-              child: Text(
-                '$title: $value',
-                style: TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w600,
-                ),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ),
-            Text(
-              ' $emoji',
-              style: TextStyle(fontSize: 13),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  int _calculateStreak() {
-    return widget.habit.completions.calculateCurrentStreak();
-  }
-
-  int _calculateLongestStreak() {
-    return widget.habit.completions.calculateLongestStreak();
   }
 
   String _getLocalizedMonth(int monthIndex) {

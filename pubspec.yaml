@@ -70,6 +70,7 @@ dependencies:
   shared_preferences: ^2.5.2
   logger: ^2.5.0
   device_info_plus: ^9.1.2
+  fl_chart: ^0.66.2
 
 dev_dependencies:
   flutter_test:

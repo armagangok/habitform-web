@@ -5,6 +5,7 @@ import '../../../create_habit/create_habit_page.dart';
 import '../../../purchase/page/paywall_page.dart';
 import '../../../purchase/providers/purchase_provider.dart';
 import '../../../settings/settings_page.dart';
+import '../../../statistics/page/statistics_page.dart';
 import '../../provider/home_provider.dart';
 import '../../provider/home_state.dart';
 import '../widgets/habit_builder.dart';
@@ -183,13 +184,14 @@ class _HomePageState extends ConsumerState<HomePage> with SingleTickerProviderSt
         builder: (context) {
           return Align(
             widthFactor: 1,
+            alignment: Alignment.centerLeft,
             child: CustomButton(
               onPressed: () {
                 CupertinoScaffold.showCupertinoModalBottomSheet(
                   enableDrag: false,
                   context: context,
                   builder: (contextFromSheet) {
-                    return SettingsPage();
+                    return const SettingsPage();
                   },
                 );
               },
@@ -231,6 +233,37 @@ class _HomePageState extends ConsumerState<HomePage> with SingleTickerProviderSt
         // Create buttons as a list
         List<Widget> buttons = [];
 
+        // Add statistics button
+        buttons.add(
+          CustomButton(
+            onPressed: () {
+              CupertinoScaffold.showCupertinoModalBottomSheet(
+                enableDrag: false,
+                context: context,
+                builder: (contextFromSheet) {
+                  return const StatisticsPage();
+                },
+              );
+            },
+            child: Container(
+              width: 32,
+              height: 32,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: context.primary.withValues(alpha: .15),
+              ),
+              child: Icon(
+                FontAwesomeIcons.chartBar,
+                size: 20,
+                color: context.theme.primaryColor.withValues(alpha: .9),
+              ),
+            ),
+          ),
+        );
+
+        // Add spacing between buttons
+        buttons.add(SizedBox(width: 12));
+
         // Premium button or loading indicator
         if (isLoading || isPurchasing || isRestoring) {
           buttons.add(
@@ -260,12 +293,12 @@ class _HomePageState extends ConsumerState<HomePage> with SingleTickerProviderSt
                   size: 20,
                 ),
               ),
-            ).animate(autoPlay: true).fadeIn(
-                  curve: Curves.easeInOutCubic,
-                  duration: Duration(milliseconds: 350),
-                ),
+            ),
           );
         }
+
+        // Add spacing between buttons
+        buttons.add(SizedBox(width: 12));
 
         // Add habit button
         buttons.add(
@@ -295,22 +328,12 @@ class _HomePageState extends ConsumerState<HomePage> with SingleTickerProviderSt
                 color: context.theme.primaryColor.withValues(alpha: .9),
               ),
             ),
-          ).animate(autoPlay: true).fadeIn(duration: Duration(milliseconds: 350)),
+          ).animate().fadeIn(duration: Duration(milliseconds: 350)),
         );
-
-        // Add spacing between buttons and display in Row
-        List<Widget> rowChildren = [];
-        for (int i = 0; i < buttons.length; i++) {
-          rowChildren.add(buttons[i]);
-          if (i < buttons.length - 1) {
-            rowChildren.add(SizedBox(width: 10));
-          }
-        }
 
         return Row(
           mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: rowChildren,
+          children: buttons,
         );
       }),
     );

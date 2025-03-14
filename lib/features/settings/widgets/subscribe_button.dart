@@ -87,7 +87,6 @@ class SubscribeButton extends ConsumerWidget {
                                       TextSpan(
                                         text: 'Rise ',
                                         style: context.titleMedium?.copyWith(
-                                          color: Colors.deepOrangeAccent,
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),
