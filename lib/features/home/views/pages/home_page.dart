@@ -32,6 +32,22 @@ class _HomePageState extends ConsumerState<HomePage> with SingleTickerProviderSt
     super.dispose();
   }
 
+  // Names for each filter
+  final filterNames = {
+    TimeOfDayFilter.all: LocaleKeys.habit_filter_all.tr(),
+    TimeOfDayFilter.morning: LocaleKeys.habit_filter_morning.tr(),
+    TimeOfDayFilter.afternoon: LocaleKeys.habit_filter_noon.tr(),
+    TimeOfDayFilter.evening: LocaleKeys.habit_filter_evening.tr(),
+  };
+
+  // List of all filters
+  final filters = [
+    TimeOfDayFilter.all,
+    TimeOfDayFilter.morning,
+    TimeOfDayFilter.afternoon,
+    TimeOfDayFilter.evening,
+  ];
+
   @override
   Widget build(BuildContext context) {
     final homeStateAsyncValue = ref.watch(homeProvider);
@@ -113,22 +129,6 @@ class _HomePageState extends ConsumerState<HomePage> with SingleTickerProviderSt
 
   // Build a horizontally scrolling filter carousel
   Widget _buildFilterCarousel(HomeState homeState) {
-    // List of all filters
-    final filters = [
-      TimeOfDayFilter.all,
-      TimeOfDayFilter.morning,
-      TimeOfDayFilter.afternoon,
-      TimeOfDayFilter.evening,
-    ];
-
-    // Names for each filter
-    final filterNames = {
-      TimeOfDayFilter.all: LocaleKeys.habit_filter_all.tr(),
-      TimeOfDayFilter.morning: LocaleKeys.habit_filter_morning.tr(),
-      TimeOfDayFilter.afternoon: LocaleKeys.habit_filter_noon.tr(),
-      TimeOfDayFilter.evening: LocaleKeys.habit_filter_evening.tr(),
-    };
-
     // Build a simple row of filter buttons - NO PageView, NO animations
     return Row(
       children: filters.map((filter) {
@@ -142,7 +142,7 @@ class _HomePageState extends ConsumerState<HomePage> with SingleTickerProviderSt
               ref.read(homeProvider.notifier).setTimeFilter(filter);
             },
             child: Card(
-              color: isSelected ? context.theme.cardTheme.color : Colors.transparent,
+              color: isSelected ? Colors.deepOrangeAccent : Colors.transparent,
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 2.5),
                 child: Center(
@@ -151,7 +151,7 @@ class _HomePageState extends ConsumerState<HomePage> with SingleTickerProviderSt
                       filterNames[filter] ?? '',
                       style: context.bodyMedium?.copyWith(
                         fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
-                        color: isSelected ? context.theme.primaryColor : context.theme.hintColor,
+                        color: isSelected ? Colors.white : context.theme.hintColor,
                       ),
                       maxLines: 1,
                     ),
@@ -219,10 +219,14 @@ class _HomePageState extends ConsumerState<HomePage> with SingleTickerProviderSt
           SizedBox(width: 10),
           Text.rich(
             TextSpan(children: [
-                
-                
-              ]
-            ),
+              TextSpan(
+                text: "Habit",
+              ),
+              TextSpan(
+                text: "Rise",
+                style: TextStyle(color: Colors.deepOrangeAccent),
+              ),
+            ]),
           ).animate().fadeIn(
                 curve: Curves.easeInOutCubic,
                 duration: Duration(milliseconds: 350),
@@ -232,37 +236,6 @@ class _HomePageState extends ConsumerState<HomePage> with SingleTickerProviderSt
       trailing: Builder(builder: (context) {
         // Create buttons as a list
         List<Widget> buttons = [];
-
-        // Add statistics button
-        buttons.add(
-          CustomButton(
-            onPressed: () {
-              CupertinoScaffold.showCupertinoModalBottomSheet(
-                enableDrag: false,
-                context: context,
-                builder: (contextFromSheet) {
-                  return const StatisticsPage();
-                },
-              );
-            },
-            child: Container(
-              width: 32,
-              height: 32,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: context.primary.withValues(alpha: .15),
-              ),
-              child: Icon(
-                FontAwesomeIcons.chartBar,
-                size: 20,
-                color: context.theme.primaryColor.withValues(alpha: .9),
-              ),
-            ),
-          ),
-        );
-
-        // Add spacing between buttons
-        buttons.add(SizedBox(width: 12));
 
         // Premium button or loading indicator
         if (isLoading || isPurchasing || isRestoring) {
@@ -296,6 +269,37 @@ class _HomePageState extends ConsumerState<HomePage> with SingleTickerProviderSt
             ),
           );
         }
+
+        // Add spacing between buttons
+        buttons.add(SizedBox(width: 12));
+
+        // Add statistics button
+        buttons.add(
+          CustomButton(
+            onPressed: () {
+              CupertinoScaffold.showCupertinoModalBottomSheet(
+                enableDrag: false,
+                context: context,
+                builder: (contextFromSheet) {
+                  return const StatisticsPage();
+                },
+              );
+            },
+            child: Container(
+              width: 32,
+              height: 32,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: context.primary.withValues(alpha: .15),
+              ),
+              child: Icon(
+                FontAwesomeIcons.chartBar,
+                size: 20,
+                color: context.theme.primaryColor.withValues(alpha: .9),
+              ),
+            ),
+          ),
+        );
 
         // Add spacing between buttons
         buttons.add(SizedBox(width: 12));

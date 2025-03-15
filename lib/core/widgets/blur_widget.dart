@@ -17,6 +17,7 @@ class CustomBlurWidget extends StatelessWidget {
     return ClipRect(
       child: BackdropFilter(
         filter: ImageFilter.blur(
+          tileMode: TileMode.mirror,
           sigmaX: blurValue,
           sigmaY: blurValue,
         ),

@@ -110,11 +110,7 @@ class HabitBuilder extends StatelessWidget {
                     ],
                   );
                 },
-                separatorBuilder: (context, index) {
-                  return Padding(
-                    padding: EdgeInsets.symmetric(vertical: 12.5),
-                  );
-                },
+                separatorBuilder: (context, index) => SizedBox(height: 10),
               ),
             ),
           ],

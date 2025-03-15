@@ -133,13 +133,44 @@ class _DataExportImportPageState extends ConsumerState<DataExportImportPage> {
         closeButtonPosition: CloseButtonPosition.left,
       ),
       child: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Info section
-              Padding(
+        child: ListView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          padding: const EdgeInsets.all(20.0),
+          children: [
+            // Info section
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Icon(
+                      CupertinoIcons.info_circle_fill,
+                      color: context.primary,
+                    ),
+                    SizedBox(width: 8),
+                    Text(
+                      LocaleKeys.settings_about_data_management.tr(),
+                      style: context.titleSmall?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 12),
+                Text(
+                  LocaleKeys.settings_data_management_description.tr(),
+                  style: context.bodySmall?.copyWith(
+                    color: context.bodySmall?.color?.withValues(alpha: .7),
+                  ),
+                ),
+              ],
+            ),
+
+            SizedBox(height: 24),
+
+            // Export section
+            Card(
+              child: Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -147,13 +178,13 @@ class _DataExportImportPageState extends ConsumerState<DataExportImportPage> {
                     Row(
                       children: [
                         Icon(
-                          CupertinoIcons.info_circle_fill,
-                          color: context.primary,
+                          CupertinoIcons.arrow_down_doc_fill,
+                          color: CupertinoColors.systemGreen,
                         ),
                         SizedBox(width: 8),
                         Text(
-                          LocaleKeys.settings_about_data_management.tr(),
-                          style: context.titleSmall?.copyWith(
+                          LocaleKeys.settings_export_data.tr(),
+                          style: context.titleMedium?.copyWith(
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -161,132 +192,98 @@ class _DataExportImportPageState extends ConsumerState<DataExportImportPage> {
                     ),
                     SizedBox(height: 12),
                     Text(
-                      LocaleKeys.settings_data_management_description.tr(),
-                      style: context.bodySmall?.copyWith(
-                        color: context.bodySmall?.color?.withValues(alpha: .7),
+                      LocaleKeys.settings_export_description.tr(),
+                      style: context.bodyMedium,
+                    ),
+                    SizedBox(height: 16),
+                    SizedBox(
+                      width: double.infinity,
+                      child: CupertinoButton(
+                        color: Colors.deepOrangeAccent,
+                        padding: EdgeInsets.symmetric(vertical: 12),
+                        onPressed: _isExporting ? null : _exportData,
+                        child: _isExporting
+                            ? Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  CupertinoActivityIndicator(),
+                                  SizedBox(width: 8),
+                                  Text(LocaleKeys.settings_exporting.tr()),
+                                ],
+                              )
+                            : Text(
+                                LocaleKeys.settings_export_data.tr(),
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                              ),
                       ),
                     ),
                   ],
                 ),
               ),
+            ),
 
-              SizedBox(height: 24),
+            SizedBox(height: 24),
 
-              // Export section
-              Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          Icon(
-                            CupertinoIcons.arrow_down_doc_fill,
-                            color: CupertinoColors.systemGreen,
-                          ),
-                          SizedBox(width: 8),
-                          Text(
-                            LocaleKeys.settings_export_data.tr(),
-                            style: context.titleMedium?.copyWith(
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 12),
-                      Text(
-                        LocaleKeys.settings_export_description.tr(),
-                        style: context.bodyMedium,
-                      ),
-                      SizedBox(height: 16),
-                      SizedBox(
-                        width: double.infinity,
-                        child: CupertinoButton(
-                          color: Colors.deepOrangeAccent,
-                          padding: EdgeInsets.symmetric(vertical: 12),
-                          onPressed: _isExporting ? null : _exportData,
-                          child: _isExporting
-                              ? Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    CupertinoActivityIndicator(),
-                                    SizedBox(width: 8),
-                                    Text(LocaleKeys.settings_exporting.tr()),
-                                  ],
-                                )
-                              : Text(
-                                  LocaleKeys.settings_export_data.tr(),
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
+            // Import section
+            Card(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Icon(
+                          CupertinoIcons.arrow_up_doc_fill,
+                          color: CupertinoColors.systemBlue,
                         ),
+                        SizedBox(width: 8),
+                        Text(
+                          LocaleKeys.settings_import_data.tr(),
+                          style: context.titleMedium?.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 12),
+                    Text(
+                      LocaleKeys.settings_import_description.tr(),
+                      style: context.bodyMedium,
+                    ),
+                    SizedBox(height: 16),
+                    SizedBox(
+                      width: double.infinity,
+                      child: CupertinoButton(
+                        color: Colors.deepOrangeAccent,
+                        padding: EdgeInsets.symmetric(vertical: 12),
+                        onPressed: _isImporting ? null : _importData,
+                        child: _isImporting
+                            ? Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  CupertinoActivityIndicator(),
+                                  SizedBox(width: 8),
+                                  Text(LocaleKeys.settings_importing.tr()),
+                                ],
+                              )
+                            : Text(
+                                LocaleKeys.settings_import_data.tr(),
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                              ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
-
-              SizedBox(height: 24),
-
-              // Import section
-              Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          Icon(
-                            CupertinoIcons.arrow_up_doc_fill,
-                            color: CupertinoColors.systemBlue,
-                          ),
-                          SizedBox(width: 8),
-                          Text(
-                            LocaleKeys.settings_import_data.tr(),
-                            style: context.titleMedium?.copyWith(
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 12),
-                      Text(
-                        LocaleKeys.settings_import_description.tr(),
-                        style: context.bodyMedium,
-                      ),
-                      SizedBox(height: 16),
-                      SizedBox(
-                        width: double.infinity,
-                        child: CupertinoButton(
-                          color: Colors.deepOrangeAccent,
-                          padding: EdgeInsets.symmetric(vertical: 12),
-                          onPressed: _isImporting ? null : _importData,
-                          child: _isImporting
-                              ? Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    CupertinoActivityIndicator(),
-                                    SizedBox(width: 8),
-                                    Text(LocaleKeys.settings_importing.tr()),
-                                  ],
-                                )
-                              : Text(
-                                  LocaleKeys.settings_import_data.tr(),
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

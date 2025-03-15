@@ -3,8 +3,17 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '/core/core.dart';
 import '/features/home/provider/home_provider.dart';
+import '/models/habit/habit_model.dart';
+import '/services/habit_service/mock_habit_service.dart';
+import '../../provider/statistics_provider.dart';
 import '../../provider/statistics_state.dart';
 import 'habit_selector_button.dart';
+
+// Mock habit service provider
+final mockHabitsProvider = FutureProvider<List<Habit>>((ref) async {
+  final mockService = MockHabitService();
+  return await mockService.getHabits();
+});
 
 // Alışkanlık seçici widget
 class HabitSelector extends ConsumerWidget {
@@ -19,31 +28,6 @@ class HabitSelector extends ConsumerWidget {
   final List<HabitStatistic> habitStats;
   final Function(int) onHabitSelected;
 
-  String _getEmojiForHabit(String habitName, WidgetRef ref) {
-    // Önce HomeProvider'dan emoji bilgisini almaya çalış
-    final homeState = ref.watch(homeProvider);
-
-    return homeState.when(
-      data: (data) {
-        // Habit adına göre eşleşen alışkanlığı bul
-        final matchingHabit = data.habits.where((h) => h.habitName == habitName).firstOrNull;
-        if (matchingHabit != null && matchingHabit.emoji != null && matchingHabit.emoji!.isNotEmpty) {
-          return matchingHabit.emoji!;
-        }
-
-        // Eşleşme bulunamazsa varsayılan emoji eşleştirmesini kullan
-        return _getDefaultEmoji(habitName);
-      },
-      loading: () => _getDefaultEmoji(habitName),
-      error: (_, __) => _getDefaultEmoji(habitName),
-    );
-  }
-
-  String _getDefaultEmoji(String habitName) {
-    // Varsayılan emoji olarak yıldız kullan
-    return '✨';
-  }
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // Eğer hiç alışkanlık yoksa veya seçili alışkanlık yoksa (-1), ilk alışkanlığı seç
@@ -53,6 +37,18 @@ class HabitSelector extends ConsumerWidget {
         onHabitSelected(0);
       });
     }
+
+    // If we have habits but no selected habit, make sure to select the first one
+    // This is especially important for mock data
+    if (habitStats.isNotEmpty && (selectedHabitIndex < 0 || selectedHabitIndex >= habitStats.length)) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        onHabitSelected(0);
+      });
+    }
+
+    // Check if we're using mock data
+    final statisticsState = ref.watch(statisticsProvider);
+    final isMockData = statisticsState.value?.isMockData ?? false;
 
     return Column(
       children: [
@@ -65,18 +61,77 @@ class HabitSelector extends ConsumerWidget {
             child: Row(
               children: [
                 // Alışkanlık butonları
-                for (int i = 0; i < habitStats.length; i++)
-                  HabitSelectorButton(
-                    isSelected: i == selectedHabitIndex,
-                    emoji: _getEmojiForHabit(habitStats[i].habitName, ref),
-                    habitName: habitStats[i].habitName,
-                    onTap: () => onHabitSelected(i),
-                  ),
+                for (int i = 0; i < habitStats.length; i++) isMockData ? _buildMockHabitButton(context, ref, i, habitStats[i]) : _buildRealHabitButton(context, ref, i, habitStats[i]),
               ],
             ),
           ),
         ),
       ],
+    );
+  }
+
+  // Build a habit button for real data
+  Widget _buildRealHabitButton(BuildContext context, WidgetRef ref, int index, HabitStatistic habitStat) {
+    final homeState = ref.watch(homeProvider);
+
+    return homeState.when(
+      data: (data) {
+        // Find the matching habit to get its emoji
+        final matchingHabit = data.habits.where((h) => h.id == habitStat.habitId).firstOrNull;
+        final emoji = matchingHabit?.emoji ?? '✨';
+
+        return HabitSelectorButton(
+          isSelected: index == selectedHabitIndex,
+          emoji: emoji,
+          habitName: habitStat.habitName,
+          onTap: () => onHabitSelected(index),
+        );
+      },
+      loading: () => HabitSelectorButton(
+        isSelected: index == selectedHabitIndex,
+        emoji: '✨',
+        habitName: habitStat.habitName,
+        onTap: () => onHabitSelected(index),
+      ),
+      error: (_, __) => HabitSelectorButton(
+        isSelected: index == selectedHabitIndex,
+        emoji: '✨',
+        habitName: habitStat.habitName,
+        onTap: () => onHabitSelected(index),
+      ),
+    );
+  }
+
+  // Build a habit button for mock data
+  Widget _buildMockHabitButton(BuildContext context, WidgetRef ref, int index, HabitStatistic habitStat) {
+    final mockHabitsAsync = ref.watch(mockHabitsProvider);
+
+    return mockHabitsAsync.when(
+      data: (mockHabits) {
+        // Find the matching mock habit to get its emoji
+        final matchingHabit = mockHabits.where((h) => h.id == habitStat.habitId || h.habitName == habitStat.habitName).firstOrNull;
+
+        final emoji = matchingHabit?.emoji ?? '✨';
+
+        return HabitSelectorButton(
+          isSelected: index == selectedHabitIndex,
+          emoji: emoji,
+          habitName: habitStat.habitName,
+          onTap: () => onHabitSelected(index),
+        );
+      },
+      loading: () => HabitSelectorButton(
+        isSelected: index == selectedHabitIndex,
+        emoji: '✨',
+        habitName: habitStat.habitName,
+        onTap: () => onHabitSelected(index),
+      ),
+      error: (_, __) => HabitSelectorButton(
+        isSelected: index == selectedHabitIndex,
+        emoji: '✨',
+        habitName: habitStat.habitName,
+        onTap: () => onHabitSelected(index),
+      ),
     );
   }
 }

@@ -8,19 +8,23 @@ class StatisticsState {
   // Habit-specific Statistics
   final Map<String, HabitStatistic> habitStatistics;
 
+  final bool isMockData;
+
   const StatisticsState({
     required this.totalCompletedDays,
     required this.completionRate,
     required this.longestStreak,
     required this.habitStatistics,
+    this.isMockData = false,
   });
 
   // Factory constructor for initial state with default values
-  factory StatisticsState.initial() => StatisticsState(
+  factory StatisticsState.initial({bool isMockData = false}) => StatisticsState(
         totalCompletedDays: 0,
         completionRate: 0,
         longestStreak: 0,
         habitStatistics: {},
+        isMockData: isMockData,
       );
 
   // CopyWith method for immutability
@@ -29,12 +33,14 @@ class StatisticsState {
     double? completionRate,
     int? longestStreak,
     Map<String, HabitStatistic>? habitStatistics,
+    bool? isMockData,
   }) {
     return StatisticsState(
       totalCompletedDays: totalCompletedDays ?? this.totalCompletedDays,
       completionRate: completionRate ?? this.completionRate,
       longestStreak: longestStreak ?? this.longestStreak,
       habitStatistics: habitStatistics ?? this.habitStatistics,
+      isMockData: isMockData ?? this.isMockData,
     );
   }
 }

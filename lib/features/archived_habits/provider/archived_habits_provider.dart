@@ -1,7 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/core.dart';
-import '../../../models/habit/habit_status.dart';
 import '../../../models/models.dart';
 import '../../../services/habit_service/habit_service_interface.dart';
 import '../../home/provider/home_provider.dart';
@@ -70,13 +69,14 @@ class ArchivedHabitsNotifier extends AutoDisposeAsyncNotifier<ArchivedHabitsStat
         );
       }
 
+      // Update home page state properly
+      await ref.read(homeProvider.notifier).refreshHabits();
+
       final updatedState = await fetchArchivedHabits();
 
       state = AsyncValue.data(updatedState.copyWith(
         successMessage: LocaleKeys.archived_habits_unarchive_success.tr(),
       ));
-
-      ref.read(homeProvider.notifier).fetchHabits();
     } catch (e) {
       state = AsyncValue.data(state.value!.copyWith(
         isLoading: false,
@@ -99,33 +99,6 @@ class ArchivedHabitsNotifier extends AutoDisposeAsyncNotifier<ArchivedHabitsStat
         archivedHabits: updatedHabits,
         successMessage: LocaleKeys.archived_habits_marked_for_deletion.tr(),
       ));
-    } catch (e) {
-      state = AsyncValue.data(state.value!.copyWith(
-        isLoading: false,
-        error: e.toString(),
-      ));
-    }
-  }
-
-  Future<void> recoverArchivedHabit(Habit habit) async {
-    state = AsyncValue.data(state.value!.copyWith(isLoading: true));
-
-    try {
-      final updatedHabit = habit.copyWith(
-        status: HabitStatus.archived,
-      );
-      await habitService.updateArchivedHabit(updatedHabit);
-
-      final updatedHabits = state.value!.archivedHabits.map((h) {
-        return h.id == habit.id ? updatedHabit : h;
-      }).toList();
-
-      state = AsyncValue.data(
-        ArchivedHabitsState(
-          archivedHabits: updatedHabits,
-          successMessage: "Habit recovered",
-        ),
-      );
     } catch (e) {
       state = AsyncValue.data(state.value!.copyWith(
         isLoading: false,

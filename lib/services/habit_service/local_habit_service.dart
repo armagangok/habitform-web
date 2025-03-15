@@ -116,11 +116,18 @@ class LocalHabitService extends HabitService {
 
     if (existingEntryWithSameDate != null && existingKey != null) {
       // Var olan kaydı güncelle, yeni kayıt ekleme - ID'yi koru
-      final updatedEntry = existingEntryWithSameDate.copyWith(isCompleted: completion.isCompleted);
+      if (completion.isCompleted) {
+        // Eğer tamamlandı olarak işaretlendiyse, güncelle
+        final updatedEntry = existingEntryWithSameDate.copyWith(isCompleted: true);
 
-      // Mevcut ID ile kaydet
-      updatedCompletions[existingKey] = updatedEntry;
-      LogHelper.shared.debugPrint('Updated existing entry with ID: $existingKey and kept the original ID');
+        // Mevcut ID ile kaydet
+        updatedCompletions[existingKey] = updatedEntry;
+        LogHelper.shared.debugPrint('Updated existing entry with ID: $existingKey and kept the original ID');
+      } else {
+        // Eğer tamamlanmadı olarak işaretlendiyse, kaydı tamamen sil
+        updatedCompletions.remove(existingKey);
+        LogHelper.shared.debugPrint('Removed entry with ID: $existingKey because it was marked as not completed');
+      }
 
       // Gelen completion'ın ID'si ile bir kayıt varsa, onu kaldır (tutarsızlığı önlemek için)
       if (completion.id != existingKey && updatedCompletions.containsKey(completion.id)) {
@@ -128,9 +135,19 @@ class LocalHabitService extends HabitService {
         LogHelper.shared.debugPrint('Removed duplicate entry with ID: ${completion.id}');
       }
     } else {
-      // Aynı tarihte başka bir kayıt yoksa, yeni kaydı ekle
-      updatedCompletions[completion.id] = completion;
-      LogHelper.shared.debugPrint('Added new entry with ID: ${completion.id}');
+      // Aynı tarihte başka bir kayıt yoksa
+      if (completion.isCompleted) {
+        // Tamamlandı olarak işaretlendiyse, yeni kaydı ekle
+        updatedCompletions[completion.id] = completion;
+        LogHelper.shared.debugPrint('Added new entry with ID: ${completion.id}');
+      } else {
+        // Tamamlanmadı olarak işaretlendiyse ve zaten kayıt yoksa, hiçbir şey yapma
+        // Ancak varsa, kaydı sil
+        if (updatedCompletions.containsKey(completion.id)) {
+          updatedCompletions.remove(completion.id);
+          LogHelper.shared.debugPrint('Removed entry with ID: ${completion.id} because it was marked as not completed');
+        }
+      }
     }
 
     final updatedHabit = habit.copyWith(

@@ -50,11 +50,8 @@ class GeneralProgressStats extends ConsumerWidget {
     // HomeProvider'dan alışkanlıkları al
     final homeAsyncValue = ref.watch(homeProvider);
 
-    // Eğer hiçbir alışkanlık seçili değilse (genel görünüm) bu widget'ı göster
-    // Artık tam tersine, bir alışkanlık seçiliyse göstereceğiz
-    if (selectedHabitIndex == -1) {
-      return const SizedBox.shrink();
-    }
+    // Remove the condition that hides this widget when no habit is selected
+    // We want to show it for all cases now, including mock data for non-pro users
 
     return statisticsAsyncValue.when(
       loading: () => const Center(child: CircularProgressIndicator()),
@@ -64,7 +61,7 @@ class GeneralProgressStats extends ConsumerWidget {
         final habitStats = statisticsState.habitStatistics.values.toList();
 
         // Eğer seçili alışkanlık indeksi geçerli değilse
-        if (selectedHabitIndex >= habitStats.length) {
+        if (selectedHabitIndex >= habitStats.length || selectedHabitIndex < 0) {
           return const SizedBox.shrink();
         }
 
@@ -85,6 +82,67 @@ class GeneralProgressStats extends ConsumerWidget {
                 completions: {},
               ),
             );
+
+            // For mock data, we might not find the habit in the homeState
+            // In that case, we'll use the statistics data directly
+            bool usingMockData = statisticsState.isMockData && habitModel.id.isEmpty;
+
+            // If we're using mock data and couldn't find the habit in homeState
+            if (usingMockData) {
+              // Use mock data to display statistics
+              return CupertinoListSection.insetGrouped(
+                backgroundColor: Colors.transparent,
+                header: Text(LocaleKeys.statistics_overview.tr()),
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      children: [
+                        Row(
+                          children: [
+                            Expanded(
+                              child: StatisticCard(
+                                icon: Icons.check_circle_outline,
+                                title: LocaleKeys.statistics_completed.tr(),
+                                value: selectedHabit.completedDays.toString(),
+                              ),
+                            ),
+                            const SizedBox(width: 16),
+                            Expanded(
+                              child: StatisticCard(
+                                icon: Icons.calendar_today,
+                                title: LocaleKeys.statistics_total_days.tr(),
+                                value: selectedHabit.totalDays.toString(),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 16),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: StatisticCard(
+                                icon: Icons.local_fire_department,
+                                title: LocaleKeys.statistics_longest_streak.tr(),
+                                value: "5", // Mock value for longest streak
+                              ),
+                            ),
+                            const SizedBox(width: 16),
+                            Expanded(
+                              child: StatisticCard(
+                                icon: Icons.trending_up,
+                                title: LocaleKeys.statistics_current_streak.tr(),
+                                value: "3", // Mock value for current streak
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              );
+            }
 
             // Eğer alışkanlık bulunamadıysa
             if (habitModel.id.isEmpty) {
@@ -111,7 +169,7 @@ class GeneralProgressStats extends ConsumerWidget {
                           Icon(
                             Icons.assessment,
                             size: 48,
-                            color: Theme.of(context).hintColor.withOpacity(0.5),
+                            color: Theme.of(context).hintColor.withValues(alpha: 0.5),
                           ),
                           const SizedBox(height: 16),
                           Text(
@@ -124,7 +182,7 @@ class GeneralProgressStats extends ConsumerWidget {
                           Text(
                             LocaleKeys.statistics_start_tracking_habit.tr(),
                             style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                  color: Theme.of(context).hintColor.withOpacity(0.7),
+                                  color: Theme.of(context).hintColor.withValues(alpha: 0.7),
                                 ),
                             textAlign: TextAlign.center,
                           ),

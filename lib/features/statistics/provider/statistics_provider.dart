@@ -4,8 +4,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '/core/core.dart';
 import '/features/home/provider/home_provider.dart';
+import '/features/purchase/providers/purchase_provider.dart';
 import '/models/habit/habit_model.dart';
 import '/services/habit_service/habit_service_interface.dart';
+import '/services/habit_service/mock_habit_service.dart';
 import 'statistics_state.dart';
 
 /// Provider for managing statistics
@@ -15,38 +17,67 @@ final statisticsProvider = AutoDisposeAsyncNotifierProvider<StatisticsNotifier, 
 
 /// Notifier class that handles all statistics-related operations
 class StatisticsNotifier extends AutoDisposeAsyncNotifier<StatisticsState> {
+  late final MockHabitService _mockHabitService = MockHabitService();
+
   @override
   Future<StatisticsState> build() async {
+    // Check if user is pro
+    final purchaseState = ref.watch(purchaseProvider);
+    final isProUser = purchaseState.value?.isSubscriptionActive ?? false;
+
     // HomeProvider'dan alışkanlıkları dinle
     ref.listen(homeProvider, (previous, next) {
       if (next is AsyncData && next.value != null) {
         // HomeProvider güncellendiğinde istatistikleri yeniden hesapla
-        state = AsyncData(calculateStatistics(next.value!.habits));
+        _refreshStats();
       }
     });
 
-    // İlk yükleme için HomeProvider'dan alışkanlıkları al
-    final homeState = ref.watch(homeProvider);
+    // Listen to purchase state changes to refresh stats when subscription status changes
+    ref.listen(purchaseProvider, (previous, next) {
+      if (previous?.value?.isSubscriptionActive != next.value?.isSubscriptionActive) {
+        _refreshStats();
+      }
+    });
 
-    return homeState.when(
-      data: (data) => calculateStatistics(data.habits),
-      loading: () async {
-        // HomeProvider yüklenirken, servis katmanından alışkanlıkları al
-        final habits = await habitService.getHabits();
-        return calculateStatistics(habits);
-      },
-      error: (error, stackTrace) async {
-        // Hata durumunda boş istatistikler döndür
-        return StatisticsState.initial();
-      },
-    );
+    return _getStatistics(isProUser);
+  }
+
+  Future<void> _refreshStats() async {
+    final purchaseState = ref.read(purchaseProvider);
+    final isProUser = purchaseState.value?.isSubscriptionActive ?? false;
+    state = AsyncData(await _getStatistics(isProUser));
+  }
+
+  Future<StatisticsState> _getStatistics(bool isProUser) async {
+    if (isProUser) {
+      // Pro user - use real data
+      final homeState = ref.watch(homeProvider);
+
+      return homeState.when(
+        data: (data) => calculateStatistics(data.habits),
+        loading: () async {
+          // HomeProvider yüklenirken, servis katmanından alışkanlıkları al
+          final habits = await habitService.getHabits();
+          return calculateStatistics(habits);
+        },
+        error: (error, stackTrace) async {
+          // Hata durumunda boş istatistikler döndür
+          return StatisticsState.initial();
+        },
+      );
+    } else {
+      // Free user - use mock data
+      final mockHabits = await _mockHabitService.getHabits();
+      return calculateStatistics(mockHabits, isMockData: true);
+    }
   }
 
   /// Calculates all statistics based on habits data
-  StatisticsState calculateStatistics(List<Habit> habits) {
+  StatisticsState calculateStatistics(List<Habit> habits, {bool isMockData = false}) {
     // Hiç alışkanlık yoksa veya tüm alışkanlıkların tamamlanma verisi yoksa boş istatistikler döndür
     if (habits.isEmpty || _hasNoCompletionData(habits)) {
-      return StatisticsState.initial();
+      return StatisticsState.initial(isMockData: isMockData);
     }
 
     final totalCompletions = _countTotalCompletions(habits);
@@ -80,6 +111,7 @@ class StatisticsNotifier extends AutoDisposeAsyncNotifier<StatisticsState> {
       completionRate: completionRate,
       longestStreak: longestStreak,
       habitStatistics: habitStatistics,
+      isMockData: isMockData,
     );
   }
 

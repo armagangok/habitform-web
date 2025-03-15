@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../core/core.dart';
-import '../../../../models/models.dart';
+import '/core/core.dart';
+import '/models/models.dart';
 import '../../../habit_detail/page/habit_detail.dart';
 import '../../../habit_detail/providers/habit_detail_provider.dart';
 import '../../provider/home_provider.dart';
@@ -43,40 +43,27 @@ class _HabitWidgetState extends ConsumerState<HabitWidget> {
       onPressed: _openHabitDetail,
       child: LayoutBuilder(
         builder: (context, constraints) {
-          return Column(
-            children: [
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  habitName,
-                  style: context.bodyMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18,
-                  ),
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 1,
-                ),
-              ),
-              Card(
-                child: SingleChildScrollView(
-                  physics: const NeverScrollableScrollPhysics(),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(10),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            HomeHabitGrid(habit: currentHabit),
-                          ],
-                        ),
+          return Card(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                children: [
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      habitName,
+                      style: context.bodyMedium?.copyWith(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
                       ),
-                    ],
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                    ),
                   ),
-                ),
+                  HomeHabitGrid(habit: currentHabit),
+                ],
               ),
-            ],
+            ),
           );
         },
       ),

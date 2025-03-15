@@ -22,13 +22,14 @@ class _ArchivedHabitsPageState extends ConsumerState<ArchivedHabitsPage> {
   Widget build(BuildContext context) {
     final archivedHabitsAsync = ref.watch(archivedHabitsProvider);
 
-    return Material(
-      color: Colors.transparent,
-      child: CupertinoPageScaffold(
-        navigationBar: CupertinoNavigationBar(
+    return CupertinoScaffold(
+      body: CupertinoPageScaffold(
+        navigationBar: SheetHeader(
+          closeButtonPosition: CloseButtonPosition.left,
           middle: Text(LocaleKeys.archived_habits_title.tr()),
         ),
         child: SafeArea(
+          bottom: false,
           child: archivedHabitsAsync.when(
             loading: () => const Center(
               child: CupertinoActivityIndicator(),

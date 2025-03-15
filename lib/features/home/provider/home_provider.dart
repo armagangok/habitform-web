@@ -19,20 +19,8 @@ class HomeNotifier extends AsyncNotifier<HomeState> {
     // Initial fetch of habits when the provider is created
     final habits = await fetchHabits();
 
-    // Set the initial filter based on current time of day
-    final currentHour = DateTime.now().hour;
-    TimeOfDayFilter initialFilter;
-
-    if (currentHour >= 5 && currentHour < 12) {
-      // Morning: 5:00 AM - 11:59 AM
-      initialFilter = TimeOfDayFilter.morning;
-    } else if (currentHour >= 12 && currentHour < 18) {
-      // Afternoon: 12:00 PM - 5:59 PM
-      initialFilter = TimeOfDayFilter.afternoon;
-    } else {
-      // Evening: 6:00 PM - 4:59 AM
-      initialFilter = TimeOfDayFilter.evening;
-    }
+    // Use the default time filter
+    final initialFilter = _getDefaultTimeFilter();
 
     return habits.copyWith(timeFilter: initialFilter);
   }
@@ -41,7 +29,35 @@ class HomeNotifier extends AsyncNotifier<HomeState> {
   /// Updates the state with loading and result/error
   Future<HomeState> fetchHabits() async {
     final habits = await habitService.getHabits();
-    return HomeState(habits: habits);
+
+    // Preserve the current time filter if available
+    TimeOfDayFilter? currentFilter;
+    if (state.value != null) {
+      currentFilter = state.value!.timeFilter;
+    }
+
+    final newState = HomeState(
+      habits: habits,
+      timeFilter: currentFilter ?? _getDefaultTimeFilter(),
+    );
+
+    return newState;
+  }
+
+  /// Helper method to get the default time filter based on current time
+  TimeOfDayFilter _getDefaultTimeFilter() {
+    final currentHour = DateTime.now().hour;
+
+    if (currentHour >= 5 && currentHour < 12) {
+      // Morning: 5:00 AM - 11:59 AM
+      return TimeOfDayFilter.morning;
+    } else if (currentHour >= 12 && currentHour < 18) {
+      // Afternoon: 12:00 PM - 5:59 PM
+      return TimeOfDayFilter.afternoon;
+    } else {
+      // Evening: 6:00 PM - 4:59 AM
+      return TimeOfDayFilter.evening;
+    }
   }
 
   /// Archives a habit by moving it to the archived habits storage
@@ -54,7 +70,7 @@ class HomeNotifier extends AsyncNotifier<HomeState> {
   }
 
   /// Toggles the completion status of a habit for a specific date
-  /// Creates a new completion entry if one doesn't exist, or updates existing one
+  /// Creates a new completion entry if one doesn't exist, or removes it if it's already completed
   Future<void> toggleHabitCompletion(String habitId, DateTime date) async {
     LogHelper.shared.debugPrint('Toggling habit completion for habit: $habitId on date: $date');
 
@@ -96,24 +112,20 @@ class HomeNotifier extends AsyncNotifier<HomeState> {
       }
     }
 
-    // Update existing entry or create a new one
-    final CompletionEntry completion;
-
-    if (existingEntry != null) {
-      // Use existing entry, just toggle the isCompleted value
-      completion = existingEntry.copyWith(
-        isCompleted: !isCurrentlyCompleted,
-      );
-      LogHelper.shared.debugPrint('Updating existing completion entry, new status: ${!isCurrentlyCompleted}');
-    } else {
-      // Create a new entry
-      completion = CompletionEntry(
-        id: dateKey,
-        date: normalizedDate,
-        isCompleted: true, // If creating a new entry, mark it as completed
-      );
-      LogHelper.shared.debugPrint('Creating new completion entry with status: true');
+    // If the day is already completed, remove the completion
+    if (isCurrentlyCompleted) {
+      await removeHabitCompletion(habitId, normalizedDate);
+      return;
     }
+
+    // Otherwise, mark it as completed
+    final CompletionEntry completion = existingEntry != null
+        ? existingEntry.copyWith(isCompleted: true)
+        : CompletionEntry(
+            id: dateKey,
+            date: normalizedDate,
+            isCompleted: true, // If creating a new entry, mark it as completed
+          );
 
     // Call the method to update the habit completion status
     await updateHabitCompletionStatus(habitId, completion);
@@ -121,8 +133,85 @@ class HomeNotifier extends AsyncNotifier<HomeState> {
     LogHelper.shared.debugPrint('Habit toggling completed successfully');
   }
 
+  /// Removes a completion entry for a specific date
+  Future<void> removeHabitCompletion(String habitId, DateTime date) async {
+    LogHelper.shared.debugPrint('Removing completion for habit: $habitId on date: $date');
+
+    // Get current state
+    final currentState = state;
+    if (currentState is! AsyncData<HomeState>) {
+      LogHelper.shared.debugPrint('Cannot remove habit completion: State is not loaded yet');
+      return;
+    }
+
+    final currentHabits = List<Habit>.from(currentState.value.habits);
+    final currentTimeFilter = currentState.value.timeFilter; // Preserve current filter
+
+    // Find habit to update by index
+    final habitIndex = currentHabits.indexWhere((h) => h.id == habitId);
+
+    if (habitIndex == -1) {
+      LogHelper.shared.debugPrint('Habit not found with ID: $habitId');
+      throw Exception('Habit not found');
+    }
+
+    // Get the habit
+    final habit = currentHabits[habitIndex];
+
+    // Copy completions
+    final updatedCompletions = Map<String, CompletionEntry>.from(habit.completions);
+
+    // Find the entry with the specified date
+    String? keyToRemove;
+    for (var entry in updatedCompletions.entries) {
+      if (entry.value.date.normalized.isSameDayWith(date.normalized)) {
+        keyToRemove = entry.key;
+        break;
+      }
+    }
+
+    // If found, remove it
+    if (keyToRemove != null) {
+      updatedCompletions.remove(keyToRemove);
+      LogHelper.shared.debugPrint('Removed completion with key: $keyToRemove');
+
+      // Create updated habit
+      final updatedHabit = habit.copyWith(completions: updatedCompletions);
+
+      // Update habit in the list
+      currentHabits[habitIndex] = updatedHabit;
+
+      // Update state (optimistic update) with preserved filter
+      final optimisticState = HomeState(
+        habits: currentHabits,
+        timeFilter: currentTimeFilter,
+      );
+      state = AsyncData(optimisticState);
+
+      // Update database
+      state = await AsyncValue.guard(() async {
+        // Create a dummy completion entry with isCompleted = false to signal removal
+        // Bu, service layer'da silme işlemini tetikleyecek
+        final dummyCompletion = CompletionEntry(
+          id: date.toIso8601DateString,
+          date: date.normalized,
+          isCompleted: false, // false değeri, service layer'da bu kaydın silinmesi gerektiğini belirtir
+        );
+
+        // This will trigger the removal logic in the service layer
+        await habitService.updateHabitCompletionStatus(habitId, dummyCompletion);
+
+        LogHelper.shared.debugPrint('Habit completion removed successfully');
+        return optimisticState;
+      });
+    } else {
+      LogHelper.shared.debugPrint('No completion found for the specified date');
+    }
+  }
+
   /// Updates the completion status of a habit with optimistic UI update
   /// Updates local state first, then persists to database
+  /// If completion.isCompleted is false, the entry will be removed completely
   Future<void> updateHabitCompletionStatus(String habitId, CompletionEntry completion) async {
     LogHelper.shared.debugPrint('Updating habit completion status: $habitId, date: ${completion.date}, completed: ${completion.isCompleted}');
 
@@ -157,11 +246,18 @@ class HomeNotifier extends AsyncNotifier<HomeState> {
 
         if (existingEntryWithSameDate != null && existingKey != null) {
           // Update existing entry, don't add a new one
-          final updatedEntry = existingEntryWithSameDate.copyWith(isCompleted: completion.isCompleted);
+          if (completion.isCompleted) {
+            // If marked as completed, update the entry
+            final updatedEntry = existingEntryWithSameDate.copyWith(isCompleted: true);
 
-          // Save with the existing ID
-          updatedCompletions[existingKey] = updatedEntry;
-          LogHelper.shared.debugPrint('Updated existing entry with ID: $existingKey and kept the original ID');
+            // Save with the existing ID
+            updatedCompletions[existingKey] = updatedEntry;
+            LogHelper.shared.debugPrint('Updated existing entry with ID: $existingKey and kept the original ID');
+          } else {
+            // If marked as not completed, remove the entry
+            updatedCompletions.remove(existingKey);
+            LogHelper.shared.debugPrint('Removed entry with ID: $existingKey because it was marked as not completed');
+          }
 
           // If there's an entry with the incoming completion ID, remove it (to prevent inconsistency)
           if (completion.id != existingKey && updatedCompletions.containsKey(completion.id)) {
@@ -169,9 +265,18 @@ class HomeNotifier extends AsyncNotifier<HomeState> {
             LogHelper.shared.debugPrint('Removed duplicate entry with ID: ${completion.id}');
           }
         } else {
-          // If there's no entry with the same date, add the new one
-          updatedCompletions[completion.id] = completion;
-          LogHelper.shared.debugPrint('Added new entry with ID: ${completion.id}');
+          // If there's no entry with the same date
+          if (completion.isCompleted) {
+            // If marked as completed, add the new entry
+            updatedCompletions[completion.id] = completion;
+            LogHelper.shared.debugPrint('Added new entry with ID: ${completion.id}');
+          } else {
+            // If marked as not completed and there's an entry with the same ID, remove it
+            if (updatedCompletions.containsKey(completion.id)) {
+              updatedCompletions.remove(completion.id);
+              LogHelper.shared.debugPrint('Removed entry with ID: ${completion.id} because it was marked as not completed');
+            }
+          }
         }
 
         // Create updated habit
@@ -191,7 +296,13 @@ class HomeNotifier extends AsyncNotifier<HomeState> {
 
         // Update database and handle any errors
         state = await AsyncValue.guard(() async {
-          await habitService.updateHabitCompletionStatus(habitId, updatedHabit.completions.values.firstWhere((e) => e.date.normalized.isSameDayWith(completion.date.normalized), orElse: () => completion));
+          if (!completion.isCompleted) {
+            await habitService.updateHabitCompletionStatus(habitId, completion);
+          } else {
+            final entryToUpdate = updatedHabit.completions.values.firstWhere((e) => e.date.normalized.isSameDayWith(completion.date.normalized), orElse: () => completion);
+            await habitService.updateHabitCompletionStatus(habitId, entryToUpdate);
+          }
+
           LogHelper.shared.debugPrint('Habit completion status updated successfully');
           return optimisticState;
         });
@@ -257,5 +368,13 @@ class HomeNotifier extends AsyncNotifier<HomeState> {
       // Update state with new filter but keep same habits
       state = AsyncData(currentState.value.copyWith(timeFilter: filter));
     }
+  }
+
+  /// Refreshes the habits list from the service and updates the state
+  Future<void> refreshHabits() async {
+    state = const AsyncValue.loading();
+    state = await AsyncValue.guard(() async {
+      return await fetchHabits();
+    });
   }
 }

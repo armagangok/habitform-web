@@ -23,7 +23,7 @@ class MockHabitData {
         reminderTime: DateTime(2023, 1, 1, 5, 45),
         days: [Days.mon, Days.tue, Days.wed, Days.thu, Days.fri],
       ),
-      completions: _generateRandomCompletions(),
+      completions: _generateRandomCompletions("habit-wakeup-1"),
       status: HabitStatus.active,
     ),
 
@@ -39,7 +39,7 @@ class MockHabitData {
         reminderTime: DateTime(2023, 1, 1, 6, 05),
         days: [Days.mon, Days.tue, Days.wed, Days.thu, Days.fri, Days.sat, Days.sun],
       ),
-      completions: _generateRandomCompletions(),
+      completions: _generateRandomCompletions("habit-stretch-1"),
       status: HabitStatus.active,
     ),
 
@@ -55,7 +55,7 @@ class MockHabitData {
         reminderTime: DateTime(2023, 1, 1, 7, 0),
         days: [Days.mon, Days.tue, Days.wed, Days.thu, Days.fri, Days.sat, Days.sun],
       ),
-      completions: _generateRandomCompletions(),
+      completions: _generateRandomCompletions("habit-breakfast-1"),
       status: HabitStatus.active,
     ),
 
@@ -71,7 +71,7 @@ class MockHabitData {
         reminderTime: DateTime(2023, 1, 1, 9, 0),
         days: [Days.mon, Days.tue, Days.wed, Days.thu, Days.fri, Days.sat, Days.sun],
       ),
-      completions: _generateRandomCompletions(),
+      completions: _generateRandomCompletions("habit-water-1"),
       status: HabitStatus.active,
     ),
 
@@ -87,7 +87,7 @@ class MockHabitData {
         reminderTime: DateTime(2023, 1, 1, 9, 30),
         days: [Days.mon, Days.tue, Days.wed, Days.thu, Days.fri, Days.sat, Days.sun],
       ),
-      completions: _generateRandomCompletions(),
+      completions: _generateRandomCompletions("habit-vitamins-1"),
       status: HabitStatus.active,
     ),
 
@@ -103,7 +103,7 @@ class MockHabitData {
         reminderTime: DateTime(2023, 1, 1, 12, 30),
         days: [Days.mon, Days.tue, Days.wed, Days.thu, Days.fri, Days.sat, Days.sun],
       ),
-      completions: _generateRandomCompletions(),
+      completions: _generateRandomCompletions("habit-vegetables-1"),
       status: HabitStatus.active,
     ),
 
@@ -119,7 +119,7 @@ class MockHabitData {
         reminderTime: DateTime(2023, 1, 1, 14, 0),
         days: [Days.mon, Days.tue, Days.wed, Days.thu, Days.fri],
       ),
-      completions: _generateRandomCompletions(),
+      completions: _generateRandomCompletions("habit-posture-1"),
       status: HabitStatus.active,
     ),
 
@@ -135,7 +135,7 @@ class MockHabitData {
         reminderTime: DateTime(2023, 1, 1, 17, 30),
         days: [Days.mon, Days.tue, Days.wed, Days.thu, Days.fri, Days.sat, Days.sun],
       ),
-      completions: _generateRandomCompletions(),
+      completions: _generateRandomCompletions("habit-walk-1"),
       status: HabitStatus.active,
     ),
 
@@ -151,7 +151,7 @@ class MockHabitData {
         reminderTime: DateTime(2023, 1, 1, 19, 0),
         days: [Days.mon, Days.tue, Days.wed, Days.thu, Days.fri],
       ),
-      completions: _generateRandomCompletions(),
+      completions: _generateRandomCompletions("habit-learning-1"),
       status: HabitStatus.active,
     ),
 
@@ -183,7 +183,7 @@ class MockHabitData {
         reminderTime: DateTime(2023, 1, 1, 20, 45),
         days: [Days.mon, Days.tue, Days.wed, Days.thu, Days.fri, Days.sat, Days.sun],
       ),
-      completions: _generateRandomCompletions(),
+      completions: _generateRandomCompletions("habit-meditation-1"),
       status: HabitStatus.active,
     ),
 
@@ -199,7 +199,7 @@ class MockHabitData {
         reminderTime: DateTime(2023, 1, 1, 21, 0),
         days: [Days.mon, Days.tue, Days.wed, Days.thu, Days.fri, Days.sat, Days.sun],
       ),
-      completions: _generateRandomCompletions(),
+      completions: _generateRandomCompletions("habit-gratitude-1"),
       status: HabitStatus.active,
     ),
 
@@ -215,7 +215,7 @@ class MockHabitData {
         reminderTime: DateTime(2023, 1, 1, 21, 15),
         days: [Days.mon, Days.tue, Days.wed, Days.thu, Days.fri, Days.sat, Days.sun],
       ),
-      completions: _generateRandomCompletions(),
+      completions: _generateRandomCompletions("habit-phoneoff-1"),
       status: HabitStatus.active,
     ),
 
@@ -231,7 +231,7 @@ class MockHabitData {
         reminderTime: DateTime(2023, 1, 1, 21, 30),
         days: [Days.mon, Days.tue, Days.wed, Days.thu, Days.fri, Days.sat, Days.sun],
       ),
-      completions: _generateRandomCompletions(),
+      completions: _generateRandomCompletions("habit-journal-1"),
       status: HabitStatus.archived,
       archiveDate: DateTime.now().subtract(const Duration(days: 15)),
     ),
@@ -248,7 +248,7 @@ class MockHabitData {
         reminderTime: DateTime(2023, 1, 1, 22, 0),
         days: [Days.mon, Days.tue, Days.wed, Days.thu, Days.fri, Days.sat, Days.sun],
       ),
-      completions: _generateRandomCompletions(),
+      completions: _generateRandomCompletions("habit-teeth-1"),
       status: HabitStatus.active,
     ),
   ];
@@ -257,6 +257,7 @@ class MockHabitData {
   static Map<String, CompletionEntry> _generateRandomCompletions([String? habitId]) {
     final Map<String, CompletionEntry> completions = {};
     final now = DateTime.now();
+    final random = DateTime.now().millisecondsSinceEpoch; // Use current time as seed for randomness
 
     // Special case for Daily Read habit
     if (habitId == "habit-reading-1") {
@@ -319,19 +320,43 @@ class MockHabitData {
       return completions;
     }
 
-    // Generate completions for the last 30 days with ~70% completion rate for other habits
+    // Create a truly unique seed for each habit
+    int seed = 0;
+    if (habitId != null) {
+      for (int i = 0; i < habitId.length; i++) {
+        seed += habitId.codeUnitAt(i);
+      }
+    }
+    seed = (seed + random) % 10000;
+
+    // Determine completion rate (between 40% and 90%) based on habit ID
+    final completionRate = 40 + (seed % 50);
+
+    // Generate completions for the last 30 days with truly random patterns
     for (int i = 0; i < 30; i++) {
       final date = now.subtract(Duration(days: i));
       final dateString = "${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}";
 
-      // ~70% chance of completion
-      if (i == 0 || i % 3 != 0) {
+      // Generate a random number between 0-99 for this specific day and habit
+      final daySpecificSeed = (seed + i * 17 + date.day * 31 + date.month * 12) % 100;
+
+      // If the random number is less than the completion rate, mark as completed
+      if (daySpecificSeed < completionRate) {
         completions[dateString] = CompletionEntry(
           id: dateString,
           date: date,
           isCompleted: true,
         );
+      } else if (daySpecificSeed > 95) {
+        // Occasionally add incomplete entries (marked as false)
+        // This makes the data more realistic by showing days the user tracked but didn't complete
+        completions[dateString] = CompletionEntry(
+          id: dateString,
+          date: date,
+          isCompleted: false,
+        );
       }
+      // Otherwise, no entry for this day (user didn't track)
     }
 
     return completions;

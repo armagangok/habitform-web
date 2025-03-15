@@ -1,9 +1,11 @@
+import '../../core/constants/debug_constants.dart';
 import '../../models/completion_entry/completion_entry.dart';
 import '../../models/habit/habit_model.dart';
 import 'local_habit_service.dart';
+import 'mock_habit_service.dart';
 
 // Use MockHabitService when in debug mode, otherwise use LocalHabitService
-final HabitService habitService = LocalHabitService.instance;
+final HabitService habitService = KDebug.mockHabitServiceDebugMode ? MockHabitService() : LocalHabitService.instance;
 
 abstract class HabitService {
   // Get all habits (both active and archived)

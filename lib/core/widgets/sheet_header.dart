@@ -32,7 +32,7 @@ class SheetHeader extends StatelessWidget implements ObstructingPreferredSizeWid
         ),
       ),
       transitionBetweenRoutes: false,
-      enableBackgroundFilterBlur: true,
+      enableBackgroundFilterBlur: false,
       leading: leading ??
           Align(
             widthFactor: 1,

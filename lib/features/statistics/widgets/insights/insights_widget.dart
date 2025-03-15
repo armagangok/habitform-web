@@ -117,10 +117,14 @@ class InsightsWidget extends ConsumerWidget {
         String habitFormationStatus = '';
         String estimatedFormationTime = '';
 
-        if (selectedHabitIndex != -1) {
+        // Check if we have a valid selected habit index
+        if (selectedHabitIndex >= 0 && selectedHabitIndex < data.habitStatistics.values.length) {
           final selectedHabit = data.habitStatistics.values.elementAt(selectedHabitIndex);
           habitFormationStatus = _getHabitFormationStatus(selectedHabit.progressPercentage, selectedHabit.completedDays);
           estimatedFormationTime = _getEstimatedFormationTime(selectedHabit.progressPercentage, selectedHabit.completedDays, selectedHabit.startDate);
+        } else {
+          // No valid habit selected, return empty widget
+          return const SizedBox.shrink();
         }
 
         return CupertinoListSection.insetGrouped(
@@ -133,51 +137,51 @@ class InsightsWidget extends ConsumerWidget {
                 spacing: 16,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  if (selectedHabitIndex != -1) ...[
-                    _buildHabitFormationChart(context, data.habitStatistics.values.elementAt(selectedHabitIndex).progressPercentage),
-                    const SizedBox(height: 10),
-                    Text(
-                      LocaleKeys.statistics_about_formation.tr(),
-                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
-                      maxLines: 3,
-                    ),
-                    Text(
-                      habitFormationStatus,
-                      style: Theme.of(context).textTheme.bodyMedium,
-                      maxLines: 10,
-                    ),
-                    Text(
-                      estimatedFormationTime,
-                      style: Theme.of(context).textTheme.bodyMedium,
-                      maxLines: 10,
-                    ),
-                    Card(
-                      child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Row(
-                          children: [
-                            Icon(
-                              Icons.info_outline,
-                              size: 24,
-                              color: context.theme.hintColor,
-                            ),
-                            const SizedBox(width: 16),
-                            Expanded(
-                              child: Text(
-                                LocaleKeys.statistics_formation_info.tr(),
-                                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                      color: context.bodySmall?.color?.withValues(alpha: .75),
-                                    ),
-                                maxLines: 10,
-                              ),
-                            ),
-                          ],
+                  // Always show the chart and information when a habit is selected
+                  _buildHabitFormationChart(context, data.habitStatistics.values.elementAt(selectedHabitIndex).progressPercentage),
+                  const SizedBox(height: 10),
+                  Text(
+                    LocaleKeys.statistics_about_formation.tr(),
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.bold,
                         ),
+                    maxLines: 3,
+                  ),
+                  Text(
+                    habitFormationStatus,
+                    style: Theme.of(context).textTheme.bodyMedium,
+                    maxLines: 10,
+                  ),
+                  Text(
+                    estimatedFormationTime,
+                    style: Theme.of(context).textTheme.bodyMedium,
+                    maxLines: 10,
+                  ),
+                  Card(
+                    color: context.primary.withValues(alpha: .075),
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.info_outline,
+                            size: 24,
+                            color: context.theme.hintColor,
+                          ),
+                          const SizedBox(width: 16),
+                          Expanded(
+                            child: Text(
+                              LocaleKeys.statistics_formation_info.tr(),
+                              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                    color: context.bodySmall?.color?.withValues(alpha: .75),
+                                  ),
+                              maxLines: 10,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                  ],
+                  ),
                 ],
               ),
             ),
