@@ -2,6 +2,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/core.dart';
 import '../home/provider/home_provider.dart';
+import '../purchase/page/paywall_page.dart';
+import '../purchase/providers/purchase_provider.dart';
 import 'csv_service.dart';
 import 'permission_helper.dart';
 
@@ -25,8 +27,7 @@ class _DataExportImportPageState extends ConsumerState<DataExportImportPage> {
         _isExporting = true;
       });
 
-      final filePath = await _csvService.exportHabitsToCSV();
-      await _csvService.shareCSVFile(filePath);
+      await _csvService.exportHabitsToCSV();
     } catch (e) {
       if (mounted) {
         // Show error message
@@ -125,12 +126,23 @@ class _DataExportImportPageState extends ConsumerState<DataExportImportPage> {
     }
   }
 
+  void _showPaywallPage() {
+    showCupertinoModalBottomSheet(
+      context: context,
+      builder: (context) => const PaywallPage(),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    final purchaseState = ref.watch(purchaseProvider);
+    final isProUser = purchaseState.value?.isSubscriptionActive ?? false;
+
     return CupertinoPageScaffold(
       navigationBar: SheetHeader(
         title: LocaleKeys.settings_data_export_import.tr(),
         closeButtonPosition: CloseButtonPosition.left,
+        middle: Text(LocaleKeys.settings_data_export_import.tr()),
       ),
       child: SafeArea(
         child: ListView(
@@ -170,58 +182,84 @@ class _DataExportImportPageState extends ConsumerState<DataExportImportPage> {
 
             // Export section
             Card(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
+              child: Stack(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Icon(
-                          CupertinoIcons.arrow_down_doc_fill,
-                          color: CupertinoColors.systemGreen,
+                        Row(
+                          children: [
+                            Icon(
+                              CupertinoIcons.arrow_down_doc_fill,
+                              color: CupertinoColors.systemGreen,
+                            ),
+                            SizedBox(width: 8),
+                            Text(
+                              LocaleKeys.settings_export_data.tr(),
+                              style: context.titleMedium?.copyWith(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
                         ),
-                        SizedBox(width: 8),
+                        SizedBox(height: 12),
                         Text(
-                          LocaleKeys.settings_export_data.tr(),
-                          style: context.titleMedium?.copyWith(
-                            fontWeight: FontWeight.bold,
+                          LocaleKeys.settings_export_description.tr(),
+                          style: context.bodyMedium,
+                        ),
+                        SizedBox(height: 16),
+                        SizedBox(
+                          width: double.infinity,
+                          child: CupertinoButton(
+                            color: Colors.deepOrangeAccent,
+                            padding: EdgeInsets.symmetric(vertical: 12),
+                            onPressed: isProUser ? (_isExporting ? null : _exportData) : _showPaywallPage,
+                            child: _isExporting
+                                ? Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      CupertinoActivityIndicator(),
+                                      SizedBox(width: 8),
+                                      Text(LocaleKeys.settings_exporting.tr()),
+                                    ],
+                                  )
+                                : Text(
+                                    LocaleKeys.settings_export_data.tr(),
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                    ),
+                                  ),
                           ),
                         ),
                       ],
                     ),
-                    SizedBox(height: 12),
-                    Text(
-                      LocaleKeys.settings_export_description.tr(),
-                      style: context.bodyMedium,
-                    ),
-                    SizedBox(height: 16),
-                    SizedBox(
-                      width: double.infinity,
-                      child: CupertinoButton(
-                        color: Colors.deepOrangeAccent,
-                        padding: EdgeInsets.symmetric(vertical: 12),
-                        onPressed: _isExporting ? null : _exportData,
-                        child: _isExporting
-                            ? Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  CupertinoActivityIndicator(),
-                                  SizedBox(width: 8),
-                                  Text(LocaleKeys.settings_exporting.tr()),
-                                ],
-                              )
-                            : Text(
-                                LocaleKeys.settings_export_data.tr(),
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white,
-                                ),
-                              ),
+                  ),
+                  if (!isProUser)
+                    Positioned(
+                      top: 12,
+                      right: 12,
+                      child: Container(
+                        padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                        decoration: BoxDecoration(
+                          color: Colors.black.withValues(alpha: .8),
+                          borderRadius: BorderRadius.circular(90),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            FaIcon(
+                              FontAwesomeIcons.crown,
+                              color: Colors.yellowAccent,
+                              size: 12,
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ],
-                ),
+                ],
               ),
             ),
 
@@ -229,58 +267,84 @@ class _DataExportImportPageState extends ConsumerState<DataExportImportPage> {
 
             // Import section
             Card(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
+              child: Stack(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Icon(
-                          CupertinoIcons.arrow_up_doc_fill,
-                          color: CupertinoColors.systemBlue,
+                        Row(
+                          children: [
+                            Icon(
+                              CupertinoIcons.arrow_up_doc_fill,
+                              color: CupertinoColors.systemBlue,
+                            ),
+                            SizedBox(width: 8),
+                            Text(
+                              LocaleKeys.settings_import_data.tr(),
+                              style: context.titleMedium?.copyWith(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
                         ),
-                        SizedBox(width: 8),
+                        SizedBox(height: 12),
                         Text(
-                          LocaleKeys.settings_import_data.tr(),
-                          style: context.titleMedium?.copyWith(
-                            fontWeight: FontWeight.bold,
+                          LocaleKeys.settings_import_description.tr(),
+                          style: context.bodyMedium,
+                        ),
+                        SizedBox(height: 16),
+                        SizedBox(
+                          width: double.infinity,
+                          child: CupertinoButton(
+                            color: Colors.deepOrangeAccent,
+                            padding: EdgeInsets.symmetric(vertical: 12),
+                            onPressed: isProUser ? (_isImporting ? null : _importData) : _showPaywallPage,
+                            child: _isImporting
+                                ? Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      CupertinoActivityIndicator(),
+                                      SizedBox(width: 8),
+                                      Text(LocaleKeys.settings_importing.tr()),
+                                    ],
+                                  )
+                                : Text(
+                                    LocaleKeys.settings_import_data.tr(),
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                    ),
+                                  ),
                           ),
                         ),
                       ],
                     ),
-                    SizedBox(height: 12),
-                    Text(
-                      LocaleKeys.settings_import_description.tr(),
-                      style: context.bodyMedium,
-                    ),
-                    SizedBox(height: 16),
-                    SizedBox(
-                      width: double.infinity,
-                      child: CupertinoButton(
-                        color: Colors.deepOrangeAccent,
-                        padding: EdgeInsets.symmetric(vertical: 12),
-                        onPressed: _isImporting ? null : _importData,
-                        child: _isImporting
-                            ? Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  CupertinoActivityIndicator(),
-                                  SizedBox(width: 8),
-                                  Text(LocaleKeys.settings_importing.tr()),
-                                ],
-                              )
-                            : Text(
-                                LocaleKeys.settings_import_data.tr(),
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white,
-                                ),
-                              ),
+                  ),
+                  if (!isProUser)
+                    Positioned(
+                      top: 12,
+                      right: 12,
+                      child: Container(
+                        padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                        decoration: BoxDecoration(
+                          color: Colors.black.withValues(alpha: .8),
+                          borderRadius: BorderRadius.circular(90),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            FaIcon(
+                              FontAwesomeIcons.crown,
+                              color: Colors.yellowAccent,
+                              size: 12,
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ],
-                ),
+                ],
               ),
             ),
           ],

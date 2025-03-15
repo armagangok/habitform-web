@@ -22,74 +22,77 @@ class _ArchivedHabitsPageState extends ConsumerState<ArchivedHabitsPage> {
   Widget build(BuildContext context) {
     final archivedHabitsAsync = ref.watch(archivedHabitsProvider);
 
-    return CupertinoScaffold(
-      body: CupertinoPageScaffold(
-        navigationBar: SheetHeader(
-          closeButtonPosition: CloseButtonPosition.left,
-          middle: Text(LocaleKeys.archived_habits_title.tr()),
-        ),
-        child: SafeArea(
-          bottom: false,
-          child: archivedHabitsAsync.when(
-            loading: () => const Center(
-              child: CupertinoActivityIndicator(),
-            ),
-            error: (error, _) => Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Icon(
-                    CupertinoIcons.exclamationmark_triangle,
-                    size: 48,
-                    color: CupertinoColors.systemRed,
-                  ),
-                  const SizedBox(height: 16),
-                  Text('${LocaleKeys.common_error.tr()}: $error'),
-                ],
+    return Material(
+      color: Colors.transparent,
+      child: CupertinoScaffold(
+        body: CupertinoPageScaffold(
+          navigationBar: SheetHeader(
+            closeButtonPosition: CloseButtonPosition.left,
+            middle: Text(LocaleKeys.archived_habits_title.tr()),
+          ),
+          child: SafeArea(
+            bottom: false,
+            child: archivedHabitsAsync.when(
+              loading: () => const Center(
+                child: CupertinoActivityIndicator(),
               ),
-            ),
-            data: (state) {
-              if (state.archivedHabits.isEmpty) {
-                return Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        CupertinoIcons.archivebox,
-                        size: 64,
-                        color: CupertinoTheme.of(context).primaryColor.withValues(alpha: 0.5),
-                      ),
-                      const SizedBox(height: 16),
-                      Text(
-                        LocaleKeys.archived_habits_no_habits_found.tr(),
-                        style: const TextStyle(fontSize: 16),
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        LocaleKeys.archived_habits_no_habits_hint.tr(),
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(
-                          fontSize: 14,
-                          color: CupertinoColors.systemGrey,
+              error: (error, _) => Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(
+                      CupertinoIcons.exclamationmark_triangle,
+                      size: 48,
+                      color: CupertinoColors.systemRed,
+                    ),
+                    const SizedBox(height: 16),
+                    Text('${LocaleKeys.common_error.tr()}: $error'),
+                  ],
+                ),
+              ),
+              data: (state) {
+                if (state.archivedHabits.isEmpty) {
+                  return Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          CupertinoIcons.archivebox,
+                          size: 64,
+                          color: CupertinoTheme.of(context).primaryColor.withValues(alpha: 0.5),
                         ),
-                      ),
-                    ],
-                  ),
-                );
-              }
-
-              return ListView.separated(
-                padding: const EdgeInsets.all(16),
-                separatorBuilder: (context, index) => const SizedBox(height: 12),
-                itemCount: state.archivedHabits.length,
-                itemBuilder: (context, index) {
-                  final habit = state.archivedHabits[index];
-                  return ArchivedHabitCard(
-                    habit: habit,
+                        const SizedBox(height: 16),
+                        Text(
+                          LocaleKeys.archived_habits_no_habits_found.tr(),
+                          style: const TextStyle(fontSize: 16),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          LocaleKeys.archived_habits_no_habits_hint.tr(),
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            fontSize: 14,
+                            color: CupertinoColors.systemGrey,
+                          ),
+                        ),
+                      ],
+                    ),
                   );
-                },
-              );
-            },
+                }
+
+                return ListView.separated(
+                  padding: const EdgeInsets.all(16),
+                  separatorBuilder: (context, index) => const SizedBox(height: 12),
+                  itemCount: state.archivedHabits.length,
+                  itemBuilder: (context, index) {
+                    final habit = state.archivedHabits[index];
+                    return ArchivedHabitCard(
+                      habit: habit,
+                    );
+                  },
+                );
+              },
+            ),
           ),
         ),
       ),

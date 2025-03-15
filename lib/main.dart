@@ -106,7 +106,7 @@ class _MyAppState extends ConsumerState<MyApp> {
       darkTheme: Themes.darkTheme,
       theme: Themes.lightTheme,
       themeMode: themeMode,
-      debugShowCheckedModeBanner: true,
+      debugShowCheckedModeBanner: false,
       navigatorKey: NavigationService.shared.navigatorKey,
       onGenerateRoute: NavigationRoute.shared.generateRoute,
       localizationsDelegates: context.localizationDelegates,
