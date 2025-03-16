@@ -52,11 +52,14 @@ class HomeNotifier extends AsyncNotifier<HomeState> {
       // Morning: 5:00 AM - 11:59 AM
       return TimeOfDayFilter.morning;
     } else if (currentHour >= 12 && currentHour < 18) {
-      // Afternoon: 12:00 PM - 5:59 PM
-      return TimeOfDayFilter.afternoon;
-    } else {
-      // Evening: 6:00 PM - 4:59 AM
+      // Noon: 12:00 PM - 5:59 PM
+      return TimeOfDayFilter.noon;
+    } else if (currentHour >= 18 && currentHour < 24) {
+      // Evening: 6:00 PM - 11:59 PM
       return TimeOfDayFilter.evening;
+    } else {
+      // Night: 12:00 AM - 4:59 AM
+      return TimeOfDayFilter.night;
     }
   }
 

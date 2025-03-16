@@ -120,7 +120,8 @@
             "all": "الكل",
             "morning": "صباح",
             "noon": "ظهر",
-            "evening": "مساء"
+            "evening": "مساء",
+            "night": "ليل"
         }
     },
     "habit_detail": {
@@ -340,7 +341,9 @@
             "below_50": "< ٥٠٪",
             "between_50_70": "٥٠-٧٠٪",
             "between_70_90": "٧٠-٩٠٪",
-            "above_90": "> ٩٠٪"
+            "above_90": "> 90%",
+            "demo_data_message": "This is demo data, upgrade to unlock real data",
+            "upgrade_button": "Upgrade"
         }
     }
 }

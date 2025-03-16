@@ -39,7 +39,7 @@ final class Themes {
       applyThemeToAll: true,
       scaffoldBackgroundColor: Colors.black,
       brightness: Brightness.dark,
-      barBackgroundColor: Colors.transparent.withAlpha(0),
+      barBackgroundColor: Colors.black,
       textTheme: CupertinoTextThemeData(),
     ),
   );
@@ -59,7 +59,6 @@ final class Themes {
     ),
     appBarTheme: AppBarTheme(
       foregroundColor: Colors.black,
-      backgroundColor: Colors.transparent,
     ),
     iconTheme: IconThemeData(color: CupertinoColors.black.withValues(alpha: .5)),
     cardTheme: CardTheme(

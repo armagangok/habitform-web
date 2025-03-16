@@ -120,7 +120,8 @@
             "all": "সব",
             "morning": "সকাল",
             "noon": "দুপুর",
-            "evening": "সন্ধ্যা"
+            "evening": "সন্ধ্যা",
+            "night": "রাত"
         }
     },
     "habit_detail": {
@@ -340,7 +341,9 @@
             "below_50": "< ৫০%",
             "between_50_70": "৫০-৭০%",
             "between_70_90": "৭০-৯০%",
-            "above_90": "> ৯০%"
+            "above_90": "> 90%",
+            "demo_data_message": "This is demo data, upgrade to unlock real data",
+            "upgrade_button": "Upgrade"
         }
     }
 }

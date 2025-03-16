@@ -36,16 +36,18 @@ class _HomePageState extends ConsumerState<HomePage> with SingleTickerProviderSt
   final filterNames = {
     TimeOfDayFilter.all: LocaleKeys.habit_filter_all.tr(),
     TimeOfDayFilter.morning: LocaleKeys.habit_filter_morning.tr(),
-    TimeOfDayFilter.afternoon: LocaleKeys.habit_filter_noon.tr(),
+    TimeOfDayFilter.noon: LocaleKeys.habit_filter_noon.tr(),
     TimeOfDayFilter.evening: LocaleKeys.habit_filter_evening.tr(),
+    TimeOfDayFilter.night: LocaleKeys.habit_filter_night.tr(),
   };
 
   // List of all filters
   final filters = [
     TimeOfDayFilter.all,
     TimeOfDayFilter.morning,
-    TimeOfDayFilter.afternoon,
+    TimeOfDayFilter.noon,
     TimeOfDayFilter.evening,
+    TimeOfDayFilter.night,
   ];
 
   @override
@@ -293,7 +295,7 @@ class _HomePageState extends ConsumerState<HomePage> with SingleTickerProviderSt
                 color: context.primary.withValues(alpha: .15),
               ),
               child: Icon(
-                FontAwesomeIcons.chartBar,
+                FontAwesomeIcons.chartLine,
                 size: 20,
                 color: context.theme.primaryColor.withValues(alpha: .9),
               ),

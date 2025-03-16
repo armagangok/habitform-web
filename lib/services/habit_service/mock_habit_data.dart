@@ -259,67 +259,6 @@ class MockHabitData {
     final now = DateTime.now();
     final random = DateTime.now().millisecondsSinceEpoch; // Use current time as seed for randomness
 
-    // Special case for Daily Read habit
-    if (habitId == "habit-reading-1") {
-      // Add specific completion data for October, November, and December 2024
-      final completionData = {
-        "2024-10-01": true,
-        "2024-10-02": true,
-        "2024-10-03": true,
-        "2024-10-04": false,
-        "2024-10-05": true,
-        "2024-10-06": true,
-        "2024-10-09": true,
-        "2024-10-10": true,
-        "2024-10-11": true,
-        "2024-10-15": true,
-        "2024-10-16": false,
-        "2024-10-17": true,
-        "2024-10-25": true,
-        "2024-10-26": true,
-        "2024-10-27": false,
-        "2024-11-01": true,
-        "2024-11-02": true,
-        "2024-11-03": true,
-        "2024-11-10": false,
-        "2024-11-11": true,
-        "2024-11-12": true,
-        "2024-11-20": true,
-        "2024-11-21": false,
-        "2024-11-22": true,
-        "2024-12-01": true,
-        "2024-12-02": true,
-        "2024-12-03": true,
-        "2024-12-04": true,
-        "2024-12-05": true,
-        "2024-12-10": true,
-        "2024-12-11": true,
-        "2024-12-12": true,
-        "2024-12-15": true,
-        "2024-12-16": true,
-        "2024-12-24": true,
-        "2024-12-25": false,
-        "2024-12-26": true,
-        "2024-12-27": true,
-        "2024-12-31": true,
-      };
-
-      completionData.forEach((dateStr, isCompleted) {
-        final dateParts = dateStr.split('-');
-        final date = DateTime(
-          int.parse(dateParts[0]),
-          int.parse(dateParts[1]),
-          int.parse(dateParts[2]),
-        );
-        completions[dateStr] = CompletionEntry(
-          id: dateStr,
-          date: date,
-          isCompleted: isCompleted,
-        );
-      });
-      return completions;
-    }
-
     // Create a truly unique seed for each habit
     int seed = 0;
     if (habitId != null) {
@@ -329,34 +268,39 @@ class MockHabitData {
     }
     seed = (seed + random) % 10000;
 
-    // Determine completion rate (between 40% and 90%) based on habit ID
-    final completionRate = 40 + (seed % 50);
-
-    // Generate completions for the last 30 days with truly random patterns
-    for (int i = 0; i < 30; i++) {
+    // Generate completions for the last 60 days (increased from 30) with alternating pattern but with some randomness
+    for (int i = 0; i < 60; i++) {
       final date = now.subtract(Duration(days: i));
       final dateString = "${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}";
 
       // Generate a random number between 0-99 for this specific day and habit
       final daySpecificSeed = (seed + i * 17 + date.day * 31 + date.month * 12) % 100;
 
-      // If the random number is less than the completion rate, mark as completed
-      if (daySpecificSeed < completionRate) {
+      // Decide whether to include this day based on a pattern with randomness
+      // If i is even, higher chance to include; if i is odd, lower chance to include
+      bool shouldInclude = false;
+
+      if (i % 2 == 0) {
+        // Even days - 95% chance to include (increased from 80%)
+        shouldInclude = daySpecificSeed < 95;
+      } else {
+        // Odd days - 60% chance to include (increased from 20%)
+        shouldInclude = daySpecificSeed < 60;
+      }
+
+      // Add some additional randomness to break the strict alternating pattern
+      // 5% chance to flip the decision (reduced from 10% to maintain more completions)
+      if (daySpecificSeed >= 95) {
+        shouldInclude = !shouldInclude;
+      }
+
+      if (shouldInclude) {
         completions[dateString] = CompletionEntry(
           id: dateString,
           date: date,
           isCompleted: true,
         );
-      } else if (daySpecificSeed > 95) {
-        // Occasionally add incomplete entries (marked as false)
-        // This makes the data more realistic by showing days the user tracked but didn't complete
-        completions[dateString] = CompletionEntry(
-          id: dateString,
-          date: date,
-          isCompleted: false,
-        );
       }
-      // Otherwise, no entry for this day (user didn't track)
     }
 
     return completions;

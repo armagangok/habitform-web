@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shimmer/shimmer.dart';
 
 import '/core/core.dart';
 import '/features/home/provider/home_provider.dart';
@@ -158,11 +159,17 @@ class StatisticsPage extends ConsumerWidget {
                                   child: Row(
                                     children: [
                                       Expanded(
-                                        child: Text(
-                                          "This is demo data, upgrade to unlock real data",
-                                          style: TextStyle(
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.bold,
+                                        child: Shimmer.fromColors(
+                                          baseColor: Colors.white,
+                                          highlightColor: Colors.white.withOpacity(0.5),
+                                          period: const Duration(seconds: 2),
+                                          direction: ShimmerDirection.ltr,
+                                          child: Text(
+                                            LocaleKeys.statistics_demo_data_message.tr(),
+                                            style: TextStyle(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.bold,
+                                            ),
                                           ),
                                         ),
                                       ),
@@ -178,12 +185,18 @@ class StatisticsPage extends ConsumerWidget {
                                                 builder: (context) => const PaywallPage(),
                                               );
                                             },
-                                            child: Text(
-                                              "Upgrade",
-                                              style: TextStyle(
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.bold,
-                                                color: Colors.deepOrange,
+                                            child: Shimmer.fromColors(
+                                              baseColor: Colors.deepOrange,
+                                              highlightColor: Colors.orange,
+                                              period: const Duration(seconds: 1),
+                                              direction: ShimmerDirection.ltr,
+                                              child: Text(
+                                                LocaleKeys.statistics_upgrade_button.tr(),
+                                                style: TextStyle(
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.deepOrange,
+                                                ),
                                               ),
                                             ),
                                           ),

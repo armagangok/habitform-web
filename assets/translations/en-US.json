@@ -120,7 +120,8 @@
             "all": "All",
             "morning": "Morning",
             "noon": "Noon",
-            "evening": "Evening"
+            "evening": "Evening",
+            "night": "Night"
         }
     },
     "habit_detail": {
@@ -337,10 +338,14 @@
             "moderate": "Moderate",
             "good": "Good",
             "excellent": "Excellent",
-            "below_50": "< 50%",
+            "below_50": "Below 50%",
             "between_50_70": "50-70%",
             "between_70_90": "70-90%",
-            "above_90": "> 90%"
-        }
+            "above_90": "> 90%",
+            "demo_data_message": "This is demo data, upgrade to unlock real data",
+            "upgrade_button": "Upgrade"
+        },
+        "demo_data_message": "This is demo data, upgrade to unlock real data",
+        "upgrade_button": "Upgrade"
     }
 }

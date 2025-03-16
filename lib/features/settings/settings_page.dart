@@ -86,9 +86,10 @@ class SettingsPage extends ConsumerWidget {
                               trailing: CupertinoListTileChevron(),
                             ),
                             CupertinoListTile(
-                              leading: const SettingLeadingWidget(
-                                iconData: CupertinoIcons.arrow_up_arrow_down,
-                                cardColor: CupertinoColors.systemTeal,
+                              leading: SettingLeadingWidget(
+                                padding: 2.5,
+                                iconData: FontAwesomeIcons.database,
+                                cardColor: Colors.deepPurpleAccent,
                               ),
                               title: Text(LocaleKeys.settings_data_export_import.tr()),
                               onTap: () {

@@ -111,6 +111,7 @@ abstract class LocaleKeys {
   static const habit_filter_morning = 'habit.filter.morning';
   static const habit_filter_noon = 'habit.filter.noon';
   static const habit_filter_evening = 'habit.filter.evening';
+  static const habit_filter_night = 'habit.filter.night';
   static const habit_filter = 'habit.filter';
   static const habit = 'habit';
   static const habit_detail_habitDetail = 'habit_detail.habitDetail';
@@ -314,4 +315,6 @@ abstract class LocaleKeys {
   static const statistics_chart_labels_between_50_70 = 'statistics.chart_labels.between_50_70';
   static const statistics_chart_labels_between_70_90 = 'statistics.chart_labels.between_70_90';
   static const statistics_chart_labels_above_90 = 'statistics.chart_labels.above_90';
+  static const statistics_demo_data_message = 'statistics.demo_data_message';
+  static const statistics_upgrade_button = 'statistics.upgrade_button';
 }

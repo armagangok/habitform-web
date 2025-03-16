@@ -54,9 +54,9 @@ class HabitBuilder extends StatelessWidget {
           return SingleChildScrollView(
             physics: ClampingScrollPhysics(),
             child: Wrap(
-              spacing: 20,
-              runSpacing: 20,
-              alignment: WrapAlignment.start,
+              spacing: 24,
+              runSpacing: 24,
+              alignment: WrapAlignment.center,
               children: habits.map((habit) {
                 return SizedBox(
                   width: (context.dynamicWidth - 185) / 2,

@@ -317,41 +317,47 @@ class InsightsWidget extends ConsumerWidget {
           ),
         ),
         const SizedBox(height: 24),
-        Card(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                _buildLegendItem(
-                  context,
-                  const Color(0xFFF44336),
-                  LocaleKeys.statistics_chart_labels_below_50.tr(),
-                  LocaleKeys.statistics_chart_labels_insufficient.tr(),
-                  isSelected: progressPercentage < 50,
-                ),
-                _buildLegendItem(
-                  context,
-                  const Color(0xFFFFC107),
-                  LocaleKeys.statistics_chart_labels_between_50_70.tr(),
-                  LocaleKeys.statistics_chart_labels_moderate.tr(),
-                  isSelected: progressPercentage >= 50 && progressPercentage < 70,
-                ),
-                _buildLegendItem(
-                  context,
-                  const Color(0xFF8BC34A),
-                  LocaleKeys.statistics_chart_labels_between_70_90.tr(),
-                  LocaleKeys.statistics_chart_labels_good.tr(),
-                  isSelected: progressPercentage >= 70 && progressPercentage < 90,
-                ),
-                _buildLegendItem(
-                  context,
-                  const Color(0xFF4CAF50),
-                  LocaleKeys.statistics_chart_labels_above_90.tr(),
-                  LocaleKeys.statistics_chart_labels_excellent.tr(),
-                  isSelected: progressPercentage >= 90,
-                ),
-              ],
+        IntrinsicHeight(
+          child: Card(
+            color: context.primary.withValues(alpha: .075),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 6),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  _buildLegendItem(
+                    context,
+                    const Color(0xFFF44336),
+                    LocaleKeys.statistics_chart_labels_below_50.tr(),
+                    LocaleKeys.statistics_chart_labels_insufficient.tr(),
+                    isSelected: progressPercentage < 50,
+                  ),
+                  VerticalDivider(thickness: 1),
+                  _buildLegendItem(
+                    context,
+                    const Color(0xFFFFC107),
+                    LocaleKeys.statistics_chart_labels_between_50_70.tr(),
+                    LocaleKeys.statistics_chart_labels_moderate.tr(),
+                    isSelected: progressPercentage >= 50 && progressPercentage < 70,
+                  ),
+                  VerticalDivider(thickness: 1),
+                  _buildLegendItem(
+                    context,
+                    const Color(0xFF8BC34A),
+                    LocaleKeys.statistics_chart_labels_between_70_90.tr(),
+                    LocaleKeys.statistics_chart_labels_good.tr(),
+                    isSelected: progressPercentage >= 70 && progressPercentage < 90,
+                  ),
+                  VerticalDivider(thickness: 1),
+                  _buildLegendItem(
+                    context,
+                    const Color(0xFF4CAF50),
+                    LocaleKeys.statistics_chart_labels_above_90.tr(),
+                    LocaleKeys.statistics_chart_labels_excellent.tr(),
+                    isSelected: progressPercentage >= 90,
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -360,44 +366,56 @@ class InsightsWidget extends ConsumerWidget {
   }
 
   Widget _buildLegendItem(BuildContext context, Color color, String label, String description, {bool isSelected = false}) {
-    return Column(
-      children: [
-        Row(
-          children: [
-            Container(
-              width: 12,
-              height: 12,
-              decoration: BoxDecoration(
-                color: color,
-                shape: BoxShape.circle,
-                boxShadow: isSelected
-                    ? [
-                        BoxShadow(
-                          color: color.withValues(alpha: 0.4),
-                          blurRadius: 4,
-                          spreadRadius: 1,
-                        ),
-                      ]
-                    : null,
+    return Expanded(
+      child: Column(
+        children: [
+          Builder(builder: (context) {
+            return FittedBox(
+              child: Row(
+                children: [
+                  Container(
+                    width: 12,
+                    height: 12,
+                    decoration: BoxDecoration(
+                      color: color,
+                      shape: BoxShape.circle,
+                      boxShadow: isSelected
+                          ? [
+                              BoxShadow(
+                                color: color.withValues(alpha: 0.4),
+                                blurRadius: 4,
+                                spreadRadius: 1,
+                              ),
+                            ]
+                          : null,
+                    ),
+                  ),
+                  const SizedBox(width: 2),
+                  FittedBox(
+                    child: Text(
+                      label,
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                            fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                          ),
+                      maxLines: 1,
+                    ),
+                  ),
+                ],
               ),
-            ),
-            const SizedBox(width: 4),
-            Text(
-              label,
+            );
+          }),
+          FittedBox(
+            child: Text(
+              description,
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    color: isSelected ? Theme.of(context).colorScheme.primary : Theme.of(context).hintColor,
                     fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
                   ),
+              maxLines: 1,
             ),
-          ],
-        ),
-        Text(
-          description,
-          style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: isSelected ? Theme.of(context).colorScheme.primary : Theme.of(context).hintColor,
-                fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-              ),
-        ),
-      ],
+          ),
+        ],
+      ),
     );
   }
 }

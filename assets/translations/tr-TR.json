@@ -120,7 +120,8 @@
             "all": "Hepsi",
             "morning": "Sabah",
             "noon": "Öğle",
-            "evening": "Akşam"
+            "evening": "Akşam",
+            "night": "Gece"
         }
     },
     "habit_detail": {
@@ -344,7 +345,11 @@
             "below_50": "< %50",
             "between_50_70": "%50-70",
             "between_70_90": "%70-90",
-            "above_90": "> %90"
-        }
+            "above_90": "> 90%",
+            "demo_data_message": "This is demo data, upgrade to unlock real data",
+            "upgrade_button": "Upgrade"
+        },
+        "demo_data_message": "Bu demo veridir, gerçek verileri görmek için yükseltme yapın",
+        "upgrade_button": "Yükselt"
     }
 }
