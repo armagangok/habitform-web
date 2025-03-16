@@ -3,18 +3,18 @@ import 'dart:io';
 
 import 'package:csv/csv.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:uuid/uuid.dart';
 
-import '../reminder/models/days/days_enum.dart';
-import '../reminder/models/reminder/reminder_model.dart';
+import '../../core/core.dart';
+import '../../features/reminder/service/reminder_service.dart';
 import '../../models/completion_entry/completion_entry.dart';
 import '../../models/habit/habit_model.dart';
 import '../../models/habit/habit_status.dart';
 import '../../services/habit_service/habit_service_interface.dart';
+import '../reminder/models/days/days_enum.dart';
+import '../reminder/models/reminder/reminder_model.dart';
 
 class CSVService {
   CSVService._();
@@ -463,6 +463,16 @@ class CSVService {
             // Create new habit
             debugPrint('Creating new habit: $name');
             await _habitService.createHabit(habit);
+          }
+
+          // Eğer hatırlatıcı varsa, bildirimleri tekrar ayarla
+          if (habit.reminderModel != null && habit.status == HabitStatus.active) {
+            debugPrint('Setting up reminder notification for habit: ${habit.habitName}');
+            await ReminderService.createReminderNotification(
+              habit.reminderModel!,
+              habit.habitName,
+              LocaleKeys.habit_timeToCompleteYourHabit.tr(),
+            );
           }
 
           importedCount++;
