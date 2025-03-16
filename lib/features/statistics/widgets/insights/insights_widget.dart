@@ -323,7 +323,7 @@ class InsightsWidget extends ConsumerWidget {
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 6),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   _buildLegendItem(
                     context,
@@ -332,7 +332,7 @@ class InsightsWidget extends ConsumerWidget {
                     LocaleKeys.statistics_chart_labels_insufficient.tr(),
                     isSelected: progressPercentage < 50,
                   ),
-                  VerticalDivider(thickness: 1),
+                  _verticalDivider(),
                   _buildLegendItem(
                     context,
                     const Color(0xFFFFC107),
@@ -340,7 +340,7 @@ class InsightsWidget extends ConsumerWidget {
                     LocaleKeys.statistics_chart_labels_moderate.tr(),
                     isSelected: progressPercentage >= 50 && progressPercentage < 70,
                   ),
-                  VerticalDivider(thickness: 1),
+                  _verticalDivider(),
                   _buildLegendItem(
                     context,
                     const Color(0xFF8BC34A),
@@ -348,7 +348,7 @@ class InsightsWidget extends ConsumerWidget {
                     LocaleKeys.statistics_chart_labels_good.tr(),
                     isSelected: progressPercentage >= 70 && progressPercentage < 90,
                   ),
-                  VerticalDivider(thickness: 1),
+                  _verticalDivider(),
                   _buildLegendItem(
                     context,
                     const Color(0xFF4CAF50),
@@ -365,53 +365,70 @@ class InsightsWidget extends ConsumerWidget {
     );
   }
 
+  Padding _verticalDivider() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 12.5),
+      child: VerticalDivider(
+        thickness: .75,
+      ),
+    );
+  }
+
   Widget _buildLegendItem(BuildContext context, Color color, String label, String description, {bool isSelected = false}) {
     return Expanded(
       child: Column(
         children: [
-          Builder(builder: (context) {
-            return FittedBox(
-              child: Row(
-                children: [
-                  Container(
-                    width: 12,
-                    height: 12,
-                    decoration: BoxDecoration(
-                      color: color,
-                      shape: BoxShape.circle,
-                      boxShadow: isSelected
-                          ? [
-                              BoxShadow(
-                                color: color.withValues(alpha: 0.4),
-                                blurRadius: 4,
-                                spreadRadius: 1,
-                              ),
-                            ]
-                          : null,
-                    ),
-                  ),
-                  const SizedBox(width: 2),
-                  FittedBox(
-                    child: Text(
-                      label,
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+          // Daire ve etiket satırı
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              // Sabit boyutlu daire
+              Container(
+                width: 16,
+                height: 16,
+                decoration: BoxDecoration(
+                  color: color,
+                  shape: BoxShape.circle,
+                  boxShadow: isSelected
+                      ? [
+                          BoxShadow(
+                            color: color.withValues(alpha: 0.4),
+                            blurRadius: 4,
+                            spreadRadius: 1,
                           ),
-                      maxLines: 1,
-                    ),
-                  ),
-                ],
+                        ]
+                      : null,
+                ),
               ),
-            );
-          }),
-          FittedBox(
-            child: Text(
-              description,
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: isSelected ? Theme.of(context).colorScheme.primary : Theme.of(context).hintColor,
-                    fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+              const SizedBox(width: 4),
+              // Etiket için FittedBox kullanarak metni küçültme
+              Expanded(
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    label,
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                        ),
                   ),
-              maxLines: 1,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 4),
+          // Açıklama metni için FittedBox kullanarak metni küçültme
+          Expanded(
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Text(
+                description,
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: isSelected ? Theme.of(context).colorScheme.primary : Theme.of(context).hintColor,
+                      fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                    ),
+                textAlign: TextAlign.center,
+              ),
             ),
           ),
         ],

@@ -23,6 +23,8 @@
 	<string>6.0</string>
 	<key>CFBundleName</key>
 	<string>HabitRise</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>We need access to your photo library to save habit screenshots and select CSV files for import/export.</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
@@ -66,7 +68,7 @@
 			<key>CFBundleTypeName</key>
 			<string>CSV Document</string>
 			<key>LSHandlerRank</key>
-			<string>Owner</string>
+			<string>Alternate</string>
 			<key>LSItemContentTypes</key>
 			<array>
 				<string>public.comma-separated-values-text</string>
