@@ -323,7 +323,7 @@ class InsightsWidget extends ConsumerWidget {
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 6),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   _buildLegendItem(
                     context,
@@ -375,64 +375,60 @@ class InsightsWidget extends ConsumerWidget {
   }
 
   Widget _buildLegendItem(BuildContext context, Color color, String label, String description, {bool isSelected = false}) {
-    return Expanded(
-      child: Column(
-        children: [
-          // Daire ve etiket satırı
-          Row(
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        // Daire ve etiket satırı
+        FittedBox(
+          fit: BoxFit.scaleDown,
+          child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               // Sabit boyutlu daire
               Container(
-                width: 16,
-                height: 16,
+                width: 12,
+                height: 12,
                 decoration: BoxDecoration(
                   color: color,
                   shape: BoxShape.circle,
                   boxShadow: isSelected
                       ? [
                           BoxShadow(
-                            color: color.withValues(alpha: 0.4),
-                            blurRadius: 4,
-                            spreadRadius: 1,
+                            color: color.withValues(alpha: 0.5),
+                            blurRadius: 10,
+                            spreadRadius: 2.5,
                           ),
                         ]
                       : null,
                 ),
               ),
-              const SizedBox(width: 4),
+              const SizedBox(width: 3),
               // Etiket için FittedBox kullanarak metni küçültme
-              Expanded(
-                child: FittedBox(
-                  fit: BoxFit.scaleDown,
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    label,
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                        ),
-                  ),
-                ),
+              Text(
+                label,
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                    ),
               ),
             ],
           ),
-          const SizedBox(height: 4),
-          // Açıklama metni için FittedBox kullanarak metni küçültme
-          Expanded(
-            child: FittedBox(
-              fit: BoxFit.scaleDown,
-              child: Text(
-                description,
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: isSelected ? Theme.of(context).colorScheme.primary : Theme.of(context).hintColor,
-                      fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                    ),
-                textAlign: TextAlign.center,
-              ),
-            ),
+        ),
+
+        const SizedBox(height: 5),
+
+        // Açıklama metni için FittedBox kullanarak metni küçültme
+        FittedBox(
+          fit: BoxFit.scaleDown,
+          child: Text(
+            description,
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  color: isSelected ? Theme.of(context).colorScheme.primary : Theme.of(context).hintColor,
+                  fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                ),
+            textAlign: TextAlign.center,
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
