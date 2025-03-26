@@ -271,7 +271,10 @@ class _PaywallWidgetState extends ConsumerState<PaywallPage> with SingleTickerPr
                       : () async {
                           HapticFeedback.heavyImpact();
                           if (selectedPackage != null) {
-                            ref.read(purchaseProvider.notifier).purchasePackage(selectedPackage!);
+                            ref.read(purchaseProvider.notifier).purchasePackage(
+                                  selectedPackage!,
+                                  widget.isFromOnboarding,
+                                );
                           }
                         },
                   child: SizedBox(
@@ -410,7 +413,7 @@ class _PaywallWidgetState extends ConsumerState<PaywallPage> with SingleTickerPr
           onPressed: isRestoring
               ? null
               : () {
-                  ref.read(purchaseProvider.notifier).restorePurchases();
+                  ref.read(purchaseProvider.notifier).restorePurchases(widget.isFromOnboarding);
                 },
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
