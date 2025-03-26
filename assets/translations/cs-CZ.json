@@ -193,6 +193,8 @@
         "upcomingFeaturesDescription": "Vzrušující funkce, které jste požadovali, přijdou brzy!",
         "supportAnIndieDev": "Podpořte nezávislého vývojáře",
         "supportAnIndieDevDescription": "Váš nákup podporuje nezávislého vývojáře aplikací",
+        "statisticsTitle": "Statistiky",
+        "statisticsDescription": "Sledujte své návyky, získejte motivaci a zjistěte, kolik času zbývá, než se váš návyk stane automatickým.",
         "loading": "Načítání..",
         "purchaseRestoredSuccessfuly": "Nákup byl úspěšně obnoven",
         "youDoNotHaveAnyPurchasesToRestore": "Nemáte žádné nákupy k obnovení",
@@ -342,8 +344,8 @@
             "between_50_70": "50-70%",
             "between_70_90": "70-90%",
             "above_90": "> 90%",
-            "demo_data_message": "This is demo data, upgrade to unlock real data",
-            "upgrade_button": "Upgrade"
+            "demo_data_message": "Toto jsou ukázková data, pro zobrazení skutečných dat proveďte upgrade",
+            "upgrade_button": "Upgradovat"
         }
     }
 }

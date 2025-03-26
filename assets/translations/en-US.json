@@ -193,6 +193,8 @@
         "upcomingFeaturesDescription": "Exciting features you requested are coming soon!",
         "supportAnIndieDev": "Support An Indie Developer",
         "supportAnIndieDevDescription": "Your purchase supports an independent app developer",
+        "statisticsTitle": "Statistics",
+        "statisticsDescription": "Track habits, get motivation, be aware of how long time left to make your habit automatic.",
         "loading": "Loading..",
         "purchaseRestoredSuccessfuly": "Purchase restored successfully",
         "youDoNotHaveAnyPurchasesToRestore": "You don't have any previous purchase to restore",

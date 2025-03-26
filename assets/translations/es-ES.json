@@ -193,6 +193,8 @@
         "upcomingFeaturesDescription": "¡Las emocionantes funciones que solicitaste están en camino!",
         "supportAnIndieDev": "Apoya a un desarrollador independiente",
         "supportAnIndieDevDescription": "Tu compra apoya a un desarrollador de aplicaciones independiente",
+        "statisticsTitle": "Estadísticas",
+        "statisticsDescription": "Rastrea tus hábitos, obtén motivación y sé consciente del tiempo restante para que tu hábito se vuelva automático.",
         "loading": "Cargando..",
         "purchaseRestoredSuccessfuly": "Compra restaurada con éxito",
         "youDoNotHaveAnyPurchasesToRestore": "No tienes ninguna compra anterior para restaurar",
@@ -342,8 +344,8 @@
             "between_50_70": "50-70%",
             "between_70_90": "70-90%",
             "above_90": "> 90%",
-            "demo_data_message": "This is demo data, upgrade to unlock real data",
-            "upgrade_button": "Upgrade"
+            "demo_data_message": "Estos son datos de demostración, actualiza para desbloquear datos reales",
+            "upgrade_button": "Actualizar"
         }
     }
 }

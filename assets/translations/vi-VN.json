@@ -193,6 +193,8 @@
         "upcomingFeaturesDescription": "Những tính năng thú vị bạn yêu cầu sẽ sớm ra mắt!",
         "supportAnIndieDev": "Hỗ trợ nhà phát triển độc lập",
         "supportAnIndieDevDescription": "Việc mua hàng của bạn hỗ trợ một nhà phát triển ứng dụng độc lập",
+        "statisticsTitle": "Thống kê",
+        "statisticsDescription": "Theo dõi thói quen của bạn, nhận động lực và biết còn bao lâu nữa thì thói quen của bạn sẽ trở nên tự động.",
         "loading": "Đang tải..",
         "purchaseRestoredSuccessfuly": "Khôi phục mua hàng thành công",
         "youDoNotHaveAnyPurchasesToRestore": "Bạn không có bất kỳ giao dịch mua nào để khôi phục",
@@ -342,8 +344,8 @@
             "between_50_70": "50-70%",
             "between_70_90": "70-90%",
             "above_90": "> 90%",
-            "demo_data_message": "This is demo data, upgrade to unlock real data",
-            "upgrade_button": "Upgrade"
+            "demo_data_message": "Đây là dữ liệu demo, nâng cấp để mở khóa dữ liệu thực",
+            "upgrade_button": "Nâng cấp"
         }
     }
 }

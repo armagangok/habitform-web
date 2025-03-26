@@ -150,9 +150,8 @@ class StatisticsPage extends ConsumerWidget {
                         child: SafeArea(
                           child: Center(
                             child: CustomBlurWidget(
-                              blurValue: 6,
                               child: Card(
-                                color: Colors.deepOrangeAccent.withValues(alpha: .3),
+                                color: Colors.deepOrangeAccent.withValues(alpha: .25),
                                 clipBehavior: Clip.antiAlias,
                                 child: Padding(
                                   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -160,13 +159,13 @@ class StatisticsPage extends ConsumerWidget {
                                     children: [
                                       Expanded(
                                         child: Shimmer.fromColors(
-                                          baseColor: Colors.white,
-                                          highlightColor: Colors.white.withOpacity(0.5),
+                                          baseColor: context.titleSmall?.color ?? Colors.deepOrange,
+                                          highlightColor: context.titleSmall?.color?.withValues(alpha: 0.5) ?? Colors.deepOrangeAccent,
                                           period: const Duration(seconds: 2),
                                           direction: ShimmerDirection.ltr,
                                           child: Text(
                                             LocaleKeys.statistics_demo_data_message.tr(),
-                                            style: TextStyle(
+                                            style: context.titleSmall?.copyWith(
                                               fontSize: 14,
                                               fontWeight: FontWeight.bold,
                                             ),

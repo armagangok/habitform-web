@@ -193,6 +193,8 @@
         "upcomingFeaturesDescription": "你请求的令人兴奋的功能即将到来！",
         "supportAnIndieDev": "支持独立开发者",
         "supportAnIndieDevDescription": "你的购买支持独立应用开发者",
+        "statisticsTitle": "统计分析",
+        "statisticsDescription": "追踪习惯，获得动力，了解距离习惯自动化还有多长时间。",
         "loading": "加载中..",
         "purchaseRestoredSuccessfuly": "购买已成功恢复",
         "youDoNotHaveAnyPurchasesToRestore": "你没有可恢复的购买",
@@ -342,8 +344,8 @@
             "between_50_70": "50-70%",
             "between_70_90": "70-90%",
             "above_90": "> 90%",
-            "demo_data_message": "This is demo data, upgrade to unlock real data",
-            "upgrade_button": "Upgrade"
+            "demo_data_message": "这是演示数据，升级以解锁真实数据",
+            "upgrade_button": "升级"
         }
     }
 }

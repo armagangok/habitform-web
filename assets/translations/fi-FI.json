@@ -193,6 +193,8 @@
         "upcomingFeaturesDescription": "Jännittäviä pyytämiäsi ominaisuuksia on tulossa!",
         "supportAnIndieDev": "Tue Itsenäistä Kehittäjää",
         "supportAnIndieDevDescription": "Ostoksesi tukee itsenäistä sovelluskehittäjää",
+        "statisticsTitle": "Tilastot",
+        "statisticsDescription": "Seuraa tapojasi, saa motivaatiota ja ole tietoinen siitä, kuinka kauan aikaa on jäljellä, kunnes tavastasi tulee automaattinen.",
         "loading": "Ladataan..",
         "purchaseRestoredSuccessfuly": "Ostos palautettu",
         "youDoNotHaveAnyPurchasesToRestore": "Sinulla ei ole palautettavia ostoksia",
@@ -342,8 +344,8 @@
             "between_50_70": "50-70%",
             "between_70_90": "70-90%",
             "above_90": "> 90%",
-            "demo_data_message": "This is demo data, upgrade to unlock real data",
-            "upgrade_button": "Upgrade"
+            "demo_data_message": "Tämä on esittelydataa, päivitä nähdäksesi oikeat tiedot",
+            "upgrade_button": "Päivitä"
         }
     }
 }

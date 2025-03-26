@@ -237,7 +237,9 @@
         "archiveSupportDescription": "Arsipkan dan kelola kebiasaan",
         "habitReminderTitle": "Pengingat",
         "habitReminderDescription": "Buat pengingat untuk kebiasaan",
-        "billingIssueDetectedAt": "Masalah penagihan terdeteksi pada"
+        "billingIssueDetectedAt": "Masalah penagihan terdeteksi pada",
+        "statisticsTitle": "Statistik",
+        "statisticsDescription": "Lacak kebiasaan Anda, dapatkan motivasi, dan ketahui berapa lama lagi hingga kebiasaan Anda menjadi otomatis"
     },
     "share": {
         "share": "Bagikan",
@@ -342,8 +344,22 @@
             "between_50_70": "50-70%",
             "between_70_90": "70-90%",
             "above_90": "> 90%",
-            "demo_data_message": "This is demo data, upgrade to unlock real data",
-            "upgrade_button": "Upgrade"
+            "demo_data_message": "Ini adalah data demo, tingkatkan untuk membuka data sebenarnya",
+            "upgrade_button": "Tingkatkan"
         }
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+

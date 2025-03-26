@@ -2,29 +2,26 @@
 import 'dart:io';
 import 'dart:math';
 
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:purchases_flutter/purchases_flutter.dart';
-
 import '/core/core.dart';
-import '../providers/purchase_provider.dart';
 import '../purchase.dart';
 
 class ProductWidget extends StatefulWidget {
   const ProductWidget({
     super.key,
+    required this.isSelected,
     this.isPopular,
-    required this.discount,
+    this.discount,
     this.monthlyCalculated,
     required this.package,
-    this.onTap,
+    this.isAnnual = false,
   });
 
+  final bool isSelected;
   final bool? isPopular;
-  final String discount;
+  final String? discount;
   final String? monthlyCalculated;
   final Package package;
-
-  final VoidCallback? onTap;
+  final bool isAnnual;
 
   @override
   State<ProductWidget> createState() => _ProductWidgetState();
@@ -36,107 +33,118 @@ class _ProductWidgetState extends State<ProductWidget> {
     final priceString = widget.package.storeProduct.priceString;
     final productTitle = widget.package.storeProduct.title;
 
-    return Consumer(builder: (context, ref, child) {
-      final paywallState = ref.watch(purchaseProvider);
+    final isAnnual = widget.isAnnual;
 
-      final isPurchasing = paywallState.value?.isPurchasing ?? false;
-      return CustomButton(
-        onPressed: isPurchasing ? null : widget.onTap,
-        child: AnimatedOpacity(
-          duration: Duration(milliseconds: 300),
-          opacity: isPurchasing ? 0.35 : 1,
-          child: Card(
-            color: Colors.deepOrangeAccent,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
-            ),
-            child: SizedBox(
-              width: double.infinity,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 15.0),
+    return AnimatedOpacity(
+      duration: Duration(milliseconds: 300),
+      opacity: widget.isSelected ? 1 : .75,
+      child: Card(
+        color: context.theme.cardColor.withAlpha(100),
+        shape: widget.isSelected
+            ? RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+                side: BorderSide(
+                  color: Colors.deepOrangeAccent,
+                  width: 4,
+                  strokeAlign: 0,
+                  style: BorderStyle.solid,
+                ),
+              )
+            : RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+                side: BorderSide(
+                  color: context.theme.dividerColor.withValues(alpha: .4),
+                  strokeAlign: 0,
+                  width: 4,
+                ),
+              ),
+        child: SizedBox(
+          width: double.infinity,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 15.0),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 15.0),
-                      child: Row(
-                        children: [
-                          Column(
-                            children: [
+                    widget.isSelected
+                        ? Icon(
+                            CupertinoIcons.circle_fill,
+                            color: Colors.deepOrangeAccent,
+                            size: 20,
+                          ).animate().scale()
+                        : Icon(
+                            CupertinoIcons.circle,
+                            color: context.theme.dividerColor,
+                            size: 20,
+                          ),
+                    SizedBox(width: 8),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          productTitle.getTitleName.toUpperCase(),
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            if (isAnnual)
                               Text(
-                                productTitle.getTitleName.toUpperCase(),
-                                style: context.titleMedium?.copyWith(
-                                  fontWeight: FontWeight.w700,
-                                  color: Colors.white,
+                                (widget.package.storeProduct.price * 2).toStringAsFixed(2),
+                                textAlign: TextAlign.left,
+                                style: context.bodySmall?.copyWith(
+                                  decoration: TextDecoration.lineThrough,
                                 ),
                               ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    (widget.package.storeProduct.price * 2).toStringAsFixed(2),
-                                    textAlign: TextAlign.left,
-                                    style: context.bodySmall?.copyWith(
-                                      decoration: TextDecoration.lineThrough,
-                                      decorationColor: Colors.white,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                  Icon(
-                                    CupertinoIcons.arrow_right,
-                                    size: 12,
-                                    color: Colors.white,
-                                  ),
-                                  SizedBox(width: 2),
-                                  Text(
-                                    widget.package.storeProduct.price.toStringAsFixed(2),
-                                    textAlign: TextAlign.left,
-                                    style: context.bodySmall?.copyWith(
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                ],
+                            if (isAnnual) SizedBox(width: 2),
+                            if (isAnnual)
+                              Icon(
+                                CupertinoIcons.arrow_right,
+                                size: 12,
                               ),
-                              if (isPurchasing) const CupertinoActivityIndicator(),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: Stack(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(2.5) + EdgeInsets.only(left: 15),
-                            child: Card(
-                              color: Colors.white,
-                              child: Padding(
-                                padding: const EdgeInsets.all(12.0),
-                                child: Text(
-                                  priceString,
-                                  textAlign: TextAlign.left,
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w700,
-                                    color: Colors.black,
-                                  ),
-                                ),
+                            if (isAnnual) SizedBox(width: 2),
+                            if (isAnnual)
+                              Text(
+                                widget.package.storeProduct.price.toStringAsFixed(2),
+                                textAlign: TextAlign.left,
+                                style: context.bodySmall,
                               ),
-                            ),
-                          ),
-                          _discountWidget(),
-                        ],
-                      ),
+                          ],
+                        ),
+                      ],
                     ),
                   ],
                 ),
               ),
-            ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5),
+                child: Stack(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(2.5) + EdgeInsets.only(left: 15),
+                      child: Card(
+                        child: Padding(
+                          padding: const EdgeInsets.all(12.0),
+                          child: Text(
+                            priceString,
+                            textAlign: TextAlign.left,
+                            style: TextStyle(fontWeight: FontWeight.w700),
+                          ),
+                        ),
+                      ),
+                    ),
+                    _discountWidget(),
+                  ],
+                ),
+              ),
+            ],
           ),
         ),
-      );
-    });
+      ),
+    );
   }
 
   Widget _discountWidget() {
@@ -159,15 +167,17 @@ class _ProductWidgetState extends State<ProductWidget> {
                 borderRadius: BorderRadius.all(Radius.circular(12)),
               ),
               child: Padding(
-                padding: EdgeInsets.symmetric(vertical: 2, horizontal: 2),
-                child: Text(
-                  discount,
-                  textAlign: TextAlign.center,
-                  style: context.bodySmall?.copyWith(
-                    color: context.primary,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
+                padding: EdgeInsets.symmetric(vertical: widget.discount != null ? 2 : 0, horizontal: 2),
+                child: discount != null
+                    ? Text(
+                        discount,
+                        textAlign: TextAlign.center,
+                        style: context.bodySmall?.copyWith(
+                          color: context.primary,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      )
+                    : SizedBox.shrink(),
               ),
             ),
           ),

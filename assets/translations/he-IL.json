@@ -193,6 +193,8 @@
         "upcomingFeaturesDescription": "תכונות מרגשות שביקשת בדרך!",
         "supportAnIndieDev": "תמוך במפתח עצמאי",
         "supportAnIndieDevDescription": "הרכישה שלך תומכת במפתח אפליקציות עצמאי",
+        "statisticsTitle": "סטטיסטיקות",
+        "statisticsDescription": "עקוב אחר ההרגלים שלך, קבל מוטיבציה והיה מודע לזמן שנותר עד שההרגל שלך יהפוך לאוטומטי.",
         "loading": "טוען..",
         "purchaseRestoredSuccessfuly": "הרכישה שוחזרה",
         "youDoNotHaveAnyPurchasesToRestore": "אין לך רכישות לשחזור",
@@ -236,8 +238,7 @@
         "archiveSupportTitle": "תמיכה בארכיון",
         "archiveSupportDescription": "ארכב ונהל הרגלים",
         "habitReminderTitle": "תזכורת",
-        "habitReminderDescription": "צור תזכורות להרגלים",
-        "billingIssueDetectedAt": "בעיית חיוב זוהתה ב"
+        "habitReminderDescription": "צור תזכורות להרגלים"
     },
     "share": {
         "share": "שתף",
@@ -342,8 +343,9 @@
             "between_50_70": "50-70%",
             "between_70_90": "70-90%",
             "above_90": "> 90%",
-            "demo_data_message": "This is demo data, upgrade to unlock real data",
-            "upgrade_button": "Upgrade"
+            "billingIssueDetectedAt": "בעיית חיוב זוהתה ב",
+            "demo_data_message": "אלו נתוני הדגמה, שדרג כדי לראות נתונים אמיתיים",
+            "upgrade_button": "שדרג"
         }
     }
 }

@@ -4,6 +4,7 @@ import '../../../core/core.dart';
 import '../../../core/widgets/habit_color_sheet/provider/habit_color_provider.dart';
 import '../../../core/widgets/habit_icon/provider/habit_icon_provider.dart';
 import '../../../models/habit/habit_model.dart';
+import '../../../services/user_defaults_service.dart';
 import '../../home/provider/home_provider.dart';
 import '../../reminder/provider/reminder_provider.dart';
 import 'create_habit_state.dart';
@@ -18,18 +19,27 @@ class CreateHabitNotifier extends AutoDisposeAsyncNotifier<CreateHabitState> {
     return CreateHabitState();
   }
 
+  Future<bool> get isProUser async {
+    final userDefaults = await UserDefaultsService.instance.getUserDefaults();
+    return userDefaults?.isPro ?? false;
+  }
+
+  Future<bool> canCreateHabit(int currentHabitCount) async {
+    final isPro = await isProUser;
+    if (isPro) return true;
+    return currentHabitCount <= 3;
+  }
+
   Future<void> createHabit() async {
     final habitName = state.value?.habitNameController.text;
     final habitDescription = state.value?.habitDescriptionController.text;
     if (habitName == null || habitName.isEmpty) {
       AppFlushbar.shared.warningFlushbar(LocaleKeys.errors_required_field.tr());
-
       return;
     }
 
     final emoji = ref.watch(iconProvider);
     final color = ref.watch(colorProvider);
-
     final reminder = ref.watch(reminderProvider).reminder;
 
     state = const AsyncValue.loading();

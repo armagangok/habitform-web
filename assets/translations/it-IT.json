@@ -193,6 +193,8 @@
         "upcomingFeaturesDescription": "Emozionanti funzionalità che hai richiesto stanno arrivando!",
         "supportAnIndieDev": "Supporta uno Sviluppatore Indipendente",
         "supportAnIndieDevDescription": "Il tuo acquisto supporta uno sviluppatore di app indipendente",
+        "statisticsTitle": "Statistiche",
+        "statisticsDescription": "Traccia le tue abitudini, ottieni motivazione e prendi consapevolezza del tempo rimanente per rendere la tua abitudine automatica.",
         "loading": "Caricamento..",
         "purchaseRestoredSuccessfuly": "Acquisto ripristinato con successo",
         "youDoNotHaveAnyPurchasesToRestore": "Non hai acquisti da ripristinare",
@@ -343,8 +345,8 @@
             "between_50_70": "50-70%",
             "between_70_90": "70-90%",
             "above_90": "> 90%",
-            "demo_data_message": "This is demo data, upgrade to unlock real data",
-            "upgrade_button": "Upgrade"
+            "demo_data_message": "Questi sono dati demo, aggiorna per sbloccare i dati reali",
+            "upgrade_button": "Aggiorna"
         }
     }
 }

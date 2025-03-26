@@ -193,6 +193,8 @@
         "upcomingFeaturesDescription": "Spännande funktioner du har efterfrågat är på väg!",
         "supportAnIndieDev": "Stöd en Oberoende Utvecklare",
         "supportAnIndieDevDescription": "Ditt köp stödjer en oberoende apputvecklare",
+        "statisticsTitle": "Statistik",
+        "statisticsDescription": "Spåra dina vanor, få motivation och se hur lång tid det är kvar tills din vana blir automatisk.",
         "loading": "Laddar..",
         "purchaseRestoredSuccessfuly": "Köp återställt framgångsrikt",
         "youDoNotHaveAnyPurchasesToRestore": "Du har inga köp att återställa",
@@ -342,8 +344,8 @@
             "between_50_70": "50-70%",
             "between_70_90": "70-90%",
             "above_90": "> 90%",
-            "demo_data_message": "This is demo data, upgrade to unlock real data",
-            "upgrade_button": "Upgrade"
+            "demo_data_message": "Detta är demodata, uppgradera för att låsa upp riktiga data",
+            "upgrade_button": "Uppgradera"
         }
     }
 }

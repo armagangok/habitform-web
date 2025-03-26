@@ -193,6 +193,8 @@
         "upcomingFeaturesDescription": "Les emocionants funcions que has demanat arribaran aviat!",
         "supportAnIndieDev": "Dona suport a un desenvolupador independent",
         "supportAnIndieDevDescription": "La teva compra dona suport a un desenvolupador d'aplicacions independent",
+        "statisticsTitle": "Estadístiques",
+        "statisticsDescription": "Fes un seguiment dels teus hàbits, aconsegueix motivació i sigues conscient del temps que falta perquè el teu hàbit sigui automàtic.",
         "loading": "Carregant..",
         "purchaseRestoredSuccessfuly": "Compra restaurada amb èxit",
         "youDoNotHaveAnyPurchasesToRestore": "No tens cap compra per restaurar",
@@ -342,8 +344,8 @@
             "between_50_70": "50-70%",
             "between_70_90": "70-90%",
             "above_90": "> 90%",
-            "demo_data_message": "This is demo data, upgrade to unlock real data",
-            "upgrade_button": "Upgrade"
+            "demo_data_message": "Aquestes són dades de demostració, actualitza per desbloquejar les dades reals",
+            "upgrade_button": "Actualitzar"
         }
     }
 }

@@ -193,6 +193,8 @@
         "upcomingFeaturesDescription": "Spændende funktioner, du har bedt om, er på vej!",
         "supportAnIndieDev": "Støt en Uafhængig Udvikler",
         "supportAnIndieDevDescription": "Dit køb støtter en uafhængig appudvikler",
+        "statisticsTitle": "Statistik",
+        "statisticsDescription": "Spor dine vaner, få motivation og vær opmærksom på, hvor lang tid der er tilbage, før din vane bliver automatisk.",
         "loading": "Indlæser..",
         "purchaseRestoredSuccessfuly": "Køb gendannet",
         "youDoNotHaveAnyPurchasesToRestore": "Du har ingen køb at gendanne",
@@ -342,8 +344,8 @@
             "between_50_70": "50-70%",
             "between_70_90": "70-90%",
             "above_90": "> 90%",
-            "demo_data_message": "This is demo data, upgrade to unlock real data",
-            "upgrade_button": "Upgrade"
+            "demo_data_message": "Dette er demodata, opgradér for at låse op for rigtige data",
+            "upgrade_button": "Opgradér"
         }
     }
 }

@@ -193,6 +193,8 @@
         "upcomingFeaturesDescription": "Spannende functies waar je om hebt gevraagd komen eraan!",
         "supportAnIndieDev": "Steun een Onafhankelijke Ontwikkelaar",
         "supportAnIndieDevDescription": "Je aankoop steunt een onafhankelijke app-ontwikkelaar",
+        "statisticsTitle": "Statistieken",
+        "statisticsDescription": "Volg je gewoontes, krijg motivatie en weet hoeveel tijd het nog duurt voordat je gewoonte automatisch wordt.",
         "loading": "Laden..",
         "purchaseRestoredSuccessfuly": "Aankoop succesvol hersteld",
         "youDoNotHaveAnyPurchasesToRestore": "Je hebt geen aankopen om te herstellen",
@@ -343,8 +345,8 @@
             "between_50_70": "50-70%",
             "between_70_90": "70-90%",
             "above_90": "> 90%",
-            "demo_data_message": "This is demo data, upgrade to unlock real data",
-            "upgrade_button": "Upgrade"
+            "demo_data_message": "Dit zijn demo gegevens, upgrade om echte gegevens te ontgrendelen",
+            "upgrade_button": "Upgraden"
         }
     }
 }

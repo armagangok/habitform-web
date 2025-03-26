@@ -193,6 +193,8 @@
         "upcomingFeaturesDescription": "Des fonctionnalités passionnantes que vous avez demandées arrivent bientôt !",
         "supportAnIndieDev": "Soutenez un développeur indépendant",
         "supportAnIndieDevDescription": "Votre achat soutient un développeur d'applications indépendant",
+        "statisticsTitle": "Statistiques",
+        "statisticsDescription": "Suivez vos habitudes, obtenez de la motivation et prenez conscience du temps restant pour que votre habitude devienne automatique.",
         "loading": "Chargement..",
         "purchaseRestoredSuccessfuly": "Achat restauré avec succès",
         "youDoNotHaveAnyPurchasesToRestore": "Vous n'avez aucun achat précédent à restaurer",
@@ -236,8 +238,7 @@
         "archiveSupportTitle": "Support d'archive",
         "archiveSupportDescription": "Archivez et gérez vos habitudes",
         "habitReminderTitle": "Rappels",
-        "habitReminderDescription": "Créez des rappels pour vos habitudes",
-        "billingIssueDetectedAt": "Problème de facturation détecté à"
+        "habitReminderDescription": "Créez des rappels pour vos habitudes"
     },
     "share": {
         "share": "Partager",
@@ -342,8 +343,9 @@
             "between_50_70": "50-70%",
             "between_70_90": "70-90%",
             "above_90": "> 90%",
-            "demo_data_message": "This is demo data, upgrade to unlock real data",
-            "upgrade_button": "Upgrade"
+            "billingIssueDetectedAt": "Problème de facturation détecté à",
+            "demo_data_message": "Ceci est une démonstration, mettez à niveau pour déverrouiller les données réelles",
+            "upgrade_button": "Mettre à niveau"
         }
     }
 }

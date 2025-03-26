@@ -1,22 +1,26 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lottie/lottie.dart';
 
 import '/core/core.dart';
 import '../../../../models/models.dart';
 import '../../../create_habit/create_habit_page.dart';
+import '../../../create_habit/provider/create_habit_provider.dart';
+import '../../../purchase/page/paywall_page.dart';
+import '../../provider/home_provider.dart';
 import 'habit_widget.dart';
 
-class HabitBuilder extends StatelessWidget {
-  final List<Habit>? habits;
+class HabitBuilder extends ConsumerWidget {
+  final List<Habit> habits;
   final bool isLoading;
 
   const HabitBuilder({
     super.key,
-    this.habits,
-    this.isLoading = false,
+    required this.habits,
+    required this.isLoading,
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     if (isLoading) {
       return Center(
         child: Column(
@@ -35,14 +39,14 @@ class HabitBuilder extends StatelessWidget {
       );
     }
 
-    if (habits != null && habits!.isEmpty) return _noDataWidget();
+    if (habits.isEmpty) return _noDataWidget(ref);
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15.0),
       child: SafeArea(
         top: false,
         bottom: false,
-        child: _buildHabitList(habits!),
+        child: _buildHabitList(habits),
       ),
     );
   }
@@ -119,7 +123,7 @@ class HabitBuilder extends StatelessWidget {
     );
   }
 
-  Widget _noDataWidget() => Builder(
+  Widget _noDataWidget(WidgetRef ref) => Builder(
         builder: (context) {
           return Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -151,14 +155,26 @@ class HabitBuilder extends StatelessWidget {
                     color: Colors.deepOrangeAccent,
                   ),
                 ),
-                onPressed: () {
-                  CupertinoScaffold.showCupertinoModalBottomSheet(
-                    enableDrag: false,
-                    context: context,
-                    builder: (contextFromSheet) {
-                      return CreateHabitPage();
-                    },
-                  );
+                onPressed: () async {
+                  final homeState = ref.read(homeProvider).value;
+                  if (homeState != null) {
+                    final canCreate = await ref.read(createHabitProvider.notifier).canCreateHabit(homeState.habits.length);
+                    if (canCreate) {
+                      CupertinoScaffold.showCupertinoModalBottomSheet(
+                        enableDrag: false,
+                        context: context,
+                        builder: (contextFromSheet) {
+                          return CreateHabitPage();
+                        },
+                      );
+                    } else {
+                      CupertinoScaffold.showCupertinoModalBottomSheet(
+                        enableDrag: false,
+                        context: context,
+                        builder: (_) => PaywallPage(),
+                      );
+                    }
+                  }
                 },
               ),
             ],

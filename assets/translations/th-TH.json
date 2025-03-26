@@ -193,6 +193,8 @@
         "upcomingFeaturesDescription": "ฟีเจอร์ที่น่าตื่นเต้นที่คุณขอจะมาในเร็วๆ นี้!",
         "supportAnIndieDev": "สนับสนุนนักพัฒนาอิสระ",
         "supportAnIndieDevDescription": "การซื้อของคุณสนับสนุนนักพัฒนาแอปอิสระ",
+        "statisticsTitle": "สถิติ",
+        "statisticsDescription": "ติดตามนิสัยของคุณ รับแรงจูงใจ และรู้ว่าเหลือเวลาอีกเท่าไรจนกว่านิสัยของคุณจะเป็นอัตโนมัติ",
         "loading": "กำลังโหลด..",
         "purchaseRestoredSuccessfuly": "กู้คืนการซื้อสำเร็จ",
         "youDoNotHaveAnyPurchasesToRestore": "คุณไม่มีการซื้อใดๆ ที่จะกู้คืน",
@@ -342,8 +344,8 @@
             "between_50_70": "50-70%",
             "between_70_90": "70-90%",
             "above_90": "> 90%",
-            "demo_data_message": "This is demo data, upgrade to unlock real data",
-            "upgrade_button": "Upgrade"
+            "demo_data_message": "นี่คือข้อมูลสาธิต อัปเกรดเพื่อปลดล็อกข้อมูลจริง",
+            "upgrade_button": "อัปเกรด"
         }
     }
 }

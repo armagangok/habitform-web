@@ -237,7 +237,9 @@
         "archiveSupportDescription": "習慣をアーカイブして管理",
         "habitReminderTitle": "リマインダー",
         "habitReminderDescription": "習慣のリマインダーを作成",
-        "billingIssueDetectedAt": "請求の問題が検出されました"
+        "billingIssueDetectedAt": "請求の問題が検出されました",
+        "statisticsTitle": "統計",
+        "statisticsDescription": "習慣を追跡し、モチベーションを得て、習慣が自動化されるまでの時間を把握できます"
     },
     "share": {
         "share": "共有",
@@ -342,8 +344,8 @@
             "between_50_70": "50-70%",
             "between_70_90": "70-90%",
             "above_90": "> 90%",
-            "demo_data_message": "This is demo data, upgrade to unlock real data",
-            "upgrade_button": "Upgrade"
+            "demo_data_message": "これはデモデータです。実際のデータを見るにはアップグレードしてください",
+            "upgrade_button": "アップグレード"
         }
     }
 }

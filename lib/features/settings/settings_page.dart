@@ -55,7 +55,6 @@ class SettingsPage extends ConsumerWidget {
                           child: Column(
                             children: [
                               ThemeModeFeature(),
-                              // LanguageFeature(),
                               CupertinoListTile(
                                 leading: SettingLeadingWidget(
                                   iconData: CupertinoIcons.bell_fill,

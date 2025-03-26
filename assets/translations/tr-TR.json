@@ -198,6 +198,8 @@
         "upcomingFeaturesDescription": "Talep ettiğiniz özellikler çok yakında geliyor!",
         "supportAnIndieDev": "Bağımsız Bir Geliştiriciyi Destekle",
         "supportAnIndieDevDescription": "Satın alımınız, bağımsız bir uygulama geliştiricisini destekler",
+        "statisticsTitle": "İstatistikler",
+        "statisticsDescription": "Alışkanlıklarınızı takip edin, motivasyon kazanın ve alışkanlığınızın otomatikleşmesine ne kadar kaldığını görün.",
         "loading": "Yükleniyor..",
         "purchaseRestoredSuccessfuly": "Satın alma başarıyla geri yüklendi",
         "youDoNotHaveAnyPurchasesToRestore": "Geri yüklenecek önceki bir satın almanız yok",
@@ -342,14 +344,12 @@
             "moderate": "Orta",
             "good": "İyi",
             "excellent": "Mükemmel",
-            "below_50": "< %50",
-            "between_50_70": "%50-70",
-            "between_70_90": "%70-90",
+            "below_50": "< 50%",
+            "between_50_70": "50-70%",
+            "between_70_90": "70-90%",
             "above_90": "> 90%",
-            "demo_data_message": "This is demo data, upgrade to unlock real data",
-            "upgrade_button": "Upgrade"
-        },
-        "demo_data_message": "Bu demo veridir, gerçek verileri görmek için yükseltme yapın",
-        "upgrade_button": "Yükselt"
+            "demo_data_message": "Bu demo verisidir, gerçek verileri görmek için yükseltin",
+            "upgrade_button": "Yükselt"
+        }
     }
 }

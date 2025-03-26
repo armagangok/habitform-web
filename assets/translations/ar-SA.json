@@ -193,6 +193,8 @@
         "upcomingFeaturesDescription": "الميزات المثيرة التي طلبتها قادمة قريباً!",
         "supportAnIndieDev": "ادعم مطور مستقل",
         "supportAnIndieDevDescription": "شراؤك يدعم مطور تطبيقات مستقل",
+        "statisticsTitle": "الإحصائيات",
+        "statisticsDescription": "تتبع عاداتك، احصل على الحافز، وكن على دراية بالوقت المتبقي حتى تصبح عادتك تلقائية.",
         "loading": "جاري التحميل..",
         "purchaseRestoredSuccessfuly": "تمت استعادة الشراء بنجاح",
         "youDoNotHaveAnyPurchasesToRestore": "ليس لديك أي عمليات شراء سابقة لاستعادتها",
@@ -334,16 +336,16 @@
             "remaining_days": "يُقدر أن {days} يوماً متبقية لتكوين العادة. حافظ على التكرار المنتظم."
         },
         "chart_labels": {
-            "insufficient": "غير كافي",
+            "insufficient": "غير كافٍ",
             "moderate": "متوسط",
             "good": "جيد",
             "excellent": "ممتاز",
-            "below_50": "< ٥٠٪",
-            "between_50_70": "٥٠-٧٠٪",
-            "between_70_90": "٧٠-٩٠٪",
+            "below_50": "< 50%",
+            "between_50_70": "50-70%",
+            "between_70_90": "70-90%",
             "above_90": "> 90%",
-            "demo_data_message": "This is demo data, upgrade to unlock real data",
-            "upgrade_button": "Upgrade"
+            "demo_data_message": "هذه بيانات تجريبية، قم بالترقية لفتح البيانات الحقيقية",
+            "upgrade_button": "ترقية"
         }
     }
 }

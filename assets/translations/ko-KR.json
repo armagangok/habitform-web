@@ -237,7 +237,9 @@
         "archiveSupportDescription": "습관을 보관하고 관리하세요",
         "habitReminderTitle": "리마인더",
         "habitReminderDescription": "습관에 대한 리마인더 만들기",
-        "billingIssueDetectedAt": "결제 문제가 감지된 시간"
+        "billingIssueDetectedAt": "결제 문제가 감지된 시간",
+        "statisticsTitle": "통계",
+        "statisticsDescription": "습관을 추적하고 동기를 얻으며 습관이 자동화될 때까지 남은 시간을 알 수 있습니다"
     },
     "share": {
         "share": "공유",
@@ -338,12 +340,12 @@
             "moderate": "보통",
             "good": "좋음",
             "excellent": "훌륭함",
-            "below_50": "50% 미만",
+            "below_50": "< 50%",
             "between_50_70": "50-70%",
             "between_70_90": "70-90%",
             "above_90": "> 90%",
-            "demo_data_message": "This is demo data, upgrade to unlock real data",
-            "upgrade_button": "Upgrade"
+            "demo_data_message": "이것은 데모 데이터입니다. 실제 데이터를 보려면 업그레이드하세요",
+            "upgrade_button": "업그레이드"
         }
     }
 }

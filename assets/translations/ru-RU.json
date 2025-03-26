@@ -193,6 +193,8 @@
         "upcomingFeaturesDescription": "Захватывающие функции, которые вы запрашивали, скоро появятся!",
         "supportAnIndieDev": "Поддержите независимого разработчика",
         "supportAnIndieDevDescription": "Ваша покупка поддерживает независимого разработчика приложений",
+        "statisticsTitle": "Статистика",
+        "statisticsDescription": "Отслеживайте свои привычки, получайте мотивацию и узнавайте, сколько времени осталось до автоматизации вашей привычки.",
         "loading": "Загрузка..",
         "purchaseRestoredSuccessfuly": "Покупка успешно восстановлена",
         "youDoNotHaveAnyPurchasesToRestore": "У вас нет предыдущих покупок для восстановления",
@@ -342,8 +344,8 @@
             "between_50_70": "50-70%",
             "between_70_90": "70-90%",
             "above_90": "> 90%",
-            "demo_data_message": "This is demo data, upgrade to unlock real data",
-            "upgrade_button": "Upgrade"
+            "demo_data_message": "Это демонстрационные данные, обновитесь, чтобы разблокировать реальные данные",
+            "upgrade_button": "Обновить"
         }
     }
 }

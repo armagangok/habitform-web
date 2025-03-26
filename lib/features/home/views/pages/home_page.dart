@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '/core/core.dart';
 import '../../../create_habit/create_habit_page.dart';
+import '../../../create_habit/provider/create_habit_provider.dart';
 import '../../../purchase/page/paywall_page.dart';
 import '../../../purchase/providers/purchase_provider.dart';
 import '../../../settings/settings_page.dart';
@@ -309,12 +310,11 @@ class _HomePageState extends ConsumerState<HomePage> with SingleTickerProviderSt
         // Add habit button
         buttons.add(
           CustomButton(
-            onPressed: () {
-              if (isSubActive) {
-                _openAddHabitPage(context);
-              } else {
-                final homeState = ref.read(homeProvider).value;
-                if (homeState != null && homeState.habits.length <= 3) {
+            onPressed: () async {
+              final homeState = ref.read(homeProvider).value;
+              if (homeState != null) {
+                final canCreate = await ref.read(createHabitProvider.notifier).canCreateHabit(homeState.habits.length);
+                if (canCreate) {
                   _openAddHabitPage(context);
                 } else {
                   _handlePaywallAction(context);

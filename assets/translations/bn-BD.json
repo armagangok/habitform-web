@@ -193,6 +193,8 @@
         "upcomingFeaturesDescription": "আপনার অনুরোধ করা উত্তেজনাপূর্ণ ফিচার শীঘ্রই আসছে!",
         "supportAnIndieDev": "একজন স্বাধীন ডেভেলপারকে সমর্থন করুন",
         "supportAnIndieDevDescription": "আপনার ক্রয় একজন স্বাধীন অ্যাপ ডেভেলপারকে সমর্থন করে",
+        "statisticsTitle": "পরিসংখ্যান",
+        "statisticsDescription": "আপনার অভ্যাস ট্র্যাক করুন, অনুপ্রেরণা পান, এবং আপনার অভ্যাস স্বয়ংক্রিয় হতে কত সময় বাকি তা জানুন।",
         "loading": "লোড হচ্ছে..",
         "purchaseRestoredSuccessfuly": "ক্রয় সফলভাবে পুনরুদ্ধার করা হয়েছে",
         "youDoNotHaveAnyPurchasesToRestore": "পুনরুদ্ধার করার জন্য আপনার কোন পূর্ববর্তী ক্রয় নেই",
@@ -338,12 +340,12 @@
             "moderate": "মাঝারি",
             "good": "ভালো",
             "excellent": "চমৎকার",
-            "below_50": "< ৫০%",
-            "between_50_70": "৫০-৭০%",
-            "between_70_90": "৭০-৯০%",
+            "below_50": "< 50%",
+            "between_50_70": "50-70%",
+            "between_70_90": "70-90%",
             "above_90": "> 90%",
-            "demo_data_message": "This is demo data, upgrade to unlock real data",
-            "upgrade_button": "Upgrade"
+            "demo_data_message": "এটি ডেমো ডেটা, আসল ডেটা দেখতে আপগ্রেড করুন",
+            "upgrade_button": "আপগ্রেড"
         }
     }
 }
