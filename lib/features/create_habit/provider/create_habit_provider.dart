@@ -4,8 +4,8 @@ import '../../../core/core.dart';
 import '../../../core/widgets/habit_color_sheet/provider/habit_color_provider.dart';
 import '../../../core/widgets/habit_icon/provider/habit_icon_provider.dart';
 import '../../../models/habit/habit_model.dart';
-import '../../../services/user_defaults_service.dart';
 import '../../home/provider/home_provider.dart';
+import '../../purchase/providers/purchase_provider.dart';
 import '../../reminder/provider/reminder_provider.dart';
 import 'create_habit_state.dart';
 
@@ -20,8 +20,8 @@ class CreateHabitNotifier extends AutoDisposeAsyncNotifier<CreateHabitState> {
   }
 
   Future<bool> get isProUser async {
-    final userDefaults = await UserDefaultsService.instance.getUserDefaults();
-    return userDefaults?.isPro ?? false;
+    final purchaseState = ref.read(purchaseProvider);
+    return purchaseState.value?.isSubscriptionActive ?? false;
   }
 
   Future<bool> canCreateHabit(int currentHabitCount) async {

@@ -315,7 +315,7 @@ class _HomePageState extends ConsumerState<HomePage> with SingleTickerProviderSt
               if (homeState != null) {
                 final canCreate = await ref.read(createHabitProvider.notifier).canCreateHabit(homeState.habits.length);
                 if (canCreate) {
-                  _openAddHabitPage(context);
+                  _openCreateHabitPage(context);
                 } else {
                   _handlePaywallAction(context);
                 }
@@ -353,7 +353,7 @@ class _HomePageState extends ConsumerState<HomePage> with SingleTickerProviderSt
     );
   }
 
-  Future<dynamic> _openAddHabitPage(BuildContext context) {
+  Future<dynamic> _openCreateHabitPage(BuildContext context) {
     return CupertinoScaffold.showCupertinoModalBottomSheet(
       enableDrag: false,
       context: context,
