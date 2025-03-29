@@ -129,11 +129,9 @@ class HabitBuilder extends ConsumerWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              SizedBox(height: 100),
+              SizedBox(height: 20),
               Lottie.asset(
                 Assets.animations.astronout,
-                width: context.width(.75),
-                height: 100,
                 fit: BoxFit.cover,
               ),
               SizedBox(height: 30),
