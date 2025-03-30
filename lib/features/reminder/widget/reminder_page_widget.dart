@@ -14,6 +14,12 @@ class ReminderPage extends ConsumerWidget {
       navigationBar: SheetHeader(
         closeButtonPosition: CloseButtonPosition.left,
         title: LocaleKeys.habit_reminder.tr(),
+        trailing: TrailingActionButton(
+          title: LocaleKeys.common_done.tr(),
+          onPressed: () {
+            navigator.pop();
+          },
+        ),
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
