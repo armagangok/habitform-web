@@ -2,7 +2,7 @@
 
 // ignore_for_file: constant_identifier_names
 
-abstract class LocaleKeys {
+abstract class  LocaleKeys {
   static const common_ok = 'common.ok';
   static const common_save = 'common.save';
   static const common_cancel = 'common.cancel';
@@ -179,6 +179,8 @@ abstract class LocaleKeys {
   static const subscription_upcomingFeaturesDescription = 'subscription.upcomingFeaturesDescription';
   static const subscription_supportAnIndieDev = 'subscription.supportAnIndieDev';
   static const subscription_supportAnIndieDevDescription = 'subscription.supportAnIndieDevDescription';
+  static const subscription_statisticsTitle = 'subscription.statisticsTitle';
+  static const subscription_statisticsDescription = 'subscription.statisticsDescription';
   static const subscription_loading = 'subscription.loading';
   static const subscription_purchaseRestoredSuccessfuly = 'subscription.purchaseRestoredSuccessfuly';
   static const subscription_youDoNotHaveAnyPurchasesToRestore = 'subscription.youDoNotHaveAnyPurchasesToRestore';
@@ -224,8 +226,6 @@ abstract class LocaleKeys {
   static const subscription_habitReminderTitle = 'subscription.habitReminderTitle';
   static const subscription_habitReminderDescription = 'subscription.habitReminderDescription';
   static const subscription_billingIssueDetectedAt = 'subscription.billingIssueDetectedAt';
-  static const subscription_statisticsTitle = 'subscription.statisticsTitle';
-  static const subscription_statisticsDescription = 'subscription.statisticsDescription';
   static const subscription = 'subscription';
   static const share_share = 'share.share';
   static const share_share_image = 'share.share_image';
@@ -304,11 +304,13 @@ abstract class LocaleKeys {
   static const statistics_formation_status_good = 'statistics.formation_status.good';
   static const statistics_formation_status_improving = 'statistics.formation_status.improving';
   static const statistics_formation_status_needs_work = 'statistics.formation_status.needs_work';
+  static const statistics_formation_status = 'statistics.formation_status';
   static const statistics_formation_time_not_enough_data = 'statistics.formation_time.not_enough_data';
   static const statistics_formation_time_completed_successful = 'statistics.formation_time.completed_successful';
   static const statistics_formation_time_completed_good = 'statistics.formation_time.completed_good';
   static const statistics_formation_time_completed_needs_work = 'statistics.formation_time.completed_needs_work';
   static const statistics_formation_time_remaining_days = 'statistics.formation_time.remaining_days';
+  static const statistics_formation_time = 'statistics.formation_time';
   static const statistics_chart_labels_insufficient = 'statistics.chart_labels.insufficient';
   static const statistics_chart_labels_moderate = 'statistics.chart_labels.moderate';
   static const statistics_chart_labels_good = 'statistics.chart_labels.good';
@@ -317,6 +319,9 @@ abstract class LocaleKeys {
   static const statistics_chart_labels_between_50_70 = 'statistics.chart_labels.between_50_70';
   static const statistics_chart_labels_between_70_90 = 'statistics.chart_labels.between_70_90';
   static const statistics_chart_labels_above_90 = 'statistics.chart_labels.above_90';
-  static const statistics_demo_data_message = 'statistics.demo_data_message';
-  static const statistics_upgrade_button = 'statistics.upgrade_button';
+  static const statistics_chart_labels_demo_data_message = 'statistics.chart_labels.demo_data_message';
+  static const statistics_chart_labels_upgrade_button = 'statistics.chart_labels.upgrade_button';
+  static const statistics_chart_labels = 'statistics.chart_labels';
+  static const statistics = 'statistics';
+
 }

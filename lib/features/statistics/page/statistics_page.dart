@@ -164,7 +164,7 @@ class StatisticsPage extends ConsumerWidget {
                                           period: const Duration(seconds: 2),
                                           direction: ShimmerDirection.ltr,
                                           child: Text(
-                                            LocaleKeys.statistics_demo_data_message.tr(),
+                                            LocaleKeys.statistics_chart_labels_demo_data_message.tr(),
                                             style: context.titleSmall?.copyWith(
                                               fontSize: 14,
                                               fontWeight: FontWeight.bold,
@@ -190,7 +190,7 @@ class StatisticsPage extends ConsumerWidget {
                                               period: const Duration(seconds: 1),
                                               direction: ShimmerDirection.ltr,
                                               child: Text(
-                                                LocaleKeys.statistics_upgrade_button.tr(),
+                                                LocaleKeys.statistics_chart_labels_upgrade_button.tr(),
                                                 style: TextStyle(
                                                   fontSize: 14,
                                                   fontWeight: FontWeight.bold,
