@@ -64,7 +64,7 @@ class _HabitDataWidgetState extends ConsumerState<HabitDataWidget> {
     }
 
     setState(() {
-      selectedYear = 2020 + ((page * 3 + (currentMonth - 1) ~/ 3 * 3) ~/ 12);
+      selectedYear = 2020 + (page * 3) ~/ 12;
     });
   }
 
@@ -109,8 +109,8 @@ class _HabitDataWidgetState extends ConsumerState<HabitDataWidget> {
                     onPageChanged: _onPageChanged,
                     physics: ClampingScrollPhysics(),
                     itemBuilder: (context, index) {
-                      final quarterStartMonth = ((index * 3) + (currentMonth - 1) ~/ 3 * 3) % 12;
-                      final year = 2020 + ((index * 3 + (currentMonth - 1) ~/ 3 * 3) ~/ 12);
+                      final quarterStartMonth = (index * 3) % 12;
+                      final year = 2020 + (index * 3) ~/ 12;
                       return _buildQuarterView(
                         color: Color(widget.habit.colorCode),
                         startMonth: quarterStartMonth,
