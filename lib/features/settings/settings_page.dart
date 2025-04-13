@@ -165,21 +165,19 @@ class SettingsPage extends ConsumerWidget {
                                     text: 'Habit',
                                     style: context.bodyLarge?.copyWith(
                                       color: context.bodyLarge?.color?.withValues(alpha: 1),
+                                      fontWeight: FontWeight.bold,
                                     ),
                                   ),
                                   TextSpan(
                                     text: 'Rise',
-                                    style: context.bodyLarge?.copyWith(color: context.primary),
+                                    style: context.bodyLarge?.copyWith(
+                                      color: Colors.deepOrange,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
                                 ],
                               ),
                             ),
-                            Text(
-                              " ${LocaleKeys.common_version.tr()}",
-                              style: context.bodyMedium?.copyWith(
-                                color: context.textTheme.bodyLarge?.color?.withValues(alpha: .75),
-                              ),
-                            )
                           ],
                         ),
                         Padding(
