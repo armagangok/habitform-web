@@ -27,7 +27,7 @@ class CreateHabitNotifier extends AutoDisposeAsyncNotifier<CreateHabitState> {
   Future<bool> canCreateHabit(int currentHabitCount) async {
     final isPro = await isProUser;
     if (isPro) return true;
-    return currentHabitCount <= 2;
+    return currentHabitCount <= 1;
   }
 
   Future<void> createHabit() async {
