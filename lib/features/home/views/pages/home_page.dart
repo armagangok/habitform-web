@@ -8,7 +8,6 @@ import '../../../purchase/providers/purchase_provider.dart';
 import '../../../settings/settings_page.dart';
 import '../../../statistics/page/statistics_page.dart';
 import '../../provider/home_provider.dart';
-import '../../provider/home_state.dart';
 import '../widgets/habit_builder.dart';
 
 class HomePage extends ConsumerStatefulWidget {
@@ -33,24 +32,6 @@ class _HomePageState extends ConsumerState<HomePage> with SingleTickerProviderSt
     super.dispose();
   }
 
-  // Names for each filter
-  final filterNames = {
-    TimeOfDayFilter.all: LocaleKeys.habit_filter_all.tr(),
-    TimeOfDayFilter.morning: LocaleKeys.habit_filter_morning.tr(),
-    TimeOfDayFilter.noon: LocaleKeys.habit_filter_noon.tr(),
-    TimeOfDayFilter.evening: LocaleKeys.habit_filter_evening.tr(),
-    TimeOfDayFilter.night: LocaleKeys.habit_filter_night.tr(),
-  };
-
-  // List of all filters
-  final filters = [
-    TimeOfDayFilter.all,
-    TimeOfDayFilter.morning,
-    TimeOfDayFilter.noon,
-    TimeOfDayFilter.evening,
-    TimeOfDayFilter.night,
-  ];
-
   @override
   Widget build(BuildContext context) {
     final homeStateAsyncValue = ref.watch(homeProvider);
@@ -71,12 +52,6 @@ class _HomePageState extends ConsumerState<HomePage> with SingleTickerProviderSt
             child: ListView(
               physics: AlwaysScrollableScrollPhysics(),
               children: <Widget>[
-                // Time of day filter
-                SizedBox(height: 16),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: _buildTimeFilterWidget(),
-                ),
                 SizedBox(height: 16),
 
                 // Habits list
@@ -84,7 +59,7 @@ class _HomePageState extends ConsumerState<HomePage> with SingleTickerProviderSt
                   data: (homeState) {
                     // Simple approach - no animations that cause flickering
                     return HabitBuilder(
-                      habits: homeState.filteredHabits,
+                      habits: homeState.habits,
                       isLoading: false,
                     ).animate(controller: controller).fadeIn(curve: Curves.easeIn);
                   },
@@ -116,55 +91,6 @@ class _HomePageState extends ConsumerState<HomePage> with SingleTickerProviderSt
           ),
         ],
       ),
-    );
-  }
-
-  // Build the time filter widget
-  Widget _buildTimeFilterWidget() {
-    return ref.watch(homeProvider).when(
-          data: (homeState) {
-            return _buildFilterCarousel(homeState);
-          },
-          loading: () => const SizedBox(),
-          error: (_, __) => const SizedBox(),
-        );
-  }
-
-  // Build a horizontally scrolling filter carousel
-  Widget _buildFilterCarousel(HomeState homeState) {
-    // Build a simple row of filter buttons - NO PageView, NO animations
-    return Row(
-      children: filters.map((filter) {
-        final isSelected = filter == homeState.timeFilter;
-
-        return Expanded(
-          child: CustomButton(
-            onPressed: () {
-              controller.forward(from: 0);
-              // Set filter directly with no animations
-              ref.read(homeProvider.notifier).setTimeFilter(filter);
-            },
-            child: Card(
-              color: isSelected ? Colors.deepOrangeAccent : Colors.transparent,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 2.5),
-                child: Center(
-                  child: FittedBox(
-                    child: Text(
-                      filterNames[filter] ?? '',
-                      style: context.bodyMedium?.copyWith(
-                        fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
-                        color: isSelected ? Colors.white : context.theme.hintColor,
-                      ),
-                      maxLines: 1,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ),
-        );
-      }).toList(),
     );
   }
 

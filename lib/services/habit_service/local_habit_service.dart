@@ -50,14 +50,14 @@ class LocalHabitService extends HabitService {
   Future<Habit?> getHabit(String habitId) async {
     LogHelper.shared.debugPrint('Fetching habit by ID: $habitId');
 
-    // Önce aktif alışkanlıklar arasında ara
+    // First check active habits
     final activeHabit = _hiveHelper.getData<Habit>(HiveBoxes.habitBox, habitId);
     if (activeHabit != null) {
       LogHelper.shared.debugPrint('Found active habit: $habitId');
       return activeHabit;
     }
 
-    // Aktif alışkanlıklar arasında bulunamazsa, arşivlenmiş alışkanlıklar arasında ara
+    // Then check archived habits
     final archivedHabit = _hiveHelper.getData<Habit>(HiveBoxes.archivedHabitBox, habitId);
     if (archivedHabit != null) {
       LogHelper.shared.debugPrint('Found archived habit: $habitId');
@@ -88,76 +88,43 @@ class LocalHabitService extends HabitService {
     );
   }
 
-  // Mark habit as complete/incomplete
+  // Update habit completion status
   @override
   Future<void> updateHabitCompletionStatus(String habitId, CompletionEntry completion) async {
-    // Tüm habit'leri al ve kontrol et
-    final allHabits = await _hiveHelper.getAll<Habit>(HiveBoxes.habitBox);
+    // Get the habit
+    final habit = await getHabit(habitId);
+    if (habit == null) {
+      LogHelper.shared.debugPrint('Habit not found: $habitId');
+      throw Exception('Habit not found');
+    }
 
-    // Habit'i ID'sine göre bul
-    Habit? habit;
-    habit = allHabits.firstWhere((h) => h.id == habitId);
-
-    // Completion'ları güncelle
+    // Update completions
     final updatedCompletions = Map<String, CompletionEntry>.from(habit.completions);
 
-    // Aynı tarih için mevcut bir kayıt var mı kontrol et (ID farklı olabilir)
-    CompletionEntry? existingEntryWithSameDate;
+    // Find any existing entry for the same date
     String? existingKey;
-
     for (var entry in updatedCompletions.entries) {
-      if (entry.value.date.normalized.isSameDayWith(completion.date.normalized) && entry.key != completion.id) {
-        existingEntryWithSameDate = entry.value;
+      if (entry.value.date.normalized.isSameDayWith(completion.date.normalized)) {
         existingKey = entry.key;
-        LogHelper.shared.debugPrint('Found existing entry with same date but different ID. Existing ID: ${entry.key}, New ID: ${completion.id}');
         break;
       }
     }
 
-    if (existingEntryWithSameDate != null && existingKey != null) {
-      // Var olan kaydı güncelle, yeni kayıt ekleme - ID'yi koru
-      if (completion.isCompleted) {
-        // Eğer tamamlandı olarak işaretlendiyse, güncelle
-        final updatedEntry = existingEntryWithSameDate.copyWith(isCompleted: true);
-
-        // Mevcut ID ile kaydet
-        updatedCompletions[existingKey] = updatedEntry;
-        LogHelper.shared.debugPrint('Updated existing entry with ID: $existingKey and kept the original ID');
-      } else {
-        // Eğer tamamlanmadı olarak işaretlendiyse, kaydı tamamen sil
-        updatedCompletions.remove(existingKey);
-        LogHelper.shared.debugPrint('Removed entry with ID: $existingKey because it was marked as not completed');
-      }
-
-      // Gelen completion'ın ID'si ile bir kayıt varsa, onu kaldır (tutarsızlığı önlemek için)
-      if (completion.id != existingKey && updatedCompletions.containsKey(completion.id)) {
-        updatedCompletions.remove(completion.id);
-        LogHelper.shared.debugPrint('Removed duplicate entry with ID: ${completion.id}');
-      }
-    } else {
-      // Aynı tarihte başka bir kayıt yoksa
-      if (completion.isCompleted) {
-        // Tamamlandı olarak işaretlendiyse, yeni kaydı ekle
-        updatedCompletions[completion.id] = completion;
-        LogHelper.shared.debugPrint('Added new entry with ID: ${completion.id}');
-      } else {
-        // Tamamlanmadı olarak işaretlendiyse ve zaten kayıt yoksa, hiçbir şey yapma
-        // Ancak varsa, kaydı sil
-        if (updatedCompletions.containsKey(completion.id)) {
-          updatedCompletions.remove(completion.id);
-          LogHelper.shared.debugPrint('Removed entry with ID: ${completion.id} because it was marked as not completed');
-        }
-      }
+    // Remove existing entry if found
+    if (existingKey != null) {
+      updatedCompletions.remove(existingKey);
     }
 
-    final updatedHabit = habit.copyWith(
-      completions: updatedCompletions,
-    );
+    // Add new entry if it's marked as completed
+    if (completion.isCompleted) {
+      updatedCompletions[completion.id] = completion;
+    }
 
-    // Habit'i güncelle
-    await _hiveHelper.putData<Habit>(HiveBoxes.habitBox, habitId, updatedHabit);
+    // Save updated habit
+    final updatedHabit = habit.copyWith(completions: updatedCompletions);
+    await updateHabit(updatedHabit);
 
-    LogHelper.shared.debugPrint('Successfully updated completion status for habit: $habitId, date: ${completion.date}, completed: ${completion.isCompleted}');
+    LogHelper.shared.debugPrint('Successfully updated completion status for habit: $habitId');
   }
 
   // Delete a habit (soft delete)
@@ -178,9 +145,9 @@ class LocalHabitService extends HabitService {
   // Archive a habit
   @override
   Future<void> archiveHabit(Habit habit) async {
-    LogHelper.shared.debugPrint('Starting archive process for habit: ${habit.id} - ${habit.habitName}');
+    LogHelper.shared.debugPrint('Archiving habit: ${habit.id}');
 
-    // Eğer habit zaten arşivlenmiş durumda değilse, arşivle
+    // Set habit to archived if it's not already
     final archivedHabit = habit.isArchived
         ? habit
         : habit.copyWith(
@@ -188,24 +155,13 @@ class LocalHabitService extends HabitService {
             archiveDate: DateTime.now(),
           );
 
-    LogHelper.shared.debugPrint('Habit status after archive preparation: ${archivedHabit.status}, isArchived: ${archivedHabit.isArchived}');
+    // Remove from active habits
+    await _hiveHelper.deleteData<Habit>(HiveBoxes.habitBox, habit.id);
 
-    // Önce aktif habitler kutusundan kontrol et ve sil
-    final existingActiveHabit = _hiveHelper.getData<Habit>(HiveBoxes.habitBox, habit.id);
-    if (existingActiveHabit != null) {
-      LogHelper.shared.debugPrint('Removing habit from active box: ${habit.id}');
-      await _hiveHelper.deleteData<Habit>(HiveBoxes.habitBox, habit.id);
-    }
-
-    LogHelper.shared.debugPrint('Saving to archivedHabitBox...');
+    // Add to archived habits
     await _hiveHelper.putData<Habit>(HiveBoxes.archivedHabitBox, habit.id, archivedHabit);
-    LogHelper.shared.debugPrint('Successfully saved to archivedHabitBox');
 
-    final verifyArchived = _hiveHelper.getData<Habit>(HiveBoxes.archivedHabitBox, habit.id);
-    LogHelper.shared.debugPrint('Verification - Habit in archived box: ${verifyArchived != null}');
-    if (verifyArchived != null) {
-      LogHelper.shared.debugPrint('Archived habit details - status: ${verifyArchived.status}, archiveDate: ${verifyArchived.archiveDate}, isArchived: ${verifyArchived.isArchived}');
-    }
+    LogHelper.shared.debugPrint('Habit archived successfully: ${habit.id}');
   }
 
   // Unarchive a habit
@@ -215,29 +171,16 @@ class LocalHabitService extends HabitService {
 
     final archivedHabit = _hiveHelper.getData<Habit>(HiveBoxes.archivedHabitBox, habitId);
     if (archivedHabit != null) {
-      // Alışkanlığı aktif duruma getir, ancak arşiv tarihini null yapma
-      // Bu, senkronizasyon sırasında arşivden çıkarıldığını belirlemek için kullanılacak
-      final activeHabit = archivedHabit.copyWith(
-        status: HabitStatus.active,
-      );
+      // Set habit to active
+      final activeHabit = archivedHabit.copyWith(status: HabitStatus.active);
 
-      LogHelper.shared.debugPrint('Moving habit from archived to active: $habitId');
-
-      // Önce aktif habitler kutusuna ekle
+      // Add to active habits
       await _hiveHelper.putData<Habit>(HiveBoxes.habitBox, habitId, activeHabit);
 
-      // Sonra arşiv kutusundan sil
+      // Remove from archived habits
       await _hiveHelper.deleteData<Habit>(HiveBoxes.archivedHabitBox, habitId);
 
-      LogHelper.shared.debugPrint('Habit successfully moved from archive to active: $habitId');
-
-      // Doğrulama
-      final verifyActive = _hiveHelper.getData<Habit>(HiveBoxes.habitBox, habitId);
-      final verifyArchived = _hiveHelper.getData<Habit>(HiveBoxes.archivedHabitBox, habitId);
-
-      LogHelper.shared.debugPrint('Verification - Habit in active box: ${verifyActive != null}, in archived box: ${verifyArchived == null}');
-    } else {
-      LogHelper.shared.debugPrint('Habit not found in archive: $habitId');
+      LogHelper.shared.debugPrint('Habit unarchived successfully: $habitId');
     }
   }
 
@@ -245,11 +188,7 @@ class LocalHabitService extends HabitService {
   @override
   Future<void> permanentlyDeleteHabit(String habitId) async {
     LogHelper.shared.debugPrint('Permanently deleting habit: $habitId');
-
-    final habit = _hiveHelper.getData<Habit>(HiveBoxes.archivedHabitBox, habitId);
-    if (habit != null) {
-      await _hiveHelper.deleteData<Habit>(HiveBoxes.archivedHabitBox, habitId);
-    }
+    await _hiveHelper.deleteData<Habit>(HiveBoxes.archivedHabitBox, habitId);
   }
 
   // Update an archived habit
@@ -257,7 +196,7 @@ class LocalHabitService extends HabitService {
   Future<void> updateArchivedHabit(Habit habit) async {
     LogHelper.shared.debugPrint('Updating archived habit: ${habit.id}');
 
-    // Eğer habit arşivlenmiş değilse, arşivle
+    // Ensure habit is archived
     final archivedHabit = habit.isArchived
         ? habit
         : habit.copyWith(
@@ -265,37 +204,12 @@ class LocalHabitService extends HabitService {
             archiveDate: habit.archiveDate ?? DateTime.now(),
           );
 
-    LogHelper.shared.debugPrint('Habit status after update preparation: ${archivedHabit.status}, isArchived: ${archivedHabit.isArchived}');
+    // Remove from active habits if it exists there
+    await _hiveHelper.deleteData<Habit>(HiveBoxes.habitBox, habit.id);
 
-    // Aktif habitler kutusunda olup olmadığını kontrol et
-    final existingActiveHabit = _hiveHelper.getData<Habit>(HiveBoxes.habitBox, habit.id);
-    if (existingActiveHabit != null) {
-      LogHelper.shared.debugPrint('Habit found in active box, removing: ${habit.id}');
-      await _hiveHelper.deleteData<Habit>(HiveBoxes.habitBox, habit.id);
-    }
-
-    await _hiveHelper.putData<Habit>(
-      HiveBoxes.archivedHabitBox,
-      habit.id,
-      archivedHabit.copyWith(),
-    );
-
-    // Doğrulama
-    final verifyArchived = _hiveHelper.getData<Habit>(HiveBoxes.archivedHabitBox, habit.id);
-    if (verifyArchived != null) {
-      LogHelper.shared.debugPrint('Verified archived habit: ${verifyArchived.id} - status: ${verifyArchived.status}, isArchived: ${verifyArchived.isArchived}');
-    } else {
-      LogHelper.shared.debugPrint('WARNING: Could not verify archived habit after update: ${habit.id}');
-    }
+    // Update in archived habits
+    await _hiveHelper.putData<Habit>(HiveBoxes.archivedHabitBox, habit.id, archivedHabit);
 
     LogHelper.shared.debugPrint('Archived habit updated successfully: ${habit.id}');
-  }
-
-  Future<void> saveHabit(Habit habit) async {
-    await _hiveHelper.putData<Habit>(
-      HiveBoxes.habitBox,
-      habit.id,
-      habit.copyWith(),
-    );
   }
 }
