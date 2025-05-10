@@ -36,6 +36,7 @@ final class Themes {
     ),
     iconTheme: IconThemeData(color: CupertinoColors.white.withValues(alpha: .7)),
     cupertinoOverrideTheme: CupertinoThemeData(
+      primaryColor: CupertinoColors.systemBlue,
       applyThemeToAll: true,
       scaffoldBackgroundColor: Colors.black,
       brightness: Brightness.dark,
@@ -77,6 +78,7 @@ final class Themes {
       elevation: 0,
     ),
     cupertinoOverrideTheme: CupertinoThemeData(
+      primaryColor:  CupertinoColors.systemBlue,
       applyThemeToAll: true,
       barBackgroundColor: Color(0xffF2F2F7),
       scaffoldBackgroundColor: Color(0xffF2F2F7),

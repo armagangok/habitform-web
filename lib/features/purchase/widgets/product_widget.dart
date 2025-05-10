@@ -44,7 +44,7 @@ class _ProductWidgetState extends State<ProductWidget> {
             ? RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(16),
                 side: BorderSide(
-                  color: Colors.deepOrangeAccent,
+                  color: Colors.blueAccent,
                   width: 4,
                   strokeAlign: 0,
                   style: BorderStyle.solid,
@@ -70,7 +70,7 @@ class _ProductWidgetState extends State<ProductWidget> {
                     widget.isSelected
                         ? Icon(
                             CupertinoIcons.circle_fill,
-                            color: Colors.deepOrangeAccent,
+                            color: Colors.blueAccent,
                             size: 20,
                           ).animate().scale()
                         : Icon(

@@ -33,7 +33,7 @@ class _PaywallWidgetState extends ConsumerState<PaywallPage> with SingleTickerPr
       LocaleKeys.subscription_statisticsTitle.tr(),
       FontAwesomeIcons.chartLine,
       LocaleKeys.subscription_statisticsDescription.tr(),
-      Colors.deepOrangeAccent,
+      Colors.blueAccent,
     ),
     FeatureModel(
       LocaleKeys.subscription_archiveSupportTitle.tr(),
@@ -69,7 +69,7 @@ class _PaywallWidgetState extends ConsumerState<PaywallPage> with SingleTickerPr
       LocaleKeys.subscription_noBoringAds.tr(),
       Icons.do_not_disturb_alt,
       LocaleKeys.subscription_noBoringAdsDescription.tr(),
-      Colors.orange,
+      Colors.deepOrangeAccent,
     ),
     FeatureModel(
       LocaleKeys.subscription_supportAnIndieDev.tr(),
@@ -188,7 +188,7 @@ class _PaywallWidgetState extends ConsumerState<PaywallPage> with SingleTickerPr
                 height: 28,
                 width: 28,
                 child: CupertinoButton(
-                  color: context.iconTheme.color?.withOpacity(0.1),
+                  color: context.iconTheme.color?.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(90),
                   padding: EdgeInsets.zero,
                   onPressed: navigator.pop,
@@ -224,7 +224,7 @@ class _PaywallWidgetState extends ConsumerState<PaywallPage> with SingleTickerPr
                 TextSpan(
                   text: 'Rise  ',
                   style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        color: Colors.deepOrangeAccent,
+                        color: Colors.blueAccent,
                         fontWeight: FontWeight.bold,
                       ),
                 ),
@@ -280,7 +280,7 @@ class _PaywallWidgetState extends ConsumerState<PaywallPage> with SingleTickerPr
                   child: SizedBox(
                     width: double.infinity,
                     child: Card(
-                      color: Colors.deepOrangeAccent,
+                      color: Colors.blueAccent,
                       child: Padding(
                         padding: EdgeInsets.symmetric(vertical: 12),
                         child: purchaseLoading

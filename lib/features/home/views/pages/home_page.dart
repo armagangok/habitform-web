@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '/core/core.dart';
 import '../../../create_habit/create_habit_page.dart';
 import '../../../create_habit/provider/create_habit_provider.dart';
+import '../../../habit_category/provider/habit_category_provider.dart';
+import '../../../habit_category/widget/home_category_filter.dart';
 import '../../../purchase/page/paywall_page.dart';
 import '../../../purchase/providers/purchase_provider.dart';
 import '../../../settings/settings_page.dart';
@@ -24,6 +26,11 @@ class _HomePageState extends ConsumerState<HomePage> with SingleTickerProviderSt
   void initState() {
     controller = AnimationController(vsync: this, duration: 350.ms);
     super.initState();
+
+    // Clear selected categories when home page is initialized
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(habitCategoryProvider.notifier).setSelectedCategories({});
+    });
   }
 
   @override
@@ -54,14 +61,22 @@ class _HomePageState extends ConsumerState<HomePage> with SingleTickerProviderSt
               children: <Widget>[
                 SizedBox(height: 16),
 
+                // Category filter
+                HomeCategoryFilter(),
+
+                SizedBox(height: 16),
+
                 // Habits list
                 homeStateAsyncValue.when(
                   data: (homeState) {
-                    // Simple approach - no animations that cause flickering
-                    return HabitBuilder(
-                      habits: homeState.habits,
-                      isLoading: false,
-                    ).animate(controller: controller).fadeIn(curve: Curves.easeIn);
+                    // Using the filtered habits provider instead of direct state
+                    return Consumer(builder: (context, ref, _) {
+                      final filteredHabits = ref.watch(filteredHabitsProvider);
+                      return HabitBuilder(
+                        habits: filteredHabits,
+                        isLoading: false,
+                      ).animate(controller: controller).fadeIn(curve: Curves.easeIn);
+                    });
                   },
                   loading: () => Column(
                     children: [
@@ -153,7 +168,7 @@ class _HomePageState extends ConsumerState<HomePage> with SingleTickerProviderSt
               ),
               TextSpan(
                 text: "Rise",
-                style: TextStyle(color: Colors.deepOrangeAccent),
+                style: TextStyle(color: Colors.blueAccent),
               ),
             ]),
           ).animate().fadeIn(
@@ -239,7 +254,9 @@ class _HomePageState extends ConsumerState<HomePage> with SingleTickerProviderSt
             onPressed: () async {
               final homeState = ref.read(homeProvider).value;
               if (homeState != null) {
-                final canCreate = await ref.read(createHabitProvider.notifier).canCreateHabit(homeState.habits.length);
+                final canCreate = await ref.read(createHabitProvider.notifier).canCreateHabit(
+                      homeState.habits.length,
+                    );
                 if (canCreate) {
                   _openCreateHabitPage(context);
                 } else {

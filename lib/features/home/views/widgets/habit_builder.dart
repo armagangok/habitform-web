@@ -29,7 +29,7 @@ class HabitBuilder extends ConsumerWidget {
             CupertinoActivityIndicator(),
             SizedBox(height: 10),
             Text(
-              isLoading ? LocaleKeys.common_loading_habits.tr() : LocaleKeys.common_loading_habits.tr(),
+              LocaleKeys.common_loading_habits.tr(),
               style: context.textTheme.bodyMedium?.copyWith(
                 color: context.theme.hintColor,
               ),
@@ -39,7 +39,10 @@ class HabitBuilder extends ConsumerWidget {
       );
     }
 
-    if (habits.isEmpty) return _noDataWidget(ref);
+    if (habits.isEmpty) {
+      // No habits at all
+      return _noDataWidget(ref);
+    }
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15.0),
@@ -144,13 +147,13 @@ class HabitBuilder extends ConsumerWidget {
               ),
               SizedBox(height: 15),
               CupertinoButton.tinted(
-                color: Colors.deepOrangeAccent,
+                color: Colors.blueAccent,
                 sizeStyle: CupertinoButtonSize.medium,
                 child: Text(
                   LocaleKeys.habit_create_habit.tr(),
                   style: TextStyle(
                     fontWeight: FontWeight.w500,
-                    color: Colors.deepOrangeAccent,
+                    color: Colors.blueAccent,
                   ),
                 ),
                 onPressed: () async {

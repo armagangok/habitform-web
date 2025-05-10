@@ -44,7 +44,7 @@ class SelectTimeWidget extends ConsumerWidget {
                             remindTime?.toHHMM() ?? LocaleKeys.common_none.tr(),
                             style: context.titleMedium?.copyWith(
                               fontWeight: FontWeight.w500,
-                              color: hasSelectedDays ? Colors.deepOrangeAccent : Colors.grey,
+                              color: hasSelectedDays ? Colors.blueAccent : Colors.grey,
                             ),
                           ),
                           const SizedBox(width: 10),

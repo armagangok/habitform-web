@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:habitrise/core/widgets/custom_list_tile.dart';
 import 'package:habitrise/features/reminder/models/reminder/reminder_model.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -35,7 +36,7 @@ class _ReminderSelectionWidgetState extends ConsumerState<ReminderSelectionWidge
 
     return CustomHeader(
       text: LocaleKeys.habit_reminder.tr().toUpperCase(),
-      child: CustomButton(
+      child: CustomListTile(
         onPressed: () async {
           context.hideKeyboard();
 
@@ -85,66 +86,61 @@ class _ReminderSelectionWidgetState extends ConsumerState<ReminderSelectionWidge
               break;
           }
         },
-        child: Card(
-          child: Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        remindTime?.toHHMM() ?? LocaleKeys.common_none.tr(),
-                        style: context.titleMedium?.copyWith(
-                          fontWeight: FontWeight.w500,
-                          color: context.titleMedium?.color,
-                        ),
-                      ),
-                    ],
+        child: Row(
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    remindTime?.toHHMM() ?? LocaleKeys.common_none.tr(),
+                    style: context.titleMedium?.copyWith(
+                      fontWeight: FontWeight.w500,
+                      color: context.titleMedium?.color,
+                    ),
                   ),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    if (days != null && days.isNotEmpty) ...[
-                      SizedBox(
-                        height: 20,
-                        child: days.length == 7
-                            ? Text(
-                                LocaleKeys.habit_daily.tr(),
-                                style: context.bodyMedium?.copyWith(
-                                  color: Colors.deepOrangeAccent,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              )
-                            : Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: List.generate(
-                                  days.length,
-                                  (index) {
-                                    final Days day = days[index];
-                                    return Center(
-                                      child: Text(
-                                        days.isLast(index) ? day.shortenDayName : "${day.shortenDayName}, ",
-                                        style: context.bodySmall?.copyWith(
-                                          color: Colors.deepOrangeAccent,
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                ),
-                              ),
-                      ),
-                      const SizedBox(width: 10),
-                    ],
-                    CupertinoListTileChevron(),
-                  ],
-                ),
+                ],
+              ),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                if (days != null && days.isNotEmpty) ...[
+                  SizedBox(
+                    height: 20,
+                    child: days.length == 7
+                        ? Text(
+                            LocaleKeys.habit_daily.tr(),
+                            style: context.bodyMedium?.copyWith(
+                              color: Colors.blueAccent,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          )
+                        : Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: List.generate(
+                              days.length,
+                              (index) {
+                                final Days day = days[index];
+                                return Center(
+                                  child: Text(
+                                    days.isLast(index) ? day.shortenDayName : "${day.shortenDayName}, ",
+                                    style: context.bodySmall?.copyWith(
+                                      color: Colors.blueAccent,
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                  ),
+                  const SizedBox(width: 10),
+                ],
+                CupertinoListTileChevron(),
               ],
             ),
-          ),
+          ],
         ),
       ),
     );

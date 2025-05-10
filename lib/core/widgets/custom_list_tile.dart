@@ -3,7 +3,8 @@ import 'package:habitrise/core/core.dart';
 class CustomListTile extends StatefulWidget {
   const CustomListTile({
     super.key,
-    required this.title,
+    this.title,
+    this.child,
     this.description,
     this.secondaryDescription,
     this.leading,
@@ -12,7 +13,8 @@ class CustomListTile extends StatefulWidget {
     this.onPressed,
   });
 
-  final String title;
+  final String? title;
+  final Widget? child;
   final String? description;
   final Widget? leading;
   final String? secondaryDescription;
@@ -33,7 +35,7 @@ class _CustomListTileState extends State<CustomListTile> {
         child: SizedBox(
           width: double.infinity,
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
             child: Row(
               children: [
                 if (widget.leading != null) ...[
@@ -44,14 +46,15 @@ class _CustomListTileState extends State<CustomListTile> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        widget.title,
-                        textAlign: TextAlign.left,
-                        style: context.titleMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: context.titleMedium?.color?.withValues(alpha: 0.9),
-                        ),
-                      ),
+                      widget.child ??
+                          Text(
+                            widget.title!,
+                            textAlign: TextAlign.left,
+                            style: context.titleMedium?.copyWith(
+                              fontWeight: FontWeight.bold,
+                              color: context.titleMedium?.color?.withValues(alpha: 0.9),
+                            ),
+                          ),
                       if (widget.secondaryDescription != null)
                         Text(
                           widget.secondaryDescription!,

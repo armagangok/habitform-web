@@ -1,3 +1,4 @@
+import 'package:habitrise/features/habit_category/model/habit_category_model.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 import '/models/models.dart';
@@ -37,6 +38,7 @@ class HiveHelper {
   void _registerAdapters() {
     try {
       Hive.registerAdapter(HabitStatusAdapter());
+      Hive.registerAdapter(HabitCategoryAdapter());
       Hive.registerAdapter(HabitAdapter());
       Hive.registerAdapter(ReminderModelAdapter());
       Hive.registerAdapter(DaysAdapter());

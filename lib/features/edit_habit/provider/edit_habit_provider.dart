@@ -1,9 +1,10 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '/core/core.dart';
+import '../../habit_color/provider/habit_color_provider.dart';
+import '../../habit_icon/provider/habit_icon_provider.dart';
 import '/models/habit/habit_model.dart';
-import '../../../core/core.dart';
-import '../../../core/widgets/habit_color_sheet/provider/habit_color_provider.dart';
-import '../../../core/widgets/habit_icon/provider/habit_icon_provider.dart';
+import '../../habit_category/provider/habit_category_provider.dart';
 import '../../habit_detail/providers/habit_detail_provider.dart';
 import '../../home/provider/home_provider.dart';
 import '../../reminder/provider/reminder_provider.dart';
@@ -28,6 +29,8 @@ class EditHabitNotifier extends AutoDisposeNotifier<Habit?> {
     ref.watch(iconProvider.notifier).pickIcon(habit.emoji);
     ref.watch(colorProvider.notifier).pickColor(Color(habit.colorCode));
 
+    ref.watch(habitCategoryProvider.notifier).setSelectedCategories(habit.categoryIds.toSet());
+
     ref.watch(reminderProvider.notifier).initializeReminder(reminder);
     state = habit;
   }
@@ -46,13 +49,15 @@ class EditHabitNotifier extends AutoDisposeNotifier<Habit?> {
     final habitColorState = ref.watch(colorProvider);
     final reminderModel = reminderState.reminder;
 
+    final categoryIds = ref.watch(habitCategoryProvider).value?.categories.where((category) => ref.watch(habitCategoryProvider).value?.selectedCategoryIds.contains(category.id) ?? false).map((e) => e.id).toList() ?? [];
+
     // Mevcut alışkanlığın hatırlatıcısını al
     final currentReminderModel = state?.reminderModel;
 
     // Store references to notifiers before making any state changes
-    final habitDetailNotifier = ref.read(habitDetailProvider.notifier);
-    final homeNotifier = ref.read(homeProvider.notifier);
-    final reminderNotifier = ref.read(reminderProvider.notifier);
+    final habitDetailNotifier = ref.watch(habitDetailProvider.notifier);
+    final homeNotifier = ref.watch(homeProvider.notifier);
+    final reminderNotifier = ref.watch(reminderProvider.notifier);
 
     final updatedHabit = state?.copyWith(
       habitName: habitName,
@@ -60,6 +65,7 @@ class EditHabitNotifier extends AutoDisposeNotifier<Habit?> {
       emoji: habitIconState,
       colorCode: habitColorState?.value,
       reminderModel: reminderModel,
+      categoryIds: categoryIds,
     );
 
     if (updatedHabit != null) {

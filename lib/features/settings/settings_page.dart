@@ -99,7 +99,7 @@ class SettingsPage extends ConsumerWidget {
                             CupertinoListTile(
                               leading: const SettingLeadingWidget(
                                 iconData: CupertinoIcons.doc_person_fill,
-                                cardColor: Colors.deepOrangeAccent,
+                                cardColor: Colors.blueAccent,
                               ),
                               onTap: () => ref.read(purchaseProvider.notifier).copyCustomerId(),
                               title: Text("Rc ID"),
@@ -108,7 +108,7 @@ class SettingsPage extends ConsumerWidget {
                                 minSize: 0,
                                 child: Icon(
                                   CupertinoIcons.doc_on_clipboard_fill,
-                                  color: Colors.deepOrangeAccent,
+                                  color: Colors.blueAccent,
                                 ),
                                 onPressed: () => ref.read(purchaseProvider.notifier).copyCustomerId(),
                               ),

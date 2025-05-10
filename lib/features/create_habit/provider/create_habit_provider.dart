@@ -1,8 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/core.dart';
-import '../../../core/widgets/habit_color_sheet/provider/habit_color_provider.dart';
-import '../../../core/widgets/habit_icon/provider/habit_icon_provider.dart';
+import '../../habit_color/provider/habit_color_provider.dart';
+import '../../habit_icon/provider/habit_icon_provider.dart';
 import '../../../models/habit/habit_model.dart';
 import '../../home/provider/home_provider.dart';
 import '../../purchase/providers/purchase_provider.dart';
@@ -30,6 +30,11 @@ class CreateHabitNotifier extends AutoDisposeAsyncNotifier<CreateHabitState> {
     return currentHabitCount <= 1;
   }
 
+  // Set category IDs for the habit
+  void setCategoryIds(List<String> categoryIds) {
+    state = AsyncValue.data(state.value!.copyWith(categoryIds: categoryIds));
+  }
+
   Future<void> createHabit() async {
     final habitName = state.value?.habitNameController.text;
     final habitDescription = state.value?.habitDescriptionController.text;
@@ -41,6 +46,7 @@ class CreateHabitNotifier extends AutoDisposeAsyncNotifier<CreateHabitState> {
     final emoji = ref.watch(iconProvider);
     final color = ref.watch(colorProvider);
     final reminder = ref.watch(reminderProvider).reminder;
+    final categoryIds = state.value?.categoryIds ?? [];
 
     state = const AsyncValue.loading();
 
@@ -50,8 +56,9 @@ class CreateHabitNotifier extends AutoDisposeAsyncNotifier<CreateHabitState> {
         habitName: habitName,
         habitDescription: habitDescription,
         emoji: emoji,
-        colorCode: color?.value ?? Colors.deepOrangeAccent.value,
+        colorCode: color?.value ?? Colors.blueAccent.value,
         reminderModel: reminder,
+        categoryIds: categoryIds,
       );
 
       await ref.read(homeProvider.notifier).createHabit(habit);

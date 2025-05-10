@@ -15,7 +15,7 @@ class OnboardingButton extends StatelessWidget {
     return CustomButton(
       onPressed: onPressed,
       child: Card(
-        color: Colors.deepOrangeAccent,
+        color: Colors.blueAccent,
         child: Padding(
           padding: const EdgeInsets.all(12.0),
           child: Center(

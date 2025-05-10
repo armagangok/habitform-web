@@ -166,7 +166,7 @@ class CategoryWidgetState extends State<CategoryWidget> {
               },
               child: Card(
                 elevation: .1,
-                color: selectedIndex == index ? widget.customColor ?? context.primary.withValues(alpha: .9) : Colors.transparent,
+                color: selectedIndex == index ? widget.customColor ?? context.cupertinoTheme.primaryColor.withValues(alpha: .9) : Colors.transparent,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8),
                   side: BorderSide(
@@ -187,7 +187,13 @@ class CategoryWidgetState extends State<CategoryWidget> {
                         style: TextStyle(
                           fontSize: 13,
                           fontWeight: FontWeight.w600,
-                          color: selectedIndex == index ? (widget.customColor ?? context.primary.withValues(alpha: .9)).colorRegardingToBrightness : context.primary.withValues(alpha: .75),
+                          color: selectedIndex == index
+                              ? (widget.customColor ??
+                                      context.cupertinoTheme.primaryColor.withValues(
+                                        alpha: .9,
+                                      ))
+                                  .colorRegardingToBrightness
+                              : context.primary.withValues(alpha: .75),
                         ),
                         textAlign: TextAlign.center,
                         maxLines: 1,

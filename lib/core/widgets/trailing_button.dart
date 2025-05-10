@@ -25,7 +25,7 @@ class TrailingActionButton extends StatelessWidget {
             title ?? "",
             style: context.titleMedium?.copyWith(
               fontWeight: FontWeight.w500,
-              color: Colors.deepOrangeAccent,
+              color: Colors.blueAccent,
             ),
           ),
     );

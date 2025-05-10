@@ -6,4 +6,5 @@ final class HiveBoxes {
   static const String userDefaultsBox = 'userDefaultsBoxHabitRise';
   static const String habitRiseDefaults = 'habitRiseDefaultsBox';
   static const String archivedHabitBox = 'archivedHabitBoxHabitRise';
+  static const String habitCategoryBox = 'habitCategoryBox';
 }

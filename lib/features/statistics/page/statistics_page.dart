@@ -80,7 +80,7 @@ class StatisticsPage extends ConsumerWidget {
                                         SizedBox(
                                           width: double.infinity,
                                           child: CupertinoButton(
-                                            color: Colors.deepOrangeAccent,
+                                            color: Colors.blueAccent,
                                             onPressed: () {
                                               navigator.pop();
                                             },
@@ -137,7 +137,7 @@ class StatisticsPage extends ConsumerWidget {
                           child: Center(
                             child: CustomBlurWidget(
                               child: Card(
-                                color: Colors.deepOrangeAccent.withValues(alpha: .25),
+                                color: Colors.blueAccent.withValues(alpha: .25),
                                 clipBehavior: Clip.antiAlias,
                                 child: Padding(
                                   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -146,7 +146,7 @@ class StatisticsPage extends ConsumerWidget {
                                       Expanded(
                                         child: Shimmer.fromColors(
                                           baseColor: context.titleSmall?.color ?? Colors.deepOrange,
-                                          highlightColor: context.titleSmall?.color?.withValues(alpha: 0.5) ?? Colors.deepOrangeAccent,
+                                          highlightColor: context.titleSmall?.color?.withValues(alpha: 0.5) ?? Colors.blueAccent,
                                           period: const Duration(seconds: 2),
                                           direction: ShimmerDirection.ltr,
                                           child: Text(

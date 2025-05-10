@@ -1,10 +1,35 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '/core/core.dart';
+import '/features/habit_category/provider/habit_category_provider.dart';
 import '/models/completion_entry/completion_entry.dart';
+import '/models/habit/habit_extension.dart';
 import '/models/habit/habit_model.dart';
 import '/services/habit_service/habit_service_interface.dart';
 import 'home_state.dart';
+
+/// Provider for filtered habits based on selected categories
+final filteredHabitsProvider = Provider<List<Habit>>((ref) {
+  final homeState = ref.watch(homeProvider);
+  final selectedCategories = ref.watch(selectedCategoriesProvider);
+
+  // Return all habits if no categories are selected
+  if (selectedCategories.isEmpty) {
+    return homeState.value?.habits ?? [];
+  }
+
+  // Filter habits based on selected categories
+  final filteredHabits = homeState.value?.habits.where((habit) {
+        // If habit has no categories, don't show it when categories are selected
+        if (habit.categoryIds.isEmpty) return false;
+
+        // Check if the habit has any of the selected categories
+        return habit.categoryIds.any((categoryId) => selectedCategories.contains(categoryId));
+      }).toList() ??
+      [];
+
+  return filteredHabits;
+});
 
 /// Provider for managing habits in the home screen
 /// Returns an async state containing habits and error info
@@ -20,36 +45,11 @@ class HomeNotifier extends AsyncNotifier<HomeState> {
     return await fetchHabits();
   }
 
-  /// Fetches all active habits from the service layer
+  /// Fetches all active habits from the service layer and sort
   Future<HomeState> fetchHabits() async {
-    final habits = await habitService.getHabits();
+    final List<Habit> habits = await habitService.getHabits();
 
-    // Sort habits by reminder time
-    final sortedHabits = habits.toList()
-      ..sort((a, b) {
-        // Habits without reminder time go at the end
-        if (a.reminderModel?.reminderTime == null && b.reminderModel?.reminderTime == null) {
-          return 0; // Both have no reminder time, keep original order
-        }
-        if (a.reminderModel?.reminderTime == null) {
-          return 1; // a goes after b
-        }
-        if (b.reminderModel?.reminderTime == null) {
-          return -1; // a goes before b
-        }
-
-        // Compare only the time part of the day (ignoring date)
-        final aTime = a.reminderModel!.reminderTime!;
-        final bTime = b.reminderModel!.reminderTime!;
-
-        // Create DateTime objects with just the hour and minute for comparison
-        final aTimeOnly = DateTime(0, 0, 0, aTime.hour, aTime.minute);
-        final bTimeOnly = DateTime(0, 0, 0, bTime.hour, bTime.minute);
-
-        return aTimeOnly.compareTo(bTimeOnly);
-      });
-
-    return HomeState(habits: sortedHabits);
+    return HomeState(habits: habits.sortHabitsByTime);
   }
 
   /// Archives a habit by moving it to the archived habits storage
