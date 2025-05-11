@@ -1,9 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/core.dart';
+import '../../../models/habit/habit_model.dart';
 import '../../habit_color/provider/habit_color_provider.dart';
 import '../../habit_icon/provider/habit_icon_provider.dart';
-import '../../../models/habit/habit_model.dart';
 import '../../home/provider/home_provider.dart';
 import '../../purchase/providers/purchase_provider.dart';
 import '../../reminder/provider/reminder_provider.dart';
@@ -32,7 +32,11 @@ class CreateHabitNotifier extends AutoDisposeAsyncNotifier<CreateHabitState> {
 
   // Set category IDs for the habit
   void setCategoryIds(List<String> categoryIds) {
-    state = AsyncValue.data(state.value!.copyWith(categoryIds: categoryIds));
+    if (state.value != null) {
+      state = AsyncValue.data(state.value!.copyWith(categoryIds: categoryIds));
+    } else {
+      state = AsyncValue.data(CreateHabitState(categoryIds: categoryIds));
+    }
   }
 
   Future<void> createHabit() async {

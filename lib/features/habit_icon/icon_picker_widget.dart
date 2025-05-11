@@ -45,13 +45,11 @@ class IconPickerState extends ConsumerState<IconPicker> with SingleTickerProvide
 
   void _scrollSelectedIconIntoView(int? selectedIconIndex) {
     if (!mounted || selectedIconIndex == null || !_iconKeys.containsKey(selectedIconIndex)) {
-      debugPrint('Cannot scroll into view, missing key or not mounted');
       return;
     }
 
     final context = _iconKeys[selectedIconIndex]?.currentContext;
     if (context == null || !_gridScrollController.hasClients) {
-      debugPrint('Cannot scroll into view, missing context or controller not attached');
       return;
     }
 
@@ -76,8 +74,6 @@ class IconPickerState extends ConsumerState<IconPicker> with SingleTickerProvide
         // İkonun GridView'ın görünür alanında olup olmadığını kontrol et
         final isFullyVisible = relativePosition >= 0 && relativePosition + size.width <= gridWidth;
 
-        debugPrint('Icon visibility status: $isFullyVisible, position: $relativePosition');
-
         // İkon tamamen görünür değilse, kaydır
         if (!isFullyVisible) {
           // İkonun GridView içindeki hedef pozisyonunu hesapla (ortada olacak şekilde)
@@ -86,13 +82,11 @@ class IconPickerState extends ConsumerState<IconPicker> with SingleTickerProvide
           // Hedef pozisyonu sınırla (minimum 0, maksimum scrollExtent)
           final clampedPosition = targetPosition.clamp(0.0, _gridScrollController.position.maxScrollExtent);
 
-          debugPrint('Scrolling to position: $clampedPosition from ${_gridScrollController.offset}');
-
           // Ani bir kaydırma yapalım
           _gridScrollController.jumpTo(clampedPosition);
         }
       } catch (e) {
-        debugPrint('Error scrolling to icon view: $e');
+        LogHelper.shared.debugPrint(e.toString());
       }
     });
   }
@@ -188,7 +182,6 @@ class IconPickerState extends ConsumerState<IconPicker> with SingleTickerProvide
                       if (state.selectedIconIndex == index) return;
 
                       HapticFeedback.selectionClick();
-                      debugPrint('Selecting icon: $iconData at index: $index');
 
                       // Update in provider
                       notifier.selectIcon(iconData, index);

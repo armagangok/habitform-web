@@ -1,20 +1,20 @@
 import '/core/core.dart';
 
-class ColorPickerSheet extends StatefulWidget {
+class ColorPickerWidget extends StatefulWidget {
   final Function(Color) onColorSelected;
   final Color? selectedColor;
 
-  const ColorPickerSheet({
+  const ColorPickerWidget({
     super.key,
     required this.onColorSelected,
     this.selectedColor,
   });
 
   @override
-  ColorPickerSheetState createState() => ColorPickerSheetState();
+  ColorPickerWidgetState createState() => ColorPickerWidgetState();
 }
 
-class ColorPickerSheetState extends State<ColorPickerSheet> with SingleTickerProviderStateMixin {
+class ColorPickerWidgetState extends State<ColorPickerWidget> with SingleTickerProviderStateMixin {
   // Define color categories with colors in hex format
   final Map<String, List<Color>> colorCategories = {
     LocaleKeys.colors_blue.tr(): [
@@ -281,54 +281,57 @@ class ColorPickerSheetState extends State<ColorPickerSheet> with SingleTickerPro
     // Grid için sütun sayısı
     final crossAxisCount = isTablet ? 10 : 5;
 
-    return ListView(
-      shrinkWrap: true,
-      physics: ClampingScrollPhysics(),
-      padding: EdgeInsets.zero,
-      children: [
-        CategoryWidget(
-          customColor: customColorForPicker,
-          categories: categoryNames,
-          initialSelectedIndex: selectedCategoryIndex,
-          onCategorySelected: (val) {
-            controller.forward(from: 0);
-            setState(() {
-              selectedCategoryIndex = val;
-              // Preserve selected color index if possible
-              if (selectedColorIndex != null && selectedColorIndex! < colorCategories[categoryNames[val]]!.length) {
-                // Keep the same shade index when changing categories
-                customColorForPicker = colorCategories[categoryNames[val]]![selectedColorIndex!];
-              } else {
-                // Default to a middle shade (index 5) if no color was selected
-                selectedColorIndex = null;
-                customColorForPicker = colorCategories[categoryNames[val]]![5];
-              }
-            });
-          },
-        ),
-        SizedBox(height: 10),
-        GridView.builder(
-          physics: ClampingScrollPhysics(),
-          shrinkWrap: true,
-          padding: EdgeInsets.zero,
-          itemCount: colorCategories[categoryNames[selectedCategoryIndex]]!.length,
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: crossAxisCount,
-            crossAxisSpacing: 10,
-            mainAxisSpacing: 10,
-            childAspectRatio: 1, // Kare şeklinde itemler
+    return CustomHeader(
+      text: LocaleKeys.colors_color.tr().toUpperCase(),
+      child: ListView(
+        shrinkWrap: true,
+        physics: ClampingScrollPhysics(),
+        padding: EdgeInsets.zero,
+        children: [
+          CategoryWidget(
+            customColor: customColorForPicker,
+            categories: categoryNames,
+            initialSelectedIndex: selectedCategoryIndex,
+            onCategorySelected: (val) {
+              controller.forward(from: 0);
+              setState(() {
+                selectedCategoryIndex = val;
+                // Preserve selected color index if possible
+                if (selectedColorIndex != null && selectedColorIndex! < colorCategories[categoryNames[val]]!.length) {
+                  // Keep the same shade index when changing categories
+                  customColorForPicker = colorCategories[categoryNames[val]]![selectedColorIndex!];
+                } else {
+                  // Default to a middle shade (index 5) if no color was selected
+                  selectedColorIndex = null;
+                  customColorForPicker = colorCategories[categoryNames[val]]![5];
+                }
+              });
+            },
           ),
-          itemBuilder: (context, index) {
-            Color color = colorCategories[categoryNames[selectedCategoryIndex]]![index];
-            return SizedBox(
-              width: itemSize,
-              height: itemSize,
-              child: _buildColorItem(color, index, itemSize),
-            );
-          },
-        ).animate(controller: controller).fadeIn(duration: 500.ms),
-        SizedBox(height: 20),
-      ],
+          SizedBox(height: 10),
+          GridView.builder(
+            physics: ClampingScrollPhysics(),
+            shrinkWrap: true,
+            padding: EdgeInsets.zero,
+            itemCount: colorCategories[categoryNames[selectedCategoryIndex]]!.length,
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: crossAxisCount,
+              crossAxisSpacing: 10,
+              mainAxisSpacing: 10,
+              childAspectRatio: 1, // Kare şeklinde itemler
+            ),
+            itemBuilder: (context, index) {
+              Color color = colorCategories[categoryNames[selectedCategoryIndex]]![index];
+              return SizedBox(
+                width: itemSize,
+                height: itemSize,
+                child: _buildColorItem(color, index, itemSize),
+              );
+            },
+          ).animate(controller: controller).fadeIn(duration: 500.ms),
+          SizedBox(height: 20),
+        ],
+      ),
     );
   }
 

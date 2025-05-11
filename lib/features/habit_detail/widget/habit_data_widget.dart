@@ -135,16 +135,27 @@ class _HabitDataWidgetState extends ConsumerState<HabitDataWidget> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        CupertinoButton(
+        CustomButton(
           padding: EdgeInsets.zero,
-          minSize: 0,
           onPressed: () {
             _pageController.previousPage(
               duration: Duration(milliseconds: 300),
               curve: Curves.easeIn,
             );
           },
-          child: Icon(CupertinoIcons.chevron_left),
+          child: Card(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+            color: Color(widget.habit.colorCode),
+            child: Padding(
+              padding: const EdgeInsets.all(4.0),
+              child: Icon(
+                CupertinoIcons.chevron_left,
+                color: Color(widget.habit.colorCode).colorRegardingToBrightness,
+              ),
+            ),
+          ),
         ),
         Text(
           selectedYear.toString(),
@@ -154,9 +165,8 @@ class _HabitDataWidgetState extends ConsumerState<HabitDataWidget> {
             color: context.theme.primaryColor,
           ),
         ),
-        CupertinoButton(
+        CustomButton(
           padding: EdgeInsets.zero,
-          minSize: 0,
           onPressed: currentPage >= maxPage
               ? null
               : () {
@@ -165,9 +175,18 @@ class _HabitDataWidgetState extends ConsumerState<HabitDataWidget> {
                     curve: Curves.easeIn,
                   );
                 },
-          child: Icon(
-            CupertinoIcons.chevron_right,
-            color: currentPage >= maxPage ? context.theme.disabledColor : null,
+          child: Card(
+            color: Color(widget.habit.colorCode),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(4.0),
+              child: Icon(
+                CupertinoIcons.chevron_right,
+                color: Color(widget.habit.colorCode).colorRegardingToBrightness,
+              ),
+            ),
           ),
         ),
       ],

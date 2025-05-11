@@ -14,6 +14,11 @@ class HomeCategoryFilter extends ConsumerWidget {
     final categoryState = ref.watch(habitCategoryProvider);
     final habitsAsync = ref.watch(homeProvider);
 
+    // Ensure multiple selection is disabled
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(habitCategoryProvider.notifier).setAllowMultiple(false);
+    });
+
     // Get only categories that are used in habits
     final usedCategoryIds = <String>{};
     if (habitsAsync.hasValue) {

@@ -4,6 +4,7 @@ import '/core/core.dart';
 import '/features/habit_category/model/habit_category_model.dart';
 import '/features/habit_category/provider/habit_category_provider.dart';
 import '/features/habit_category/util/icon_util.dart';
+import '../../create_habit/provider/create_habit_provider.dart';
 import '../provider/habit_category_button_provider.dart';
 
 class HabitCategoryPage extends ConsumerStatefulWidget {
@@ -48,7 +49,15 @@ class _HabitCategoryPageState extends ConsumerState<HabitCategoryPage> {
               child: Text(LocaleKeys.common_done.tr()),
               onPressed: () {
                 categoryState.whenData((state) {
-                  ref.read(habitCategoryProvider.notifier).setSelectedCategories(state.selectedCategoryIds);
+                  final selectedIds = state.selectedCategoryIds;
+                  // Store in habitCategoryProvider
+                  ref.read(habitCategoryProvider.notifier).setSelectedCategories(selectedIds);
+
+                  // Update categoryButtonProvider for UI
+                  ref.read(categoryButtonProvider.notifier).setSelectedCategories(selectedIds.toList());
+
+                  // Update createHabitProvider state with selected categories
+                  ref.read(createHabitProvider.notifier).setCategoryIds(selectedIds.toList());
                 });
                 navigator.pop();
               },

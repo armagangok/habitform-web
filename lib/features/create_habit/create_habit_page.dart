@@ -1,11 +1,11 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '/core/core.dart';
+import '../habit_category/widget/habit_category_button.dart';
+import '../habit_color/color_picker_widget.dart';
+import '../habit_color/provider/habit_color_provider.dart';
 import '../habit_icon/icon_picker_button.dart';
 import '../habit_icon/provider/habit_icon_provider.dart';
-import '../habit_category/widget/habit_category_button.dart';
-import '../habit_color/color_picker_sheet.dart';
-import '../habit_color/provider/habit_color_provider.dart';
 import '../reminder/provider/reminder_provider.dart';
 import '../reminder/widget/reminder_selection_widget.dart';
 import 'provider/create_habit_provider.dart';
@@ -33,6 +33,7 @@ class _CreateHabitPageState extends ConsumerState<CreateHabitPage> {
     final selectedIcon = ref.watch(iconProvider);
 
     return Material(
+      color: Colors.transparent,
       child: GestureDetector(
         onTap: context.hideKeyboard,
         child: CupertinoPageScaffold(
@@ -66,7 +67,6 @@ class _CreateHabitPageState extends ConsumerState<CreateHabitPage> {
                           maxLines: 1,
                         ),
                       ),
-                      SizedBox(height: KSpacing.betweenListItems / 3),
                       CustomHeader(
                         text: LocaleKeys.habit_habit_description.tr().toUpperCase(),
                         child: _buildHabitTextField(
@@ -74,18 +74,18 @@ class _CreateHabitPageState extends ConsumerState<CreateHabitPage> {
                         ),
                       ),
                       SizedBox(height: KSpacing.betweenListItems),
-                      ReminderSelectionWidget(),
-                      SizedBox(height: KSpacing.betweenListItems),
-                      CustomHeader(
-                        text: LocaleKeys.colors_color.tr().toUpperCase(),
-                        child: ColorPickerSheet(
-                          onColorSelected: (color) {
-                            ref.watch(colorProvider.notifier).pickColor(color);
-                          },
-                        ),
+                      Column(
+                        children: [
+                          ReminderSelectionWidget(),
+                          CategoryPickerButton(),
+                          SizedBox(height: KSpacing.betweenListItems),
+                          ColorPickerWidget(
+                            onColorSelected: (color) {
+                              ref.watch(colorProvider.notifier).pickColor(color);
+                            },
+                          ),
+                        ],
                       ),
-                      SizedBox(height: KSpacing.betweenListItems),
-                      CategoryPickerButton(),
                       SizedBox(height: 50)
                     ],
                   ),
