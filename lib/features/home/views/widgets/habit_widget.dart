@@ -18,12 +18,12 @@ class HabitWidget extends ConsumerStatefulWidget {
 
 class _HabitWidgetState extends ConsumerState<HabitWidget> {
   void _openHabitDetail() {
-    ref.watch(habitDetailProvider.notifier).updateHabit(widget.habit);
+    ref.watch(habitDetailProvider.notifier).initHabit(widget.habit);
 
     CupertinoScaffold.showCupertinoModalBottomSheet(
       enableDrag: false,
       context: context,
-      builder: (contextFromSheet) => HabitDetailPage(habit: widget.habit),
+      builder: (contextFromSheet) => HabitDetailPage(),
     );
   }
 

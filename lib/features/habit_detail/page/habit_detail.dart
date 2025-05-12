@@ -13,30 +13,13 @@ import '../widget/habit_calendar_widget.dart';
 import '../widget/habit_data_widget.dart';
 import '../widget/navbar_button.dart';
 
-class HabitDetailPage extends ConsumerStatefulWidget {
+class HabitDetailPage extends ConsumerWidget {
   const HabitDetailPage({
     super.key,
-    required this.habit,
   });
 
-  final Habit habit;
-
   @override
-  ConsumerState<HabitDetailPage> createState() => _HabitDetailPageState();
-}
-
-class _HabitDetailPageState extends ConsumerState<HabitDetailPage> {
-  @override
-  void initState() {
-    super.initState();
-    // Set initial habit
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read(habitDetailProvider.notifier).setHabit(widget.habit);
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final currentHabit = ref.watch(habitDetailProvider);
 
     if (currentHabit == null) {
@@ -213,17 +196,24 @@ class _HabitDetailPageState extends ConsumerState<HabitDetailPage> {
             onPressed: () => Navigator.pop(context),
             child: Text(LocaleKeys.common_cancel.tr()),
           ),
-          CupertinoDialogAction(
-            isDestructiveAction: false,
-            onPressed: () async {
-              Navigator.pop(context);
-              await ref.read(homeProvider.notifier).archiveHabit(habit);
-              ReminderService.cancelReminderNotification(habit.reminderModel?.id);
+          Consumer(
+            builder: (context, ref, child) {
+              return CupertinoDialogAction(
+                isDestructiveAction: false,
+                onPressed: () async {
+                  Navigator.pop(context);
+                  await ref.read(homeProvider.notifier).archiveHabit(habit);
+                  ReminderService.cancelReminderNotification(habit.reminderModel?.id);
 
-              navigator.pop();
+                  navigator.pop();
+                },
+                child: Text(LocaleKeys.habit_detail_archive_title.tr()),
+              );
             },
-            child: Text(LocaleKeys.habit_detail_archive_title.tr()),
-          ),
+          )
+          //       WidgetsBinding.instance.addPostFrameCallback((_) {
+          //   ref.read(habitDetailProvider.notifier).initHabit(widget.habit);
+          // });
         ],
       ),
     );

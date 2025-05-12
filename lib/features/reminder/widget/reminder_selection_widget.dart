@@ -1,18 +1,17 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:habitrise/core/widgets/custom_list_tile.dart';
-import 'package:habitrise/features/reminder/models/reminder/reminder_model.dart';
+import 'package:habitrise/features/edit_habit/provider/edit_habit_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import '/core/core.dart';
-import '../../../core/helpers/notifications/notification_helper.dart';
+import '/core/helpers/notifications/notification_helper.dart';
+import '/core/widgets/custom_list_tile.dart';
 import '../extension/easy_day.dart';
 import '../models/days/days_enum.dart';
 import '../provider/reminder_provider.dart';
 import 'reminder_page_widget.dart';
 
 class ReminderSelectionWidget extends ConsumerStatefulWidget {
-  final ReminderModel? reminderModel;
-  const ReminderSelectionWidget({super.key, this.reminderModel});
+  const ReminderSelectionWidget({super.key});
 
   @override
   ConsumerState<ReminderSelectionWidget> createState() => _ReminderSelectionWidgetState();
@@ -22,7 +21,8 @@ class _ReminderSelectionWidgetState extends ConsumerState<ReminderSelectionWidge
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.watch(reminderProvider.notifier).initializeReminder(widget.reminderModel);
+      final initialReminder = ref.watch(editHabitProvider)?.reminderModel;
+      ref.watch(reminderProvider.notifier).initializeReminder(initialReminder);
     });
     super.initState();
   }
