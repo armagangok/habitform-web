@@ -20,9 +20,6 @@ final filteredHabitsProvider = Provider<List<Habit>>((ref) {
 
   // Filter habits based on selected categories
   final filteredHabits = homeState.value?.habits.where((habit) {
-        // If habit has no categories, don't show it when categories are selected
-        if (habit.categoryIds.isEmpty) return false;
-
         // Check if the habit has any of the selected categories
         return habit.categoryIds.any((categoryId) => selectedCategories.contains(categoryId));
       }).toList() ??

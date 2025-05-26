@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '/core/core.dart';
 import '../../../create_habit/create_habit_page.dart';
 import '../../../create_habit/provider/create_habit_provider.dart';
-import '../../../habit_category/provider/habit_category_provider.dart';
 import '../../../habit_category/widget/home_category_filter.dart';
 import '../../../purchase/page/paywall_page.dart';
 import '../../../purchase/providers/purchase_provider.dart';
@@ -12,50 +11,19 @@ import '../../../statistics/page/statistics_page.dart';
 import '../../provider/home_provider.dart';
 import '../widgets/habit_builder.dart';
 
-class HomePage extends ConsumerStatefulWidget {
+class HomePage extends ConsumerWidget {
   const HomePage({super.key});
 
   @override
-  ConsumerState<HomePage> createState() => _HomePageState();
-}
-
-class _HomePageState extends ConsumerState<HomePage> with SingleTickerProviderStateMixin {
-  late AnimationController controller;
-
-  @override
-  void initState() {
-    controller = AnimationController(vsync: this, duration: 350.ms);
-    super.initState();
-
-    // Clear selected categories when home page is initialized
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read(habitCategoryProvider.notifier).setSelectedCategories({});
-    });
-  }
-
-  @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final homeStateAsyncValue = ref.watch(homeProvider);
-
-    ref.listen(homeProvider, (previous, next) {
-      if (next.hasError) {
-        // Show error message using AppFlushbar
-        AppFlushbar.shared.errorFlushbar(next.error.toString().contains('Exception:') ? next.error.toString().split('Exception:')[1].trim() : LocaleKeys.errors_something_went_wrong.tr());
-      }
-    });
 
     return CupertinoScaffold(
       body: Stack(
         children: [
           // Main content
           CupertinoPageScaffold(
-            navigationBar: _homePageNavigationBar(),
+            navigationBar: _homePageNavigationBar(ref, context),
             child: ListView(
               physics: AlwaysScrollableScrollPhysics(),
               children: <Widget>[
@@ -75,31 +43,11 @@ class _HomePageState extends ConsumerState<HomePage> with SingleTickerProviderSt
                       return HabitBuilder(
                         habits: filteredHabits,
                         isLoading: false,
-                      ).animate(controller: controller).fadeIn(curve: Curves.easeIn);
+                      );
                     });
                   },
-                  loading: () => Column(
-                    children: [
-                      CupertinoActivityIndicator(),
-                      SizedBox(height: 10),
-                      Text(
-                        LocaleKeys.common_loading_habits.tr(),
-                        style: context.bodyMedium,
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
-                  ),
-                  error: (error, stack) {
-                    LogHelper.shared.debugPrint('Error loading habits: $error');
-                    LogHelper.shared.debugPrint('Stack trace: $stack');
-                    return Center(
-                      child: Text(
-                        LocaleKeys.errors_something_went_wrong.tr(),
-                        style: context.bodyMedium,
-                        textAlign: TextAlign.center,
-                      ),
-                    );
-                  },
+                  loading: () => _loadingWidget(context),
+                  error: (error, stack) => _errorWidget(context),
                 ),
               ],
             ),
@@ -109,7 +57,31 @@ class _HomePageState extends ConsumerState<HomePage> with SingleTickerProviderSt
     );
   }
 
-  CupertinoNavigationBar _homePageNavigationBar() {
+  Widget _errorWidget(BuildContext context) {
+    return Center(
+      child: Text(
+        LocaleKeys.errors_something_went_wrong.tr(),
+        style: context.bodyMedium,
+        textAlign: TextAlign.center,
+      ),
+    );
+  }
+
+  Widget _loadingWidget(BuildContext context) {
+    return Column(
+      children: [
+        CupertinoActivityIndicator(),
+        SizedBox(height: 10),
+        Text(
+          LocaleKeys.common_loading_habits.tr(),
+          style: context.bodyMedium,
+          textAlign: TextAlign.center,
+        ),
+      ],
+    );
+  }
+
+  CupertinoNavigationBar _homePageNavigationBar(WidgetRef ref, BuildContext context) {
     final paywallState = ref.watch(purchaseProvider);
     final isSubActive = paywallState.value?.isSubscriptionActive ?? false;
     final isPurchasing = paywallState.value?.isPurchasing ?? false;

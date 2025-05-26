@@ -32,65 +32,68 @@ class _CreateHabitPageState extends ConsumerState<CreateHabitPage> {
     final addHabitState = ref.watch(createHabitProvider);
     final selectedIcon = ref.watch(iconProvider);
 
-    return Material(
-      color: Colors.transparent,
-      child: GestureDetector(
-        onTap: context.hideKeyboard,
-        child: CupertinoPageScaffold(
-          navigationBar: SheetHeader(
-            title: LocaleKeys.habit_create_habit.tr(),
-            closeButtonPosition: CloseButtonPosition.left,
-            trailing: TrailingActionButton(
-              title: LocaleKeys.common_save.tr(),
-              onPressed: () {
-                ref.watch(createHabitProvider.notifier).createHabit();
-              },
+    return CupertinoPopupSurface(
+      child: Material(
+        color: Colors.transparent,
+        child: GestureDetector(
+          onTap: context.hideKeyboard,
+          child: CupertinoPageScaffold(
+            backgroundColor: Colors.transparent,
+            navigationBar: SheetHeader(
+              title: LocaleKeys.habit_create_habit.tr(),
+              closeButtonPosition: CloseButtonPosition.left,
+              trailing: TrailingActionButton(
+                title: LocaleKeys.common_save.tr(),
+                onPressed: () {
+                  ref.watch(createHabitProvider.notifier).createHabit();
+                },
+              ),
             ),
-          ),
-          child: CupertinoScrollbar(
-            thumbVisibility: false,
-            child: ListView(
-              padding: EdgeInsets.all(16),
-              children: [
-                SafeArea(
-                  bottom: false,
-                  child: Column(
-                    children: [
-                      Align(
-                        alignment: Alignment.center,
-                        child: IconPickerButton(selectedIcon: selectedIcon),
-                      ),
-                      CustomHeader(
-                        text: LocaleKeys.habit_habit_name.tr().toUpperCase(),
-                        child: _buildHabitTextField(
-                          controller: addHabitState.value?.habitNameController ?? TextEditingController(),
-                          maxLines: 1,
+            child: CupertinoScrollbar(
+              thumbVisibility: false,
+              child: ListView(
+                padding: EdgeInsets.all(16),
+                children: [
+                  SafeArea(
+                    bottom: false,
+                    child: Column(
+                      children: [
+                        Align(
+                          alignment: Alignment.center,
+                          child: IconPickerButton(selectedIcon: selectedIcon),
                         ),
-                      ),
-                      CustomHeader(
-                        text: LocaleKeys.habit_habit_description.tr().toUpperCase(),
-                        child: _buildHabitTextField(
-                          controller: addHabitState.value?.habitDescriptionController ?? TextEditingController(),
-                        ),
-                      ),
-                      SizedBox(height: KSpacing.betweenListItems),
-                      Column(
-                        children: [
-                          ReminderSelectionWidget(),
-                          CategoryPickerButton(),
-                          SizedBox(height: KSpacing.betweenListItems),
-                          ColorPickerWidget(
-                            onColorSelected: (color) {
-                              ref.watch(colorProvider.notifier).pickColor(color);
-                            },
+                        CustomHeader(
+                          text: LocaleKeys.habit_habit_name.tr().toUpperCase(),
+                          child: _buildHabitTextField(
+                            controller: addHabitState.value?.habitNameController ?? TextEditingController(),
+                            maxLines: 1,
                           ),
-                        ],
-                      ),
-                      SizedBox(height: 50)
-                    ],
+                        ),
+                        CustomHeader(
+                          text: LocaleKeys.habit_habit_description.tr().toUpperCase(),
+                          child: _buildHabitTextField(
+                            controller: addHabitState.value?.habitDescriptionController ?? TextEditingController(),
+                          ),
+                        ),
+                        SizedBox(height: KSpacing.betweenListItems),
+                        Column(
+                          children: [
+                            ReminderSelectionWidget(),
+                            CategoryPickerButton(),
+                            SizedBox(height: KSpacing.betweenListItems),
+                            ColorPickerWidget(
+                              onColorSelected: (color) {
+                                ref.watch(colorProvider.notifier).pickColor(color);
+                              },
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 50)
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),

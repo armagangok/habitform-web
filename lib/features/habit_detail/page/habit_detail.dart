@@ -28,78 +28,42 @@ class HabitDetailPage extends ConsumerWidget {
 
     return Stack(
       children: [
-        CupertinoPageScaffold(
-          navigationBar: SheetHeader(
-            title: LocaleKeys.habit_detail_detail.tr(),
-            closeButtonPosition: CloseButtonPosition.left,
-          ),
-          child: ListView(
-            children: [
-              SafeArea(
-                child: Column(
-                  spacing: 16,
-                  children: [
-                    SizedBox(height: 28),
-                    CustomButton(
-                      onPressed: () {},
-                      child: Container(
-                        height: 90,
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          color: context.theme.scaffoldBackgroundColor,
-                          shape: BoxShape.circle,
-                          border: Border.all(
-                            color: Colors.grey.withValues(alpha: .7),
-                            width: .5,
-                          ),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.withValues(alpha: 0.25),
-                              spreadRadius: 15,
-                              blurRadius: 50,
-                              offset: const Offset(0, 0),
-                            ),
-                          ],
-                        ),
-                        child: Text(
-                          currentHabit.emoji ?? "",
-                          style: const TextStyle(fontSize: 40, color: Colors.white),
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 15) + const EdgeInsets.only(top: 10),
-                      child: CustomHeader(
-                        text: LocaleKeys.common_general.tr(),
+        CupertinoPopupSurface(
+          child: CupertinoPageScaffold(
+            backgroundColor: Colors.transparent,
+            navigationBar: SheetHeader(
+              title: LocaleKeys.habit_detail_detail.tr(),
+              closeButtonPosition: CloseButtonPosition.left,
+            ),
+            child: ListView(
+              children: [
+                SafeArea(
+                  child: Column(
+                    spacing: 16,
+                    children: [
+                      SizedBox(height: 28),
+                      _iconPicker(context, currentHabit),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 15) + const EdgeInsets.only(top: 10),
                         child: _HabitGeneralInfo(
                           name: currentHabit.habitName,
                           description: currentHabit.habitDescription,
                           emoji: currentHabit.emoji,
                         ),
                       ),
-                    ),
-                    // Padding(
-                    //   padding: const EdgeInsets.symmetric(horizontal: 15),
-                    //   child: CustomHeader(
-                    //     text: LocaleKeys.habit_reminder.tr(),
-                    //     child: _ReminderInfo(
-                    //       remindTime: currentHabit.reminderModel?.reminderTime?.toHHMM(),
-                    //       days: currentHabit.reminderModel?.days,
-                    //     ),
-                    //   ),
-                    // ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 15),
-                      child: CustomHeader(
-                        text: LocaleKeys.habit_detail_habitData.tr(),
-                        child: HabitDataWidget(habit: currentHabit),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 15),
+                        child: CustomHeader(
+                          text: LocaleKeys.habit_detail_habitData.tr(),
+                          child: HabitDataWidget(habit: currentHabit),
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 40),
-                  ],
+                      const SizedBox(height: 40),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
         Positioned(
@@ -121,7 +85,7 @@ class HabitDetailPage extends ConsumerWidget {
                         showCupertinoModalBottomSheet(
                           enableDrag: false,
                           context: context,
-                          builder: (context) => const HabitCalendarWidget().build(context, ref),
+                          builder: (context) => HabitCalendarCompletionSheet(habit: currentHabit),
                         );
                       },
                     ),
@@ -163,6 +127,36 @@ class HabitDetailPage extends ConsumerWidget {
           ),
         ),
       ],
+    );
+  }
+
+  CustomButton _iconPicker(BuildContext context, Habit currentHabit) {
+    return CustomButton(
+      onPressed: () {},
+      child: Container(
+        height: 90,
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          color: context.theme.scaffoldBackgroundColor,
+          shape: BoxShape.circle,
+          border: Border.all(
+            color: Colors.grey.withValues(alpha: .7),
+            width: .5,
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withValues(alpha: 0.2),
+              spreadRadius: 10,
+              blurRadius: 30,
+              offset: const Offset(0, 0),
+            ),
+          ],
+        ),
+        child: Text(
+          currentHabit.emoji ?? "",
+          style: const TextStyle(fontSize: 40, color: Colors.white),
+        ),
+      ),
     );
   }
 
@@ -211,9 +205,6 @@ class HabitDetailPage extends ConsumerWidget {
               );
             },
           )
-          //       WidgetsBinding.instance.addPostFrameCallback((_) {
-          //   ref.read(habitDetailProvider.notifier).initHabit(widget.habit);
-          // });
         ],
       ),
     );
@@ -251,66 +242,3 @@ class _HabitGeneralInfo extends ConsumerWidget {
     );
   }
 }
-
-// class _ReminderInfo extends ConsumerWidget {
-//   const _ReminderInfo({
-//     required this.remindTime,
-//     this.days,
-//   });
-
-//   final String? remindTime;
-//   final List<Days>? days;
-
-//   @override
-//   Widget build(BuildContext context, WidgetRef ref) {
-//     return _HabitInfoTile(
-//       title: remindTime ?? LocaleKeys.common_none.tr(),
-//       additionalInfo: (days != null && days!.isNotEmpty)
-//           ? SizedBox(
-//               height: 20,
-//               child: days!.length == 7
-//                   ? Text(
-//                       LocaleKeys.habit_daily.tr(),
-//                       style: context.bodyLarge?.copyWith(
-//                         color: context.primary.withValues(alpha: .72),
-//                       ),
-//                     )
-//                   : ListView.separated(
-//                       scrollDirection: Axis.horizontal,
-//                       shrinkWrap: true,
-//                       itemCount: days!.length,
-//                       separatorBuilder: (context, index) {
-//                         return Text(
-//                           ", ",
-//                           style: context.bodyMedium?.copyWith(
-//                             color: context.primary.withAlpha(170),
-//                           ),
-//                         );
-//                       },
-//                       itemBuilder: (context, index) {
-//                         final day = days![index];
-//                         return Text(
-//                           day.shortenDayName,
-//                           style: context.bodyMedium?.copyWith(
-//                             color: context.primary.withAlpha(170),
-//                           ),
-//                         );
-//                       },
-//                     ),
-//             )
-//           : null,
-//       onPressed: () {
-//         final habit = ref.watch(habitDetailProvider);
-//         ref.watch(editHabitProvider.notifier).initHabit(habit!);
-
-//         showCupertinoModalBottomSheet(
-//           enableDrag: false,
-//           context: context,
-//           builder: (context) => EditHabitPage(
-//             habit: habit,
-//           ),
-//         );
-//       },
-//     );
-//   }
-// }

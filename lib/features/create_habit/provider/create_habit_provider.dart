@@ -30,14 +30,14 @@ class CreateHabitNotifier extends AutoDisposeAsyncNotifier<CreateHabitState> {
     return currentHabitCount <= 1;
   }
 
-  // Set category IDs for the habit
-  void setCategoryIds(List<String> categoryIds) {
-    if (state.value != null) {
-      state = AsyncValue.data(state.value!.copyWith(categoryIds: categoryIds));
-    } else {
-      state = AsyncValue.data(CreateHabitState(categoryIds: categoryIds));
-    }
-  }
+  // // Set category IDs for the habit
+  // void setCategoryIds(List<String> categoryIds) {
+  //   if (state.value != null) {
+  //     state = AsyncValue.data(state.value!.copyWith(categoryIds: categoryIds));
+  //   } else {
+  //     state = AsyncValue.data(CreateHabitState(categoryIds: categoryIds));
+  //   }
+  // }
 
   Future<void> createHabit() async {
     final habitName = state.value?.habitNameController.text;

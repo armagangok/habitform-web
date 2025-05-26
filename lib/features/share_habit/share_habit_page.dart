@@ -71,88 +71,92 @@ class _ShareHabitPageState extends State<ShareHabitPage> {
 
   @override
   Widget build(BuildContext context) {
-    return CupertinoPageScaffold(
-      navigationBar: SheetHeader(
-        closeButtonPosition: CloseButtonPosition.left,
-        title: LocaleKeys.share_share.tr(),
-      ),
-      child: Stack(
-        children: [
-          ListView(
-            physics: const NeverScrollableScrollPhysics(),
-            children: [
-              SafeArea(
-                bottom: false,
-                child: Screenshot(
-                  controller: screenshotController,
-                  key: const Key('habit_screenshot'),
-                  child: Material(
-                    color: Colors.transparent,
-                    child: ShareHabitPreview(
-                      habit: widget.habit,
+    return CupertinoPopupSurface(
+      child: CupertinoPageScaffold(
+        backgroundColor: Colors.transparent,
+        navigationBar: SheetHeader(
+          closeButtonPosition: CloseButtonPosition.left,
+          title: LocaleKeys.share_share.tr(),
+        ),
+        child: Stack(
+          children: [
+            ListView(
+              physics: const NeverScrollableScrollPhysics(),
+              children: [
+                SizedBox(height: 20),
+                SafeArea(
+                  bottom: false,
+                  child: Screenshot(
+                    controller: screenshotController,
+                    key: const Key('habit_screenshot'),
+                    child: Material(
+                      color: Colors.transparent,
+                      child: ShareHabitPreview(
+                        habit: widget.habit,
+                      ),
                     ),
                   ),
                 ),
-              ),
-              const SizedBox(height: 20),
-            ],
-          ),
-          Positioned.fill(
-            child: Align(
-              alignment: Alignment.bottomCenter,
-              child: Card(
-                child: SafeArea(
-                  top: false,
-                  child: Padding(
-                    padding: const EdgeInsets.all(20),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: CupertinoButton.tinted(
-                            onPressed: isShareLoading
-                                ? null
-                                : () {
-                                    _shareHabitAsImage(context);
-                                  },
-                            sizeStyle: CupertinoButtonSize.small,
-                            child: isShareLoading
-                                ? const CircularProgressIndicator.adaptive()
-                                : Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Icon(FontAwesomeIcons.solidFileImage),
-                                      const SizedBox(width: 5),
-                                      Text(
-                                        LocaleKeys.share_share_image.tr(),
-                                        style: TextStyle(fontWeight: FontWeight.w600),
-                                      ),
-                                    ],
-                                  ),
-                          ),
-                        ),
-                        const SizedBox(width: 20),
-                        Expanded(
-                          child: CupertinoButton.tinted(
-                            sizeStyle: CupertinoButtonSize.small,
-                            onPressed: _shareHabitAsText,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(FontAwesomeIcons.solidFileLines),
-                                SizedBox(width: 5),
-                                Text(LocaleKeys.share_share_text.tr()),
-                              ],
+                const SizedBox(height: 20),
+              ],
+            ),
+            Positioned.fill(
+              child: Align(
+                alignment: Alignment.bottomCenter,
+                child: Card(
+                  child: SafeArea(
+                    top: false,
+                    child: Padding(
+                      padding: const EdgeInsets.all(20),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: CupertinoButton.tinted(
+                              onPressed: isShareLoading
+                                  ? null
+                                  : () {
+                                      _shareHabitAsImage(context);
+                                    },
+                              sizeStyle: CupertinoButtonSize.small,
+                              child: isShareLoading
+                                  ? const CircularProgressIndicator.adaptive()
+                                  : Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Icon(FontAwesomeIcons.solidFileImage),
+                                        const SizedBox(width: 5),
+                                        Text(
+                                          LocaleKeys.share_share_image.tr(),
+                                          style: TextStyle(fontWeight: FontWeight.w600),
+                                        ),
+                                      ],
+                                    ),
                             ),
                           ),
-                        ),
-                      ],
+                          const SizedBox(width: 20),
+                          Expanded(
+                            child: CupertinoButton.tinted(
+                              sizeStyle: CupertinoButtonSize.small,
+                              onPressed: _shareHabitAsText,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(FontAwesomeIcons.solidFileLines),
+                                  SizedBox(width: 5),
+                                  Text(LocaleKeys.share_share_text.tr()),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

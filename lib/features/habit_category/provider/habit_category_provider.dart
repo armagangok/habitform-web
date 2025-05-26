@@ -21,12 +21,10 @@ final habitCategoryProvider = StateNotifierProvider<HabitCategoryNotifier, Async
 class HabitCategoryState {
   final List<HabitCategory> categories;
   final Set<String> selectedCategoryIds;
-  final bool allowMultiple;
 
   const HabitCategoryState({
     required this.categories,
     this.selectedCategoryIds = const {},
-    this.allowMultiple = true,
   });
 
   HabitCategoryState copyWith({
@@ -37,7 +35,6 @@ class HabitCategoryState {
     return HabitCategoryState(
       categories: categories ?? this.categories,
       selectedCategoryIds: selectedCategoryIds ?? this.selectedCategoryIds,
-      allowMultiple: allowMultiple ?? this.allowMultiple,
     );
   }
 }
@@ -94,9 +91,6 @@ class HabitCategoryNotifier extends StateNotifier<AsyncValue<HabitCategoryState>
       if (newSelectedIds.contains(categoryId)) {
         newSelectedIds.remove(categoryId);
       } else {
-        if (!currentState.allowMultiple) {
-          newSelectedIds.clear();
-        }
         newSelectedIds.add(categoryId);
       }
 
@@ -106,13 +100,7 @@ class HabitCategoryNotifier extends StateNotifier<AsyncValue<HabitCategoryState>
     });
   }
 
-  void setAllowMultiple(bool allowMultiple) {
-    state.whenData((currentState) {
-      state = AsyncValue.data(currentState.copyWith(
-        allowMultiple: allowMultiple,
-      ));
-    });
-  }
+  
 
   void setSelectedCategories(Set<String> categoryIds) {
     state.whenData((currentState) {

@@ -3,8 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '/core/core.dart';
 import '/features/habit_category/model/habit_category_model.dart';
 import '/features/habit_category/provider/habit_category_provider.dart';
+import '/features/habit_category/provider/icon_selection_provider.dart';
 import '/features/habit_category/util/icon_util.dart';
-import '../../create_habit/provider/create_habit_provider.dart';
 import '../provider/habit_category_button_provider.dart';
 
 class HabitCategoryPage extends ConsumerStatefulWidget {
@@ -29,7 +29,6 @@ class _HabitCategoryPageState extends ConsumerState<HabitCategoryPage> {
       // Get selected categories from categoryButtonProvider
       final selectedIds = ref.read(categoryButtonProvider)?.toSet() ?? widget.selectedCategoryIds?.toSet() ?? {};
       ref.read(habitCategoryProvider.notifier).setSelectedCategories(selectedIds);
-      ref.read(habitCategoryProvider.notifier).setAllowMultiple(widget.allowMultiple);
     });
   }
 
@@ -55,9 +54,6 @@ class _HabitCategoryPageState extends ConsumerState<HabitCategoryPage> {
 
                   // Update categoryButtonProvider for UI
                   ref.read(categoryButtonProvider.notifier).setSelectedCategories(selectedIds.toList());
-
-                  // Update createHabitProvider state with selected categories
-                  ref.read(createHabitProvider.notifier).setCategoryIds(selectedIds.toList());
                 });
                 navigator.pop();
               },
@@ -234,12 +230,16 @@ class _HabitCategoryPageState extends ConsumerState<HabitCategoryPage> {
 
   void _showEditCategoryDialog(HabitCategory category) {
     final nameController = TextEditingController(text: category.name);
-    String? selectedIcon = category.icon;
+
+    // Initialize the icon selection provider with the category's icon
+    ref.read(iconSelectionProvider.notifier).setInitialIcon(category.icon);
 
     showCupertinoModalPopup(
       context: context,
-      builder: (context) => StatefulBuilder(
-        builder: (context, setState) {
+      builder: (context) => Consumer(
+        builder: (context, widgetRef, _) {
+          final selectedIcon = widgetRef.watch(iconSelectionProvider);
+
           return CupertinoActionSheet(
             title: const Text('Edit Category'),
             message: Column(
@@ -278,9 +278,7 @@ class _HabitCategoryPageState extends ConsumerState<HabitCategoryPage> {
                           child: InkWell(
                             borderRadius: BorderRadius.circular(10),
                             onTap: () {
-                              setState(() {
-                                selectedIcon = iconString;
-                              });
+                              widgetRef.read(iconSelectionProvider.notifier).selectIcon(iconString);
                             },
                             child: Container(
                               decoration: BoxDecoration(
@@ -315,7 +313,7 @@ class _HabitCategoryPageState extends ConsumerState<HabitCategoryPage> {
                     ref.read(habitCategoryProvider.notifier).updateCategory(
                           category.id,
                           name,
-                          selectedIcon!,
+                          selectedIcon,
                         );
                     Navigator.pop(context);
                   }
@@ -336,12 +334,16 @@ class _HabitCategoryPageState extends ConsumerState<HabitCategoryPage> {
 
   void _showCreateCategoryDialog() {
     final nameController = TextEditingController();
-    String? selectedIcon;
+
+    // Reset the icon selection provider
+    ref.read(iconSelectionProvider.notifier).reset();
 
     showCupertinoModalPopup(
       context: context,
-      builder: (context) => StatefulBuilder(
-        builder: (context, setState) {
+      builder: (context) => Consumer(
+        builder: (context, widgetRef, _) {
+          final selectedIcon = widgetRef.watch(iconSelectionProvider);
+
           return CupertinoActionSheet(
             title: const Text('Create Category'),
             message: Column(
@@ -380,9 +382,7 @@ class _HabitCategoryPageState extends ConsumerState<HabitCategoryPage> {
                           child: InkWell(
                             borderRadius: BorderRadius.circular(10),
                             onTap: () {
-                              setState(() {
-                                selectedIcon = iconString;
-                              });
+                              widgetRef.read(iconSelectionProvider.notifier).selectIcon(iconString);
                             },
                             child: Container(
                               decoration: BoxDecoration(
@@ -414,7 +414,7 @@ class _HabitCategoryPageState extends ConsumerState<HabitCategoryPage> {
                 onPressed: () {
                   final name = nameController.text.trim();
                   if (name.isNotEmpty && selectedIcon != null) {
-                    ref.read(habitCategoryProvider.notifier).createCategory(name, selectedIcon!);
+                    ref.read(habitCategoryProvider.notifier).createCategory(name, selectedIcon);
                     Navigator.pop(context);
                   }
                 },

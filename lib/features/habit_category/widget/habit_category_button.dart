@@ -4,7 +4,6 @@ import '/core/core.dart';
 import '/core/widgets/custom_list_tile.dart';
 import '/features/habit_category/provider/habit_category_provider.dart';
 import '/features/habit_category/util/icon_util.dart';
-import '../../create_habit/provider/create_habit_provider.dart';
 import '../provider/habit_category_button_provider.dart';
 
 class CategoryPickerButton extends ConsumerWidget {
@@ -56,9 +55,6 @@ class CategoryPickerButton extends ConsumerWidget {
               context.hideKeyboard();
               final selectedCategoryIds = selectedCategories.map((category) => category.id).toList();
               ref.read(categoryButtonProvider.notifier).setSelectedCategories(selectedCategoryIds);
-
-              // When navigating to category page, save the current selection to create habit provider too
-              ref.read(createHabitProvider.notifier).setCategoryIds(selectedCategoryIds);
 
               navigator.navigateTo(path: KRoute.habitCategoryPage);
             },

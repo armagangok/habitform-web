@@ -8,7 +8,7 @@ import '/core/widgets/custom_list_tile.dart';
 import '../extension/easy_day.dart';
 import '../models/days/days_enum.dart';
 import '../provider/reminder_provider.dart';
-import 'reminder_page_widget.dart';
+import 'reminder_page.dart';
 
 class ReminderSelectionWidget extends ConsumerStatefulWidget {
   const ReminderSelectionWidget({super.key});
