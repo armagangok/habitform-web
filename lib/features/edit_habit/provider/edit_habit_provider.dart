@@ -1,11 +1,12 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '/core/core.dart';
-import '../../habit_color/provider/habit_color_provider.dart';
-import '../../habit_icon/provider/habit_icon_provider.dart';
 import '/models/habit/habit_model.dart';
+import '../../habit_category/provider/habit_category_button_provider.dart';
 import '../../habit_category/provider/habit_category_provider.dart';
+import '../../habit_color/provider/habit_color_provider.dart';
 import '../../habit_detail/providers/habit_detail_provider.dart';
+import '../../habit_icon/provider/habit_icon_provider.dart';
 import '../../home/provider/home_provider.dart';
 import '../../reminder/provider/reminder_provider.dart';
 
@@ -30,6 +31,7 @@ class EditHabitNotifier extends AutoDisposeNotifier<Habit?> {
     ref.watch(colorProvider.notifier).pickColor(Color(habit.colorCode));
 
     ref.watch(habitCategoryProvider.notifier).setSelectedCategories(habit.categoryIds.toSet());
+    ref.watch(categoryButtonProvider.notifier).setSelectedCategories(habit.categoryIds);
 
     ref.watch(reminderProvider.notifier).initializeReminder(reminder);
     state = habit;
@@ -49,7 +51,7 @@ class EditHabitNotifier extends AutoDisposeNotifier<Habit?> {
     final habitColorState = ref.watch(colorProvider);
     final reminderModel = reminderState.reminder;
 
-    final categoryIds = ref.watch(habitCategoryProvider).value?.categories.where((category) => ref.watch(habitCategoryProvider).value?.selectedCategoryIds.contains(category.id) ?? false).map((e) => e.id).toList() ?? [];
+    final categoryIds = ref.watch(categoryButtonProvider) ?? [];
 
     // Mevcut alışkanlığın hatırlatıcısını al
     final currentReminderModel = state?.reminderModel;

@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '/core/core.dart';
-import '../habit_category/widget/habit_category_button.dart';
+import '../habit_category/widget/category_picker_button.dart';
 import '../habit_color/color_picker_widget.dart';
 import '../habit_color/provider/habit_color_provider.dart';
 import '../habit_icon/icon_picker_button.dart';

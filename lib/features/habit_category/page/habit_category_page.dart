@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '/core/core.dart';
 import '/features/habit_category/model/habit_category_model.dart';
+import '/features/habit_category/provider/category_selection_provider.dart';
 import '/features/habit_category/provider/habit_category_provider.dart';
 import '/features/habit_category/provider/icon_selection_provider.dart';
 import '/features/habit_category/util/icon_util.dart';
@@ -26,15 +27,16 @@ class _HabitCategoryPageState extends ConsumerState<HabitCategoryPage> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      // Get selected categories from categoryButtonProvider
+      // Initialize local selection with current selected categories
       final selectedIds = ref.read(categoryButtonProvider)?.toSet() ?? widget.selectedCategoryIds?.toSet() ?? {};
-      ref.read(habitCategoryProvider.notifier).setSelectedCategories(selectedIds);
+      ref.read(categorySelectionProvider.notifier).setCategories(selectedIds);
     });
   }
 
   @override
   Widget build(BuildContext context) {
     final categoryState = ref.watch(habitCategoryProvider);
+    final localSelectedIds = ref.watch(categorySelectionProvider);
 
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
@@ -47,14 +49,12 @@ class _HabitCategoryPageState extends ConsumerState<HabitCategoryPage> {
               padding: EdgeInsets.zero,
               child: Text(LocaleKeys.common_done.tr()),
               onPressed: () {
-                categoryState.whenData((state) {
-                  final selectedIds = state.selectedCategoryIds;
-                  // Store in habitCategoryProvider
-                  ref.read(habitCategoryProvider.notifier).setSelectedCategories(selectedIds);
+                // Update categoryButtonProvider for UI (this is for the category selection button)
+                ref.read(categoryButtonProvider.notifier).setSelectedCategories(localSelectedIds.toList());
 
-                  // Update categoryButtonProvider for UI
-                  ref.read(categoryButtonProvider.notifier).setSelectedCategories(selectedIds.toList());
-                });
+                // Clear category selection in habitCategoryProvider to prevent auto-filtering on home page
+                ref.read(habitCategoryProvider.notifier).setSelectedCategories({});
+
                 navigator.pop();
               },
             ),
@@ -66,7 +66,7 @@ class _HabitCategoryPageState extends ConsumerState<HabitCategoryPage> {
           Padding(
             padding: const EdgeInsets.all(16),
             child: categoryState.when(
-              data: (state) => _buildCategoryList(state),
+              data: (state) => _buildCategoryList(state, localSelectedIds),
               loading: () => const Center(child: CupertinoActivityIndicator()),
               error: (error, _) => Center(
                 child: Text('Error loading categories: $error', style: context.bodyMedium),
@@ -106,7 +106,7 @@ class _HabitCategoryPageState extends ConsumerState<HabitCategoryPage> {
     );
   }
 
-  Widget _buildCategoryList(HabitCategoryState state) {
+  Widget _buildCategoryList(HabitCategoryState state, Set<String> localSelectedIds) {
     final defaultCategories = state.categories.where((cat) => cat.isDefault).toList();
     final customCategories = state.categories.where((cat) => !cat.isDefault).toList();
 
@@ -117,7 +117,7 @@ class _HabitCategoryPageState extends ConsumerState<HabitCategoryPage> {
           Wrap(
             spacing: 8.0,
             runSpacing: 8.0,
-            children: defaultCategories.map((category) => _buildCategoryChip(category, state)).toList(),
+            children: defaultCategories.map((category) => _buildCategoryChip(category, localSelectedIds)).toList(),
           ),
           SizedBox(height: 24),
         ],
@@ -126,7 +126,7 @@ class _HabitCategoryPageState extends ConsumerState<HabitCategoryPage> {
           Wrap(
             spacing: 8.0,
             runSpacing: 8.0,
-            children: customCategories.map((category) => _buildDeletableCategoryChip(category, state)).toList(),
+            children: customCategories.map((category) => _buildDeletableCategoryChip(category, localSelectedIds)).toList(),
           ),
           SizedBox(height: 24),
         ],
@@ -147,13 +147,13 @@ class _HabitCategoryPageState extends ConsumerState<HabitCategoryPage> {
     );
   }
 
-  Widget _buildCategoryChip(HabitCategory category, HabitCategoryState state) {
-    final bool isSelected = state.selectedCategoryIds.contains(category.id);
+  Widget _buildCategoryChip(HabitCategory category, Set<String> localSelectedIds) {
+    final bool isSelected = localSelectedIds.contains(category.id);
     final iconData = category.icon != null ? CategoryIconUtil.getIconFromString(category.icon!) : null;
 
     return CustomButton(
       onPressed: () {
-        ref.read(habitCategoryProvider.notifier).toggleCategorySelection(category.id);
+        ref.read(categorySelectionProvider.notifier).toggleCategory(category.id);
       },
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
@@ -190,10 +190,10 @@ class _HabitCategoryPageState extends ConsumerState<HabitCategoryPage> {
     );
   }
 
-  Widget _buildDeletableCategoryChip(HabitCategory category, HabitCategoryState state) {
+  Widget _buildDeletableCategoryChip(HabitCategory category, Set<String> localSelectedIds) {
     return GestureDetector(
       onLongPress: () => _showDeleteCategoryConfirmation(category),
-      child: _buildCategoryChip(category, state),
+      child: _buildCategoryChip(category, localSelectedIds),
     );
   }
 

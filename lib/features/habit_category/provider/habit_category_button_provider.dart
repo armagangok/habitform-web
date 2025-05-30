@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// Provider for storing selected category IDs in the button
-final categoryButtonProvider = StateNotifierProvider<CategoryButtonNotifier, List<String>?>((ref) {
+final categoryButtonProvider = StateNotifierProvider.autoDispose<CategoryButtonNotifier, List<String>?>((ref) {
   return CategoryButtonNotifier();
 });
 

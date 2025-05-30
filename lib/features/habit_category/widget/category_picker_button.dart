@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '/core/core.dart';
 import '/core/widgets/custom_list_tile.dart';
+import '/features/habit_category/model/habit_category_model.dart';
 import '/features/habit_category/provider/habit_category_provider.dart';
 import '/features/habit_category/util/icon_util.dart';
 import '../provider/habit_category_button_provider.dart';
@@ -42,20 +43,18 @@ class CategoryPickerButton extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final categoryState = ref.watch(habitCategoryProvider);
+    final selectedCategoryIds = ref.watch(categoryButtonProvider);
 
     return categoryState.when(
       data: (state) {
-        // Find selected categories
-        final selectedCategories = state.categories.where((category) => state.selectedCategoryIds.contains(category.id)).toList();
+        // Find selected categories based on categoryButtonProvider
+        final selectedCategories = selectedCategoryIds != null ? state.categories.where((category) => selectedCategoryIds.contains(category.id)).toList() : <HabitCategory>[];
 
         return CustomHeader(
           text: "CATEGORY",
           child: CustomListTile(
             onPressed: () {
               context.hideKeyboard();
-              final selectedCategoryIds = selectedCategories.map((category) => category.id).toList();
-              ref.read(categoryButtonProvider.notifier).setSelectedCategories(selectedCategoryIds);
-
               navigator.navigateTo(path: KRoute.habitCategoryPage);
             },
             trailing: CupertinoListTileChevron(),
