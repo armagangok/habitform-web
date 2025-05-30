@@ -17,78 +17,81 @@ class MembershipInfoWidget extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final paywallState = ref.watch(purchaseProvider);
 
-    return CupertinoScaffold(
-      transitionBackgroundColor: Colors.transparent,
-      body: CupertinoPageScaffold(
-        navigationBar: SheetHeader(
-          title: LocaleKeys.membership_info_title.tr(),
-          closeButtonPosition: CloseButtonPosition.left,
-        ),
-        child: paywallState.when(
-          data: (state) {
-            final customerInfo = state.customerInfo;
-            final entitlements = customerInfo?.entitlements;
+    return CupertinoPopupSurface(
+      child: CupertinoScaffold(
+        transitionBackgroundColor: Colors.transparent,
+        body: CupertinoPageScaffold(
+          backgroundColor: Colors.transparent,
+          navigationBar: SheetHeader(
+            title: LocaleKeys.membership_info_title.tr(),
+            closeButtonPosition: CloseButtonPosition.left,
+          ),
+          child: paywallState.when(
+            data: (state) {
+              final customerInfo = state.customerInfo;
+              final entitlements = customerInfo?.entitlements;
 
-            final String? latestPurchaseDate = entitlements?.all[entitlementID]?.latestPurchaseDate;
-            final String? originalPurchaseDate = entitlements?.all[entitlementID]?.originalPurchaseDate;
-            final String? productPlanIdentifier = entitlements?.all[entitlementID]?.productIdentifier;
-            final String? expirationDate = entitlements?.all[entitlementID]?.expirationDate;
+              final String? latestPurchaseDate = entitlements?.all[entitlementID]?.latestPurchaseDate;
+              final String? originalPurchaseDate = entitlements?.all[entitlementID]?.originalPurchaseDate;
+              final String? productPlanIdentifier = entitlements?.all[entitlementID]?.productIdentifier;
+              final String? expirationDate = entitlements?.all[entitlementID]?.expirationDate;
 
-            final bool? isActive = entitlements?.all[entitlementID]?.isActive;
-            final String? originalAppUserId = state.customerInfo?.originalAppUserId;
+              final bool? isActive = entitlements?.all[entitlementID]?.isActive;
+              final String? originalAppUserId = state.customerInfo?.originalAppUserId;
 
-            return ListView(
-              children: [
-                Padding(
-                  padding: EdgeInsets.all(20),
-                  child: Builder(
-                    builder: (contextFromBuilder) {
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          _infoItemWidget(
-                            infoText: LocaleKeys.membership_info_state.tr(),
-                            text: isActive == null
-                                ? null
-                                : isActive
-                                    ? LocaleKeys.membership_info_active.tr()
-                                    : LocaleKeys.membership_info_inactive.tr(),
-                          ),
-                          _infoItemWidget(infoText: LocaleKeys.membership_info_plan.tr(), text: productPlanIdentifier),
-                          _infoItemWidget(
-                            infoText: LocaleKeys.membership_info_customer_id.tr(),
-                            text: originalAppUserId,
-                            onTap: () => onCopyCustomerId(),
-                            trailing: CupertinoListTileChevron(),
-                          ),
-                          _infoItemWidget(infoText: LocaleKeys.membership_info_expiration_date.tr(), text: expirationDate),
-                          _infoItemWidget(infoText: LocaleKeys.membership_info_first_purchase_date.tr(), text: originalPurchaseDate),
-                          _infoItemWidget(infoText: LocaleKeys.membership_info_last_purchase_date.tr(), text: latestPurchaseDate),
-                          _infoItemWidget(
-                            infoText: LocaleKeys.membership_info_change_plan.tr(),
-                            text: LocaleKeys.membership_info_change_plan_desc.tr(),
-                            trailing: CupertinoListTileChevron(),
-                            onTap: () {
-                              CupertinoScaffold.showCupertinoModalBottomSheet(
-                                backgroundColor: Colors.transparent,
-                                barrierColor: Colors.transparent,
-                                expand: true,
-                                enableDrag: false,
-                                context: contextFromBuilder,
-                                builder: (_) => PaywallPage(),
-                              );
-                            },
-                          ),
-                        ],
-                      );
-                    },
+              return ListView(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.all(20),
+                    child: Builder(
+                      builder: (contextFromBuilder) {
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            _infoItemWidget(
+                              infoText: LocaleKeys.membership_info_state.tr(),
+                              text: isActive == null
+                                  ? null
+                                  : isActive
+                                      ? LocaleKeys.membership_info_active.tr()
+                                      : LocaleKeys.membership_info_inactive.tr(),
+                            ),
+                            _infoItemWidget(infoText: LocaleKeys.membership_info_plan.tr(), text: productPlanIdentifier),
+                            _infoItemWidget(
+                              infoText: LocaleKeys.membership_info_customer_id.tr(),
+                              text: originalAppUserId,
+                              onTap: () => onCopyCustomerId(),
+                              trailing: CupertinoListTileChevron(),
+                            ),
+                            _infoItemWidget(infoText: LocaleKeys.membership_info_expiration_date.tr(), text: expirationDate),
+                            _infoItemWidget(infoText: LocaleKeys.membership_info_first_purchase_date.tr(), text: originalPurchaseDate),
+                            _infoItemWidget(infoText: LocaleKeys.membership_info_last_purchase_date.tr(), text: latestPurchaseDate),
+                            _infoItemWidget(
+                              infoText: LocaleKeys.membership_info_change_plan.tr(),
+                              text: LocaleKeys.membership_info_change_plan_desc.tr(),
+                              trailing: CupertinoListTileChevron(),
+                              onTap: () {
+                                CupertinoScaffold.showCupertinoModalBottomSheet(
+                                  backgroundColor: Colors.transparent,
+                                  barrierColor: Colors.transparent,
+                                  expand: true,
+                                  enableDrag: false,
+                                  context: contextFromBuilder,
+                                  builder: (_) => PaywallPage(),
+                                );
+                              },
+                            ),
+                          ],
+                        );
+                      },
+                    ),
                   ),
-                ),
-              ],
-            );
-          },
-          loading: () => Center(child: CupertinoActivityIndicator()),
-          error: (error, stackTrace) => Center(child: Text('Error: $error')),
+                ],
+              );
+            },
+            loading: () => Center(child: CupertinoActivityIndicator()),
+            error: (error, stackTrace) => Center(child: Text('Error: $error')),
+          ),
         ),
       ),
     );

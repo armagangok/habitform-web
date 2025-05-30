@@ -225,7 +225,7 @@ class MockHabitData {
       habitName: "Journal",
       habitDescription: "Write down thoughts and reflections for the day",
       emoji: "✏️",
-      colorCode: Colors.deepOrangeAccent.value,
+      colorCode: Colors.blueAccent.value,
       reminderModel: ReminderModel(
         id: 1014,
         reminderTime: DateTime(2023, 1, 1, 21, 30),

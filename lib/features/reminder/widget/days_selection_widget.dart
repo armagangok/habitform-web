@@ -41,7 +41,7 @@ class _DaysGridViewBuilderState extends ConsumerState<DaySelectionWidget> {
       initialSelection: selectedDays,
       onCategorySelected: _onDaysSelected,
       categoryLabelBuilder: (category) => category.getFullDayName,
-      selection: Colors.deepOrangeAccent,
+      selection: Colors.blueAccent,
       unselectedColor: Colors.grey.withValues(alpha: .2),
     );
   }

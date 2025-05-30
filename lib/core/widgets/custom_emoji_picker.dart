@@ -16,17 +16,22 @@ class CustomEmojiPicker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CupertinoButton(
-      padding: EdgeInsets.zero,
-      minSize: 0,
-      child: Text(
-        LocaleKeys.common_pick_your_emoji.tr(),
-        style: TextStyle(
-          fontSize: 14,
-          fontWeight: FontWeight.w600,
+    return SafeArea(
+      child: Padding(
+        padding: EdgeInsets.only(bottom: 16) + EdgeInsets.symmetric(horizontal: 32),
+        child: SizedBox(
+          width: double.infinity,
+          child: CupertinoButton.filled(
+            child: Text(
+              LocaleKeys.common_pick_your_emoji.tr(),
+              style: context.titleMedium?.copyWith(
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            onPressed: () => _showEmojiPicker(context),
+          ),
         ),
       ),
-      onPressed: () => _showEmojiPicker(context),
     );
   }
 
@@ -87,51 +92,6 @@ class CustomEmojiPicker extends StatelessWidget {
                   color: Colors.transparent,
                   child: EmojiPicker(
                     onEmojiSelected: onEmojiSelected,
-                    // config: Config(
-                    //   checkPlatformCompatibility: true,
-                    //   emojiViewConfig: EmojiViewConfig(
-                    //     emojiSizeMax: 28 * (foundation.defaultTargetPlatform == foundation.TargetPlatform.iOS ? 1.20 : 1.0),
-                    //     backgroundColor: backgroundColor ?? context.theme.scaffoldBackgroundColor,
-                    //     columns: 8,
-                    //     verticalSpacing: 0,
-                    //     horizontalSpacing: 0,
-                    //     gridPadding: EdgeInsets.zero,
-                    //     recentsLimit: 28,
-                    //     replaceEmojiOnLimitExceed: true,
-                    //     loadingIndicator: const CupertinoActivityIndicator(),
-                    //     noRecents: Text(
-                    //       LocaleKeys.common_none.tr(),
-                    //       style: context.bodySmall?.copyWith(
-                    //         fontSize: 13,
-                    //         color: context.theme.hintColor,
-                    //       ),
-                    //     ),
-                    //     buttonMode: ButtonMode.CUPERTINO,
-                    //   ),
-                    //   skinToneConfig: SkinToneConfig(
-                    //     dialogBackgroundColor: backgroundColor ?? context.theme.scaffoldBackgroundColor,
-                    //     indicatorColor: context.theme.dividerColor,
-                    //   ),
-                    //   categoryViewConfig: CategoryViewConfig(
-                    //     tabBarHeight: 40,
-                    //     indicatorColor: indicatorColor ?? context.theme.primaryColor,
-                    //     iconColor: context.theme.iconTheme.color ?? CupertinoColors.systemGrey,
-                    //     iconColorSelected: context.theme.primaryColor,
-                    //     backspaceColor: context.theme.iconTheme.color ?? CupertinoColors.systemGrey,
-                    //     backgroundColor: backgroundColor ?? context.theme.scaffoldBackgroundColor,
-                    //     categoryIcons: const CategoryIcons(),
-                    //     tabIndicatorAnimDuration: const Duration(milliseconds: 300),
-                    //   ),
-                    //   bottomActionBarConfig: const BottomActionBarConfig(
-                    //     showBackspaceButton: false,
-                    //     showSearchViewButton: true,
-                    //     backgroundColor: Colors.transparent,
-                    //   ),
-                    //   searchViewConfig: SearchViewConfig(
-                    //     backgroundColor: backgroundColor ?? context.theme.scaffoldBackgroundColor,
-                    //     buttonIconColor: context.theme.iconTheme.color ?? CupertinoColors.systemGrey,
-                    //   ),
-                    // ),
                   ),
                 ),
               ),

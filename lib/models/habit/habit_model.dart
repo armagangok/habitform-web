@@ -35,6 +35,9 @@ class Habit extends HiveObject {
   @HiveField(10, defaultValue: HabitStatus.active)
   final HabitStatus status;
 
+  @HiveField(11, defaultValue: [])
+  final List<String> categoryIds;
+
   Habit({
     required this.id,
     required this.habitName,
@@ -45,6 +48,7 @@ class Habit extends HiveObject {
     required this.colorCode,
     this.archiveDate,
     this.status = HabitStatus.active,
+    this.categoryIds = const [],
   });
 
   Habit copyWith({
@@ -57,6 +61,7 @@ class Habit extends HiveObject {
     Map<String, CompletionEntry>? completions,
     DateTime? archiveDate,
     HabitStatus? status,
+    List<String>? categoryIds,
   }) {
     return Habit(
       id: id ?? this.id,
@@ -68,6 +73,7 @@ class Habit extends HiveObject {
       colorCode: colorCode ?? this.colorCode,
       archiveDate: archiveDate ?? this.archiveDate,
       status: status ?? this.status,
+      categoryIds: categoryIds ?? this.categoryIds,
     );
   }
 }

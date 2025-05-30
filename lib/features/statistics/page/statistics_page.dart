@@ -2,7 +2,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '/core/core.dart';
-import '/features/home/provider/home_provider.dart';
 import '../../purchase/page/paywall_page.dart';
 import '../provider/statistics_provider.dart';
 import '../widgets/general_progress/general_progress_stats.dart';
@@ -17,9 +16,6 @@ class StatisticsPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // HomeProvider'ı da dinle, böylece alışkanlıklar güncellendiğinde istatistikler de güncellenir
-    ref.watch(homeProvider);
-
     return Material(
       color: Colors.transparent,
       child: CupertinoScaffold(
@@ -33,106 +29,96 @@ class StatisticsPage extends ConsumerWidget {
             bottom: false,
             child: Stack(
               children: [
-                CustomScrollView(
+                ListView(
                   physics: const AlwaysScrollableScrollPhysics(),
-                  slivers: [
-                    CupertinoSliverRefreshControl(
-                      onRefresh: () async {
-                        // İstatistikleri yenile
-                        await ref.read(statisticsProvider.notifier).refreshStatistics();
-                      },
-                    ),
-                    SliverToBoxAdapter(
-                      child: Column(
-                        children: [
-                          // Alışkanlık seçici
+                  children: [
+                    Column(
+                      children: [
+                        Consumer(
+                          builder: (context, ref, child) {
+                            final statisticsAsyncValue = ref.watch(statisticsProvider);
 
-                          Consumer(
-                            builder: (context, ref, child) {
-                              final statisticsAsyncValue = ref.watch(statisticsProvider);
-
-                              return statisticsAsyncValue.when(
-                                loading: () => const Center(child: CircularProgressIndicator()),
-                                error: (error, stackTrace) => Center(child: Text('${LocaleKeys.errors_something_went_wrong.tr()}: $error')),
-                                data: (state) {
-                                  if (state.habitStatistics.isEmpty) {
-                                    return Padding(
-                                      padding: const EdgeInsets.all(24.0),
-                                      child: Column(
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        children: [
-                                          Container(
-                                            padding: const EdgeInsets.all(20),
-                                            decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.circular(20),
-                                            ),
-                                            child: Icon(
-                                              FontAwesomeIcons.chartLine,
-                                              size: 48,
-                                              color: Theme.of(context).colorScheme.primary,
-                                            ),
+                            return statisticsAsyncValue.when(
+                              loading: () => const Center(child: CircularProgressIndicator()),
+                              error: (error, stackTrace) => Center(child: Text('${LocaleKeys.errors_something_went_wrong.tr()}: $error')),
+                              data: (state) {
+                                if (state.habitStatistics.isEmpty) {
+                                  return Padding(
+                                    padding: const EdgeInsets.all(24.0),
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Container(
+                                          padding: const EdgeInsets.all(20),
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(20),
                                           ),
-                                          const SizedBox(height: 24),
-                                          Text(
-                                            LocaleKeys.statistics_no_data_title.tr(),
-                                            style: TextStyle(
-                                              fontSize: 24,
-                                              fontWeight: FontWeight.bold,
-                                            ),
+                                          child: Icon(
+                                            FontAwesomeIcons.chartLine,
+                                            size: 48,
+                                            color: Theme.of(context).colorScheme.primary,
                                           ),
-                                          const SizedBox(height: 12),
-                                          Text(
-                                            LocaleKeys.statistics_no_data_description.tr(),
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                              fontSize: 16,
-                                              height: 1.5,
-                                            ),
+                                        ),
+                                        const SizedBox(height: 24),
+                                        Text(
+                                          LocaleKeys.statistics_no_data_title.tr(),
+                                          style: TextStyle(
+                                            fontSize: 24,
+                                            fontWeight: FontWeight.bold,
                                           ),
-                                          const SizedBox(height: 32),
-                                          SizedBox(
-                                            width: double.infinity,
-                                            child: CupertinoButton(
-                                              color: Colors.deepOrangeAccent,
-                                              onPressed: () {
-                                                navigator.pop();
-                                              },
-                                              child: Text(
-                                                LocaleKeys.habit_add_habit.tr(),
-                                                style: const TextStyle(
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.w700,
-                                                  color: Colors.white,
-                                                ),
+                                        ),
+                                        const SizedBox(height: 12),
+                                        Text(
+                                          LocaleKeys.statistics_no_data_description.tr(),
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            height: 1.5,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 32),
+                                        SizedBox(
+                                          width: double.infinity,
+                                          child: CupertinoButton(
+                                            color: Colors.blueAccent,
+                                            onPressed: () {
+                                              navigator.pop();
+                                            },
+                                            child: Text(
+                                              LocaleKeys.habit_add_habit.tr(),
+                                              style: const TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w700,
+                                                color: Colors.white,
                                               ),
                                             ),
                                           ),
-                                        ],
-                                      ),
-                                    );
-                                  }
-
-                                  return Column(
-                                    spacing: 20,
-                                    children: [
-                                      HabitSelector(
-                                        selectedHabitIndex: ref.watch(selectedHabitIndexProvider),
-                                        habitStats: state.habitStatistics.values.toList(),
-                                        onHabitSelected: (index) {
-                                          ref.read(selectedHabitIndexProvider.notifier).state = index;
-                                        },
-                                      ),
-                                      const GeneralProgressStats(),
-                                      const InsightsWidget(),
-                                      const SizedBox(height: 100), // Extra space for watermark
-                                    ],
+                                        ),
+                                      ],
+                                    ),
                                   );
-                                },
-                              );
-                            },
-                          ),
-                        ],
-                      ),
+                                }
+
+                                return Column(
+                                  spacing: 20,
+                                  children: [
+                                    HabitSelector(
+                                      selectedHabitIndex: ref.watch(selectedHabitIndexProvider),
+                                      habitStats: state.habitStatistics.values.toList(),
+                                      onHabitSelected: (index) {
+                                        ref.read(selectedHabitIndexProvider.notifier).state = index;
+                                      },
+                                    ),
+                                    const GeneralProgressStats(),
+                                    const InsightsWidget(),
+                                    const SizedBox(height: 100), // Extra space for watermark
+                                  ],
+                                );
+                              },
+                            );
+                          },
+                        ),
+                      ],
                     ),
                   ],
                 ),
@@ -151,7 +137,7 @@ class StatisticsPage extends ConsumerWidget {
                           child: Center(
                             child: CustomBlurWidget(
                               child: Card(
-                                color: Colors.deepOrangeAccent.withValues(alpha: .25),
+                                color: Colors.blueAccent.withValues(alpha: .25),
                                 clipBehavior: Clip.antiAlias,
                                 child: Padding(
                                   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -160,7 +146,7 @@ class StatisticsPage extends ConsumerWidget {
                                       Expanded(
                                         child: Shimmer.fromColors(
                                           baseColor: context.titleSmall?.color ?? Colors.deepOrange,
-                                          highlightColor: context.titleSmall?.color?.withValues(alpha: 0.5) ?? Colors.deepOrangeAccent,
+                                          highlightColor: context.titleSmall?.color?.withValues(alpha: 0.5) ?? Colors.blueAccent,
                                           period: const Duration(seconds: 2),
                                           direction: ShimmerDirection.ltr,
                                           child: Text(

@@ -1,36 +1,49 @@
-import 'package:flutter/services.dart';
-import 'package:habitrise/core/widgets/custom_emoji_picker.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '/core/core.dart';
 
-class IconPickerSheet extends StatefulWidget {
-  final Function(String) onIconSelected;
+final iconPickerProvider = NotifierProvider<IconPickerNotifier, IconPickerState>(() {
+  return IconPickerNotifier();
+});
+
+class IconPickerState {
   final String? selectedIcon;
+  final int selectedCategoryIndex;
+  final int? selectedIconIndex;
+  final Map<String, List<String>> emojiCategories;
 
-  const IconPickerSheet({
-    super.key,
-    required this.onIconSelected,
+  IconPickerState({
     this.selectedIcon,
-  });
+    this.selectedCategoryIndex = 0,
+    this.selectedIconIndex,
+    Map<String, List<String>>? emojiCategories,
+  }) : emojiCategories = emojiCategories ?? {};
 
-  @override
-  IconPickerSheetState createState() => IconPickerSheetState();
+  IconPickerState copyWith({
+    String? selectedIcon,
+    int? selectedCategoryIndex,
+    int? selectedIconIndex,
+    Map<String, List<String>>? emojiCategories,
+  }) {
+    return IconPickerState(
+      selectedIcon: selectedIcon ?? this.selectedIcon,
+      selectedCategoryIndex: selectedCategoryIndex ?? this.selectedCategoryIndex,
+      selectedIconIndex: selectedIconIndex ?? this.selectedIconIndex,
+      emojiCategories: emojiCategories ?? this.emojiCategories,
+    );
+  }
 }
 
-class IconPickerSheetState extends State<IconPickerSheet> with SingleTickerProviderStateMixin {
-  // Initial selected category index
-  int selectedCategoryIndex = 0;
-  int? selectedIconIndex;
+class IconPickerNotifier extends Notifier<IconPickerState> {
+  @override
+  IconPickerState build() {
+    // Initialize with default categories
+    final categories = _initializeCategories();
+    return IconPickerState(emojiCategories: categories);
+  }
 
-  late final AnimationController controller;
-  final ScrollController _gridScrollController = ScrollController();
-  final Map<int, GlobalKey> _iconKeys = {};
-
-  // Define categories with emojis
-  late Map<String, List<String>> emojiCategories;
-
-  void _initializeCategories() {
-    emojiCategories = {
+  Map<String, List<String>> _initializeCategories() {
+    return {
       LocaleKeys.iconCategories_dailylife.tr(): [
         // Sleep and Rest
         '🛏️', // bed
@@ -659,250 +672,82 @@ class IconPickerSheetState extends State<IconPickerSheet> with SingleTickerProvi
       ],
       "Custom": [], // Custom emojis will be loaded from EmojiPicker
     };
-
-    // Eğer seçili icon Custom kategorisindeyse listeye ekle
-    if (widget.selectedIcon != null && !emojiCategories.values.any((list) => list.contains(widget.selectedIcon))) {
-      emojiCategories["Custom"]!.add(widget.selectedIcon!);
-    }
   }
 
-  void _scrollSelectedIconIntoView() {
-    if (!mounted || selectedIconIndex == null || !_iconKeys.containsKey(selectedIconIndex)) return;
+  void initializeWithSelectedIcon(String? selectedIcon) {
+    if (selectedIcon == null) return;
 
-    final context = _iconKeys[selectedIconIndex]?.currentContext;
-    if (context == null || !_gridScrollController.hasClients) return;
+    // Check if the icon is in any category
+    Map<String, List<String>> categories = state.emojiCategories;
+    int categoryIndex = 0;
+    int? iconIndex;
 
-    // İkonun pozisyonunu ve boyutunu al
-    final RenderBox box = context.findRenderObject() as RenderBox;
-    final size = box.size;
-    final position = box.localToGlobal(Offset.zero);
-
-    // GridView'ın pozisyonunu ve boyutunu al
-    final RenderBox gridBox = _gridScrollController.position.context.storageContext.findRenderObject() as RenderBox;
-    final gridPosition = gridBox.localToGlobal(Offset.zero);
-    final gridWidth = gridBox.size.width;
-
-    // İkonun GridView içindeki göreceli pozisyonunu hesapla
-    final relativePosition = position.dx - gridPosition.dx;
-
-    // İkonun GridView'ın görünür alanında olup olmadığını kontrol et
-    final isFullyVisible = relativePosition >= 0 && relativePosition + size.width <= gridWidth;
-
-    // İkon tamamen görünür değilse, kaydır
-    if (!isFullyVisible) {
-      // İkonun GridView içindeki hedef pozisyonunu hesapla (ortada olacak şekilde)
-      final targetPosition = _gridScrollController.offset + relativePosition - (gridWidth / 2) + (size.width / 2);
-
-      // Hedef pozisyonu sınırla (minimum 0, maksimum scrollExtent)
-      final clampedPosition = targetPosition.clamp(0.0, _gridScrollController.position.maxScrollExtent);
-
-      // Eğer mevcut pozisyondan çok farklı değilse, kaydırma yapma
-      if ((clampedPosition - _gridScrollController.offset).abs() > 20) {
-        _gridScrollController.animateTo(
-          clampedPosition,
-          duration: const Duration(milliseconds: 300),
-          curve: Curves.easeInOut,
-        );
+    for (var i = 0; i < categories.length; i++) {
+      final category = categories.values.elementAt(i);
+      final index = category.indexOf(selectedIcon);
+      if (index != -1) {
+        categoryIndex = i;
+        iconIndex = index;
+        break;
       }
     }
-  }
 
-  @override
-  void initState() {
-    super.initState();
-    controller = AnimationController(vsync: this);
-    _initializeCategories();
-
-    if (widget.selectedIcon != null) {
-      // Tüm kategorilerde ara (Custom dahil)
-      for (var i = 0; i < emojiCategories.length; i++) {
-        final category = emojiCategories.values.elementAt(i);
-        final iconIndex = category.indexOf(widget.selectedIcon!);
-        if (iconIndex != -1) {
-          selectedCategoryIndex = i;
-          selectedIconIndex = iconIndex;
-
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            if (mounted) {
-              // Biraz bekleyerek GridView'ın oluşmasını bekle
-              Future.delayed(Duration(milliseconds: 200), () {
-                if (mounted) {
-                  _scrollSelectedIconIntoView();
-                }
-              });
-            }
-          });
-
-          break;
-        }
+    // If not found in categories, add to custom
+    if (iconIndex == null && selectedIcon.isNotEmpty) {
+      final customCategory = categories["Custom"]!;
+      if (!customCategory.contains(selectedIcon)) {
+        customCategory.add(selectedIcon);
+        categories["Custom"] = customCategory;
       }
+
+      categoryIndex = categories.length - 1; // Custom is last
+      iconIndex = customCategory.indexOf(selectedIcon);
+    }
+
+    state = state.copyWith(
+      selectedIcon: selectedIcon,
+      selectedCategoryIndex: categoryIndex,
+      selectedIconIndex: iconIndex,
+      emojiCategories: categories,
+    );
+  }
+
+  void selectCategory(int categoryIndex) {
+    if (categoryIndex == state.selectedCategoryIndex) return;
+
+    state = state.copyWith(
+      selectedCategoryIndex: categoryIndex,
+      selectedIconIndex: null,
+    );
+  }
+
+  void selectIcon(String icon, int iconIndex) {
+    state = state.copyWith(
+      selectedIcon: icon,
+      selectedIconIndex: iconIndex,
+    );
+  }
+
+  void addCustomIcon(String icon) {
+    if (icon.isEmpty) return;
+
+    final categories = Map<String, List<String>>.from(state.emojiCategories);
+    final customIcons = List<String>.from(categories["Custom"] ?? []);
+
+    if (!customIcons.contains(icon)) {
+      customIcons.add(icon);
+      categories["Custom"] = customIcons;
+
+      state = state.copyWith(
+        emojiCategories: categories,
+      );
     }
   }
 
-  @override
-  void dispose() {
-    controller.dispose();
-    _gridScrollController.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    // Extract the keys as category names
-    List<String> categoryNames = emojiCategories.keys.toList();
-
-    // Seçili kategorideki ikonlar
-    final currentCategoryIcons = emojiCategories[categoryNames[selectedCategoryIndex]] ?? [];
-
-    // İkon tuşlarını güncelle - sadece gerektiğinde
-    if (_iconKeys.length != currentCategoryIcons.length) {
-      _iconKeys.clear();
-    }
-
-    return Stack(
-      children: [
-        ListView(
-          shrinkWrap: true,
-          physics: ClampingScrollPhysics(),
-          padding: EdgeInsets.zero,
-          children: [
-            CategoryWidget(
-              categories: categoryNames,
-              initialSelectedIndex: selectedCategoryIndex,
-              onCategorySelected: (int selectedCategory) {
-                if (selectedCategory == selectedCategoryIndex) return;
-
-                controller.forward(from: 0);
-                setState(() {
-                  selectedCategoryIndex = selectedCategory;
-                  selectedIconIndex = null;
-                });
-
-                // Kategori değiştiğinde GridView'ı başa sar
-                if (_gridScrollController.hasClients) {
-                  _gridScrollController.jumpTo(0);
-                }
-
-                // Yeni kategori için tuşları güncelle
-                WidgetsBinding.instance.addPostFrameCallback((_) {
-                  if (mounted) {
-                    setState(() {
-                      _iconKeys.clear();
-                    });
-                  }
-                });
-              },
-            ),
-            SizedBox(height: 10),
-            SizedBox(
-              height: 130,
-              child: GridView.builder(
-                controller: _gridScrollController,
-                shrinkWrap: true,
-                padding: EdgeInsets.zero,
-                scrollDirection: Axis.horizontal,
-                physics: BouncingScrollPhysics(),
-
-                cacheExtent: 1000, // Daha fazla öğeyi önbelleğe al
-                itemCount: currentCategoryIcons.length,
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 10,
-                  mainAxisSpacing: 10,
-                  childAspectRatio: 1,
-                ),
-                itemBuilder: (context, index) {
-                  final iconData = currentCategoryIcons[index];
-                  final isSelected = index == selectedIconIndex;
-
-                  // Performans için key kullanımını optimize et
-                  if (!_iconKeys.containsKey(index)) {
-                    _iconKeys[index] = GlobalKey();
-                  }
-
-                  return CustomButton(
-                    key: _iconKeys[index],
-                    onPressed: () {
-                      // Eğer zaten seçiliyse, tekrar işlem yapma
-                      if (selectedIconIndex == index) return;
-
-                      HapticFeedback.selectionClick();
-                      setState(() {
-                        selectedIconIndex = index;
-                      });
-
-                      widget.onIconSelected(iconData);
-
-                      // Seçilen ikonu görünür yap - ama sadece görünür değilse
-                      WidgetsBinding.instance.addPostFrameCallback((_) {
-                        if (mounted) {
-                          _scrollSelectedIconIntoView();
-                        }
-                      });
-                    },
-                    child: Card(
-                      elevation: .25,
-                      color: isSelected ? context.primary.withAlpha(100) : null,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Center(
-                        child: FittedBox(
-                          child: Text(
-                            iconData,
-                            textAlign: TextAlign.center,
-                            style: context.titleLarge?.copyWith(fontSize: 44),
-                            maxLines: 1,
-                          ),
-                        ),
-                      ),
-                    ),
-                  );
-                },
-              ).animate(controller: controller).fadeIn(duration: 500.ms),
-            ),
-            Align(
-              alignment: Alignment.centerRight,
-              child: Padding(
-                padding: const EdgeInsets.only(
-                  right: 10,
-                  top: 5,
-                ),
-                child: CustomEmojiPicker(
-                  onEmojiSelected: (category, emoji) {
-                    // Eğer emoji zaten seçiliyse, işlem yapma
-                    if (widget.selectedIcon == emoji.emoji) {
-                      navigator.pop();
-                      return;
-                    }
-
-                    // Yeni emojiyi Custom kategorisine ekle
-                    final customEmojis = emojiCategories["Custom"] ?? [];
-                    if (!customEmojis.contains(emoji.emoji)) {
-                      setState(() {
-                        customEmojis.add(emoji.emoji);
-                        emojiCategories["Custom"] = customEmojis;
-                      });
-                    }
-
-                    widget.onIconSelected(emoji.emoji);
-
-                    // Custom kategorisini seç
-                    final customCategoryIndex = emojiCategories.keys.toList().indexOf("Custom");
-                    setState(() {
-                      selectedCategoryIndex = customCategoryIndex;
-                      // Custom kategorisindeki yeni eklenen emojinin indeksini bul
-                      selectedIconIndex = customEmojis.indexOf(emoji.emoji);
-                    });
-
-                    navigator.pop();
-                  },
-                ),
-              ),
-            ),
-          ],
-        ),
-      ],
+  void clearSelection() {
+    state = state.copyWith(
+      selectedIcon: null,
+      selectedIconIndex: null,
     );
   }
 }

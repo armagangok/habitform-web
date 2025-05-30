@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '/core/core.dart';
 import '/core/theme/theme_data/theme_data.dart';
+import '/features/habit_category/provider/provider_setup.dart';
 import '/features/onboarding/providers/onboarding_provider.dart';
 import '/features/purchase/services/purchase_service.dart';
 import '/services/app_default.dart';
@@ -35,8 +36,14 @@ void main() async {
   await TimeZoneHelper.initializeTimeZone();
   await AppDefaultsService().initializeAppDefaults();
 
+  // Setup habit category providers
+  final habitCategoryOverrides = await setupHabitCategoryProviders();
+
   runApp(
     ProviderScope(
+      overrides: [
+        ...habitCategoryOverrides,
+      ],
       child: EasyLocalization(
         supportedLocales: const [
           Locale('en', 'US'),

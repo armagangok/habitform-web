@@ -14,17 +14,15 @@ class HabitDetailNotifier extends AutoDisposeNotifier<Habit?> {
   @override
   Habit? build() => null;
 
+  Future<void> initHabit(Habit habit) async => state = habit;
+
   Future<void> updateHabit(Habit habit) async {
     try {
       await habitService.updateHabit(habit);
       state = habit;
     } catch (e) {
-      rethrow;
+      LogHelper.shared.errorPrint("Error updating habit: $e");
     }
-  }
-
-  Future<void> setHabit(Habit habit) async {
-    state = habit;
   }
 
   Future<void> markHabitAsComplete(String habitId, CompletionEntry completion) async {
@@ -54,7 +52,7 @@ class HabitDetailNotifier extends AutoDisposeNotifier<Habit?> {
           await ref.read(homeProvider.notifier).refreshHabits();
           LogHelper.shared.debugPrint("State and home provider updated successfully");
         } catch (e) {
-          LogHelper.shared.debugPrint("Could not find the updated habit: $e");
+          LogHelper.shared.errorPrint("Could not find the updated habit: $e");
         }
       } else {
         LogHelper.shared.debugPrint("Current habit is not being viewed, only updating home provider");
@@ -62,8 +60,7 @@ class HabitDetailNotifier extends AutoDisposeNotifier<Habit?> {
         await ref.read(homeProvider.notifier).refreshHabits();
       }
     } catch (e, s) {
-      LogHelper.shared.debugPrint("Error marking habit as complete: $e\n$s");
-      // Hatayı yukarı ilet, widget layer'da handling yapılabilir
+      LogHelper.shared.errorPrint("Error marking habit as complete: $e\n$s");
       rethrow;
     }
   }

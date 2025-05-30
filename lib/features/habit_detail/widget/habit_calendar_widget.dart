@@ -156,52 +156,57 @@ class _HabitCalendarCompletionSheetState extends ConsumerState<HabitCalendarComp
 
   @override
   Widget build(BuildContext context) {
-    return CupertinoPageScaffold(
-      navigationBar: const SheetHeader(
-        title: "",
-        closeButtonPosition: CloseButtonPosition.left,
-      ),
-      child: ListView(
-        physics: const ClampingScrollPhysics(),
-        shrinkWrap: true,
-        children: [
-          Material(
-            child: TableCalendar(
-              locale: context.locale.languageCode,
-              firstDay: _firstDay,
-              lastDay: _lastDay,
-              focusedDay: _focusedDay,
-              calendarFormat: CalendarFormat.month,
-              startingDayOfWeek: StartingDayOfWeek.monday,
-              headerStyle: const HeaderStyle(
-                formatButtonVisible: false,
-                titleCentered: true,
+    return CupertinoPopupSurface(
+      isSurfacePainted: true,
+      child: CupertinoPageScaffold(
+        backgroundColor: Colors.transparent,
+        navigationBar: const SheetHeader(
+          title: "",
+          closeButtonPosition: CloseButtonPosition.left,
+        ),
+        child: ListView(
+          physics: const ClampingScrollPhysics(),
+          shrinkWrap: true,
+          children: [
+            Material(
+              color: Colors.transparent,
+              child: TableCalendar(
+                locale: context.locale.languageCode,
+                firstDay: _firstDay,
+                lastDay: _lastDay,
+                focusedDay: _focusedDay,
+                calendarFormat: CalendarFormat.month,
+                startingDayOfWeek: StartingDayOfWeek.monday,
+                headerStyle: const HeaderStyle(
+                  formatButtonVisible: false,
+                  titleCentered: true,
+                ),
+                calendarStyle: _calendarStyle,
+                selectedDayPredicate: (day) => _completedDays.contains(day),
+                onDaySelected: _onDaySelected,
+                eventLoader: (day) {
+                  final normalizedDay = DateTime(day.year, day.month, day.day);
+                  return _completedDays.contains(normalizedDay) ? [normalizedDay] : const [];
+                },
+                sixWeekMonthsEnforced: false,
+                rowHeight: 52,
+                daysOfWeekHeight: 40,
               ),
-              calendarStyle: _calendarStyle,
-              selectedDayPredicate: (day) => _completedDays.contains(day),
-              onDaySelected: _onDaySelected,
-              eventLoader: (day) {
-                final normalizedDay = DateTime(day.year, day.month, day.day);
-                return _completedDays.contains(normalizedDay) ? [normalizedDay] : const [];
-              },
-              sixWeekMonthsEnforced: false,
-              rowHeight: 52,
-              daysOfWeekHeight: 40,
             ),
-          ),
-          const SizedBox(height: 16),
-          SafeArea(
-            top: false,
-            child: Text(
-              LocaleKeys.habit_calendar_tap_info.tr(),
-              style: context.bodySmall?.copyWith(
-                color: context.theme.hintColor,
+            const SizedBox(height: 16),
+            SafeArea(
+              top: false,
+              child: Text(
+                LocaleKeys.habit_calendar_tap_info.tr(),
+                style: context.bodySmall?.copyWith(
+                  color: context.theme.hintColor,
+                ),
+                textAlign: TextAlign.center,
               ),
-              textAlign: TextAlign.center,
             ),
-          ),
-          const SizedBox(height: 5),
-        ],
+            const SizedBox(height: 5),
+          ],
+        ),
       ),
     );
   }

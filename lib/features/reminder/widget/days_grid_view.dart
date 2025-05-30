@@ -55,7 +55,7 @@ class _DaysGridViewBuilderState extends ConsumerState<DaysGridViewBuilder> {
       initialSelection: selectedDays,
       onCategorySelected: _updateDays,
       categoryLabelBuilder: (category) => category.getFullDayName,
-      selection: Colors.deepOrangeAccent,
+      selection: Colors.blueAccent,
     );
   }
 }

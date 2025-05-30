@@ -25,7 +25,7 @@ class SheetHeader extends StatelessWidget implements ObstructingPreferredSizeWid
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return CupertinoNavigationBar(
-      backgroundColor: context.cupertinoTheme.barBackgroundColor,
+      backgroundColor: context.cupertinoTheme.barBackgroundColor.withValues(alpha: .25),
       border: Border(
         bottom: BorderSide(
           color: theme.dividerColor.withValues(alpha: .3),

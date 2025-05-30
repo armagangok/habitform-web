@@ -1,5 +1,3 @@
-import 'dart:math' as math;
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '/core/core.dart';
@@ -14,32 +12,6 @@ class GeneralProgressStats extends ConsumerWidget {
   const GeneralProgressStats({
     super.key,
   });
-
-  // Calculate the longest streak for a specific habit
-  int _calculateHabitLongestStreak(Habit habit) {
-    final sortedCompletions = habit.completions.values.where((entry) => entry.isCompleted).toList()..sort((a, b) => a.date.compareTo(b.date));
-
-    if (sortedCompletions.isEmpty) return 0;
-
-    int currentStreak = 1;
-    int longestStreak = 1;
-
-    for (int i = 1; i < sortedCompletions.length; i++) {
-      final previousDate = DateUtils.dateOnly(sortedCompletions[i - 1].date);
-      final currentDate = DateUtils.dateOnly(sortedCompletions[i].date);
-
-      final difference = currentDate.difference(previousDate).inDays;
-
-      if (difference == 1) {
-        currentStreak++;
-        longestStreak = math.max(longestStreak, currentStreak);
-      } else if (difference > 1) {
-        currentStreak = 1;
-      }
-    }
-
-    return longestStreak;
-  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -150,7 +122,7 @@ class GeneralProgressStats extends ConsumerWidget {
             }
 
             // Alışkanlığa özel en uzun seriyi hesapla
-            final longestStreak = _calculateHabitLongestStreak(habitModel);
+            final longestStreak = habitModel.completions.calculateLongestStreak();
 
             // Mevcut seriyi hesapla
             final currentStreak = habitModel.completions.calculateCurrentStreak();
@@ -198,8 +170,8 @@ class GeneralProgressStats extends ConsumerWidget {
               backgroundColor: Colors.transparent,
               header: Text(LocaleKeys.statistics_overview.tr()),
               children: [
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
+                ColoredBox(
+                  color: context.theme.scaffoldBackgroundColor,
                   child: Column(
                     children: [
                       Row(

@@ -9,4 +9,8 @@ class KRoute {
   static const auth = '/auth';
   static const archivedHabits = '/archivedHabits';
   static const dataManagement = '/dataManagement';
+
+  static const habitCategoryPage = '/habitCategoryPage';
+
+  static const iconPage = '/iconPage';
 }

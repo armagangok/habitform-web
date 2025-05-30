@@ -17,8 +17,7 @@ class StatisticCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       child: CupertinoListTile(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        backgroundColor: context.theme.cardTheme.color,
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
         title: Icon(
           icon,
           color: context.theme.primaryColor,

@@ -213,7 +213,7 @@ class _DataExportImportPageState extends ConsumerState<DataExportImportPage> {
                         SizedBox(
                           width: double.infinity,
                           child: CupertinoButton(
-                            color: Colors.deepOrangeAccent,
+                            color: Colors.blueAccent,
                             padding: EdgeInsets.symmetric(vertical: 12),
                             onPressed: isProUser ? (_isExporting ? null : _exportData) : _showPaywallPage,
                             child: _isExporting
@@ -298,7 +298,7 @@ class _DataExportImportPageState extends ConsumerState<DataExportImportPage> {
                         SizedBox(
                           width: double.infinity,
                           child: CupertinoButton(
-                            color: Colors.deepOrangeAccent,
+                            color: Colors.blueAccent,
                             padding: EdgeInsets.symmetric(vertical: 12),
                             onPressed: isProUser ? (_isImporting ? null : _importData) : _showPaywallPage,
                             child: _isImporting

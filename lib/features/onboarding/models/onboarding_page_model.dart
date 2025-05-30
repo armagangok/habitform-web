@@ -43,7 +43,7 @@ class OnboardingPages {
       imagePath: Assets.images.onboarding.smallSteps.path,
       backgroundColor: Color(0xFF1E1E1E),
       textColor: Colors.white,
-      accentColor: Colors.deepOrangeAccent,
+      accentColor: Colors.blueAccent,
     ),
     OnboardingPageModel(
       title: LocaleKeys.onboarding_pages_routine_title.tr(),
@@ -51,7 +51,7 @@ class OnboardingPages {
       imagePath: Assets.images.onboarding.waterTree.path,
       backgroundColor: Color(0xFF1E1E1E),
       textColor: Colors.white,
-      accentColor: Colors.deepOrangeAccent,
+      accentColor: Colors.blueAccent,
     ),
     OnboardingPageModel(
       title: LocaleKeys.onboarding_pages_patience_title.tr(),
@@ -59,7 +59,7 @@ class OnboardingPages {
       imagePath: Assets.images.onboarding.orangeFruit.path,
       backgroundColor: Color(0xFF1E1E1E),
       textColor: Colors.white,
-      accentColor: Colors.deepOrangeAccent,
+      accentColor: Colors.blueAccent,
     ),
     OnboardingPageModel(
       title: LocaleKeys.onboarding_pages_bad_habits_title.tr(),
@@ -67,7 +67,7 @@ class OnboardingPages {
       imagePath: Assets.images.onboarding.badHabits.path,
       backgroundColor: Color(0xFF1E1E1E),
       textColor: Colors.white,
-      accentColor: Colors.deepOrangeAccent,
+      accentColor: Colors.blueAccent,
     ),
     OnboardingPageModel(
       title: LocaleKeys.onboarding_pages_become_person_title.tr(),
@@ -75,7 +75,7 @@ class OnboardingPages {
       imagePath: Assets.images.onboarding.aristoteles.path,
       backgroundColor: Colors.black,
       textColor: Colors.white.withValues(alpha: 0.9),
-      accentColor: Colors.deepOrangeAccent,
+      accentColor: Colors.blueAccent,
     ),
   ];
 }

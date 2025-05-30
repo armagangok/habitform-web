@@ -16,7 +16,7 @@ class CustomHeader extends StatelessWidget {
         ? Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
-            spacing: 2.5,
+            spacing: 8,
             children: [
               if (text != null)
                 Padding(

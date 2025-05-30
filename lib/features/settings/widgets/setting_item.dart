@@ -44,13 +44,11 @@ class SettingItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: CupertinoListTile(
-        leading: leading,
-        title: Text(title),
-        onTap: onTap,
-        trailing: trailing ?? CupertinoListTileChevron(),
-      ),
+    return CupertinoListTile(
+      leading: leading,
+      title: Text(title),
+      onTap: onTap,
+      trailing: trailing ?? CupertinoListTileChevron(),
     );
   }
 }

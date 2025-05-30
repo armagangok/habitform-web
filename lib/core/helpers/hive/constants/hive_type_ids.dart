@@ -6,6 +6,5 @@ class HiveTypeIds {
   static const int days = 3;
   static const int appDefaults = 4;
   static const int completionEntry = 7;
-  static const int deviceInfo = 8;
-  static const int syncMetadata = 9;
+  static const int habitCategory = 9;
 }

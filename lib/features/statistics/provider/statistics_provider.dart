@@ -1,5 +1,3 @@
-import 'dart:math' as math;
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '/core/core.dart';
@@ -26,27 +24,24 @@ class StatisticsNotifier extends AutoDisposeAsyncNotifier<StatisticsState> {
     final isProUser = purchaseState.value?.isSubscriptionActive ?? false;
 
     // HomeProvider'dan alışkanlıkları dinle
-    ref.listen(homeProvider, (previous, next) {
+    ref.listen(homeProvider, (previous, next) async {
       if (next is AsyncData && next.value != null) {
         // HomeProvider güncellendiğinde istatistikleri yeniden hesapla
-        _refreshStats();
+        final purchaseState = ref.read(purchaseProvider);
+        final isProUser = purchaseState.value?.isSubscriptionActive ?? false;
+        state = AsyncData(await _getStatistics(isProUser));
       }
     });
 
     // Listen to purchase state changes to refresh stats when subscription status changes
-    ref.listen(purchaseProvider, (previous, next) {
+    ref.listen(purchaseProvider, (previous, next) async {
       if (previous?.value?.isSubscriptionActive != next.value?.isSubscriptionActive) {
-        _refreshStats();
+        final isProUser = next.value?.isSubscriptionActive ?? false;
+        state = AsyncData(await _getStatistics(isProUser));
       }
     });
 
     return _getStatistics(isProUser);
-  }
-
-  Future<void> _refreshStats() async {
-    final purchaseState = ref.read(purchaseProvider);
-    final isProUser = purchaseState.value?.isSubscriptionActive ?? false;
-    state = AsyncData(await _getStatistics(isProUser));
   }
 
   Future<StatisticsState> _getStatistics(bool isProUser) async {
@@ -82,34 +77,11 @@ class StatisticsNotifier extends AutoDisposeAsyncNotifier<StatisticsState> {
 
     final totalCompletions = _countTotalCompletions(habits);
 
-    // Tüm alışkanlıklar için başlangıç tarihinden bugüne kadar olan toplam gün sayısını hesapla
-    final today = DateUtils.dateOnly(DateTime.now());
-    int totalDaysSinceStart = 0;
-
-    for (final habit in habits) {
-      if (habit.completions.isEmpty) continue;
-
-      // Alışkanlığın başlangıç tarihini bul
-      final sortedDates = habit.completions.values.map((entry) => DateUtils.dateOnly(entry.date)).toList()..sort();
-
-      final startDate = sortedDates.first;
-
-      // Başlangıç tarihinden bugüne kadar geçen gün sayısını ekle
-      totalDaysSinceStart += today.difference(startDate).inDays + 1;
-    }
-
-    // Tamamlama oranı: toplam tamamlanan gün / toplam geçen gün
-    final completionRate = totalDaysSinceStart > 0 ? (totalCompletions / totalDaysSinceStart) * 100.0 : 0.0;
-
-    final longestStreak = _calculateLongestStreak(habits);
-
     // Calculate habit-specific statistics
     final habitStatistics = _calculateHabitStatistics(habits);
 
     return StatisticsState(
       totalCompletedDays: totalCompletions,
-      completionRate: completionRate,
-      longestStreak: longestStreak,
       habitStatistics: habitStatistics,
       isMockData: isMockData,
     );
@@ -132,38 +104,6 @@ class StatisticsNotifier extends AutoDisposeAsyncNotifier<StatisticsState> {
       total += habit.completions.values.where((entry) => entry.isCompleted).length;
     }
     return total;
-  }
-
-  /// Calculates the longest streak across all habits
-  int _calculateLongestStreak(List<Habit> habits) {
-    int maxStreak = 0;
-
-    for (final habit in habits) {
-      final sortedCompletions = habit.completions.values.where((entry) => entry.isCompleted).toList()..sort((a, b) => a.date.compareTo(b.date));
-
-      if (sortedCompletions.isEmpty) continue;
-
-      int currentStreak = 1;
-      int longestStreak = 1;
-
-      for (int i = 1; i < sortedCompletions.length; i++) {
-        final previousDate = DateUtils.dateOnly(sortedCompletions[i - 1].date);
-        final currentDate = DateUtils.dateOnly(sortedCompletions[i].date);
-
-        final difference = currentDate.difference(previousDate).inDays;
-
-        if (difference == 1) {
-          currentStreak++;
-          longestStreak = math.max(longestStreak, currentStreak);
-        } else if (difference > 1) {
-          currentStreak = 1;
-        }
-      }
-
-      maxStreak = math.max(maxStreak, longestStreak);
-    }
-
-    return maxStreak;
   }
 
   /// Calculates per-habit statistics
