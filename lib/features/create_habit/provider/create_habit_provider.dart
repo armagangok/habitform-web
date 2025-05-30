@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/core.dart';
 import '../../../models/habit/habit_model.dart';
+import '../../habit_category/provider/habit_category_button_provider.dart';
 import '../../habit_color/provider/habit_color_provider.dart';
 import '../../habit_icon/provider/habit_icon_provider.dart';
 import '../../home/provider/home_provider.dart';
@@ -50,7 +51,7 @@ class CreateHabitNotifier extends AutoDisposeAsyncNotifier<CreateHabitState> {
     final emoji = ref.watch(iconProvider);
     final color = ref.watch(colorProvider);
     final reminder = ref.watch(reminderProvider).reminder;
-    final categoryIds = state.value?.categoryIds ?? [];
+    final categoryIds = ref.read(categoryButtonProvider) ?? [];
 
     state = const AsyncValue.loading();
 
@@ -76,6 +77,9 @@ class CreateHabitNotifier extends AutoDisposeAsyncNotifier<CreateHabitState> {
       } else {
         LogHelper.shared.debugPrint('No reminder to schedule for new habit');
       }
+
+      // Clear category selection after successful habit creation
+      ref.read(categoryButtonProvider.notifier).clearCategories();
 
       state = AsyncValue.data(CreateHabitState());
 

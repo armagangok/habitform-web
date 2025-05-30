@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '/core/core.dart';
+import '../habit_category/provider/habit_category_button_provider.dart';
 import '../habit_category/widget/category_picker_button.dart';
 import '../habit_color/color_picker_widget.dart';
 import '../habit_color/provider/habit_color_provider.dart';
@@ -24,6 +25,8 @@ class _CreateHabitPageState extends ConsumerState<CreateHabitPage> {
     // Initialize reminder provider with empty reminder
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(reminderProvider.notifier).initializeReminder(null);
+      // Clear any previously selected categories when creating a new habit
+      ref.read(categoryButtonProvider.notifier).clearCategories();
     });
   }
 

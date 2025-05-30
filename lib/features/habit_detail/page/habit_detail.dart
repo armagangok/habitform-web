@@ -42,13 +42,12 @@ class HabitDetailPage extends ConsumerWidget {
                     spacing: 16,
                     children: [
                       SizedBox(height: 28),
-                      _iconPicker(context, currentHabit),
+                      _iconPicker(currentHabit),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 15) + const EdgeInsets.only(top: 10),
                         child: _HabitGeneralInfo(
                           name: currentHabit.habitName,
                           description: currentHabit.habitDescription,
-                          emoji: currentHabit.emoji,
                         ),
                       ),
                       Padding(
@@ -130,33 +129,43 @@ class HabitDetailPage extends ConsumerWidget {
     );
   }
 
-  CustomButton _iconPicker(BuildContext context, Habit currentHabit) {
-    return CustomButton(
-      onPressed: () {},
-      child: Container(
-        height: 90,
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-          color: context.theme.scaffoldBackgroundColor,
-          shape: BoxShape.circle,
-          border: Border.all(
-            color: Colors.grey.withValues(alpha: .7),
-            width: .5,
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withValues(alpha: 0.2),
-              spreadRadius: 10,
-              blurRadius: 30,
-              offset: const Offset(0, 0),
+  Widget _iconPicker(Habit currentHabit) {
+    return Builder(
+      builder: (context) {
+        return CustomButton(
+          onPressed: () {
+            showCupertinoModalBottomSheet(
+              enableDrag: false,
+              context: context,
+              builder: (context) => EditHabitPage(habit: currentHabit),
+            );
+          },
+          child: Container(
+            height: 90,
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              color: context.theme.scaffoldBackgroundColor,
+              shape: BoxShape.circle,
+              border: Border.all(
+                color: Colors.grey.withValues(alpha: .7),
+                width: .5,
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withValues(alpha: 0.2),
+                  spreadRadius: 10,
+                  blurRadius: 30,
+                  offset: const Offset(0, 0),
+                ),
+              ],
             ),
-          ],
-        ),
-        child: Text(
-          currentHabit.emoji ?? "",
-          style: const TextStyle(fontSize: 40, color: Colors.white),
-        ),
-      ),
+            child: Text(
+              currentHabit.emoji ?? "",
+              style: const TextStyle(fontSize: 40, color: Colors.white),
+            ),
+          ),
+        );
+      },
     );
   }
 
@@ -215,12 +224,10 @@ class _HabitGeneralInfo extends ConsumerWidget {
   const _HabitGeneralInfo({
     required this.name,
     this.description,
-    this.emoji,
   });
 
   final String name;
   final String? description;
-  final String? emoji;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
