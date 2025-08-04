@@ -49,7 +49,7 @@ PODS:
     - FlutterMacOS
   - permission_handler_apple (9.3.0):
     - Flutter
-  - purchases_flutter (8.8.1):
+  - purchases_flutter (8.9.0):
     - Flutter
     - PurchasesHybridCommon (= 13.32.0)
   - PurchasesHybridCommon (13.32.0):
@@ -131,7 +131,7 @@ SPEC CHECKSUMS:
   in_app_review: a31b5257259646ea78e0e35fc914979b0031d011
   path_provider_foundation: 2b6b4c569c0fb62ec74538f866245ac84301af46
   permission_handler_apple: 9878588469a2b0d0fc1e048d9f43605f92e6cec2
-  purchases_flutter: 474338fe3d5c6477a4188ecd258a9ee859c03b56
+  purchases_flutter: 4f70e7d0ef551154bd322deb308fadbdcc58a18c
   PurchasesHybridCommon: 662aa1f4769ff4ef594e35adf1a5d0ad7b3d08b7
   RevenueCat: 2d3639d30b8a71cbfe3d99cef8243c602793e0ec
   SDWebImage: f84b0feeb08d2d11e6a9b843cb06d75ebf5b8868

@@ -26,6 +26,7 @@ class CustomEmojiPicker extends StatelessWidget {
               LocaleKeys.common_pick_your_emoji.tr(),
               style: context.titleMedium?.copyWith(
                 fontWeight: FontWeight.w600,
+                color: Colors.white,
               ),
             ),
             onPressed: () => _showEmojiPicker(context),
