@@ -118,6 +118,7 @@ class _HomeHabitGridState extends ConsumerState<HomeHabitGrid> with SingleTicker
                     ? Icon(
                         CupertinoIcons.calendar_today,
                         size: 24,
+                        color: habitColor,
                       )
                     : null,
           ),
