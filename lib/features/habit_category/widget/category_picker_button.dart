@@ -69,7 +69,7 @@ class CategoryPickerButton extends ConsumerWidget {
                       SizedBox(width: 8),
                       Text(
                         'Select categories',
-                        style: context.bodyMedium?.copyWith(
+                        style: context.bodyMedium.copyWith(
                           color: context.primary,
                         ),
                       ),
@@ -102,7 +102,7 @@ class CategoryPickerButton extends ConsumerWidget {
                             SizedBox(width: 6),
                             Text(
                               category.name,
-                              style: context.bodySmall?.copyWith(
+                              style: context.bodySmall.copyWith(
                                 color: context.primary,
                                 fontWeight: FontWeight.w500,
                               ),

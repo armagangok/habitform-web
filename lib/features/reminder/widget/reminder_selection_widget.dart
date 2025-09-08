@@ -35,7 +35,6 @@ class _ReminderSelectionWidgetState extends ConsumerState<ReminderSelectionWidge
     final remindTime = reminderState.reminder?.reminderTime;
 
     return CustomHeader(
-      text: LocaleKeys.habit_reminder.tr().toUpperCase(),
       child: CustomListTile(
         onPressed: () async {
           context.hideKeyboard();
@@ -45,7 +44,7 @@ class _ReminderSelectionWidgetState extends ConsumerState<ReminderSelectionWidge
           switch (permissionStatus) {
             case PermissionStatus.granted:
               if (context.mounted) {
-                await showCupertinoModalBottomSheet(
+                await showCupertinoSheet(
                   enableDrag: false,
                   context: context,
                   builder: (contextFromSheet) => const ReminderPage(),
@@ -94,9 +93,9 @@ class _ReminderSelectionWidgetState extends ConsumerState<ReminderSelectionWidge
                 children: [
                   Text(
                     remindTime?.toHHMM() ?? LocaleKeys.common_none.tr(),
-                    style: context.titleMedium?.copyWith(
+                    style: context.titleMedium.copyWith(
                       fontWeight: FontWeight.w500,
-                      color: context.titleMedium?.color,
+                      color: context.titleMedium.color,
                     ),
                   ),
                 ],
@@ -112,8 +111,7 @@ class _ReminderSelectionWidgetState extends ConsumerState<ReminderSelectionWidge
                     child: days.length == 7
                         ? Text(
                             LocaleKeys.habit_daily.tr(),
-                            style: context.bodyMedium?.copyWith(
-                              color: Colors.blueAccent,
+                            style: context.bodyMedium.copyWith(
                               fontWeight: FontWeight.w600,
                             ),
                           )
@@ -126,9 +124,7 @@ class _ReminderSelectionWidgetState extends ConsumerState<ReminderSelectionWidge
                                 return Center(
                                   child: Text(
                                     days.isLast(index) ? day.shortenDayName : "${day.shortenDayName}, ",
-                                    style: context.bodySmall?.copyWith(
-                                      color: Colors.blueAccent,
-                                    ),
+                                    style: context.bodySmall,
                                   ),
                                 );
                               },

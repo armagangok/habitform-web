@@ -17,15 +17,15 @@ class TrailingActionButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return CupertinoButton(
       padding: EdgeInsets.zero,
-      minSize: 0,
+      minimumSize: Size.zero,
       borderRadius: BorderRadius.circular(8),
       onPressed: onPressed,
       child: child ??
           Text(
             title ?? "",
-            style: context.titleMedium?.copyWith(
+            style: context.titleMedium.copyWith(
               fontWeight: FontWeight.w500,
-              color: Colors.blueAccent,
+              
             ),
           ),
     );

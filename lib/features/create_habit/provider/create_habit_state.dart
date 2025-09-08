@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
+import '../../../models/habit/habit_difficulty.dart';
 import '../../reminder/models/reminder/reminder_model.dart';
+import '../models/create_habit_step.dart';
 
 class CreateHabitState {
   final String? title;
@@ -12,6 +14,8 @@ class CreateHabitState {
   final TextEditingController habitNameController;
   final TextEditingController habitDescriptionController;
   final List<String> categoryIds;
+  final CreateHabitStep currentStep;
+  final HabitDifficulty difficulty;
 
   CreateHabitState({
     this.title,
@@ -23,6 +27,8 @@ class CreateHabitState {
     TextEditingController? habitNameController,
     TextEditingController? habitDescriptionController,
     this.categoryIds = const [],
+    this.currentStep = CreateHabitStep.habitName,
+    this.difficulty = HabitDifficulty.moderate,
   })  : habitNameController = habitNameController ?? TextEditingController(),
         habitDescriptionController = habitDescriptionController ?? TextEditingController();
 
@@ -36,6 +42,8 @@ class CreateHabitState {
     TextEditingController? habitNameController,
     TextEditingController? habitDescriptionController,
     List<String>? categoryIds,
+    CreateHabitStep? currentStep,
+    HabitDifficulty? difficulty,
   }) {
     return CreateHabitState(
       title: title ?? this.title,
@@ -47,6 +55,8 @@ class CreateHabitState {
       habitNameController: habitNameController ?? this.habitNameController,
       habitDescriptionController: habitDescriptionController ?? this.habitDescriptionController,
       categoryIds: categoryIds ?? this.categoryIds,
+      currentStep: currentStep ?? this.currentStep,
+      difficulty: difficulty ?? this.difficulty,
     );
   }
 

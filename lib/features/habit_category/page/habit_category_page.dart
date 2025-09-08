@@ -63,13 +63,15 @@ class _HabitCategoryPageState extends ConsumerState<HabitCategoryPage> {
       ),
       child: Stack(
         children: [
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: categoryState.when(
-              data: (state) => _buildCategoryList(state, localSelectedIds),
-              loading: () => const Center(child: CupertinoActivityIndicator()),
-              error: (error, _) => Center(
-                child: Text('Error loading categories: $error', style: context.bodyMedium),
+          SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: categoryState.when(
+                data: (state) => _buildCategoryList(state, localSelectedIds),
+                loading: () => const Center(child: CupertinoActivityIndicator()),
+                error: (error, _) => Center(
+                  child: Text('Error loading categories: $error', style: context.bodyMedium),
+                ),
               ),
             ),
           ),
@@ -85,12 +87,11 @@ class _HabitCategoryPageState extends ConsumerState<HabitCategoryPage> {
                       mainAxisSize: MainAxisSize.max,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(FontAwesomeIcons.solidPenToSquare, size: 20, color: Colors.white),
+                        Icon(FontAwesomeIcons.solidPenToSquare, size: 20),
                         SizedBox(width: 8),
                         Text(
                           'New Category',
-                          style: context.titleMedium?.copyWith(
-                            color: Colors.white,
+                          style: context.titleMedium.copyWith(
                             fontWeight: FontWeight.w600,
                           ),
                         ),
@@ -139,7 +140,7 @@ class _HabitCategoryPageState extends ConsumerState<HabitCategoryPage> {
       padding: const EdgeInsets.only(bottom: 12),
       child: Text(
         title,
-        style: context.bodySmall?.copyWith(
+        style: context.bodySmall.copyWith(
           fontWeight: FontWeight.w600,
           color: Colors.grey,
         ),
@@ -159,7 +160,7 @@ class _HabitCategoryPageState extends ConsumerState<HabitCategoryPage> {
         duration: const Duration(milliseconds: 200),
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         decoration: BoxDecoration(
-          color: isSelected ? context.cupertinoTheme.primaryColor : context.theme.cardColor,
+          color: isSelected ? context.cupertinoTheme.primaryColor : context.selectionHandleColor,
           borderRadius: BorderRadius.circular(8),
           border: Border.all(
             color: isSelected ? Colors.transparent : Colors.grey.withValues(alpha: 0.3),
@@ -173,13 +174,13 @@ class _HabitCategoryPageState extends ConsumerState<HabitCategoryPage> {
               FaIcon(
                 iconData,
                 size: 16,
-                color: isSelected ? Colors.white : context.primary,
+                color: isSelected ? context.primary : context.selectionHandleColor,
               ),
               SizedBox(width: 6),
             ],
             Text(
               category.name,
-              style: context.bodySmall?.copyWith(
+              style: context.bodySmall.copyWith(
                 color: isSelected ? Colors.white : null,
                 fontWeight: FontWeight.w600,
               ),

@@ -117,44 +117,38 @@ class _PaywallWidgetState extends ConsumerState<PaywallPage> with SingleTickerPr
                           itemBuilder: (context, index) {
                             final feature = featureList[index];
 
-                            return Card(
-                              child: Padding(
-                                padding: EdgeInsets.symmetric(
-                                  vertical: 5,
-                                  horizontal: 12,
-                                ),
-                                child: Row(
-                                  children: [
-                                    Card(
-                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                                      color: feature.color,
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(6.0),
-                                        child: Icon(
-                                          feature.widget,
-                                          color: Colors.white,
-                                          size: 20,
-                                        ),
-                                      ),
+                            return Padding(
+                              padding: EdgeInsets.symmetric(
+                                vertical: 5,
+                                horizontal: 12,
+                              ),
+                              child: Row(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(6.0),
+                                    child: Icon(
+                                      feature.widget,
+                                      color: Colors.white,
+                                      size: 20,
                                     ),
-                                    SizedBox(width: 10),
-                                    Expanded(
-                                      child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            feature.name,
-                                            style: context.titleMedium,
-                                          ),
-                                          Text(
-                                            feature.description,
-                                            style: context.bodySmall,
-                                          ),
-                                        ],
-                                      ),
-                                    )
-                                  ],
-                                ),
+                                  ),
+                                  SizedBox(width: 10),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          feature.name,
+                                          style: context.titleMedium,
+                                        ),
+                                        Text(
+                                          feature.description,
+                                          style: context.bodySmall,
+                                        ),
+                                      ],
+                                    ),
+                                  )
+                                ],
                               ),
                             );
                           },
@@ -193,17 +187,11 @@ class _PaywallWidgetState extends ConsumerState<PaywallPage> with SingleTickerPr
                   padding: EdgeInsets.zero,
                   onPressed: navigator.pop,
                   child: FittedBox(
-                    child: Card(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(360),
-                      ),
-                      color: Colors.transparent,
-                      child: Padding(
-                        padding: const EdgeInsets.all(12.0),
-                        child: Icon(
-                          CupertinoIcons.xmark,
-                          color: context.iconTheme.color,
-                        ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(12.0),
+                      child: Icon(
+                        CupertinoIcons.xmark,
+                        color: context.iconTheme.color,
                       ),
                     ),
                   ),
@@ -279,58 +267,55 @@ class _PaywallWidgetState extends ConsumerState<PaywallPage> with SingleTickerPr
                         },
                   child: SizedBox(
                     width: double.infinity,
-                    child: Card(
-                      color: Colors.blueAccent,
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(vertical: 12),
-                        child: purchaseLoading
-                            ? Row(
-                                mainAxisSize: MainAxisSize.min,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    LocaleKeys.subscription_loading.tr(),
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white,
-                                    ),
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(vertical: 12),
+                      child: purchaseLoading
+                          ? Row(
+                              mainAxisSize: MainAxisSize.min,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  LocaleKeys.subscription_loading.tr(),
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
                                   ),
-                                  SizedBox(width: 4),
-                                  Text(
-                                    "🔓",
-                                    style: context.cupertinoTextStyle.copyWith(
-                                      fontSize: 24,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white,
-                                    ),
+                                ),
+                                SizedBox(width: 4),
+                                Text(
+                                  "🔓",
+                                  style: context.cupertinoTextStyle.copyWith(
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
                                   ),
-                                  CupertinoActivityIndicator(radius: 12),
-                                ],
-                              )
-                            : Row(
-                                mainAxisSize: MainAxisSize.min,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    LocaleKeys.subscription_continue.tr(),
-                                    style: context.cupertinoTextStyle.copyWith(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white,
-                                    ),
+                                ),
+                                CupertinoActivityIndicator(radius: 12),
+                              ],
+                            )
+                          : Row(
+                              mainAxisSize: MainAxisSize.min,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  LocaleKeys.subscription_continue.tr(),
+                                  style: context.cupertinoTextStyle.copyWith(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
                                   ),
-                                  Text(
-                                    " 🚀",
-                                    style: context.cupertinoTextStyle.copyWith(
-                                      fontSize: 24,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white,
-                                    ),
+                                ),
+                                Text(
+                                  " 🚀",
+                                  style: context.cupertinoTextStyle.copyWith(
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
                                   ),
-                                ],
-                              ),
-                      ),
+                                ),
+                              ],
+                            ),
                     ),
                   ),
                 ),
@@ -343,8 +328,8 @@ class _PaywallWidgetState extends ConsumerState<PaywallPage> with SingleTickerPr
                   },
                   child: Text(
                     LocaleKeys.subscription_continueWithLimitedPlan.tr(),
-                    style: context.bodySmall?.copyWith(
-                      color: context.bodySmall?.color?.withValues(alpha: .7),
+                    style: context.bodySmall.copyWith(
+                      color: context.bodySmall.color?.withValues(alpha: .7),
                     ),
                   ),
                 ),
@@ -363,7 +348,7 @@ class _PaywallWidgetState extends ConsumerState<PaywallPage> with SingleTickerPr
                             child: Text(
                               LocaleKeys.settings_privacy.tr(),
                               textAlign: TextAlign.center,
-                              style: context.bodySmall?.copyWith(
+                              style: context.bodySmall.copyWith(
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
@@ -382,7 +367,7 @@ class _PaywallWidgetState extends ConsumerState<PaywallPage> with SingleTickerPr
                             child: Text(
                               LocaleKeys.settings_terms.tr(),
                               textAlign: TextAlign.center,
-                              style: context.bodySmall?.copyWith(
+                              style: context.bodySmall.copyWith(
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
@@ -420,7 +405,7 @@ class _PaywallWidgetState extends ConsumerState<PaywallPage> with SingleTickerPr
             children: [
               Text(
                 LocaleKeys.subscription_restore.tr(),
-                style: context.bodySmall?.copyWith(
+                style: context.bodySmall.copyWith(
                   fontWeight: FontWeight.w600,
                 ),
                 textAlign: TextAlign.center,

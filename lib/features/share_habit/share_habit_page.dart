@@ -103,53 +103,51 @@ class _ShareHabitPageState extends State<ShareHabitPage> {
             Positioned.fill(
               child: Align(
                 alignment: Alignment.bottomCenter,
-                child: Card(
-                  child: SafeArea(
-                    top: false,
-                    child: Padding(
-                      padding: const EdgeInsets.all(20),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: CupertinoButton.tinted(
-                              onPressed: isShareLoading
-                                  ? null
-                                  : () {
-                                      _shareHabitAsImage(context);
-                                    },
-                              sizeStyle: CupertinoButtonSize.small,
-                              child: isShareLoading
-                                  ? const CircularProgressIndicator.adaptive()
-                                  : Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        Icon(FontAwesomeIcons.solidFileImage),
-                                        const SizedBox(width: 5),
-                                        Text(
-                                          LocaleKeys.share_share_image.tr(),
-                                          style: TextStyle(fontWeight: FontWeight.w600),
-                                        ),
-                                      ],
-                                    ),
+                child: SafeArea(
+                  top: false,
+                  child: Padding(
+                    padding: const EdgeInsets.all(20),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: CupertinoButton.tinted(
+                            onPressed: isShareLoading
+                                ? null
+                                : () {
+                                    _shareHabitAsImage(context);
+                                  },
+                            sizeStyle: CupertinoButtonSize.small,
+                            child: isShareLoading
+                                ? const CircularProgressIndicator.adaptive()
+                                : Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Icon(FontAwesomeIcons.solidFileImage),
+                                      const SizedBox(width: 5),
+                                      Text(
+                                        LocaleKeys.share_share_image.tr(),
+                                        style: TextStyle(fontWeight: FontWeight.w600),
+                                      ),
+                                    ],
+                                  ),
+                          ),
+                        ),
+                        const SizedBox(width: 20),
+                        Expanded(
+                          child: CupertinoButton.tinted(
+                            sizeStyle: CupertinoButtonSize.small,
+                            onPressed: _shareHabitAsText,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(FontAwesomeIcons.solidFileLines),
+                                SizedBox(width: 5),
+                                Text(LocaleKeys.share_share_text.tr()),
+                              ],
                             ),
                           ),
-                          const SizedBox(width: 20),
-                          Expanded(
-                            child: CupertinoButton.tinted(
-                              sizeStyle: CupertinoButtonSize.small,
-                              onPressed: _shareHabitAsText,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(FontAwesomeIcons.solidFileLines),
-                                  SizedBox(width: 5),
-                                  Text(LocaleKeys.share_share_text.tr()),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
@@ -224,40 +222,38 @@ class _ShareHabitPreviewState extends State<ShareHabitPreview> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Card(
-                    child: Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              Expanded(
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      widget.habit.habitName,
-                                      style: context.textTheme.titleLarge?.copyWith(
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                  Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    widget.habit.habitName,
+                                    style: context.titleLarge.copyWith(
+                                      fontWeight: FontWeight.bold,
                                     ),
-                                    // if (widget.habit.habitDescription != null) ...[
-                                    //   Text(
-                                    //     widget.habit.habitDescription!,
-                                    //     style: context.textTheme.bodyMedium,
-                                    //   ),
-                                    // ],
-                                  ],
-                                ),
+                                  ),
+                                  // if (widget.habit.habitDescription != null) ...[
+                                  //   Text(
+                                  //     widget.habit.habitDescription!,
+                                  //     style: context.bodyMedium,
+                                  //   ),
+                                  // ],
+                                ],
                               ),
-                            ],
-                          ),
-                          const SizedBox(height: 10),
-                          HabitDataWidget(habit: widget.habit),
-                        ],
-                      ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 10),
+                        HabitDataWidget(habit: widget.habit),
+                      ],
                     ),
                   ),
                 ],
@@ -272,19 +268,14 @@ class _ShareHabitPreviewState extends State<ShareHabitPreview> {
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Card(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(4),
-                      ),
-                      child: Assets.app.appLogoDark.image(
-                        height: 24,
-                        width: 24,
-                      ),
+                    Assets.app.appLogoDark.image(
+                      height: 24,
+                      width: 24,
                     ),
                     const SizedBox(width: 5),
                     Text(
                       "HabitRise",
-                      style: context.bodySmall?.copyWith(
+                      style: context.bodySmall.copyWith(
                         color: Color(widget.habit.colorCode).colorRegardingToBrightness,
                         fontWeight: FontWeight.bold,
                       ),

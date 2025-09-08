@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:habitrise/core/widgets/my_list_tile.dart';
 
 import '../../core/core.dart';
 import '../home/provider/home_provider.dart';
@@ -127,7 +128,7 @@ class _DataExportImportPageState extends ConsumerState<DataExportImportPage> {
   }
 
   void _showPaywallPage() {
-    showCupertinoModalBottomSheet(
+    showCupertinoSheet(
       context: context,
       builder: (context) => const PaywallPage(),
     );
@@ -147,33 +148,24 @@ class _DataExportImportPageState extends ConsumerState<DataExportImportPage> {
       child: SafeArea(
         child: ListView(
           physics: const AlwaysScrollableScrollPhysics(),
-          padding: const EdgeInsets.all(20.0),
           children: [
             // Info section
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Icon(
-                      CupertinoIcons.info_circle_fill,
-                      color: context.primary,
-                    ),
-                    SizedBox(width: 8),
-                    Text(
-                      LocaleKeys.settings_about_data_management.tr(),
-                      style: context.titleSmall?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 12),
-                Text(
-                  LocaleKeys.settings_data_management_description.tr(),
-                  style: context.bodySmall?.copyWith(
-                    color: context.bodySmall?.color?.withValues(alpha: .7),
+            CupertinoListSection.insetGrouped(
+              header: Row(
+                children: [
+                  Icon(
+                    CupertinoIcons.info_circle_fill,
+                    color: context.primary,
                   ),
+                  SizedBox(width: 8),
+                  Text(
+                    LocaleKeys.settings_about_data_management.tr(),
+                  ),
+                ],
+              ),
+              children: [
+                MyListTile(
+                  title: LocaleKeys.settings_data_management_description.tr(),
                 ),
               ],
             ),
@@ -181,171 +173,151 @@ class _DataExportImportPageState extends ConsumerState<DataExportImportPage> {
             SizedBox(height: 24),
 
             // Export section
-            Card(
-              child: Stack(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            Icon(
-                              CupertinoIcons.arrow_down_doc_fill,
-                              color: CupertinoColors.systemGreen,
-                            ),
-                            SizedBox(width: 8),
-                            Text(
-                              LocaleKeys.settings_export_data.tr(),
-                              style: context.titleMedium?.copyWith(
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 12),
-                        Text(
-                          LocaleKeys.settings_export_description.tr(),
-                          style: context.bodyMedium,
-                        ),
-                        SizedBox(height: 16),
-                        SizedBox(
-                          width: double.infinity,
-                          child: CupertinoButton(
-                            color: Colors.blueAccent,
-                            padding: EdgeInsets.symmetric(vertical: 12),
-                            onPressed: isProUser ? (_isExporting ? null : _exportData) : _showPaywallPage,
-                            child: _isExporting
-                                ? Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      CupertinoActivityIndicator(),
-                                      SizedBox(width: 8),
-                                      Text(LocaleKeys.settings_exporting.tr()),
-                                    ],
-                                  )
-                                : Text(
-                                    LocaleKeys.settings_export_data.tr(),
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  if (!isProUser)
-                    Positioned(
-                      top: 12,
-                      right: 12,
-                      child: Container(
-                        padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-                        decoration: BoxDecoration(
-                          color: Colors.black.withValues(alpha: .8),
-                          borderRadius: BorderRadius.circular(90),
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            FaIcon(
-                              FontAwesomeIcons.crown,
-                              color: Colors.yellowAccent,
-                              size: 12,
-                            ),
-                          ],
+            Stack(
+              children: [
+                CupertinoListSection.insetGrouped(
+                  header: Row(
+                    children: [
+                      Icon(
+                        CupertinoIcons.arrow_down_doc_fill,
+                        color: CupertinoColors.systemGreen,
+                      ),
+                      SizedBox(width: 8),
+                      Text(
+                        LocaleKeys.settings_export_data.tr(),
+                        style: context.titleMedium.copyWith(
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
+                    ],
+                  ),
+                  footer: SizedBox(
+                    width: double.infinity,
+                    child: CupertinoButton.filled(
+                      padding: EdgeInsets.symmetric(vertical: 12),
+                      onPressed: isProUser ? (_isExporting ? null : _exportData) : _showPaywallPage,
+                      child: _isExporting
+                          ? Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                CupertinoActivityIndicator(),
+                                SizedBox(width: 8),
+                                Text(LocaleKeys.settings_exporting.tr()),
+                              ],
+                            )
+                          : Text(
+                              LocaleKeys.settings_export_data.tr(),
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
                     ),
-                ],
-              ),
+                  ),
+                  children: [
+                    MyListTile(
+                      title: LocaleKeys.settings_export_description.tr(),
+                    ),
+                  ],
+                ),
+                if (!isProUser)
+                  Positioned(
+                    top: 12,
+                    right: 12,
+                    child: Container(
+                      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                      decoration: BoxDecoration(
+                        color: Colors.black.withValues(alpha: .8),
+                        borderRadius: BorderRadius.circular(90),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          FaIcon(
+                            FontAwesomeIcons.crown,
+                            color: Colors.yellowAccent,
+                            size: 12,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+              ],
             ),
 
             SizedBox(height: 24),
 
             // Import section
-            Card(
-              child: Stack(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            Icon(
-                              CupertinoIcons.arrow_up_doc_fill,
-                              color: CupertinoColors.systemBlue,
-                            ),
-                            SizedBox(width: 8),
-                            Text(
-                              LocaleKeys.settings_import_data.tr(),
-                              style: context.titleMedium?.copyWith(
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 12),
-                        Text(
-                          LocaleKeys.settings_import_description.tr(),
-                          style: context.bodyMedium,
-                        ),
-                        SizedBox(height: 16),
-                        SizedBox(
-                          width: double.infinity,
-                          child: CupertinoButton(
-                            color: Colors.blueAccent,
-                            padding: EdgeInsets.symmetric(vertical: 12),
-                            onPressed: isProUser ? (_isImporting ? null : _importData) : _showPaywallPage,
-                            child: _isImporting
-                                ? Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      CupertinoActivityIndicator(),
-                                      SizedBox(width: 8),
-                                      Text(LocaleKeys.settings_importing.tr()),
-                                    ],
-                                  )
-                                : Text(
-                                    LocaleKeys.settings_import_data.tr(),
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  if (!isProUser)
-                    Positioned(
-                      top: 12,
-                      right: 12,
-                      child: Container(
-                        padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-                        decoration: BoxDecoration(
-                          color: Colors.black.withValues(alpha: .8),
-                          borderRadius: BorderRadius.circular(90),
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            FaIcon(
-                              FontAwesomeIcons.crown,
-                              color: Colors.yellowAccent,
-                              size: 12,
-                            ),
-                          ],
+            Stack(
+              children: [
+                CupertinoListSection.insetGrouped(
+                  header: Row(
+                    children: [
+                      Icon(
+                        CupertinoIcons.arrow_up_doc_fill,
+                        color: CupertinoColors.systemBlue,
+                      ),
+                      SizedBox(width: 8),
+                      Text(
+                        LocaleKeys.settings_import_data.tr(),
+                        style: context.titleMedium.copyWith(
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
+                    ],
+                  ),
+                  footer: SizedBox(
+                    width: double.infinity,
+                    child: CupertinoButton.filled(
+                      padding: EdgeInsets.symmetric(vertical: 12),
+                      onPressed: isProUser ? (_isImporting ? null : _importData) : _showPaywallPage,
+                      child: _isImporting
+                          ? Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                CupertinoActivityIndicator(),
+                                SizedBox(width: 8),
+                                Text(LocaleKeys.settings_importing.tr()),
+                              ],
+                            )
+                          : Text(
+                              LocaleKeys.settings_import_data.tr(),
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
                     ),
-                ],
-              ),
+                  ),
+                  children: [
+                    MyListTile(
+                      title: LocaleKeys.settings_import_description.tr(),
+                    ),
+                  ],
+                ),
+                if (!isProUser)
+                  Positioned(
+                    top: 12,
+                    right: 12,
+                    child: Container(
+                      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                      decoration: BoxDecoration(
+                        color: Colors.black.withValues(alpha: .8),
+                        borderRadius: BorderRadius.circular(90),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          FaIcon(
+                            FontAwesomeIcons.crown,
+                            color: Colors.yellowAccent,
+                            size: 12,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+              ],
             ),
           ],
         ),

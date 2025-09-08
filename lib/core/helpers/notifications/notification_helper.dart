@@ -85,7 +85,7 @@ final class NotificationHelper {
         importance: Importance.high,
         priority: Priority.high,
         enableVibration: true,
-        color: Colors.blueAccent,
+        
         icon: 'ic_launcher',
       );
 

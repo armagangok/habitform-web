@@ -26,7 +26,6 @@ class EditHabitPage extends ConsumerWidget {
           child: CupertinoPageScaffold(
             backgroundColor: Colors.transparent,
             navigationBar: SheetHeader(
-              
               title: LocaleKeys.habit_edit_habit.tr(),
               closeButtonPosition: CloseButtonPosition.left,
               trailing: CupertinoButton(
@@ -37,7 +36,7 @@ class EditHabitPage extends ConsumerWidget {
                 },
                 child: Text(
                   LocaleKeys.common_save.tr(),
-                  style: context.titleMedium?.copyWith(color: context.primary),
+                  style: context.titleMedium.copyWith(color: context.primary),
                 ),
               ),
             ),
@@ -65,12 +64,10 @@ class EditHabitPage extends ConsumerWidget {
                           controller: editHabitNotifier.habitDescriptionController,
                         ),
                       ),
-                      SizedBox(height: KSpacing.betweenListItems),
                       Column(
                         children: [
                           ReminderSelectionWidget(),
                           CategoryPickerButton(),
-                          SizedBox(height: KSpacing.betweenListItems),
                           ColorPickerWidget(
                             onColorSelected: (color) {
                               ref.watch(colorProvider.notifier).pickColor(color);
@@ -94,14 +91,12 @@ class EditHabitPage extends ConsumerWidget {
     required TextEditingController controller,
     int? maxLines,
   }) {
-    return Card(
-      child: CupertinoTextField(
-        controller: controller,
-        maxLines: maxLines,
-        placeholder: maxLines == 1 ? LocaleKeys.habit_habit_name.tr() : LocaleKeys.habit_habit_description.tr(),
-        padding: const EdgeInsets.all(10),
-        decoration: null,
-      ),
+    return CupertinoTextField(
+      controller: controller,
+      maxLines: maxLines,
+      placeholder: maxLines == 1 ? LocaleKeys.habit_habit_name.tr() : LocaleKeys.habit_habit_description.tr(),
+      padding: const EdgeInsets.all(10),
+      decoration: null,
     );
   }
 }

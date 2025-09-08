@@ -164,41 +164,30 @@ class CategoryWidgetState extends State<CategoryWidget> {
                   if (mounted) _scrollSelectedItemIntoView();
                 });
               },
-              child: Card(
-                elevation: .1,
-                color: selectedIndex == index ? widget.customColor ?? context.cupertinoTheme.primaryColor.withValues(alpha: .9) : Colors.transparent,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                  side: BorderSide(
-                    color: selectedIndex == index ? Colors.transparent : Theme.of(context).primaryColor.withValues(alpha: .2),
-                    width: 1,
+              child: IntrinsicWidth(
+                child: Container(
+                  constraints: BoxConstraints(minHeight: minItemHeight),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: horizontalPadding,
+                    vertical: verticalPadding,
                   ),
-                ),
-                child: IntrinsicWidth(
-                  child: Container(
-                    constraints: BoxConstraints(minHeight: minItemHeight),
-                    padding: EdgeInsets.symmetric(
-                      horizontal: horizontalPadding,
-                      vertical: verticalPadding,
-                    ),
-                    child: Center(
-                      child: Text(
-                        text,
-                        style: TextStyle(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w600,
-                          color: selectedIndex == index
-                              ? (widget.customColor ??
-                                      context.cupertinoTheme.primaryColor.withValues(
-                                        alpha: .9,
-                                      ))
-                                  .colorRegardingToBrightness
-                              : context.primary.withValues(alpha: .75),
-                        ),
-                        textAlign: TextAlign.center,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
+                  child: Center(
+                    child: Text(
+                      text,
+                      style: TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600,
+                        color: selectedIndex == index
+                            ? (widget.customColor ??
+                                    context.cupertinoTheme.primaryColor.withValues(
+                                      alpha: .9,
+                                    ))
+                                .colorRegardingToBrightness
+                            : context.primary.withValues(alpha: .75),
                       ),
+                      textAlign: TextAlign.center,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
                 ),

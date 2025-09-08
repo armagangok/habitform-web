@@ -12,29 +12,15 @@ class CustomHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return child != null
-        ? Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            spacing: 8,
-            children: [
-              if (text != null)
-                Padding(
-                  padding: const EdgeInsets.only(left: 16.0, top: 8.0),
-                  child: SizedBox(
-                    width: double.infinity,
-                    child: Text(
-                      text!.toUpperCase(),
-                      style: context.bodySmall?.copyWith(
-                        color: context.bodySmall?.color?.withAlpha(200),
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                ),
-              if (child != null) child!,
-            ],
-          )
-        : SizedBox.shrink();
+    if (child != null) {
+      return CupertinoListSection.insetGrouped(
+        header: text != null ? Text(text ?? "") : null,
+        children: [
+          if (child != null) child!,
+        ],
+      );
+    } else {
+      return SizedBox.shrink();
+    }
   }
 }

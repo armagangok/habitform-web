@@ -157,29 +157,26 @@ class InsightsWidget extends ConsumerWidget {
                     style: Theme.of(context).textTheme.bodyMedium,
                     maxLines: 10,
                   ),
-                  Card(
-                    color: context.primary.withValues(alpha: .075),
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Row(
-                        children: [
-                          Icon(
-                            Icons.info_outline,
-                            size: 24,
-                            color: context.theme.hintColor,
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.info_outline,
+                          size: 24,
+                          color: context.hintColor,
+                        ),
+                        const SizedBox(width: 16),
+                        Expanded(
+                          child: Text(
+                            LocaleKeys.statistics_formation_info.tr(),
+                            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                  color: context.bodySmall.color?.withValues(alpha: .75),
+                                ),
+                            maxLines: 10,
                           ),
-                          const SizedBox(width: 16),
-                          Expanded(
-                            child: Text(
-                              LocaleKeys.statistics_formation_info.tr(),
-                              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                    color: context.bodySmall?.color?.withValues(alpha: .75),
-                                  ),
-                              maxLines: 10,
-                            ),
-                          ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ),
                 ],
@@ -318,46 +315,43 @@ class InsightsWidget extends ConsumerWidget {
         ),
         const SizedBox(height: 24),
         IntrinsicHeight(
-          child: Card(
-            color: context.primary.withValues(alpha: .075),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 6),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  _buildLegendItem(
-                    context,
-                    const Color(0xFFF44336),
-                    LocaleKeys.statistics_chart_labels_below_50.tr(),
-                    LocaleKeys.statistics_chart_labels_insufficient.tr(),
-                    isSelected: progressPercentage < 50,
-                  ),
-                  _verticalDivider(),
-                  _buildLegendItem(
-                    context,
-                    const Color(0xFFFFC107),
-                    LocaleKeys.statistics_chart_labels_between_50_70.tr(),
-                    LocaleKeys.statistics_chart_labels_moderate.tr(),
-                    isSelected: progressPercentage >= 50 && progressPercentage < 70,
-                  ),
-                  _verticalDivider(),
-                  _buildLegendItem(
-                    context,
-                    const Color(0xFF8BC34A),
-                    LocaleKeys.statistics_chart_labels_between_70_90.tr(),
-                    LocaleKeys.statistics_chart_labels_good.tr(),
-                    isSelected: progressPercentage >= 70 && progressPercentage < 90,
-                  ),
-                  _verticalDivider(),
-                  _buildLegendItem(
-                    context,
-                    const Color(0xFF4CAF50),
-                    LocaleKeys.statistics_chart_labels_above_90.tr(),
-                    LocaleKeys.statistics_chart_labels_excellent.tr(),
-                    isSelected: progressPercentage >= 90,
-                  ),
-                ],
-              ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 6),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                _buildLegendItem(
+                  context,
+                  const Color(0xFFF44336),
+                  LocaleKeys.statistics_chart_labels_below_50.tr(),
+                  LocaleKeys.statistics_chart_labels_insufficient.tr(),
+                  isSelected: progressPercentage < 50,
+                ),
+                _verticalDivider(),
+                _buildLegendItem(
+                  context,
+                  const Color(0xFFFFC107),
+                  LocaleKeys.statistics_chart_labels_between_50_70.tr(),
+                  LocaleKeys.statistics_chart_labels_moderate.tr(),
+                  isSelected: progressPercentage >= 50 && progressPercentage < 70,
+                ),
+                _verticalDivider(),
+                _buildLegendItem(
+                  context,
+                  const Color(0xFF8BC34A),
+                  LocaleKeys.statistics_chart_labels_between_70_90.tr(),
+                  LocaleKeys.statistics_chart_labels_good.tr(),
+                  isSelected: progressPercentage >= 70 && progressPercentage < 90,
+                ),
+                _verticalDivider(),
+                _buildLegendItem(
+                  context,
+                  const Color(0xFF4CAF50),
+                  LocaleKeys.statistics_chart_labels_above_90.tr(),
+                  LocaleKeys.statistics_chart_labels_excellent.tr(),
+                  isSelected: progressPercentage >= 90,
+                ),
+              ],
             ),
           ),
         ),

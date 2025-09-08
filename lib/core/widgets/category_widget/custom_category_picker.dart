@@ -56,17 +56,13 @@ class CustomCategoryWidgetState<T> extends State<CustomCategoryWidget<T>> {
             });
             widget.onCategorySelected(category);
           },
-          child: Card(
-            color: isSelected ? widget.customColor ?? context.primary : null,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 8),
-              child: Text(
-                widget.categoryLabelBuilder(category),
-                style: context.bodySmall?.copyWith(
-                  color: isSelected ? Colors.white : context.bodySmall?.color?.withValues(alpha: .72),
-                  fontWeight: FontWeight.bold,
-                ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 8),
+            child: Text(
+              widget.categoryLabelBuilder(category),
+              style: context.bodySmall.copyWith(
+                color: isSelected ? Colors.white : context.bodySmall.color?.withValues(alpha: .72),
+                fontWeight: FontWeight.bold,
               ),
             ),
           ),

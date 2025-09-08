@@ -10,47 +10,42 @@ class ReminderPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return CupertinoPopupSurface(
-      child: CupertinoPageScaffold(
-        backgroundColor: Colors.transparent,
-        navigationBar: SheetHeader(
-          closeButtonPosition: CloseButtonPosition.left,
-          title: LocaleKeys.habit_reminder.tr(),
-          trailing: TrailingActionButton(
-            title: LocaleKeys.common_done.tr(),
-            onPressed: () {
-              navigator.pop();
-            },
-          ),
+    return CupertinoPageScaffold(
+      navigationBar: SheetHeader(
+        closeButtonPosition: CloseButtonPosition.left,
+        title: LocaleKeys.habit_reminder.tr(),
+        trailing: TrailingActionButton(
+          title: LocaleKeys.common_done.tr(),
+          onPressed: () {
+            navigator.pop();
+          },
         ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: SafeArea(
-            child: ListView(
-              physics: const BouncingScrollPhysics(),
-              children: [
-                Column(
-                  children: [
-                    CustomHeader(
-                      text: LocaleKeys.common_days.tr(),
-                      child: Card(
-                        child: Padding(
-                          padding: const EdgeInsets.all(10.0),
-                          child: DaySelectionWidget(),
-                        ),
-                      ),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        child: SafeArea(
+          child: ListView(
+            physics: const BouncingScrollPhysics(),
+            children: [
+              Column(
+                children: [
+                  CustomHeader(
+                    text: LocaleKeys.common_days.tr(),
+                    child: Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: DaySelectionWidget(),
                     ),
-                    SelectionButtons(),
-                  ],
-                ),
-                const SizedBox(height: 30),
-                CustomHeader(
-                  text: LocaleKeys.reminder_time.tr(),
-                  child: SelectTimeWidget().animate(),
-                ),
-                const Padding(padding: EdgeInsets.only(bottom: 32)),
-              ],
-            ),
+                  ),
+                  SelectionButtons(),
+                ],
+              ),
+              const SizedBox(height: 30),
+              CustomHeader(
+                text: LocaleKeys.reminder_time.tr(),
+                child: SelectTimeWidget().animate(),
+              ),
+              const Padding(padding: EdgeInsets.only(bottom: 32)),
+            ],
           ),
         ),
       ),

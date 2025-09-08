@@ -9,6 +9,7 @@ class KRoute {
   static const auth = '/auth';
   static const archivedHabits = '/archivedHabits';
   static const dataManagement = '/dataManagement';
+  static const emojiPage = '/emojiPage';
 
   static const habitCategoryPage = '/habitCategoryPage';
 

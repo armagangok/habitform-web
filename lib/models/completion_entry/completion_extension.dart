@@ -99,4 +99,68 @@ extension CompletionEntryUtils on Map<String, CompletionEntry> {
     final dateKey = date.toIso8601DateString;
     return containsKey(dateKey) && this[dateKey]?.isCompleted == true;
   }
+
+  // Calculate formation score based on completed days
+  int calculateFormationScore() {
+    if (isEmpty) return 0;
+    // Count distinct completed entries
+    return values.where((entry) => entry.isCompleted == true).length;
+  }
+
+  // Calculate formation progress percentage (0.0 to 1.0)
+  double calculateFormationProgress(int totalFormationDays) {
+    if (totalFormationDays <= 0) return 0.0;
+    final completedDays = calculateFormationScore();
+    return (completedDays / totalFormationDays).clamp(0.0, 1.0);
+  }
+
+  // Get remaining days for formation
+  int getRemainingFormationDays(int totalFormationDays) {
+    final completedDays = calculateFormationScore();
+    final remaining = totalFormationDays - completedDays;
+    return remaining > 0 ? remaining : 0;
+  }
+
+  // Calculate formation likelihood score (0-100) based on completion rate vs difficulty requirements
+  double calculateFormationLikelihoodScore(int totalFormationDays, double minimumCompletionRate) {
+    if (totalFormationDays <= 0) return 0.0;
+
+    final completedDays = calculateFormationScore();
+    final completionRate = (completedDays / totalFormationDays) * 100;
+
+    // Calculate how much above/below the minimum requirement
+    final scoreAboveMinimum = completionRate - (minimumCompletionRate * 100);
+
+    // Scale the score: 0-100 where 100 means excellent formation likelihood
+    if (scoreAboveMinimum >= 15) {
+      return 100.0; // Excellent (>90% likelihood)
+    } else if (scoreAboveMinimum >= 5) {
+      return 70.0 + (scoreAboveMinimum - 5) * 3; // Good (70-90% likelihood)
+    } else if (scoreAboveMinimum >= 0) {
+      return 50.0 + scoreAboveMinimum * 4; // Moderate (50-70% likelihood)
+    } else {
+      // For below minimum, show progress from 0-50 based on how close to minimum
+      final progressToMinimum = (completionRate / (minimumCompletionRate * 100)).clamp(0.0, 1.0);
+      return progressToMinimum * 50.0; // 0-50 range for below minimum
+    }
+  }
+
+  // Calculate progress percentage like statistics page (completion rate from start to today)
+  double calculateProgressPercentage() {
+    if (isEmpty) return 0.0;
+
+    // Get all completion dates and find the earliest
+    final sortedDates = values.map((entry) => entry.date).toList()..sort();
+    final startDate = sortedDates.first;
+    final today = DateTime.now();
+
+    // Calculate days since start (including today)
+    final daysSinceStart = today.difference(startDate).inDays + 1;
+
+    // Count completed entries
+    final completedEntries = values.where((entry) => entry.isCompleted).length;
+
+    // Calculate completion rate percentage
+    return daysSinceStart > 0 ? (completedEntries / daysSinceStart) * 100.0 : 0.0;
+  }
 }

@@ -14,9 +14,9 @@ class SettingLeadingWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
+    return CupertinoCard(
       color: cardColor,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+      borderRadius: BorderRadius.circular(6),
       child: Padding(
         padding: EdgeInsets.all(padding ?? 2.5),
         child: Icon(

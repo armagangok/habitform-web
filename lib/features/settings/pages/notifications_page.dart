@@ -112,13 +112,13 @@ class _NotificationsPageState extends State<NotificationsPage> with SingleTicker
           ),
           title: Text(
             habitName,
-            style: context.titleMedium?.copyWith(
+            style: context.titleMedium.copyWith(
               fontWeight: FontWeight.w600,
             ),
           ),
           subtitle: Text(
             '${notifications.length} ${LocaleKeys.notifications_reminders.tr()}',
-            style: context.bodySmall?.copyWith(
+            style: context.bodySmall.copyWith(
               color: CupertinoColors.systemGrey,
             ),
           ),

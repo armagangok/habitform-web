@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/services.dart';
 
 import '../../../core/core.dart';
+import '../../../models/completion_entry/completion_extension.dart';
 import '../../../models/habit/habit_difficulty.dart';
 import '../../../models/habit/habit_model.dart';
 
@@ -44,14 +45,14 @@ class _AchievementDialogState extends State<AchievementDialog> with TickerProvid
 
     _scaleController = AnimationController(duration: const Duration(milliseconds: 600), vsync: this);
 
-    _scoreController = AnimationController(duration: const Duration(milliseconds: 1200), vsync: this);
+    _scoreController = AnimationController(duration: const Duration(milliseconds: 2000), vsync: this);
 
     _particleController = AnimationController(duration: const Duration(milliseconds: 2000), vsync: this);
 
     _scaleAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(parent: _scaleController, curve: Curves.elasticOut));
 
-    _scoreAnimation = Tween<double>(begin: widget.previousScore.toDouble(), end: widget.newScore.toDouble()).animate(CurvedAnimation(parent: _scoreController, curve: Curves.easeOutCubic));
-    _lastNotifiedScore = widget.previousScore;
+    _scoreAnimation = Tween<double>(begin: 0.0, end: widget.newScore.toDouble()).animate(CurvedAnimation(parent: _scoreController, curve: Curves.easeOutCubic));
+    _lastNotifiedScore = 0;
     _scoreController.addListener(() {
       final current = _scoreAnimation.value.round();
       if (current > _lastNotifiedScore) {
@@ -64,8 +65,8 @@ class _AchievementDialogState extends State<AchievementDialog> with TickerProvid
 
     // Start animations
     _scaleController.forward();
-    Future.delayed(const Duration(milliseconds: 300), () {
-      _scoreController.forward();
+    Future.delayed(const Duration(milliseconds: 500), () {
+      if (mounted) _scoreController.forward();
     });
     _particleController.forward();
   }
@@ -190,16 +191,17 @@ class _AchievementDialogState extends State<AchievementDialog> with TickerProvid
 
                       const SizedBox(height: 16),
 
-                      // New total score
+                      // Progress percentage score
                       AnimatedBuilder(
                         animation: _scoreAnimation,
                         builder: (context, child) {
+                          final animatedScore = _scoreAnimation.value;
                           return Text(
-                            '${_scoreAnimation.value.round()}',
+                            '${animatedScore.round()}',
                             style: context.headlineMedium.copyWith(
                               fontSize: 28,
                               fontWeight: FontWeight.w800,
-                              color: _getScoreColor(_scoreAnimation.value.round()),
+                              color: _getFormationScoreColor(animatedScore),
                               fontFeatures: [
                                 FontFeature.tabularFigures(),
                               ],
@@ -215,7 +217,7 @@ class _AchievementDialogState extends State<AchievementDialog> with TickerProvid
                           color: context.cupertinoTheme.barBackgroundColor.withValues(alpha: 0.3),
                           borderRadius: BorderRadius.circular(16),
                           border: Border.all(
-                            color: _getScoreColor(_scoreAnimation.value.round()).withValues(alpha: 0.2),
+                            color: _getFormationScoreColor(_scoreAnimation.value).withValues(alpha: 0.2),
                             width: 1,
                           ),
                         ),
@@ -229,11 +231,11 @@ class _AchievementDialogState extends State<AchievementDialog> with TickerProvid
                                   'Formation Progress',
                                   style: context.bodyMedium.copyWith(
                                     fontWeight: FontWeight.w600,
-                                    color: _getScoreColor(_scoreAnimation.value.round()),
+                                    color: _getFormationScoreColor(_scoreAnimation.value),
                                   ),
                                 ),
                                 Text(
-                                  '${_getRemainingDays()} days left',
+                                  '${_getRemainingDaysByCompletions()} days left',
                                   style: context.bodyMedium.copyWith(
                                     fontWeight: FontWeight.w500,
                                     color: context.bodyMedium.color?.withValues(alpha: 0.7),
@@ -254,10 +256,10 @@ class _AchievementDialogState extends State<AchievementDialog> with TickerProvid
                                   return Stack(
                                     children: [
                                       Container(
-                                        width: constraints.maxWidth * _getFormationProgress(),
+                                        width: constraints.maxWidth * _getFormationProgressByCompletions(),
                                         decoration: BoxDecoration(
                                           borderRadius: BorderRadius.circular(4),
-                                          color: _getScoreColor(_scoreAnimation.value.round()),
+                                          color: _getFormationScoreColor(_scoreAnimation.value),
                                         ),
                                       ),
                                     ],
@@ -271,14 +273,14 @@ class _AchievementDialogState extends State<AchievementDialog> with TickerProvid
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  '${(_getFormationProgress() * 100).round()}% complete',
+                                  '${(_getFormationProgressByCompletions() * 100).round()}% complete',
                                   style: context.bodySmall.copyWith(
                                     color: context.bodySmall.color?.withValues(alpha: 0.7),
                                     fontWeight: FontWeight.w500,
                                   ),
                                 ),
                                 Text(
-                                  '${_getElapsedDays()}/$_totalFormationDays days',
+                                  '${_getCompletedDays()}/$_totalFormationDays days',
                                   style: context.bodySmall.copyWith(
                                     color: context.bodySmall.color?.withValues(alpha: 0.7),
                                     fontWeight: FontWeight.w500,
@@ -294,8 +296,9 @@ class _AchievementDialogState extends State<AchievementDialog> with TickerProvid
                       AnimatedBuilder(
                         animation: _scoreAnimation,
                         builder: (context, child) {
+                          final animatedScore = _scoreAnimation.value;
                           return Text(
-                            _getFormationMessage(_scoreAnimation.value.round()),
+                            _getFormationMessage(animatedScore.round()),
                             style: context.bodySmall.copyWith(
                               fontSize: 12,
                               color: context.bodySmall.color?.withValues(alpha: 0.7),
@@ -329,44 +332,37 @@ class _AchievementDialogState extends State<AchievementDialog> with TickerProvid
     );
   }
 
-  Color _getScoreColor(int score) {
-    if (score >= 85) return CupertinoColors.systemGreen;
-    if (score >= 70) return const Color(0xFF7CB342);
-    if (score >= 55) return CupertinoColors.systemYellow;
-    if (score >= 40) return CupertinoColors.systemOrange;
-    return CupertinoColors.systemRed;
+  Color _getFormationScoreColor(double score) {
+    if (score >= 90) return const Color(0xFF4CAF50); // Green - Excellent
+    if (score >= 70) return const Color(0xFF8BC34A); // Light Green - Good
+    if (score >= 50) return const Color(0xFFFFC107); // Amber - Moderate
+    return const Color(0xFFF44336); // Red - Insufficient
   }
 
   // Calculate total formation days needed for this habit
-  int get _totalFormationDays => widget.habit.difficulty.estimatedFormationDays;
+  HabitDifficulty get _defaultDifficulty => HabitDifficulty.moderate;
 
-  // Calculate elapsed days since habit creation
-  int _getElapsedDays() {
-    final habitId = widget.habit.id;
-    final creationTimeStamp = int.tryParse(habitId) ?? DateTime.now().millisecondsSinceEpoch;
-    final creationDate = DateTime.fromMillisecondsSinceEpoch(creationTimeStamp);
-    final now = DateTime.now();
-    return now.difference(creationDate).inDays;
+  int get _totalFormationDays => _defaultDifficulty.estimatedFormationDays;
+
+  // Count completed unique days for the habit
+  int _getCompletedDays() {
+    return widget.habit.completions.calculateFormationScore();
   }
 
-  // Calculate remaining days for full habit formation
-  int _getRemainingDays() {
-    final elapsedDays = _getElapsedDays();
-    final remainingDays = _totalFormationDays - elapsedDays;
-    return remainingDays > 0 ? remainingDays : 0;
+  // Remaining days to reach formation based on completions
+  int _getRemainingDaysByCompletions() {
+    return widget.habit.completions.getRemainingFormationDays(_totalFormationDays);
   }
 
-  // Calculate formation progress percentage
-  double _getFormationProgress() {
-    final elapsedDays = _getElapsedDays();
-    final progress = (elapsedDays / _totalFormationDays).clamp(0.0, 1.0);
-    return progress;
+  // Progress ratio based on completions
+  double _getFormationProgressByCompletions() {
+    return widget.habit.completions.calculateFormationProgress(_totalFormationDays);
   }
 
   String _getFormationMessage(int score) {
-    final remainingDays = _getRemainingDays();
+    final remainingDays = _getRemainingDaysByCompletions();
     final totalDays = _totalFormationDays;
-    final difficultyName = widget.habit.difficulty.displayName;
+    final difficultyName = _defaultDifficulty.displayName;
 
     if (score >= 90) {
       if (remainingDays == 0) {
@@ -374,16 +370,12 @@ class _AchievementDialogState extends State<AchievementDialog> with TickerProvid
       } else {
         return 'Excellent! Just $remainingDays more days until your habit is fully formed! 🎉';
       }
-    } else if (score >= 80) {
-      return 'Great progress! You\'re building a strong habit foundation. $remainingDays days left! 💪';
     } else if (score >= 70) {
-      return 'Good work! This $difficultyName habit takes $totalDays days to form. $remainingDays days remaining! 📈';
+      return 'Great progress! You\'re building a strong habit foundation. $remainingDays days left! 💪';
     } else if (score >= 50) {
-      return 'You\'re making progress! This $difficultyName habit needs consistency. $remainingDays days to go! 🌱';
-    } else if (score >= 30) {
-      return 'Every step counts! $difficultyName habits need patience. $remainingDays days remaining! 🌟';
+      return 'Good work! This $difficultyName habit takes $totalDays days to form. $remainingDays days remaining! 📈';
     } else {
-      return 'Starting is the hardest part! This $difficultyName habit takes $totalDays days to form. Keep going! 🚀';
+      return 'Keep going! This $difficultyName habit needs more consistency. $remainingDays days to go! 🌱';
     }
   }
 }

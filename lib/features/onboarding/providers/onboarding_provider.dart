@@ -57,11 +57,9 @@ class OnboardingNotifier extends StateNotifier<OnboardingState> {
 
       if (!context.mounted) return;
 
-      showCupertinoModalBottomSheet(
+      showCupertinoSheet(
         context: context,
         enableDrag: false,
-        expand: true,
-        barrierColor: Colors.black,
         builder: (context) => const PaywallPage(isFromOnboarding: true),
       );
     } catch (e, s) {

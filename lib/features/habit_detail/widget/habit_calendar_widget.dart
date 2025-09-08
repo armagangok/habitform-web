@@ -17,7 +17,7 @@ class HabitCalendarWidget extends ConsumerWidget {
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       sizeStyle: CupertinoButtonSize.small,
       onPressed: () {
-        showCupertinoModalBottomSheet(
+        showCupertinoSheet(
           enableDrag: false,
           context: context,
           builder: (context) => HabitCalendarCompletionSheet(habit: currentHabit!),
@@ -198,8 +198,8 @@ class _HabitCalendarCompletionSheetState extends ConsumerState<HabitCalendarComp
               top: false,
               child: Text(
                 LocaleKeys.habit_calendar_tap_info.tr(),
-                style: context.bodySmall?.copyWith(
-                  color: context.theme.hintColor,
+                style: context.bodySmall.copyWith(
+                  color: context.hintColor,
                 ),
                 textAlign: TextAlign.center,
               ),

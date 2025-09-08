@@ -30,8 +30,8 @@ class HabitBuilder extends ConsumerWidget {
             SizedBox(height: 10),
             Text(
               LocaleKeys.common_loading_habits.tr(),
-              style: context.textTheme.bodyMedium?.copyWith(
-                color: context.theme.hintColor,
+              style: context.bodyMedium.copyWith(
+                color: context.hintColor,
               ),
             ),
           ],
@@ -74,53 +74,21 @@ class HabitBuilder extends ConsumerWidget {
           );
         }
 
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(
-              width: double.infinity,
-              child: ListView.separated(
-                shrinkWrap: true,
-                padding: EdgeInsets.zero,
-                physics: ClampingScrollPhysics(),
-                itemCount: habits.length,
-                itemBuilder: (context, index) {
-                  final habit = habits[index];
-                  final remindTime = habit.reminderModel?.reminderTime;
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      HabitWidget(habit: habit),
-                      SizedBox(
-                        width: 50,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            SizedBox(height: 5),
-                            if (remindTime != null) ...[
-                              SizedBox(height: 4),
-                              Text(
-                                remindTime.toHHMM(),
-                                style: context.bodySmall,
-                              ),
-                            ],
-                            if (habits.isNotLast(index)) ...[
-                              SizedBox(height: 10),
-                              SizedBox(
-                                height: 20,
-                                child: VerticalDivider(),
-                              ),
-                            ]
-                          ],
-                        ),
-                      ),
-                    ],
-                  );
-                },
-                separatorBuilder: (context, index) => SizedBox(height: 10),
-              ),
-            ),
-          ],
+        return GridView.builder(
+          shrinkWrap: true,
+          physics: ClampingScrollPhysics(),
+          padding: EdgeInsets.zero,
+          itemCount: habits.length,
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            mainAxisSpacing: 12,
+            crossAxisSpacing: 12,
+            childAspectRatio: 1,
+          ),
+          itemBuilder: (context, index) {
+            final habit = habits[index];
+            return HabitWidget(habit: habit);
+          },
         );
       },
     );
@@ -140,20 +108,18 @@ class HabitBuilder extends ConsumerWidget {
               SizedBox(height: 30),
               Text(
                 LocaleKeys.habit_no_habit_found.tr(),
-                style: context.titleLarge?.copyWith(
+                style: context.titleLarge.copyWith(
                   fontWeight: FontWeight.w500,
                 ),
                 textAlign: TextAlign.center,
               ),
               SizedBox(height: 15),
               CupertinoButton.tinted(
-                color: Colors.blueAccent,
                 sizeStyle: CupertinoButtonSize.medium,
                 child: Text(
                   LocaleKeys.habit_create_habit.tr(),
                   style: TextStyle(
                     fontWeight: FontWeight.w500,
-                    color: Colors.blueAccent,
                   ),
                 ),
                 onPressed: () async {
@@ -161,7 +127,8 @@ class HabitBuilder extends ConsumerWidget {
                   if (homeState != null) {
                     final canCreate = await ref.read(createHabitProvider.notifier).canCreateHabit(homeState.habits.length);
                     if (canCreate) {
-                      CupertinoScaffold.showCupertinoModalBottomSheet(
+                      if (!context.mounted) return;
+                      showCupertinoSheet(
                         enableDrag: false,
                         context: context,
                         builder: (contextFromSheet) {
@@ -169,7 +136,9 @@ class HabitBuilder extends ConsumerWidget {
                         },
                       );
                     } else {
-                      CupertinoScaffold.showCupertinoModalBottomSheet(
+                      if (!context.mounted) return;
+
+                      showCupertinoSheet(
                         enableDrag: false,
                         context: context,
                         builder: (_) => PaywallPage(),

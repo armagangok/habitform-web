@@ -1,11 +1,12 @@
 import '/features/archived_habits/pages/archived_habits_page.dart';
 import '/features/export_import_data/data_export_import_page.dart';
 import '/features/habit_category/page/habit_category_page.dart';
+import '/features/habit_emoji/emoji_picker_page.dart';
 import '/features/home/views/pages/home_page.dart';
 import '/features/settings/pages/notifications_page.dart';
 import '/features/settings/settings_page.dart';
-import '../core.dart';
 import '../../features/habit_icon/icon_picker_page.dart';
+import '../core.dart';
 
 @immutable
 final class NavigationRoute {
@@ -34,6 +35,18 @@ final class NavigationRoute {
 
       case KRoute.habitCategoryPage:
         return _getRoute(page: const HabitCategoryPage(), settings: args);
+
+      case KRoute.emojiPage:
+        final data = args.arguments as Map<String, Object?>?;
+        final selectedIcon = data != null ? data['selectedIcon'] as String? : null;
+        final onIconSelected = data != null ? data['onIconSelected'] as Function(String?)? : null;
+        return _getRoute(
+          page: EmojiPickerPage(
+            selectedIcon: selectedIcon,
+            onIconSelected: onIconSelected,
+          ),
+          settings: args,
+        );
 
       default:
         return CupertinoPageRoute(

@@ -12,7 +12,7 @@ class DifficultyPickerWidget extends ConsumerWidget {
     final difficulty = ref.watch(createHabitProvider).value?.difficulty ?? HabitDifficulty.moderate;
 
     return CupertinoListSection.insetGrouped(
-      header: Text(LocaleKeys.habit_difficulty.tr().toUpperCase()),
+      header: Text('Habit Difficulty'),
       children: [
         // Difficulty selection buttons
         Column(
@@ -115,7 +115,7 @@ class DifficultyPickerWidget extends ConsumerWidget {
               const SizedBox(width: 8),
               Expanded(
                 child: Text(
-                  LocaleKeys.habit_difficulty_info.tr(),
+                  'Choose how challenging this habit feels. We use this to estimate formation time and personalize insights.',
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
                         color: context.primary,
                       ),

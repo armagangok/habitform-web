@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '/core/core.dart';
 import '/models/models.dart';
 import '../../edit_habit/edit_habit_page.dart';
+import '../../edit_habit/provider/edit_habit_provider.dart';
 import '../../home/provider/home_provider.dart';
 import '../../reminder/service/reminder_service.dart';
 import '../../share_habit/share_habit_page.dart';

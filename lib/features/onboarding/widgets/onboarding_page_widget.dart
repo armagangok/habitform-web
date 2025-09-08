@@ -44,7 +44,7 @@ class OnboardingPageWidget extends StatelessWidget {
                             child: Text(
                               'Aristotle',
                               textAlign: TextAlign.left,
-                              style: context.bodyLarge?.copyWith(
+                              style: context.bodyLarge.copyWith(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold,
                               ),
@@ -74,7 +74,7 @@ class OnboardingPageWidget extends StatelessWidget {
                       child: Text(
                         pageModel.title,
                         textAlign: TextAlign.center,
-                        style: context.headlineMedium?.copyWith(
+                        style: context.headlineMedium.copyWith(
                           color: pageModel.textColor,
                           fontWeight: FontWeight.bold,
                         ),
@@ -90,7 +90,7 @@ class OnboardingPageWidget extends StatelessWidget {
                       child: Text(
                         pageModel.description,
                         textAlign: TextAlign.center,
-                        style: context.bodyLarge?.copyWith(
+                        style: context.bodyLarge.copyWith(
                           color: pageModel.textColor.withValues(alpha: 0.8),
                         ),
                       ),

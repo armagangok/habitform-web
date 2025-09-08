@@ -19,8 +19,7 @@ class DifficultyStep extends ConsumerWidget {
       step: CreateHabitStep.difficulty,
       canProceed: canProceed,
       onNext: () {
-        // This is the last step, so create the habit
-        ref.read(createHabitProvider.notifier).createHabit(context);
+        ref.read(createHabitProvider.notifier).nextStep();
       },
       onPrevious: () {
         ref.read(createHabitProvider.notifier).previousStep();

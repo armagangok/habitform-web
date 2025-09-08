@@ -25,13 +25,6 @@ class SheetHeader extends StatelessWidget implements ObstructingPreferredSizeWid
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return CupertinoNavigationBar(
-      backgroundColor: context.cupertinoTheme.barBackgroundColor.withValues(alpha: .25),
-      border: Border(
-        bottom: BorderSide(
-          color: theme.dividerColor.withValues(alpha: .3),
-          width: 0.5,
-        ),
-      ),
       transitionBetweenRoutes: false,
       leading: leading ??
           Align(
@@ -72,24 +65,17 @@ class SheetHeader extends StatelessWidget implements ObstructingPreferredSizeWid
             width: 28,
             height: 28,
             child: CupertinoButton.filled(
-              disabledColor: context.theme.dividerColor.withValues(alpha: .25),
+              disabledColor: context.theme.selectionHandleColor.withValues(alpha: .2),
               borderRadius: BorderRadius.circular(90),
               padding: EdgeInsets.zero,
               onPressed: null,
               child: FittedBox(
-                child: Card(
-                  elevation: 0,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(360),
-                  ),
-                  color: Colors.transparent,
-                  child: Padding(
-                    padding: const EdgeInsets.all(12.0),
-                    child: Icon(
-                      CupertinoIcons.xmark,
-                      color: context.primary.withValues(alpha: .9),
-                      size: 40,
-                    ),
+                child: Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Icon(
+                    CupertinoIcons.xmark,
+                    color: context.selectionHandleColor.withValues(alpha: .8),
+                    size: 40,
                   ),
                 ),
               ),

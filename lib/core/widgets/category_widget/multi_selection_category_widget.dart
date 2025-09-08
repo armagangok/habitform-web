@@ -96,15 +96,15 @@ class MultiCategoryWidgetState<T> extends State<MultiCategoryWidget<T>> {
                 margin: EdgeInsets.zero,
                 padding: EdgeInsets.zero,
                 decoration: BoxDecoration(
-                  color: isSelected ? widget.selection : widget.unselectedColor ?? context.theme.cardTheme.color?.withValues(alpha: .25),
+                  color: isSelected ? widget.selection : widget.unselectedColor ?? context.selectionHandleColor.withValues(alpha: .25),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
                   child: Text(
                     widget.categoryLabelBuilder(item),
-                    style: context.bodySmall?.copyWith(
-                      color: isSelected ? Colors.white : context.bodySmall?.color?.withValues(alpha: .72),
+                    style: context.bodySmall.copyWith(
+                      color: isSelected ? Colors.white : context.bodySmall.color?.withValues(alpha: .72),
                       fontWeight: FontWeight.bold,
                     ),
                   ),

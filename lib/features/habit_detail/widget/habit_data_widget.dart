@@ -82,47 +82,45 @@ class _HabitDataWidgetState extends ConsumerState<HabitDataWidget> {
   Widget build(BuildContext context) {
     return CustomButton(
       onPressed: () {
-        showCupertinoModalBottomSheet(
+        showCupertinoSheet(
           enableDrag: false,
           context: context,
           builder: (context) => HabitCalendarCompletionSheet(habit: widget.habit),
         );
       },
-      child: Card(
-        child: Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildHeader(),
-              const SizedBox(height: 10),
-              LayoutBuilder(builder: (context, constraints) {
-                final screenWidth = constraints.maxWidth;
-                final monthWidth = (screenWidth - 16) / 3;
-                final gridSquareSize = (monthWidth - 8) / 6;
-                final gridHeight = (gridSquareSize * 7) + 40;
+      child: Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildHeader(),
+            const SizedBox(height: 10),
+            LayoutBuilder(builder: (context, constraints) {
+              final screenWidth = constraints.maxWidth;
+              final monthWidth = (screenWidth - 16) / 3;
+              final gridSquareSize = (monthWidth - 8) / 6;
+              final gridHeight = (gridSquareSize * 7) + 40;
 
-                return SizedBox(
-                  height: gridHeight,
-                  child: PageView.builder(
-                    controller: _pageController,
-                    onPageChanged: _onPageChanged,
-                    physics: ClampingScrollPhysics(),
-                    itemBuilder: (context, index) {
-                      final quarterStartMonth = (index * 3) % 12;
-                      final year = 2020 + (index * 3) ~/ 12;
-                      return _buildQuarterView(
-                        color: Color(widget.habit.colorCode),
-                        startMonth: quarterStartMonth,
-                        year: year,
-                        gridSquareSize: gridSquareSize,
-                      );
-                    },
-                  ),
-                );
-              }),
-            ],
-          ),
+              return SizedBox(
+                height: gridHeight,
+                child: PageView.builder(
+                  controller: _pageController,
+                  onPageChanged: _onPageChanged,
+                  physics: ClampingScrollPhysics(),
+                  itemBuilder: (context, index) {
+                    final quarterStartMonth = (index * 3) % 12;
+                    final year = 2020 + (index * 3) ~/ 12;
+                    return _buildQuarterView(
+                      color: Color(widget.habit.colorCode),
+                      startMonth: quarterStartMonth,
+                      year: year,
+                      gridSquareSize: gridSquareSize,
+                    );
+                  },
+                ),
+              );
+            }),
+          ],
         ),
       ),
     );
@@ -143,17 +141,11 @@ class _HabitDataWidgetState extends ConsumerState<HabitDataWidget> {
               curve: Curves.easeIn,
             );
           },
-          child: Card(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
-            ),
-            color: Color(widget.habit.colorCode),
-            child: Padding(
-              padding: const EdgeInsets.all(4.0),
-              child: Icon(
-                CupertinoIcons.chevron_left,
-                color: Color(widget.habit.colorCode).colorRegardingToBrightness,
-              ),
+          child: Padding(
+            padding: const EdgeInsets.all(4.0),
+            child: Icon(
+              CupertinoIcons.chevron_left,
+              color: Color(widget.habit.colorCode).colorRegardingToBrightness,
             ),
           ),
         ),
@@ -175,17 +167,11 @@ class _HabitDataWidgetState extends ConsumerState<HabitDataWidget> {
                     curve: Curves.easeIn,
                   );
                 },
-          child: Card(
-            color: Color(widget.habit.colorCode),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(4.0),
-              child: Icon(
-                CupertinoIcons.chevron_right,
-                color: Color(widget.habit.colorCode).colorRegardingToBrightness,
-              ),
+          child: Padding(
+            padding: const EdgeInsets.all(4.0),
+            child: Icon(
+              CupertinoIcons.chevron_right,
+              color: Color(widget.habit.colorCode).colorRegardingToBrightness,
             ),
           ),
         ),
@@ -335,7 +321,7 @@ class _HabitDataWidgetState extends ConsumerState<HabitDataWidget> {
         }) {
           if (isCompleted) return baseColor;
           if (isBetweenCompletions) return baseColor.withValues(alpha: 0.25);
-          return context.theme.disabledColor.withValues(alpha: 0.25);
+          return context.selectionHandleColor.withValues(alpha: 0.25);
         }
 
         final cardColor = getCardColor(

@@ -99,7 +99,9 @@ class _MyAppState extends ConsumerState<MyApp> {
     final themeMode = ref.watch(themeProvider);
     final onboardingState = ref.watch(onboardingProvider);
 
-    return MaterialApp(
+    final cupertinoTheme = themeMode == ThemeMode.dark ? Themes.cupertinoDarkTheme : Themes.cupertinoLightTheme;
+
+    return CupertinoApp(
       builder: (context, child) {
         return MediaQuery(
           data: MediaQuery.of(context).copyWith(
@@ -110,9 +112,7 @@ class _MyAppState extends ConsumerState<MyApp> {
           child: child!,
         );
       },
-      darkTheme: Themes.darkTheme,
-      theme: Themes.lightTheme,
-      themeMode: themeMode,
+      theme: cupertinoTheme,
       debugShowCheckedModeBanner: false,
       navigatorKey: NavigationService.shared.navigatorKey,
       onGenerateRoute: NavigationRoute.shared.generateRoute,

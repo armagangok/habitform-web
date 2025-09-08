@@ -121,6 +121,7 @@ class StatisticsNotifier extends AutoDisposeAsyncNotifier<StatisticsState> {
           completedDays: 0,
           progressPercentage: 0,
           startDate: today,
+          difficulty: null,
         );
         continue;
       }
@@ -146,6 +147,7 @@ class StatisticsNotifier extends AutoDisposeAsyncNotifier<StatisticsState> {
         completedDays: completedEntries,
         progressPercentage: completionRate,
         startDate: startDate,
+        difficulty: null,
       );
     }
 

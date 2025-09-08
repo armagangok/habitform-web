@@ -120,8 +120,9 @@ class FormationWidget extends ConsumerWidget {
         // Check if we have a valid selected habit index
         if (selectedHabitIndex >= 0 && selectedHabitIndex < data.habitStatistics.values.length) {
           final selectedHabit = data.habitStatistics.values.elementAt(selectedHabitIndex);
-          habitFormationStatus = _getHabitFormationStatus(selectedHabit.progressPercentage, selectedHabit.completedDays, selectedHabit.difficulty);
-          estimatedFormationTime = _getEstimatedFormationTime(selectedHabit.progressPercentage, selectedHabit.completedDays, selectedHabit.startDate, selectedHabit.difficulty);
+          final HabitDifficulty selectedDifficulty = selectedHabit.difficulty ?? HabitDifficulty.moderate;
+          habitFormationStatus = _getHabitFormationStatus(selectedHabit.progressPercentage, selectedHabit.completedDays, selectedDifficulty);
+          estimatedFormationTime = _getEstimatedFormationTime(selectedHabit.progressPercentage, selectedHabit.completedDays, selectedHabit.startDate, selectedDifficulty);
         } else {
           // No valid habit selected, return empty widget
           return const SizedBox.shrink();
@@ -137,7 +138,11 @@ class FormationWidget extends ConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // Always show the chart and information when a habit is selected
-                  _buildHabitFormationChart(context, data.habitStatistics.values.elementAt(selectedHabitIndex).progressPercentage, data.habitStatistics.values.elementAt(selectedHabitIndex).difficulty),
+                  _buildHabitFormationChart(
+                    context,
+                    data.habitStatistics.values.elementAt(selectedHabitIndex).progressPercentage,
+                    data.habitStatistics.values.elementAt(selectedHabitIndex).difficulty ?? HabitDifficulty.moderate,
+                  ),
                   const SizedBox(height: 10),
                   Text(
                     LocaleKeys.statistics_about_formation.tr(),

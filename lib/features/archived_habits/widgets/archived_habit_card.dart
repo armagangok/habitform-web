@@ -23,26 +23,24 @@ class ArchivedHabitCard extends ConsumerWidget {
 
     return Stack(
       children: [
-        Card(
-          child: CupertinoListTile(
-            onTap: () {
-              showModalPopUpForActions(context);
-            },
-            leading: Text(
-              habitEmoji,
-              style: context.textTheme.titleLarge?.copyWith(fontSize: 24),
-            ),
-            title: Text(habit.habitName),
-            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-            subtitle: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                if (habitDescription != null && habitDescription.isNotEmpty) Text(habitDescription),
-                Text("${LocaleKeys.archived_habits_archived_on.tr()} $archivedDateString"),
-              ],
-            ),
-            trailing: CupertinoListTileChevron(),
+        CupertinoListTile(
+          onTap: () {
+            showModalPopUpForActions(context);
+          },
+          leading: Text(
+            habitEmoji,
+            style: context.titleLarge.copyWith(fontSize: 24),
           ),
+          title: Text(habit.habitName),
+          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+          subtitle: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (habitDescription != null && habitDescription.isNotEmpty) Text(habitDescription),
+              Text("${LocaleKeys.archived_habits_archived_on.tr()} $archivedDateString"),
+            ],
+          ),
+          trailing: CupertinoListTileChevron(),
         ),
       ],
     );

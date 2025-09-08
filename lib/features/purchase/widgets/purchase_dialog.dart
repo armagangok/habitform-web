@@ -21,7 +21,7 @@ Future<void> showUnlockProDialog() async {
         CupertinoDialogAction(
           onPressed: () {
             Navigator.pop(context);
-            showCupertinoModalBottomSheet(
+            showCupertinoSheet(
               enableDrag: false,
               context: context,
               builder: (context) => PaywallPage(),

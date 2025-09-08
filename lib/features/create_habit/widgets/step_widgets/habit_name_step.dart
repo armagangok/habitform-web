@@ -19,8 +19,9 @@ class _HabitNameStepState extends ConsumerState<HabitNameStep> {
   @override
   void initState() {
     super.initState();
-    final state = ref.read(createHabitProvider);
-    _controller = state.value?.habitNameController ?? TextEditingController();
+    final initial = ref.read(createHabitProvider);
+    // Use provider controller if ready; otherwise create a temporary one
+    _controller = initial.value?.habitNameController ?? TextEditingController();
     _controller.addListener(_onTextChanged);
     _updateValidation();
   }
@@ -46,6 +47,22 @@ class _HabitNameStepState extends ConsumerState<HabitNameStep> {
 
   @override
   Widget build(BuildContext context) {
+    // Keep controller in sync with provider once available
+    ref.listen(createHabitProvider, (prev, next) {
+      if (next.hasValue && next.value != null) {
+        final providerController = next.value!.habitNameController;
+        if (!identical(providerController, _controller)) {
+          if (_controller.text.isNotEmpty && providerController.text != _controller.text) {
+            providerController.text = _controller.text;
+          }
+          _controller.removeListener(_onTextChanged);
+          _controller = providerController;
+          _controller.addListener(_onTextChanged);
+          _updateValidation();
+          setState(() {});
+        }
+      }
+    });
     return BaseStepWidget(
       step: CreateHabitStep.habitName,
       canProceed: _isValid,

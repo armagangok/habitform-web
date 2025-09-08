@@ -70,13 +70,13 @@ class HomeCategoryFilter extends ConsumerWidget {
                             FaIcon(
                               iconData,
                               size: 13,
-                              color: isSelected ? Colors.white : context.textTheme.bodyMedium?.color,
+                              color: isSelected ? Colors.white : context.bodyMedium.color,
                             ),
                             SizedBox(width: 5),
                             Text(
                               category.name,
-                              style: context.bodySmall?.copyWith(
-                                color: isSelected ? Colors.white : context.textTheme.bodyMedium?.color,
+                              style: context.bodySmall.copyWith(
+                                color: isSelected ? Colors.white : context.bodyMedium.color,
                                 fontWeight: FontWeight.w500,
                                 fontSize: 12,
                               ),

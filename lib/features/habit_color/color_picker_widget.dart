@@ -1,4 +1,5 @@
 import '/core/core.dart';
+import '../../core/widgets/widgets.dart';
 
 class ColorPickerWidget extends StatefulWidget {
   final Function(Color) onColorSelected;
@@ -18,9 +19,6 @@ class ColorPickerWidgetState extends State<ColorPickerWidget> with SingleTickerP
   // Define color categories with colors in hex format
   final Map<String, List<Color>> colorCategories = {
     LocaleKeys.colors_blue.tr(): [
-      Colors.blue.shade50,
-      Colors.blue.shade100,
-      Colors.blue.shade200,
       Colors.blue.shade300,
       Colors.blue.shade400,
       Colors.blue.shade500,
@@ -30,9 +28,6 @@ class ColorPickerWidgetState extends State<ColorPickerWidget> with SingleTickerP
       Colors.blue.shade900,
     ],
     LocaleKeys.colors_lightBlue.tr(): [
-      Colors.lightBlue.shade50,
-      Colors.lightBlue.shade100,
-      Colors.lightBlue.shade200,
       Colors.lightBlue.shade300,
       Colors.lightBlue.shade400,
       Colors.lightBlue.shade500,
@@ -42,9 +37,6 @@ class ColorPickerWidgetState extends State<ColorPickerWidget> with SingleTickerP
       Colors.lightBlue.shade900,
     ],
     LocaleKeys.colors_indigo.tr(): [
-      Colors.indigo.shade50,
-      Colors.indigo.shade100,
-      Colors.indigo.shade200,
       Colors.indigo.shade300,
       Colors.indigo.shade400,
       Colors.indigo.shade500,
@@ -54,9 +46,6 @@ class ColorPickerWidgetState extends State<ColorPickerWidget> with SingleTickerP
       Colors.indigo.shade900,
     ],
     LocaleKeys.colors_red.tr(): [
-      Colors.red.shade50,
-      Colors.red.shade100,
-      Colors.red.shade200,
       Colors.red.shade300,
       Colors.red.shade400,
       Colors.red.shade500,
@@ -66,9 +55,6 @@ class ColorPickerWidgetState extends State<ColorPickerWidget> with SingleTickerP
       Colors.red.shade900,
     ],
     LocaleKeys.colors_orange.tr(): [
-      Colors.orange.shade50,
-      Colors.orange.shade100,
-      Colors.orange.shade200,
       Colors.orange.shade300,
       Colors.orange.shade400,
       Colors.orange.shade500,
@@ -78,9 +64,6 @@ class ColorPickerWidgetState extends State<ColorPickerWidget> with SingleTickerP
       Colors.orange.shade900,
     ],
     LocaleKeys.colors_deepOrange.tr(): [
-      Colors.deepOrange.shade50,
-      Colors.deepOrange.shade100,
-      Colors.deepOrange.shade200,
       Colors.deepOrange.shade300,
       Colors.deepOrange.shade400,
       Colors.deepOrange.shade500,
@@ -90,9 +73,6 @@ class ColorPickerWidgetState extends State<ColorPickerWidget> with SingleTickerP
       Colors.deepOrange.shade900,
     ],
     LocaleKeys.colors_amber.tr(): [
-      Colors.amber.shade50,
-      Colors.amber.shade100,
-      Colors.amber.shade200,
       Colors.amber.shade300,
       Colors.amber.shade400,
       Colors.amber.shade500,
@@ -102,9 +82,6 @@ class ColorPickerWidgetState extends State<ColorPickerWidget> with SingleTickerP
       Colors.amber.shade900,
     ],
     LocaleKeys.colors_yellow.tr(): [
-      Colors.yellow.shade50,
-      Colors.yellow.shade100,
-      Colors.yellow.shade200,
       Colors.yellow.shade300,
       Colors.yellow.shade400,
       Colors.yellow.shade500,
@@ -114,9 +91,6 @@ class ColorPickerWidgetState extends State<ColorPickerWidget> with SingleTickerP
       Colors.yellowAccent.shade700,
     ],
     LocaleKeys.colors_Lime.tr(): [
-      Colors.lime.shade50,
-      Colors.lime.shade100,
-      Colors.lime.shade200,
       Colors.lime.shade300,
       Colors.lime.shade400,
       Colors.lime.shade500,
@@ -126,9 +100,6 @@ class ColorPickerWidgetState extends State<ColorPickerWidget> with SingleTickerP
       Colors.lime.shade900,
     ],
     LocaleKeys.colors_green.tr(): [
-      Colors.green.shade50,
-      Colors.green.shade100,
-      Colors.green.shade200,
       Colors.green.shade300,
       Colors.green.shade400,
       Colors.green.shade500,
@@ -138,9 +109,6 @@ class ColorPickerWidgetState extends State<ColorPickerWidget> with SingleTickerP
       Colors.green.shade900,
     ],
     LocaleKeys.colors_cyan.tr(): [
-      Colors.cyan.shade50,
-      Colors.cyan.shade100,
-      Colors.cyan.shade200,
       Colors.cyan.shade300,
       Colors.cyan.shade400,
       Colors.cyan.shade500,
@@ -150,9 +118,6 @@ class ColorPickerWidgetState extends State<ColorPickerWidget> with SingleTickerP
       Colors.cyan.shade900,
     ],
     LocaleKeys.colors_teal.tr(): [
-      Colors.teal.shade50,
-      Colors.teal.shade100,
-      Colors.teal.shade200,
       Colors.teal.shade300,
       Colors.teal.shade400,
       Colors.teal.shade500,
@@ -162,9 +127,6 @@ class ColorPickerWidgetState extends State<ColorPickerWidget> with SingleTickerP
       Colors.teal.shade900,
     ],
     LocaleKeys.colors_blueGrey.tr(): [
-      Colors.blueGrey.shade50,
-      Colors.blueGrey.shade100,
-      Colors.blueGrey.shade200,
       Colors.blueGrey.shade300,
       Colors.blueGrey.shade400,
       Colors.blueGrey.shade500,
@@ -174,9 +136,6 @@ class ColorPickerWidgetState extends State<ColorPickerWidget> with SingleTickerP
       Colors.blueGrey.shade900,
     ],
     LocaleKeys.colors_grey.tr(): [
-      Colors.grey.shade50,
-      Colors.grey.shade100,
-      Colors.grey.shade200,
       Colors.grey.shade300,
       Colors.grey.shade400,
       Colors.grey.shade500,
@@ -186,9 +145,6 @@ class ColorPickerWidgetState extends State<ColorPickerWidget> with SingleTickerP
       Colors.grey.shade900,
     ],
     LocaleKeys.colors_purple.tr(): [
-      Colors.purple.shade50,
-      Colors.purple.shade100,
-      Colors.purple.shade200,
       Colors.purple.shade300,
       Colors.purple.shade400,
       Colors.purple.shade500,
@@ -198,9 +154,6 @@ class ColorPickerWidgetState extends State<ColorPickerWidget> with SingleTickerP
       Colors.purple.shade900,
     ],
     LocaleKeys.colors_deepPurple.tr(): [
-      Colors.deepPurple.shade50,
-      Colors.deepPurple.shade100,
-      Colors.deepPurple.shade200,
       Colors.deepPurple.shade300,
       Colors.deepPurple.shade400,
       Colors.deepPurple.shade500,
@@ -210,9 +163,6 @@ class ColorPickerWidgetState extends State<ColorPickerWidget> with SingleTickerP
       Colors.deepPurple.shade900,
     ],
     LocaleKeys.colors_brown.tr(): [
-      Colors.brown.shade50,
-      Colors.brown.shade100,
-      Colors.brown.shade200,
       Colors.brown.shade300,
       Colors.brown.shade400,
       Colors.brown.shade500,
@@ -222,9 +172,6 @@ class ColorPickerWidgetState extends State<ColorPickerWidget> with SingleTickerP
       Colors.brown.shade900,
     ],
     LocaleKeys.colors_pink.tr(): [
-      Colors.pink.shade50,
-      Colors.pink.shade100,
-      Colors.pink.shade200,
       Colors.pink.shade300,
       Colors.pink.shade400,
       Colors.pink.shade500,
@@ -343,16 +290,29 @@ class ColorPickerWidgetState extends State<ColorPickerWidget> with SingleTickerP
           widget.onColorSelected(color);
         });
       },
-      child: Card(
-        margin: EdgeInsets.zero,
-        color: color,
-        child: index == selectedColorIndex
-            ? Icon(
-                CupertinoIcons.checkmark_circle,
-                size: size * 0.5,
-                color: index == selectedColorIndex ? color.colorRegardingToBrightness : Colors.transparent,
-              )
-            : null,
+      child: Container(
+        width: size,
+        height: size,
+        decoration: BoxDecoration(
+          color: color,
+          shape: BoxShape.circle,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.15),
+              blurRadius: 6,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Center(
+          child: index == selectedColorIndex
+              ? Icon(
+                  CupertinoIcons.checkmark_alt,
+                  size: size * 0.45,
+                  color: color.colorRegardingToBrightness,
+                )
+              : const SizedBox.shrink(),
+        ),
       ),
     );
   }

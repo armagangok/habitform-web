@@ -24,7 +24,7 @@ class CustomEmojiPicker extends StatelessWidget {
           child: CupertinoButton.filled(
             child: Text(
               LocaleKeys.common_pick_your_emoji.tr(),
-              style: context.titleMedium?.copyWith(
+              style: context.titleMedium.copyWith(
                 fontWeight: FontWeight.w600,
                 color: Colors.white,
               ),
@@ -57,7 +57,7 @@ class CustomEmojiPicker extends StatelessWidget {
                 width: 40,
                 margin: const EdgeInsets.symmetric(vertical: 8),
                 decoration: BoxDecoration(
-                  color: context.theme.dividerColor.withValues(alpha: 0.4),
+                  color: context.selectionHandleColor.withValues(alpha: 0.4),
                   borderRadius: BorderRadius.circular(3),
                 ),
               ),
@@ -68,17 +68,17 @@ class CustomEmojiPicker extends StatelessWidget {
                   children: [
                     Text(
                       LocaleKeys.common_pick_your_emoji.tr(),
-                      style: context.titleMedium?.copyWith(
+                      style: context.titleMedium.copyWith(
                         fontWeight: FontWeight.w600,
                       ),
                     ),
                     CupertinoButton(
                       padding: EdgeInsets.zero,
-                      minSize: 0,
+                      minimumSize: Size.zero,
                       onPressed: () => Navigator.pop(context),
                       child: Text(
                         LocaleKeys.common_ok.tr(),
-                        style: context.titleSmall?.copyWith(
+                        style: context.titleSmall.copyWith(
                           color: context.theme.primaryColor,
                           fontWeight: FontWeight.w600,
                         ),

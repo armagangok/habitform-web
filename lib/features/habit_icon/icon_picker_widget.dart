@@ -2,6 +2,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '/core/core.dart';
+import '../../core/widgets/widgets.dart';
 import 'provider/icon_picker_provider.dart';
 
 class IconPicker extends ConsumerStatefulWidget {
@@ -195,18 +196,15 @@ class IconPickerState extends ConsumerState<IconPicker> with SingleTickerProvide
                         }
                       });
                     },
-                    child: Card(
-                      elevation: .25,
-                      color: isSelected ? context.primary.withAlpha(100) : null,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
+                    child: CupertinoCard(
+                      color: isSelected ? context.primary.withValues(alpha: .8) : null,
+                      borderRadius: BorderRadius.circular(8),
                       child: Center(
                         child: FittedBox(
                           child: Text(
                             iconData,
                             textAlign: TextAlign.center,
-                            style: context.titleLarge?.copyWith(fontSize: 44),
+                            style: context.titleLarge.copyWith(fontSize: 44),
                             maxLines: 1,
                           ),
                         ),

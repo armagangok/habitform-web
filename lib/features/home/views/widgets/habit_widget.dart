@@ -1,12 +1,12 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lottie/lottie.dart';
 
 import '/core/core.dart';
+import '/models/completion_entry/completion_extension.dart';
 import '/models/models.dart';
 import '../../../habit_detail/page/habit_detail.dart';
 import '../../../habit_detail/providers/habit_detail_provider.dart';
+import '../../components/achievement_dialog.dart';
 import '../../provider/home_provider.dart';
-import 'home_habit_grid.dart';
 
 class HabitWidget extends ConsumerStatefulWidget {
   const HabitWidget({super.key, required this.habit});
@@ -17,20 +17,87 @@ class HabitWidget extends ConsumerStatefulWidget {
   ConsumerState<HabitWidget> createState() => _HabitWidgetState();
 }
 
-class _HabitWidgetState extends ConsumerState<HabitWidget> {
+class _HabitWidgetState extends ConsumerState<HabitWidget> with SingleTickerProviderStateMixin {
+  late final AnimationController _controller;
+  late final Animation<double> _tapScaleAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(vsync: this, duration: const Duration(milliseconds: 400));
+    _tapScaleAnimation = TweenSequence<double>([
+      TweenSequenceItem(tween: Tween(begin: 1.0, end: 1.08).chain(CurveTween(curve: Curves.easeOut)), weight: 55),
+      TweenSequenceItem(tween: Tween(begin: 1.08, end: 1.0).chain(CurveTween(curve: Curves.easeIn)), weight: 45),
+    ]).animate(_controller);
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
   void _openHabitDetail() {
     ref.watch(habitDetailProvider.notifier).initHabit(widget.habit);
 
-    CupertinoScaffold.showCupertinoModalBottomSheet(
+    showCupertinoSheet(
       enableDrag: false,
       context: context,
       builder: (contextFromSheet) => HabitDetailPage(),
     );
   }
 
-  void _uncompleteHabit() {
+  double _getProgressPercentage(Habit habit) {
+    return habit.completions.calculateProgressPercentage();
+  }
+
+  Future<void> _showAchievementIfEarned({required Habit previousHabit, required Habit updatedHabit}) async {
+    final previousScore = _getProgressPercentage(previousHabit);
+    final newScore = _getProgressPercentage(updatedHabit);
+
+    if (!mounted) return;
+
+    await showCupertinoDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (_) => AchievementDialog(
+        habit: updatedHabit,
+        pointsGained: 10,
+        previousScore: previousScore.round(),
+        newScore: newScore.round(),
+        message: 'Nice! You completed today. Keep the streak going! 🔥',
+      ),
+    );
+  }
+
+  void _toggleToday() async {
+    if (!mounted) return;
+
     final today = DateTime.now();
+    final beforeHabit = ref.read(homeProvider).maybeWhen(
+          data: (homeState) => homeState.habits.firstWhere(
+            (h) => h.id == widget.habit.id,
+            orElse: () => widget.habit,
+          ),
+          orElse: () => widget.habit,
+        );
+    final wasCompleted = today.isCompletedInEntries(beforeHabit.completions);
+
+    await _controller.forward(from: 0.0);
+
     ref.read(homeProvider.notifier).toggleHabitCompletion(widget.habit.id, today);
+
+    if (!wasCompleted) {
+      await Future<void>.delayed(const Duration(milliseconds: 50));
+      final afterHabit = ref.read(homeProvider).maybeWhen(
+            data: (homeState) => homeState.habits.firstWhere(
+              (h) => h.id == widget.habit.id,
+              orElse: () => widget.habit,
+            ),
+            orElse: () => widget.habit,
+          );
+      await _showAchievementIfEarned(previousHabit: beforeHabit, updatedHabit: afterHabit);
+    }
   }
 
   @override
@@ -46,165 +113,122 @@ class _HabitWidgetState extends ConsumerState<HabitWidget> {
     final habitName = currentHabit.habitName;
     final today = DateTime.now();
     final isTodayCompleted = today.isCompletedInEntries(currentHabit.completions);
+    final habitColor = Color(currentHabit.colorCode);
+    final emoji = currentHabit.emoji ?? '🎯';
+    final streak = currentHabit.completions.calculateCurrentStreak();
 
     return CustomButton(
       onPressed: _openHabitDetail,
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          Widget content = Card(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                children: [
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      habitName,
-                      style: context.bodyMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
-                      ),
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 1,
-                    ),
-                  ),
-                  HomeHabitGrid(habit: currentHabit),
-                ],
-              ),
-            ),
-          );
-
-          if (isTodayCompleted) {
-            final habitColor = Color(currentHabit.colorCode);
-            final emoji = widget.habit.emoji;
-            content = Stack(
+      child: AspectRatio(
+        aspectRatio: 1,
+        child: Container(
+          decoration: BoxDecoration(
+            color: habitColor.withValues(alpha: 0.1),
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(color: habitColor.withValues(alpha: 0.35), width: 2),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                // Blurred background
-                content,
-                // Completion overlay that covers the entire habit item
-                Positioned.fill(
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(12),
-                    child: CustomBlurWidget(
-                      blurValue: 15,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: context.theme.cardTheme.color?.withValues(alpha: 0.7),
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(
-                            color: habitColor.withValues(alpha: 0.6),
-                            width: 1.25,
-                          ),
+                // Emoji - top left
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      width: 56,
+                      height: 56,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: habitColor.withValues(alpha: 0.12),
+                        border: Border.all(color: habitColor.withValues(alpha: 0.25)),
+                      ),
+                      child: Center(
+                        child: Text(
+                          emoji,
+                          style: const TextStyle(fontSize: 28),
                         ),
-                        child: Stack(
-                          children: [
-                            // Center completion message
-                            Center(
-                              child: AnimatedSwitcher(
-                                duration: Duration(milliseconds: 600),
-                                transitionBuilder: (child, animation) => ScaleTransition(scale: animation, child: child),
-                                child: Container(
-                                  key: ValueKey('completed-today'),
-                                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(16),
-                                  ),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Expanded(
-                                        flex: 5,
-                                        child: Row(
-                                          children: [
-                                            if (emoji != null) ...[
-                                              FittedBox(
-                                                child: Text(
-                                                  emoji,
-                                                  style: context.bodyLarge?.copyWith(
-                                                    color: habitColor,
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 32,
-                                                  ),
-                                                  maxLines: 1,
-                                                ),
-                                              ),
-                                              SizedBox(width: 10),
-                                            ],
-                                            Expanded(
-                                              child: Column(
-                                                mainAxisAlignment: MainAxisAlignment.center,
-                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                children: [
-                                                  FittedBox(
-                                                    child: Text(
-                                                      habitName,
-                                                      style: context.bodyLarge?.copyWith(
-                                                        color: habitColor,
-                                                        fontWeight: FontWeight.bold,
-                                                        fontSize: 18,
-                                                      ),
-                                                      maxLines: 1,
-                                                    ),
-                                                  ),
-                                                  FittedBox(
-                                                    child: Text(
-                                                      LocaleKeys.habit_todayCompleted.tr(),
-                                                      style: context.bodyLarge?.copyWith(
-                                                        color: context.bodyLarge?.color?.withValues(alpha: 0.8),
-                                                        fontWeight: FontWeight.w500,
-                                                        fontSize: 14,
-                                                      ),
-                                                      maxLines: 1,
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                            SizedBox(width: 8),
-                                            SizedBox(
-                                              width: 60,
-                                              height: 60,
-                                              child: Lottie.asset(
-                                                Assets.animations.completion,
-                                                repeat: false,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      Expanded(
-                                        child: CupertinoButton(
-                                          color: Colors.transparent,
-                                          borderRadius: BorderRadius.circular(8),
-                                          padding: EdgeInsets.zero,
-                                          minSize: 0,
-                                          sizeStyle: CupertinoButtonSize.small,
-                                          onPressed: _uncompleteHabit,
-                                          child: Icon(
-                                            CupertinoIcons.xmark_circle_fill,
-                                            color: habitColor,
-                                            size: 32,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
+                      ),
+                    ),
+
+                    // Streak pill - top right
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                      decoration: BoxDecoration(
+                        color: habitColor.withValues(alpha: 0.18),
+                        borderRadius: BorderRadius.circular(24),
+                        border: Border.all(color: habitColor.withValues(alpha: 0.25)),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(CupertinoIcons.flame_fill, size: 16, color: habitColor),
+                          const SizedBox(width: 6),
+                          AnimatedSwitcher(
+                            duration: const Duration(milliseconds: 250),
+                            transitionBuilder: (child, animation) {
+                              final curved = CurvedAnimation(parent: animation, curve: Curves.easeOutCubic);
+                              return FadeTransition(
+                                opacity: curved,
+                                child: ScaleTransition(scale: curved, child: child),
+                              );
+                            },
+                            child: Text(
+                              '$streak',
+                              key: ValueKey<int>(streak),
+                              style: context.bodyMedium.copyWith(
+                                fontWeight: FontWeight.w700,
+                                color: habitColor,
+                                fontFeatures: [
+                                  FontFeature.tabularFigures(),
+                                ],
                               ),
                             ),
-                            // Uncomplete button positioned on top
-                          ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+
+                // Habit name - bottom left
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: Text(
+                        habitName,
+                        maxLines: null,
+                        style: context.titleLarge.copyWith(fontWeight: FontWeight.w700),
+                      ),
+                    ),
+
+                    // Complete button - bottom right
+                    CupertinoButton(
+                      padding: EdgeInsets.zero,
+                      onPressed: _toggleToday,
+                      minimumSize: Size(0, 0),
+                      child: ScaleTransition(
+                        scale: _tapScaleAnimation,
+                        child: AnimatedSwitcher(
+                          duration: const Duration(milliseconds: 350),
+                          transitionBuilder: (child, animation) => FadeTransition(opacity: animation, child: child),
+                          child: Icon(
+                            isTodayCompleted ? CupertinoIcons.circle_fill : CupertinoIcons.circle,
+                            key: ValueKey<bool>(isTodayCompleted),
+                            color: habitColor,
+                            size: 28,
+                          ),
                         ),
                       ),
                     ),
-                  ),
+                  ],
                 ),
               ],
-            );
-          }
-
-          return content;
-        },
+            ),
+          ),
+        ),
       ),
     );
   }

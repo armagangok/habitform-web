@@ -81,7 +81,7 @@ class HabitDetailPage extends ConsumerWidget {
                       color: Color(currentHabit.colorCode),
                       label: LocaleKeys.habit_detail_calendar.tr(),
                       onPressed: () {
-                        showCupertinoModalBottomSheet(
+                        showCupertinoSheet(
                           enableDrag: false,
                           context: context,
                           builder: (context) => HabitCalendarCompletionSheet(habit: currentHabit),
@@ -99,7 +99,7 @@ class HabitDetailPage extends ConsumerWidget {
                       icon: FontAwesomeIcons.share,
                       label: LocaleKeys.share_share.tr(),
                       onPressed: () {
-                        showCupertinoModalBottomSheet(
+                        showCupertinoSheet(
                           context: context,
                           builder: (context) => ShareHabitPage(habit: currentHabit),
                         );
@@ -112,7 +112,7 @@ class HabitDetailPage extends ConsumerWidget {
                       onPressed: () {
                         ref.watch(editHabitProvider.notifier).initHabit(currentHabit);
 
-                        showCupertinoModalBottomSheet(
+                        showCupertinoSheet(
                           enableDrag: false,
                           context: context,
                           builder: (context) => EditHabitPage(habit: currentHabit),
@@ -134,7 +134,7 @@ class HabitDetailPage extends ConsumerWidget {
       builder: (context) {
         return CustomButton(
           onPressed: () {
-            showCupertinoModalBottomSheet(
+            showCupertinoSheet(
               enableDrag: false,
               context: context,
               builder: (context) => EditHabitPage(habit: currentHabit),
@@ -240,7 +240,7 @@ class _HabitGeneralInfo extends ConsumerWidget {
 
         ref.watch(editHabitProvider.notifier).initHabit(habit);
 
-        showCupertinoModalBottomSheet(
+        showCupertinoSheet(
           enableDrag: false,
           context: context,
           builder: (context) => EditHabitPage(habit: habit),

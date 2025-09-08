@@ -1,7 +1,8 @@
+import '../../../models/habit/habit_difficulty.dart';
+
 /// State model for statistics
 class StatisticsState {
-  
-  final int totalCompletedDays;  
+  final int totalCompletedDays;
   final Map<String, HabitStatistic> habitStatistics;
   final bool isMockData;
 
@@ -41,6 +42,8 @@ class HabitStatistic {
   final int completedDays;
   final double progressPercentage;
   final DateTime startDate;
+  // Optional difficulty for insights; defaults can be applied where computed
+  final HabitDifficulty? difficulty;
 
   const HabitStatistic({
     required this.habitId,
@@ -49,5 +52,6 @@ class HabitStatistic {
     required this.completedDays,
     required this.progressPercentage,
     required this.startDate,
+    this.difficulty,
   });
 }
