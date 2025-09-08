@@ -1,0 +1,610 @@
+import 'dart:math' as math;
+
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:habitrise/features/habit_detail/widget/habit_calendar_widget.dart';
+
+import '/core/core.dart';
+import '/models/models.dart';
+
+class HabitHeatmapCard extends ConsumerWidget {
+  final Habit habit;
+
+  const HabitHeatmapCard({
+    super.key,
+    required this.habit,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return CupertinoListSection.insetGrouped(
+      header: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                FontAwesomeIcons.calendarDays,
+                size: 20,
+                color: Color(habit.colorCode),
+              ),
+              const SizedBox(width: 8),
+              Text(
+                "Habit Heatmap",
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: context.titleLarge.color,
+                ),
+              ),
+            ],
+          ),
+          CustomButton(
+            onPressed: () {
+              showCupertinoSheet(
+                enableDrag: false,
+                context: context,
+                builder: (context) => HabitCalendarCompletionSheet(habit: habit),
+              );
+            },
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+              decoration: BoxDecoration(
+                color: Color(habit.colorCode).withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Text(
+                "View Full",
+                style: TextStyle(
+                  fontSize: 12,
+                  color: Color(habit.colorCode),
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+      children: [
+        CupertinoListTile(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+          title: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Heatmap
+              _OptimizedHeatmapGrid(habit: habit),
+
+              const SizedBox(height: 16),
+
+              // Legend and Stats
+              _OptimizedHeatmapLegend(habit: habit),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _OptimizedHeatmapGrid extends StatefulWidget {
+  final Habit habit;
+
+  const _OptimizedHeatmapGrid({required this.habit});
+
+  @override
+  State<_OptimizedHeatmapGrid> createState() => _OptimizedHeatmapGridState();
+}
+
+class _OptimizedHeatmapGridState extends State<_OptimizedHeatmapGrid> {
+  late final ScrollController _scrollController;
+  late final HeatmapData heatmapData;
+  late List<String> visibleMonthLabels;
+
+  // Pre-processed completion data for O(1) lookup
+  late final Map<String, bool> _completionMap;
+
+  // Cache for cell widgets to avoid rebuilding
+  final Map<String, Widget> _cellWidgetCache = {};
+
+  // Track the current scroll offset to update visible month labels
+  double _currentScrollOffset = 0;
+
+  // Debounce scroll updates
+  bool _isUpdatingScroll = false;
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Pre-process completion data for fast lookup
+    _completionMap = _buildCompletionMap();
+
+    heatmapData = _generateHeatmapData();
+    _scrollController = ScrollController();
+
+    // Optimized scroll listener with debouncing
+    _scrollController.addListener(_onScrollChanged);
+
+    // Start with the last 6 months visible
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (_scrollController.hasClients) {
+        _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+        _updateVisibleMonths();
+      }
+    });
+
+    // Initialize visible month labels with the last up to 6 months (clamped)
+    final totalMonths = heatmapData.monthLabels.length;
+    final startIndex = math.max(0, totalMonths - 6);
+    visibleMonthLabels = heatmapData.monthLabels.sublist(startIndex, totalMonths);
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    _cellWidgetCache.clear();
+    super.dispose();
+  }
+
+  // Pre-process completion data for O(1) lookup instead of O(n) search
+  Map<String, bool> _buildCompletionMap() {
+    final Map<String, bool> completionMap = {};
+    final now = DateTime.now();
+    final oneYearAgo = now.subtract(const Duration(days: 365));
+
+    for (final entry in widget.habit.completions.values) {
+      final entryDate = DateUtils.dateOnly(entry.date);
+      if (entryDate.isAfter(oneYearAgo) && entryDate.isBefore(now.add(const Duration(days: 1)))) {
+        final dateKey = '${entryDate.year}-${entryDate.month}-${entryDate.day}';
+        completionMap[dateKey] = entry.isCompleted;
+      }
+    }
+
+    return completionMap;
+  }
+
+  // Debounced scroll handling for better performance
+  void _onScrollChanged() {
+    if (_isUpdatingScroll) return;
+
+    _isUpdatingScroll = true;
+    Future.delayed(const Duration(milliseconds: 16), () {
+      if (mounted) {
+        _updateVisibleMonths();
+        _isUpdatingScroll = false;
+      }
+    });
+  }
+
+  void _updateVisibleMonths() {
+    if (!_scrollController.hasClients) return;
+
+    // Clamp offset to avoid negative values from bouncing physics
+    final clampedOffset = _scrollController.offset.clamp(0.0, _scrollController.position.maxScrollExtent);
+    final newScrollOffset = clampedOffset.toDouble();
+
+    // Only update if there's a significant change
+    if ((newScrollOffset - _currentScrollOffset).abs() < 10) return;
+
+    setState(() {
+      _currentScrollOffset = newScrollOffset;
+
+      // Calculate which months are currently visible based on scroll position
+      final totalWidth = _scrollController.position.maxScrollExtent + _scrollController.position.viewportDimension;
+      final visibleStart = totalWidth == 0 ? 0.0 : _currentScrollOffset / totalWidth;
+
+      // Each month is approximately 1/12 of the total width for a year
+      final totalMonths = heatmapData.monthLabels.length;
+      final rawStartIndex = (visibleStart * totalMonths).floor();
+      final startMonthIndex = math.max(0, math.min(rawStartIndex, math.max(0, totalMonths - 1)));
+      final endMonthIndex = math.min(totalMonths, startMonthIndex + 6);
+
+      // Update visible month labels (ensure non-empty range)
+      visibleMonthLabels = heatmapData.monthLabels.sublist(startMonthIndex, endMonthIndex);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        // Month labels - separated for better performance
+        _buildMonthLabels(context),
+        const SizedBox(height: 8),
+        // Heatmap grid - optimized with caching
+        _buildHeatmapGrid(context),
+      ],
+    );
+  }
+
+  Widget _buildMonthLabels(BuildContext context) {
+    return Row(
+      children: [
+        const SizedBox(width: 24), // Space for day labels
+        ...visibleMonthLabels.map(
+          (month) => Expanded(
+            child: Text(
+              month,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 10,
+                color: context.bodyMedium.color?.withValues(alpha: 0.6),
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildHeatmapGrid(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Day labels - static, no need to rebuild
+        _buildDayLabels(context),
+        const SizedBox(width: 4),
+        // Grid with horizontal scrolling - optimized
+        Expanded(
+          child: Stack(
+            children: [
+              SingleChildScrollView(
+                controller: _scrollController,
+                scrollDirection: Axis.horizontal,
+                physics: const BouncingScrollPhysics(),
+                child: _buildScrollableGrid(context),
+              ),
+              // Fade indicators - only rebuild when scroll changes
+              _buildFadeIndicators(context),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildDayLabels(BuildContext context) {
+    return Column(
+      children: heatmapData.dayLabels.asMap().entries.map((entry) {
+        return Container(
+          height: 16,
+          width: 20,
+          alignment: Alignment.centerRight,
+          child: entry.key.isEven
+              ? Text(
+                  entry.value,
+                  style: TextStyle(
+                    fontSize: 9,
+                    color: context.bodyMedium.color?.withValues(alpha: 0.6),
+                  ),
+                )
+              : null,
+        );
+      }).toList(),
+    );
+  }
+
+  Widget _buildScrollableGrid(BuildContext context) {
+    return SizedBox(
+      // Make the width proportional to the number of weeks
+      width: heatmapData.weeks * 9.0, // Each cell is 8px + 1px margin = 9px
+      child: Column(
+        children: List.generate(7, (dayIndex) {
+          return SizedBox(
+            width: heatmapData.weeks * 9.0,
+            child: Row(
+              children: List.generate(
+                heatmapData.weeks,
+                (weekIndex) => _buildCachedCell(context, weekIndex, dayIndex),
+              ),
+            ),
+          );
+        }),
+      ),
+    );
+  }
+
+  // Cached cell building for performance
+  Widget _buildCachedCell(BuildContext context, int weekIndex, int dayIndex) {
+    final cellKey = '$weekIndex-$dayIndex';
+
+    if (_cellWidgetCache.containsKey(cellKey)) {
+      return _cellWidgetCache[cellKey]!;
+    }
+
+    final cellData = _getCellDataOptimized(heatmapData, weekIndex, dayIndex);
+    final cellWidget = Container(
+      margin: const EdgeInsets.all(0.5),
+      width: 8,
+      height: 8,
+      decoration: BoxDecoration(
+        color: _getCellColor(cellData.intensity, context),
+        borderRadius: BorderRadius.circular(1),
+      ),
+    );
+
+    // Cache the widget
+    _cellWidgetCache[cellKey] = cellWidget;
+    return cellWidget;
+  }
+
+  Widget _buildFadeIndicators(BuildContext context) {
+    return Stack(
+      children: [
+        // Left fade indicator
+        Positioned(
+          left: 0,
+          top: 0,
+          bottom: 0,
+          child: AnimatedOpacity(
+            opacity: _currentScrollOffset > 20 ? 1.0 : 0.0,
+            duration: const Duration(milliseconds: 300),
+            child: Container(
+              width: 20,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.centerLeft,
+                  end: Alignment.centerRight,
+                  colors: [
+                    context.cupertinoTheme.scaffoldBackgroundColor,
+                    context.cupertinoTheme.scaffoldBackgroundColor.withValues(alpha: 0.0),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+        // Right fade indicator
+        Positioned(
+          right: 0,
+          top: 0,
+          bottom: 0,
+          child: AnimatedOpacity(
+            opacity: _scrollController.hasClients && _scrollController.position.maxScrollExtent - _currentScrollOffset > 20 ? 1.0 : 0.0,
+            duration: const Duration(milliseconds: 300),
+            child: Container(
+              width: 20,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.centerRight,
+                  end: Alignment.centerLeft,
+                  colors: [
+                    context.cupertinoTheme.scaffoldBackgroundColor,
+                    context.cupertinoTheme.scaffoldBackgroundColor.withValues(alpha: 0.0),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  HeatmapData _generateHeatmapData() {
+    final now = DateTime.now();
+    final endDate = DateUtils.dateOnly(now);
+    final startDate = endDate.subtract(const Duration(days: 365)); // Full year
+
+    final weeks = 52; // Show full year (52 weeks)
+    final monthLabels = <String>[];
+    final dayLabels = ['', 'Mon', '', 'Wed', '', 'Fri', ''];
+
+    // Generate month labels for the full year
+    for (int i = 0; i < 12; i++) {
+      final month = DateTime(now.year, now.month - i, 1);
+      monthLabels.insert(0, _getMonthAbbreviation(month.month));
+    }
+
+    return HeatmapData(
+      startDate: startDate,
+      endDate: endDate,
+      weeks: weeks,
+      monthLabels: monthLabels,
+      dayLabels: dayLabels,
+    );
+  }
+
+  // Optimized cell data lookup using pre-processed map
+  CellData _getCellDataOptimized(HeatmapData data, int weekIndex, int dayIndex) {
+    final date = data.startDate.add(Duration(days: weekIndex * 7 + dayIndex));
+
+    if (date.isAfter(data.endDate)) {
+      return CellData(
+        date: date,
+        intensity: 0,
+        tooltip: '',
+      );
+    }
+
+    final dateKey = '${date.year}-${date.month}-${date.day}';
+    final isCompleted = _completionMap[dateKey] ?? false;
+
+    return CellData(
+      date: date,
+      intensity: isCompleted ? 1 : 0,
+      tooltip: isCompleted ? "Completed on ${date.day}/${date.month}/${date.year}" : "Not completed on ${date.day}/${date.month}/${date.year}",
+    );
+  }
+
+  Color _getCellColor(int intensity, BuildContext context) {
+    final habitColor = Color(widget.habit.colorCode);
+
+    switch (intensity) {
+      case 0:
+        return context.cupertinoTheme.brightness == Brightness.dark ? CupertinoColors.systemGrey6 : CupertinoColors.systemGrey5;
+      case 1:
+        return habitColor;
+      default:
+        return habitColor;
+    }
+  }
+
+  String _getMonthAbbreviation(int month) {
+    const months = ['', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    return months[month];
+  }
+}
+
+class _OptimizedHeatmapLegend extends StatefulWidget {
+  final Habit habit;
+
+  const _OptimizedHeatmapLegend({required this.habit});
+
+  @override
+  State<_OptimizedHeatmapLegend> createState() => _OptimizedHeatmapLegendState();
+}
+
+class _OptimizedHeatmapLegendState extends State<_OptimizedHeatmapLegend> {
+  late final HeatmapStats _cachedStats;
+
+  @override
+  void initState() {
+    super.initState();
+    // Pre-calculate stats once during init for better performance
+    _cachedStats = _calculateHeatmapStats();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        // Legend - static, doesn't need rebuilds
+        _buildLegend(context),
+        // Stats - using cached value
+        _buildStats(context),
+      ],
+    );
+  }
+
+  Widget _buildLegend(BuildContext context) {
+    return Row(
+      children: [
+        Text(
+          "Less",
+          style: TextStyle(
+            fontSize: 11,
+            color: context.bodyMedium.color?.withValues(alpha: 0.6),
+          ),
+        ),
+        const SizedBox(width: 4),
+        ...List.generate(4, (index) {
+          return Container(
+            margin: const EdgeInsets.symmetric(horizontal: 1),
+            width: 10,
+            height: 10,
+            decoration: BoxDecoration(
+              color: _getLegendColor(index, context),
+              borderRadius: BorderRadius.circular(2),
+            ),
+          );
+        }),
+        const SizedBox(width: 4),
+        Text(
+          "More",
+          style: TextStyle(
+            fontSize: 11,
+            color: context.bodyMedium.color?.withValues(alpha: 0.6),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildStats(BuildContext context) {
+    return Text(
+      "${_cachedStats.completedDays} days completed in the last year",
+      style: TextStyle(
+        fontSize: 11,
+        color: context.bodyMedium.color?.withValues(alpha: 0.7),
+        fontWeight: FontWeight.w500,
+      ),
+    );
+  }
+
+  Color _getLegendColor(int index, BuildContext context) {
+    final habitColor = Color(widget.habit.colorCode);
+    final baseColor = context.cupertinoTheme.brightness == Brightness.dark ? CupertinoColors.systemGrey6 : CupertinoColors.systemGrey5;
+
+    switch (index) {
+      case 0:
+        return baseColor;
+      case 1:
+        return habitColor.withValues(alpha: 0.3);
+      case 2:
+        return habitColor.withValues(alpha: 0.6);
+      case 3:
+        return habitColor;
+      default:
+        return habitColor;
+    }
+  }
+
+  HeatmapStats _calculateHeatmapStats() {
+    final now = DateTime.now();
+    final oneYearAgo = now.subtract(const Duration(days: 365));
+
+    int completedDays = 0;
+    int totalDays = 0;
+
+    // Count all days in the 1-year period that have entries
+    for (final entry in widget.habit.completions.values) {
+      final entryDate = DateUtils.dateOnly(entry.date);
+      if (entryDate.isAfter(oneYearAgo) && entryDate.isBefore(now.add(const Duration(days: 1)))) {
+        totalDays++;
+        if (entry.isCompleted) {
+          completedDays++;
+        }
+      }
+    }
+
+    // If we have no completion entries, show 0 but still show the grid
+    return HeatmapStats(
+      completedDays: completedDays,
+      totalDays: totalDays,
+      completionRate: totalDays > 0 ? (completedDays / totalDays) * 100 : 0.0,
+    );
+  }
+}
+
+class HeatmapData {
+  final DateTime startDate;
+  final DateTime endDate;
+  final int weeks;
+  final List<String> monthLabels;
+  final List<String> dayLabels;
+
+  const HeatmapData({
+    required this.startDate,
+    required this.endDate,
+    required this.weeks,
+    required this.monthLabels,
+    required this.dayLabels,
+  });
+}
+
+class CellData {
+  final DateTime date;
+  final int intensity;
+  final String tooltip;
+
+  const CellData({
+    required this.date,
+    required this.intensity,
+    required this.tooltip,
+  });
+}
+
+class HeatmapStats {
+  final int completedDays;
+  final int totalDays;
+  final double completionRate;
+
+  const HeatmapStats({
+    required this.completedDays,
+    required this.totalDays,
+    required this.completionRate,
+  });
+}
