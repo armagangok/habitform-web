@@ -1,5 +1,6 @@
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:habitrise/features/onboarding/pages/onboarding_welcome_page.dart';
 
 import '/core/core.dart';
 import '/core/theme/theme_data/theme_data.dart';
@@ -13,7 +14,6 @@ import 'core/helpers/notifications/timezone.dart';
 import 'core/theme/providers/theme_provider.dart';
 import 'features/home/provider/home_provider.dart';
 import 'features/home/views/pages/home_page.dart';
-import 'features/onboarding/pages/onboarding_main_page.dart';
 import 'features/onboarding/providers/onboarding_state.dart';
 import 'features/purchase/providers/purchase_provider.dart';
 
@@ -112,7 +112,7 @@ class _MyAppState extends ConsumerState<MyApp> {
           child: child!,
         );
       },
-      theme: cupertinoTheme,
+      theme: Themes.cupertinoDarkTheme,
       debugShowCheckedModeBanner: false,
       navigatorKey: NavigationService.shared.navigatorKey,
       onGenerateRoute: NavigationRoute.shared.generateRoute,
@@ -125,7 +125,7 @@ class _MyAppState extends ConsumerState<MyApp> {
 
   Widget _buildHomeScreen(OnboardingState onboardingState) {
     if (KDebug.onboardingDebugMode || onboardingState.isFirstLaunch) {
-      return const OnboardingMainPage();
+      return const OnboardingWelcomePage();
     }
 
     return HomePage();

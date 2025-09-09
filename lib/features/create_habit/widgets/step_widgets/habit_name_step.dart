@@ -67,7 +67,7 @@ class _HabitNameStepState extends ConsumerState<HabitNameStep> {
       step: CreateHabitStep.habitName,
       canProceed: _isValid,
       onNext: () {
-        ref.read(createHabitProvider.notifier).nextStep();
+        ref.watch(createHabitProvider.notifier).nextStep();
       },
       child: Column(
         children: [

@@ -86,38 +86,41 @@ class _IconPickerPageState extends ConsumerState<EmojiPickerPage> {
               ),
               const Divider(height: 1),
               Expanded(
-                child: EmojiPicker(
-                  onEmojiSelected: (category, emoji) {
-                    final state = ref.read(emojiPickerProvider);
+                child: Material(
+                  color: context.theme.scaffoldBackgroundColor,
+                  child: EmojiPicker(
+                    onEmojiSelected: (category, emoji) {
+                      final state = ref.read(emojiPickerProvider);
 
-                    // If emoji is already selected, just close the picker
-                    if (state.selectedEmoji == emoji.emoji) {
+                      // If emoji is already selected, just close the picker
+                      if (state.selectedEmoji == emoji.emoji) {
+                        Navigator.pop(context);
+                        return;
+                      }
+
+                      // Add the new emoji to custom category
+                      ref.read(emojiPickerProvider.notifier).addCustomEmoji(emoji.emoji);
+
+                      // Select the emoji
+                      final customCategory = "Custom";
+                      final customCategoryIndex = state.emojiCategories.keys.toList().indexOf(customCategory);
+                      final customEmojis = state.emojiCategories[customCategory] ?? [];
+                      final emojiIndex = customEmojis.indexOf(emoji.emoji);
+
+                      // Select custom category
+                      ref.read(emojiPickerProvider.notifier).selectCategory(customCategoryIndex);
+                      // Select the emoji
+                      ref.read(emojiPickerProvider.notifier).selectEmoji(emoji.emoji, emojiIndex);
+
+                      if (widget.onIconSelected != null) {
+                        widget.onIconSelected!(emoji.emoji);
+                      } else {
+                        ref.read(habitEmojiProvider.notifier).pickEmoji(emoji.emoji);
+                      }
+
                       Navigator.pop(context);
-                      return;
-                    }
-
-                    // Add the new emoji to custom category
-                    ref.read(emojiPickerProvider.notifier).addCustomIcon(emoji.emoji);
-
-                    // Select the emoji
-                    final customCategory = "Custom";
-                    final customCategoryIndex = state.emojiCategories.keys.toList().indexOf(customCategory);
-                    final customEmojis = state.emojiCategories[customCategory] ?? [];
-                    final emojiIndex = customEmojis.indexOf(emoji.emoji);
-
-                    // Select custom category
-                    ref.read(emojiPickerProvider.notifier).selectCategory(customCategoryIndex);
-                    // Select the emoji
-                    ref.read(emojiPickerProvider.notifier).selectIcon(emoji.emoji, emojiIndex);
-
-                    if (widget.onIconSelected != null) {
-                      widget.onIconSelected!(emoji.emoji);
-                    } else {
-                      ref.read(habitEmojiProvider.notifier).pickEmoji(emoji.emoji);
-                    }
-
-                    Navigator.pop(context);
-                  },
+                    },
+                  ),
                 ),
               ),
             ],

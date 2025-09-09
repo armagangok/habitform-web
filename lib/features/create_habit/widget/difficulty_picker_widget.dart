@@ -23,7 +23,7 @@ class DifficultyPickerWidget extends ConsumerWidget {
               child: CupertinoButton(
                 padding: EdgeInsets.zero,
                 onPressed: () {
-                  ref.read(createHabitProvider.notifier).updateDifficulty(diff);
+                  ref.watch(createHabitProvider.notifier).updateDifficulty(diff);
                 },
                 child: Container(
                   width: double.infinity,

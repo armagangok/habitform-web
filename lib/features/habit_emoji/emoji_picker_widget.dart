@@ -1,8 +1,8 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../core/widgets/widgets.dart';
 import '/core/core.dart';
+import '../../core/widgets/widgets.dart';
 import 'provider/emoji_picker_provider.dart';
 
 class IconPicker extends ConsumerStatefulWidget {
@@ -169,7 +169,7 @@ class IconPickerState extends ConsumerState<IconPicker> with SingleTickerProvide
                 ),
                 itemBuilder: (context, index) {
                   final iconData = currentCategoryIcons[index];
-                  final isSelected = index == state.selectedEmojiIndex;
+                  final isSelected = iconData == state.selectedEmoji;
 
                   // Performans için key kullanımını optimize et
                   if (!_iconKeys.containsKey(index)) {
@@ -180,12 +180,12 @@ class IconPickerState extends ConsumerState<IconPicker> with SingleTickerProvide
                     key: _iconKeys[index],
                     onPressed: () {
                       // Eğer zaten seçiliyse, tekrar işlem yapma
-                      if (state.selectedEmojiIndex == index) return;
+                      if (state.selectedEmoji == iconData) return;
 
                       HapticFeedback.selectionClick();
 
                       // Update in provider
-                      notifier.selectIcon(iconData, index);
+                      notifier.selectEmoji(iconData, index);
 
                       widget.onIconSelected(iconData);
 

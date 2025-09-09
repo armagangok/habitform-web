@@ -1,11 +1,11 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:habitrise/features/edit_habit/provider/edit_habit_provider.dart';
+import 'package:habitrise/features/reminder/extension/easy_day.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import '/core/core.dart';
 import '/core/helpers/notifications/notification_helper.dart';
-import '/core/widgets/custom_list_tile.dart';
-import '../extension/easy_day.dart';
+import '../../../core/widgets/my_list_tile.dart';
 import '../models/days/days_enum.dart';
 import '../provider/reminder_provider.dart';
 import 'reminder_page.dart';
@@ -21,6 +21,8 @@ class _ReminderSelectionWidgetState extends ConsumerState<ReminderSelectionWidge
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      // Try to get initial reminder from edit habit provider (for edit flow)
+      // If not available, initialize with null (for create flow)
       final initialReminder = ref.watch(editHabitProvider)?.reminderModel;
       ref.watch(reminderProvider.notifier).initializeReminder(initialReminder);
     });
@@ -35,8 +37,36 @@ class _ReminderSelectionWidgetState extends ConsumerState<ReminderSelectionWidge
     final remindTime = reminderState.reminder?.reminderTime;
 
     return CustomHeader(
-      child: CustomListTile(
-        onPressed: () async {
+      child: MyListTile(
+        trailing: CupertinoListTileChevron(),
+        additionalInfo: Row(
+          children: [
+            if (days != null && days.isNotEmpty) ...[
+              SizedBox(
+                child: days.length == 7
+                    ? Text(
+                        LocaleKeys.habit_daily.tr(),
+                        style: context.bodyMedium.copyWith(
+                          fontWeight: FontWeight.w600,
+                        ),
+                      )
+                    : Wrap(
+                        children: List.generate(
+                          days.length,
+                          (index) {
+                            final Days day = days[index];
+                            return Text(
+                              days.isLast(index) ? day.shortenDayName : "${day.shortenDayName}, ",
+                              style: context.bodySmall,
+                            );
+                          },
+                        ),
+                      ),
+              ),
+            ],
+          ],
+        ),
+        onTap: () async {
           context.hideKeyboard();
 
           final permissionStatus = await NotificationHelper.shared.requestNotificationPermission();
@@ -85,59 +115,7 @@ class _ReminderSelectionWidgetState extends ConsumerState<ReminderSelectionWidge
               break;
           }
         },
-        child: Row(
-          children: [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    remindTime?.toHHMM() ?? LocaleKeys.common_none.tr(),
-                    style: context.titleMedium.copyWith(
-                      fontWeight: FontWeight.w500,
-                      color: context.titleMedium.color,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                if (days != null && days.isNotEmpty) ...[
-                  SizedBox(
-                    height: 20,
-                    child: days.length == 7
-                        ? Text(
-                            LocaleKeys.habit_daily.tr(),
-                            style: context.bodyMedium.copyWith(
-                              fontWeight: FontWeight.w600,
-                            ),
-                          )
-                        : Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: List.generate(
-                              days.length,
-                              (index) {
-                                final Days day = days[index];
-                                return Center(
-                                  child: Text(
-                                    days.isLast(index) ? day.shortenDayName : "${day.shortenDayName}, ",
-                                    style: context.bodySmall,
-                                  ),
-                                );
-                              },
-                            ),
-                          ),
-                  ),
-                  const SizedBox(width: 10),
-                ],
-                CupertinoListTileChevron(),
-              ],
-            ),
-          ],
-        ),
+        title: remindTime?.toHHMM() ?? LocaleKeys.common_none.tr(),
       ),
     );
   }

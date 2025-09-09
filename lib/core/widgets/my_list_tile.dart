@@ -6,6 +6,7 @@ class MyListTile extends StatefulWidget {
   final String? subtitle;
   final Widget? trailing;
   final VoidCallback? onTap;
+  final Widget? additionalInfo;
 
   const MyListTile({
     super.key,
@@ -14,6 +15,7 @@ class MyListTile extends StatefulWidget {
     this.subtitle,
     this.trailing,
     this.onTap,
+    this.additionalInfo,
   });
 
   @override
@@ -26,6 +28,7 @@ class _MyListTileState extends State<MyListTile> {
     return CupertinoListTile(
       padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
       leading: widget.leading,
+      additionalInfo: widget.additionalInfo,
       title: widget.title != null
           ? Text(
               widget.title!,

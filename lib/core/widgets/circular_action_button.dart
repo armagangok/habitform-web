@@ -29,17 +29,22 @@ class CircularActionButton extends StatelessWidget {
 
     Widget button = CustomButton(
       onPressed: onPressed,
-      child: Container(
-        width: size,
-        height: size,
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          color: effectiveBackgroundColor,
-        ),
-        child: Icon(
-          icon,
-          size: iconSize,
-          color: effectiveIconColor,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(100),
+        child: CustomBlurWidget(
+          child: Container(
+            width: size,
+            height: size,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: effectiveBackgroundColor,
+            ),
+            child: Icon(
+              icon,
+              size: iconSize,
+              color: effectiveIconColor,
+            ),
+          ),
         ),
       ),
     );

@@ -169,7 +169,7 @@ class IconPickerState extends ConsumerState<IconPicker> with SingleTickerProvide
                 ),
                 itemBuilder: (context, index) {
                   final iconData = currentCategoryIcons[index];
-                  final isSelected = index == state.selectedIconIndex;
+                  final isSelected = iconData == state.selectedIcon;
 
                   // Performans için key kullanımını optimize et
                   if (!_iconKeys.containsKey(index)) {
@@ -180,7 +180,7 @@ class IconPickerState extends ConsumerState<IconPicker> with SingleTickerProvide
                     key: _iconKeys[index],
                     onPressed: () {
                       // Eğer zaten seçiliyse, tekrar işlem yapma
-                      if (state.selectedIconIndex == index) return;
+                      if (state.selectedIcon == iconData) return;
 
                       HapticFeedback.selectionClick();
 

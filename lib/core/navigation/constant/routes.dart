@@ -6,6 +6,9 @@ class KRoute {
   static const homePage = '/homePage';
 
   static const onboardingPaywall = '/onboardingPaywall';
+  static const onboardingWelcome = '/onboardingWelcome';
+
+
   static const auth = '/auth';
   static const archivedHabits = '/archivedHabits';
   static const dataManagement = '/dataManagement';

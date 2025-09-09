@@ -18,42 +18,41 @@ class HomePage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final homeStateAsyncValue = ref.watch(homeProvider);
 
-    return CupertinoPageScaffold(
-      child: Stack(
-        children: [
-          // Main content
-          CupertinoPageScaffold(
-            navigationBar: _homePageNavigationBar(ref, context),
-            child: ListView(
-              physics: AlwaysScrollableScrollPhysics(),
-              children: <Widget>[
-                SizedBox(height: 16),
+    return Stack(
+      children: [
+        // Main content
+        CupertinoPageScaffold(
+          navigationBar: _homePageNavigationBar(ref, context),
+          child: ListView(
+            padding: EdgeInsets.zero,
+            physics: AlwaysScrollableScrollPhysics(),
+            children: <Widget>[
+              SizedBox(height: 16),
 
-                // Category filter
-                HomeCategoryFilter(),
+              // Category filter
+              HomeCategoryFilter(),
 
-                SizedBox(height: 16),
+              SizedBox(height: 16),
 
-                // Habits list
-                homeStateAsyncValue.when(
-                  data: (homeState) {
-                    // Using the filtered habits provider instead of direct state
-                    return Consumer(builder: (context, ref, _) {
-                      final filteredHabits = ref.watch(filteredHabitsProvider);
-                      return HabitBuilder(
-                        habits: filteredHabits,
-                        isLoading: false,
-                      );
-                    });
-                  },
-                  loading: () => _loadingWidget(context),
-                  error: (error, stack) => _errorWidget(context),
-                ),
-              ],
-            ),
+              // Habits list
+              homeStateAsyncValue.when(
+                data: (homeState) {
+                  // Using the filtered habits provider instead of direct state
+                  return Consumer(builder: (context, ref, _) {
+                    final filteredHabits = ref.watch(filteredHabitsProvider);
+                    return HabitBuilder(
+                      habits: filteredHabits,
+                      isLoading: false,
+                    );
+                  });
+                },
+                loading: () => _loadingWidget(context),
+                error: (error, stack) => _errorWidget(context),
+              ),
+            ],
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
@@ -188,7 +187,7 @@ class HomePage extends ConsumerWidget {
             onPressed: () async {
               final homeState = ref.read(homeProvider).value;
               if (homeState != null) {
-                final canCreate = await ref.read(createHabitProvider.notifier).canCreateHabit(
+                final canCreate = await ref.watch(createHabitProvider.notifier).canCreateHabit(
                       homeState.habits.length,
                     );
                 if (canCreate) {

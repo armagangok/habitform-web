@@ -1,6 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-
 import '/core/core.dart';
 import '/models/completion_entry/completion_extension.dart';
 import '/models/models.dart';
@@ -17,97 +16,76 @@ class HabitStatisticsCard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final stats = _calculateStatistics();
 
-    return CupertinoCard(
-      elevation: 2,
-      borderRadius: BorderRadius.circular(16),
-      padding: const EdgeInsets.all(20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
+    return CupertinoListSection.insetGrouped(
+      children: [
+        // Statistics Grid
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
             children: [
-              Icon(
-                FontAwesomeIcons.chartLine,
-                size: 20,
-                color: Color(habit.colorCode),
+              GridView.count(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                crossAxisCount: 3,
+                childAspectRatio: 1,
+                mainAxisSpacing: 10,
+                crossAxisSpacing: 10,
+                children: [
+                  _StatisticItem(
+                    title: "Current Streak",
+                    value: "${stats.currentStreak}",
+                    suffix: stats.currentStreak == 1 ? " day" : " days",
+                    icon: FontAwesomeIcons.fire,
+                    color: Colors.orange,
+                    trend: _getStreakTrend(stats.currentStreak, stats.longestStreak),
+                  ),
+                  _StatisticItem(
+                    title: "Best Streak",
+                    value: "${stats.longestStreak}",
+                    suffix: stats.longestStreak == 1 ? " day" : " days",
+                    icon: FontAwesomeIcons.trophy,
+                    color: Colors.amber,
+                  ),
+                  _StatisticItem(
+                    title: "Success Rate",
+                    value: stats.successRate.toStringAsFixed(1),
+                    suffix: "%",
+                    icon: FontAwesomeIcons.bullseye,
+                    color: Color(habit.colorCode),
+                    trend: _getSuccessRateTrend(stats.successRate),
+                  ),
+                  _StatisticItem(
+                    title: "Total Completed",
+                    value: "${stats.completedDays}",
+                    suffix: stats.completedDays == 1 ? " day" : " days",
+                    icon: FontAwesomeIcons.circleCheck,
+                    color: Colors.green,
+                  ),
+                  _StatisticItem(
+                    title: "Days Active",
+                    value: "${stats.totalDays}",
+                    suffix: stats.totalDays == 1 ? " day" : " days",
+                    icon: FontAwesomeIcons.calendar,
+                    color: Colors.blue,
+                  ),
+                  _StatisticItem(
+                    title: "Formation Progress",
+                    value: stats.formationProgress.toStringAsFixed(0),
+                    suffix: "%",
+                    icon: FontAwesomeIcons.seedling,
+                    color: Colors.purple,
+                    showProgressBar: true,
+                    progressValue: stats.formationProgress / 100,
+                  ),
+                ],
               ),
-              const SizedBox(width: 8),
-              Text(
-                "Statistics",
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: context.titleLarge.color,
-                ),
-              ),
+
+              // Additional Insights
+              _buildAdditionalInsights(stats),
             ],
           ),
-          const SizedBox(height: 20),
-
-          // Statistics Grid
-          GridView.count(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            crossAxisCount: 2,
-            childAspectRatio: 1.86,
-            mainAxisSpacing: 10,
-            crossAxisSpacing: 10,
-            children: [
-              _StatisticItem(
-                title: "Current Streak",
-                value: "${stats.currentStreak}",
-                suffix: stats.currentStreak == 1 ? " day" : " days",
-                icon: FontAwesomeIcons.fire,
-                color: Colors.orange,
-                trend: _getStreakTrend(stats.currentStreak, stats.longestStreak),
-              ),
-              _StatisticItem(
-                title: "Best Streak",
-                value: "${stats.longestStreak}",
-                suffix: stats.longestStreak == 1 ? " day" : " days",
-                icon: FontAwesomeIcons.trophy,
-                color: Colors.amber,
-              ),
-              _StatisticItem(
-                title: "Success Rate",
-                value: stats.successRate.toStringAsFixed(1),
-                suffix: "%",
-                icon: FontAwesomeIcons.bullseye,
-                color: Color(habit.colorCode),
-                trend: _getSuccessRateTrend(stats.successRate),
-              ),
-              _StatisticItem(
-                title: "Total Completed",
-                value: "${stats.completedDays}",
-                suffix: stats.completedDays == 1 ? " day" : " days",
-                icon: FontAwesomeIcons.circleCheck,
-                color: Colors.green,
-              ),
-              _StatisticItem(
-                title: "Days Active",
-                value: "${stats.totalDays}",
-                suffix: stats.totalDays == 1 ? " day" : " days",
-                icon: FontAwesomeIcons.calendar,
-                color: Colors.blue,
-              ),
-              _StatisticItem(
-                title: "Formation Progress",
-                value: stats.formationProgress.toStringAsFixed(0),
-                suffix: "%",
-                icon: FontAwesomeIcons.seedling,
-                color: Colors.purple,
-                showProgressBar: true,
-                progressValue: stats.formationProgress / 100,
-              ),
-            ],
-          ),
-
-          const SizedBox(height: 20),
-
-          // Additional Insights
-          _buildAdditionalInsights(stats),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
@@ -257,14 +235,14 @@ class _StatisticItem extends StatelessWidget {
             children: [
               Icon(
                 icon,
-                size: 12,
+                size: 17,
                 color: color,
               ),
               const SizedBox(width: 3),
               if (trend != null)
                 Icon(
                   _getTrendIcon(),
-                  size: 9,
+                  size: 11,
                   color: _getTrendColor(),
                 ),
             ],
@@ -278,7 +256,7 @@ class _StatisticItem extends StatelessWidget {
                 RichText(
                   text: TextSpan(
                     style: TextStyle(
-                      fontSize: 14,
+                      fontSize: 15,
                       fontWeight: FontWeight.bold,
                       color: context.titleLarge.color,
                     ),
@@ -300,12 +278,11 @@ class _StatisticItem extends StatelessWidget {
                 Text(
                   title,
                   style: TextStyle(
-                    fontSize: 9,
+                    fontSize: 12,
                     color: context.bodyMedium.color?.withValues(alpha: 0.7),
                     fontWeight: FontWeight.w500,
                   ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
+                  maxLines: 2,
                 ),
                 if (showProgressBar) ...[
                   const SizedBox(height: 2),

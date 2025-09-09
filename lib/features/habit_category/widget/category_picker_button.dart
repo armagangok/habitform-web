@@ -1,10 +1,10 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '/core/core.dart';
-import '/core/widgets/custom_list_tile.dart';
 import '/features/habit_category/model/habit_category_model.dart';
 import '/features/habit_category/provider/habit_category_provider.dart';
 import '/features/habit_category/util/icon_util.dart';
+import '../../../core/widgets/my_list_tile.dart';
 import '../provider/habit_category_button_provider.dart';
 
 class CategoryPickerButton extends ConsumerWidget {
@@ -51,14 +51,14 @@ class CategoryPickerButton extends ConsumerWidget {
         final selectedCategories = selectedCategoryIds != null ? state.categories.where((category) => selectedCategoryIds.contains(category.id)).toList() : <HabitCategory>[];
 
         return CustomHeader(
-          text: "CATEGORY",
-          child: CustomListTile(
-            onPressed: () {
+          text: "Categories",
+          child: MyListTile(
+            onTap: () {
               context.hideKeyboard();
               navigator.navigateTo(path: KRoute.habitCategoryPage);
             },
             trailing: CupertinoListTileChevron(),
-            child: selectedCategories.isEmpty
+            additionalInfo: selectedCategories.isEmpty
                 ? Row(
                     children: [
                       Icon(

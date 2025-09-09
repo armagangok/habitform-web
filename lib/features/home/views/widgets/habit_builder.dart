@@ -125,7 +125,7 @@ class HabitBuilder extends ConsumerWidget {
                 onPressed: () async {
                   final homeState = ref.read(homeProvider).value;
                   if (homeState != null) {
-                    final canCreate = await ref.read(createHabitProvider.notifier).canCreateHabit(homeState.habits.length);
+                    final canCreate = await ref.watch(createHabitProvider.notifier).canCreateHabit(homeState.habits.length);
                     if (canCreate) {
                       if (!context.mounted) return;
                       showCupertinoSheet(

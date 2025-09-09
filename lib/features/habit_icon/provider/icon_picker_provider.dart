@@ -715,9 +715,21 @@ class IconPickerNotifier extends Notifier<IconPickerState> {
   void selectCategory(int categoryIndex) {
     if (categoryIndex == state.selectedCategoryIndex) return;
 
+    // Find the index of selected icon in the new category
+    int? iconIndex;
+    if (state.selectedIcon != null) {
+      final categoryKeys = state.emojiCategories.keys.toList();
+      if (categoryIndex < categoryKeys.length) {
+        final categoryName = categoryKeys[categoryIndex];
+        final categoryIcons = state.emojiCategories[categoryName] ?? [];
+        iconIndex = categoryIcons.indexOf(state.selectedIcon!);
+        if (iconIndex == -1) iconIndex = null;
+      }
+    }
+
     state = state.copyWith(
       selectedCategoryIndex: categoryIndex,
-      selectedIconIndex: null,
+      selectedIconIndex: iconIndex,
     );
   }
 

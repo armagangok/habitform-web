@@ -5,7 +5,7 @@ import '../../../models/habit/habit_difficulty.dart';
 import '../../../models/habit/habit_model.dart';
 import '../../habit_category/provider/habit_category_button_provider.dart';
 import '../../habit_color/provider/habit_color_provider.dart';
-import '../../habit_icon/provider/habit_icon_provider.dart';
+import '../../habit_emoji/provider/emoji_picker_provider.dart';
 import '../../home/provider/home_provider.dart';
 import '../../purchase/providers/purchase_provider.dart';
 import '../../reminder/provider/reminder_provider.dart';
@@ -35,6 +35,8 @@ class CreateHabitNotifier extends AutoDisposeAsyncNotifier<CreateHabitState> {
 
   // Navigation helpers
   bool isCurrentStepValid() {
+    final emoji = ref.read(emojiPickerProvider);
+    final color = ref.read(colorProvider);
     final value = state.value;
     if (value == null) return false;
     switch (value.currentStep) {
@@ -43,9 +45,9 @@ class CreateHabitNotifier extends AutoDisposeAsyncNotifier<CreateHabitState> {
       case CreateHabitStep.description:
         return true; // optional
       case CreateHabitStep.emoji:
-        return ref.read(iconProvider) != null || (value.emoji != null && value.emoji!.isNotEmpty);
+        return emoji.selectedEmoji != null || (value.emoji != null && value.emoji!.isNotEmpty);
       case CreateHabitStep.color:
-        return ref.read(colorProvider) != null || value.colorCode != null;
+        return color?.value != null || value.colorCode != null;
       case CreateHabitStep.reminder:
         return true; // optional
       case CreateHabitStep.category:
@@ -79,7 +81,7 @@ class CreateHabitNotifier extends AutoDisposeAsyncNotifier<CreateHabitState> {
   // Updaters used by steps
   void updateEmoji(String? emoji) {
     final value = state.value ?? CreateHabitState();
-    ref.read(iconProvider.notifier).pickIcon(emoji);
+    ref.read(emojiPickerProvider.notifier).selectEmoji(emoji ?? "", 0);
     state = AsyncValue.data(value.copyWith(emoji: emoji));
   }
 
@@ -111,7 +113,7 @@ class CreateHabitNotifier extends AutoDisposeAsyncNotifier<CreateHabitState> {
       return;
     }
 
-    final emoji = ref.watch(iconProvider);
+    final emoji = ref.watch(emojiPickerProvider);
     final color = ref.watch(colorProvider);
     final reminder = ref.watch(reminderProvider).reminder;
     final categoryIds = ref.read(categoryButtonProvider) ?? [];
@@ -124,17 +126,17 @@ class CreateHabitNotifier extends AutoDisposeAsyncNotifier<CreateHabitState> {
         id: DateTime.now().millisecondsSinceEpoch.toString(),
         habitName: habitName,
         habitDescription: habitDescription,
-        emoji: emoji,
+        emoji: emoji.selectedEmoji,
         colorCode: color?.value ?? defaultColor ?? Colors.blueAccent.value,
         reminderModel: reminder,
         categoryIds: categoryIds,
       );
 
-      await ref.read(homeProvider.notifier).createHabit(habit);
+      await ref.watch(homeProvider.notifier).createHabit(habit);
 
       if (reminder != null) {
         LogHelper.shared.debugPrint('Scheduling reminder for new habit: $reminder');
-        await ref.read(reminderProvider.notifier).scheduleReminder(
+        await ref.watch(reminderProvider.notifier).scheduleReminder(
               title: habitName,
               body: LocaleKeys.reminder_habit_reminder_message.tr(),
             );
@@ -143,7 +145,7 @@ class CreateHabitNotifier extends AutoDisposeAsyncNotifier<CreateHabitState> {
       }
 
       // Clear category selection after successful habit creation
-      ref.read(categoryButtonProvider.notifier).clearCategories();
+      ref.watch(categoryButtonProvider.notifier).clearCategories();
 
       state = AsyncValue.data(CreateHabitState());
 

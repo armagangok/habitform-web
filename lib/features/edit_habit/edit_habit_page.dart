@@ -1,11 +1,11 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:habitrise/features/habit_icon/icon_picker_button.dart';
 
 import '/core/core.dart';
 import '/models/models.dart';
 import '../habit_category/widget/category_picker_button.dart';
 import '../habit_color/color_picker_widget.dart';
 import '../habit_color/provider/habit_color_provider.dart';
-import '../habit_icon/icon_picker_button.dart';
 import '../reminder/widget/reminder_selection_widget.dart';
 import 'provider/edit_habit_provider.dart';
 

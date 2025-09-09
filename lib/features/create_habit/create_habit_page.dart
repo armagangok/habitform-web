@@ -18,9 +18,9 @@ class _CreateHabitPageState extends ConsumerState<CreateHabitPage> {
     super.initState();
     // Initialize reminder provider with empty reminder
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read(reminderProvider.notifier).initializeReminder(null);
+      ref.watch(reminderProvider.notifier).initializeReminder(null);
       // Clear any previously selected categories when creating a new habit
-      ref.read(categoryButtonProvider.notifier).clearCategories();
+      ref.watch(categoryButtonProvider.notifier).clearCategories();
     });
   }
 

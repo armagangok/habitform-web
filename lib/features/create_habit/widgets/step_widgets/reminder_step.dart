@@ -17,10 +17,10 @@ class ReminderStep extends ConsumerWidget {
       step: CreateHabitStep.reminder,
       canProceed: canProceed,
       onNext: () {
-        ref.read(createHabitProvider.notifier).nextStep();
+        ref.watch(createHabitProvider.notifier).nextStep();
       },
       onPrevious: () {
-        ref.read(createHabitProvider.notifier).previousStep();
+        ref.watch(createHabitProvider.notifier).previousStep();
       },
       child: Column(
         children: [

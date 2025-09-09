@@ -16,6 +16,46 @@ class HabitHeatmapCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // Safety check to prevent rendering issues
+    if (habit.completions.isEmpty) {
+      return CupertinoListSection.insetGrouped(
+        header: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              FontAwesomeIcons.calendarDays,
+              size: 20,
+              color: Color(habit.colorCode),
+            ),
+            const SizedBox(width: 8),
+            Text(
+              "Habit Heatmap",
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: context.titleLarge.color,
+              ),
+            ),
+          ],
+        ),
+        children: [
+          CupertinoListTile(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+            title: Center(
+              child: Text(
+                "No data available yet. Start tracking your habit to see the heatmap!",
+                style: TextStyle(
+                  color: context.bodyMedium.color?.withValues(alpha: 0.7),
+                  fontSize: 14,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ),
+        ],
+      );
+    }
+
     return CupertinoListSection.insetGrouped(
       header: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -247,17 +287,20 @@ class _OptimizedHeatmapGridState extends State<_OptimizedHeatmapGrid> {
         const SizedBox(width: 4),
         // Grid with horizontal scrolling - optimized
         Expanded(
-          child: Stack(
-            children: [
-              SingleChildScrollView(
-                controller: _scrollController,
-                scrollDirection: Axis.horizontal,
-                physics: const BouncingScrollPhysics(),
-                child: _buildScrollableGrid(context),
-              ),
-              // Fade indicators - only rebuild when scroll changes
-              _buildFadeIndicators(context),
-            ],
+          child: SizedBox(
+            height: 112, // Fixed height for the heatmap grid (7 rows * 16px)
+            child: Stack(
+              children: [
+                SingleChildScrollView(
+                  controller: _scrollController,
+                  scrollDirection: Axis.horizontal,
+                  physics: const BouncingScrollPhysics(),
+                  child: _buildScrollableGrid(context),
+                ),
+                // Fade indicators - only rebuild when scroll changes
+                _buildFadeIndicators(context),
+              ],
+            ),
           ),
         ),
       ],
@@ -361,7 +404,7 @@ class _OptimizedHeatmapGridState extends State<_OptimizedHeatmapGrid> {
           top: 0,
           bottom: 0,
           child: AnimatedOpacity(
-            opacity: _scrollController.hasClients && _scrollController.position.maxScrollExtent - _currentScrollOffset > 20 ? 1.0 : 0.0,
+            opacity: _scrollController.hasClients && _scrollController.position.maxScrollExtent > 0 && _scrollController.position.maxScrollExtent - _currentScrollOffset > 20 ? 1.0 : 0.0,
             duration: const Duration(milliseconds: 300),
             child: Container(
               width: 20,

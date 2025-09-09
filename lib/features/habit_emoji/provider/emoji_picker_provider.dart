@@ -713,20 +713,32 @@ class EmojiPickerNotifier extends Notifier<EmojiPickerState> {
   void selectCategory(int categoryIndex) {
     if (categoryIndex == state.selectedCategoryIndex) return;
 
+    // Find the index of selected emoji in the new category
+    int? emojiIndex;
+    if (state.selectedEmoji != null) {
+      final categoryKeys = state.emojiCategories.keys.toList();
+      if (categoryIndex < categoryKeys.length) {
+        final categoryName = categoryKeys[categoryIndex];
+        final categoryEmojis = state.emojiCategories[categoryName] ?? [];
+        emojiIndex = categoryEmojis.indexOf(state.selectedEmoji!);
+        if (emojiIndex == -1) emojiIndex = null;
+      }
+    }
+
     state = state.copyWith(
       selectedCategoryIndex: categoryIndex,
-      selectedEmojiIndex: null,
+      selectedEmojiIndex: emojiIndex,
     );
   }
 
-  void selectIcon(String icon, int iconIndex) {
+  void selectEmoji(String icon, int iconIndex) {
     state = state.copyWith(
       selectedEmoji: icon,
       selectedEmojiIndex: iconIndex,
     );
   }
 
-  void addCustomIcon(String icon) {
+  void addCustomEmoji(String icon) {
     if (icon.isEmpty) return;
 
     final categories = Map<String, List<String>>.from(state.emojiCategories);

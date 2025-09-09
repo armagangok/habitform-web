@@ -19,10 +19,10 @@ class EmojiStep extends ConsumerWidget {
       step: CreateHabitStep.emoji,
       canProceed: canProceed,
       onNext: () {
-        ref.read(createHabitProvider.notifier).nextStep();
+        ref.watch(createHabitProvider.notifier).nextStep();
       },
       onPrevious: () {
-        ref.read(createHabitProvider.notifier).previousStep();
+        ref.watch(createHabitProvider.notifier).previousStep();
       },
       child: Column(
         children: [
@@ -55,7 +55,7 @@ class EmojiStep extends ConsumerWidget {
           EmojiPickerButton(
             selectedIcon: selectedEmoji,
             onEmojiSelected: (icon) {
-              ref.read(createHabitProvider.notifier).updateEmoji(icon);
+              ref.watch(createHabitProvider.notifier).updateEmoji(icon);
             },
           ),
         ],

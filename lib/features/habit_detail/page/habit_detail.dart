@@ -1,17 +1,16 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '/core/core.dart';
-import '/core/widgets/custom_list_tile.dart';
 import '/models/models.dart';
 import '../../edit_habit/edit_habit_page.dart';
 import '../../edit_habit/provider/edit_habit_provider.dart';
-import '../../home/provider/home_provider.dart';
-import '../../reminder/service/reminder_service.dart';
-import '../../share_habit/share_habit_page.dart';
 import '../providers/habit_detail_provider.dart';
-import '../widget/habit_calendar_widget.dart';
-import '../widget/habit_data_widget.dart';
-import '../widget/navbar_button.dart';
+import '../widget/habit_heatmap_card.dart';
+import '../widget/habit_insights_card.dart';
+import '../widget/habit_milestones_card.dart';
+import '../widget/habit_progress_card.dart';
+import '../widget/habit_statistics_card.dart';
+import '../widget/modern_action_buttons.dart';
 
 class HabitDetailPage extends ConsumerWidget {
   const HabitDetailPage({
@@ -26,226 +25,160 @@ class HabitDetailPage extends ConsumerWidget {
       return const SizedBox.shrink();
     }
 
-    return Stack(
-      children: [
-        CupertinoPopupSurface(
-          child: CupertinoPageScaffold(
-            backgroundColor: Colors.transparent,
-            navigationBar: SheetHeader(
-              title: LocaleKeys.habit_detail_detail.tr(),
-              closeButtonPosition: CloseButtonPosition.left,
+    return CupertinoPageScaffold(
+      backgroundColor: context.cupertinoTheme.scaffoldBackgroundColor,
+      child: Stack(
+        children: [
+          CustomScrollView(
+            slivers: [
+              // SliverAppBar with habit header
+              _buildSliverAppBar(context, currentHabit, ref),
+
+              // Progress card
+              SliverToBoxAdapter(
+                child: HabitProgressCard(habit: currentHabit),
+              ),
+
+              // Statistics card
+              SliverToBoxAdapter(
+                child: HabitStatisticsCard(habit: currentHabit),
+              ),
+
+              // Heatmap card
+              SliverToBoxAdapter(
+                child: HabitHeatmapCard(habit: currentHabit),
+              ),
+
+              // Milestones card
+              SliverToBoxAdapter(
+                child: HabitMilestonesCard(habit: currentHabit),
+              ),
+
+              // Insights card
+              SliverToBoxAdapter(
+                child: HabitInsightsCard(habit: currentHabit),
+              ),
+
+              // Bottom spacing for safe area
+              const SliverToBoxAdapter(
+                child: SizedBox(height: 100),
+              ),
+            ],
+          ),
+          ActionButtons(),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSliverAppBar(BuildContext context, Habit habit, WidgetRef ref) {
+    return SliverAppBar(
+      expandedHeight: 190.0,
+      floating: false,
+      pinned: true,
+      centerTitle: true,
+      title: Text(
+        habit.habitName,
+        textAlign: TextAlign.center,
+        style: TextStyle(
+          color: context.titleLarge.color,
+          fontWeight: FontWeight.bold,
+          fontSize: 18,
+        ),
+      ),
+      flexibleSpace: FlexibleSpaceBar(
+        background: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                Color(habit.colorCode).withValues(alpha: 0.2),
+                Color(habit.colorCode).withValues(alpha: 0.1),
+              ],
             ),
-            child: ListView(
+          ),
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                SafeArea(
-                  child: Column(
-                    spacing: 16,
-                    children: [
-                      SizedBox(height: 28),
-                      _iconPicker(currentHabit),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 15) + const EdgeInsets.only(top: 10),
-                        child: _HabitGeneralInfo(
-                          name: currentHabit.habitName,
-                          description: currentHabit.habitDescription,
-                        ),
+                _habitEmoji(context, habit),
+                const SizedBox(height: 8),
+                if (habit.habitDescription != null && habit.habitDescription!.isNotEmpty)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 32) + const EdgeInsets.only(bottom: 16),
+                    child: Text(
+                      habit.habitDescription!,
+                      style: TextStyle(
+                        color: context.bodyMedium.color?.withValues(alpha: 0.8),
+                        fontSize: 14,
                       ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 15),
-                        child: CustomHeader(
-                          text: LocaleKeys.habit_detail_habitData.tr(),
-                          child: HabitDataWidget(habit: currentHabit),
-                        ),
-                      ),
-                      const SizedBox(height: 40),
-                    ],
+                      textAlign: TextAlign.center,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ),
-                ),
               ],
             ),
           ),
         ),
-        Positioned(
-          bottom: 0,
-          left: 0,
-          right: 0,
-          child: CustomBlurWidget(
-            child: SafeArea(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    NavBarButton(
-                      icon: FontAwesomeIcons.solidCalendarDays,
-                      color: Color(currentHabit.colorCode),
-                      label: LocaleKeys.habit_detail_calendar.tr(),
-                      onPressed: () {
-                        showCupertinoSheet(
-                          enableDrag: false,
-                          context: context,
-                          builder: (context) => HabitCalendarCompletionSheet(habit: currentHabit),
-                        );
-                      },
-                    ),
-                    NavBarButton(
-                      icon: CupertinoIcons.archivebox_fill,
-                      color: Color(currentHabit.colorCode),
-                      label: LocaleKeys.habit_detail_archive_title.tr(),
-                      onPressed: () => _showArchiveConfirmationDialog(context, currentHabit),
-                    ),
-                    NavBarButton(
-                      color: Color(currentHabit.colorCode),
-                      icon: FontAwesomeIcons.share,
-                      label: LocaleKeys.share_share.tr(),
-                      onPressed: () {
-                        showCupertinoSheet(
-                          context: context,
-                          builder: (context) => ShareHabitPage(habit: currentHabit),
-                        );
-                      },
-                    ),
-                    NavBarButton(
-                      icon: FontAwesomeIcons.solidPenToSquare,
-                      label: LocaleKeys.common_edit.tr(),
-                      color: Color(currentHabit.colorCode),
-                      onPressed: () {
-                        ref.watch(editHabitProvider.notifier).initHabit(currentHabit);
-
-                        showCupertinoSheet(
-                          enableDrag: false,
-                          context: context,
-                          builder: (context) => EditHabitPage(habit: currentHabit),
-                        );
-                      },
-                    ),
-                  ],
-                ),
-              ),
-            ),
+      ),
+      leading: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: CircularActionButton(
+          icon: CupertinoIcons.back,
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+      ),
+      actions: [
+        CupertinoButton(
+          padding: EdgeInsets.zero,
+          onPressed: () {
+            ref.watch(editHabitProvider.notifier).initHabit(habit);
+            showCupertinoSheet(
+              enableDrag: false,
+              context: context,
+              builder: (context) => EditHabitPage(habit: habit),
+            );
+          },
+          child: Icon(
+            FontAwesomeIcons.solidPenToSquare,
+            color: context.titleLarge.color,
+            size: 18,
           ),
         ),
+        const SizedBox(width: 8),
       ],
     );
   }
 
-  Widget _iconPicker(Habit currentHabit) {
-    return Builder(
-      builder: (context) {
-        return CustomButton(
-          onPressed: () {
-            showCupertinoSheet(
-              enableDrag: false,
-              context: context,
-              builder: (context) => EditHabitPage(habit: currentHabit),
-            );
-          },
-          child: Container(
-            height: 90,
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              color: context.theme.scaffoldBackgroundColor,
-              shape: BoxShape.circle,
-              border: Border.all(
-                color: Colors.grey.withValues(alpha: .7),
-                width: .5,
-              ),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withValues(alpha: 0.2),
-                  spreadRadius: 10,
-                  blurRadius: 30,
-                  offset: const Offset(0, 0),
-                ),
-              ],
-            ),
-            child: Text(
-              currentHabit.emoji ?? "",
-              style: const TextStyle(fontSize: 40, color: Colors.white),
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  void _showArchiveConfirmationDialog(BuildContext context, Habit habit) {
-    showCupertinoDialog(
-      context: context,
-      builder: (context) => CupertinoAlertDialog(
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Icon(CupertinoIcons.archivebox, color: CupertinoColors.systemIndigo),
-            const SizedBox(width: 8),
-            Text(LocaleKeys.habit_detail_archive_title.tr()),
-          ],
+  Container _habitEmoji(BuildContext context, Habit habit) {
+    return Container(
+      width: 80,
+      height: 80,
+      decoration: BoxDecoration(
+        color: context.cupertinoTheme.scaffoldBackgroundColor,
+        shape: BoxShape.circle,
+        border: Border.all(
+          color: Color(habit.colorCode).withValues(alpha: 0.3),
+          width: 2,
         ),
-        content: Column(
-          children: [
-            const SizedBox(height: 8),
-            Text(
-              LocaleKeys.habit_detail_archive_confirmation.tr().replaceAll('{{habitName}}', habit.habitName),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              LocaleKeys.habit_detail_archive_info.tr(),
-            ),
-          ],
-        ),
-        actions: [
-          CupertinoDialogAction(
-            isDefaultAction: true,
-            onPressed: () => Navigator.pop(context),
-            child: Text(LocaleKeys.common_cancel.tr()),
+        boxShadow: [
+          BoxShadow(
+            color: Color(habit.colorCode).withValues(alpha: 0.2),
+            spreadRadius: 2,
+            blurRadius: 10,
+            offset: const Offset(0, 4),
           ),
-          Consumer(
-            builder: (context, ref, child) {
-              return CupertinoDialogAction(
-                isDestructiveAction: false,
-                onPressed: () async {
-                  Navigator.pop(context);
-                  await ref.read(homeProvider.notifier).archiveHabit(habit);
-                  ReminderService.cancelReminderNotification(habit.reminderModel?.id);
-
-                  navigator.pop();
-                },
-                child: Text(LocaleKeys.habit_detail_archive_title.tr()),
-              );
-            },
-          )
         ],
+      ),
+      child: Center(
+        child: Text(
+          habit.emoji ?? "🎯",
+          style: const TextStyle(fontSize: 32),
+        ),
       ),
     );
   }
 }
 
-class _HabitGeneralInfo extends ConsumerWidget {
-  const _HabitGeneralInfo({
-    required this.name,
-    this.description,
-  });
-
-  final String name;
-  final String? description;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return CustomListTile(
-      title: name,
-      description: description,
-      onPressed: () {
-        final habit = ref.read(habitDetailProvider);
-        if (habit == null) return;
-
-        ref.watch(editHabitProvider.notifier).initHabit(habit);
-
-        showCupertinoSheet(
-          enableDrag: false,
-          context: context,
-          builder: (context) => EditHabitPage(habit: habit),
-        );
-      },
-    );
-  }
-}

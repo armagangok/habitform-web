@@ -20,10 +20,10 @@ class ColorStep extends ConsumerWidget {
       step: CreateHabitStep.color,
       canProceed: canProceed,
       onNext: () {
-        ref.read(createHabitProvider.notifier).nextStep();
+        ref.watch(createHabitProvider.notifier).nextStep();
       },
       onPrevious: () {
-        ref.read(createHabitProvider.notifier).previousStep();
+        ref.watch(createHabitProvider.notifier).previousStep();
       },
       child: Column(
         children: [
@@ -78,7 +78,7 @@ class ColorStep extends ConsumerWidget {
           // Color picker
           ColorPickerWidget(
             onColorSelected: (color) {
-              ref.read(createHabitProvider.notifier).updateColorCode(color.value);
+              ref.watch(createHabitProvider.notifier).updateColorCode(color.value);
             },
           ),
         ],
