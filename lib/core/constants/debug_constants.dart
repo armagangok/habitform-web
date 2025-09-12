@@ -9,7 +9,7 @@ abstract final class KDebug {
   static const bool onboardingDebugMode = true;
 
   // enables log debug mode for print
-  static const bool logDebugMode = false;
+  static const bool logDebugMode = true;
 
   // enables mock data debug mode for print
   static const bool mockHabitServiceDebugMode = false;

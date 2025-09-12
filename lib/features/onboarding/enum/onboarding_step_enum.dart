@@ -2,6 +2,7 @@ enum OnboardingStep {
   initial,
   cardsStackedAtBottom,
   exerciseCardInCenter,
+  completed,
 }
 
 extension OnboardingStepExtension on OnboardingStep {
@@ -13,6 +14,8 @@ extension OnboardingStepExtension on OnboardingStep {
         return 'Cards Stacked at Bottom';
       case OnboardingStep.exerciseCardInCenter:
         return 'Exercise Card in Center';
+      case OnboardingStep.completed:
+        return 'Completed Step';
     }
   }
 }

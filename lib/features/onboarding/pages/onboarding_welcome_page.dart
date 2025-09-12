@@ -37,7 +37,9 @@ class _OnboardingWelcomePageState extends State<OnboardingWelcomePage> with Tick
   bool _showMotivationalMessage = false;
   bool _isButtonDisabled = false;
   bool _isTransitioning = false;
-  double _centerCardProgress = 0.0;
+  bool _isCenterCardReady = false;
+  bool _showFinalMessage = false;
+  bool _showFinalCta = false;
   int _runningStreak = 12; // Initial streak value
 
   OnboardingStep _currentStep = OnboardingStep.initial;
@@ -125,7 +127,7 @@ class _OnboardingWelcomePageState extends State<OnboardingWelcomePage> with Tick
                         emoji: '🏃',
                         title: 'Running',
                         badgeValue: 12,
-                        initial: const Offset(-10, 70), // top-left
+                        initial: Offset(-context.width(0.025), context.height(0.09)), // top-left with responsive positioning
                         initialRotation: -0.30,
                         isLeftSide: true,
                         tier: 1, // dock lower-left when stacked
@@ -139,7 +141,7 @@ class _OnboardingWelcomePageState extends State<OnboardingWelcomePage> with Tick
                         emoji: '📚',
                         title: 'Read Book',
                         badgeValue: 21,
-                        initial: Offset(size.width - 230 + 40, 80), // top-right
+                        initial: Offset(size.width - context.width(0.5) + context.width(0.1), context.height(0.1)), // top-right with responsive positioning
                         initialRotation: 0.4,
                         isLeftSide: false,
                         tier: 0,
@@ -153,7 +155,7 @@ class _OnboardingWelcomePageState extends State<OnboardingWelcomePage> with Tick
                         emoji: '🧘‍♂️',
                         title: 'Meditate',
                         badgeValue: 8,
-                        initial: Offset(-10, size.height - 320), // bottom-left
+                        initial: Offset(-context.width(0.025), size.height - context.height(0.4)), // bottom-left with responsive positioning
                         initialRotation: -0.2,
                         isLeftSide: true,
                         tier: 0, // dock upper-left when stacked
@@ -167,7 +169,7 @@ class _OnboardingWelcomePageState extends State<OnboardingWelcomePage> with Tick
                         emoji: '💧',
                         title: 'Drink Water',
                         badgeValue: 30,
-                        initial: Offset(size.width - 200 + 5, size.height - 320), // bottom-right
+                        initial: Offset(size.width - context.width(0.5) + context.width(0.012), size.height - context.height(0.4)), // bottom-right with responsive positioning
                         initialRotation: 0.2,
                         isLeftSide: false,
                         tier: 1,
@@ -205,134 +207,121 @@ class _OnboardingWelcomePageState extends State<OnboardingWelcomePage> with Tick
           // Content
           SafeArea(
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24),
+              padding: context.symmetricPadding(horizontal: 0.06), // Responsive horizontal padding
               child: Stack(
                 children: [
-                  // Main content area
-                  Column(
-                    children: [
-                      Expanded(
-                        child: Center(
-                          child: AnimatedBuilder(
-                            animation: Listenable.merge([_cardsAnim, _centerCardController]),
-                            builder: (context, _) {
-                              final progress = _cardsAnim.value;
-                              final centerProgress = _centerCardController.value;
-                              _centerCardProgress = centerProgress; // Update for external use
-                              return Stack(
-                                alignment: Alignment.center,
+                  // Main content area - Fixed positioning to prevent layout shifts
+                  Positioned.fill(
+                    child: AnimatedBuilder(
+                      animation: Listenable.merge([_cardsAnim, _centerCardController]),
+                      builder: (context, _) {
+                        final progress = _cardsAnim.value;
+                        final centerProgress = _centerCardController.value;
+                        return Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            // Welcome block fades out in place
+                            Opacity(
+                              opacity: 1.0 - progress,
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  // Welcome block fades out in place
-                                  Opacity(
-                                    opacity: 1.0 - progress,
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Text(
-                                          'Welcome to',
-                                          style: theme.textTheme.headlineSmall?.copyWith(
-                                            fontWeight: FontWeight.w600,
-                                            color: theme.colorScheme.onSurface.withValues(alpha: 0.92),
-                                          ),
-                                          textAlign: TextAlign.center,
-                                        ),
-                                        const SizedBox(height: 5),
-                                        Column(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            CupertinoCard(
-                                              color: CupertinoColors.black,
-                                              padding: const EdgeInsets.all(16),
-                                              child: Image.asset(logoAsset, height: 80, fit: BoxFit.contain),
-                                            ),
-                                            const SizedBox(height: 5),
-                                            Text(
-                                              'HabitRise',
-                                              style: theme.textTheme.displaySmall?.copyWith(
-                                                fontWeight: FontWeight.w700,
-                                                letterSpacing: 0.5,
-                                                fontSize: 27,
-                                                color: theme.colorScheme.onSurface,
-                                              ),
-                                              textAlign: TextAlign.center,
-                                            ),
-                                          ],
-                                        ),
-                                      ],
+                                  Text(
+                                    'Welcome to',
+                                    style: context.headlineSmall.copyWith(
+                                      fontWeight: FontWeight.w600,
+                                      color: theme.colorScheme.onSurface.withValues(alpha: 0.92),
                                     ),
+                                    textAlign: TextAlign.center,
                                   ),
-                                  // Tagline fades in, then fades out when center card appears
-                                  AnimatedOpacity(
-                                    opacity: ((progress > 0.02 || _showTagline) && !(_currentStep == OnboardingStep.exerciseCardInCenter && centerProgress > 0.7)) ? (_currentStep == OnboardingStep.exerciseCardInCenter ? (centerProgress > 0.7 ? 0.0 : progress * (1.0 - centerProgress.clamp(0.0, 0.7))) : progress) : 0.0,
-                                    duration: const Duration(milliseconds: 400),
-                                    curve: Curves.easeOutCubic,
-                                    child: Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                                      child: Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          Text(
-                                            'Build your dream life',
-                                            style: context.headlineLarge.copyWith(
-                                              fontSize: 32,
-                                              height: 1.1,
-                                            ),
-                                            textAlign: TextAlign.center,
-                                          ),
-                                          const SizedBox(height: 12),
-                                          Text(
-                                            'One habit at a time.',
-                                            style: theme.textTheme.titleMedium?.copyWith(
-                                              fontSize: 18,
-                                            ),
-                                            textAlign: TextAlign.center,
-                                          ),
-                                        ],
+                                  Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      CupertinoCard(
+                                        color: CupertinoColors.black,
+                                        padding: context.padding(0.04), // Responsive padding
+                                        child: Image.asset(logoAsset, height: context.height(0.1), fit: BoxFit.contain), // Responsive logo size
                                       ),
-                                    ),
+                                      SizedBox(height: context.height(0.006)), // Responsive spacing
+                                      Text(
+                                        'HabitRise',
+                                        style: context.displaySmall.copyWith(
+                                          fontWeight: FontWeight.w700,
+                                          letterSpacing: 0.5,
+                                          color: theme.colorScheme.onSurface,
+                                        ),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    ],
                                   ),
                                 ],
-                              );
-                            },
-                          ),
-                        ),
-                      ),
-                      // Bottom CTA button
-                      if (!(_currentStep == OnboardingStep.exerciseCardInCenter && !_showMotivationalMessage))
-                        _BottomCtaButton(
-                          arrowOffsetX: _arrowOffsetX,
-                          onPressed: _isButtonDisabled ? null : _onCtaPressed,
-                        ),
-                      const SizedBox(height: 18),
-                    ],
+                              ),
+                            ),
+                            // Tagline fades in, then fades out when center card appears
+                            // Never show tagline if final message is shown, if we're in completed state, or if motivational message is showing
+                            if (_currentStep == OnboardingStep.cardsStackedAtBottom)
+                              AnimatedOpacity(
+                                opacity: (((progress > 0.02 || _showTagline) && !(_currentStep == OnboardingStep.exerciseCardInCenter && centerProgress > 0.7)) ? (_currentStep == OnboardingStep.exerciseCardInCenter ? (centerProgress > 0.7 ? 0.0 : progress * (1.0 - centerProgress.clamp(0.0, 0.7))) : progress) : 0.0),
+                                duration: const Duration(milliseconds: 400),
+                                curve: Curves.easeOutCubic,
+                                child: Padding(
+                                  padding: context.symmetricPadding(horizontal: 0.025), // Responsive horizontal padding
+                                  child: SizedBox(
+                                    width: context.width(0.9),
+                                    child: Text(
+                                      'Build your dream life',
+                                      style: context.headlineLarge.copyWith(
+                                        fontSize: context.width(0.08), // 8% of screen width
+                                        height: 1.1,
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                          ],
+                        );
+                      },
+                    ),
                   ),
+                  // Bottom CTA button - Fixed positioning at bottom
+                  if (!(_currentStep == OnboardingStep.exerciseCardInCenter && !_showMotivationalMessage) && (_currentStep != OnboardingStep.completed || _showFinalCta))
+                    Positioned(
+                      bottom: context.height(0.022), // Responsive spacing from bottom
+                      left: 0,
+                      right: 0,
+                      child: _BottomCtaButton(
+                        arrowOffsetX: _arrowOffsetX,
+                        onPressed: _isButtonDisabled ? null : _onCtaPressed,
+                      ),
+                    ),
                   // Center-step instruction (below the card area)
                   if (_currentStep == OnboardingStep.exerciseCardInCenter && !_isCenterCardCompleted)
                     Positioned(
-                      top: MediaQuery.of(context).size.height / 2 + 115, // Position below the center card (card height/2 + 15 padding)
+                      top: context.dynamicHeight / 2 + context.height(0.12), // Position below the center card (card height/2 + 15 padding)
                       left: 0,
                       right: 0,
                       child: AnimatedOpacity(
-                        opacity: Curves.easeInOut.transform(_centerCardProgress),
-                        duration: const Duration(milliseconds: 300),
+                        opacity: _isCenterCardReady ? 1.0 : 0.0,
+                        duration: const Duration(milliseconds: 350),
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Icon(CupertinoIcons.hand_point_right_fill, size: 28, color: theme.colorScheme.primary),
-                            const SizedBox(height: 12),
+                            Icon(CupertinoIcons.hand_point_right_fill, size: context.width(0.07), color: theme.colorScheme.primary), // Responsive icon size
+                            SizedBox(height: context.height(0.01)), // Responsive spacing
                             Text(
                               'Try tapping on the habit card',
-                              style: theme.textTheme.titleMedium,
+                              style: context.titleMedium,
                               textAlign: TextAlign.center,
                             ),
                           ],
                         ),
                       ),
                     ),
-                  // "Just like that!" message above the habit card
+                  // "Just like that!" text above the card
                   if (_showMotivationalMessage)
                     Positioned(
-                      top: MediaQuery.of(context).size.height / 2 - 120, // Position above the center card
+                      top: MediaQuery.of(context).size.height / 2 - context.height(0.25), // Position well above the center card
                       left: 0,
                       right: 0,
                       child: AnimatedOpacity(
@@ -341,19 +330,43 @@ class _OnboardingWelcomePageState extends State<OnboardingWelcomePage> with Tick
                         curve: Curves.easeOutCubic,
                         child: Text(
                           'Just like that!',
-                          style: theme.textTheme.titleLarge?.copyWith(
+                          style: context.titleLarge.copyWith(
                             fontWeight: FontWeight.w600,
                             color: Colors.white.withValues(alpha: 0.9),
-                            fontSize: 24,
+                            fontSize: context.width(0.06), // Responsive font size
                           ),
                           textAlign: TextAlign.center,
                         ),
                       ),
                     ),
-                  // Motivational message with smooth fade-in
+                  // Final message in center
+                  if (_showFinalMessage)
+                    Positioned.fill(
+                      child: Center(
+                        child: AnimatedOpacity(
+                          opacity: _showFinalMessage ? 1.0 : 0.0,
+                          duration: const Duration(milliseconds: 800),
+                          curve: Curves.easeOutCubic,
+                          child: Padding(
+                            padding: context.symmetricPadding(horizontal: 0.025),
+                            child: Text(
+                              'Change your life one habit at a time.',
+                              style: context.headlineLarge.copyWith(
+                                fontSize: context.width(0.08),
+                                height: 1.1,
+                                fontWeight: FontWeight.w600,
+                                color: theme.colorScheme.onSurface,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  // Congratulations messages below the card
                   if (_showMotivationalMessage)
                     Positioned(
-                      bottom: 100,
+                      top: (MediaQuery.of(context).size.height + context.width(0.5)) / 2, // Position below the center card (card bottom + padding)
                       left: 0,
                       right: 0,
                       child: AnimatedOpacity(
@@ -363,47 +376,29 @@ class _OnboardingWelcomePageState extends State<OnboardingWelcomePage> with Tick
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            // First text with slight delay for staggered effect
-                            AnimatedOpacity(
-                              opacity: _showMotivationalMessage ? 1.0 : 0.0,
-                              duration: const Duration(milliseconds: 800),
-                              curve: Curves.easeOutCubic,
-                              child: Text(
-                                'Congratulations!',
-                                style: theme.textTheme.headlineSmall?.copyWith(
-                                  fontWeight: FontWeight.w700,
-                                  color: const Color(0xFF1DB954),
-                                ),
-                                textAlign: TextAlign.center,
+                            Text(
+                              'Congratulations!',
+                              style: context.headlineSmall.copyWith(
+                                fontWeight: FontWeight.w700,
+                                color: const Color(0xFF1DB954),
                               ),
+                              textAlign: TextAlign.center,
                             ),
-                            const SizedBox(height: 8),
-                            // Second text with more delay
-                            AnimatedOpacity(
-                              opacity: _showMotivationalMessage ? 1.0 : 0.0,
-                              duration: const Duration(milliseconds: 1000),
-                              curve: Curves.easeOutCubic,
-                              child: Text(
-                                'You\'ve completed your first habit!',
-                                style: theme.textTheme.titleMedium?.copyWith(
-                                  color: Colors.white,
-                                ),
-                                textAlign: TextAlign.center,
+                            SizedBox(height: context.height(0.01)), // Responsive spacing
+                            Text(
+                              'You\'ve completed your first habit!',
+                              style: context.titleMedium.copyWith(
+                                color: Colors.white,
                               ),
+                              textAlign: TextAlign.center,
                             ),
-                            const SizedBox(height: 4),
-                            // Third text with most delay
-                            AnimatedOpacity(
-                              opacity: _showMotivationalMessage ? 1.0 : 0.0,
-                              duration: const Duration(milliseconds: 1200),
-                              curve: Curves.easeOutCubic,
-                              child: Text(
-                                'Every journey begins with a single step.',
-                                style: theme.textTheme.bodyMedium?.copyWith(
-                                  color: Colors.white.withValues(alpha: 0.8),
-                                ),
-                                textAlign: TextAlign.center,
+                            SizedBox(height: context.height(0.005)), // Responsive spacing
+                            Text(
+                              'Every journey begins with a single step.',
+                              style: context.bodyMedium.copyWith(
+                                color: Colors.white.withValues(alpha: 0.8),
                               ),
+                              textAlign: TextAlign.center,
                             ),
                           ],
                         ),
@@ -454,6 +449,7 @@ class _OnboardingWelcomePageState extends State<OnboardingWelcomePage> with Tick
           _centerCardController.value = 0.0;
           setState(() {
             _currentStep = OnboardingStep.exerciseCardInCenter;
+            _isCenterCardReady = true; // Enable card interaction immediately
           });
           await _centerCardController.forward();
           print('Debug: Center card animation completed');
@@ -468,16 +464,35 @@ class _OnboardingWelcomePageState extends State<OnboardingWelcomePage> with Tick
       case OnboardingStep.exerciseCardInCenter:
         // Step 3: Handle completion or reset
         if (_isCenterCardCompleted && _showMotivationalMessage) {
-          // Reset everything after message is shown
+          // Start reset flow: fade out messages, return card, show final message
           try {
+            setState(() {
+              _showMotivationalMessage = false; // Fade out motivational messages
+              _showTagline = false; // Hide tagline to prevent reappearance
+            });
+
+            // Wait for fade out animation
+            await Future.delayed(const Duration(milliseconds: 600));
+
+            // Return center card to stacked position (don't reverse cards animation)
             await _centerCardController.reverse();
-            await _cardsController.reverse();
+
+            // Show final message
             setState(() {
               _showTagline = false;
               _isCenterCardCompleted = false;
-              _showMotivationalMessage = false;
-              _currentStep = OnboardingStep.initial;
+              _isCenterCardReady = false;
+              _showFinalMessage = true;
+              _currentStep = OnboardingStep.completed;
             });
+
+            // Show CTA button after final message appears
+            await Future.delayed(const Duration(milliseconds: 1000));
+            if (mounted) {
+              setState(() {
+                _showFinalCta = true;
+              });
+            }
           } finally {
             setState(() {
               _isTransitioning = false;
@@ -487,6 +502,22 @@ class _OnboardingWelcomePageState extends State<OnboardingWelcomePage> with Tick
         } else {
           // If card is not completed yet or message not shown, do nothing
           print('Debug: Card not completed or message not shown yet, current step: ${_currentStep.name}');
+          setState(() {
+            _isTransitioning = false;
+            _isButtonDisabled = false;
+          });
+        }
+        break;
+
+      case OnboardingStep.completed:
+        // Final step - handle final CTA button press
+        if (_showFinalCta) {
+          // Navigate to information page
+          if (mounted) {
+            Navigator.of(context).pushNamed('/onboardingInformation');
+          }
+        } else {
+          // If CTA not ready yet, do nothing
           setState(() {
             _isTransitioning = false;
             _isButtonDisabled = false;
@@ -519,7 +550,7 @@ class _OnboardingWelcomePageState extends State<OnboardingWelcomePage> with Tick
   }
 
   void _onCenterCardTap() async {
-    if (_isCenterCardCompleted || _isTransitioning) return;
+    if (_isCenterCardCompleted || !_isCenterCardReady) return;
 
     print('Debug: Center card tapped!');
     setState(() {
@@ -564,34 +595,36 @@ class _OnboardingWelcomePageState extends State<OnboardingWelcomePage> with Tick
     }
   }
 
-  // Manual docked positions for each card
-  Map<String, double> _getDockedPosition(int index, Size screenSize) {
+  // Responsive docked positions for each card
+  Map<String, double> _getDockedPosition(int index, Size screenSize, BuildContext context) {
+    final double cardWidth = context.width(0.5);
+
     switch (index) {
       case 0: // Running card (left side, lower tier)
         return {
-          'x': -10.0, // Left side
-          'y': screenSize.height - 170.0, // Bottom area
+          'x': -context.width(0.025), // Left side with responsive margin
+          'y': screenSize.height - context.height(0.21), // Bottom area
           'rotation': 0.5, // Slight left rotation
           'scale': 0.9, // Slightly smaller
         };
       case 1: // Read Book card (right side, upper tier)
         return {
-          'x': screenSize.width - 180.0, // Right side
-          'y': screenSize.height - 180.0, // Bottom area, slightly higher
-          'rotation': -0.35, // Slight right rotat ion
+          'x': screenSize.width - cardWidth - context.width(0.045), // Right side with responsive margin
+          'y': screenSize.height - context.height(0.22), // Bottom area, slightly higher
+          'rotation': -0.35, // Slight right rotation
           'scale': 0.92, // Slightly smaller
         };
       case 2: // Meditate card (left side, upper tier)
         return {
-          'x': -10.0, // Left side
-          'y': screenSize.height - 80.0, // Bottom area, higher than running
+          'x': -context.width(0.025), // Left side with responsive margin
+          'y': screenSize.height - context.height(0.1), // Bottom area, higher than running
           'rotation': 0.15, // Very slight left rotation
           'scale': 0.88, // Smaller
         };
       case 3: // Drink Water card (right side, lower tier)
         return {
-          'x': screenSize.width - 210.0, // Right side
-          'y': screenSize.height - 80.0, // Bottom area, lower than read book
+          'x': screenSize.width - cardWidth - context.width(0.05), // Right side with responsive margin
+          'y': screenSize.height - context.height(0.1), // Bottom area, lower than read book
           'rotation': -0.15, // Very slight right rotation
           'scale': 0.85, // Smallest
         };
@@ -620,10 +653,13 @@ class _OnboardingWelcomePageState extends State<OnboardingWelcomePage> with Tick
     required int tier,
   }) {
     final double value = _cardsAnim.value; // 0 → scattered, 1 → stacked bottom
-    const Size cardSize = Size(200, 200);
+    // Responsive card size based on screen width (maintains aspect ratio)
+    final double cardWidth = context.width(0.5); // 50% of screen width
+    final double cardHeight = cardWidth; // Square aspect ratio
+    final Size cardSize = Size(cardWidth, cardHeight);
 
-    // Get manual docked position for this card
-    final dockedPos = _getDockedPosition(index, screenSize);
+    // Get responsive docked position for this card
+    final dockedPos = _getDockedPosition(index, screenSize, context);
 
     // Special case: only in Step 2, animate first card (Exercise) into center x
     if (index == 0 && _currentStep == OnboardingStep.exerciseCardInCenter) {
@@ -713,9 +749,15 @@ class _BottomCtaButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
+    // Responsive button sizing
+    final double buttonHeight = context.height(0.062); // 6.2% of screen height
+    final double buttonWidth = context.width(0.35); // 35% of screen width
+    final double borderRadius = context.width(0.07); // 7% of screen width
+    final double iconSize = context.width(0.085); // 8.5% of screen width
+
     return Center(
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(28),
+        borderRadius: BorderRadius.circular(borderRadius),
         child: CupertinoButton(
           padding: EdgeInsets.zero,
           onPressed: onPressed,
@@ -724,11 +766,11 @@ class _BottomCtaButton extends StatelessWidget {
             child: Material(
               color: theme.colorScheme.onSurface.withValues(alpha: 0.08),
               child: Container(
-                height: 50,
-                width: 140,
+                height: buttonHeight,
+                width: buttonWidth,
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(28),
+                  borderRadius: BorderRadius.circular(borderRadius),
                   border: Border.all(
                     color: theme.colorScheme.onSurface.withValues(alpha: 0.16),
                   ),
@@ -743,7 +785,7 @@ class _BottomCtaButton extends StatelessWidget {
                   },
                   child: Icon(
                     Icons.arrow_forward_ios_rounded,
-                    size: 34,
+                    size: iconSize,
                     color: theme.colorScheme.onSurface.withValues(alpha: 0.92),
                   ),
                 ),
@@ -779,80 +821,90 @@ class _HabitCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     final Color habitColor = accent;
+
+    // Responsive sizing for card elements
+    final double emojiSize = context.width(0.15); // 35% of card width
+    final double iconSize = context.width(0.05); // 14% of card width
+    final double completionIconSize = context.width(0.14); // 14% of card width
+    final double borderRadius = context.width(0.08); // 10% of card width
+    final double borderWidth = context.width(0.01); // 1% of card width
+
     return CupertinoButton(
       onPressed: onTap,
       padding: EdgeInsets.zero,
-      child: CustomBlurWidget(
-        child: Container(
-          width: size.width,
-          height: size.height,
-          decoration: BoxDecoration(
-            color: habitColor.withValues(alpha: 0.10),
-            borderRadius: BorderRadius.circular(20),
-            border: Border.all(color: habitColor.withValues(alpha: 0.35), width: 2),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                // Top row: emoji + streak
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Container(
-                      width: 70,
-                      height: 70,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: habitColor.withValues(alpha: 0.12),
-                        border: Border.all(color: habitColor.withValues(alpha: 0.25)),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(borderRadius),
+        child: CustomBlurWidget(
+          child: Container(
+            width: size.width,
+            height: size.height,
+            decoration: BoxDecoration(
+              color: habitColor.withValues(alpha: 0.10),
+              borderRadius: BorderRadius.circular(borderRadius),
+              border: Border.all(color: habitColor.withValues(alpha: 0.35), width: borderWidth),
+            ),
+            child: Padding(
+              padding: context.padding(0.03), // 8% of screen width as padding
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  // Top row: emoji + streak
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(
+                        width: emojiSize,
+                        height: emojiSize,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: habitColor.withValues(alpha: 0.12),
+                          border: Border.all(color: habitColor.withValues(alpha: 0.25)),
+                        ),
+                        child: Center(child: Text(emoji, style: TextStyle(fontSize: emojiSize * 0.5))),
                       ),
-                      child: Center(child: Text(emoji, style: const TextStyle(fontSize: 36))),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                      decoration: BoxDecoration(
-                        color: habitColor.withValues(alpha: 0.18),
-                        borderRadius: BorderRadius.circular(24),
-                        border: Border.all(color: habitColor.withValues(alpha: 0.25)),
+                      Container(
+                        padding: context.symmetricPadding(horizontal: 0.02, vertical: 0.01), // Responsive padding
+                        decoration: BoxDecoration(
+                          color: habitColor.withValues(alpha: 0.18),
+                          borderRadius: BorderRadius.circular(context.width(0.12)), // 12% of card width
+                          border: Border.all(color: habitColor.withValues(alpha: 0.25)),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(CupertinoIcons.flame_fill, size: iconSize, color: habitColor),
+                            SizedBox(width: context.width(0.03)), // 3% of screen width
+                            Text('$badgeValue', style: context.bodyMedium.copyWith(fontWeight: FontWeight.w700, color: habitColor)),
+                          ],
+                        ),
                       ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(CupertinoIcons.flame_fill, size: 16, color: habitColor),
-                          const SizedBox(width: 6),
-                          Text('$badgeValue', style: theme.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w700, color: habitColor)),
-                        ],
+                    ],
+                  ),
+                  // Bottom row: name + completion icon
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: Text(
+                          title,
+                          maxLines: null,
+                          style: context.titleLarge.copyWith(fontWeight: FontWeight.w700),
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-                // Bottom row: name + completion icon
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(
-                      child: Text(
-                        title,
-                        maxLines: null,
-                        style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w700),
+                      AnimatedSwitcher(
+                        duration: const Duration(milliseconds: 300),
+                        child: Icon(
+                          isCompleted ? CupertinoIcons.checkmark_circle_fill : CupertinoIcons.circle,
+                          key: ValueKey<bool>(isCompleted),
+                          color: habitColor,
+                          size: completionIconSize,
+                        ),
                       ),
-                    ),
-                    AnimatedSwitcher(
-                      duration: const Duration(milliseconds: 300),
-                      child: Icon(
-                        isCompleted ? CupertinoIcons.circle_fill : CupertinoIcons.circle,
-                        key: ValueKey<bool>(isCompleted),
-                        color: habitColor,
-                        size: 28,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         ),

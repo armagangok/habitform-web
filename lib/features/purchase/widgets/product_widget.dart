@@ -35,90 +35,127 @@ class _ProductWidgetState extends State<ProductWidget> {
 
     final isAnnual = widget.isAnnual;
 
-    return AnimatedOpacity(
+    return AnimatedContainer(
       duration: Duration(milliseconds: 300),
-      opacity: widget.isSelected ? 1 : .75,
-      child: SizedBox(
-        width: double.infinity,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 15.0),
-              child: Row(
-                children: [
-                  widget.isSelected
-                      ? Icon(
-                          CupertinoIcons.circle_fill,
-                          color: Colors.blueAccent,
-                          size: 20,
-                        ).animate().scale()
-                      : Icon(
-                          CupertinoIcons.circle,
-                          color: context.theme.selectionHandleColor,
-                          size: 20,
+      curve: Curves.easeInOut,
+      padding: EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: widget.isSelected ? context.primary.withValues(alpha: 0.1) : Colors.transparent,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: widget.isSelected ? context.primary.withValues(alpha: 0.3) : context.theme.selectionHandleColor.withValues(alpha: 0.2),
+          width: widget.isSelected ? 2 : 1,
+        ),
+        boxShadow: widget.isSelected
+            ? [
+                BoxShadow(
+                  color: context.primary.withValues(alpha: 0.2),
+                  blurRadius: 12,
+                  offset: Offset(0, 4),
+                ),
+              ]
+            : null,
+      ),
+      child: AnimatedOpacity(
+        duration: Duration(milliseconds: 300),
+        opacity: widget.isSelected ? 1 : .75,
+        child: SizedBox(
+          width: double.infinity,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 0.0),
+                child: Row(
+                  children: [
+                    AnimatedContainer(
+                      duration: Duration(milliseconds: 300),
+                      curve: Curves.easeInOut,
+                      padding: EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: widget.isSelected ? context.primary.withValues(alpha: 0.2) : Colors.transparent,
+                        shape: BoxShape.circle,
+                      ),
+                      child: widget.isSelected
+                          ? Icon(
+                              CupertinoIcons.checkmark_circle_fill,
+                              color: context.primary,
+                              size: 20,
+                            )
+                          : Icon(
+                              CupertinoIcons.circle,
+                              color: context.theme.selectionHandleColor,
+                              size: 20,
+                            ),
+                    ),
+                    SizedBox(width: 8),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          productTitle.getTitleName.toUpperCase(),
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: widget.isSelected ? context.primary : null,
+                          ),
                         ),
-                  SizedBox(width: 8),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        productTitle.getTitleName.toUpperCase(),
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          if (isAnnual)
-                            Text(
-                              (widget.package.storeProduct.price * 2).toStringAsFixed(2),
-                              textAlign: TextAlign.left,
-                              style: context.bodySmall.copyWith(
-                                decoration: TextDecoration.lineThrough,
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            if (isAnnual)
+                              Text(
+                                (widget.package.storeProduct.price * 2).toStringAsFixed(2),
+                                textAlign: TextAlign.left,
+                                style: context.bodySmall.copyWith(
+                                  decoration: TextDecoration.lineThrough,
+                                ),
                               ),
-                            ),
-                          if (isAnnual) SizedBox(width: 2),
-                          if (isAnnual)
-                            Icon(
-                              CupertinoIcons.arrow_right,
-                              size: 12,
-                            ),
-                          if (isAnnual) SizedBox(width: 2),
-                          if (isAnnual)
-                            Text(
-                              widget.package.storeProduct.price.toStringAsFixed(2),
-                              textAlign: TextAlign.left,
-                              style: context.bodySmall,
-                            ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ],
+                            if (isAnnual) SizedBox(width: 2),
+                            if (isAnnual)
+                              Icon(
+                                CupertinoIcons.arrow_right,
+                                size: 12,
+                              ),
+                            if (isAnnual) SizedBox(width: 2),
+                            if (isAnnual)
+                              Text(
+                                widget.package.storeProduct.price.toStringAsFixed(2),
+                                textAlign: TextAlign.left,
+                                style: context.bodySmall,
+                              ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5),
-              child: Stack(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(2.5) + EdgeInsets.only(left: 15),
-                    child: Padding(
-                      padding: const EdgeInsets.all(12.0),
-                      child: Text(
-                        priceString,
-                        textAlign: TextAlign.left,
-                        style: TextStyle(fontWeight: FontWeight.w700),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 0.0, vertical: 5),
+                child: Stack(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(2.5),
+                      child: Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: Text(
+                          priceString,
+                          textAlign: TextAlign.left,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w700,
+                            color: widget.isSelected ? context.primary : null,
+                          ),
+                        ),
                       ),
                     ),
-                  ),
-                  _discountWidget(),
-                ],
+                    _discountWidget(),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

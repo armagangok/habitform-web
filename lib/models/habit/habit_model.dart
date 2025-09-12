@@ -2,6 +2,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 
 import '../../features/reminder/models/reminder/reminder_model.dart';
 import '../completion_entry/completion_entry.dart';
+import 'habit_difficulty.dart';
 import 'habit_status.dart';
 
 part 'habit_model.g.dart';
@@ -38,6 +39,9 @@ class Habit extends HiveObject {
   @HiveField(11, defaultValue: [])
   final List<String> categoryIds;
 
+  @HiveField(12, defaultValue: HabitDifficulty.moderate)
+  final HabitDifficulty difficulty;
+
   Habit({
     required this.id,
     required this.habitName,
@@ -49,6 +53,7 @@ class Habit extends HiveObject {
     this.archiveDate,
     this.status = HabitStatus.active,
     this.categoryIds = const [],
+    this.difficulty = HabitDifficulty.moderate,
   });
 
   Habit copyWith({
@@ -62,6 +67,7 @@ class Habit extends HiveObject {
     DateTime? archiveDate,
     HabitStatus? status,
     List<String>? categoryIds,
+    HabitDifficulty? difficulty,
   }) {
     return Habit(
       id: id ?? this.id,
@@ -74,6 +80,7 @@ class Habit extends HiveObject {
       archiveDate: archiveDate ?? this.archiveDate,
       status: status ?? this.status,
       categoryIds: categoryIds ?? this.categoryIds,
+      difficulty: difficulty ?? this.difficulty,
     );
   }
 }

@@ -24,7 +24,7 @@ class HabitDifficultyAdapter extends TypeAdapter<HabitDifficulty> {
       case 4:
         return HabitDifficulty.veryDifficult;
       default:
-        return HabitDifficulty.moderate;
+        return HabitDifficulty.veryEasy;
     }
   }
 
@@ -50,8 +50,12 @@ class HabitDifficultyAdapter extends TypeAdapter<HabitDifficulty> {
   }
 
   @override
-  bool operator ==(Object other) => identical(this, other) || other is HabitDifficultyAdapter && runtimeType == other.runtimeType && typeId == other.typeId;
+  int get hashCode => typeId.hashCode;
 
   @override
-  int get hashCode => typeId.hashCode;
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is HabitDifficultyAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
 }
