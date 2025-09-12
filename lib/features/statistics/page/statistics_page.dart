@@ -134,53 +134,58 @@ class StatisticsPage extends ConsumerWidget {
                       right: 30,
                       child: SafeArea(
                         child: Center(
-                          child: CustomBlurWidget(
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                    child: Shimmer.fromColors(
-                                      baseColor: context.titleSmall.color ?? Colors.deepOrange,
-                                      highlightColor: context.titleSmall.color?.withValues(alpha: 0.5) ?? Colors.blueAccent,
-                                      period: const Duration(seconds: 2),
-                                      direction: ShimmerDirection.ltr,
-                                      child: Text(
-                                        LocaleKeys.statistics_chart_labels_demo_data_message.tr(),
-                                        style: context.titleSmall.copyWith(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  SizedBox(width: 12),
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
-                                    child: CustomButton(
-                                      onPressed: () {
-                                        showCupertinoSheet(
-                                          context: context,
-                                          builder: (context) => const PaywallPage(),
-                                        );
-                                      },
-                                      child: Shimmer.fromColors(
-                                        baseColor: Colors.deepOrange,
-                                        highlightColor: Colors.orange,
-                                        period: const Duration(seconds: 1),
-                                        direction: ShimmerDirection.ltr,
-                                        child: Text(
-                                          LocaleKeys.statistics_chart_labels_upgrade_button.tr(),
-                                          style: TextStyle(
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.deepOrange,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(12),
+                            child: CustomBlurWidget(
+                              child: CupertinoCard(
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                                  child: Row(
+                                    children: [
+                                      Expanded(
+                                        child: Shimmer.fromColors(
+                                          baseColor: context.titleSmall.color ?? Colors.deepOrange,
+                                          highlightColor: context.titleSmall.color?.withValues(alpha: 0.5) ?? Colors.blueAccent,
+                                          period: const Duration(seconds: 2),
+                                          direction: ShimmerDirection.ltr,
+                                          child: Text(
+                                            LocaleKeys.statistics_chart_labels_demo_data_message.tr(),
+                                            style: context.titleSmall.copyWith(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.bold,
+                                            ),
                                           ),
                                         ),
                                       ),
-                                    ),
-                                  )
-                                ],
+                                      SizedBox(width: 12),
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
+                                        child: CustomButton(
+                                          onPressed: () {
+                                            showCupertinoSheet(
+                                              context: context,
+                                              builder: (context) => const PaywallPage(),
+                                            );
+                                          },
+                                          child: Shimmer.fromColors(
+                                            baseColor: Colors.deepOrange,
+                                            highlightColor: Colors.orange,
+                                            period: const Duration(seconds: 1),
+                                            direction: ShimmerDirection.ltr,
+                                            child: Text(
+                                              LocaleKeys.statistics_chart_labels_upgrade_button.tr(),
+                                              style: TextStyle(
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.deepOrange,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ),
                               ),
                             ),
                           ),
