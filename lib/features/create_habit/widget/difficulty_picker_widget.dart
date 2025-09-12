@@ -11,120 +11,191 @@ class DifficultyPickerWidget extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final difficulty = ref.watch(createHabitProvider).value?.difficulty ?? HabitDifficulty.moderate;
 
-    return CupertinoListSection.insetGrouped(
-      header: Text('Habit Difficulty'),
-      children: [
-        // Difficulty selection buttons
-        Column(
-          children: HabitDifficulty.values.map((diff) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      child: Column(
+        children: [
+          // Info card
+          _buildInfoCard(context),
+          const SizedBox(height: 24),
+          // Difficulty selection cards
+          ...HabitDifficulty.values.map((diff) {
             final isSelected = difficulty == diff;
             return Padding(
-              padding: const EdgeInsets.only(bottom: 8.0),
-              child: CupertinoButton(
-                padding: EdgeInsets.zero,
-                onPressed: () {
-                  ref.watch(createHabitProvider.notifier).updateDifficulty(diff);
-                },
-                child: Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.all(16.0),
-                  decoration: BoxDecoration(
-                    color: isSelected ? Color(diff.colorValue).withValues(alpha: 0.1) : Colors.transparent,
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(
-                      color: isSelected ? Color(diff.colorValue) : Colors.grey.shade300,
-                      width: isSelected ? 2 : 1,
+              padding: const EdgeInsets.only(bottom: 16.0),
+              child: _buildDifficultyCard(context, diff, isSelected, () {
+                ref.watch(createHabitProvider.notifier).updateDifficulty(diff);
+              }),
+            );
+          }),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDifficultyCard(
+    BuildContext context,
+    HabitDifficulty diff,
+    bool isSelected,
+    VoidCallback onTap,
+  ) {
+    final color = Color(diff.colorValue);
+
+    return Material(
+      color: Colors.transparent,
+      child: CupertinoButton(
+        padding: EdgeInsets.zero,
+        onPressed: onTap,
+        color: color.withValues(alpha: 0.001),
+        borderRadius: BorderRadius.circular(16),
+        child: Column(
+          children: [
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(
+                  color: isSelected ? color.withValues(alpha: 0.3) : context.selectionHandleColor.withValues(alpha: 0.3),
+                  width: isSelected ? 1 : 1,
+                ),
+                boxShadow: isSelected
+                    ? [
+                        BoxShadow(
+                          color: color.withValues(alpha: 0.15),
+                          blurRadius: 12,
+                          offset: const Offset(0, 4),
+                        ),
+                      ]
+                    : [
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.05),
+                          blurRadius: 8,
+                          offset: const Offset(0, 2),
+                        ),
+                      ],
+              ),
+              child: Row(
+                children: [
+                  // Difficulty indicator with better design
+                  Container(
+                    width: 20,
+                    height: 20,
+                    decoration: BoxDecoration(
+                      color: color,
+                      shape: BoxShape.circle,
+                      boxShadow: [
+                        BoxShadow(
+                          color: color.withValues(alpha: 0.3),
+                          blurRadius: 4,
+                          offset: const Offset(0, 2),
+                        ),
+                      ],
                     ),
+                    child: isSelected
+                        ? Icon(
+                            Icons.check,
+                            size: 12,
+                            color: Colors.white,
+                          )
+                        : null,
                   ),
-                  child: Row(
-                    children: [
-                      // Difficulty indicator
-                      Container(
-                        width: 12,
-                        height: 12,
-                        decoration: BoxDecoration(
-                          color: Color(diff.colorValue),
-                          shape: BoxShape.circle,
-                        ),
-                      ),
-                      const SizedBox(width: 12),
-                      // Difficulty name and description
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              diff.displayName,
-                              style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                                    fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                                    color: isSelected ? Color(diff.colorValue) : null,
-                                  ),
-                            ),
-                            const SizedBox(height: 4),
-                            Text(
-                              diff.description,
-                              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                    color: Theme.of(context).hintColor,
-                                  ),
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ],
-                        ),
-                      ),
-                      // Estimated days
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                        decoration: BoxDecoration(
-                          color: Color(diff.colorValue).withValues(alpha: 0.1),
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Text(
-                          '${diff.estimatedFormationDays}d',
-                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                color: Color(diff.colorValue),
-                                fontWeight: FontWeight.bold,
+                  const SizedBox(width: 16),
+
+                  // Difficulty content
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          diff.displayName,
+                          style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                                fontWeight: FontWeight.w600,
+                                color: isSelected ? color : null,
                               ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
+
+                  const SizedBox(width: 12),
+
+                  // Estimated days with better design
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    decoration: BoxDecoration(
+                      color: color.withValues(alpha: 0.12),
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(
+                        color: color.withValues(alpha: 0.2),
+                        width: 1,
+                      ),
+                    ),
+                    child: Text(
+                      '${diff.estimatedFormationDays}d',
+                      style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                            color: color,
+                            fontWeight: FontWeight.w700,
+                            letterSpacing: 0.5,
+                          ),
+                    ),
+                  ),
+                ],
               ),
-            );
-          }).toList(),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              diff.description,
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: Theme.of(context).hintColor,
+                    height: 1.4,
+                  ),
+              maxLines: 12,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ],
         ),
-        // Info card
-        Container(
-          margin: const EdgeInsets.all(16),
-          padding: const EdgeInsets.all(12),
-          decoration: BoxDecoration(
-            color: context.primary.withValues(alpha: 0.05),
-            borderRadius: BorderRadius.circular(8),
-            border: Border.all(
-              color: context.primary.withValues(alpha: 0.2),
+      ),
+    );
+  }
+
+  Widget _buildInfoCard(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Theme.of(context).primaryColor.withValues(alpha: 0.08),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: context.primary.withValues(alpha: 0.15),
+          width: 1,
+        ),
+      ),
+      child: Row(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: context.primary.withValues(alpha: 0.1),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Icon(
+              Icons.lightbulb_outline,
+              size: 20,
+              color: context.primary,
             ),
           ),
-          child: Row(
-            children: [
-              Icon(
-                Icons.info_outline,
-                size: 20,
-                color: context.primary,
+          const SizedBox(width: 12),
+          Expanded(
+            child: Text(
+              'Choose how challenging this habit feels. We use this to estimate formation time and personalize insights.',
+              style: context.bodyMedium.copyWith(
+                color: context.primary.withValues(alpha: 0.9),
+                height: 1.4,
               ),
-              const SizedBox(width: 8),
-              Expanded(
-                child: Text(
-                  'Choose how challenging this habit feels. We use this to estimate formation time and personalize insights.',
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: context.primary,
-                      ),
-                ),
-              ),
-            ],
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

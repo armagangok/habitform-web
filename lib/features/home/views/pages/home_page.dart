@@ -21,35 +21,44 @@ class HomePage extends ConsumerWidget {
     return Stack(
       children: [
         // Main content
-        CupertinoPageScaffold(
-          navigationBar: _homePageNavigationBar(ref, context),
-          child: ListView(
-            padding: EdgeInsets.zero,
-            physics: AlwaysScrollableScrollPhysics(),
-            children: <Widget>[
-              SizedBox(height: 16),
+        CupertinoPopupSurface(
+          child: CupertinoPageScaffold(
+            navigationBar: _homePageNavigationBar(ref, context),
+            child: ListView(
+              padding: EdgeInsets.zero,
+              physics: AlwaysScrollableScrollPhysics(),
+              children: <Widget>[
+                SafeArea(
+                  bottom: false,
+                  child: SizedBox(height: 16),
+                ),
 
-              // Category filter
-              HomeCategoryFilter(),
+                // Category filter
+                HomeCategoryFilter(),
 
-              SizedBox(height: 16),
+                SizedBox(height: 16),
 
-              // Habits list
-              homeStateAsyncValue.when(
-                data: (homeState) {
-                  // Using the filtered habits provider instead of direct state
-                  return Consumer(builder: (context, ref, _) {
-                    final filteredHabits = ref.watch(filteredHabitsProvider);
-                    return HabitBuilder(
-                      habits: filteredHabits,
-                      isLoading: false,
-                    );
-                  });
-                },
-                loading: () => _loadingWidget(context),
-                error: (error, stack) => _errorWidget(context),
-              ),
-            ],
+                // Habits list
+                homeStateAsyncValue.when(
+                  data: (homeState) {
+                    // Using the filtered habits provider instead of direct state
+                    return Consumer(builder: (context, ref, _) {
+                      final filteredHabits = ref.watch(filteredHabitsProvider);
+                      return HabitBuilder(
+                        habits: filteredHabits,
+                        isLoading: false,
+                      );
+                    });
+                  },
+                  loading: () => _loadingWidget(context),
+                  error: (error, stack) {
+                    print('Error: $error');
+                    print('Stack: $stack');
+                    return _errorWidget(context);
+                  },
+                ),
+              ],
+            ),
           ),
         ),
       ],

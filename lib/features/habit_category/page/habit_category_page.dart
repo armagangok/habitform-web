@@ -174,7 +174,7 @@ class _HabitCategoryPageState extends ConsumerState<HabitCategoryPage> {
               FaIcon(
                 iconData,
                 size: 16,
-                color: isSelected ? context.primary : context.selectionHandleColor,
+                color: context.selectionHandleColor.withValues(alpha: isSelected ? 1.0 : 0.5),
               ),
               SizedBox(width: 6),
             ],

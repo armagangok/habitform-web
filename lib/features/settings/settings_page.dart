@@ -32,7 +32,6 @@ class SettingsPage extends ConsumerWidget {
                       CupertinoListSection.insetGrouped(
                         children: [
                           CupertinoListTile(
-                            backgroundColor: CupertinoColors.systemFill,
                             leading: Assets.app.habitriseDarkTransparent.image(height: 24, width: 24),
                             title: Text(LocaleKeys.subscription_myMembership.tr()),
                             onTap: () {
@@ -55,7 +54,6 @@ class SettingsPage extends ConsumerWidget {
                           children: [
                             ThemeModeFeature(),
                             CupertinoListTile(
-                              backgroundColor: CupertinoColors.systemFill,
                               leading: SettingLeadingWidget(
                                 iconData: CupertinoIcons.bell_fill,
                                 cardColor: CupertinoColors.systemGreen,
@@ -72,7 +70,6 @@ class SettingsPage extends ConsumerWidget {
                       child: Column(
                         children: [
                           CupertinoListTile(
-                            backgroundColor: CupertinoColors.systemFill,
                             leading: const SettingLeadingWidget(
                               iconData: CupertinoIcons.archivebox_fill,
                               cardColor: CupertinoColors.systemIndigo,
@@ -84,7 +81,6 @@ class SettingsPage extends ConsumerWidget {
                             trailing: CupertinoListTileChevron(),
                           ),
                           CupertinoListTile(
-                            backgroundColor: CupertinoColors.systemFill,
                             leading: SettingLeadingWidget(
                               padding: 2.5,
                               iconData: FontAwesomeIcons.database,
@@ -97,7 +93,6 @@ class SettingsPage extends ConsumerWidget {
                             trailing: CupertinoListTileChevron(),
                           ),
                           CupertinoListTile(
-                            backgroundColor: CupertinoColors.systemFill,
                             leading: const SettingLeadingWidget(
                               iconData: CupertinoIcons.doc_person_fill,
                               cardColor: Colors.blueAccent,
@@ -120,7 +115,6 @@ class SettingsPage extends ConsumerWidget {
                     CupertinoListSection.insetGrouped(
                       children: [
                         CupertinoListTile(
-                          backgroundColor: CupertinoColors.systemFill,
                           leading: const SettingLeadingWidget(
                             iconData: CupertinoIcons.hand_raised_fill,
                             cardColor: CupertinoColors.activeBlue,
@@ -130,7 +124,6 @@ class SettingsPage extends ConsumerWidget {
                           trailing: CupertinoListTileChevron(),
                         ),
                         CupertinoListTile(
-                          backgroundColor: CupertinoColors.systemFill,
                           leading: const SettingLeadingWidget(
                             iconData: CupertinoIcons.hand_point_right_fill,
                             cardColor: CupertinoColors.activeBlue,
@@ -140,7 +133,6 @@ class SettingsPage extends ConsumerWidget {
                           trailing: CupertinoListTileChevron(),
                         ),
                         CupertinoListTile(
-                          backgroundColor: CupertinoColors.systemFill,
                           leading: const SettingLeadingWidget(
                             iconData: CupertinoIcons.mail_solid,
                             cardColor: CupertinoColors.activeBlue,

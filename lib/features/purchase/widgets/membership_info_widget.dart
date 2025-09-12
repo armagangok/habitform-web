@@ -19,9 +19,7 @@ class MembershipInfoWidget extends ConsumerWidget {
 
     return CupertinoPopupSurface(
       child: CupertinoPageScaffold(
-        backgroundColor: Colors.transparent,
         navigationBar: SheetHeader(
-          title: LocaleKeys.membership_info_title.tr(),
           closeButtonPosition: CloseButtonPosition.left,
         ),
         child: paywallState.when(
@@ -39,47 +37,42 @@ class MembershipInfoWidget extends ConsumerWidget {
 
             return ListView(
               children: [
-                Padding(
-                  padding: EdgeInsets.all(20),
-                  child: Builder(
-                    builder: (contextFromBuilder) {
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
+                Builder(
+                  builder: (contextFromBuilder) {
+                    return CupertinoListSection.insetGrouped(
+                      header: Text(LocaleKeys.membership_info_title.tr()),
+                      children: [
+                        if (isActive != null)
                           _infoItemWidget(
                             infoText: LocaleKeys.membership_info_state.tr(),
-                            text: isActive == null
-                                ? null
-                                : isActive
-                                    ? LocaleKeys.membership_info_active.tr()
-                                    : LocaleKeys.membership_info_inactive.tr(),
+                            text: isActive ? LocaleKeys.membership_info_active.tr() : LocaleKeys.membership_info_inactive.tr(),
                           ),
-                          _infoItemWidget(infoText: LocaleKeys.membership_info_plan.tr(), text: productPlanIdentifier),
+                        if (productPlanIdentifier != null) _infoItemWidget(infoText: LocaleKeys.membership_info_plan.tr(), text: productPlanIdentifier),
+                        if (originalAppUserId != null)
                           _infoItemWidget(
                             infoText: LocaleKeys.membership_info_customer_id.tr(),
                             text: originalAppUserId,
                             onTap: () => onCopyCustomerId(),
                             trailing: CupertinoListTileChevron(),
                           ),
-                          _infoItemWidget(infoText: LocaleKeys.membership_info_expiration_date.tr(), text: expirationDate),
-                          _infoItemWidget(infoText: LocaleKeys.membership_info_first_purchase_date.tr(), text: originalPurchaseDate),
-                          _infoItemWidget(infoText: LocaleKeys.membership_info_last_purchase_date.tr(), text: latestPurchaseDate),
-                          _infoItemWidget(
-                            infoText: LocaleKeys.membership_info_change_plan.tr(),
-                            text: LocaleKeys.membership_info_change_plan_desc.tr(),
-                            trailing: CupertinoListTileChevron(),
-                            onTap: () {
-                              showCupertinoSheet(
-                                enableDrag: false,
-                                context: contextFromBuilder,
-                                builder: (_) => PaywallPage(),
-                              );
-                            },
-                          ),
-                        ],
-                      );
-                    },
-                  ),
+                        if (expirationDate != null) _infoItemWidget(infoText: LocaleKeys.membership_info_expiration_date.tr(), text: expirationDate),
+                        if (originalPurchaseDate != null) _infoItemWidget(infoText: LocaleKeys.membership_info_first_purchase_date.tr(), text: originalPurchaseDate),
+                        if (latestPurchaseDate != null) _infoItemWidget(infoText: LocaleKeys.membership_info_last_purchase_date.tr(), text: latestPurchaseDate),
+                        _infoItemWidget(
+                          infoText: LocaleKeys.membership_info_change_plan.tr(),
+                          text: LocaleKeys.membership_info_change_plan_desc.tr(),
+                          trailing: CupertinoListTileChevron(),
+                          onTap: () {
+                            showCupertinoSheet(
+                              enableDrag: false,
+                              context: contextFromBuilder,
+                              builder: (_) => PaywallPage(),
+                            );
+                          },
+                        ),
+                      ],
+                    );
+                  },
                 ),
               ],
             );
@@ -91,57 +84,24 @@ class MembershipInfoWidget extends ConsumerWidget {
     );
   }
 
-  Widget _infoItemWidget({required String infoText, required String? text, Function()? onTap, Widget? trailing}) {
+  Widget _infoItemWidget({
+    required String infoText,
+    required String? text,
+    Function()? onTap,
+    Widget? trailing,
+  }) {
     if (text != null) {
       return Builder(builder: (context) {
-        return CustomButton(
-          onPressed: onTap,
-          child: Padding(
-            padding: EdgeInsets.only(bottom: 20.0),
-            child: SizedBox(
-              width: double.infinity,
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 5),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            infoText,
-                            textAlign: TextAlign.left,
-                            style: context.titleMedium.copyWith(
-                              fontWeight: FontWeight.bold,
-                              color: context.titleMedium.color?.withValues(alpha: 0.9),
-                            ),
-                          ),
-                          Text(
-                            text,
-                            textAlign: TextAlign.left,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: context.bodyMedium.copyWith(
-                              color: context.bodyMedium.color?.withValues(alpha: 0.6),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    if (trailing != null) ...[
-                      const SizedBox(width: 10),
-                      trailing,
-                    ]
-                  ],
-                ),
-              ),
-            ),
-          ),
+        return CupertinoListTile(
+          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+          onTap: onTap,
+          title: Text(infoText, maxLines: 999),
+          subtitle: Text(text, maxLines: 999),
+          trailing: trailing,
         );
       });
     } else {
-      return SizedBox.shrink();
+      return Center();
     }
   }
 }

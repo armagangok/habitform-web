@@ -52,6 +52,8 @@ class _HabitWidgetState extends ConsumerState<HabitWidget> with SingleTickerProv
   }
 
   Future<void> _showAchievementIfEarned({required Habit previousHabit, required Habit updatedHabit}) async {
+    if (!mounted) return;
+
     final previousScore = _getProgressPercentage(previousHabit);
     final newScore = _getProgressPercentage(updatedHabit);
 
@@ -73,30 +75,45 @@ class _HabitWidgetState extends ConsumerState<HabitWidget> with SingleTickerProv
   void _toggleToday() async {
     if (!mounted) return;
 
-    final today = DateTime.now();
-    final beforeHabit = ref.read(homeProvider).maybeWhen(
-          data: (homeState) => homeState.habits.firstWhere(
-            (h) => h.id == widget.habit.id,
-            orElse: () => widget.habit,
-          ),
-          orElse: () => widget.habit,
-        );
-    final wasCompleted = today.isCompletedInEntries(beforeHabit.completions);
-
-    await _controller.forward(from: 0.0);
-
-    ref.read(homeProvider.notifier).toggleHabitCompletion(widget.habit.id, today);
-
-    if (!wasCompleted) {
-      await Future<void>.delayed(const Duration(milliseconds: 50));
-      final afterHabit = ref.read(homeProvider).maybeWhen(
+    try {
+      final today = DateTime.now();
+      final homeNotifier = ref.read(homeProvider.notifier);
+      final beforeHabit = ref.read(homeProvider).maybeWhen(
             data: (homeState) => homeState.habits.firstWhere(
               (h) => h.id == widget.habit.id,
               orElse: () => widget.habit,
             ),
             orElse: () => widget.habit,
           );
-      await _showAchievementIfEarned(previousHabit: beforeHabit, updatedHabit: afterHabit);
+      final wasCompleted = today.isCompletedInEntries(beforeHabit.completions);
+
+      await _controller.forward(from: 0.0);
+
+      if (!mounted) return;
+      await homeNotifier.toggleHabitCompletion(widget.habit.id, today);
+
+      if (!wasCompleted) {
+        await Future<void>.delayed(const Duration(milliseconds: 50));
+        if (!mounted) return;
+
+        try {
+          final afterHabit = ref.read(homeProvider).maybeWhen(
+                data: (homeState) => homeState.habits.firstWhere(
+                  (h) => h.id == widget.habit.id,
+                  orElse: () => widget.habit,
+                ),
+                orElse: () => widget.habit,
+              );
+          if (!mounted) return;
+          await _showAchievementIfEarned(previousHabit: beforeHabit, updatedHabit: afterHabit);
+        } catch (e) {
+          // Achievement dialog açılamazsa sessizce devam et
+          print('Achievement dialog error: $e');
+        }
+      }
+    } catch (e) {
+      // Genel hata durumunda sessizce devam et
+      print('Toggle habit error: $e');
     }
   }
 

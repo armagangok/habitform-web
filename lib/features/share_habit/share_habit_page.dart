@@ -73,7 +73,6 @@ class _ShareHabitPageState extends State<ShareHabitPage> {
   Widget build(BuildContext context) {
     return CupertinoPopupSurface(
       child: CupertinoPageScaffold(
-        backgroundColor: Colors.transparent,
         navigationBar: SheetHeader(
           closeButtonPosition: CloseButtonPosition.left,
           title: LocaleKeys.share_share.tr(),

@@ -10,7 +10,6 @@ class ThemeModeFeature extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return CupertinoListTile(
-      backgroundColor: CupertinoColors.systemFill,
       leading: const SettingLeadingWidget(
         iconData: CupertinoIcons.paintbrush_fill,
         cardColor: Colors.deepOrange,

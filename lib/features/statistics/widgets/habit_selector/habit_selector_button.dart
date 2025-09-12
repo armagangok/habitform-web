@@ -25,7 +25,7 @@ class HabitSelectorButton extends StatelessWidget {
           minSize: 0,
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
           borderRadius: BorderRadius.circular(12),
-          color: isSelected ? Colors.blueAccent : context.selectionHandleColor,
+          color: isSelected ? context.primary : context.selectionHandleColor,
           pressedOpacity: .9,
           child: AnimatedSize(
             duration: const Duration(milliseconds: 350),
