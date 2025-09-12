@@ -265,7 +265,14 @@
         "deselect_all": "Deselect All",
         "select_time": "Select Time",
         "time": "Time",
-        "habit_reminder_message": "Don't forget to complete your habit!"
+        "habit_reminder_message": "Don't forget to complete your habit!",
+        "times": "times",
+        "mode": "Reminder Mode",
+        "single": "Single",
+        "multiple": "Multiple",
+        "multiple_description": "Set multiple reminder times for the same habit",
+        "add_time": "Add Time",
+        "reminder_times": "Reminder Times"
     },
     "habit_data": {
         "longest_streak": "Longest Streak",

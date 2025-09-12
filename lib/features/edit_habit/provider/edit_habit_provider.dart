@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '/core/core.dart';
+import '/models/habit/habit_difficulty.dart';
 import '/models/habit/habit_model.dart';
 import '../../habit_category/provider/habit_category_button_provider.dart';
 import '../../habit_category/provider/habit_category_provider.dart';
@@ -18,12 +19,15 @@ class EditHabitNotifier extends AutoDisposeNotifier<Habit?> {
   final habitNameController = TextEditingController();
   final habitDescriptionController = TextEditingController();
 
+  HabitDifficulty _selectedDifficulty = HabitDifficulty.moderate;
+
   @override
   Habit? build() => null;
 
   void initHabit(Habit habit) {
     habitNameController.text = habit.habitName;
     habitDescriptionController.text = habit.habitDescription ?? '';
+    _selectedDifficulty = habit.difficulty;
 
     final reminder = habit.reminderModel;
 
@@ -36,6 +40,12 @@ class EditHabitNotifier extends AutoDisposeNotifier<Habit?> {
     ref.watch(reminderProvider.notifier).initializeReminder(reminder);
     state = habit;
   }
+
+  void updateDifficulty(HabitDifficulty difficulty) {
+    _selectedDifficulty = difficulty;
+  }
+
+  HabitDifficulty get selectedDifficulty => _selectedDifficulty;
 
   void updateHabit() async {
     final habitName = habitNameController.text;
@@ -68,6 +78,7 @@ class EditHabitNotifier extends AutoDisposeNotifier<Habit?> {
       colorCode: habitColorState?.value,
       reminderModel: reminderModel,
       categoryIds: categoryIds,
+      difficulty: _selectedDifficulty,
     );
 
     if (updatedHabit != null) {

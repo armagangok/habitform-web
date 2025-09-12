@@ -124,30 +124,27 @@ class HabitDetailPage extends ConsumerWidget {
         ),
       ),
       leading: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(13.0),
         child: CircularActionButton(
           icon: CupertinoIcons.back,
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
       actions: [
-        CupertinoButton(
-          padding: EdgeInsets.zero,
-          onPressed: () {
-            ref.watch(editHabitProvider.notifier).initHabit(habit);
-            showCupertinoSheet(
-              enableDrag: false,
-              context: context,
-              builder: (context) => EditHabitPage(habit: habit),
-            );
-          },
-          child: Icon(
-            FontAwesomeIcons.solidPenToSquare,
-            color: context.titleLarge.color,
-            size: 18,
+        Padding(
+          padding: const EdgeInsets.all(13.0),
+          child: CircularActionButton(
+            icon: CupertinoIcons.pencil,
+            onPressed: () {
+              ref.watch(editHabitProvider.notifier).initHabit(habit);
+              showCupertinoSheet(
+                enableDrag: false,
+                context: context,
+                builder: (context) => EditHabitPage(habit: habit),
+              );
+            },
           ),
         ),
-        const SizedBox(width: 8),
       ],
     );
   }
@@ -181,4 +178,3 @@ class HabitDetailPage extends ConsumerWidget {
     );
   }
 }
-

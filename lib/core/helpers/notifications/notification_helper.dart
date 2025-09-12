@@ -140,7 +140,11 @@ final class NotificationHelper {
         LogHelper.shared.debugPrint('Scheduling notification for day ${day.name} at: $scheduleDate');
         LogHelper.shared.debugPrint('Payload: ${jsonEncode(payloadData)}');
 
-        final notificationId = id + day.index;
+        // Generate unique notification ID for multiple reminders
+        final timeIndex = reminder.hasMultipleReminders 
+            ? reminder.multipleReminders!.sortedReminderTimes.indexOf(scheduledTime)
+            : 0;
+        final notificationId = id + (day.index * 100) + timeIndex;
         await _notificationPlugin.zonedSchedule(
           notificationId,
           title,
@@ -189,11 +193,23 @@ final class NotificationHelper {
       await _notificationPlugin.cancel(reminder.id);
       LogHelper.shared.debugPrint('Cancelled base notification with ID: ${reminder.id}');
 
-      // Cancel notifications for all possible days
-      for (final day in Days.values) {
-        final notificationId = reminder.id + day.index;
-        await _notificationPlugin.cancel(notificationId);
-        LogHelper.shared.debugPrint('Cancelled notification for day ${day.name} with ID: $notificationId');
+      if (reminder.hasMultipleReminders) {
+        // Cancel notifications for multiple reminders
+        final times = reminder.multipleReminders!.sortedReminderTimes;
+        for (final day in Days.values) {
+          for (int timeIndex = 0; timeIndex < times.length; timeIndex++) {
+            final notificationId = reminder.id + (day.index * 100) + timeIndex;
+            await _notificationPlugin.cancel(notificationId);
+            LogHelper.shared.debugPrint('Cancelled notification for day ${day.name} time $timeIndex with ID: $notificationId');
+          }
+        }
+      } else {
+        // Cancel notifications for single reminder (backward compatibility)
+        for (final day in Days.values) {
+          final notificationId = reminder.id + day.index;
+          await _notificationPlugin.cancel(notificationId);
+          LogHelper.shared.debugPrint('Cancelled notification for day ${day.name} with ID: $notificationId');
+        }
       }
     } catch (e) {
       LogHelper.shared.debugPrint('Error cancelling notifications: $e');

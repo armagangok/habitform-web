@@ -163,6 +163,7 @@ class _NotificationsPageState extends State<NotificationsPage> with SingleTicker
           middle: Text(LocaleKeys.habit_reminder.tr()),
         ),
         child: SafeArea(
+          bottom: false,
           child: CustomScrollView(
             slivers: [
               SliverToBoxAdapter(

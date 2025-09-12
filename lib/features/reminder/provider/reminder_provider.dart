@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/core.dart';
 import '../models/days/days_enum.dart';
+import '../models/multiple_reminder/multiple_reminder_model.dart';
 import '../models/reminder/reminder_model.dart';
 import '../service/reminder_service.dart';
 import 'remind_time_provider.dart';
@@ -179,6 +180,63 @@ class ReminderNotifier extends AutoDisposeNotifier<ReminderState> {
       reminder: currentReminder.copyWith(
         days: currentReminder.days,
         time: time,
+      ),
+    );
+  }
+
+  // Set reminder mode (single or multiple)
+  void setReminderMode(bool isMultiple) {
+    final currentReminder = state.reminder;
+    if (currentReminder == null) return;
+
+    if (isMultiple) {
+      // Switch to multiple reminders mode
+      final currentTime = currentReminder.reminderTime;
+      final multipleReminders = MultipleReminderModel(
+        id: UuidHelper.uidInt,
+        reminderTimes: currentTime != null ? [currentTime] : [],
+        days: currentReminder.days,
+      );
+
+      state = state.copyWith(
+        reminder: currentReminder.copyWith(
+          multipleReminders: multipleReminders,
+          time: null, // Clear single time when switching to multiple
+        ),
+      );
+    } else {
+      // Switch to single reminder mode
+      final firstTime = currentReminder.multipleReminders?.reminderTimes.isNotEmpty == true ? currentReminder.multipleReminders!.reminderTimes.first : null;
+
+      state = state.copyWith(
+        reminder: currentReminder.copyWith(
+          time: firstTime,
+          multipleReminders: null, // Clear multiple reminders when switching to single
+        ),
+      );
+    }
+  }
+
+  // Update multiple reminders
+  void updateMultipleReminders(MultipleReminderModel? multipleReminders) {
+    final currentReminder = state.reminder;
+    if (currentReminder == null) return;
+
+    state = state.copyWith(
+      reminder: currentReminder.copyWith(
+        multipleReminders: multipleReminders,
+      ),
+    );
+  }
+
+  // Clear multiple reminders
+  void clearMultipleReminders() {
+    final currentReminder = state.reminder;
+    if (currentReminder == null) return;
+
+    state = state.copyWith(
+      reminder: currentReminder.copyWith(
+        multipleReminders: null,
       ),
     );
   }

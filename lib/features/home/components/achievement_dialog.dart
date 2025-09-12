@@ -54,16 +54,16 @@ class _AchievementDialogState extends State<AchievementDialog> with TickerProvid
     // Haptic feedback for achievement
     HapticFeedback.lightImpact();
 
-    _scaleController = AnimationController(duration: const Duration(milliseconds: 800), vsync: this);
+    _scaleController = AnimationController(duration: const Duration(milliseconds: 600), vsync: this);
     _scoreController = AnimationController(duration: const Duration(milliseconds: 2500), vsync: this);
     _particleController = AnimationController(duration: const Duration(milliseconds: 3000), vsync: this);
-    _fadeController = AnimationController(duration: const Duration(milliseconds: 600), vsync: this);
-    _slideController = AnimationController(duration: const Duration(milliseconds: 700), vsync: this);
+    _fadeController = AnimationController(duration: const Duration(milliseconds: 500), vsync: this);
+    _slideController = AnimationController(duration: const Duration(milliseconds: 600), vsync: this);
     _pulseController = AnimationController(duration: const Duration(milliseconds: 1500), vsync: this);
     _confettiController = ConfettiController(duration: const Duration(seconds: 3));
 
     _scaleAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(parent: _scaleController, curve: Curves.elasticOut),
+      CurvedAnimation(parent: _scaleController, curve: Curves.easeOutBack),
     );
 
     _scoreAnimation = Tween<double>(begin: 0.0, end: widget.newScore.toDouble()).animate(
@@ -96,20 +96,25 @@ class _AchievementDialogState extends State<AchievementDialog> with TickerProvid
       }
     });
 
-    // Start animations with staggered timing
+    // Start animations with staggered timing for smooth appearance
     _fadeController.forward();
     _slideController.forward();
     _scaleController.forward();
 
-    Future.delayed(const Duration(milliseconds: 300), () {
+    Future.delayed(const Duration(milliseconds: 200), () {
       if (mounted) {
         _pulseController.repeat(reverse: true);
         _particleController.forward();
+      }
+    });
+
+    Future.delayed(const Duration(milliseconds: 400), () {
+      if (mounted) {
         _confettiController.play();
       }
     });
 
-    Future.delayed(const Duration(milliseconds: 800), () {
+    Future.delayed(const Duration(milliseconds: 600), () {
       if (mounted) _scoreController.forward();
     });
   }
@@ -131,130 +136,102 @@ class _AchievementDialogState extends State<AchievementDialog> with TickerProvid
     final theme = Theme.of(context);
     final habitColor = _getFormationScoreColor(widget.newScore.toDouble());
 
-    return Material(
-      color: Colors.transparent,
-      child: Stack(
-        children: [
-          // Confetti overlay
-          Align(
-            alignment: const Alignment(0, -0.3),
-            child: ConfettiWidget(
-              confettiController: _confettiController,
-              blastDirectionality: BlastDirectionality.explosive,
-              emissionFrequency: 0.05,
-              numberOfParticles: 20,
-              minBlastForce: 10,
-              maxBlastForce: 25,
-              gravity: 0.3,
-              particleDrag: 0.1,
-              shouldLoop: false,
-              colors: [
-                habitColor,
-                habitColor.withValues(alpha: 0.8),
-                habitColor.withValues(alpha: 0.6),
-                const Color(0xFFFFD700),
-                const Color(0xFFFF6B6B),
-                const Color(0xFF4ECDC4),
-              ],
-              createParticlePath: _drawStar,
-            ),
-          ),
-          // Main dialog
-          BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 25, sigmaY: 25),
-            child: AnimatedBuilder(
-              animation: Listenable.merge([_fadeAnimation, _slideAnimation, _scaleAnimation]),
-              builder: (context, child) {
-                return FadeTransition(
-                  opacity: _fadeAnimation,
-                  child: SlideTransition(
-                    position: _slideAnimation,
-                    child: ScaleTransition(
-                      scale: _scaleAnimation,
-                      child: Center(
-                        child: Container(
-                          width: context.width(0.85),
-                          constraints: BoxConstraints(
-                            maxWidth: 400,
-                            maxHeight: context.height(0.8),
-                          ),
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                              colors: [
-                                theme.colorScheme.surface.withValues(alpha: 0.95),
-                                theme.colorScheme.surface.withValues(alpha: 0.9),
-                              ],
-                            ),
-                            borderRadius: BorderRadius.circular(context.width(0.08)),
-                            border: Border.all(
-                              color: habitColor.withValues(alpha: 0.3),
-                              width: 1.5,
-                            ),
-                            boxShadow: [
-                              BoxShadow(
-                                color: habitColor.withValues(alpha: 0.2),
-                                blurRadius: 30,
-                                spreadRadius: 5,
-                                offset: const Offset(0, 10),
-                              ),
-                              BoxShadow(
-                                color: Colors.black.withValues(alpha: 0.1),
-                                blurRadius: 20,
-                                spreadRadius: 0,
-                                offset: const Offset(0, 5),
-                              ),
+    return Stack(
+      children: [
+        // Main dialog with consistent blur background
+        CustomBlurWidget(
+          child: AnimatedBuilder(
+            animation: Listenable.merge([_fadeAnimation, _slideAnimation, _scaleAnimation]),
+            builder: (context, child) {
+              return FadeTransition(
+                opacity: _fadeAnimation,
+                child: SlideTransition(
+                  position: _slideAnimation,
+                  child: ScaleTransition(
+                    scale: _scaleAnimation,
+                    child: Center(
+                      child: Container(
+                        width: context.width(0.85),
+                        constraints: BoxConstraints(
+                          maxWidth: 400,
+                          maxHeight: context.height(0.8),
+                        ),
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                            colors: [
+                              theme.colorScheme.surface.withValues(alpha: 0.95),
+                              theme.colorScheme.surface.withValues(alpha: 0.9),
                             ],
                           ),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(context.width(0.08)),
-                            child: BackdropFilter(
-                              filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-                              child: Padding(
-                                padding: context.padding(0.06),
-                                child: SingleChildScrollView(
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      // Achievement Icon with premium effects
-                                      _buildPremiumIcon(context, habitColor),
-                                      SizedBox(height: context.height(0.03)),
+                          borderRadius: BorderRadius.circular(context.width(0.08)),
+                          border: Border.all(
+                            color: habitColor.withValues(alpha: 0.3),
+                            width: 1.5,
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: habitColor.withValues(alpha: 0.2),
+                              blurRadius: 30,
+                              spreadRadius: 5,
+                              offset: const Offset(0, 10),
+                            ),
+                            BoxShadow(
+                              color: Colors.black.withValues(alpha: 0.1),
+                              blurRadius: 20,
+                              spreadRadius: 0,
+                              offset: const Offset(0, 5),
+                            ),
+                          ],
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(context.width(0.08)),
+                          child: BackdropFilter(
+                            filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                            child: Padding(
+                              padding: context.padding(0.06),
+                              child: SingleChildScrollView(
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    // Achievement Icon with premium effects
+                                    _buildPremiumIcon(context, habitColor),
+                                    SizedBox(height: context.height(0.03)),
 
-                                      // Habit name
-                                      Text(
-                                        widget.habit.habitName,
-                                        style: context.headlineMedium.copyWith(
-                                          fontWeight: FontWeight.w700,
-                                          color: theme.colorScheme.onSurface,
-                                        ),
-                                        textAlign: TextAlign.center,
+                                    // Habit name
+                                    Text(
+                                      widget.habit.habitName,
+                                      style: context.headlineMedium.copyWith(
+                                        fontWeight: FontWeight.w700,
+                                        color: theme.colorScheme.onSurface,
                                       ),
-                                      SizedBox(height: context.height(0.01)),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    SizedBox(height: context.height(0.01)),
 
-                                      // Achievement title
-                                      Text(
-                                        widget.pointsGained > 0 ? 'Amazing Progress! 🎉' : 'Keep Going! 💪',
-                                        style: context.titleLarge.copyWith(
-                                          fontWeight: FontWeight.w600,
-                                          color: habitColor,
-                                        ),
-                                        textAlign: TextAlign.center,
+                                    // Achievement title
+                                    Text(
+                                      widget.pointsGained > 0 ? 'Amazing Progress! 🎉' : 'Keep Going! 💪',
+                                      style: context.titleLarge.copyWith(
+                                        fontWeight: FontWeight.w600,
+                                        color: habitColor,
                                       ),
-                                      SizedBox(height: context.height(0.03)),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    SizedBox(height: context.height(0.03)),
 
-                                      // Score display with premium styling
-                                      _buildScoreDisplay(context, theme, habitColor),
-                                      SizedBox(height: context.height(0.03)),
+                                    // Score display with premium styling
+                                    _buildScoreDisplay(context, theme, habitColor),
+                                    SizedBox(height: context.height(0.03)),
 
-                                      // Progress section
-                                      _buildProgressSection(context, theme, habitColor),
-                                      SizedBox(height: context.height(0.03)),
+                                    // Progress section
+                                    _buildProgressSection(context, theme, habitColor),
+                                    SizedBox(height: context.height(0.03)),
 
-                                      // Continue button with premium styling
-                                      _buildPremiumButton(context, theme, habitColor),
-                                    ],
-                                  ),
+                                    // Continue button with premium styling
+                                    _buildPremiumButton(context, theme, habitColor),
+                                  ],
                                 ),
                               ),
                             ),
@@ -263,12 +240,36 @@ class _AchievementDialogState extends State<AchievementDialog> with TickerProvid
                       ),
                     ),
                   ),
-                );
-              },
-            ),
+                ),
+              );
+            },
           ),
-        ],
-      ),
+        ),
+        // Confetti overlay - positioned on top of dialog content
+        Align(
+          alignment: const Alignment(0, -0.3),
+          child: ConfettiWidget(
+            confettiController: _confettiController,
+            blastDirectionality: BlastDirectionality.explosive,
+            emissionFrequency: 0.05,
+            numberOfParticles: 20,
+            minBlastForce: 10,
+            maxBlastForce: 25,
+            gravity: 0.3,
+            particleDrag: 0.1,
+            shouldLoop: false,
+            colors: [
+              habitColor,
+              habitColor.withValues(alpha: 0.8),
+              habitColor.withValues(alpha: 0.6),
+              const Color(0xFFFFD700),
+              const Color(0xFFFF6B6B),
+              const Color(0xFF4ECDC4),
+            ],
+            createParticlePath: _drawStar,
+          ),
+        ),
+      ],
     );
   }
 

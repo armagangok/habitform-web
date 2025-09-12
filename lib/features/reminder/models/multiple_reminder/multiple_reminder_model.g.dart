@@ -1,41 +1,38 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'reminder_model.dart';
+part of 'multiple_reminder_model.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class ReminderModelAdapter extends TypeAdapter<ReminderModel> {
+class MultipleReminderModelAdapter extends TypeAdapter<MultipleReminderModel> {
   @override
-  final int typeId = 4;
+  final int typeId = 77;
 
   @override
-  ReminderModel read(BinaryReader reader) {
+  MultipleReminderModel read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return ReminderModel(
+    return MultipleReminderModel(
       id: fields[0] as int,
-      reminderTime: fields[1] as DateTime?,
+      reminderTimes: (fields[1] as List).cast<DateTime>(),
       days: (fields[2] as List?)?.cast<Days>(),
-      multipleReminders: fields[3] as MultipleReminderModel?,
     );
   }
 
   @override
-  void write(BinaryWriter writer, ReminderModel obj) {
+  void write(BinaryWriter writer, MultipleReminderModel obj) {
     writer
-      ..writeByte(4)
+      ..writeByte(3)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
-      ..write(obj.reminderTime)
+      ..write(obj.reminderTimes)
       ..writeByte(2)
-      ..write(obj.days)
-      ..writeByte(3)
-      ..write(obj.multipleReminders);
+      ..write(obj.days);
   }
 
   @override
@@ -44,7 +41,7 @@ class ReminderModelAdapter extends TypeAdapter<ReminderModel> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is ReminderModelAdapter &&
+      other is MultipleReminderModelAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

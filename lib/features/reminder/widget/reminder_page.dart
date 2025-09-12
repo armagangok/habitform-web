@@ -1,7 +1,10 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '/core/core.dart';
+import '../provider/reminder_provider.dart';
 import 'days_selection_widget.dart';
+import 'multiple_reminder_times_widget.dart';
+import 'reminder_mode_toggle_widget.dart';
 import 'select_time_widget.dart';
 import 'selection_buttons.dart';
 
@@ -39,10 +42,37 @@ class ReminderPage extends ConsumerWidget {
                   SelectionButtons(),
                 ],
               ),
-              const SizedBox(height: 30),
-              CustomSection(
-                text: LocaleKeys.reminder_time.tr(),
-                child: SelectTimeWidget().animate(),
+              // Only show reminder mode and time sections if days are selected
+              Consumer(
+                builder: (context, ref, child) {
+                  final reminderState = ref.watch(reminderProvider);
+
+                  if (!reminderState.hasSelectedDays) {
+                    return const SizedBox.shrink();
+                  }
+
+                  return Column(
+                    children: [
+                      const SizedBox(height: 20),
+                      const ReminderModeToggleWidget(),
+                      const SizedBox(height: 20),
+                      Consumer(
+                        builder: (context, ref, child) {
+                          final hasMultipleReminders = reminderState.reminder?.hasMultipleReminders ?? false;
+
+                          if (hasMultipleReminders) {
+                            return const MultipleReminderTimesWidget();
+                          } else {
+                            return CustomSection(
+                              text: LocaleKeys.reminder_time.tr(),
+                              child: SelectTimeWidget().animate(),
+                            );
+                          }
+                        },
+                      ),
+                    ],
+                  );
+                },
               ),
               const Padding(padding: EdgeInsets.only(bottom: 32)),
             ],

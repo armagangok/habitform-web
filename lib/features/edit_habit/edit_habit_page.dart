@@ -8,6 +8,7 @@ import '../habit_color/color_picker_widget.dart';
 import '../habit_color/provider/habit_color_provider.dart';
 import '../reminder/widget/reminder_selection_widget.dart';
 import 'provider/edit_habit_provider.dart';
+import 'widgets/difficulty_selection_widget.dart';
 
 class EditHabitPage extends ConsumerWidget {
   final Habit habit;
@@ -17,6 +18,7 @@ class EditHabitPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final editHabitNotifier = ref.watch(editHabitProvider.notifier);
+    final selectedDifficulty = editHabitNotifier.selectedDifficulty;
 
     return CupertinoPopupSurface(
       child: GestureDetector(
@@ -28,7 +30,6 @@ class EditHabitPage extends ConsumerWidget {
             trailing: CupertinoButton(
               padding: EdgeInsets.zero,
               onPressed: () {
-                // Pass category IDs to provider
                 editHabitNotifier.updateHabit();
               },
               child: Text(
@@ -38,41 +39,119 @@ class EditHabitPage extends ConsumerWidget {
             ),
           ),
           child: ListView(
-            padding: const EdgeInsets.all(16),
             children: [
               SafeArea(
                 bottom: false,
                 child: Column(
                   children: [
-                    Align(
-                      alignment: Alignment.center,
-                      child: IconPickerButton(selectedIcon: habit.emoji),
-                    ),
-                    CustomSection(
-                      text: LocaleKeys.habit_habit_name.tr().toUpperCase(),
-                      child: _buildHabitTextField(
-                        controller: editHabitNotifier.habitNameController,
-                        maxLines: 1,
+                    // Icon Selection
+                    CupertinoListSection.insetGrouped(
+                      header: Text("Emoji"),
+                      footer: Text(
+                        'Choose an emoji that represents your habit',
+                        style: context.bodyMedium.copyWith(
+                          color: context.bodyMedium.color?.withValues(alpha: 0.7),
+                        ),
                       ),
-                    ),
-                    CustomSection(
-                      text: LocaleKeys.habit_habit_description.tr().toUpperCase(),
-                      child: _buildHabitTextField(
-                        controller: editHabitNotifier.habitDescriptionController,
-                      ),
-                    ),
-                    Column(
                       children: [
-                        ReminderSelectionWidget(),
-                        CategoryPickerButton(),
-                        ColorPickerWidget(
-                          onColorSelected: (color) {
-                            ref.watch(colorProvider.notifier).pickColor(color);
-                          },
+                        Container(
+                          padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const SizedBox(height: 16),
+                              Center(
+                                child: IconPickerButton(selectedIcon: habit.emoji),
+                              ),
+                            ],
+                          ),
                         ),
                       ],
                     ),
-                    SizedBox(height: 50)
+
+                    // Habit Name
+                    CupertinoListSection.insetGrouped(
+                      header: Text(
+                        LocaleKeys.habit_habit_name.tr(),
+                      ),
+                      footer: Text(
+                        'Give your habit a clear, memorable name',
+                        style: context.bodyMedium.copyWith(
+                          color: context.bodyMedium.color?.withValues(alpha: 0.7),
+                        ),
+                      ),
+                      children: [
+                        CupertinoTextField(
+                          controller: editHabitNotifier.habitNameController,
+                          placeholder: LocaleKeys.habit_habit_name.tr(),
+                          decoration: null,
+                          style: context.bodyLarge,
+                        ),
+                      ],
+                    ),
+
+                    // Habit Description
+                    CupertinoListSection.insetGrouped(
+                      header: Text(
+                        LocaleKeys.habit_habit_description.tr(),
+                      ),
+                      footer: Text(
+                        'Add details about your habit to stay motivated',
+                        style: context.bodyMedium.copyWith(
+                          color: context.bodyMedium.color?.withValues(alpha: 0.7),
+                        ),
+                      ),
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            CupertinoTextField(
+                              controller: editHabitNotifier.habitDescriptionController,
+                              placeholder: LocaleKeys.habit_habit_description.tr(),
+                              decoration: null,
+                              maxLines: null,
+                              style: context.bodyLarge,
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+
+                    // Difficulty Selection
+                    DifficultySelectionWidget(
+                      selectedDifficulty: selectedDifficulty,
+                      onDifficultyChanged: (difficulty) {
+                        editHabitNotifier.updateDifficulty(difficulty);
+                      },
+                    ),
+
+                    // Reminder Selection
+                    CupertinoListSection.insetGrouped(
+                      header: Text(
+                        LocaleKeys.habit_reminder.tr(),
+                      ),
+                      footer: Text(
+                        'Add a reminder to help you stay on track, we highly recommend you to add a reminder.',
+                        style: context.bodyMedium.copyWith(
+                          color: context.bodyMedium.color?.withValues(alpha: 0.7),
+                        ),
+                      ),
+                      children: [
+                        ReminderSelectionWidget(),
+                      ],
+                    ),
+
+                    // Category Selection
+                    CategoryPickerButton(),
+
+                    // Color Selection
+                    ColorPickerWidget(
+                      onColorSelected: (color) {
+                        ref.watch(colorProvider.notifier).pickColor(color);
+                      },
+                    ),
+
+                    const SizedBox(height: 50),
                   ],
                 ),
               ),
@@ -80,19 +159,6 @@ class EditHabitPage extends ConsumerWidget {
           ),
         ),
       ),
-    );
-  }
-
-  Widget _buildHabitTextField({
-    required TextEditingController controller,
-    int? maxLines,
-  }) {
-    return CupertinoTextField(
-      controller: controller,
-      maxLines: maxLines,
-      placeholder: maxLines == 1 ? LocaleKeys.habit_habit_name.tr() : LocaleKeys.habit_habit_description.tr(),
-      padding: const EdgeInsets.all(10),
-      decoration: null,
     );
   }
 }

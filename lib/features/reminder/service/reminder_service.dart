@@ -11,9 +11,21 @@ final class ReminderService {
     String title,
     String body,
   ) async {
-    if (reminder.reminderTime != null) {
-      await NotificationHelper.shared.cancelReminderNotifications(reminder);
+    await NotificationHelper.shared.cancelReminderNotifications(reminder);
 
+    if (reminder.hasMultipleReminders) {
+      // Schedule multiple notifications for each time
+      for (final time in reminder.multipleReminders!.sortedReminderTimes) {
+        await NotificationHelper.shared.scheduleReminderNotification(
+          reminder.id,
+          title,
+          body,
+          time,
+          reminder,
+        );
+      }
+    } else if (reminder.hasSingleReminder) {
+      // Schedule single notification
       await NotificationHelper.shared.scheduleReminderNotification(
         reminder.id,
         title,

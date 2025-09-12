@@ -140,7 +140,7 @@ class _HabitWidgetState extends ConsumerState<HabitWidget> with SingleTickerProv
         aspectRatio: 1,
         child: Container(
           decoration: BoxDecoration(
-            color: habitColor.withValues(alpha: 0.1),
+            color: habitColor.withValues(alpha: isTodayCompleted ? 0.2 : 0.075),
             borderRadius: BorderRadius.circular(20),
             border: Border.all(color: habitColor.withValues(alpha: 0.35), width: 2),
           ),

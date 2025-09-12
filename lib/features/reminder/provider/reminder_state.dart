@@ -17,6 +17,12 @@ class ReminderState extends Equatable {
   @override
   List<Object?> get props => [reminder, isLoading, error];
 
+  // Check if any days are selected
+  bool get hasSelectedDays => reminder?.days?.isNotEmpty ?? false;
+
+  // Check if reminder has any content (days or times)
+  bool get hasReminderContent => hasSelectedDays;
+
   ReminderState copyWith({
     ReminderModel? reminder,
     bool? isLoading,

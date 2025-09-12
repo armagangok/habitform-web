@@ -16,172 +16,171 @@ class SettingsPage extends ConsumerWidget {
     final paywallState = ref.watch(purchaseProvider);
 
     return paywallState.when(
-      data: (state) => CupertinoPopupSurface(
-        child: CupertinoPageScaffold(
-          navigationBar: SheetHeader(
-            title: LocaleKeys.settings_settings.tr(),
-            closeButtonPosition: CloseButtonPosition.left,
-          ),
+      data: (state) => CupertinoPageScaffold(
+        navigationBar: SheetHeader(
+          title: LocaleKeys.settings_settings.tr(),
+          closeButtonPosition: CloseButtonPosition.left,
+        ),
+        child: SafeArea(
+          bottom: false,
           child: ListView(
+            padding: EdgeInsets.zero,
             children: [
-              SafeArea(
-                bottom: false,
-                child: Column(
-                  children: [
-                    if (state.isSubscriptionActive)
-                      CupertinoListSection.insetGrouped(
-                        children: [
-                          CupertinoListTile(
-                            leading: Assets.app.habitriseDarkTransparent.image(height: 24, width: 24),
-                            title: Text(LocaleKeys.subscription_myMembership.tr()),
-                            onTap: () {
-                              showCupertinoSheet(
-                                context: context,
-                                builder: (_) => MembershipInfoWidget(
-                                  onCopyCustomerId: () => ref.read(purchaseProvider.notifier).copyCustomerId(),
-                                ),
-                              );
-                            },
-                            trailing: CupertinoListTileChevron(),
+              Column(
+                children: [
+                  if (state.isSubscriptionActive)
+                    CupertinoListSection.insetGrouped(
+                      children: [
+                        CupertinoListTile(
+                          leading: Assets.app.habitriseDarkTransparent.image(height: 24, width: 24),
+                          title: Text(LocaleKeys.subscription_myMembership.tr()),
+                          onTap: () {
+                            showCupertinoSheet(
+                              context: context,
+                              builder: (_) => MembershipInfoWidget(
+                                onCopyCustomerId: () => ref.read(purchaseProvider.notifier).copyCustomerId(),
+                              ),
+                            );
+                          },
+                          trailing: CupertinoListTileChevron(),
+                        ),
+                      ],
+                    )
+                  else
+                    const SubscribeButton(),
+                  SafeArea(
+                    child: CupertinoListSection.insetGrouped(
+                      children: [
+                        ThemeModeFeature(),
+                        CupertinoListTile(
+                          leading: SettingLeadingWidget(
+                            iconData: CupertinoIcons.bell_fill,
+                            cardColor: CupertinoColors.systemGreen,
                           ),
-                        ],
-                      )
-                    else
-                      const SubscribeButton(),
-                    SafeArea(
-                      child: CupertinoListSection.insetGrouped(
+                          title: Text(LocaleKeys.settings_notifications.tr()),
+                          onTap: () => navigator.navigateTo(path: KRoute.notifications),
+                          trailing: CupertinoListTileChevron(),
+                        ),
+                      ],
+                    ),
+                  ),
+                  CupertinoListSection.insetGrouped(
+                    children: [
+                      CupertinoListTile(
+                        leading: const SettingLeadingWidget(
+                          iconData: CupertinoIcons.archivebox_fill,
+                          cardColor: CupertinoColors.systemIndigo,
+                        ),
+                        title: Text(LocaleKeys.settings_habitArchive.tr()),
+                        onTap: () {
+                          navigator.navigateTo(path: KRoute.archivedHabits);
+                        },
+                        trailing: CupertinoListTileChevron(),
+                      ),
+                      CupertinoListTile(
+                        leading: SettingLeadingWidget(
+                          padding: 2.5,
+                          iconData: FontAwesomeIcons.database,
+                          cardColor: Colors.deepPurpleAccent,
+                        ),
+                        title: Text(LocaleKeys.settings_data_export_import.tr()),
+                        onTap: () {
+                          navigator.navigateTo(path: KRoute.dataManagement);
+                        },
+                        trailing: CupertinoListTileChevron(),
+                      ),
+                      CupertinoListTile(
+                        leading: const SettingLeadingWidget(
+                          iconData: CupertinoIcons.doc_person_fill,
+                          cardColor: Colors.blueAccent,
+                        ),
+                        onTap: () => ref.read(purchaseProvider.notifier).copyCustomerId(),
+                        title: Text("Rc ID"),
+                        trailing: CupertinoButton(
+                          padding: EdgeInsets.zero,
+                          minimumSize: Size.zero,
+                          child: Icon(
+                            CupertinoIcons.doc_on_clipboard_fill,
+                            color: Colors.blueAccent,
+                          ),
+                          onPressed: () => ref.read(purchaseProvider.notifier).copyCustomerId(),
+                        ),
+                      ),
+                    ],
+                  ),
+                  CupertinoListSection.insetGrouped(
+                    children: [
+                      CupertinoListTile(
+                        leading: const SettingLeadingWidget(
+                          iconData: CupertinoIcons.hand_raised_fill,
+                          cardColor: CupertinoColors.activeBlue,
+                        ),
+                        title: Text(LocaleKeys.settings_privacy.tr()),
+                        onTap: UrlLauncherHelper.openPrivacyPolicy,
+                        trailing: CupertinoListTileChevron(),
+                      ),
+                      CupertinoListTile(
+                        leading: const SettingLeadingWidget(
+                          iconData: CupertinoIcons.hand_point_right_fill,
+                          cardColor: CupertinoColors.activeBlue,
+                        ),
+                        title: Text(LocaleKeys.settings_terms.tr()),
+                        onTap: UrlLauncherHelper.openTermsOfUse,
+                        trailing: CupertinoListTileChevron(),
+                      ),
+                      CupertinoListTile(
+                        leading: const SettingLeadingWidget(
+                          iconData: CupertinoIcons.mail_solid,
+                          cardColor: CupertinoColors.activeBlue,
+                        ),
+                        title: Text(LocaleKeys.settings_feedback.tr()),
+                        onTap: UrlLauncherHelper.requestEmail,
+                        trailing: CupertinoListTileChevron(),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 30),
+                  Column(
+                    children: [
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          ThemeModeFeature(),
-                          CupertinoListTile(
-                            leading: SettingLeadingWidget(
-                              iconData: CupertinoIcons.bell_fill,
-                              cardColor: CupertinoColors.systemGreen,
+                          Text.rich(
+                            TextSpan(
+                              children: [
+                                TextSpan(
+                                  text: 'Habit',
+                                  style: context.bodyLarge.copyWith(
+                                    color: context.bodyLarge.color?.withValues(alpha: 1),
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                TextSpan(
+                                  text: 'Rise',
+                                  style: context.bodyLarge.copyWith(
+                                    color: Colors.deepOrange,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
                             ),
-                            title: Text(LocaleKeys.settings_notifications.tr()),
-                            onTap: () => navigator.navigateTo(path: KRoute.notifications),
-                            trailing: CupertinoListTileChevron(),
                           ),
                         ],
                       ),
-                    ),
-                    CupertinoListSection.insetGrouped(
-                      children: [
-                        CupertinoListTile(
-                          leading: const SettingLeadingWidget(
-                            iconData: CupertinoIcons.archivebox_fill,
-                            cardColor: CupertinoColors.systemIndigo,
-                          ),
-                          title: Text(LocaleKeys.settings_habitArchive.tr()),
-                          onTap: () {
-                            navigator.navigateTo(path: KRoute.archivedHabits);
-                          },
-                          trailing: CupertinoListTileChevron(),
-                        ),
-                        CupertinoListTile(
-                          leading: SettingLeadingWidget(
-                            padding: 2.5,
-                            iconData: FontAwesomeIcons.database,
-                            cardColor: Colors.deepPurpleAccent,
-                          ),
-                          title: Text(LocaleKeys.settings_data_export_import.tr()),
-                          onTap: () {
-                            navigator.navigateTo(path: KRoute.dataManagement);
-                          },
-                          trailing: CupertinoListTileChevron(),
-                        ),
-                        CupertinoListTile(
-                          leading: const SettingLeadingWidget(
-                            iconData: CupertinoIcons.doc_person_fill,
-                            cardColor: Colors.blueAccent,
-                          ),
-                          onTap: () => ref.read(purchaseProvider.notifier).copyCustomerId(),
-                          title: Text("Rc ID"),
-                          trailing: CupertinoButton(
-                            padding: EdgeInsets.zero,
-                            minimumSize: Size.zero,
-                            child: Icon(
-                              CupertinoIcons.doc_on_clipboard_fill,
-                              color: Colors.blueAccent,
-                            ),
-                            onPressed: () => ref.read(purchaseProvider.notifier).copyCustomerId(),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 5.0),
+                        child: CustomButton(
+                          onPressed: UrlLauncherHelper.openTwitter,
+                          child: Text(
+                            LocaleKeys.common_made_by.tr(),
+                            style: context.bodySmall,
                           ),
                         ),
-                      ],
-                    ),
-                    CupertinoListSection.insetGrouped(
-                      children: [
-                        CupertinoListTile(
-                          leading: const SettingLeadingWidget(
-                            iconData: CupertinoIcons.hand_raised_fill,
-                            cardColor: CupertinoColors.activeBlue,
-                          ),
-                          title: Text(LocaleKeys.settings_privacy.tr()),
-                          onTap: UrlLauncherHelper.openPrivacyPolicy,
-                          trailing: CupertinoListTileChevron(),
-                        ),
-                        CupertinoListTile(
-                          leading: const SettingLeadingWidget(
-                            iconData: CupertinoIcons.hand_point_right_fill,
-                            cardColor: CupertinoColors.activeBlue,
-                          ),
-                          title: Text(LocaleKeys.settings_terms.tr()),
-                          onTap: UrlLauncherHelper.openTermsOfUse,
-                          trailing: CupertinoListTileChevron(),
-                        ),
-                        CupertinoListTile(
-                          leading: const SettingLeadingWidget(
-                            iconData: CupertinoIcons.mail_solid,
-                            cardColor: CupertinoColors.activeBlue,
-                          ),
-                          title: Text(LocaleKeys.settings_feedback.tr()),
-                          onTap: UrlLauncherHelper.requestEmail,
-                          trailing: CupertinoListTileChevron(),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 30),
-                    Column(
-                      children: [
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text.rich(
-                              TextSpan(
-                                children: [
-                                  TextSpan(
-                                    text: 'Habit',
-                                    style: context.bodyLarge.copyWith(
-                                      color: context.bodyLarge.color?.withValues(alpha: 1),
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  TextSpan(
-                                    text: 'Rise',
-                                    style: context.bodyLarge.copyWith(
-                                      color: Colors.deepOrange,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 5.0),
-                          child: CustomButton(
-                            onPressed: UrlLauncherHelper.openTwitter,
-                            child: Text(
-                              LocaleKeys.common_made_by.tr(),
-                              style: context.bodySmall,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ],
           ),
