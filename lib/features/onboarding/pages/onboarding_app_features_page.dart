@@ -533,7 +533,7 @@ class _OnboardingAppFeaturesPageState extends State<OnboardingAppFeaturesPage> w
           child: Text(
             subFeature,
             style: context.bodySmall.copyWith(
-              color: Colors.white.withValues(alpha: 0.7),
+              color: feature.color.withValues(alpha: 1),
               fontWeight: FontWeight.w600,
             ),
           ),

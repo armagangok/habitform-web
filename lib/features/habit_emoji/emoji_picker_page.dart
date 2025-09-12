@@ -147,26 +147,24 @@ class _IconPickerPageState extends ConsumerState<EmojiPickerPage> {
             ),
           ),
           child: SafeArea(
+            bottom: false,
             child: ListView(
               padding: EdgeInsets.zero,
               children: [
                 CupertinoListSection.insetGrouped(
                   header: Text("Pick your emoji"),
                   children: [
-                    ColoredBox(
-                      color: context.cupertinoTheme.scaffoldBackgroundColor,
-                      child: IconPicker(
-                        onIconSelected: (icon) {
-                          // The icon selection is now handled by the provider,
-                          // we just need to call our callback if provided
-                          if (widget.onIconSelected != null) {
-                            widget.onIconSelected!(icon);
-                          } else {
-                            ref.watch(habitEmojiProvider.notifier).pickEmoji(icon);
-                          }
-                        },
-                        selectedIcon: state.selectedEmoji,
-                      ),
+                    IconPicker(
+                      onIconSelected: (icon) {
+                        // The icon selection is now handled by the provider,
+                        // we just need to call our callback if provided
+                        if (widget.onIconSelected != null) {
+                          widget.onIconSelected!(icon);
+                        } else {
+                          ref.watch(habitEmojiProvider.notifier).pickEmoji(icon);
+                        }
+                      },
+                      selectedIcon: state.selectedEmoji,
                     ),
                   ],
                 ),

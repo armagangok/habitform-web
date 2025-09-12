@@ -1,10 +1,10 @@
 import '../core.dart';
 
-class CustomHeader extends StatelessWidget {
+class CustomSection extends StatelessWidget {
   final String? text;
   final Widget? child;
 
-  const CustomHeader({
+  const CustomSection({
     super.key,
     this.text,
     this.child,

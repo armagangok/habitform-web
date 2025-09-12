@@ -98,7 +98,6 @@ class HomePage extends ConsumerWidget {
 
     return CupertinoNavigationBar(
       enableBackgroundFilterBlur: true,
-      backgroundColor: context.theme.scaffoldBackgroundColor.withValues(alpha: .1),
       border: Border(
         bottom: BorderSide(
           color: context.theme.selectionHandleColor.withValues(alpha: .25),

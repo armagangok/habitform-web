@@ -49,68 +49,64 @@ class SettingsPage extends ConsumerWidget {
                     else
                       const SubscribeButton(),
                     SafeArea(
-                      child: CustomHeader(
-                        child: Column(
-                          children: [
-                            ThemeModeFeature(),
-                            CupertinoListTile(
-                              leading: SettingLeadingWidget(
-                                iconData: CupertinoIcons.bell_fill,
-                                cardColor: CupertinoColors.systemGreen,
-                              ),
-                              title: Text(LocaleKeys.settings_notifications.tr()),
-                              onTap: () => navigator.navigateTo(path: KRoute.notifications),
-                              trailing: CupertinoListTileChevron(),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    CustomHeader(
-                      child: Column(
+                      child: CupertinoListSection.insetGrouped(
                         children: [
-                          CupertinoListTile(
-                            leading: const SettingLeadingWidget(
-                              iconData: CupertinoIcons.archivebox_fill,
-                              cardColor: CupertinoColors.systemIndigo,
-                            ),
-                            title: Text(LocaleKeys.settings_habitArchive.tr()),
-                            onTap: () {
-                              navigator.navigateTo(path: KRoute.archivedHabits);
-                            },
-                            trailing: CupertinoListTileChevron(),
-                          ),
+                          ThemeModeFeature(),
                           CupertinoListTile(
                             leading: SettingLeadingWidget(
-                              padding: 2.5,
-                              iconData: FontAwesomeIcons.database,
-                              cardColor: Colors.deepPurpleAccent,
+                              iconData: CupertinoIcons.bell_fill,
+                              cardColor: CupertinoColors.systemGreen,
                             ),
-                            title: Text(LocaleKeys.settings_data_export_import.tr()),
-                            onTap: () {
-                              navigator.navigateTo(path: KRoute.dataManagement);
-                            },
+                            title: Text(LocaleKeys.settings_notifications.tr()),
+                            onTap: () => navigator.navigateTo(path: KRoute.notifications),
                             trailing: CupertinoListTileChevron(),
-                          ),
-                          CupertinoListTile(
-                            leading: const SettingLeadingWidget(
-                              iconData: CupertinoIcons.doc_person_fill,
-                              cardColor: Colors.blueAccent,
-                            ),
-                            onTap: () => ref.read(purchaseProvider.notifier).copyCustomerId(),
-                            title: Text("Rc ID"),
-                            trailing: CupertinoButton(
-                              padding: EdgeInsets.zero,
-                              minimumSize: Size.zero,
-                              child: Icon(
-                                CupertinoIcons.doc_on_clipboard_fill,
-                                color: Colors.blueAccent,
-                              ),
-                              onPressed: () => ref.read(purchaseProvider.notifier).copyCustomerId(),
-                            ),
                           ),
                         ],
                       ),
+                    ),
+                    CupertinoListSection.insetGrouped(
+                      children: [
+                        CupertinoListTile(
+                          leading: const SettingLeadingWidget(
+                            iconData: CupertinoIcons.archivebox_fill,
+                            cardColor: CupertinoColors.systemIndigo,
+                          ),
+                          title: Text(LocaleKeys.settings_habitArchive.tr()),
+                          onTap: () {
+                            navigator.navigateTo(path: KRoute.archivedHabits);
+                          },
+                          trailing: CupertinoListTileChevron(),
+                        ),
+                        CupertinoListTile(
+                          leading: SettingLeadingWidget(
+                            padding: 2.5,
+                            iconData: FontAwesomeIcons.database,
+                            cardColor: Colors.deepPurpleAccent,
+                          ),
+                          title: Text(LocaleKeys.settings_data_export_import.tr()),
+                          onTap: () {
+                            navigator.navigateTo(path: KRoute.dataManagement);
+                          },
+                          trailing: CupertinoListTileChevron(),
+                        ),
+                        CupertinoListTile(
+                          leading: const SettingLeadingWidget(
+                            iconData: CupertinoIcons.doc_person_fill,
+                            cardColor: Colors.blueAccent,
+                          ),
+                          onTap: () => ref.read(purchaseProvider.notifier).copyCustomerId(),
+                          title: Text("Rc ID"),
+                          trailing: CupertinoButton(
+                            padding: EdgeInsets.zero,
+                            minimumSize: Size.zero,
+                            child: Icon(
+                              CupertinoIcons.doc_on_clipboard_fill,
+                              color: Colors.blueAccent,
+                            ),
+                            onPressed: () => ref.read(purchaseProvider.notifier).copyCustomerId(),
+                          ),
+                        ),
+                      ],
                     ),
                     CupertinoListSection.insetGrouped(
                       children: [

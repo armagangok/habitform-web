@@ -29,7 +29,7 @@ class ReminderPage extends ConsumerWidget {
             children: [
               Column(
                 children: [
-                  CustomHeader(
+                  CustomSection(
                     text: LocaleKeys.common_days.tr(),
                     child: Padding(
                       padding: const EdgeInsets.all(10.0),
@@ -40,7 +40,7 @@ class ReminderPage extends ConsumerWidget {
                 ],
               ),
               const SizedBox(height: 30),
-              CustomHeader(
+              CustomSection(
                 text: LocaleKeys.reminder_time.tr(),
                 child: SelectTimeWidget().animate(),
               ),

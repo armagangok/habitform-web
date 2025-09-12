@@ -120,102 +120,106 @@ class IconPickerState extends ConsumerState<IconPicker> with SingleTickerProvide
 
     return Stack(
       children: [
-        ListView(
-          shrinkWrap: true,
-          physics: ClampingScrollPhysics(),
-          padding: EdgeInsets.zero,
-          children: [
-            CategoryWidget(
-              categories: categoryNames,
-              initialSelectedIndex: state.selectedCategoryIndex,
-              onCategorySelected: (int selectedCategory) {
-                if (selectedCategory == state.selectedCategoryIndex) return;
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: ListView(
+            shrinkWrap: true,
+            physics: ClampingScrollPhysics(),
+            padding: EdgeInsets.zero,
+            children: [
+              CategoryWidget(
+                categories: categoryNames,
+                initialSelectedIndex: state.selectedCategoryIndex,
+                
+                onCategorySelected: (int selectedCategory) {
+                  if (selectedCategory == state.selectedCategoryIndex) return;
 
-                controller.forward(from: 0);
-                // Update category in provider
-                notifier.selectCategory(selectedCategory);
+                  controller.forward(from: 0);
+                  // Update category in provider
+                  notifier.selectCategory(selectedCategory);
 
-                // Kategori değiştiğinde GridView'ı başa sar
-                if (_gridScrollController.hasClients) {
-                  _gridScrollController.jumpTo(0);
-                }
-
-                // Yeni kategori için tuşları güncelle
-                WidgetsBinding.instance.addPostFrameCallback((_) {
-                  if (mounted) {
-                    setState(() {
-                      _iconKeys.clear();
-                    });
-                  }
-                });
-              },
-            ),
-            SizedBox(height: 10),
-            SizedBox(
-              child: GridView.builder(
-                controller: _gridScrollController,
-                shrinkWrap: true,
-                padding: EdgeInsets.zero,
-                scrollDirection: Axis.vertical,
-                physics: BouncingScrollPhysics(),
-
-                cacheExtent: 1000, // Daha fazla öğeyi önbelleğe al
-                itemCount: currentCategoryIcons.length,
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 5,
-                  crossAxisSpacing: 10,
-                  mainAxisSpacing: 10,
-                  childAspectRatio: 1,
-                ),
-                itemBuilder: (context, index) {
-                  final iconData = currentCategoryIcons[index];
-                  final isSelected = iconData == state.selectedEmoji;
-
-                  // Performans için key kullanımını optimize et
-                  if (!_iconKeys.containsKey(index)) {
-                    _iconKeys[index] = GlobalKey();
+                  // Kategori değiştiğinde GridView'ı başa sar
+                  if (_gridScrollController.hasClients) {
+                    _gridScrollController.jumpTo(0);
                   }
 
-                  return CustomButton(
-                    key: _iconKeys[index],
-                    onPressed: () {
-                      // Eğer zaten seçiliyse, tekrar işlem yapma
-                      if (state.selectedEmoji == iconData) return;
-
-                      HapticFeedback.selectionClick();
-
-                      // Update in provider
-                      notifier.selectEmoji(iconData, index);
-
-                      widget.onIconSelected(iconData);
-
-                      // Seçilen ikonu görünür yap - ama sadece görünür değilse
-                      WidgetsBinding.instance.addPostFrameCallback((_) {
-                        if (mounted) {
-                          _scrollSelectedIconIntoView(index);
-                        }
+                  // Yeni kategori için tuşları güncelle
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    if (mounted) {
+                      setState(() {
+                        _iconKeys.clear();
                       });
-                    },
-                    child: CupertinoCard(
-                      elevation: .25,
-                      color: isSelected ? context.primary.withAlpha(100) : null,
-                      borderRadius: BorderRadius.circular(8),
-                      child: Center(
-                        child: FittedBox(
-                          child: Text(
-                            iconData,
-                            textAlign: TextAlign.center,
-                            style: context.titleLarge.copyWith(fontSize: 44),
-                            maxLines: 1,
+                    }
+                  });
+                },
+              ),
+              SizedBox(height: 10),
+              SizedBox(
+                child: GridView.builder(
+                  controller: _gridScrollController,
+                  shrinkWrap: true,
+                  padding: EdgeInsets.zero,
+                  scrollDirection: Axis.vertical,
+                  physics: BouncingScrollPhysics(),
+
+                  cacheExtent: 1000, // Daha fazla öğeyi önbelleğe al
+                  itemCount: currentCategoryIcons.length,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 5,
+                    crossAxisSpacing: 10,
+                    mainAxisSpacing: 10,
+                    childAspectRatio: 1,
+                  ),
+                  itemBuilder: (context, index) {
+                    final iconData = currentCategoryIcons[index];
+                    final isSelected = iconData == state.selectedEmoji;
+
+                    // Performans için key kullanımını optimize et
+                    if (!_iconKeys.containsKey(index)) {
+                      _iconKeys[index] = GlobalKey();
+                    }
+
+                    return CustomButton(
+                      key: _iconKeys[index],
+                      onPressed: () {
+                        // Eğer zaten seçiliyse, tekrar işlem yapma
+                        if (state.selectedEmoji == iconData) return;
+
+                        HapticFeedback.selectionClick();
+
+                        // Update in provider
+                        notifier.selectEmoji(iconData, index);
+
+                        widget.onIconSelected(iconData);
+
+                        // Seçilen ikonu görünür yap - ama sadece görünür değilse
+                        WidgetsBinding.instance.addPostFrameCallback((_) {
+                          if (mounted) {
+                            _scrollSelectedIconIntoView(index);
+                          }
+                        });
+                      },
+                      child: CupertinoCard(
+                        elevation: .25,
+                        color: isSelected ? context.primary : context.selectionHandleColor.withValues(alpha: .1),
+                        borderRadius: BorderRadius.circular(8),
+                        child: Center(
+                          child: FittedBox(
+                            child: Text(
+                              iconData,
+                              textAlign: TextAlign.center,
+                              style: context.titleLarge.copyWith(fontSize: 44),
+                              maxLines: 1,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  );
-                },
-              ).animate(controller: controller).fadeIn(duration: 350.ms),
-            ),
-          ],
+                    );
+                  },
+                ).animate(controller: controller).fadeIn(duration: 350.ms),
+              ),
+            ],
+          ),
         ),
       ],
     );

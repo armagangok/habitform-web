@@ -112,7 +112,7 @@ class _MyAppState extends ConsumerState<MyApp> {
           child: child!,
         );
       },
-      theme: Themes.cupertinoDarkTheme,
+      theme: cupertinoTheme,
       debugShowCheckedModeBanner: false,
       navigatorKey: NavigationService.shared.navigatorKey,
       onGenerateRoute: NavigationRoute.shared.generateRoute,

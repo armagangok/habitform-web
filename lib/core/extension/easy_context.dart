@@ -51,7 +51,8 @@ class CupertinoColorsProxy {
 extension EasyTheme on BuildContext {
   CupertinoThemeData get theme => CupertinoTheme.of(this);
   Color get primary => theme.primaryColor;
-  Color get backgroundColor => theme.scaffoldBackgroundColor;
+  Color get scaffoldBackgroundColor => theme.scaffoldBackgroundColor;
+  Color get barBackgroundColor => theme.barBackgroundColor;
   CupertinoColorsProxy get colors => CupertinoColorsProxy(theme);
 
   // Adds selection handler color for consistent access
@@ -120,6 +121,8 @@ extension EasyText on BuildContext {
   TextStyle get displayLarge => cupertinoTextTheme.textStyle.copyWith(fontSize: 34, fontWeight: FontWeight.bold);
   TextStyle get displayMedium => cupertinoTextTheme.textStyle.copyWith(fontSize: 28, fontWeight: FontWeight.bold);
   TextStyle get displaySmall => cupertinoTextTheme.textStyle.copyWith(fontSize: 22, fontWeight: FontWeight.bold);
+
+  
 
   String? get fontFamily => cupertinoTextTheme.textStyle.fontFamily;
 }

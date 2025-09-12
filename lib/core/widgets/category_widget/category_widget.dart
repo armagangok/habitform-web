@@ -145,6 +145,8 @@ class CategoryWidgetState extends State<CategoryWidget> {
           final index = startIndex + entry.key;
           final text = entry.value;
 
+          final isSelected = selectedIndex == index;
+
           return Padding(
             key: _itemKeys[index],
             padding: EdgeInsets.only(right: entry.key == items.length - 1 ? 0 : 5),
@@ -166,6 +168,10 @@ class CategoryWidgetState extends State<CategoryWidget> {
               },
               child: IntrinsicWidth(
                 child: Container(
+                  decoration: BoxDecoration(
+                    color: isSelected ? widget.customColor ?? context.primary : context.selectionHandleColor.withValues(alpha: .1),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
                   constraints: BoxConstraints(minHeight: minItemHeight),
                   padding: EdgeInsets.symmetric(
                     horizontal: horizontalPadding,
@@ -177,13 +183,8 @@ class CategoryWidgetState extends State<CategoryWidget> {
                       style: TextStyle(
                         fontSize: 13,
                         fontWeight: FontWeight.w600,
-                        color: selectedIndex == index
-                            ? (widget.customColor ??
-                                    context.cupertinoTheme.primaryColor.withValues(
-                                      alpha: .9,
-                                    ))
-                                .colorRegardingToBrightness
-                            : context.primary.withValues(alpha: .75),
+                        color: isSelected ? Colors.white : context.selectionHandleColor.withValues(alpha: .75)
+                          ..colorRegardingToBrightness,
                       ),
                       textAlign: TextAlign.center,
                       maxLines: 1,

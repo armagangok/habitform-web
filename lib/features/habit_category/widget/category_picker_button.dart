@@ -50,7 +50,7 @@ class CategoryPickerButton extends ConsumerWidget {
         // Find selected categories based on categoryButtonProvider
         final selectedCategories = selectedCategoryIds != null ? state.categories.where((category) => selectedCategoryIds.contains(category.id)).toList() : <HabitCategory>[];
 
-        return CustomHeader(
+        return CustomSection(
           text: "Categories",
           child: MyListTile(
             onTap: () {

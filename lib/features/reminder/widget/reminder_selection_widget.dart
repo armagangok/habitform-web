@@ -36,7 +36,7 @@ class _ReminderSelectionWidgetState extends ConsumerState<ReminderSelectionWidge
     final days = reminderState.reminder?.days;
     final remindTime = reminderState.reminder?.reminderTime;
 
-    return CustomHeader(
+    return CustomSection(
       child: MyListTile(
         trailing: CupertinoListTileChevron(),
         additionalInfo: Row(

@@ -18,5 +18,5 @@ export './extension/datetime_extension.dart';
 export './extension/extensions.dart';
 export './helpers/helpers.dart';
 export './navigation/navigation.dart';
-export 'widgets/custom_header.dart';
+export 'widgets/custom_section.dart';
 export 'widgets/sheet_header.dart';

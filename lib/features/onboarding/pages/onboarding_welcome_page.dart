@@ -388,7 +388,7 @@ class _OnboardingWelcomePageState extends State<OnboardingWelcomePage> with Tick
                             Text(
                               'You\'ve completed your first habit!',
                               style: context.titleMedium.copyWith(
-                                color: Colors.white,
+                                
                               ),
                               textAlign: TextAlign.center,
                             ),

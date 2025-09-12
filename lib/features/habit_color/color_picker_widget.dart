@@ -228,7 +228,7 @@ class ColorPickerWidgetState extends State<ColorPickerWidget> with SingleTickerP
     // Grid için sütun sayısı
     final crossAxisCount = isTablet ? 10 : 5;
 
-    return CustomHeader(
+    return CustomSection(
       text: LocaleKeys.colors_color.tr().toUpperCase(),
       child: ListView(
         shrinkWrap: true,

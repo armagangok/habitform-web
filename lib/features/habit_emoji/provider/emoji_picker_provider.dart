@@ -54,15 +54,15 @@ class EmojiPickerNotifier extends Notifier<EmojiPickerState> {
         // Personal Care
         '🚿', // shower
         '🪥', // toothbrush
+        '🚰', // water fountain
         '💧', // water drop
+        '💦', // water splash
         '🧴', // lotion
         '💆🏻‍♂️', // face care
         '💆🏻‍♀️', // spa
         '💇🏻‍♂️', // haircut
         '💇🏻‍♀️', // hair care
 
-        // Hydration and Nutrition
-        '💦', // water splash
         '🥤', // cup with straw
         '🫗', // pouring liquid
         '🧊', // ice

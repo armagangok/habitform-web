@@ -164,7 +164,7 @@ class _HabitWidgetState extends ConsumerState<HabitWidget> with SingleTickerProv
                       child: Center(
                         child: Text(
                           emoji,
-                          style: const TextStyle(fontSize: 28),
+                          style: const TextStyle(fontSize: 30),
                         ),
                       ),
                     ),
