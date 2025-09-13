@@ -8,6 +8,8 @@ class MyListTile extends StatefulWidget {
   final VoidCallback? onTap;
   final Widget? additionalInfo;
 
+  final Widget? titleWidget;
+
   const MyListTile({
     super.key,
     this.leading,
@@ -16,6 +18,7 @@ class MyListTile extends StatefulWidget {
     this.trailing,
     this.onTap,
     this.additionalInfo,
+    this.titleWidget,
   });
 
   @override
@@ -29,12 +32,14 @@ class _MyListTileState extends State<MyListTile> {
       padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
       leading: widget.leading,
       additionalInfo: widget.additionalInfo,
-      title: widget.title != null
-          ? Text(
-              widget.title!,
-              maxLines: 999,
-            )
-          : SizedBox.shrink(),
+      title: widget.titleWidget != null
+          ? widget.titleWidget!
+          : widget.title != null
+              ? Text(
+                  widget.title!,
+                  maxLines: 999,
+                )
+              : SizedBox.shrink(),
       subtitle: widget.subtitle != null ? Text(widget.subtitle!, maxLines: 999) : null,
       trailing: widget.trailing,
       onTap: widget.onTap,

@@ -138,7 +138,7 @@ class _AchievementDialogState extends State<AchievementDialog> with TickerProvid
     return CustomBlurWidget(
       child: Stack(
         children: [
-          // Main dialog with consistent blur background
+          // Main dialog with liquid glass effect
           AnimatedBuilder(
             animation: Listenable.merge([_fadeAnimation, _slideAnimation, _scaleAnimation]),
             builder: (context, child) {
@@ -149,75 +149,53 @@ class _AchievementDialogState extends State<AchievementDialog> with TickerProvid
                   child: ScaleTransition(
                     scale: _scaleAnimation,
                     child: Center(
-                      child: Container(
-                        width: context.width(0.85),
-                        constraints: BoxConstraints(
-                          maxWidth: 400,
-                          maxHeight: context.height(0.8),
-                        ),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(context.width(0.08)),
-                          border: Border.all(
-                            color: habitColor.withValues(alpha: 0.3),
-                            width: 1.5,
-                          ),
-                          boxShadow: [
-                            BoxShadow(
-                              color: habitColor.withValues(alpha: 0.2),
-                              blurRadius: 30,
-                              spreadRadius: 5,
-                              offset: const Offset(0, 10),
-                            ),
-                            BoxShadow(
-                              color: Colors.black.withValues(alpha: 0.1),
-                              blurRadius: 20,
-                              spreadRadius: 0,
-                              offset: const Offset(0, 5),
-                            ),
-                          ],
-                        ),
-                        child: Padding(
-                          padding: context.padding(0.04),
-                          child: SingleChildScrollView(
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                // Achievement Emoji with premium effects
-                                _buildAnimatedEmoji(context, habitColor),
-                                SizedBox(height: context.height(0.015)),
+                      child: CupertinoPopupSurface(
+                        isSurfacePainted: false,
+                        child: SizedBox(
+                          width: context.width(0.8),
+                          child: Padding(
+                            padding: context.padding(0.04),
+                            child: SingleChildScrollView(
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  // Achievement Emoji with premium effects
+                                  _buildAnimatedEmoji(context, habitColor),
+                                  SizedBox(height: context.height(0.015)),
 
-                                // Habit name
-                                Text(
-                                  widget.habit.habitName,
-                                  style: context.headlineMedium.copyWith(
-                                    fontWeight: FontWeight.w700,
-                                    color: theme.colorScheme.onSurface,
+                                  // Habit name
+                                  Text( 
+                                    widget.habit.habitName,
+                                    style: context.headlineMedium.copyWith(
+                                      fontWeight: FontWeight.w700,
+                                      color: theme.colorScheme.onSurface,
+                                    ),
+                                    textAlign: TextAlign.center,
                                   ),
-                                  textAlign: TextAlign.center,
-                                ),
 
-                                // Achievement title
-                                Text(
-                                  widget.pointsGained > 0 ? 'Amazing Progress! 🎉' : 'Keep Going! 💪',
-                                  style: context.titleLarge.copyWith(
-                                    fontWeight: FontWeight.w600,
-                                    color: habitColor,
+                                  // Achievement title
+                                  Text(
+                                    widget.pointsGained > 0 ? 'Amazing Progress! 🎉' : 'Keep Going! 💪',
+                                    style: context.titleLarge.copyWith(
+                                      fontWeight: FontWeight.w600,
+                                      color: habitColor,
+                                    ),
+                                    textAlign: TextAlign.center,
                                   ),
-                                  textAlign: TextAlign.center,
-                                ),
-                                SizedBox(height: context.height(0.03)),
+                                  SizedBox(height: context.height(0.03)),
 
-                                // Score display with premium styling
-                                _buildScoreDisplay(context, theme, habitColor),
-                                SizedBox(height: context.height(0.03)),
+                                  // Score display with premium styling
+                                  _buildScoreDisplay(context, theme, habitColor),
+                                  SizedBox(height: context.height(0.03)),
 
-                                // Progress section
-                                _buildProgressSection(context, theme, habitColor),
-                                SizedBox(height: context.height(0.03)),
+                                  // Progress section
+                                  _buildProgressSection(context, theme, habitColor),
+                                  SizedBox(height: context.height(0.03)),
 
-                                // Continue button with premium styling
-                                _buildPremiumButton(context, theme, habitColor),
-                              ],
+                                  // Continue button with premium styling
+                                  _buildPremiumButton(context, theme, habitColor),
+                                ],
+                              ),
                             ),
                           ),
                         ),
@@ -279,7 +257,7 @@ class _AchievementDialogState extends State<AchievementDialog> with TickerProvid
                   );
                 },
               ),
-              // Main icon container
+              // Main icon container with liquid glass effect
               Container(
                 width: context.width(0.25),
                 height: context.width(0.25),
@@ -287,15 +265,15 @@ class _AchievementDialogState extends State<AchievementDialog> with TickerProvid
                   shape: BoxShape.circle,
                   gradient: RadialGradient(
                     colors: [
-                      habitColor.withValues(alpha: 0.2),
-                      habitColor.withValues(alpha: 0.1),
+                      habitColor.withValues(alpha: 0.15),
+                      habitColor.withValues(alpha: 0.08),
                     ],
                   ),
                   boxShadow: [
                     BoxShadow(
-                      color: habitColor.withValues(alpha: 0.3),
-                      blurRadius: 20,
-                      spreadRadius: 5,
+                      color: habitColor.withValues(alpha: 0.25),
+                      blurRadius: 15,
+                      spreadRadius: 3,
                     ),
                   ],
                 ),
@@ -516,15 +494,9 @@ class _AchievementDialogState extends State<AchievementDialog> with TickerProvid
     return Container(
       padding: context.padding(0.04),
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            theme.colorScheme.surface.withValues(alpha: 0.5),
-            theme.colorScheme.surface.withValues(alpha: 0.3),
-          ],
-        ),
         borderRadius: BorderRadius.circular(context.width(0.06)),
         border: Border.all(
-          color: habitColor.withValues(alpha: 0.2),
+          color: habitColor.withValues(alpha: 0.25),
           width: 1,
         ),
       ),

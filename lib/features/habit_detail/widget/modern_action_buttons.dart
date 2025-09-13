@@ -109,7 +109,7 @@ class ActionButtons extends ConsumerWidget {
             onPressed: () async {
               Navigator.pop(context);
               await ref.read(homeProvider.notifier).archiveHabit(habit);
-              ReminderService.cancelReminderNotification(habit.reminderModel?.id);
+              ReminderService.cancelAllReminderNotifications(habit.reminderModel);
               navigator.pop();
             },
             child: Text(LocaleKeys.habit_detail_archive_title.tr()),

@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '/core/core.dart';
 import '/features/habit_category/provider/habit_category_provider.dart';
+import '/features/reminder/service/reminder_service.dart';
 import '/models/completion_entry/completion_entry.dart';
 import '/models/habit/habit_extension.dart';
 import '/models/habit/habit_model.dart';
@@ -152,6 +153,13 @@ class HomeNotifier extends AsyncNotifier<HomeState> {
   Future<void> deleteHabit(String habitId) async {
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(() async {
+      // Get the habit before deleting to cancel its reminders
+      final habit = await habitService.getHabit(habitId);
+      if (habit != null) {
+        // Cancel all reminder notifications before archiving
+        ReminderService.cancelAllReminderNotifications(habit.reminderModel);
+      }
+
       await habitService.deleteHabit(habitId);
       return await fetchHabits();
     });

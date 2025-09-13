@@ -3,12 +3,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '/core/core.dart';
 import '/features/habit_category/model/habit_category_model.dart';
 import '/features/habit_category/provider/habit_category_provider.dart';
-import '/features/habit_category/util/icon_util.dart';
 import '../../../core/widgets/my_list_tile.dart';
 import '../provider/habit_category_button_provider.dart';
+import '../util/icon_util.dart';
 
 class CategoryPickerButton extends ConsumerWidget {
-  const CategoryPickerButton({super.key});
+  final Widget? header;
+  
+  const CategoryPickerButton({super.key, this.header});
 
   // Helper method to get FontAwesome icon based on category name
   static IconData _getCategoryIcon(String categoryName) {
@@ -51,31 +53,18 @@ class CategoryPickerButton extends ConsumerWidget {
         final selectedCategories = selectedCategoryIds != null ? state.categories.where((category) => selectedCategoryIds.contains(category.id)).toList() : <HabitCategory>[];
 
         return CustomSection(
-          text: "Categories",
+          header: header,
           child: MyListTile(
             onTap: () {
               context.hideKeyboard();
               navigator.navigateTo(path: KRoute.habitCategoryPage);
             },
             trailing: CupertinoListTileChevron(),
-            additionalInfo: selectedCategories.isEmpty
-                ? Row(
-                    children: [
-                      Icon(
-                        FontAwesomeIcons.tag,
-                        size: 16,
-                        color: context.primary,
-                      ),
-                      SizedBox(width: 8),
-                      Text(
-                        'Select categories',
-                        style: context.bodyMedium.copyWith(
-                          color: context.primary,
-                        ),
-                      ),
-                    ],
-                  )
+            titleWidget: selectedCategories.isEmpty
+                ? Text('Select categories')
                 : Wrap(
+                    runAlignment: WrapAlignment.start,
+                    alignment: WrapAlignment.start,
                     spacing: 8,
                     runSpacing: 8,
                     children: selectedCategories.map((category) {

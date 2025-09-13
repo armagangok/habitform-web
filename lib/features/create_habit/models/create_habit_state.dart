@@ -1,3 +1,8 @@
+// CreateHabitStep enum and extension
+import '../../../core/core.dart';
+import '../../../models/habit/habit_difficulty.dart';
+import '../../reminder/models/reminder/reminder_model.dart';
+
 enum CreateHabitStep {
   habitName,
   description,
@@ -86,5 +91,63 @@ extension CreateHabitStepExtension on CreateHabitStep {
       case CreateHabitStep.difficulty:
         return CreateHabitStep.category;
     }
+  }
+}
+
+// CreateHabitState class
+class CreateHabitState {
+  final String? habitName;
+  final String? habitDescription;
+  final String? emoji;
+  final int? colorCode;
+  final ReminderModel? reminder;
+  final String? error;
+  final TextEditingController habitNameController;
+  final TextEditingController habitDescriptionController;
+  final List<String> categoryIds;
+  final CreateHabitStep currentStep;
+  final HabitDifficulty difficulty;
+
+  CreateHabitState({
+    this.habitName,
+    this.habitDescription,
+    this.emoji,
+    this.colorCode,
+    this.reminder,
+    this.error,
+    TextEditingController? habitNameController,
+    TextEditingController? habitDescriptionController,
+    this.categoryIds = const [],
+    this.currentStep = CreateHabitStep.habitName,
+    this.difficulty = HabitDifficulty.moderate,
+  })  : habitNameController = habitNameController ?? TextEditingController(),
+        habitDescriptionController = habitDescriptionController ?? TextEditingController();
+
+  CreateHabitState copyWith({
+    String? title,
+    String? description,
+    String? emoji,
+    int? colorCode,
+    ReminderModel? reminder,
+    String? error,
+    TextEditingController? habitNameController,
+    TextEditingController? habitDescriptionController,
+    List<String>? categoryIds,
+    CreateHabitStep? currentStep,
+    HabitDifficulty? difficulty,
+  }) {
+    return CreateHabitState(
+      habitName: title ?? habitName,
+      habitDescription: description ?? habitDescription,
+      emoji: emoji ?? this.emoji,
+      colorCode: colorCode ?? this.colorCode,
+      reminder: reminder ?? this.reminder,
+      error: error,
+      habitNameController: habitNameController ?? this.habitNameController,
+      habitDescriptionController: habitDescriptionController ?? this.habitDescriptionController,
+      categoryIds: categoryIds ?? this.categoryIds,
+      currentStep: currentStep ?? this.currentStep,
+      difficulty: difficulty ?? this.difficulty,
+    );
   }
 }

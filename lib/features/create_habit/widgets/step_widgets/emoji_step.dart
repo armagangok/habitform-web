@@ -2,7 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/core.dart';
 import '../../../habit_emoji/emoji_picker_button.dart';
-import '../../models/create_habit_step.dart';
+import '../../models/create_habit_state.dart';
 import '../../provider/create_habit_provider.dart';
 import 'base_step_widget.dart';
 
@@ -12,7 +12,7 @@ class EmojiStep extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(createHabitProvider);
-    final selectedEmoji = state.value?.emoji;
+    final selectedEmoji = state.emoji;
     final canProceed = ref.watch(createHabitProvider.notifier).isCurrentStepValid();
 
     return BaseStepWidget(

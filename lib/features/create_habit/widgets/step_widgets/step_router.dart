@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/core.dart';
-import '../../models/create_habit_step.dart';
+import '../../models/create_habit_state.dart';
 import '../../provider/create_habit_provider.dart';
 import 'category_step.dart';
 import 'color_step.dart';
@@ -16,7 +16,7 @@ class StepRouter extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final currentStep = ref.watch(createHabitProvider).value?.currentStep ?? CreateHabitStep.habitName;
+    final currentStep = ref.watch(createHabitProvider).currentStep;
 
     switch (currentStep) {
       case CreateHabitStep.habitName:

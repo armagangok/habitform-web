@@ -126,23 +126,20 @@ class EditHabitPage extends ConsumerWidget {
                     ),
 
                     // Reminder Selection
-                    CupertinoListSection.insetGrouped(
-                      header: Text(
-                        LocaleKeys.habit_reminder.tr(),
-                      ),
-                      footer: Text(
-                        'Add a reminder to help you stay on track, we highly recommend you to add a reminder.',
-                        style: context.bodyMedium.copyWith(
-                          color: context.bodyMedium.color?.withValues(alpha: 0.7),
-                        ),
-                      ),
-                      children: [
-                        ReminderSelectionWidget(),
-                      ],
+                    Consumer(
+                      builder: (context, ref, child) {
+                        final editHabitState = ref.watch(editHabitProvider);
+                        return ReminderSelectionWidget(
+                          initialReminder: editHabitState?.reminderModel,
+                          header: Text(LocaleKeys.habit_reminder.tr()),
+                        );
+                      },
                     ),
 
                     // Category Selection
-                    CategoryPickerButton(),
+                    CategoryPickerButton(
+                      header: Text("Category"),
+                    ),
 
                     // Color Selection
                     ColorPickerWidget(

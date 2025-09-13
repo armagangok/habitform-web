@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/core.dart';
-import '../../models/create_habit_step.dart';
+import '../../models/create_habit_state.dart';
 import '../../provider/create_habit_provider.dart';
 import 'base_step_widget.dart';
 
@@ -52,7 +52,7 @@ class DescriptionStep extends ConsumerWidget {
             children: [
               CupertinoListTile(
                 title: CupertinoTextField(
-                  controller: state.value?.habitDescriptionController ?? TextEditingController(),
+                  controller: state.habitDescriptionController,
                   placeholder: LocaleKeys.habit_habit_description.tr(),
                   decoration: null,
                   maxLines: 4,

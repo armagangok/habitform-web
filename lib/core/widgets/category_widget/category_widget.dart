@@ -169,7 +169,7 @@ class CategoryWidgetState extends State<CategoryWidget> {
               child: IntrinsicWidth(
                 child: Container(
                   decoration: BoxDecoration(
-                    color: isSelected ? widget.customColor ?? context.primary : context.selectionHandleColor.withValues(alpha: .1),
+                    color: isSelected ? widget.customColor ?? context.primary : context.primaryContrastingColor.withValues(alpha: .1),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   constraints: BoxConstraints(minHeight: minItemHeight),
@@ -183,7 +183,7 @@ class CategoryWidgetState extends State<CategoryWidget> {
                       style: TextStyle(
                         fontSize: 13,
                         fontWeight: FontWeight.w600,
-                        color: isSelected ? Colors.white : context.selectionHandleColor.withValues(alpha: .75)
+                        color: isSelected ? Colors.white : context.primaryContrastingColor.withValues(alpha: .5)
                           ..colorRegardingToBrightness,
                       ),
                       textAlign: TextAlign.center,

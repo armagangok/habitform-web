@@ -3,7 +3,6 @@ import 'dart:math' as math;
 
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lottie/lottie.dart';
 
 import '/core/core.dart';
 import '/models/completion_entry/completion_entry.dart';
@@ -226,6 +225,18 @@ class _CircularProgressState extends State<_CircularProgress> with SingleTickerP
   }
 
   @override
+  void didUpdateWidget(covariant _CircularProgress oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.progress != widget.progress) {
+      _animation = Tween<double>(
+        begin: oldWidget.progress,
+        end: widget.progress,
+      ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
+      _controller.forward(from: 0.0);
+    }
+  }
+
+  @override
   void dispose() {
     _controller.dispose();
     super.dispose();
@@ -353,103 +364,11 @@ class _WeeklyProgressChart extends ConsumerStatefulWidget {
   ConsumerState<_WeeklyProgressChart> createState() => _WeeklyProgressChartState();
 }
 
-class _WeeklyProgressChartState extends ConsumerState<_WeeklyProgressChart> with TickerProviderStateMixin {
-  late AnimationController _lottieController;
-  int? _animatingIndex;
-  bool _showLottieAnimation = false;
-  Timer? _animationTimeout;
-
-  @override
-  void initState() {
-    super.initState();
-    _lottieController = AnimationController(
-      duration: const Duration(milliseconds: 1500),
-      vsync: this,
-    );
-  }
-
-  @override
-  void dispose() {
-    _animationTimeout?.cancel();
-    _lottieController.dispose();
-    super.dispose();
-  }
-
-  void _resetAnimationState() {
-    if (mounted) {
-      _animationTimeout?.cancel();
-      setState(() {
-        _lottieController.reset();
-        _animatingIndex = null;
-        _showLottieAnimation = false;
-      });
-    }
-  }
-
-  Future<void> _toggleCompletion(int index, Habit habit) async {
-    // Prevent multiple simultaneous toggles on the same cell
-    if (_animatingIndex == index) return;
-
-    // Get the current habit from the provider to ensure we have the latest data
-    final currentHabit = ref.read(habitDetailProvider);
-    if (currentHabit == null) return;
-
-    final isCurrentlyCompleted = _getWeeklyData(currentHabit)[index];
-
-    // Set Lottie animation state
-    _animatingIndex = index;
-    _showLottieAnimation = !isCurrentlyCompleted;
-
-    // Haptic feedback
-    HapticFeedback.lightImpact();
-
-    // Start Lottie animation
-    if (_showLottieAnimation) {
-      _lottieController.forward();
-    }
-
-    // Update completion status using the provider
-    final today = DateUtils.dateOnly(DateTime.now());
-    final targetDate = today.subtract(Duration(days: 6 - index));
-
-    final completionEntry = CompletionEntry(
-      id: '${targetDate.year}-${targetDate.month}-${targetDate.day}',
-      date: targetDate,
-      isCompleted: !isCurrentlyCompleted,
-    );
-
-    try {
-      // Use the provider which will update both local state and home provider
-      await ref.read(habitDetailProvider.notifier).markHabitAsComplete(currentHabit.id, completionEntry);
-
-      // Wait a bit to ensure state is properly updated
-      await Future.delayed(const Duration(milliseconds: 100));
-    } catch (e) {
-      // Handle error - could show a snackbar or dialog
-      print('Error updating completion: $e');
-    } finally {
-      // Always reset animation state, even if there was an error
-      // Cancel any existing timeout
-      _animationTimeout?.cancel();
-      // Set a new timeout to reset the animation state
-      _animationTimeout = Timer(const Duration(milliseconds: 1400), () {
-        _resetAnimationState();
-      });
-    }
-  }
-
+class _WeeklyProgressChartState extends ConsumerState<_WeeklyProgressChart> {
   @override
   Widget build(BuildContext context) {
     final habit = ref.watch(habitDetailProvider);
     if (habit == null) return const SizedBox.shrink();
-
-    // Safety check: reset animation state if it's been stuck for too long
-    if (_animatingIndex != null) {
-      _animationTimeout?.cancel();
-      _animationTimeout = Timer(const Duration(milliseconds: 2000), () {
-        _resetAnimationState();
-      });
-    }
 
     final weeklyData = _getWeeklyData(habit);
 
@@ -465,56 +384,50 @@ class _WeeklyProgressChartState extends ConsumerState<_WeeklyProgressChart> with
           ),
         ),
         const SizedBox(height: 12),
-        Stack(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: List.generate(7, (index) {
-                final isCompleted = weeklyData[index];
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: List.generate(7, (index) {
+            final isCompleted = weeklyData[index];
 
-                return _WeeklyDayCell(
-                  index: index,
-                  isCompleted: isCompleted,
-                  habitColor: Color(habit.colorCode),
-                  onTap: () => _toggleCompletion(index, habit),
-                );
-              }),
-            ),
-            // Lottie animation overlay
-            if (_showLottieAnimation && _animatingIndex != null)
-              Positioned(
-                left: _animatingIndex! * (MediaQuery.of(context).size.width - 32) / 7 + 16 - 30,
-                top: -30,
-                child: SizedBox(
-                  width: 60,
-                  height: 60,
-                  child: Lottie.asset(
-                    'assets/animations/completion.json',
-                    controller: _lottieController,
-                    fit: BoxFit.contain,
-                    errorBuilder: (context, error, stackTrace) {
-                      // Fallback to a simple checkmark animation if Lottie fails
-                      return AnimatedBuilder(
-                        animation: _lottieController,
-                        builder: (context, child) {
-                          return Transform.scale(
-                            scale: _lottieController.value,
-                            child: Icon(
-                              FontAwesomeIcons.check,
-                              size: 30,
-                              color: Color(habit.colorCode),
-                            ),
-                          );
-                        },
-                      );
-                    },
-                  ),
-                ),
-              ),
-          ],
+            return _WeeklyDayCell(
+              index: index,
+              isCompleted: isCompleted,
+              habitColor: Color(habit.colorCode),
+              onTap: () => _toggleCompletion(index, habit),
+            );
+          }),
         ),
       ],
     );
+  }
+
+  Future<void> _toggleCompletion(int index, Habit habit) async {
+    // Get the current habit from the provider to ensure we have the latest data
+    final currentHabit = ref.read(habitDetailProvider);
+    if (currentHabit == null) return;
+
+    final isCurrentlyCompleted = _getWeeklyData(currentHabit)[index];
+
+    // Haptic feedback
+    HapticFeedback.lightImpact();
+
+    // Update completion status using the provider
+    final today = DateUtils.dateOnly(DateTime.now());
+    final targetDate = today.subtract(Duration(days: 6 - index));
+
+    final completionEntry = CompletionEntry(
+      id: '${targetDate.year}-${targetDate.month}-${targetDate.day}',
+      date: targetDate,
+      isCompleted: !isCurrentlyCompleted,
+    );
+
+    try {
+      // Use the provider which will update both local state and home provider
+      await ref.read(habitDetailProvider.notifier).markHabitAsComplete(currentHabit.id, completionEntry);
+    } catch (e) {
+      // Handle error - could show a snackbar or dialog
+      print('Error updating completion: $e');
+    }
   }
 
   List<bool> _getWeeklyData(Habit habit) {
@@ -548,132 +461,42 @@ class _WeeklyDayCell extends StatefulWidget {
   State<_WeeklyDayCell> createState() => _WeeklyDayCellState();
 }
 
-class _WeeklyDayCellState extends State<_WeeklyDayCell> with SingleTickerProviderStateMixin {
-  late AnimationController _animationController;
-  late Animation<double> _scaleAnimation;
-  late Animation<double> _fadeAnimation;
-  late Animation<double> _rotationAnimation;
-
-  bool _isAnimating = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _animationController = AnimationController(
-      duration: const Duration(milliseconds: 800),
-      vsync: this,
-    );
-
-    _scaleAnimation = Tween<double>(
-      begin: 0.0,
-      end: 1.0,
-    ).animate(CurvedAnimation(
-      parent: _animationController,
-      curve: Curves.elasticOut,
-    ));
-
-    _fadeAnimation = Tween<double>(
-      begin: 0.0,
-      end: 1.0,
-    ).animate(CurvedAnimation(
-      parent: _animationController,
-      curve: const Interval(0.0, 0.6, curve: Curves.easeOut),
-    ));
-
-    _rotationAnimation = Tween<double>(
-      begin: 0.0,
-      end: 1.0,
-    ).animate(CurvedAnimation(
-      parent: _animationController,
-      curve: const Interval(0.0, 0.8, curve: Curves.easeOutBack),
-    ));
-  }
-
-  @override
-  void dispose() {
-    _animationController.dispose();
-    super.dispose();
-  }
-
-  void _startAnimation() {
-    if (_isAnimating) return;
-
-    setState(() {
-      _isAnimating = true;
-    });
-
-    _animationController.forward().then((_) {
-      _animationController.reset();
-      if (mounted) {
-        setState(() {
-          _isAnimating = false;
-        });
-      }
-    });
-  }
-
+class _WeeklyDayCellState extends State<_WeeklyDayCell> {
   @override
   Widget build(BuildContext context) {
     const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
-    return RepaintBoundary(
-      child: GestureDetector(
-        onTap: () {
-          _startAnimation();
-          widget.onTap();
-        },
-        child: Column(
-          children: [
-            AnimatedBuilder(
-              animation: _animationController,
-              builder: (context, child) {
-                return Transform.scale(
-                  scale: _isAnimating ? _scaleAnimation.value : 1.0,
-                  child: Transform.rotate(
-                    angle: _isAnimating && widget.isCompleted ? _rotationAnimation.value * 0.1 : 0.0,
-                    child: Container(
-                      width: 32,
-                      height: 32,
-                      decoration: BoxDecoration(
-                        color: widget.isCompleted ? widget.habitColor : widget.habitColor.withValues(alpha: 0.1),
-                        borderRadius: BorderRadius.circular(8),
-                        boxShadow: _isAnimating && widget.isCompleted
-                            ? [
-                                BoxShadow(
-                                  color: widget.habitColor.withValues(alpha: 0.3),
-                                  blurRadius: 8,
-                                  spreadRadius: 2,
-                                ),
-                              ]
-                            : null,
-                      ),
-                      child: Center(
-                        child: widget.isCompleted
-                            ? FadeTransition(
-                                opacity: _fadeAnimation,
-                                child: const Icon(
-                                  FontAwesomeIcons.check,
-                                  size: 14,
-                                  color: Colors.white,
-                                ),
-                              )
-                            : null,
-                      ),
-                    ),
-                  ),
-                );
-              },
+    return CustomButton(
+      onPressed: widget.onTap,
+      padding: EdgeInsets.zero,
+      child: Column(
+        children: [
+          Container(
+            width: 32,
+            height: 32,
+            decoration: BoxDecoration(
+              color: widget.isCompleted ? widget.habitColor : widget.habitColor.withValues(alpha: 0.1),
+              borderRadius: BorderRadius.circular(8),
             ),
-            const SizedBox(height: 4),
-            Text(
-              days[widget.index],
-              style: TextStyle(
-                fontSize: 10,
-                color: context.bodyMedium.color?.withValues(alpha: 0.6),
-              ),
+            child: Center(
+              child: widget.isCompleted
+                  ? const Icon(
+                      FontAwesomeIcons.check,
+                      size: 14,
+                      color: Colors.white,
+                    )
+                  : null,
             ),
-          ],
-        ),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            days[widget.index],
+            style: TextStyle(
+              fontSize: 10,
+              color: context.bodyMedium.color?.withValues(alpha: 0.6),
+            ),
+          ),
+        ],
       ),
     );
   }

@@ -2,15 +2,20 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/core.dart';
 import '../../../reminder/widget/reminder_selection_widget.dart';
-import '../../models/create_habit_step.dart';
+import '../../models/create_habit_state.dart';
 import '../../provider/create_habit_provider.dart';
 import 'base_step_widget.dart';
 
-class ReminderStep extends ConsumerWidget {
+class ReminderStep extends ConsumerStatefulWidget {
   const ReminderStep({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ReminderStep> createState() => _ReminderStepState();
+}
+
+class _ReminderStepState extends ConsumerState<ReminderStep> {
+  @override
+  Widget build(BuildContext context) {
     final canProceed = ref.watch(createHabitProvider.notifier).isCurrentStepValid();
 
     return BaseStepWidget(
@@ -48,8 +53,16 @@ class ReminderStep extends ConsumerWidget {
           ),
 
           // Reminder selection widget
-          CustomSection(
-            child: ReminderSelectionWidget(),
+          Consumer(
+            builder: (context, ref, child) {
+              final createHabitState = ref.watch(createHabitProvider);
+              return ReminderSelectionWidget(
+                initialReminder: createHabitState.reminder,
+                onReminderChanged: (reminder) {
+                  ref.read(createHabitProvider.notifier).updateReminder(reminder);
+                },
+              );
+            },
           ),
         ],
       ),

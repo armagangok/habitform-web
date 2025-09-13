@@ -114,7 +114,7 @@ class _IconPickerPageState extends ConsumerState<EmojiPickerPage> {
 
                       if (widget.onIconSelected != null) {
                         widget.onIconSelected!(emoji.emoji);
-                      } else {
+                      } else if (mounted) {
                         ref.read(habitEmojiProvider.notifier).pickEmoji(emoji.emoji);
                       }
 
@@ -160,7 +160,7 @@ class _IconPickerPageState extends ConsumerState<EmojiPickerPage> {
                         // we just need to call our callback if provided
                         if (widget.onIconSelected != null) {
                           widget.onIconSelected!(icon);
-                        } else {
+                        } else if (mounted) {
                           ref.watch(habitEmojiProvider.notifier).pickEmoji(icon);
                         }
                       },
@@ -190,12 +190,10 @@ class _IconPickerPageState extends ConsumerState<EmojiPickerPage> {
                   ),
                   onPressed: () {
                     final selectedIcon = state.selectedEmoji;
-                    if (selectedIcon != null) {
-                      if (widget.onIconSelected != null) {
-                        widget.onIconSelected!(selectedIcon);
-                      } else {
-                        ref.watch(habitEmojiProvider.notifier).pickEmoji(selectedIcon);
-                      }
+                    if (widget.onIconSelected != null) {
+                      widget.onIconSelected?.call(selectedIcon);
+                    } else if (mounted) {
+                      ref.watch(habitEmojiProvider.notifier).pickEmoji(selectedIcon);
                     }
                     navigator.pop();
                   },

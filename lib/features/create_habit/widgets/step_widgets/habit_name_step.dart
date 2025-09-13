@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/core.dart';
-import '../../models/create_habit_step.dart';
+import '../../models/create_habit_state.dart';
 import '../../provider/create_habit_provider.dart';
 import 'base_step_widget.dart';
 
@@ -20,8 +20,8 @@ class _HabitNameStepState extends ConsumerState<HabitNameStep> {
   void initState() {
     super.initState();
     final initial = ref.read(createHabitProvider);
-    // Use provider controller if ready; otherwise create a temporary one
-    _controller = initial.value?.habitNameController ?? TextEditingController();
+    // Always use the provider controller to ensure sync
+    _controller = initial.habitNameController;
     _controller.addListener(_onTextChanged);
     _updateValidation();
   }
@@ -49,18 +49,16 @@ class _HabitNameStepState extends ConsumerState<HabitNameStep> {
   Widget build(BuildContext context) {
     // Keep controller in sync with provider once available
     ref.listen(createHabitProvider, (prev, next) {
-      if (next.hasValue && next.value != null) {
-        final providerController = next.value!.habitNameController;
-        if (!identical(providerController, _controller)) {
-          if (_controller.text.isNotEmpty && providerController.text != _controller.text) {
-            providerController.text = _controller.text;
-          }
-          _controller.removeListener(_onTextChanged);
-          _controller = providerController;
-          _controller.addListener(_onTextChanged);
-          _updateValidation();
-          setState(() {});
+      final providerController = next.habitNameController;
+      if (!identical(providerController, _controller)) {
+        if (_controller.text.isNotEmpty && providerController.text != _controller.text) {
+          providerController.text = _controller.text;
         }
+        _controller.removeListener(_onTextChanged);
+        _controller = providerController;
+        _controller.addListener(_onTextChanged);
+        _updateValidation();
+        setState(() {});
       }
     });
     return BaseStepWidget(

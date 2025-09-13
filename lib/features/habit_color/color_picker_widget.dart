@@ -126,24 +126,6 @@ class ColorPickerWidgetState extends State<ColorPickerWidget> with SingleTickerP
       Colors.teal.shade800,
       Colors.teal.shade900,
     ],
-    LocaleKeys.colors_blueGrey.tr(): [
-      Colors.blueGrey.shade300,
-      Colors.blueGrey.shade400,
-      Colors.blueGrey.shade500,
-      Colors.blueGrey.shade600,
-      Colors.blueGrey.shade700,
-      Colors.blueGrey.shade800,
-      Colors.blueGrey.shade900,
-    ],
-    LocaleKeys.colors_grey.tr(): [
-      Colors.grey.shade300,
-      Colors.grey.shade400,
-      Colors.grey.shade500,
-      Colors.grey.shade600,
-      Colors.grey.shade700,
-      Colors.grey.shade800,
-      Colors.grey.shade900,
-    ],
     LocaleKeys.colors_purple.tr(): [
       Colors.purple.shade300,
       Colors.purple.shade400,
@@ -179,6 +161,24 @@ class ColorPickerWidgetState extends State<ColorPickerWidget> with SingleTickerP
       Colors.pink.shade700,
       Colors.pink.shade800,
       Colors.pink.shade900,
+    ],
+    LocaleKeys.colors_grey.tr(): [
+      Colors.grey.shade300,
+      Colors.grey.shade400,
+      Colors.grey.shade500,
+      Colors.grey.shade600,
+      Colors.grey.shade700,
+      Colors.grey.shade800,
+      Colors.grey.shade900,
+    ],
+    LocaleKeys.colors_blueGrey.tr(): [
+      Colors.blueGrey.shade300,
+      Colors.blueGrey.shade400,
+      Colors.blueGrey.shade500,
+      Colors.blueGrey.shade600,
+      Colors.blueGrey.shade700,
+      Colors.blueGrey.shade800,
+      Colors.blueGrey.shade900,
     ],
   };
 
@@ -223,7 +223,7 @@ class ColorPickerWidgetState extends State<ColorPickerWidget> with SingleTickerP
     final isTablet = screenWidth > 600;
 
     // Sabit item boyutu belirle
-    final itemSize = isTablet ? 45.0 : 55.0;
+    final itemSize = isTablet ? 40.0 : 55.0;
 
     // Grid için sütun sayısı
     final crossAxisCount = isTablet ? 10 : 5;

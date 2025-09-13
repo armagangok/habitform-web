@@ -84,6 +84,7 @@ class DifficultySelectionWidget extends ConsumerWidget {
                           fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
                           color: isSelected ? context.primary : null,
                         ),
+                        textAlign: TextAlign.left,
                       ),
                       const SizedBox(height: 2),
                       Text(
@@ -91,8 +92,8 @@ class DifficultySelectionWidget extends ConsumerWidget {
                         style: context.bodySmall.copyWith(
                           color: context.bodySmall.color?.withValues(alpha: 0.7),
                         ),
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
+                        maxLines: 99,
+                        textAlign: TextAlign.left,
                       ),
                     ],
                   ),

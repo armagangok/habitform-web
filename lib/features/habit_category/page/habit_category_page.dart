@@ -41,24 +41,17 @@ class _HabitCategoryPageState extends ConsumerState<HabitCategoryPage> {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         middle: Text("Habit Category"),
-        trailing: Row(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            CupertinoButton(
-              padding: EdgeInsets.zero,
-              child: Text(LocaleKeys.common_done.tr()),
-              onPressed: () {
-                // Update categoryButtonProvider for UI (this is for the category selection button)
-                ref.read(categoryButtonProvider.notifier).setSelectedCategories(localSelectedIds.toList());
-
-                // Clear category selection in habitCategoryProvider to prevent auto-filtering on home page
-                ref.read(habitCategoryProvider.notifier).setSelectedCategories({});
-
-                navigator.pop();
-              },
-            ),
-          ],
+        trailing: CupertinoButton(
+          padding: EdgeInsets.zero,
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(CupertinoIcons.add, size: 20),
+              SizedBox(width: 4),
+              Text("New"),
+            ],
+          ),
+          onPressed: () => _showCreateCategoryDialog(),
         ),
       ),
       child: Stack(
@@ -81,21 +74,25 @@ class _HabitCategoryPageState extends ConsumerState<HabitCategoryPage> {
               child: SafeArea(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
-                  child: CupertinoButton.filled(
-                    onPressed: () => _showCreateCategoryDialog(),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(FontAwesomeIcons.solidPenToSquare, size: 20),
-                        SizedBox(width: 8),
-                        Text(
-                          'New Category',
-                          style: context.titleMedium.copyWith(
-                            fontWeight: FontWeight.w600,
-                          ),
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: CupertinoButton.filled(
+                      onPressed: () {
+                        // Update categoryButtonProvider for UI (this is for the category selection button)
+                        ref.watch(categoryButtonProvider.notifier).setSelectedCategories(localSelectedIds.toList());
+
+                        // Clear category selection in habitCategoryProvider to prevent auto-filtering on home page
+                        ref.watch(habitCategoryProvider.notifier).setSelectedCategories({});
+
+                        navigator.pop();
+                      },
+                      child: Text(
+                        LocaleKeys.common_done.tr(),
+                        style: context.titleMedium.copyWith(
+                          fontWeight: FontWeight.w600,
+                          color: Colors.white,
                         ),
-                      ],
+                      ),
                     ),
                   ),
                 ),
@@ -174,7 +171,7 @@ class _HabitCategoryPageState extends ConsumerState<HabitCategoryPage> {
               FaIcon(
                 iconData,
                 size: 16,
-                color: context.selectionHandleColor.withValues(alpha: isSelected ? 1.0 : 0.5),
+                color: isSelected ? Colors.white : context.primaryContrastingColor.withValues(alpha: isSelected ? 1.0 : 0.5),
               ),
               SizedBox(width: 6),
             ],

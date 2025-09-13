@@ -52,6 +52,14 @@ final class ReminderService {
     await NotificationHelper.shared.cancelReminderNotifications(dummyReminder);
   }
 
+  /// Cancel all reminder notifications for a habit (including multiple reminders)
+  static Future<void> cancelAllReminderNotifications(ReminderModel? reminderModel) async {
+    if (reminderModel == null) return;
+
+    // Use the actual reminder model to properly cancel all notifications
+    await NotificationHelper.shared.cancelReminderNotifications(reminderModel);
+  }
+
   /// Get current notification count
   static Future<int> getCurrentNotificationCount() async {
     return await SmartNotificationManager.shared.getCurrentNotificationCount();

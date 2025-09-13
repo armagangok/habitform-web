@@ -89,6 +89,9 @@ class ArchivedHabitsNotifier extends AutoDisposeAsyncNotifier<ArchivedHabitsStat
     state = AsyncValue.data(state.value!.copyWith(isLoading: true));
 
     try {
+      // Cancel any remaining reminder notifications before deleting
+      ReminderService.cancelAllReminderNotifications(habit.reminderModel);
+
       // Alışkanlığı kalıcı olarak sil
       await habitService.permanentlyDeleteHabit(habit.id);
 

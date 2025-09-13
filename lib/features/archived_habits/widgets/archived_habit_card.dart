@@ -21,7 +21,7 @@ class ArchivedHabitCard extends ConsumerWidget {
 
     final archivedDateString = archivedDate != null ? DateFormat('yyyy-MM-dd').format(archivedDate) : "";
 
-    return Stack(
+    return CupertinoListSection.insetGrouped(
       children: [
         CupertinoListTile(
           onTap: () {

@@ -77,9 +77,8 @@ class _ArchivedHabitsPageState extends ConsumerState<ArchivedHabitsPage> {
               );
             }
 
-            return ListView.separated(
-              padding: const EdgeInsets.all(16),
-              separatorBuilder: (context, index) => const SizedBox(height: 12),
+            return ListView.builder(
+              padding: EdgeInsets.zero,
               itemCount: state.archivedHabits.length,
               itemBuilder: (context, index) {
                 final habit = state.archivedHabits[index];

@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/core.dart';
-import '../../models/create_habit_step.dart';
+import '../../models/create_habit_state.dart';
 
 class BaseStepWidget extends ConsumerWidget {
   final CreateHabitStep step;
