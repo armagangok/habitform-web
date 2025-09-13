@@ -46,7 +46,7 @@ class HomeCategoryFilter extends ConsumerWidget {
                   final isSelected = state.selectedCategoryIds.contains(category.id);
                   final IconData iconData = category.icon != null ? CategoryIconUtil.getIconFromString(category.icon!) : _getCategoryIcon(category.name);
 
-                  final selectedColor = isSelected ? context.cupertinoTheme.primaryColor : context.theme.primaryColor.withValues(alpha: .7);
+                  final selectedColor = isSelected ? context.cupertinoTheme.primaryColor : context.theme.primaryContrastingColor;
 
                   return Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 4.0),
@@ -61,7 +61,7 @@ class HomeCategoryFilter extends ConsumerWidget {
                           borderRadius: BorderRadius.circular(10),
                           border: Border.all(
                             color: selectedColor,
-                            width: .5,
+                            width: .7,
                           ),
                         ),
                         child: Row(
