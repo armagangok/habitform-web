@@ -140,7 +140,7 @@ class PrimaryActionButton extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         CupertinoButton.filled(
-          color: color,
+          color: context.primaryContrastingColor,
           sizeStyle: CupertinoButtonSize.medium,
           onPressed: onPressed,
           child: Row(
@@ -149,7 +149,7 @@ class PrimaryActionButton extends StatelessWidget {
               Icon(
                 icon,
                 size: 18,
-                color: CupertinoColors.white,
+                color: context.primaryContrastingColor.withValues(alpha: 1),
               ),
             ],
           ),
@@ -160,7 +160,7 @@ class PrimaryActionButton extends StatelessWidget {
             style: TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.w600,
-              color: color,
+              color: context.primaryContrastingColor.withValues(alpha: .9),
             ),
             maxLines: 1,
           ),

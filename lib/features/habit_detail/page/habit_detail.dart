@@ -26,7 +26,6 @@ class HabitDetailPage extends ConsumerWidget {
     }
 
     return CupertinoPageScaffold(
-      backgroundColor: context.cupertinoTheme.scaffoldBackgroundColor,
       child: Stack(
         children: [
           CustomScrollView(
@@ -76,6 +75,8 @@ class HabitDetailPage extends ConsumerWidget {
       expandedHeight: 190.0,
       floating: false,
       pinned: true,
+      backgroundColor: context.scaffoldBackgroundColor,
+      shadowColor: Colors.transparent,
       centerTitle: true,
       title: Text(
         habit.habitName,
@@ -93,8 +94,8 @@ class HabitDetailPage extends ConsumerWidget {
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
               colors: [
-                Color(habit.colorCode).withValues(alpha: 0.2),
-                Color(habit.colorCode).withValues(alpha: 0.1),
+                Color(habit.colorCode).withValues(alpha: 0.3),
+                Color(habit.colorCode).withValues(alpha: 0.4),
               ],
             ),
           ),
@@ -103,7 +104,7 @@ class HabitDetailPage extends ConsumerWidget {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 _habitEmoji(context, habit),
-                const SizedBox(height: 8),
+                const SizedBox(height: 16),
                 if (habit.habitDescription != null && habit.habitDescription!.isNotEmpty)
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 32) + const EdgeInsets.only(bottom: 16),
