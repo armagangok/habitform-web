@@ -26,92 +26,106 @@ class SubscribeButton extends ConsumerWidget {
                 builder: (_) => PaywallPage(),
               );
             },
-            child: SizedBox(
-              width: double.infinity,
-              child: Padding(
-                padding: EdgeInsets.all(8),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
+            child: CupertinoListSection.insetGrouped(
+              children: [
+                Column(
                   children: [
-                    Consumer(
-                      builder: (context, ref, child) {
-                        final themeMode = ref.watch(themeProvider);
-                        return themeMode == ThemeMode.dark
-                            ? Assets.app.habitriseDarkTransparent.image(
-                                width: 40,
-                                height: 40,
-                              )
-                            : Assets.app.habitriseLightTransparent.image(
-                                width: 40,
-                                height: 40,
-                              );
-                      },
-                    ),
-                    SizedBox(width: 12),
-                    Expanded(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            mainAxisSize: MainAxisSize.min,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              RichText(
-                                maxLines: 1,
-                                text: TextSpan(
-                                  style: context.titleMedium.copyWith(
-                                    fontWeight: FontWeight.bold,
+                    SizedBox(
+                      width: double.infinity,
+                      child: Padding(
+                        padding: EdgeInsets.all(8),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Consumer(
+                              builder: (context, ref, child) {
+                                final themeMode = ref.watch(themeProvider);
+                                return themeMode == ThemeMode.dark
+                                    ? Assets.app.habitriseDarkTransparent.image(
+                                        width: 40,
+                                        height: 40,
+                                      )
+                                    : Assets.app.habitriseLightTransparent.image(
+                                        width: 40,
+                                        height: 40,
+                                      );
+                              },
+                            ),
+                            SizedBox(width: 12),
+                            Expanded(
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      RichText(
+                                        maxLines: 1,
+                                        text: TextSpan(
+                                          style: context.titleMedium.copyWith(
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                          children: [
+                                            TextSpan(
+                                              text: LocaleKeys.subscription_subscribe_to.tr(),
+                                              style: context.titleMedium.copyWith(
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                            TextSpan(
+                                              text: ' Habit',
+                                              style: context.titleMedium.copyWith(
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                            TextSpan(
+                                              text: 'Rise ',
+                                              style: context.titleMedium.copyWith(
+                                                fontWeight: FontWeight.bold,
+                                                color: context.primary,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      CupertinoCard(
+                                        color: context.primary,
+                                        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+                                        child: Text(
+                                          'Pro',
+                                          style: context.titleMedium.copyWith(
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                  children: [
-                                    TextSpan(
-                                      text: LocaleKeys.subscription_subscribe_to.tr(),
-                                      style: context.titleMedium.copyWith(
-                                        color: context.primary,
-                                        fontWeight: FontWeight.bold,
+                                  Column(
+                                    children: [
+                                      Text(
+                                        LocaleKeys.subscription_tap_advantages.tr(),
+                                        textAlign: TextAlign.start,
+                                        style: context.bodySmall.copyWith(
+                                          color: context.cupertinoTextTheme.textStyle.color?.withValues(alpha: 0.7),
+                                        ),
                                       ),
-                                    ),
-                                    TextSpan(
-                                      text: ' Habit',
-                                      style: context.titleMedium.copyWith(
-                                        color: context.primary,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    TextSpan(
-                                      text: 'Rise ',
-                                      style: context.titleMedium.copyWith(
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    TextSpan(
-                                      text: 'Pro',
-                                      style: context.titleMedium.copyWith(
-                                        color: context.primary,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                                    ],
+                                  ),
+                                ],
                               ),
-                            ],
-                          ),
-                          Column(
-                            children: [
-                              Text(
-                                LocaleKeys.subscription_tap_advantages.tr(),
-                                textAlign: TextAlign.start,
-                              ),
-                            ],
-                          ),
-                        ],
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ],
                 ),
-              ),
+              ],
             ),
           );
         }

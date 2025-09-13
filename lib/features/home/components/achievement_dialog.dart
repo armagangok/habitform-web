@@ -1,5 +1,4 @@
 import 'dart:math';
-import 'dart:ui';
 
 import 'package:confetti/confetti.dart';
 import 'package:flutter/services.dart';
@@ -136,11 +135,11 @@ class _AchievementDialogState extends State<AchievementDialog> with TickerProvid
     final theme = Theme.of(context);
     final habitColor = _getFormationScoreColor(widget.newScore.toDouble());
 
-    return Stack(
-      children: [
-        // Main dialog with consistent blur background
-        CustomBlurWidget(
-          child: AnimatedBuilder(
+    return CustomBlurWidget(
+      child: Stack(
+        children: [
+          // Main dialog with consistent blur background
+          AnimatedBuilder(
             animation: Listenable.merge([_fadeAnimation, _slideAnimation, _scaleAnimation]),
             builder: (context, child) {
               return FadeTransition(
@@ -185,55 +184,49 @@ class _AchievementDialogState extends State<AchievementDialog> with TickerProvid
                             ),
                           ],
                         ),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(context.width(0.08)),
-                          child: BackdropFilter(
-                            filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-                            child: Padding(
-                              padding: context.padding(0.06),
-                              child: SingleChildScrollView(
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    // Achievement Icon with premium effects
-                                    _buildPremiumIcon(context, habitColor),
-                                    SizedBox(height: context.height(0.03)),
+                        child: Padding(
+                          padding: context.padding(0.04),
+                          child: SingleChildScrollView(
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                // Achievement Emoji with premium effects
+                                _buildAnimatedEmoji(context, habitColor),
+                                SizedBox(height: context.height(0.03)),
 
-                                    // Habit name
-                                    Text(
-                                      widget.habit.habitName,
-                                      style: context.headlineMedium.copyWith(
-                                        fontWeight: FontWeight.w700,
-                                        color: theme.colorScheme.onSurface,
-                                      ),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                    SizedBox(height: context.height(0.01)),
-
-                                    // Achievement title
-                                    Text(
-                                      widget.pointsGained > 0 ? 'Amazing Progress! 🎉' : 'Keep Going! 💪',
-                                      style: context.titleLarge.copyWith(
-                                        fontWeight: FontWeight.w600,
-                                        color: habitColor,
-                                      ),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                    SizedBox(height: context.height(0.03)),
-
-                                    // Score display with premium styling
-                                    _buildScoreDisplay(context, theme, habitColor),
-                                    SizedBox(height: context.height(0.03)),
-
-                                    // Progress section
-                                    _buildProgressSection(context, theme, habitColor),
-                                    SizedBox(height: context.height(0.03)),
-
-                                    // Continue button with premium styling
-                                    _buildPremiumButton(context, theme, habitColor),
-                                  ],
+                                // Habit name
+                                Text(
+                                  widget.habit.habitName,
+                                  style: context.headlineMedium.copyWith(
+                                    fontWeight: FontWeight.w700,
+                                    color: theme.colorScheme.onSurface,
+                                  ),
+                                  textAlign: TextAlign.center,
                                 ),
-                              ),
+                                SizedBox(height: context.height(0.01)),
+
+                                // Achievement title
+                                Text(
+                                  widget.pointsGained > 0 ? 'Amazing Progress! 🎉' : 'Keep Going! 💪',
+                                  style: context.titleLarge.copyWith(
+                                    fontWeight: FontWeight.w600,
+                                    color: habitColor,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                                SizedBox(height: context.height(0.03)),
+
+                                // Score display with premium styling
+                                _buildScoreDisplay(context, theme, habitColor),
+                                SizedBox(height: context.height(0.03)),
+
+                                // Progress section
+                                _buildProgressSection(context, theme, habitColor),
+                                SizedBox(height: context.height(0.03)),
+
+                                // Continue button with premium styling
+                                _buildPremiumButton(context, theme, habitColor),
+                              ],
                             ),
                           ),
                         ),
@@ -244,36 +237,36 @@ class _AchievementDialogState extends State<AchievementDialog> with TickerProvid
               );
             },
           ),
-        ),
-        // Confetti overlay - positioned on top of dialog content
-        Align(
-          alignment: const Alignment(0, -0.3),
-          child: ConfettiWidget(
-            confettiController: _confettiController,
-            blastDirectionality: BlastDirectionality.explosive,
-            emissionFrequency: 0.05,
-            numberOfParticles: 20,
-            minBlastForce: 10,
-            maxBlastForce: 25,
-            gravity: 0.3,
-            particleDrag: 0.1,
-            shouldLoop: false,
-            colors: [
-              habitColor,
-              habitColor.withValues(alpha: 0.8),
-              habitColor.withValues(alpha: 0.6),
-              const Color(0xFFFFD700),
-              const Color(0xFFFF6B6B),
-              const Color(0xFF4ECDC4),
-            ],
-            createParticlePath: _drawStar,
+          // Confetti overlay - positioned on top of dialog content
+          Align(
+            alignment: const Alignment(0, -0.3),
+            child: ConfettiWidget(
+              confettiController: _confettiController,
+              blastDirectionality: BlastDirectionality.explosive,
+              emissionFrequency: 0.05,
+              numberOfParticles: 20,
+              minBlastForce: 10,
+              maxBlastForce: 25,
+              gravity: 0.3,
+              particleDrag: 0.1,
+              shouldLoop: false,
+              colors: [
+                habitColor,
+                habitColor.withValues(alpha: 0.8),
+                habitColor.withValues(alpha: 0.6),
+                const Color(0xFFFFD700),
+                const Color(0xFFFF6B6B),
+                const Color(0xFF4ECDC4),
+              ],
+              createParticlePath: _drawStar,
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
-  Widget _buildPremiumIcon(BuildContext context, Color habitColor) {
+  Widget _buildAnimatedEmoji(BuildContext context, Color habitColor) {
     return AnimatedBuilder(
       animation: Listenable.merge([_pulseAnimation, _particleAnimation]),
       builder: (context, child) {

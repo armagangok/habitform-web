@@ -51,6 +51,7 @@ class CupertinoColorsProxy {
 extension EasyTheme on BuildContext {
   CupertinoThemeData get theme => CupertinoTheme.of(this);
   Color get primary => theme.primaryColor;
+  Color get primaryContrastingColor => theme.primaryContrastingColor;
   Color get scaffoldBackgroundColor => theme.scaffoldBackgroundColor;
   Color get barBackgroundColor => theme.barBackgroundColor;
   CupertinoColorsProxy get colors => CupertinoColorsProxy(theme);

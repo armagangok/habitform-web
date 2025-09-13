@@ -18,37 +18,34 @@ class HabitSelectorButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(right: 20),
-      child: Material(
-        color: Colors.transparent,
-        child: CupertinoButton(
-          onPressed: onTap,
-          minSize: 0,
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-          borderRadius: BorderRadius.circular(12),
-          color: isSelected ? context.primary : context.selectionHandleColor,
-          pressedOpacity: .9,
-          child: AnimatedSize(
-            duration: const Duration(milliseconds: 350),
-            curve: Curves.easeInOut,
-            alignment: Alignment.centerLeft,
-            child: Row(
-              children: [
+      child: CupertinoButton(
+        onPressed: onTap,
+        minimumSize: Size.zero,
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+        borderRadius: BorderRadius.circular(12),
+        color: isSelected ? context.primary : context.selectionHandleColor.withValues(alpha: 0.1),
+        pressedOpacity: .9,
+        child: AnimatedSize(
+          duration: const Duration(milliseconds: 350),
+          curve: Curves.easeInOut,
+          alignment: Alignment.centerLeft,
+          child: Row(
+            children: [
+              Text(
+                emoji,
+                style: const TextStyle(fontSize: 24),
+              ),
+              if (isSelected) ...[
+                const SizedBox(width: 8),
                 Text(
-                  emoji,
-                  style: const TextStyle(fontSize: 24),
+                  isSelected ? habitName : "",
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                        color: isSelected ? CupertinoColors.white : null,
+                      ),
                 ),
-                if (isSelected) ...[
-                  const SizedBox(width: 8),
-                  Text(
-                    isSelected ? habitName : "",
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                          fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                          color: isSelected ? CupertinoColors.white : null,
-                        ),
-                  ),
-                ]
-              ],
-            ),
+              ]
+            ],
           ),
         ),
       ),

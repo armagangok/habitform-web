@@ -211,7 +211,7 @@ class ReminderNotifier extends AutoDisposeNotifier<ReminderState> {
       state = state.copyWith(
         reminder: currentReminder.copyWith(
           time: firstTime,
-          multipleReminders: null, // Clear multiple reminders when switching to single
+          clearMultipleReminders: true, // Clear multiple reminders when switching to single
         ),
       );
     }
@@ -236,7 +236,7 @@ class ReminderNotifier extends AutoDisposeNotifier<ReminderState> {
 
     state = state.copyWith(
       reminder: currentReminder.copyWith(
-        multipleReminders: null,
+        clearMultipleReminders: true,
       ),
     );
   }

@@ -155,7 +155,7 @@ class _OnboardingWelcomePageState extends State<OnboardingWelcomePage> with Tick
                         emoji: '🧘‍♂️',
                         title: 'Meditate',
                         badgeValue: 8,
-                        initial: Offset(-context.width(0.025), size.height - context.height(0.4)), // bottom-left with responsive positioning
+                        initial: Offset(-context.width(0.025), size.height - context.height(0.36)), // bottom-left with responsive positioning
                         initialRotation: -0.2,
                         isLeftSide: true,
                         tier: 0, // dock upper-left when stacked
@@ -169,7 +169,7 @@ class _OnboardingWelcomePageState extends State<OnboardingWelcomePage> with Tick
                         emoji: '💧',
                         title: 'Drink Water',
                         badgeValue: 30,
-                        initial: Offset(size.width - context.width(0.5) + context.width(0.012), size.height - context.height(0.4)), // bottom-right with responsive positioning
+                        initial: Offset(size.width - context.width(0.5) + context.width(0.012), size.height - context.height(0.36)), // bottom-right with responsive positioning
                         initialRotation: 0.2,
                         isLeftSide: false,
                         tier: 1,
@@ -387,9 +387,7 @@ class _OnboardingWelcomePageState extends State<OnboardingWelcomePage> with Tick
                             SizedBox(height: context.height(0.01)), // Responsive spacing
                             Text(
                               'You\'ve completed your first habit!',
-                              style: context.titleMedium.copyWith(
-                                
-                              ),
+                              style: context.titleMedium.copyWith(),
                               textAlign: TextAlign.center,
                             ),
                             SizedBox(height: context.height(0.005)), // Responsive spacing

@@ -24,8 +24,8 @@ class CircularActionButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final effectiveIconColor = iconColor ?? context.theme.selectionHandleColor.withValues(alpha: .8);
-    final effectiveBackgroundColor = backgroundColor ?? context.theme.selectionHandleColor.withValues(alpha: .2);
+    final effectiveIconColor = iconColor ?? context.theme.primaryContrastingColor.withValues(alpha: .8);
+    final effectiveBackgroundColor = backgroundColor ?? context.theme.primaryContrastingColor.withValues(alpha: .11);
 
     Widget button = CustomButton(
       onPressed: onPressed,

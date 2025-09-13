@@ -131,27 +131,31 @@ class _MultipleReminderTimesWidgetState extends ConsumerState<MultipleReminderTi
                 style: BorderStyle.solid,
               ),
             ),
-            child: Column(
+            child: CupertinoListSection.insetGrouped(
               children: [
-                Icon(
-                  CupertinoIcons.clock,
-                  size: 32,
-                  color: context.selectionHandleColor.withOpacity(0.5),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  'No reminder times set',
-                  style: context.bodyMedium.copyWith(
-                    color: context.selectionHandleColor.withOpacity(0.7),
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  'Tap "Add another time" below to get started',
-                  style: context.bodySmall.copyWith(
-                    color: context.selectionHandleColor.withOpacity(0.5),
-                  ),
+                Column(
+                  children: [
+                    Icon(
+                      CupertinoIcons.clock,
+                      size: 32,
+                      color: context.selectionHandleColor.withOpacity(0.5),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      'No reminder times set',
+                      style: context.bodyMedium.copyWith(
+                        color: context.selectionHandleColor.withOpacity(0.7),
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      'Tap "Add another time" below to get started',
+                      style: context.bodySmall.copyWith(
+                        color: context.selectionHandleColor.withOpacity(0.5),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
@@ -195,105 +199,106 @@ class _MultipleReminderTimesWidgetState extends ConsumerState<MultipleReminderTi
       );
     }
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+    return CupertinoListSection.insetGrouped(
+      header: Text('Reminder times'),
       children: [
-        Text(
-          'Reminder times',
-          style: context.titleMedium.copyWith(
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-        const SizedBox(height: 12),
-        ...multipleReminders.sortedReminderTimes.asMap().entries.map((entry) {
-          final index = entry.key;
-          final time = entry.value;
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              ...multipleReminders.sortedReminderTimes.asMap().entries.map((entry) {
+                final index = entry.key;
+                final time = entry.value;
 
-          return Container(
-            margin: const EdgeInsets.only(bottom: 8),
-            child: CupertinoButton(
-              padding: EdgeInsets.zero,
-              onPressed: () => _editReminderTime(index, time),
-              child: Container(
-                width: double.infinity,
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                decoration: BoxDecoration(
-                  color: context.scaffoldBackgroundColor,
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(
-                    color: context.selectionHandleColor.withOpacity(0.2),
-                  ),
-                ),
-                child: Row(
-                  children: [
-                    Icon(
-                      CupertinoIcons.clock,
-                      size: 20,
-                      color: context.primary,
-                    ),
-                    const SizedBox(width: 12),
-                    Text(
-                      time.toHHMM(),
-                      style: context.bodyLarge.copyWith(
-                        fontWeight: FontWeight.w500,
+                return Container(
+                  margin: const EdgeInsets.only(bottom: 8),
+                  child: CupertinoButton(
+                    padding: EdgeInsets.zero,
+                    onPressed: () => _editReminderTime(index, time),
+                    child: Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                      decoration: BoxDecoration(
+                        color: context.scaffoldBackgroundColor,
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                          color: context.selectionHandleColor.withOpacity(0.2),
+                        ),
+                      ),
+                      child: Row(
+                        children: [
+                          Icon(
+                            CupertinoIcons.clock,
+                            size: 20,
+                            color: context.primary,
+                          ),
+                          const SizedBox(width: 12),
+                          Text(
+                            time.toHHMM(),
+                            style: context.bodyLarge.copyWith(
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          const Spacer(),
+                          Icon(
+                            CupertinoIcons.pencil,
+                            size: 16,
+                            color: context.selectionHandleColor.withOpacity(0.6),
+                          ),
+                          const SizedBox(width: 8),
+                          CupertinoButton(
+                            padding: EdgeInsets.zero,
+                            onPressed: () => _removeReminderTime(index),
+                            minimumSize: Size(0, 0),
+                            child: Icon(
+                              CupertinoIcons.minus_circle_fill,
+                              size: 20,
+                              color: CupertinoColors.systemRed,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                    const Spacer(),
-                    Icon(
-                      CupertinoIcons.pencil,
-                      size: 16,
-                      color: context.selectionHandleColor.withOpacity(0.6),
+                  ),
+                );
+              }),
+              const SizedBox(height: 8),
+              CupertinoButton(
+                padding: EdgeInsets.zero,
+                onPressed: _addReminderTime,
+                child: Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  decoration: BoxDecoration(
+                    color: context.primary.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(
+                      color: context.primary.withOpacity(0.3),
+                      style: BorderStyle.solid,
                     ),
-                    const SizedBox(width: 8),
-                    CupertinoButton(
-                      padding: EdgeInsets.zero,
-                      onPressed: () => _removeReminderTime(index),
-                      minimumSize: Size(0, 0),
-                      child: Icon(
-                        CupertinoIcons.minus_circle_fill,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        CupertinoIcons.add_circled,
                         size: 20,
-                        color: CupertinoColors.systemRed,
+                        color: context.primary,
                       ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          );
-        }),
-        const SizedBox(height: 8),
-        CupertinoButton(
-          padding: EdgeInsets.zero,
-          onPressed: _addReminderTime,
-          child: Container(
-            width: double.infinity,
-            padding: const EdgeInsets.symmetric(vertical: 12),
-            decoration: BoxDecoration(
-              color: context.primary.withOpacity(0.1),
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(
-                color: context.primary.withOpacity(0.3),
-                style: BorderStyle.solid,
-              ),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  CupertinoIcons.add_circled,
-                  size: 20,
-                  color: context.primary,
-                ),
-                const SizedBox(width: 8),
-                Text(
-                  'Add another time',
-                  style: context.bodyMedium.copyWith(
-                    color: context.primary,
-                    fontWeight: FontWeight.w500,
+                      const SizedBox(width: 8),
+                      Text(
+                        'Add another time',
+                        style: context.bodyMedium.copyWith(
+                          color: context.primary,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ],

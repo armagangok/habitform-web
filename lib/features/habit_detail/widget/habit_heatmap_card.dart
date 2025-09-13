@@ -137,11 +137,12 @@ class _OptimizedHeatmapGrid extends StatefulWidget {
 
 class _OptimizedHeatmapGridState extends State<_OptimizedHeatmapGrid> {
   late final ScrollController _scrollController;
+  late final ScrollController _monthLabelsScrollController;
   late final HeatmapData heatmapData;
   late List<String> visibleMonthLabels;
 
   // Pre-processed completion data for O(1) lookup
-  late final Map<String, bool> _completionMap;
+  late Map<String, bool> _completionMap;
 
   // Cache for cell widgets to avoid rebuilding
   final Map<String, Widget> _cellWidgetCache = {};
@@ -161,27 +162,45 @@ class _OptimizedHeatmapGridState extends State<_OptimizedHeatmapGrid> {
 
     heatmapData = _generateHeatmapData();
     _scrollController = ScrollController();
+    _monthLabelsScrollController = ScrollController();
 
     // Optimized scroll listener with debouncing
     _scrollController.addListener(_onScrollChanged);
+    _monthLabelsScrollController.addListener(_onMonthLabelsScrollChanged);
 
-    // Start with the last 6 months visible
+    // Start at the current month to show the most recent data
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (_scrollController.hasClients) {
-        _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+        _scrollToCurrentMonth();
         _updateVisibleMonths();
       }
     });
 
-    // Initialize visible month labels with the last up to 6 months (clamped)
-    final totalMonths = heatmapData.monthLabels.length;
-    final startIndex = math.max(0, totalMonths - 6);
-    visibleMonthLabels = heatmapData.monthLabels.sublist(startIndex, totalMonths);
+    // Initialize visible month labels with all months initially
+    visibleMonthLabels = List<String>.from(heatmapData.monthLabels);
+  }
+
+  @override
+  void didUpdateWidget(_OptimizedHeatmapGrid oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    // Check if the habit completions have changed
+    if (oldWidget.habit.completions != widget.habit.completions) {
+      // Rebuild completion map with new data
+      _completionMap = _buildCompletionMap();
+
+      // Clear cache to force rebuild of all cells
+      _cellWidgetCache.clear();
+
+      // Force a rebuild to reflect the changes
+      setState(() {});
+    }
   }
 
   @override
   void dispose() {
     _scrollController.dispose();
+    _monthLabelsScrollController.dispose();
     _cellWidgetCache.clear();
     super.dispose();
   }
@@ -192,14 +211,26 @@ class _OptimizedHeatmapGridState extends State<_OptimizedHeatmapGrid> {
     final now = DateTime.now();
     final oneYearAgo = now.subtract(const Duration(days: 365));
 
+    print('DEBUG: Building completion map for habit: ${widget.habit.habitName}');
+    print('DEBUG: Total completions: ${widget.habit.completions.length}');
+    print('DEBUG: Date range: ${oneYearAgo.toString()} to ${now.toString()}');
+
     for (final entry in widget.habit.completions.values) {
       final entryDate = DateUtils.dateOnly(entry.date);
+      final dateKey = '${entryDate.year}-${entryDate.month}-${entryDate.day}';
+
+      print('DEBUG: Processing entry: $dateKey, completed: ${entry.isCompleted}, date: ${entryDate.toString()}');
+
       if (entryDate.isAfter(oneYearAgo) && entryDate.isBefore(now.add(const Duration(days: 1)))) {
-        final dateKey = '${entryDate.year}-${entryDate.month}-${entryDate.day}';
         completionMap[dateKey] = entry.isCompleted;
+        print('DEBUG: Added to map: $dateKey = ${entry.isCompleted}');
+      } else {
+        print('DEBUG: Skipped entry outside range: $dateKey');
       }
     }
 
+    print('DEBUG: Final completion map size: ${completionMap.length}');
+    print('DEBUG: Completion map keys: ${completionMap.keys.toList()}');
     return completionMap;
   }
 
@@ -211,9 +242,57 @@ class _OptimizedHeatmapGridState extends State<_OptimizedHeatmapGrid> {
     Future.delayed(const Duration(milliseconds: 16), () {
       if (mounted) {
         _updateVisibleMonths();
+        // Sync month labels scroll with main grid
+        _syncMonthLabelsScroll();
         _isUpdatingScroll = false;
       }
     });
+  }
+
+  void _onMonthLabelsScrollChanged() {
+    if (_isUpdatingScroll) return;
+
+    _isUpdatingScroll = true;
+    Future.delayed(const Duration(milliseconds: 16), () {
+      if (mounted) {
+        // Sync main grid scroll with month labels
+        _syncMainGridScroll();
+        _isUpdatingScroll = false;
+      }
+    });
+  }
+
+  void _syncMonthLabelsScroll() {
+    if (_monthLabelsScrollController.hasClients && _scrollController.hasClients) {
+      final mainScrollOffset = _scrollController.offset;
+      _monthLabelsScrollController.jumpTo(mainScrollOffset);
+    }
+  }
+
+  void _syncMainGridScroll() {
+    if (_scrollController.hasClients && _monthLabelsScrollController.hasClients) {
+      final monthLabelsScrollOffset = _monthLabelsScrollController.offset;
+      _scrollController.jumpTo(monthLabelsScrollOffset);
+    }
+  }
+
+  void _scrollToCurrentMonth() {
+    if (!_scrollController.hasClients) return;
+
+    // Calculate which month index corresponds to the current month
+    // Month labels are generated from oldest to newest (11 months ago to current month)
+    final currentMonthIndex = 11; // Current month is always the last (12th) month in our 12-month range
+
+    // Calculate scroll position to show the current month
+    // Each month takes approximately 1/12 of the total width
+    final totalWidth = _scrollController.position.maxScrollExtent + _scrollController.position.viewportDimension;
+    final monthWidth = totalWidth / 12; // 12 months total
+    final targetScrollPosition = monthWidth * currentMonthIndex;
+
+    // Ensure we don't scroll beyond the maximum scroll extent
+    final clampedPosition = targetScrollPosition.clamp(0.0, _scrollController.position.maxScrollExtent);
+
+    _scrollController.jumpTo(clampedPosition);
   }
 
   void _updateVisibleMonths() {
@@ -246,34 +325,48 @@ class _OptimizedHeatmapGridState extends State<_OptimizedHeatmapGrid> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        // Month labels - separated for better performance
-        _buildMonthLabels(context),
-        const SizedBox(height: 8),
-        // Heatmap grid - optimized with caching
-        _buildHeatmapGrid(context),
-      ],
-    );
+    return _buildUnifiedHeatmap(context);
   }
 
-  Widget _buildMonthLabels(BuildContext context) {
-    return Row(
+  Widget _buildUnifiedHeatmap(BuildContext context) {
+    return Column(
       children: [
-        const SizedBox(width: 24), // Space for day labels
-        ...visibleMonthLabels.map(
-          (month) => Expanded(
-            child: Text(
-              month,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 10,
-                color: context.bodyMedium.color?.withValues(alpha: 0.6),
-                fontWeight: FontWeight.w500,
+        // Month labels row
+        Row(
+          children: [
+            const SizedBox(width: 24), // Space for day labels
+            Expanded(
+              child: SingleChildScrollView(
+                controller: _monthLabelsScrollController,
+                scrollDirection: Axis.horizontal,
+                physics: const BouncingScrollPhysics(),
+                child: SizedBox(
+                  width: heatmapData.weeks * 12.0, // Same width as the grid
+                  child: Row(
+                    children: visibleMonthLabels
+                        .map(
+                          (month) => Expanded(
+                            child: Text(
+                              month,
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 10,
+                                color: context.bodyMedium.color?.withValues(alpha: 0.6),
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ),
+                        )
+                        .toList(),
+                  ),
+                ),
               ),
             ),
-          ),
+          ],
         ),
+        const SizedBox(height: 8),
+        // Heatmap grid with day labels
+        _buildHeatmapGrid(context),
       ],
     );
   }
@@ -288,7 +381,7 @@ class _OptimizedHeatmapGridState extends State<_OptimizedHeatmapGrid> {
         // Grid with horizontal scrolling - optimized
         Expanded(
           child: SizedBox(
-            height: 112, // Fixed height for the heatmap grid (7 rows * 16px)
+            height: 84, // Fixed height for the heatmap grid (7 rows * 12px)
             child: Stack(
               children: [
                 SingleChildScrollView(
@@ -311,7 +404,7 @@ class _OptimizedHeatmapGridState extends State<_OptimizedHeatmapGrid> {
     return Column(
       children: heatmapData.dayLabels.asMap().entries.map((entry) {
         return Container(
-          height: 16,
+          height: 12,
           width: 20,
           alignment: Alignment.centerRight,
           child: entry.key.isEven
@@ -331,11 +424,12 @@ class _OptimizedHeatmapGridState extends State<_OptimizedHeatmapGrid> {
   Widget _buildScrollableGrid(BuildContext context) {
     return SizedBox(
       // Make the width proportional to the number of weeks
-      width: heatmapData.weeks * 9.0, // Each cell is 8px + 1px margin = 9px
+      width: heatmapData.weeks * 12.0, // Each cell is 10px + 2px margin = 12px
       child: Column(
         children: List.generate(7, (dayIndex) {
           return SizedBox(
-            width: heatmapData.weeks * 9.0,
+            width: heatmapData.weeks * 12.0,
+            height: 12, // Each row height: 10px cell + 2px margin = 12px
             child: Row(
               children: List.generate(
                 heatmapData.weeks,
@@ -358,9 +452,9 @@ class _OptimizedHeatmapGridState extends State<_OptimizedHeatmapGrid> {
 
     final cellData = _getCellDataOptimized(heatmapData, weekIndex, dayIndex);
     final cellWidget = Container(
-      margin: const EdgeInsets.all(0.5),
-      width: 8,
-      height: 8,
+      margin: const EdgeInsets.symmetric(horizontal: 1, vertical: 1),
+      width: 10,
+      height: 10,
       decoration: BoxDecoration(
         color: _getCellColor(cellData.intensity, context),
         borderRadius: BorderRadius.circular(1),
@@ -430,15 +524,19 @@ class _OptimizedHeatmapGridState extends State<_OptimizedHeatmapGrid> {
     final endDate = DateUtils.dateOnly(now);
     final startDate = endDate.subtract(const Duration(days: 365)); // Full year
 
+    print('DEBUG: Heatmap data generation - startDate: $startDate, endDate: $endDate');
+
     final weeks = 52; // Show full year (52 weeks)
     final monthLabels = <String>[];
     final dayLabels = ['', 'Mon', '', 'Wed', '', 'Fri', ''];
 
-    // Generate month labels for the full year
-    for (int i = 0; i < 12; i++) {
+    // Generate month labels for the full year (from oldest to newest)
+    for (int i = 11; i >= 0; i--) {
       final month = DateTime(now.year, now.month - i, 1);
-      monthLabels.insert(0, _getMonthAbbreviation(month.month));
+      monthLabels.add(_getMonthAbbreviation(month.month));
     }
+
+    print('DEBUG: Generated month labels: $monthLabels');
 
     return HeatmapData(
       startDate: startDate,
@@ -463,6 +561,11 @@ class _OptimizedHeatmapGridState extends State<_OptimizedHeatmapGrid> {
 
     final dateKey = '${date.year}-${date.month}-${date.day}';
     final isCompleted = _completionMap[dateKey] ?? false;
+
+    // Debug logging for first few cells to understand the mapping
+    if (weekIndex < 3 && dayIndex < 3) {
+      print('DEBUG: Cell lookup - week: $weekIndex, day: $dayIndex, date: $date, key: $dateKey, completed: $isCompleted');
+    }
 
     return CellData(
       date: date,
@@ -500,13 +603,27 @@ class _OptimizedHeatmapLegend extends StatefulWidget {
 }
 
 class _OptimizedHeatmapLegendState extends State<_OptimizedHeatmapLegend> {
-  late final HeatmapStats _cachedStats;
+  late HeatmapStats _cachedStats;
 
   @override
   void initState() {
     super.initState();
     // Pre-calculate stats once during init for better performance
     _cachedStats = _calculateHeatmapStats();
+  }
+
+  @override
+  void didUpdateWidget(_OptimizedHeatmapLegend oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    // Check if the habit completions have changed
+    if (oldWidget.habit.completions != widget.habit.completions) {
+      // Recalculate stats with new completion data
+      _cachedStats = _calculateHeatmapStats();
+
+      // Force a rebuild to reflect the changes
+      setState(() {});
+    }
   }
 
   @override

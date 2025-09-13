@@ -5,6 +5,7 @@ final class Themes {
     brightness: Brightness.dark,
     primaryColor: Colors.deepOrangeAccent,
     selectionHandleColor: CupertinoColors.white.withValues(alpha: .25),
+    primaryContrastingColor: CupertinoColors.white.withValues(alpha: .25),
     textTheme: const CupertinoTextThemeData(
       primaryColor: CupertinoColors.white,
     ),
@@ -13,7 +14,9 @@ final class Themes {
   static final cupertinoLightTheme = CupertinoThemeData(
     brightness: Brightness.light,
     primaryColor: Colors.deepOrangeAccent,
-    selectionHandleColor: CupertinoColors.black.withValues(alpha: .25),
+    selectionHandleColor: CupertinoColors.white,
+    primaryContrastingColor: CupertinoColors.black.withValues(alpha: .25),
+    scaffoldBackgroundColor: CupertinoColors.tertiarySystemGroupedBackground,
     textTheme: const CupertinoTextThemeData(
       primaryColor: CupertinoColors.black,
     ),

@@ -8,6 +8,7 @@ import '/features/habit_category/provider/provider_setup.dart';
 import '/features/onboarding/providers/onboarding_provider.dart';
 import '/features/purchase/services/purchase_service.dart';
 import '/services/app_default.dart';
+import '/services/app_lifecycle_service.dart';
 import 'core/constants/debug_constants.dart';
 import 'core/helpers/notifications/notification_helper.dart';
 import 'core/helpers/notifications/timezone.dart';
@@ -35,6 +36,9 @@ void main() async {
 
   await TimeZoneHelper.initializeTimeZone();
   await AppDefaultsService().initializeAppDefaults();
+
+  // Initialize app lifecycle service for smart notifications
+  AppLifecycleService().initialize();
 
   // Setup habit category providers
   final habitCategoryOverrides = await setupHabitCategoryProviders();

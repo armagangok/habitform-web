@@ -11,132 +11,122 @@ class ReminderModeToggleWidget extends ConsumerWidget {
     final reminderState = ref.watch(reminderProvider);
     final hasMultipleReminders = reminderState.reminder?.hasMultipleReminders ?? false;
 
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: context.scaffoldBackgroundColor,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: context.selectionHandleColor.withOpacity(0.2),
-        ),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'How many reminders?',
-            style: context.titleMedium.copyWith(
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-          const SizedBox(height: 12),
-          Row(
+    return CupertinoListSection.insetGrouped(
+      header: Text('How many reminders?'),
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
             children: [
-              Expanded(
-                child: CupertinoButton(
-                  padding: const EdgeInsets.symmetric(vertical: 12),
-                  onPressed: () => ref.read(reminderProvider.notifier).setReminderMode(false),
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                    decoration: BoxDecoration(
-                      color: !hasMultipleReminders ? context.primary : context.scaffoldBackgroundColor,
-                      borderRadius: BorderRadius.circular(8),
-                      border: Border.all(
-                        color: !hasMultipleReminders ? context.primary : context.selectionHandleColor.withOpacity(0.3),
-                      ),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          CupertinoIcons.clock,
-                          size: 16,
-                          color: !hasMultipleReminders ? Colors.white : context.cupertinoTextTheme.textStyle.color,
-                        ),
-                        const SizedBox(width: 8),
-                        Text(
-                          'Once a day',
-                          style: context.bodyMedium.copyWith(
-                            color: !hasMultipleReminders ? Colors.white : context.cupertinoTextTheme.textStyle.color,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: CupertinoButton(
-                  padding: const EdgeInsets.symmetric(vertical: 12),
-                  onPressed: () => ref.read(reminderProvider.notifier).setReminderMode(true),
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                    decoration: BoxDecoration(
-                      color: hasMultipleReminders ? context.primary : context.scaffoldBackgroundColor,
-                      borderRadius: BorderRadius.circular(8),
-                      border: Border.all(
-                        color: hasMultipleReminders ? context.primary : context.selectionHandleColor.withOpacity(0.3),
-                      ),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          CupertinoIcons.clock_fill,
-                          size: 16,
-                          color: hasMultipleReminders ? Colors.white : context.cupertinoTextTheme.textStyle.color,
-                        ),
-                        const SizedBox(width: 8),
-                        Text(
-                          'Multiple times',
-                          style: context.bodyMedium.copyWith(
-                            color: hasMultipleReminders ? Colors.white : context.cupertinoTextTheme.textStyle.color,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-          if (hasMultipleReminders) ...[
-            const SizedBox(height: 12),
-            Container(
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: context.primary.withOpacity(0.1),
-                borderRadius: BorderRadius.circular(8),
-                border: Border.all(
-                  color: context.primary.withOpacity(0.2),
-                ),
-              ),
-              child: Row(
+              Row(
                 children: [
-                  Icon(
-                    CupertinoIcons.lightbulb,
-                    size: 16,
-                    color: context.primary,
-                  ),
-                  const SizedBox(width: 8),
                   Expanded(
-                    child: Text(
-                      'Perfect for habits like "Drink Water" - set reminders at 8 AM, 2 PM, and 8 PM',
-                      style: context.bodySmall.copyWith(
-                        color: context.primary,
-                        fontWeight: FontWeight.w500,
+                    child: CupertinoButton(
+                      padding: const EdgeInsets.symmetric(vertical: 12),
+                      onPressed: () => ref.read(reminderProvider.notifier).setReminderMode(false),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                        decoration: BoxDecoration(
+                          color: !hasMultipleReminders ? context.primary : context.scaffoldBackgroundColor,
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.all(
+                            color: !hasMultipleReminders ? context.primary : context.selectionHandleColor.withOpacity(0.3),
+                          ),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              CupertinoIcons.clock,
+                              size: 16,
+                              color: !hasMultipleReminders ? Colors.white : context.cupertinoTextTheme.textStyle.color,
+                            ),
+                            const SizedBox(width: 8),
+                            Text(
+                              'Once a day',
+                              style: context.bodyMedium.copyWith(
+                                color: !hasMultipleReminders ? Colors.white : context.cupertinoTextTheme.textStyle.color,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: CupertinoButton(
+                      padding: const EdgeInsets.symmetric(vertical: 12),
+                      onPressed: () => ref.read(reminderProvider.notifier).setReminderMode(true),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                        decoration: BoxDecoration(
+                          color: hasMultipleReminders ? context.primary : context.scaffoldBackgroundColor,
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.all(
+                            color: hasMultipleReminders ? context.primary : context.selectionHandleColor.withOpacity(0.3),
+                          ),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              CupertinoIcons.clock_fill,
+                              size: 16,
+                              color: hasMultipleReminders ? Colors.white : context.cupertinoTextTheme.textStyle.color,
+                            ),
+                            const SizedBox(width: 8),
+                            Text(
+                              'Multiple times',
+                              style: context.bodyMedium.copyWith(
+                                color: hasMultipleReminders ? Colors.white : context.cupertinoTextTheme.textStyle.color,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
                 ],
               ),
-            ),
-          ],
-        ],
-      ),
+              if (hasMultipleReminders) ...[
+                const SizedBox(height: 12),
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: context.primary.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(
+                      color: context.primary.withOpacity(0.2),
+                    ),
+                  ),
+                  child: Row(
+                    children: [
+                      Icon(
+                        CupertinoIcons.lightbulb,
+                        size: 16,
+                        color: context.primary,
+                      ),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          'Perfect for habits like "Drink Water" - set reminders at 8 AM, 2 PM, and 8 PM',
+                          style: context.bodySmall.copyWith(
+                            color: context.primary,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ],
+          ),
+        )
+      ],
     );
   }
 }

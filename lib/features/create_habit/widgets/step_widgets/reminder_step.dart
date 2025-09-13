@@ -48,7 +48,9 @@ class ReminderStep extends ConsumerWidget {
           ),
 
           // Reminder selection widget
-          ReminderSelectionWidget(),
+          CustomSection(
+            child: ReminderSelectionWidget(),
+          ),
         ],
       ),
     );

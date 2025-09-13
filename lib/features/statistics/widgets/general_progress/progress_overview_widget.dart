@@ -8,8 +8,8 @@ import '../../page/statistics_page.dart'; // selectedHabitIndexProvider için
 import '../../provider/statistics_provider.dart';
 import 'statistic_card.dart';
 
-class GeneralProgressStats extends ConsumerWidget {
-  const GeneralProgressStats({
+class ProgressOverviewWidget extends ConsumerWidget {
+  const ProgressOverviewWidget({
     super.key,
   });
 
@@ -63,13 +63,51 @@ class GeneralProgressStats extends ConsumerWidget {
             if (usingMockData) {
               // Use mock data to display statistics
               return CupertinoListSection.insetGrouped(
-                backgroundColor: Colors.transparent,
                 header: Text(LocaleKeys.statistics_overview.tr()),
                 children: [
                   Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: Column(
                       children: [
+                        // First row
+                        Row(
+                          children: [
+                            Expanded(
+                              child: StatisticCard(
+                                icon: Icons.local_fire_department,
+                                title: LocaleKeys.statistics_current_streak.tr(),
+                                value: "28", // Mock value for current streak
+                                unit: "days",
+                                cardColor: Colors.orange.withValues(alpha: 0.15),
+                                iconColor: Colors.orange,
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: StatisticCard(
+                                icon: Icons.emoji_events,
+                                title: LocaleKeys.statistics_longest_streak.tr(),
+                                value: "28", // Mock value for longest streak
+                                unit: "days",
+                                cardColor: Colors.amber.withValues(alpha: 0.15),
+                                iconColor: Colors.amber,
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: StatisticCard(
+                                icon: Icons.track_changes,
+                                title: "Success Rate",
+                                value: "100.0",
+                                unit: "%",
+                                cardColor: Colors.red.withValues(alpha: 0.15),
+                                iconColor: Colors.red,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 12),
+                        // Second row
                         Row(
                           children: [
                             Expanded(
@@ -77,34 +115,31 @@ class GeneralProgressStats extends ConsumerWidget {
                                 icon: Icons.check_circle_outline,
                                 title: LocaleKeys.statistics_completed.tr(),
                                 value: selectedHabit.completedDays.toString(),
+                                unit: "days",
+                                cardColor: Colors.green.withValues(alpha: 0.15),
+                                iconColor: Colors.green,
                               ),
                             ),
-                            const SizedBox(width: 16),
+                            const SizedBox(width: 12),
                             Expanded(
                               child: StatisticCard(
                                 icon: Icons.calendar_today,
-                                title: LocaleKeys.statistics_total_days.tr(),
+                                title: "Days Active",
                                 value: selectedHabit.totalDays.toString(),
+                                unit: "days",
+                                cardColor: Colors.blue.withValues(alpha: 0.15),
+                                iconColor: Colors.blue,
                               ),
                             ),
-                          ],
-                        ),
-                        const SizedBox(height: 16),
-                        Row(
-                          children: [
+                            const SizedBox(width: 12),
                             Expanded(
                               child: StatisticCard(
-                                icon: Icons.local_fire_department,
-                                title: LocaleKeys.statistics_longest_streak.tr(),
-                                value: "5", // Mock value for longest streak
-                              ),
-                            ),
-                            const SizedBox(width: 16),
-                            Expanded(
-                              child: StatisticCard(
-                                icon: Icons.trending_up,
-                                title: LocaleKeys.statistics_current_streak.tr(),
-                                value: "3", // Mock value for current streak
+                                icon: Icons.eco,
+                                title: "Formation Progress",
+                                value: "42",
+                                unit: "%",
+                                cardColor: Colors.purple.withValues(alpha: 0.15),
+                                iconColor: Colors.purple,
                               ),
                             ),
                           ],
@@ -130,7 +165,6 @@ class GeneralProgressStats extends ConsumerWidget {
             // Veri kontrolü
             if (selectedHabit.totalDays == 0) {
               return CupertinoListSection.insetGrouped(
-                backgroundColor: Colors.transparent,
                 header: Text(LocaleKeys.statistics_overview.tr()),
                 children: [
                   Padding(
@@ -167,13 +201,51 @@ class GeneralProgressStats extends ConsumerWidget {
             }
 
             return CupertinoListSection.insetGrouped(
-              backgroundColor: Colors.transparent,
               header: Text(LocaleKeys.statistics_overview.tr()),
               children: [
-                ColoredBox(
-                  color: context.theme.scaffoldBackgroundColor,
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
                   child: Column(
                     children: [
+                      // First row
+                      Row(
+                        children: [
+                          Expanded(
+                            child: StatisticCard(
+                              icon: Icons.local_fire_department,
+                              title: LocaleKeys.statistics_current_streak.tr(),
+                              value: currentStreak.toString(),
+                              unit: "days",
+                              cardColor: Colors.orange.withValues(alpha: 0.15),
+                              iconColor: Colors.orange,
+                            ),
+                          ),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: StatisticCard(
+                              icon: Icons.emoji_events,
+                              title: LocaleKeys.statistics_longest_streak.tr(),
+                              value: longestStreak.toString(),
+                              unit: "days",
+                              cardColor: Colors.amber.withValues(alpha: 0.15),
+                              iconColor: Colors.amber,
+                            ),
+                          ),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: StatisticCard(
+                              icon: Icons.track_changes,
+                              title: "Success Rate",
+                              value: selectedHabit.totalDays > 0 ? ((selectedHabit.completedDays / selectedHabit.totalDays) * 100).toStringAsFixed(1) : "0.0",
+                              unit: "%",
+                              cardColor: Colors.red.withValues(alpha: 0.15),
+                              iconColor: Colors.red,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 12),
+                      // Second row
                       Row(
                         children: [
                           Expanded(
@@ -181,34 +253,31 @@ class GeneralProgressStats extends ConsumerWidget {
                               icon: Icons.check_circle_outline,
                               title: LocaleKeys.statistics_completed.tr(),
                               value: selectedHabit.completedDays.toString(),
+                              unit: "days",
+                              cardColor: Colors.green.withValues(alpha: 0.15),
+                              iconColor: Colors.green,
                             ),
                           ),
-                          const SizedBox(width: 16),
+                          const SizedBox(width: 12),
                           Expanded(
                             child: StatisticCard(
                               icon: Icons.calendar_today,
-                              title: LocaleKeys.statistics_total_days.tr(),
+                              title: "Days Active",
                               value: selectedHabit.totalDays.toString(),
+                              unit: "days",
+                              cardColor: Colors.blue.withValues(alpha: 0.15),
+                              iconColor: Colors.blue,
                             ),
                           ),
-                        ],
-                      ),
-                      const SizedBox(height: 16),
-                      Row(
-                        children: [
+                          const SizedBox(width: 12),
                           Expanded(
                             child: StatisticCard(
-                              icon: Icons.local_fire_department,
-                              title: LocaleKeys.statistics_longest_streak.tr(),
-                              value: longestStreak.toString(),
-                            ),
-                          ),
-                          const SizedBox(width: 16),
-                          Expanded(
-                            child: StatisticCard(
-                              icon: Icons.trending_up,
-                              title: LocaleKeys.statistics_current_streak.tr(),
-                              value: currentStreak.toString(),
+                              icon: Icons.eco,
+                              title: "Formation Progress",
+                              value: selectedHabit.totalDays > 0 ? ((selectedHabit.totalDays / 66) * 100).clamp(0, 100).toStringAsFixed(0) : "0",
+                              unit: "%",
+                              cardColor: Colors.purple.withValues(alpha: 0.15),
+                              iconColor: Colors.purple,
                             ),
                           ),
                         ],

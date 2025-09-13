@@ -32,12 +32,13 @@ class ReminderModel extends HiveObject {
     DateTime? time,
     List<Days>? days,
     MultipleReminderModel? multipleReminders,
+    bool clearMultipleReminders = false,
   }) {
     return ReminderModel(
       id: id ?? this.id,
       reminderTime: time,
       days: days ?? this.days,
-      multipleReminders: multipleReminders ?? this.multipleReminders,
+      multipleReminders: clearMultipleReminders ? null : (multipleReminders ?? this.multipleReminders),
     );
   }
 

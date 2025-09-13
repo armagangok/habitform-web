@@ -1,10 +1,14 @@
 import 'dart:math' as math;
 
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lottie/lottie.dart';
 
 import '/core/core.dart';
+import '/models/completion_entry/completion_entry.dart';
 import '/models/completion_entry/completion_extension.dart';
 import '/models/models.dart';
+import '../providers/habit_detail_provider.dart';
 
 class HabitProgressCard extends ConsumerWidget {
   final Habit habit;
@@ -338,15 +342,81 @@ class _ProgressStatRow extends StatelessWidget {
   }
 }
 
-class _WeeklyProgressChart extends StatelessWidget {
+class _WeeklyProgressChart extends ConsumerStatefulWidget {
   final Habit habit;
 
   const _WeeklyProgressChart({required this.habit});
 
   @override
+  ConsumerState<_WeeklyProgressChart> createState() => _WeeklyProgressChartState();
+}
+
+class _WeeklyProgressChartState extends ConsumerState<_WeeklyProgressChart> with TickerProviderStateMixin {
+  late AnimationController _lottieController;
+  int? _animatingIndex;
+  bool _showLottieAnimation = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _lottieController = AnimationController(
+      duration: const Duration(milliseconds: 1500),
+      vsync: this,
+    );
+  }
+
+  @override
+  void dispose() {
+    _lottieController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _toggleCompletion(int index) async {
+    final isCurrentlyCompleted = _getWeeklyData()[index];
+
+    // Set Lottie animation state
+    _animatingIndex = index;
+    _showLottieAnimation = !isCurrentlyCompleted;
+
+    // Haptic feedback
+    HapticFeedback.lightImpact();
+
+    // Start Lottie animation
+    if (_showLottieAnimation) {
+      _lottieController.forward();
+    }
+
+    // Update completion status using the provider
+    final today = DateUtils.dateOnly(DateTime.now());
+    final targetDate = today.subtract(Duration(days: 6 - index));
+
+    final completionEntry = CompletionEntry(
+      id: '${targetDate.year}-${targetDate.month}-${targetDate.day}',
+      date: targetDate,
+      isCompleted: !isCurrentlyCompleted,
+    );
+
+    try {
+      // Use the provider which will update both local state and home provider
+      await ref.read(habitDetailProvider.notifier).markHabitAsComplete(widget.habit.id, completionEntry);
+    } catch (e) {
+      // Handle error - could show a snackbar or dialog
+      print('Error updating completion: $e');
+    }
+
+    // Reset Lottie animation after completion
+    Future.delayed(const Duration(milliseconds: 1500), () {
+      if (mounted) {
+        _lottieController.reset();
+        _animatingIndex = null;
+        _showLottieAnimation = false;
+      }
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     final weeklyData = _getWeeklyData();
-    final days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -360,40 +430,53 @@ class _WeeklyProgressChart extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 12),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: List.generate(7, (index) {
-            final isCompleted = weeklyData[index];
-            return Column(
-              children: [
-                Container(
-                  width: 32,
-                  height: 32,
-                  decoration: BoxDecoration(
-                    color: isCompleted ? Color(habit.colorCode) : Color(habit.colorCode).withValues(alpha: 0.1),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Center(
-                    child: isCompleted
-                        ? Icon(
-                            FontAwesomeIcons.check,
-                            size: 14,
-                            color: Colors.white,
-                          )
-                        : null,
+        Stack(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: List.generate(7, (index) {
+                final isCompleted = weeklyData[index];
+
+                return _WeeklyDayCell(
+                  index: index,
+                  isCompleted: isCompleted,
+                  habitColor: Color(widget.habit.colorCode),
+                  onTap: () => _toggleCompletion(index),
+                );
+              }),
+            ),
+            // Lottie animation overlay
+            if (_showLottieAnimation && _animatingIndex != null)
+              Positioned(
+                left: _animatingIndex! * (MediaQuery.of(context).size.width - 32) / 7 + 16 - 30,
+                top: -30,
+                child: SizedBox(
+                  width: 60,
+                  height: 60,
+                  child: Lottie.asset(
+                    'assets/animations/completion.json',
+                    controller: _lottieController,
+                    fit: BoxFit.contain,
+                    errorBuilder: (context, error, stackTrace) {
+                      // Fallback to a simple checkmark animation if Lottie fails
+                      return AnimatedBuilder(
+                        animation: _lottieController,
+                        builder: (context, child) {
+                          return Transform.scale(
+                            scale: _lottieController.value,
+                            child: Icon(
+                              FontAwesomeIcons.check,
+                              size: 30,
+                              color: Color(widget.habit.colorCode),
+                            ),
+                          );
+                        },
+                      );
+                    },
                   ),
                 ),
-                const SizedBox(height: 4),
-                Text(
-                  days[index],
-                  style: TextStyle(
-                    fontSize: 10,
-                    color: context.bodyMedium.color?.withValues(alpha: 0.6),
-                  ),
-                ),
-              ],
-            );
-          }),
+              ),
+          ],
         ),
       ],
     );
@@ -405,11 +488,159 @@ class _WeeklyProgressChart extends StatelessWidget {
 
     for (int i = 6; i >= 0; i--) {
       final date = today.subtract(Duration(days: i));
-      final isCompleted = habit.completions.values.any((entry) => DateUtils.isSameDay(DateUtils.dateOnly(entry.date), date) && entry.isCompleted);
+      final isCompleted = widget.habit.completions.values.any((entry) => DateUtils.isSameDay(DateUtils.dateOnly(entry.date), date) && entry.isCompleted);
       weeklyData.add(isCompleted);
     }
 
     return weeklyData;
+  }
+}
+
+class _WeeklyDayCell extends StatefulWidget {
+  final int index;
+  final bool isCompleted;
+  final Color habitColor;
+  final VoidCallback onTap;
+
+  const _WeeklyDayCell({
+    required this.index,
+    required this.isCompleted,
+    required this.habitColor,
+    required this.onTap,
+  });
+
+  @override
+  State<_WeeklyDayCell> createState() => _WeeklyDayCellState();
+}
+
+class _WeeklyDayCellState extends State<_WeeklyDayCell> with SingleTickerProviderStateMixin {
+  late AnimationController _animationController;
+  late Animation<double> _scaleAnimation;
+  late Animation<double> _fadeAnimation;
+  late Animation<double> _rotationAnimation;
+
+  bool _isAnimating = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _animationController = AnimationController(
+      duration: const Duration(milliseconds: 800),
+      vsync: this,
+    );
+
+    _scaleAnimation = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(CurvedAnimation(
+      parent: _animationController,
+      curve: Curves.elasticOut,
+    ));
+
+    _fadeAnimation = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(CurvedAnimation(
+      parent: _animationController,
+      curve: const Interval(0.0, 0.6, curve: Curves.easeOut),
+    ));
+
+    _rotationAnimation = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(CurvedAnimation(
+      parent: _animationController,
+      curve: const Interval(0.0, 0.8, curve: Curves.easeOutBack),
+    ));
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
+  void _startAnimation() {
+    if (_isAnimating) return;
+
+    setState(() {
+      _isAnimating = true;
+    });
+
+    _animationController.forward().then((_) {
+      _animationController.reset();
+      if (mounted) {
+        setState(() {
+          _isAnimating = false;
+        });
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+
+    return RepaintBoundary(
+      child: GestureDetector(
+        onTap: () {
+          _startAnimation();
+          widget.onTap();
+        },
+        child: Column(
+          children: [
+            AnimatedBuilder(
+              animation: _animationController,
+              builder: (context, child) {
+                return Transform.scale(
+                  scale: _isAnimating ? _scaleAnimation.value : 1.0,
+                  child: Transform.rotate(
+                    angle: _isAnimating && widget.isCompleted ? _rotationAnimation.value * 0.1 : 0.0,
+                    child: Container(
+                      width: 32,
+                      height: 32,
+                      decoration: BoxDecoration(
+                        color: widget.isCompleted ? widget.habitColor : widget.habitColor.withValues(alpha: 0.1),
+                        borderRadius: BorderRadius.circular(8),
+                        boxShadow: _isAnimating && widget.isCompleted
+                            ? [
+                                BoxShadow(
+                                  color: widget.habitColor.withValues(alpha: 0.3),
+                                  blurRadius: 8,
+                                  spreadRadius: 2,
+                                ),
+                              ]
+                            : null,
+                      ),
+                      child: Center(
+                        child: widget.isCompleted
+                            ? FadeTransition(
+                                opacity: _fadeAnimation,
+                                child: const Icon(
+                                  FontAwesomeIcons.check,
+                                  size: 14,
+                                  color: Colors.white,
+                                ),
+                              )
+                            : null,
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+            const SizedBox(height: 4),
+            Text(
+              days[widget.index],
+              style: TextStyle(
+                fontSize: 10,
+                color: context.bodyMedium.color?.withValues(alpha: 0.6),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
 

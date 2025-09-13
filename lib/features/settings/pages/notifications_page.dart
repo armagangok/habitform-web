@@ -1,10 +1,14 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import '/core/core.dart';
 import '/core/helpers/notifications/notification_helper.dart';
+import '/core/widgets/notification_limit_widget.dart';
+import '/features/reminder/models/reminder/reminder_model.dart';
+import '/services/habit_service/habit_service_interface.dart';
 
 class NotificationsPage extends StatefulWidget {
   const NotificationsPage({super.key});
@@ -15,6 +19,7 @@ class NotificationsPage extends StatefulWidget {
 
 class _NotificationsPageState extends State<NotificationsPage> with SingleTickerProviderStateMixin {
   List<PendingNotificationRequest> _notifications = [];
+  List<ReminderModel> _activeReminders = [];
   bool _isLoading = true;
   final Map<String, bool> _expandedStates = {};
 
@@ -27,8 +32,19 @@ class _NotificationsPageState extends State<NotificationsPage> with SingleTicker
   Future<void> _loadNotifications() async {
     try {
       final notifications = await NotificationHelper.shared.listScheduledNotifications();
+
+      // Get active reminders for notification limit widget
+      final activeHabits = await habitService.getHabits();
+      final reminders = <ReminderModel>[];
+      for (final habit in activeHabits) {
+        if (habit.reminderModel != null && habit.reminderModel!.hasAnyReminders) {
+          reminders.add(habit.reminderModel!);
+        }
+      }
+
       setState(() {
         _notifications = notifications;
+        _activeReminders = reminders;
         _isLoading = false;
       });
     } catch (e) {
@@ -49,6 +65,20 @@ class _NotificationsPageState extends State<NotificationsPage> with SingleTicker
       grouped[habitName]!.add(notification);
     }
     return grouped;
+  }
+
+  void _showNotificationBreakdown() {
+    if (Platform.isIOS) {
+      showCupertinoDialog(
+        context: context,
+        builder: (context) => NotificationBreakdownDialog(reminders: _activeReminders),
+      );
+    } else {
+      showDialog(
+        context: context,
+        builder: (context) => NotificationBreakdownDialog(reminders: _activeReminders),
+      );
+    }
   }
 
   Widget _buildNotificationItem(PendingNotificationRequest notification) {
@@ -160,12 +190,22 @@ class _NotificationsPageState extends State<NotificationsPage> with SingleTicker
       child: CupertinoPageScaffold(
         navigationBar: CupertinoNavigationBar(
           backgroundColor: context.theme.scaffoldBackgroundColor.withValues(alpha: .4),
+          previousPageTitle: LocaleKeys.settings_settings.tr(),
           middle: Text(LocaleKeys.habit_reminder.tr()),
         ),
         child: SafeArea(
           bottom: false,
           child: CustomScrollView(
             slivers: [
+              // Notification limit widget
+              if (!_isLoading && _activeReminders.isNotEmpty)
+                SliverToBoxAdapter(
+                  child: NotificationLimitWidget(
+                    reminders: _activeReminders,
+                    onOptimizePressed: () => _showNotificationBreakdown(),
+                  ),
+                ),
+
               SliverToBoxAdapter(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 16),

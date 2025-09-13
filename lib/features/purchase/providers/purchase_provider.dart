@@ -161,7 +161,7 @@ class PurchaseNotifier extends AsyncNotifier<PaywallState> {
   }
 
   /// Attempts to purchase a package
-  Future<void> purchasePackage(Package package, bool isFromOnboarding ) async {
+  Future<void> purchasePackage(Package package, bool isFromOnboarding) async {
     // Mevcut state'i güvenli bir şekilde al
     final currentState = state.valueOrNull;
     if (currentState == null) return;

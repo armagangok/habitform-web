@@ -24,59 +24,59 @@ class ReminderPage extends ConsumerWidget {
           },
         ),
       ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: SafeArea(
-          child: ListView(
-            physics: const BouncingScrollPhysics(),
-            children: [
-              Column(
-                children: [
-                  CustomSection(
-                    text: LocaleKeys.common_days.tr(),
-                    child: Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: DaySelectionWidget(),
+      child: SafeArea(
+        child: ListView(
+          physics: const BouncingScrollPhysics(),
+          children: [
+            Column(
+              children: [
+                CustomSection(
+                  text: LocaleKeys.common_days.tr(),
+                  child: Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Column(
+                      children: [
+                        DaySelectionWidget(),
+                        const SizedBox(height: 5),
+                        SelectionButtons(),
+                      ],
                     ),
                   ),
-                  SelectionButtons(),
-                ],
-              ),
-              // Only show reminder mode and time sections if days are selected
-              Consumer(
-                builder: (context, ref, child) {
-                  final reminderState = ref.watch(reminderProvider);
+                ),
+              ],
+            ),
+            // Only show reminder mode and time sections if days are selected
+            Consumer(
+              builder: (context, ref, child) {
+                final reminderState = ref.watch(reminderProvider);
 
-                  if (!reminderState.hasSelectedDays) {
-                    return const SizedBox.shrink();
-                  }
+                if (!reminderState.hasSelectedDays) {
+                  return const SizedBox.shrink();
+                }
 
-                  return Column(
-                    children: [
-                      const SizedBox(height: 20),
-                      const ReminderModeToggleWidget(),
-                      const SizedBox(height: 20),
-                      Consumer(
-                        builder: (context, ref, child) {
-                          final hasMultipleReminders = reminderState.reminder?.hasMultipleReminders ?? false;
+                return Column(
+                  children: [
+                    const ReminderModeToggleWidget(),
+                    Consumer(
+                      builder: (context, ref, child) {
+                        final hasMultipleReminders = reminderState.reminder?.hasMultipleReminders ?? false;
 
-                          if (hasMultipleReminders) {
-                            return const MultipleReminderTimesWidget();
-                          } else {
-                            return CustomSection(
-                              text: LocaleKeys.reminder_time.tr(),
-                              child: SelectTimeWidget().animate(),
-                            );
-                          }
-                        },
-                      ),
-                    ],
-                  );
-                },
-              ),
-              const Padding(padding: EdgeInsets.only(bottom: 32)),
-            ],
-          ),
+                        if (hasMultipleReminders) {
+                          return const MultipleReminderTimesWidget();
+                        } else {
+                          return CustomSection(
+                            text: LocaleKeys.reminder_time.tr(),
+                            child: SelectTimeWidget().animate(),
+                          );
+                        }
+                      },
+                    ),
+                  ],
+                );
+              },
+            ),
+            const Padding(padding: EdgeInsets.only(bottom: 32)),
+          ],
         ),
       ),
     );
