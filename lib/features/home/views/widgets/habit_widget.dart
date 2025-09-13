@@ -59,6 +59,9 @@ class _HabitWidgetState extends ConsumerState<HabitWidget> with SingleTickerProv
 
     if (!mounted) return;
 
+    await Future.delayed(const Duration(milliseconds: 500));
+    if (!mounted) return;
+
     await showCupertinoDialog(
       context: context,
       barrierDismissible: true,

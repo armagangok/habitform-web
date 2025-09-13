@@ -115,10 +115,9 @@ class LocalHabitService extends HabitService {
       updatedCompletions.remove(existingKey);
     }
 
-    // Add new entry if it's marked as completed
-    if (completion.isCompleted) {
-      updatedCompletions[completion.id] = completion;
-    }
+    // Always add the completion entry (regardless of completed status)
+    // This allows us to track both completed and incomplete states
+    updatedCompletions[completion.id] = completion;
 
     // Save updated habit
     final updatedHabit = habit.copyWith(completions: updatedCompletions);

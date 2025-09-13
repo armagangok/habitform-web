@@ -133,7 +133,7 @@ class _AchievementDialogState extends State<AchievementDialog> with TickerProvid
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final habitColor = _getFormationScoreColor(widget.newScore.toDouble());
+    final habitColor = Color(widget.habit.colorCode);
 
     return CustomBlurWidget(
       child: Stack(
@@ -156,14 +156,6 @@ class _AchievementDialogState extends State<AchievementDialog> with TickerProvid
                           maxHeight: context.height(0.8),
                         ),
                         decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                            colors: [
-                              theme.colorScheme.surface.withValues(alpha: 0.95),
-                              theme.colorScheme.surface.withValues(alpha: 0.9),
-                            ],
-                          ),
                           borderRadius: BorderRadius.circular(context.width(0.08)),
                           border: Border.all(
                             color: habitColor.withValues(alpha: 0.3),
@@ -192,7 +184,7 @@ class _AchievementDialogState extends State<AchievementDialog> with TickerProvid
                               children: [
                                 // Achievement Emoji with premium effects
                                 _buildAnimatedEmoji(context, habitColor),
-                                SizedBox(height: context.height(0.03)),
+                                SizedBox(height: context.height(0.015)),
 
                                 // Habit name
                                 Text(
@@ -203,7 +195,6 @@ class _AchievementDialogState extends State<AchievementDialog> with TickerProvid
                                   ),
                                   textAlign: TextAlign.center,
                                 ),
-                                SizedBox(height: context.height(0.01)),
 
                                 // Achievement title
                                 Text(
@@ -327,44 +318,198 @@ class _AchievementDialogState extends State<AchievementDialog> with TickerProvid
       animation: _scoreAnimation,
       builder: (context, child) {
         final animatedScore = _scoreAnimation.value;
-        return Container(
-          padding: context.padding(0.04),
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [
-                habitColor.withValues(alpha: 0.1),
-                habitColor.withValues(alpha: 0.05),
-              ],
-            ),
-            borderRadius: BorderRadius.circular(context.width(0.06)),
-            border: Border.all(
-              color: habitColor.withValues(alpha: 0.3),
-              width: 1,
-            ),
-          ),
-          child: Column(
-            children: [
-              Text(
-                'Formation Score',
-                style: context.bodyMedium.copyWith(
-                  color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-              SizedBox(height: context.height(0.01)),
-              Text(
-                '${animatedScore.round()}',
-                style: context.displaySmall.copyWith(
-                  fontWeight: FontWeight.w800,
-                  color: habitColor,
-                  fontFeatures: [FontFeature.tabularFigures()],
-                ),
-              ),
-            ],
-          ),
-        );
+        final progress = animatedScore / 100.0;
+        final scoreColor = _getFormationScoreColor(animatedScore);
+
+        return _buildAdvancedCircularProgress(context, progress, animatedScore, scoreColor, theme);
       },
     );
+  }
+
+  Widget _buildAdvancedCircularProgress(
+    BuildContext context,
+    double progress,
+    double animatedScore,
+    Color scoreColor,
+    ThemeData theme,
+  ) {
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        // Background circle with gradient
+        Container(
+          width: context.width(0.4),
+          height: context.width(0.4),
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            gradient: RadialGradient(
+              colors: [
+                scoreColor.withValues(alpha: 0.1),
+                scoreColor.withValues(alpha: 0.05),
+                Colors.transparent,
+              ],
+            ),
+          ),
+        ),
+
+        // Outer ring (background)
+        CustomPaint(
+          size: Size(context.width(0.4), context.width(0.4)),
+          painter: _CircularProgressPainter(
+            progress: 1.0,
+            strokeWidth: 8,
+            color: theme.colorScheme.onSurface.withValues(alpha: 0.1),
+            startAngle: -90,
+          ),
+        ),
+
+        // Progress ring with gradient
+        CustomPaint(
+          size: Size(context.width(0.4), context.width(0.4)),
+          painter: _CircularProgressPainter(
+            progress: progress,
+            strokeWidth: 8,
+            color: scoreColor,
+            startAngle: -90,
+            isGradient: true,
+            gradientColors: _getProgressiveColors(progress),
+          ),
+        ),
+
+        // Inner glow effect
+        Container(
+          width: context.width(0.35),
+          height: context.width(0.35),
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            gradient: RadialGradient(
+              colors: [
+                scoreColor.withValues(alpha: 0.15),
+                scoreColor.withValues(alpha: 0.05),
+                Colors.transparent,
+              ],
+            ),
+          ),
+        ),
+
+        // Center content
+        Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            // Animated percentage
+            AnimatedBuilder(
+              animation: _scoreAnimation,
+              builder: (context, child) {
+                return Text(
+                  '${animatedScore.round()}',
+                  style: context.displaySmall.copyWith(
+                    fontWeight: FontWeight.w900,
+                    color: scoreColor,
+                    fontFeatures: [
+                      FontFeature.tabularFigures(),
+                    ],
+                    shadows: [
+                      Shadow(
+                        color: scoreColor.withValues(alpha: 0.3),
+                        blurRadius: 8,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
+
+            SizedBox(height: context.height(0.005)),
+
+            // Formation status
+            Text(
+              _getFormationStatus(progress),
+              style: context.bodySmall.copyWith(
+                color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
+                fontWeight: FontWeight.w500,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
+
+        // Floating particles around the circle
+        ...List.generate(8, (index) {
+          final angle = (index * 45.0) * (pi / 180);
+          final radius = context.width(0.2);
+          final x = cos(angle) * radius;
+          final y = sin(angle) * radius;
+
+          return Positioned(
+            left: context.width(0.2) + x - 2,
+            top: context.width(0.2) + y - 2,
+            child: AnimatedBuilder(
+              animation: _particleAnimation,
+              builder: (context, child) {
+                final particleProgress = (_particleAnimation.value + index * 0.1) % 1.0;
+                return Opacity(
+                  opacity: (1 - particleProgress) * 0.6,
+                  child: Transform.scale(
+                    scale: 0.5 + particleProgress * 0.5,
+                    child: Container(
+                      width: 4,
+                      height: 4,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: scoreColor.withValues(alpha: 0.8),
+                        boxShadow: [
+                          BoxShadow(
+                            color: scoreColor.withValues(alpha: 0.5),
+                            blurRadius: 4,
+                            spreadRadius: 1,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+          );
+        }),
+      ],
+    );
+  }
+
+  List<Color> _getProgressiveColors(double progress) {
+    if (progress >= 0.9) {
+      return [
+        const Color(0xFF4CAF50),
+        const Color(0xFF8BC34A),
+        const Color(0xFFCDDC39),
+      ];
+    } else if (progress >= 0.7) {
+      return [
+        const Color(0xFF8BC34A),
+        const Color(0xFFCDDC39),
+        const Color(0xFFFFC107),
+      ];
+    } else if (progress >= 0.5) {
+      return [
+        const Color(0xFFFFC107),
+        const Color(0xFFFF9800),
+        const Color(0xFFFF5722),
+      ];
+    } else {
+      return [
+        const Color(0xFFFF5722),
+        const Color(0xFFF44336),
+        const Color(0xFFE91E63),
+      ];
+    }
+  }
+
+  String _getFormationStatus(double progress) {
+    if (progress >= 0.9) return 'Excellent!';
+    if (progress >= 0.7) return 'Great!';
+    if (progress >= 0.5) return 'Good';
+    return 'Keep Going';
   }
 
   Widget _buildProgressSection(BuildContext context, ThemeData theme, Color habitColor) {
@@ -447,47 +592,31 @@ class _AchievementDialogState extends State<AchievementDialog> with TickerProvid
   }
 
   Widget _buildPremiumButton(BuildContext context, ThemeData theme, Color habitColor) {
-    return Container(
-      width: double.infinity,
-      height: context.height(0.06),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(context.width(0.08)),
-        gradient: LinearGradient(
-          colors: [habitColor, habitColor.withValues(alpha: 0.8)],
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: habitColor.withValues(alpha: 0.3),
-            blurRadius: 15,
-            spreadRadius: 2,
-            offset: const Offset(0, 5),
+    return CupertinoButton(
+      color: habitColor,
+      borderRadius: BorderRadius.circular(90),
+      onPressed: () {
+        HapticFeedback.lightImpact();
+        Navigator.of(context).pop();
+      },
+      padding: EdgeInsets.zero,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            'Continue',
+            style: context.bodyLarge.copyWith(
+              fontWeight: FontWeight.w600,
+              color: Colors.white,
+            ),
+          ),
+          SizedBox(width: context.width(0.02)),
+          Icon(
+            CupertinoIcons.arrow_right_circle_fill,
+            color: Colors.white,
+            size: context.width(0.05),
           ),
         ],
-      ),
-      child: CupertinoButton(
-        onPressed: () {
-          HapticFeedback.lightImpact();
-          Navigator.of(context).pop();
-        },
-        padding: EdgeInsets.zero,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              'Continue',
-              style: context.bodyLarge.copyWith(
-                fontWeight: FontWeight.w600,
-                color: Colors.white,
-              ),
-            ),
-            SizedBox(width: context.width(0.02)),
-            Icon(
-              CupertinoIcons.arrow_right_circle_fill,
-              color: Colors.white,
-              size: context.width(0.05),
-            ),
-          ],
-        ),
       ),
     );
   }
@@ -583,6 +712,78 @@ class _AchievementDialogState extends State<AchievementDialog> with TickerProvid
     } else {
       return 'Keep going! This $difficultyName habit needs more consistency. $remainingDays days to go! 🌱';
     }
+  }
+}
+
+class _CircularProgressPainter extends CustomPainter {
+  final double progress;
+  final double strokeWidth;
+  final Color color;
+  final double startAngle;
+  final bool isGradient;
+  final List<Color>? gradientColors;
+
+  _CircularProgressPainter({
+    required this.progress,
+    required this.strokeWidth,
+    required this.color,
+    required this.startAngle,
+    this.isGradient = false,
+    this.gradientColors,
+  });
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final center = Offset(size.width / 2, size.height / 2);
+    final radius = (size.width - strokeWidth) / 2;
+
+    if (isGradient && gradientColors != null && gradientColors!.length >= 2) {
+      // Create gradient shader
+      final rect = Rect.fromCircle(center: center, radius: radius);
+      final gradient = SweepGradient(
+        colors: gradientColors!,
+        startAngle: startAngle * (pi / 180),
+        endAngle: (startAngle + 360 * progress) * (pi / 180),
+      );
+
+      final paint = Paint()
+        ..shader = gradient.createShader(rect)
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = strokeWidth
+        ..strokeCap = StrokeCap.round;
+
+      final sweepAngle = 2 * pi * progress;
+      canvas.drawArc(
+        rect,
+        startAngle * (pi / 180),
+        sweepAngle,
+        false,
+        paint,
+      );
+    } else {
+      // Solid color
+      final paint = Paint()
+        ..color = color
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = strokeWidth
+        ..strokeCap = StrokeCap.round;
+
+      final rect = Rect.fromCircle(center: center, radius: radius);
+      final sweepAngle = 2 * pi * progress;
+
+      canvas.drawArc(
+        rect,
+        startAngle * (pi / 180),
+        sweepAngle,
+        false,
+        paint,
+      );
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) {
+    return oldDelegate is _CircularProgressPainter && (oldDelegate.progress != progress || oldDelegate.color != color || oldDelegate.strokeWidth != strokeWidth);
   }
 }
 

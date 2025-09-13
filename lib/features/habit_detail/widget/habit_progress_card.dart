@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math' as math;
 
 import 'package:flutter/services.dart';
@@ -20,7 +21,7 @@ class HabitProgressCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final progressData = _calculateProgressData();
+    final progressData = _calculateProgressData(habit);
 
     return CupertinoListSection.insetGrouped(
       header: Row(
@@ -54,29 +55,35 @@ class HabitProgressCard extends ConsumerWidget {
                   // Main Progress Circle
                   Expanded(
                     flex: 2,
-                    child: _CircularProgress(
-                      progress: progressData.completionRate / 100,
-                      color: Color(habit.colorCode),
-                      centerChild: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            "${progressData.completionRate.toStringAsFixed(0)}%",
-                            style: TextStyle(
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold,
-                              color: context.titleLarge.color,
-                            ),
+                    child: Consumer(
+                      builder: (context, ref, child) {
+                        final currentHabit = ref.watch(habitDetailProvider);
+                        final currentProgressData = _calculateProgressData(currentHabit ?? habit);
+                        return _CircularProgress(
+                          progress: currentProgressData.completionRate / 100,
+                          color: Color(habit.colorCode),
+                          centerChild: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                "${currentProgressData.completionRate.toStringAsFixed(0)}%",
+                                style: TextStyle(
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.bold,
+                                  color: context.titleLarge.color,
+                                ),
+                              ),
+                              Text(
+                                "Success Rate",
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: context.bodyMedium.color?.withValues(alpha: 0.7),
+                                ),
+                              ),
+                            ],
                           ),
-                          Text(
-                            "Success Rate",
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: context.bodyMedium.color?.withValues(alpha: 0.7),
-                            ),
-                          ),
-                        ],
-                      ),
+                        );
+                      },
                     ),
                   ),
 
@@ -120,7 +127,7 @@ class HabitProgressCard extends ConsumerWidget {
               const SizedBox(height: 24),
 
               // Weekly Progress Chart
-              _WeeklyProgressChart(habit: habit),
+              _WeeklyProgressChart(),
 
               const SizedBox(height: 8),
             ],
@@ -130,7 +137,7 @@ class HabitProgressCard extends ConsumerWidget {
     );
   }
 
-  ProgressData _calculateProgressData() {
+  ProgressData _calculateProgressData(Habit habit) {
     if (habit.completions.isEmpty) {
       return ProgressData(
         completionRate: 0.0,
@@ -267,10 +274,7 @@ class _CircularProgressPainter extends CustomPainter {
 
     // Progress arc
     final progressPaint = Paint()
-      ..shader = SweepGradient(
-        colors: [color.withValues(alpha: 0.5), color],
-        startAngle: -math.pi / 2,
-      ).createShader(Rect.fromCircle(center: center, radius: radius))
+      ..color = color
       ..style = PaintingStyle.stroke
       ..strokeWidth = 8
       ..strokeCap = StrokeCap.round;
@@ -343,9 +347,7 @@ class _ProgressStatRow extends StatelessWidget {
 }
 
 class _WeeklyProgressChart extends ConsumerStatefulWidget {
-  final Habit habit;
-
-  const _WeeklyProgressChart({required this.habit});
+  const _WeeklyProgressChart();
 
   @override
   ConsumerState<_WeeklyProgressChart> createState() => _WeeklyProgressChartState();
@@ -355,6 +357,7 @@ class _WeeklyProgressChartState extends ConsumerState<_WeeklyProgressChart> with
   late AnimationController _lottieController;
   int? _animatingIndex;
   bool _showLottieAnimation = false;
+  Timer? _animationTimeout;
 
   @override
   void initState() {
@@ -367,12 +370,31 @@ class _WeeklyProgressChartState extends ConsumerState<_WeeklyProgressChart> with
 
   @override
   void dispose() {
+    _animationTimeout?.cancel();
     _lottieController.dispose();
     super.dispose();
   }
 
-  Future<void> _toggleCompletion(int index) async {
-    final isCurrentlyCompleted = _getWeeklyData()[index];
+  void _resetAnimationState() {
+    if (mounted) {
+      _animationTimeout?.cancel();
+      setState(() {
+        _lottieController.reset();
+        _animatingIndex = null;
+        _showLottieAnimation = false;
+      });
+    }
+  }
+
+  Future<void> _toggleCompletion(int index, Habit habit) async {
+    // Prevent multiple simultaneous toggles on the same cell
+    if (_animatingIndex == index) return;
+
+    // Get the current habit from the provider to ensure we have the latest data
+    final currentHabit = ref.read(habitDetailProvider);
+    if (currentHabit == null) return;
+
+    final isCurrentlyCompleted = _getWeeklyData(currentHabit)[index];
 
     // Set Lottie animation state
     _animatingIndex = index;
@@ -398,25 +420,38 @@ class _WeeklyProgressChartState extends ConsumerState<_WeeklyProgressChart> with
 
     try {
       // Use the provider which will update both local state and home provider
-      await ref.read(habitDetailProvider.notifier).markHabitAsComplete(widget.habit.id, completionEntry);
+      await ref.read(habitDetailProvider.notifier).markHabitAsComplete(currentHabit.id, completionEntry);
+
+      // Wait a bit to ensure state is properly updated
+      await Future.delayed(const Duration(milliseconds: 100));
     } catch (e) {
       // Handle error - could show a snackbar or dialog
       print('Error updating completion: $e');
+    } finally {
+      // Always reset animation state, even if there was an error
+      // Cancel any existing timeout
+      _animationTimeout?.cancel();
+      // Set a new timeout to reset the animation state
+      _animationTimeout = Timer(const Duration(milliseconds: 1400), () {
+        _resetAnimationState();
+      });
     }
-
-    // Reset Lottie animation after completion
-    Future.delayed(const Duration(milliseconds: 1500), () {
-      if (mounted) {
-        _lottieController.reset();
-        _animatingIndex = null;
-        _showLottieAnimation = false;
-      }
-    });
   }
 
   @override
   Widget build(BuildContext context) {
-    final weeklyData = _getWeeklyData();
+    final habit = ref.watch(habitDetailProvider);
+    if (habit == null) return const SizedBox.shrink();
+
+    // Safety check: reset animation state if it's been stuck for too long
+    if (_animatingIndex != null) {
+      _animationTimeout?.cancel();
+      _animationTimeout = Timer(const Duration(milliseconds: 2000), () {
+        _resetAnimationState();
+      });
+    }
+
+    final weeklyData = _getWeeklyData(habit);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -440,8 +475,8 @@ class _WeeklyProgressChartState extends ConsumerState<_WeeklyProgressChart> with
                 return _WeeklyDayCell(
                   index: index,
                   isCompleted: isCompleted,
-                  habitColor: Color(widget.habit.colorCode),
-                  onTap: () => _toggleCompletion(index),
+                  habitColor: Color(habit.colorCode),
+                  onTap: () => _toggleCompletion(index, habit),
                 );
               }),
             ),
@@ -467,7 +502,7 @@ class _WeeklyProgressChartState extends ConsumerState<_WeeklyProgressChart> with
                             child: Icon(
                               FontAwesomeIcons.check,
                               size: 30,
-                              color: Color(widget.habit.colorCode),
+                              color: Color(habit.colorCode),
                             ),
                           );
                         },
@@ -482,13 +517,13 @@ class _WeeklyProgressChartState extends ConsumerState<_WeeklyProgressChart> with
     );
   }
 
-  List<bool> _getWeeklyData() {
+  List<bool> _getWeeklyData(Habit habit) {
     final today = DateUtils.dateOnly(DateTime.now());
     final weeklyData = <bool>[];
 
     for (int i = 6; i >= 0; i--) {
       final date = today.subtract(Duration(days: i));
-      final isCompleted = widget.habit.completions.values.any((entry) => DateUtils.isSameDay(DateUtils.dateOnly(entry.date), date) && entry.isCompleted);
+      final isCompleted = habit.completions.values.any((entry) => DateUtils.isSameDay(DateUtils.dateOnly(entry.date), date) && entry.isCompleted);
       weeklyData.add(isCompleted);
     }
 

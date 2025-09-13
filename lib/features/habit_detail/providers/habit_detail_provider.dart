@@ -38,11 +38,9 @@ class HabitDetailNotifier extends AutoDisposeNotifier<Habit?> {
         LogHelper.shared.debugPrint("Updating local state for the habit");
 
         // Güncel habit'i db'den al
-        final habits = await habitService.getHabits();
+        final updatedHabit = await habitService.getHabit(habitId);
 
-        try {
-          // Güncellenmiş habit'i bul
-          final updatedHabit = habits.firstWhere((h) => h.id == habitId);
+        if (updatedHabit != null) {
           LogHelper.shared.debugPrint("Updated habit found, updating state");
 
           // State'i güncelle
@@ -51,8 +49,8 @@ class HabitDetailNotifier extends AutoDisposeNotifier<Habit?> {
           // Home provider'ı da güncelle
           await ref.read(homeProvider.notifier).refreshHabits();
           LogHelper.shared.debugPrint("State and home provider updated successfully");
-        } catch (e) {
-          LogHelper.shared.errorPrint("Could not find the updated habit: $e");
+        } else {
+          LogHelper.shared.errorPrint("Could not find the updated habit");
         }
       } else {
         LogHelper.shared.debugPrint("Current habit is not being viewed, only updating home provider");

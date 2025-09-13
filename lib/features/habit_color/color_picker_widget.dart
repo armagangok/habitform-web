@@ -229,37 +229,40 @@ class ColorPickerWidgetState extends State<ColorPickerWidget> with SingleTickerP
     final crossAxisCount = isTablet ? 10 : 5;
 
     return CustomSection(
-      text: LocaleKeys.colors_color.tr().toUpperCase(),
+      text: LocaleKeys.colors_color.tr(),
       child: ListView(
         shrinkWrap: true,
         physics: ClampingScrollPhysics(),
         padding: EdgeInsets.zero,
         children: [
-          CategoryWidget(
-            customColor: customColorForPicker,
-            categories: categoryNames,
-            initialSelectedIndex: selectedCategoryIndex,
-            onCategorySelected: (val) {
-              controller.forward(from: 0);
-              setState(() {
-                selectedCategoryIndex = val;
-                // Preserve selected color index if possible
-                if (selectedColorIndex != null && selectedColorIndex! < colorCategories[categoryNames[val]]!.length) {
-                  // Keep the same shade index when changing categories
-                  customColorForPicker = colorCategories[categoryNames[val]]![selectedColorIndex!];
-                } else {
-                  // Default to a middle shade (index 5) if no color was selected
-                  selectedColorIndex = null;
-                  customColorForPicker = colorCategories[categoryNames[val]]![5];
-                }
-              });
-            },
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: CategoryWidget(
+              customColor: customColorForPicker,
+              categories: categoryNames,
+              initialSelectedIndex: selectedCategoryIndex,
+              onCategorySelected: (val) {
+                controller.forward(from: 0);
+                setState(() {
+                  selectedCategoryIndex = val;
+                  // Preserve selected color index if possible
+                  if (selectedColorIndex != null && selectedColorIndex! < colorCategories[categoryNames[val]]!.length) {
+                    // Keep the same shade index when changing categories
+                    customColorForPicker = colorCategories[categoryNames[val]]![selectedColorIndex!];
+                  } else {
+                    // Default to a middle shade (index 5) if no color was selected
+                    selectedColorIndex = null;
+                    customColorForPicker = colorCategories[categoryNames[val]]![5];
+                  }
+                });
+              },
+            ),
           ),
           SizedBox(height: 10),
           GridView.builder(
             physics: ClampingScrollPhysics(),
             shrinkWrap: true,
-            padding: EdgeInsets.zero,
+            padding: EdgeInsets.all(8),
             itemCount: colorCategories[categoryNames[selectedCategoryIndex]]!.length,
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: crossAxisCount,
