@@ -1,217 +1,208 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'dart:io';
-import 'dart:math';
+// // ignore_for_file: public_member_api_docs, sort_constructors_first
+// import 'dart:io';
+// import 'dart:math';
 
-import '/core/core.dart';
-import '../purchase.dart';
+// import '/core/core.dart';
+// import '../purchase.dart';
 
-class ProductWidget extends StatefulWidget {
-  const ProductWidget({
-    super.key,
-    required this.isSelected,
-    this.isPopular,
-    this.discount,
-    this.monthlyCalculated,
-    required this.package,
-    this.isAnnual = false,
-  });
+// class ProductWidget extends StatefulWidget {
+//   const ProductWidget({
+//     super.key,
+//     required this.isSelected,
+//     this.isPopular,
+//     this.discount,
+//     this.monthlyCalculated,
+//     required this.package,
+//     this.isAnnual = false,
+//   });
 
-  final bool isSelected;
-  final bool? isPopular;
-  final String? discount;
-  final String? monthlyCalculated;
-  final Package package;
-  final bool isAnnual;
+//   final bool isSelected;
+//   final bool? isPopular;
+//   final String? discount;
+//   final String? monthlyCalculated;
+//   final Package package;
+//   final bool isAnnual;
 
-  @override
-  State<ProductWidget> createState() => _ProductWidgetState();
-}
+//   @override
+//   State<ProductWidget> createState() => _ProductWidgetState();
+// }
 
-class _ProductWidgetState extends State<ProductWidget> {
-  @override
-  Widget build(BuildContext context) {
-    final priceString = widget.package.storeProduct.priceString;
-    final productTitle = widget.package.storeProduct.title;
+// class _ProductWidgetState extends State<ProductWidget> {
+//   @override
+//   Widget build(BuildContext context) {
+//     final priceString = widget.package.storeProduct.priceString;
+//     final productTitle = widget.package.storeProduct.title;
 
-    final isAnnual = widget.isAnnual;
+//     final isAnnual = widget.isAnnual;
 
-    return AnimatedContainer(
-      duration: Duration(milliseconds: 300),
-      curve: Curves.easeInOut,
-      padding: EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: widget.isSelected ? context.primary.withValues(alpha: 0.1) : Colors.transparent,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: widget.isSelected ? context.primary.withValues(alpha: 0.3) : context.theme.selectionHandleColor.withValues(alpha: 0.2),
-          width: widget.isSelected ? 2 : 1,
-        ),
-        boxShadow: widget.isSelected
-            ? [
-                BoxShadow(
-                  color: context.primary.withValues(alpha: 0.2),
-                  blurRadius: 12,
-                  offset: Offset(0, 4),
-                ),
-              ]
-            : null,
-      ),
-      child: AnimatedOpacity(
-        duration: Duration(milliseconds: 300),
-        opacity: widget.isSelected ? 1 : .75,
-        child: SizedBox(
-          width: double.infinity,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 0.0),
-                child: Row(
-                  children: [
-                    AnimatedContainer(
-                      duration: Duration(milliseconds: 300),
-                      curve: Curves.easeInOut,
-                      padding: EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        color: widget.isSelected ? context.primary.withValues(alpha: 0.2) : Colors.transparent,
-                        shape: BoxShape.circle,
-                      ),
-                      child: widget.isSelected
-                          ? Icon(
-                              CupertinoIcons.checkmark_circle_fill,
-                              color: context.primary,
-                              size: 20,
-                            )
-                          : Icon(
-                              CupertinoIcons.circle,
-                              color: context.theme.selectionHandleColor,
-                              size: 20,
-                            ),
-                    ),
-                    SizedBox(width: 8),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          productTitle.getTitleName.toUpperCase(),
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: widget.isSelected ? context.primary : null,
-                          ),
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            if (isAnnual)
-                              Text(
-                                (widget.package.storeProduct.price * 2).toStringAsFixed(2),
-                                textAlign: TextAlign.left,
-                                style: context.bodySmall.copyWith(
-                                  decoration: TextDecoration.lineThrough,
-                                ),
-                              ),
-                            if (isAnnual) SizedBox(width: 2),
-                            if (isAnnual)
-                              Icon(
-                                CupertinoIcons.arrow_right,
-                                size: 12,
-                              ),
-                            if (isAnnual) SizedBox(width: 2),
-                            if (isAnnual)
-                              Text(
-                                widget.package.storeProduct.price.toStringAsFixed(2),
-                                textAlign: TextAlign.left,
-                                style: context.bodySmall,
-                              ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 0.0, vertical: 5),
-                child: Stack(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(2.5),
-                      child: Padding(
-                        padding: const EdgeInsets.all(12.0),
-                        child: Text(
-                          priceString,
-                          textAlign: TextAlign.left,
-                          style: TextStyle(
-                            fontWeight: FontWeight.w700,
-                            color: widget.isSelected ? context.primary : null,
-                          ),
-                        ),
-                      ),
-                    ),
-                    _discountWidget(),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
+//     return AnimatedContainer(
+//       duration: Duration(milliseconds: 300),
+//       curve: Curves.easeInOut,
+//       padding: EdgeInsets.all(16),
+//       decoration: BoxDecoration(
+//         color: widget.isSelected ? context.primary.withValues(alpha: 0.1) : Colors.transparent,
+//         borderRadius: BorderRadius.circular(16),
+//         border: Border.all(
+//           color: widget.isSelected ? context.primary.withValues(alpha: 0.3) : context.theme.selectionHandleColor.withValues(alpha: 0.3),
+//           width: 2,
+//         ),
+//       ),
+//       child: AnimatedOpacity(
+//         duration: Duration(milliseconds: 300),
+//         opacity: widget.isSelected ? 1 : .75,
+//         child: SizedBox(
+//           width: double.infinity,
+//           child: Row(
+//             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//             children: [
+//               Padding(
+//                 padding: const EdgeInsets.only(left: 0.0),
+//                 child: Row(
+//                   children: [
+//                     AnimatedContainer(
+//                       duration: Duration(milliseconds: 300),
+//                       curve: Curves.easeInOut,
+//                       padding: EdgeInsets.all(8),
+//                       decoration: BoxDecoration(
+//                         color: widget.isSelected ? context.primary.withValues(alpha: 0.2) : Colors.transparent,
+//                         shape: BoxShape.circle,
+//                       ),
+//                       child: widget.isSelected
+//                           ? Icon(
+//                               CupertinoIcons.checkmark_circle_fill,
+//                               color: context.primary,
+//                               size: 20,
+//                             )
+//                           : Icon(
+//                               CupertinoIcons.circle,
+//                               color: context.theme.selectionHandleColor,
+//                               size: 20,
+//                             ),
+//                     ),
+//                     SizedBox(width: 8),
+//                     Column(
+//                       mainAxisAlignment: MainAxisAlignment.start,
+//                       crossAxisAlignment: CrossAxisAlignment.start,
+//                       children: [
+//                         Text(
+//                           productTitle.getTitleName.toUpperCase(),
+//                           style: TextStyle(
+//                             fontWeight: FontWeight.bold,
+//                             color: widget.isSelected ? context.primary : null,
+//                           ),
+//                         ),
+//                         Row(
+//                           mainAxisAlignment: MainAxisAlignment.center,
+//                           crossAxisAlignment: CrossAxisAlignment.center,
+//                           children: [
+//                             if (isAnnual)
+//                               Text(
+//                                 (widget.package.storeProduct.price * 2).toStringAsFixed(2),
+//                                 textAlign: TextAlign.left,
+//                                 style: context.bodySmall.copyWith(
+//                                   decoration: TextDecoration.lineThrough,
+//                                 ),
+//                               ),
+//                             if (isAnnual) SizedBox(width: 2),
+//                             if (isAnnual)
+//                               Icon(
+//                                 CupertinoIcons.arrow_right,
+//                                 size: 12,
+//                               ),
+//                             if (isAnnual) SizedBox(width: 2),
+//                             if (isAnnual)
+//                               Text(
+//                                 widget.package.storeProduct.price.toStringAsFixed(2),
+//                                 textAlign: TextAlign.left,
+//                                 style: context.bodySmall,
+//                               ),
+//                           ],
+//                         ),
+//                       ],
+//                     ),
+//                   ],
+//                 ),
+//               ),
+//               Padding(
+//                 padding: const EdgeInsets.symmetric(horizontal: 0.0, vertical: 5),
+//                 child: Stack(
+//                   children: [
+//                     Padding(
+//                       padding: const EdgeInsets.all(2.5),
+//                       child: Padding(
+//                         padding: const EdgeInsets.all(12.0),
+//                         child: Text(
+//                           priceString,
+//                           textAlign: TextAlign.left,
+//                           style: TextStyle(
+//                             fontWeight: FontWeight.w700,
+//                             color: widget.isSelected ? context.primary : null,
+//                           ),
+//                         ),
+//                       ),
+//                     ),
+//                     _discountWidget(),
+//                   ],
+//                 ),
+//               ),
+//             ],
+//           ),
+//         ),
+//       ),
+//     );
+//   }
 
-  Widget _discountWidget() {
-    final currentLocale = Localizations.localeOf(context);
-    final languageCode = currentLocale.languageCode;
-    final isArabic = languageCode == 'ar';
+//   Widget _discountWidget() {
+//     final currentLocale = Localizations.localeOf(context);
+//     final languageCode = currentLocale.languageCode;
+//     final isArabic = languageCode == 'ar';
 
-    final discount = widget.discount;
+//     final discount = widget.discount;
 
-    return Builder(builder: (context) {
-      return Padding(
-        padding: const EdgeInsets.only(top: 2.0),
-        child: Align(
-          alignment: isArabic ? Alignment.topLeft : Alignment.topLeft,
-          child: Transform.rotate(
-            angle: -30 * pi / 180,
-            child: Container(
-              decoration: BoxDecoration(
-                color: CupertinoColors.activeOrange,
-                borderRadius: BorderRadius.all(Radius.circular(12)),
-              ),
-              child: Padding(
-                padding: EdgeInsets.symmetric(vertical: widget.discount != null ? 2 : 0, horizontal: 2),
-                child: discount != null
-                    ? Text(
-                        discount,
-                        textAlign: TextAlign.center,
-                        style: context.bodySmall.copyWith(
-                          color: context.primary,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      )
-                    : SizedBox.shrink(),
-              ),
-            ),
-          ),
-        ),
-      );
-    });
-  }
-}
+//     return Builder(builder: (context) {
+//       return Padding(
+//         padding: const EdgeInsets.only(top: 2.0),
+//         child: Align(
+//           alignment: isArabic ? Alignment.topLeft : Alignment.topLeft,
+//           child: Transform.rotate(
+//             angle: -30 * pi / 180,
+//             child: Container(
+//               decoration: BoxDecoration(
+//                 color: CupertinoColors.activeOrange,
+//                 borderRadius: BorderRadius.all(Radius.circular(12)),
+//               ),
+//               child: Padding(
+//                 padding: EdgeInsets.symmetric(vertical: widget.discount != null ? 2 : 0, horizontal: 2),
+//                 child: discount != null
+//                     ? Text(
+//                         discount,
+//                         textAlign: TextAlign.center,
+//                         style: context.bodySmall.copyWith(
+//                           color: context.primary,
+//                           fontWeight: FontWeight.bold,
+//                         ),
+//                       )
+//                     : SizedBox.shrink(),
+//               ),
+//             ),
+//           ),
+//         ),
+//       );
+//     });
+//   }
+// }
 
-extension _EasyTitleName on String {
-  String get getTitleName {
-    if (Platform.isIOS) return this;
+// extension _EasyTitleName on String {
+//   String get getTitleName {
+//     if (Platform.isIOS) return this;
 
-    // Remove everything inside parentheses (including nested parentheses)
-    String cleanedText = replaceAll(RegExp('\\(.*?\\)'), '');
+//     // Remove everything inside parentheses (including nested parentheses)
+//     String cleanedText = replaceAll(RegExp('\\(.*?\\)'), '');
 
-    // Remove any remaining double quotes and trim whitespace
-    cleanedText = cleanedText.replaceAll(')', '').trim();
-    cleanedText = cleanedText.replaceAll(' ', '').trim();
+//     // Remove any remaining double quotes and trim whitespace
+//     cleanedText = cleanedText.replaceAll(')', '').trim();
+//     cleanedText = cleanedText.replaceAll(' ', '').trim();
 
-    return cleanedText;
-  }
-}
+//     return cleanedText;
+//   }
+// }

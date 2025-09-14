@@ -10,6 +10,10 @@ class AppLifecycleService with WidgetsBindingObserver {
   bool _initialized = false;
   final SmartNotificationManager _notificationManager = SmartNotificationManager.shared;
 
+  // Track when app went to background to prevent unnecessary rescheduling
+  DateTime? _backgroundTime;
+  static const Duration _minBackgroundDuration = Duration(seconds: 30);
+
   AppLifecycleService();
 
   /// Servisi başlatır ve yaşam döngüsü olaylarını dinlemeye başlar
@@ -37,6 +41,7 @@ class AppLifecycleService with WidgetsBindingObserver {
     // Uygulama arka plana geçtiğinde veya tamamen kapandığında senkronizasyon yap
     if (state == AppLifecycleState.paused || state == AppLifecycleState.detached) {
       LogHelper.shared.debugPrint('App is closing or going to background, triggering auto sync');
+      _backgroundTime = DateTime.now();
     } else if (state == AppLifecycleState.resumed) {
       LogHelper.shared.debugPrint('App is resuming from background, triggering auto sync');
       _handleAppResumed();
@@ -46,6 +51,19 @@ class AppLifecycleService with WidgetsBindingObserver {
   /// Handle app resumed - reschedule notifications if needed
   Future<void> _handleAppResumed() async {
     try {
+      // Check if app was in background long enough to warrant rescheduling
+      final now = DateTime.now();
+      final backgroundDuration = _backgroundTime != null ? now.difference(_backgroundTime!) : Duration.zero;
+
+      LogHelper.shared.debugPrint('Background duration: ${backgroundDuration.inSeconds} seconds');
+
+      // Only reschedule if app was in background for a significant time
+      // This prevents unnecessary rescheduling for brief interruptions like purchase dialogs
+      if (backgroundDuration < _minBackgroundDuration) {
+        LogHelper.shared.debugPrint('Skipping notification rescheduling - app was in background for only ${backgroundDuration.inSeconds} seconds');
+        return;
+      }
+
       // Check if we need to reschedule notifications
       final isApproachingLimit = await _notificationManager.isApproachingLimit();
       final currentCount = await _notificationManager.getCurrentNotificationCount();
@@ -107,6 +125,13 @@ class AppLifecycleService with WidgetsBindingObserver {
 
   /// Manually trigger notification rescheduling
   Future<void> rescheduleNotificationsNow() async {
+    await _rescheduleNotifications();
+  }
+
+  /// Force reschedule notifications regardless of background duration
+  /// Use this when you specifically need to reschedule (e.g., after habit changes)
+  Future<void> forceRescheduleNotifications() async {
+    LogHelper.shared.debugPrint('Force rescheduling notifications...');
     await _rescheduleNotifications();
   }
 }

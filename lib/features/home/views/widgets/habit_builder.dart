@@ -5,7 +5,6 @@ import '/core/core.dart';
 import '../../../../models/models.dart';
 import '../../../create_habit/create_habit_page.dart';
 import '../../../create_habit/provider/create_habit_provider.dart';
-import '../../../purchase/page/paywall_page.dart';
 import '../../provider/home_provider.dart';
 import 'habit_widget.dart';
 
@@ -138,10 +137,9 @@ class HabitBuilder extends ConsumerWidget {
                     } else {
                       if (!context.mounted) return;
 
-                      showCupertinoSheet(
-                        enableDrag: false,
-                        context: context,
-                        builder: (_) => PaywallPage(),
+                      navigator.navigateTo(
+                        path: KRoute.prePaywall,
+                        data: {'isFromOnboarding': false},
                       );
                     }
                   }

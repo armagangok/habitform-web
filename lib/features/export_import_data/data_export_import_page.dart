@@ -3,7 +3,6 @@ import 'package:habitrise/core/widgets/my_list_tile.dart';
 
 import '../../core/core.dart';
 import '../home/provider/home_provider.dart';
-import '../purchase/page/paywall_page.dart';
 import '../purchase/providers/purchase_provider.dart';
 import 'csv_service.dart';
 import 'permission_helper.dart';
@@ -128,9 +127,9 @@ class _DataExportImportPageState extends ConsumerState<DataExportImportPage> {
   }
 
   void _showPaywallPage() {
-    showCupertinoSheet(
-      context: context,
-      builder: (context) => const PaywallPage(),
+    navigator.navigateTo(
+      path: KRoute.prePaywall,
+      data: {'isFromOnboarding': false},
     );
   }
 

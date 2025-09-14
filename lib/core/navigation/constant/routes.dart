@@ -19,4 +19,7 @@ class KRoute {
   static const habitCategoryPage = '/habitCategoryPage';
 
   static const iconPage = '/iconPage';
+
+  static const prePaywall = '/prePaywall';
+  static const paywall = '/paywall';
 }

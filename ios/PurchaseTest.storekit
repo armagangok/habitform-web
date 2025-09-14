@@ -9,13 +9,13 @@
       }
     ]
   },
-  "identifier" : "8F08F358",
+  "identifier" : "06B31D6C",
   "nonRenewingSubscriptions" : [
 
   ],
   "products" : [
     {
-      "displayPrice" : "99.99",
+      "displayPrice" : "39.99",
       "familyShareable" : false,
       "internalID" : "6740823519",
       "localizations" : [
@@ -44,7 +44,7 @@
     "_applicationInternalID" : "6740816961",
     "_developerTeamID" : "6WZ7JL7327",
     "_failTransactionsEnabled" : false,
-    "_lastSynchronizedDate" : 775990351.89823604,
+    "_lastSynchronizedDate" : 779562708.80164301,
     "_locale" : "en_US",
     "_storefront" : "USA",
     "_storeKitErrors" : [
@@ -110,11 +110,16 @@
           "codeOffers" : [
 
           ],
-          "displayPrice" : "47.95",
+          "displayPrice" : "17.49",
           "familyShareable" : false,
           "groupNumber" : 2,
           "internalID" : "6740823451",
-          "introductoryOffer" : null,
+          "introductoryOffer" : {
+            "internalID" : "59F93E25",
+            "numberOfPeriods" : 1,
+            "paymentMode" : "free",
+            "subscriptionPeriod" : "P1W"
+          },
           "localizations" : [
             {
               "description" : "HabitRise Pro'ya yıllık erişim",
@@ -148,11 +153,16 @@
           "codeOffers" : [
 
           ],
-          "displayPrice" : "4.99",
+          "displayPrice" : "2.99",
           "familyShareable" : false,
           "groupNumber" : 1,
           "internalID" : "6740823447",
-          "introductoryOffer" : null,
+          "introductoryOffer" : {
+            "internalID" : "C5D184BB",
+            "numberOfPeriods" : 1,
+            "paymentMode" : "free",
+            "subscriptionPeriod" : "P3D"
+          },
           "localizations" : [
             {
               "description" : "Monthly access to HabitRise Pro",

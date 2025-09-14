@@ -343,74 +343,77 @@ class _OnboardingAppFeaturesPageState extends State<OnboardingAppFeaturesPage> w
       child: AnimatedBuilder(
         animation: _introTransitionAnimation,
         builder: (context, child) {
-          return Opacity(
-            opacity: 1.0 - _introTransitionAnimation.value,
-            child: Transform.scale(
-              scale: 1.0 - (_introTransitionAnimation.value * 0.1),
-              child: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    // Animated icon
-                    AnimatedBuilder(
-                      animation: _pulseAnimation,
-                      builder: (context, child) {
-                        return Transform.scale(
-                          scale: _pulseAnimation.value,
-                          child: Container(
-                            width: context.width(0.25),
-                            height: context.width(0.25),
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              gradient: RadialGradient(
-                                colors: [
-                                  const Color(0xFF1DB954).withValues(alpha: 0.2),
-                                  const Color(0xFF1DB954).withValues(alpha: 0.1),
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Opacity(
+              opacity: 1.0 - _introTransitionAnimation.value,
+              child: Transform.scale(
+                scale: 1.0 - (_introTransitionAnimation.value * 0.1),
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      // Animated icon
+                      AnimatedBuilder(
+                        animation: _pulseAnimation,
+                        builder: (context, child) {
+                          return Transform.scale(
+                            scale: _pulseAnimation.value,
+                            child: Container(
+                              width: context.width(0.25),
+                              height: context.width(0.25),
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                gradient: RadialGradient(
+                                  colors: [
+                                    const Color(0xFF1DB954).withValues(alpha: 0.2),
+                                    const Color(0xFF1DB954).withValues(alpha: 0.1),
+                                  ],
+                                ),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: const Color(0xFF1DB954).withValues(alpha: 0.3),
+                                    blurRadius: 20,
+                                    spreadRadius: 5,
+                                  ),
                                 ],
                               ),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: const Color(0xFF1DB954).withValues(alpha: 0.3),
-                                  blurRadius: 20,
-                                  spreadRadius: 5,
+                              child: Center(
+                                child: Icon(
+                                  CupertinoIcons.heart_fill,
+                                  size: context.width(0.12),
+                                  color: const Color(0xFF1DB954),
                                 ),
-                              ],
-                            ),
-                            child: Center(
-                              child: Icon(
-                                CupertinoIcons.heart_fill,
-                                size: context.width(0.12),
-                                color: const Color(0xFF1DB954),
                               ),
                             ),
+                          );
+                        },
+                      ),
+                      SizedBox(height: context.height(0.06)),
+                      // Title
+                      FittedBox(
+                        child: Text(
+                          'HabitRise Helps You ...',
+                          style: context.headlineLarge.copyWith(
+                            fontSize: 30,
+                            fontWeight: FontWeight.w700,
+                            color: theme.colorScheme.onSurface,
                           ),
-                        );
-                      },
-                    ),
-                    SizedBox(height: context.height(0.06)),
-                    // Title
-                    FittedBox(
-                      child: Text(
-                        'HabitRise Helps You ...',
-                        style: context.headlineLarge.copyWith(
-                          fontSize: 30,
-                          fontWeight: FontWeight.w700,
-                          color: theme.colorScheme.onSurface,
+                          maxLines: 1,
+                          textAlign: TextAlign.center,
                         ),
-                        maxLines: 1,
+                      ),
+                      SizedBox(height: context.height(0.02)),
+                      // Subtitle
+                      Text(
+                        'Build lasting habits with smart tracking and personalized insights',
+                        style: context.bodyLarge.copyWith(
+                          color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
+                        ),
                         textAlign: TextAlign.center,
                       ),
-                    ),
-                    SizedBox(height: context.height(0.02)),
-                    // Subtitle
-                    Text(
-                      'Build lasting habits with smart tracking and personalized insights',
-                      style: context.bodyLarge.copyWith(
-                        color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),

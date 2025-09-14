@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/core.dart';
 import '../../../models/app_defaults/app_defaults.dart';
 import '../../../services/app_default.dart';
-import '../../purchase/page/paywall_page.dart';
 import '../enum/user_goal_enum.dart';
 import '../models/onboarding_page_model.dart';
 import 'onboarding_state.dart';
@@ -57,10 +56,9 @@ class OnboardingNotifier extends StateNotifier<OnboardingState> {
 
       if (!context.mounted) return;
 
-      showCupertinoSheet(
-        context: context,
-        enableDrag: false,
-        builder: (context) => const PaywallPage(isFromOnboarding: true),
+      navigator.navigateAndClear(
+        path: KRoute.prePaywall,
+        data: {'isFromOnboarding': true},
       );
     } catch (e, s) {
       LogHelper.shared.debugPrint(e.toString());

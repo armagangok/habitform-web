@@ -1,5 +1,4 @@
 import '../../../core/core.dart';
-import '../page/paywall_page.dart';
 
 Future<void> showUnlockProDialog() async {
   final context = navigator.navigatorKey.currentContext;
@@ -21,10 +20,9 @@ Future<void> showUnlockProDialog() async {
         CupertinoDialogAction(
           onPressed: () {
             Navigator.pop(context);
-            showCupertinoSheet(
-              enableDrag: false,
-              context: context,
-              builder: (context) => PaywallPage(),
+            navigator.navigateTo(
+              path: KRoute.prePaywall,
+              data: {'isFromOnboarding': false},
             );
           },
           child: Text(

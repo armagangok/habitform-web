@@ -10,6 +10,8 @@ import '/features/habit_emoji/emoji_picker_page.dart';
 import '/features/home/views/pages/home_page.dart';
 import '/features/settings/pages/notifications_page.dart';
 import '/features/settings/settings_page.dart';
+import '../../features/purchase/page/paywall_page.dart';
+import '../../features/purchase/page/pre_paywall_page.dart';
 import '../core.dart';
 
 @immutable
@@ -60,6 +62,26 @@ final class NavigationRoute {
           page: EmojiPickerPage(
             selectedIcon: selectedIcon,
             onIconSelected: onIconSelected,
+          ),
+          settings: args,
+        );
+
+      case KRoute.prePaywall:
+        final data = args.arguments as Map<String, Object?>?;
+        final isFromOnboarding = data != null ? data['isFromOnboarding'] as bool? : false;
+        return _getRoute(
+          page: PrePaywallPage(
+            isFromOnboarding: isFromOnboarding ?? false,
+          ),
+          settings: args,
+        );
+
+      case KRoute.paywall:
+        final data = args.arguments as Map<String, Object?>?;
+        final isFromOnboarding = data != null ? data['isFromOnboarding'] as bool? : false;
+        return _getRoute(
+          page: PaywallPage(
+            isFromOnboarding: isFromOnboarding ?? false,
           ),
           settings: args,
         );

@@ -1,9 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '/core/core.dart' hide showCupertinoSheet;
-import '../../purchase/page/paywall_page.dart';
 import '../provider/habit_formation_provider.dart';
 import '../widgets/formation_widget/formation_insights_widget.dart';
 import '../widgets/habit_selector/habit_selector.dart';
@@ -160,9 +158,9 @@ class HabitFormationPage extends ConsumerWidget {
                                         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
                                         child: CustomButton(
                                           onPressed: () {
-                                            showCupertinoSheet(
-                                              context: context,
-                                              builder: (context) => const PaywallPage(),
+                                            navigator.navigateTo(
+                                              path: KRoute.prePaywall,
+                                              data: {'isFromOnboarding': false},
                                             );
                                           },
                                           child: Shimmer.fromColors(
