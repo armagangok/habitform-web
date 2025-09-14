@@ -158,17 +158,7 @@ class HabitInsightsCard extends ConsumerWidget {
 
   double _calculateCompletionRate() {
     if (habit.completions.isEmpty) return 0.0;
-    final completed = habit.completions.values.where((e) => e.isCompleted).length;
-    final total = habit.completions.length;
-    return total > 0 ? (completed / total) * 100.0 : 0.0;
-  }
-
-  int _calculateTotalDays() {
-    if (habit.completions.isEmpty) return 0;
-    final today = DateUtils.dateOnly(DateTime.now());
-    final sortedDates = habit.completions.values.map((e) => DateUtils.dateOnly(e.date)).toList()..sort();
-    final startDate = sortedDates.first;
-    return today.difference(startDate).inDays + 1;
+    return habit.completions.calculateProgressPercentage();
   }
 
   bool _isWeekendWarrior() {
@@ -195,7 +185,7 @@ class HabitInsightsCard extends ConsumerWidget {
     int missedDays = 0;
     for (int i = 0; i < today.weekday; i++) {
       final date = DateUtils.dateOnly(startOfWeek.add(Duration(days: i)));
-      final isCompleted = habit.completions.values.any((entry) => DateUtils.isSameDay(DateUtils.dateOnly(entry.date), date) && entry.isCompleted);
+      final isCompleted = habit.completions.isDateCompleted(date);
       if (!isCompleted) {
         missedDays++;
       }
@@ -205,9 +195,8 @@ class HabitInsightsCard extends ConsumerWidget {
   }
 
   double _getFormationProgress() {
-    final totalDays = _calculateTotalDays();
     final estimatedFormationDays = 66; // Default formation days
-    return (totalDays / estimatedFormationDays * 100.0).clamp(0.0, 100.0);
+    return habit.completions.calculateFormationProgress(estimatedFormationDays) * 100.0;
   }
 }
 
@@ -220,7 +209,11 @@ class _FormationStatusCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final progress = _getFormationProgress();
     final estimatedDays = 66; // Default formation days
-    final totalDays = _calculateTotalDays();
+    // Calculate total days since start for remaining days calculation
+    final today = DateUtils.dateOnly(DateTime.now());
+    final sortedDates = habit.completions.values.map((e) => DateUtils.dateOnly(e.date)).toList()..sort();
+    final startDate = sortedDates.first;
+    final totalDays = today.difference(startDate).inDays + 1;
     final daysRemaining = (estimatedDays - totalDays).clamp(0, estimatedDays);
 
     return Container(
@@ -309,17 +302,8 @@ class _FormationStatusCard extends StatelessWidget {
   }
 
   double _getFormationProgress() {
-    final totalDays = _calculateTotalDays();
     final estimatedFormationDays = 66; // Default formation days
-    return (totalDays / estimatedFormationDays * 100.0).clamp(0.0, 100.0);
-  }
-
-  int _calculateTotalDays() {
-    if (habit.completions.isEmpty) return 0;
-    final today = DateUtils.dateOnly(DateTime.now());
-    final sortedDates = habit.completions.values.map((e) => DateUtils.dateOnly(e.date)).toList()..sort();
-    final startDate = sortedDates.first;
-    return today.difference(startDate).inDays + 1;
+    return habit.completions.calculateFormationProgress(estimatedFormationDays) * 100.0;
   }
 }
 
@@ -629,9 +613,7 @@ class _MotivationCard extends StatelessWidget {
 
   double _calculateCompletionRate() {
     if (habit.completions.isEmpty) return 0.0;
-    final completed = habit.completions.values.where((e) => e.isCompleted).length;
-    final total = habit.completions.length;
-    return total > 0 ? (completed / total) * 100.0 : 0.0;
+    return habit.completions.calculateProgressPercentage();
   }
 }
 

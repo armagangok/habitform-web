@@ -4,16 +4,15 @@ import 'package:shimmer/shimmer.dart';
 
 import '/core/core.dart' hide showCupertinoSheet;
 import '../../purchase/page/paywall_page.dart';
-import '../provider/statistics_provider.dart';
-import '../widgets/general_progress/progress_overview_widget.dart';
+import '../provider/habit_formation_provider.dart';
 import '../widgets/habit_selector/habit_selector.dart';
-import '../widgets/insights/insights_widget.dart';
+import '../widgets/formation_widget/insights_widget.dart';
 
 // Seçili alışkanlık indeksi için provider
 final selectedHabitIndexProvider = StateProvider<int>((ref) => -1);
 
-class StatisticsPage extends ConsumerWidget {
-  const StatisticsPage({super.key});
+class HabitFormationPage extends ConsumerWidget {
+  const HabitFormationPage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -22,7 +21,7 @@ class StatisticsPage extends ConsumerWidget {
       child: CupertinoPageScaffold(
         navigationBar: SheetHeader(
           closeButtonPosition: CloseButtonPosition.left,
-          middle: Text(LocaleKeys.statistics_title.tr()),
+          middle: Text(LocaleKeys.statistics_habit_formation.tr()),
         ),
         child: SafeArea(
           bottom: false,
@@ -35,7 +34,7 @@ class StatisticsPage extends ConsumerWidget {
                     children: [
                       Consumer(
                         builder: (context, ref, child) {
-                          final statisticsAsyncValue = ref.watch(statisticsProvider);
+                          final statisticsAsyncValue = ref.watch(formationProvider);
 
                           return statisticsAsyncValue.when(
                             loading: () => const Center(child: CircularProgressIndicator()),
@@ -108,7 +107,6 @@ class StatisticsPage extends ConsumerWidget {
                                       ref.read(selectedHabitIndexProvider.notifier).state = index;
                                     },
                                   ),
-                                  const ProgressOverviewWidget(),
                                   const InsightsWidget(),
                                   const SizedBox(height: 100), // Extra space for watermark
                                 ],
@@ -125,7 +123,7 @@ class StatisticsPage extends ConsumerWidget {
               // Watermark for mock data
               Consumer(
                 builder: (context, ref, child) {
-                  final statisticsAsyncValue = ref.watch(statisticsProvider);
+                  final statisticsAsyncValue = ref.watch(formationProvider);
 
                   if (statisticsAsyncValue is AsyncData && statisticsAsyncValue.value?.isMockData == true && statisticsAsyncValue.value?.habitStatistics.isNotEmpty == true) {
                     return Positioned(

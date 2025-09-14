@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:habitrise/models/completion_entry/completion_extension.dart';
 
 import '/core/core.dart';
 import '/features/home/provider/home_provider.dart';
@@ -6,19 +7,19 @@ import '/features/purchase/providers/purchase_provider.dart';
 import '/models/habit/habit_model.dart';
 import '/services/habit_service/habit_service_interface.dart';
 import '/services/habit_service/mock_habit_service.dart';
-import 'statistics_state.dart';
+import 'habit_formation_state.dart';
 
 /// Provider for managing statistics
-final statisticsProvider = AutoDisposeAsyncNotifierProvider<StatisticsNotifier, StatisticsState>(() {
-  return StatisticsNotifier();
+final formationProvider = AutoDisposeAsyncNotifierProvider<FormationNotifier, FormtionState>(() {
+  return FormationNotifier();
 });
 
 /// Notifier class that handles all statistics-related operations
-class StatisticsNotifier extends AutoDisposeAsyncNotifier<StatisticsState> {
+class FormationNotifier extends AutoDisposeAsyncNotifier<FormtionState> {
   late final MockHabitService _mockHabitService = MockHabitService();
 
   @override
-  Future<StatisticsState> build() async {
+  Future<FormtionState> build() async {
     // Check if user is pro
     final purchaseState = ref.watch(purchaseProvider);
     final isProUser = purchaseState.value?.isSubscriptionActive ?? false;
@@ -44,7 +45,7 @@ class StatisticsNotifier extends AutoDisposeAsyncNotifier<StatisticsState> {
     return _getStatistics(isProUser);
   }
 
-  Future<StatisticsState> _getStatistics(bool isProUser) async {
+  Future<FormtionState> _getStatistics(bool isProUser) async {
     if (isProUser) {
       // Pro user - use real data
       final homeState = ref.watch(homeProvider);
@@ -58,7 +59,7 @@ class StatisticsNotifier extends AutoDisposeAsyncNotifier<StatisticsState> {
         },
         error: (error, stackTrace) async {
           // Hata durumunda boş istatistikler döndür
-          return StatisticsState.initial();
+          return FormtionState.initial();
         },
       );
     } else {
@@ -69,10 +70,10 @@ class StatisticsNotifier extends AutoDisposeAsyncNotifier<StatisticsState> {
   }
 
   /// Calculates all statistics based on habits data
-  StatisticsState calculateStatistics(List<Habit> habits, {bool isMockData = false}) {
+  FormtionState calculateStatistics(List<Habit> habits, {bool isMockData = false}) {
     // Hiç alışkanlık yoksa veya tüm alışkanlıkların tamamlanma verisi yoksa boş istatistikler döndür
     if (habits.isEmpty || _hasNoCompletionData(habits)) {
-      return StatisticsState.initial(isMockData: isMockData);
+      return FormtionState.initial(isMockData: isMockData);
     }
 
     final totalCompletions = _countTotalCompletions(habits);
@@ -80,7 +81,7 @@ class StatisticsNotifier extends AutoDisposeAsyncNotifier<StatisticsState> {
     // Calculate habit-specific statistics
     final habitStatistics = _calculateHabitStatistics(habits);
 
-    return StatisticsState(
+    return FormtionState(
       totalCompletedDays: totalCompletions,
       habitStatistics: habitStatistics,
       isMockData: isMockData,
@@ -97,16 +98,16 @@ class StatisticsNotifier extends AutoDisposeAsyncNotifier<StatisticsState> {
     return true; // Hiçbir alışkanlığın tamamlanma verisi yok
   }
 
-  /// Counts total number of completed days across all habits
+  /// Counts total number of completed days across all habits using extension methods
   int _countTotalCompletions(List<Habit> habits) {
     int total = 0;
     for (final habit in habits) {
-      total += habit.completions.values.where((entry) => entry.isCompleted).length;
+      total += habit.completions.calculateFormationScore();
     }
     return total;
   }
 
-  /// Calculates per-habit statistics
+  /// Calculates per-habit statistics using extension methods
   Map<String, HabitStatistic> _calculateHabitStatistics(List<Habit> habits) {
     final Map<String, HabitStatistic> result = {};
     final today = DateUtils.dateOnly(DateTime.now());
@@ -126,26 +127,23 @@ class StatisticsNotifier extends AutoDisposeAsyncNotifier<StatisticsState> {
         continue;
       }
 
-      // Alışkanlığın başlangıç tarihini bul (en eski tamamlama kaydı)
-      final sortedDates = habit.completions.values.map((entry) => DateUtils.dateOnly(entry.date)).toList()..sort();
+      // Use extension methods for consistent calculations
+      final completedDays = habit.completions.calculateFormationScore();
+      final progressPercentage = habit.completions.calculateProgressPercentage();
 
+      // Get start date from the earliest completion entry
+      final sortedDates = habit.completions.values.map((entry) => DateUtils.dateOnly(entry.date)).toList()..sort();
       final startDate = sortedDates.first;
 
-      // Başlangıç tarihinden bugüne kadar geçen toplam gün sayısı
-      final daysSinceStart = today.difference(startDate).inDays + 1; // Bugünü de dahil et
-
-      // Tamamlanan günlerin sayısı
-      final completedEntries = habit.completions.values.where((entry) => entry.isCompleted).length;
-
-      // Tamamlama oranı: tamamlanan gün sayısı / başlangıçtan bugüne geçen gün sayısı
-      final completionRate = daysSinceStart > 0 ? (completedEntries / daysSinceStart) * 100.0 : 0.0;
+      // Calculate total days since start
+      final daysSinceStart = today.difference(startDate).inDays + 1;
 
       result[habit.id] = HabitStatistic(
         habitId: habit.id,
         habitName: habit.habitName,
         totalDays: daysSinceStart,
-        completedDays: completedEntries,
-        progressPercentage: completionRate,
+        completedDays: completedDays,
+        progressPercentage: progressPercentage,
         startDate: startDate,
         difficulty: null,
       );

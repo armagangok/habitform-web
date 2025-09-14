@@ -150,7 +150,6 @@ class _AchievementDialogState extends State<AchievementDialog> with TickerProvid
                     scale: _scaleAnimation,
                     child: Center(
                       child: CupertinoPopupSurface(
-                        isSurfacePainted: false,
                         child: SizedBox(
                           width: context.width(0.8),
                           child: Padding(
@@ -164,7 +163,7 @@ class _AchievementDialogState extends State<AchievementDialog> with TickerProvid
                                   SizedBox(height: context.height(0.015)),
 
                                   // Habit name
-                                  Text( 
+                                  Text(
                                     widget.habit.habitName,
                                     style: context.headlineMedium.copyWith(
                                       fontWeight: FontWeight.w700,

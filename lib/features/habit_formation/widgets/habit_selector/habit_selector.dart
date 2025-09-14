@@ -5,8 +5,8 @@ import '/core/core.dart';
 import '/features/home/provider/home_provider.dart';
 import '/models/habit/habit_model.dart';
 import '/services/habit_service/mock_habit_service.dart';
-import '../../provider/statistics_provider.dart';
-import '../../provider/statistics_state.dart';
+import '../../provider/habit_formation_provider.dart';
+import '../../provider/habit_formation_state.dart';
 import 'habit_selector_button.dart';
 
 // Mock habit service provider
@@ -47,7 +47,7 @@ class HabitSelector extends ConsumerWidget {
     }
 
     // Check if we're using mock data
-    final statisticsState = ref.watch(statisticsProvider);
+    final statisticsState = ref.watch(formationProvider);
     final isMockData = statisticsState.value?.isMockData ?? false;
 
     return Column(

@@ -150,31 +150,28 @@ class HabitProgressCard extends ConsumerWidget {
       );
     }
 
-    final today = DateUtils.dateOnly(DateTime.now());
-    final sortedDates = habit.completions.values.map((e) => DateUtils.dateOnly(e.date)).toList()..sort();
-    final startDate = sortedDates.first;
-    final daysSinceStart = today.difference(startDate).inDays + 1;
-    final completedEntries = habit.completions.values.where((e) => e.isCompleted).length;
-    final completionRate = daysSinceStart > 0 ? (completedEntries / daysSinceStart) * 100.0 : 0.0;
-
+    // Use extension methods for consistent calculations
+    final completionRate = habit.completions.calculateProgressPercentage();
     final currentStreak = habit.completions.calculateCurrentStreak();
     final longestStreak = habit.completions.calculateLongestStreak();
     final streakProgress = longestStreak > 0 ? (currentStreak / longestStreak).clamp(0.0, 1.0) : 0.0;
 
+    // Calculate formation progress using extension method
     final estimatedFormationDays = 66; // Default formation days
-    final formationProgress = (daysSinceStart / estimatedFormationDays * 100.0).clamp(0.0, 100.0);
+    final formationProgress = habit.completions.calculateFormationProgress(estimatedFormationDays) * 100.0;
 
-    // This month data
+    // This month data using extension method
     final now = DateTime.now();
     final thisMonthCompletions = habit.completions.getCompletionsForMonth(now.year, now.month);
     final daysInMonth = DateTime(now.year, now.month + 1, 0).day;
     final thisMonthRate = thisMonthCompletions.length / daysInMonth;
 
-    // Weekly data (last 7 days)
+    // Weekly data (last 7 days) using extension method
+    final today = DateUtils.dateOnly(DateTime.now());
     final weeklyData = <double>[];
     for (int i = 6; i >= 0; i--) {
       final date = today.subtract(Duration(days: i));
-      final isCompleted = habit.completions.values.any((entry) => DateUtils.isSameDay(DateUtils.dateOnly(entry.date), date) && entry.isCompleted);
+      final isCompleted = habit.completions.isDateCompleted(date);
       weeklyData.add(isCompleted ? 1.0 : 0.0);
     }
 
@@ -424,9 +421,9 @@ class _WeeklyProgressChartState extends ConsumerState<_WeeklyProgressChart> {
     try {
       // Use the provider which will update both local state and home provider
       await ref.read(habitDetailProvider.notifier).markHabitAsComplete(currentHabit.id, completionEntry);
-    } catch (e) {
+    } catch (e, s) {
       // Handle error - could show a snackbar or dialog
-      print('Error updating completion: $e');
+      LogHelper.shared.errorPrint('Error updating completion: $e\nStacktrace:$s');
     }
   }
 
@@ -436,7 +433,7 @@ class _WeeklyProgressChartState extends ConsumerState<_WeeklyProgressChart> {
 
     for (int i = 6; i >= 0; i--) {
       final date = today.subtract(Duration(days: i));
-      final isCompleted = habit.completions.values.any((entry) => DateUtils.isSameDay(DateUtils.dateOnly(entry.date), date) && entry.isCompleted);
+      final isCompleted = habit.completions.isDateCompleted(date);
       weeklyData.add(isCompleted);
     }
 

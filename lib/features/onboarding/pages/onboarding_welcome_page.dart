@@ -419,7 +419,7 @@ class _OnboardingWelcomePageState extends State<OnboardingWelcomePage> with Tick
       _isButtonDisabled = true;
     });
 
-    print('Debug: Button pressed, current step: ${_currentStep.name}');
+    LogHelper.shared.debugPrint('Debug: Button pressed, current step: ${_currentStep.name}');
     switch (_currentStep) {
       case OnboardingStep.initial:
         // Step 1: Move cards down and show tagline
@@ -440,7 +440,7 @@ class _OnboardingWelcomePageState extends State<OnboardingWelcomePage> with Tick
 
       case OnboardingStep.cardsStackedAtBottom:
         // Step 2: Move Exercise card to center and fade out tagline
-        print('Debug: Starting center card animation');
+        LogHelper.shared.debugPrint('Debug: Starting center card animation');
         try {
           // Ensure center animation starts from 0 for a smooth transition
           _centerCardController.stop();
@@ -450,7 +450,7 @@ class _OnboardingWelcomePageState extends State<OnboardingWelcomePage> with Tick
             _isCenterCardReady = true; // Enable card interaction immediately
           });
           await _centerCardController.forward();
-          print('Debug: Center card animation completed');
+          LogHelper.shared.debugPrint('Debug: Center card animation completed');
         } finally {
           setState(() {
             _isTransitioning = false;
@@ -499,7 +499,7 @@ class _OnboardingWelcomePageState extends State<OnboardingWelcomePage> with Tick
           }
         } else {
           // If card is not completed yet or message not shown, do nothing
-          print('Debug: Card not completed or message not shown yet, current step: ${_currentStep.name}');
+          LogHelper.shared.debugPrint('Debug: Card not completed or message not shown yet, current step: ${_currentStep.name}');
           setState(() {
             _isTransitioning = false;
             _isButtonDisabled = false;
@@ -550,7 +550,7 @@ class _OnboardingWelcomePageState extends State<OnboardingWelcomePage> with Tick
   void _onCenterCardTap() async {
     if (_isCenterCardCompleted || !_isCenterCardReady) return;
 
-    print('Debug: Center card tapped!');
+    LogHelper.shared.debugPrint('Debug: Center card tapped!');
     setState(() {
       _isCenterCardCompleted = true;
     });
@@ -681,7 +681,7 @@ class _OnboardingWelcomePageState extends State<OnboardingWelcomePage> with Tick
 
       // Debug logging - only log at key points to avoid spam
       if (centerCardValue == 0.0 || centerCardValue == 1.0 || (centerCardValue * 10).round() % 2 == 0) {
-        print('Debug: Exercise card - centerCardValue: ${centerCardValue.toStringAsFixed(2)}, x: ${x.toStringAsFixed(1)} (from $currentX to $centerX)');
+        LogHelper.shared.debugPrint('Debug: Exercise card - centerCardValue: ${centerCardValue.toStringAsFixed(2)}, x: ${x.toStringAsFixed(1)} (from $currentX to $centerX)');
       }
 
       return Positioned(

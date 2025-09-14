@@ -8,8 +8,8 @@ import '../providers/habit_detail_provider.dart';
 import '../widget/habit_heatmap_card.dart';
 import '../widget/habit_insights_card.dart';
 import '../widget/habit_milestones_card.dart';
+import '../widget/habit_overview_widget.dart';
 import '../widget/habit_progress_card.dart';
-import '../widget/habit_statistics_card.dart';
 import '../widget/modern_action_buttons.dart';
 
 class HabitDetailPage extends ConsumerWidget {
@@ -38,9 +38,9 @@ class HabitDetailPage extends ConsumerWidget {
                 child: HabitProgressCard(habit: currentHabit),
               ),
 
-              // Statistics card
+              // Overview widget (moved from Statistics page)
               SliverToBoxAdapter(
-                child: HabitStatisticsCard(habit: currentHabit),
+                child: HabitOverviewWidget(habit: currentHabit),
               ),
 
               // Heatmap card
@@ -77,6 +77,8 @@ class HabitDetailPage extends ConsumerWidget {
       pinned: true,
       backgroundColor: context.scaffoldBackgroundColor,
       shadowColor: Colors.transparent,
+      elevation: 0,
+      surfaceTintColor: Colors.transparent,
       centerTitle: true,
       title: Text(
         habit.habitName,

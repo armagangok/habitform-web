@@ -44,7 +44,7 @@ class CustomCategoryWidgetState<T> extends State<CustomCategoryWidget<T>> {
       children: widget.categories.map((category) {
         final isSelected = category == selectedCategory;
         return CupertinoButton(
-          minSize: 0,
+          minimumSize: Size.zero,
           pressedOpacity: .8,
           padding: EdgeInsets.zero,
           borderRadius: BorderRadius.circular(8),

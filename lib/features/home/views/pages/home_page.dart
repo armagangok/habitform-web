@@ -4,10 +4,10 @@ import '/core/core.dart';
 import '../../../create_habit/create_habit_page.dart';
 import '../../../create_habit/provider/create_habit_provider.dart';
 import '../../../habit_category/widget/home_category_filter.dart';
+import '../../../habit_formation/page/habit_formation_page.dart';
 import '../../../purchase/page/paywall_page.dart';
 import '../../../purchase/providers/purchase_provider.dart';
 import '../../../settings/settings_page.dart';
-import '../../../statistics/page/statistics_page.dart';
 import '../../provider/home_provider.dart';
 import '../widgets/habit_builder.dart';
 
@@ -52,8 +52,8 @@ class HomePage extends ConsumerWidget {
                   },
                   loading: () => _loadingWidget(context),
                   error: (error, stack) {
-                    print('Error: $error');
-                    print('Stack: $stack');
+                    LogHelper.shared.errorPrint('Error: $error');
+                    LogHelper.shared.errorPrint('Stack: $stack');
                     return _errorWidget(context);
                   },
                 ),
@@ -178,7 +178,7 @@ class HomePage extends ConsumerWidget {
                 enableDrag: false,
                 context: context,
                 builder: (contextFromSheet) {
-                  return const StatisticsPage();
+                  return const HabitFormationPage();
                 },
               );
             },
@@ -199,9 +199,13 @@ class HomePage extends ConsumerWidget {
                       homeState.habits.length,
                     );
                 if (canCreate) {
-                  _openCreateHabitPage(context);
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    _openCreateHabitPage(context);
+                  });
                 } else {
-                  _handlePaywallAction(context);
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    _handlePaywallAction(context);
+                  });
                 }
               }
             },

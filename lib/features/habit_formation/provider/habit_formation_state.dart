@@ -1,32 +1,32 @@
 import '../../../models/habit/habit_difficulty.dart';
 
 /// State model for statistics
-class StatisticsState {
+class FormtionState {
   final int totalCompletedDays;
   final Map<String, HabitStatistic> habitStatistics;
   final bool isMockData;
 
-  const StatisticsState({
+  const FormtionState({
     required this.totalCompletedDays,
     required this.habitStatistics,
     this.isMockData = false,
   });
 
   // Factory constructor for initial state with default values
-  factory StatisticsState.initial({bool isMockData = false}) => StatisticsState(
+  factory FormtionState.initial({bool isMockData = false}) => FormtionState(
         totalCompletedDays: 0,
         habitStatistics: {},
         isMockData: isMockData,
       );
 
   // CopyWith method for immutability
-  StatisticsState copyWith({
+  FormtionState copyWith({
     int? totalCompletedDays,
     int? longestStreak,
     Map<String, HabitStatistic>? habitStatistics,
     bool? isMockData,
   }) {
-    return StatisticsState(
+    return FormtionState(
       totalCompletedDays: totalCompletedDays ?? this.totalCompletedDays,
       habitStatistics: habitStatistics ?? this.habitStatistics,
       isMockData: isMockData ?? this.isMockData,

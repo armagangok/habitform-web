@@ -250,7 +250,7 @@ class NotificationLimitWidget extends StatelessWidget {
       children: [
         LinearProgressIndicator(
           value: percentage.clamp(0.0, 1.0),
-          backgroundColor: Theme.of(context).colorScheme.outline.withOpacity(0.3),
+          backgroundColor: Theme.of(context).colorScheme.outline.withValues(alpha: 0.3),
           valueColor: AlwaysStoppedAnimation<Color>(barColor),
         ),
         const SizedBox(height: 4),
@@ -345,10 +345,10 @@ class NotificationBreakdownDialog extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: stats.wouldExceedLimit ? CupertinoColors.systemOrange.withOpacity(0.1) : CupertinoTheme.of(context).primaryColor.withOpacity(0.1),
+                color: stats.wouldExceedLimit ? CupertinoColors.systemOrange.withValues(alpha: 0.1) : CupertinoTheme.of(context).primaryColor.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(
-                  color: stats.wouldExceedLimit ? CupertinoColors.systemOrange.withOpacity(0.3) : CupertinoTheme.of(context).primaryColor.withOpacity(0.3),
+                  color: stats.wouldExceedLimit ? CupertinoColors.systemOrange.withValues(alpha: 0.3) : CupertinoTheme.of(context).primaryColor.withValues(alpha: 0.3),
                 ),
               ),
               child: Row(
@@ -508,7 +508,7 @@ class NotificationBreakdownDialog extends StatelessWidget {
           children: [
             // Summary
             Card(
-              color: stats.wouldExceedLimit ? Theme.of(context).colorScheme.tertiary.withOpacity(0.1) : Theme.of(context).colorScheme.primary.withOpacity(0.1),
+              color: stats.wouldExceedLimit ? Theme.of(context).colorScheme.tertiary.withValues(alpha: 0.1) : Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
               child: Padding(
                 padding: const EdgeInsets.all(12),
                 child: Row(

@@ -39,7 +39,7 @@ class _TimePickerModalState extends State<_TimePickerModal> {
               color: context.scaffoldBackgroundColor,
               border: Border(
                 bottom: BorderSide(
-                  color: context.selectionHandleColor.withOpacity(0.2),
+                  color: context.selectionHandleColor.withValues(alpha: 0.2),
                 ),
               ),
             ),
@@ -127,7 +127,7 @@ class _MultipleReminderTimesWidgetState extends ConsumerState<MultipleReminderTi
               color: context.scaffoldBackgroundColor,
               borderRadius: BorderRadius.circular(12),
               border: Border.all(
-                color: context.selectionHandleColor.withOpacity(0.2),
+                color: context.selectionHandleColor.withValues(alpha: 0.2),
                 style: BorderStyle.solid,
               ),
             ),
@@ -138,13 +138,13 @@ class _MultipleReminderTimesWidgetState extends ConsumerState<MultipleReminderTi
                     Icon(
                       CupertinoIcons.clock,
                       size: 32,
-                      color: context.selectionHandleColor.withOpacity(0.5),
+                      color: context.selectionHandleColor.withValues(alpha: 0.5),
                     ),
                     const SizedBox(height: 8),
                     Text(
                       'No reminder times set',
                       style: context.bodyMedium.copyWith(
-                        color: context.selectionHandleColor.withOpacity(0.7),
+                        color: context.selectionHandleColor.withValues(alpha: 0.7),
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -152,7 +152,7 @@ class _MultipleReminderTimesWidgetState extends ConsumerState<MultipleReminderTi
                     Text(
                       'Tap "Add another time" below to get started',
                       style: context.bodySmall.copyWith(
-                        color: context.selectionHandleColor.withOpacity(0.5),
+                        color: context.selectionHandleColor.withValues(alpha: 0.5),
                       ),
                     ),
                   ],
@@ -168,10 +168,10 @@ class _MultipleReminderTimesWidgetState extends ConsumerState<MultipleReminderTi
               width: double.infinity,
               padding: const EdgeInsets.symmetric(vertical: 12),
               decoration: BoxDecoration(
-                color: context.primary.withOpacity(0.1),
+                color: context.primary.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(
-                  color: context.primary.withOpacity(0.3),
+                  color: context.primary.withValues(alpha: 0.3),
                   style: BorderStyle.solid,
                 ),
               ),
@@ -223,7 +223,7 @@ class _MultipleReminderTimesWidgetState extends ConsumerState<MultipleReminderTi
                         color: context.scaffoldBackgroundColor,
                         borderRadius: BorderRadius.circular(12),
                         border: Border.all(
-                          color: context.selectionHandleColor.withOpacity(0.2),
+                          color: context.selectionHandleColor.withValues(alpha: 0.2),
                         ),
                       ),
                       child: Row(
@@ -244,7 +244,7 @@ class _MultipleReminderTimesWidgetState extends ConsumerState<MultipleReminderTi
                           Icon(
                             CupertinoIcons.pencil,
                             size: 16,
-                            color: context.selectionHandleColor.withOpacity(0.6),
+                            color: context.selectionHandleColor.withValues(alpha: 0.6),
                           ),
                           const SizedBox(width: 8),
                           CupertinoButton(
@@ -271,10 +271,10 @@ class _MultipleReminderTimesWidgetState extends ConsumerState<MultipleReminderTi
                   width: double.infinity,
                   padding: const EdgeInsets.symmetric(vertical: 12),
                   decoration: BoxDecoration(
-                    color: context.primary.withOpacity(0.1),
+                    color: context.primary.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(12),
                     border: Border.all(
-                      color: context.primary.withOpacity(0.3),
+                      color: context.primary.withValues(alpha: 0.3),
                       style: BorderStyle.solid,
                     ),
                   ),

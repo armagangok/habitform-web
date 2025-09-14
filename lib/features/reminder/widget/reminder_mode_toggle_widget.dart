@@ -30,7 +30,7 @@ class ReminderModeToggleWidget extends ConsumerWidget {
                           color: !hasMultipleReminders ? context.primary : context.scaffoldBackgroundColor,
                           borderRadius: BorderRadius.circular(8),
                           border: Border.all(
-                            color: !hasMultipleReminders ? context.primary : context.selectionHandleColor.withOpacity(0.3),
+                            color: !hasMultipleReminders ? context.primary : context.selectionHandleColor.withValues(alpha: 0.3),
                           ),
                         ),
                         child: Row(
@@ -65,7 +65,7 @@ class ReminderModeToggleWidget extends ConsumerWidget {
                           color: hasMultipleReminders ? context.primary : context.scaffoldBackgroundColor,
                           borderRadius: BorderRadius.circular(8),
                           border: Border.all(
-                            color: hasMultipleReminders ? context.primary : context.selectionHandleColor.withOpacity(0.3),
+                            color: hasMultipleReminders ? context.primary : context.selectionHandleColor.withValues(alpha: 0.3),
                           ),
                         ),
                         child: Row(
@@ -96,10 +96,10 @@ class ReminderModeToggleWidget extends ConsumerWidget {
                 Container(
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: context.primary.withOpacity(0.1),
+                    color: context.primary.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(8),
                     border: Border.all(
-                      color: context.primary.withOpacity(0.2),
+                      color: context.primary.withValues(alpha: 0.2),
                     ),
                   ),
                   child: Row(

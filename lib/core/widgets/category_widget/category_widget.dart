@@ -151,7 +151,7 @@ class CategoryWidgetState extends State<CategoryWidget> {
             key: _itemKeys[index],
             padding: EdgeInsets.only(right: entry.key == items.length - 1 ? 0 : 5),
             child: CupertinoButton(
-              minSize: 0,
+              minimumSize: Size.zero,
               pressedOpacity: .8,
               padding: EdgeInsets.zero,
               borderRadius: BorderRadius.circular(8),

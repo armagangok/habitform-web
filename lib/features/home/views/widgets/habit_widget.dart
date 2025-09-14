@@ -111,12 +111,12 @@ class _HabitWidgetState extends ConsumerState<HabitWidget> with SingleTickerProv
           await _showAchievementIfEarned(previousHabit: beforeHabit, updatedHabit: afterHabit);
         } catch (e) {
           // Achievement dialog açılamazsa sessizce devam et
-          print('Achievement dialog error: $e');
+          LogHelper.shared.debugPrint('Achievement dialog error: $e');
         }
       }
     } catch (e) {
       // Genel hata durumunda sessizce devam et
-      print('Toggle habit error: $e');
+      LogHelper.shared.debugPrint('Toggle habit error: $e');
     }
   }
 
