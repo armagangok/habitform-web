@@ -43,6 +43,10 @@ class EditHabitNotifier extends AutoDisposeNotifier<Habit?> {
 
   void updateDifficulty(HabitDifficulty difficulty) {
     _selectedDifficulty = difficulty;
+    // Update the state to trigger UI rebuild
+    if (state != null) {
+      state = state?.copyWith(difficulty: difficulty);
+    }
   }
 
   HabitDifficulty get selectedDifficulty => _selectedDifficulty;

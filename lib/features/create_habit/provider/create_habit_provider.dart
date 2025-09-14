@@ -134,6 +134,7 @@ class CreateHabitNotifier extends AutoDisposeNotifier<CreateHabitState> {
         colorCode: color?.value ?? state.colorCode ?? defaultColor ?? Colors.blueAccent.value,
         reminderModel: reminder,
         categoryIds: categoryIds,
+        difficulty: state.difficulty,
       );
 
       await ref.read(homeProvider.notifier).createHabit(habit);

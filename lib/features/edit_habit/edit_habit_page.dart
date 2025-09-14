@@ -18,7 +18,8 @@ class EditHabitPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final editHabitNotifier = ref.watch(editHabitProvider.notifier);
-    final selectedDifficulty = editHabitNotifier.selectedDifficulty;
+    final editHabitState = ref.watch(editHabitProvider);
+    final selectedDifficulty = editHabitState?.difficulty ?? editHabitNotifier.selectedDifficulty;
 
     return CupertinoPopupSurface(
       child: GestureDetector(
