@@ -150,8 +150,11 @@ class _AchievementDialogState extends State<AchievementDialog> with TickerProvid
                     scale: _scaleAnimation,
                     child: Center(
                       child: CupertinoPopupSurface(
-                        child: SizedBox(
-                          width: context.width(0.8),
+                        child: ConstrainedBox(
+                          constraints: BoxConstraints(
+                            maxHeight: context.height(0.85),
+                            maxWidth: context.width(0.9),
+                          ),
                           child: Padding(
                             padding: context.padding(0.04),
                             child: SingleChildScrollView(
@@ -160,7 +163,7 @@ class _AchievementDialogState extends State<AchievementDialog> with TickerProvid
                                 children: [
                                   // Achievement Emoji with premium effects
                                   _buildAnimatedEmoji(context, habitColor),
-                                  SizedBox(height: context.height(0.015)),
+                                  SizedBox(height: context.height(0.02)),
 
                                   // Habit name
                                   Text(
@@ -181,15 +184,15 @@ class _AchievementDialogState extends State<AchievementDialog> with TickerProvid
                                     ),
                                     textAlign: TextAlign.center,
                                   ),
-                                  SizedBox(height: context.height(0.03)),
+                                  SizedBox(height: context.height(0.025)),
 
                                   // Score display with premium styling
                                   _buildScoreDisplay(context, theme, habitColor),
-                                  SizedBox(height: context.height(0.03)),
+                                  SizedBox(height: context.height(0.025)),
 
                                   // Progress section
                                   _buildProgressSection(context, theme, habitColor),
-                                  SizedBox(height: context.height(0.03)),
+                                  SizedBox(height: context.height(0.025)),
 
                                   // Continue button with premium styling
                                   _buildPremiumButton(context, theme, habitColor),
@@ -490,72 +493,165 @@ class _AchievementDialogState extends State<AchievementDialog> with TickerProvid
   }
 
   Widget _buildProgressSection(BuildContext context, ThemeData theme, Color habitColor) {
+    final remainingDays = _getRemainingDaysByCompletions();
+    final totalDays = _totalFormationDays;
+    final progress = _getFormationProgressByCompletions();
+
     return Container(
-      padding: context.padding(0.04),
+      padding: EdgeInsets.symmetric(
+        horizontal: context.width(0.04),
+        vertical: context.height(0.012),
+      ),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(context.width(0.06)),
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            habitColor.withValues(alpha: 0.08),
+            habitColor.withValues(alpha: 0.04),
+          ],
+        ),
         border: Border.all(
-          color: habitColor.withValues(alpha: 0.25),
+          color: habitColor.withValues(alpha: 0.2),
           width: 1,
         ),
       ),
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
+          // Title and progress indicator
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Expanded(
                 child: Text(
                   _getFormationProgressTitle(),
+                  style: context.titleMedium.copyWith(
+                    fontWeight: FontWeight.w700,
+                    color: habitColor,
+                  ),
+                ),
+              ),
+              Container(
+                padding: EdgeInsets.symmetric(
+                  horizontal: context.width(0.03),
+                  vertical: context.height(0.008),
+                ),
+                decoration: BoxDecoration(
+                  color: habitColor.withValues(alpha: 0.15),
+                  borderRadius: BorderRadius.circular(context.width(0.02)),
+                ),
+                child: Text(
+                  _getFormationDaysText(),
                   style: context.bodyMedium.copyWith(
                     fontWeight: FontWeight.w600,
                     color: habitColor,
                   ),
                 ),
               ),
-              Text(
-                _getFormationDaysText(),
-                style: context.bodyMedium.copyWith(
-                  fontWeight: FontWeight.w500,
-                  color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
+            ],
+          ),
+
+          SizedBox(height: context.height(0.02)),
+
+          // Progress bar with better visual design
+          Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Progress',
+                    style: context.bodySmall.copyWith(
+                      color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  Text(
+                    '${(progress * 100).round()}%',
+                    style: context.bodySmall.copyWith(
+                      color: habitColor,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: context.height(0.008)),
+              Container(
+                height: context.height(0.01),
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(context.height(0.005)),
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.1),
+                ),
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    return Stack(
+                      children: [
+                        Container(
+                          width: constraints.maxWidth * progress,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(context.height(0.005)),
+                            gradient: LinearGradient(
+                              colors: [
+                                habitColor,
+                                habitColor.withValues(alpha: 0.8),
+                              ],
+                            ),
+                            boxShadow: [
+                              BoxShadow(
+                                color: habitColor.withValues(alpha: 0.3),
+                                blurRadius: 4,
+                                spreadRadius: 1,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    );
+                  },
                 ),
               ),
             ],
           ),
+
           SizedBox(height: context.height(0.015)),
-          // Premium progress bar
+
+          // Clear formation message
           Container(
-            height: context.height(0.008),
+            padding: EdgeInsets.all(context.width(0.001)),
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(context.height(0.004)),
-              color: theme.colorScheme.onSurface.withValues(alpha: 0.1),
+              color: theme.colorScheme.surface.withValues(alpha: 0.5),
+              borderRadius: BorderRadius.circular(context.width(0.04)),
+              border: Border.all(
+                color: theme.colorScheme.outline.withValues(alpha: 0.1),
+                width: 1,
+              ),
             ),
-            child: LayoutBuilder(
-              builder: (context, constraints) {
-                return Stack(
-                  children: [
-                    Container(
-                      width: constraints.maxWidth * _getFormationProgressByCompletions(),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(context.height(0.004)),
-                        gradient: LinearGradient(
-                          colors: [habitColor, habitColor.withValues(alpha: 0.7)],
-                        ),
-                      ),
+            child: Column(
+              children: [
+                Text(
+                  _getFormationMessage(widget.newScore),
+                  style: context.bodyMedium.copyWith(
+                    color: theme.colorScheme.onSurface,
+                    height: 1.4,
+                    fontWeight: FontWeight.w500,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                if (remainingDays > 0) ...[
+                  SizedBox(height: context.height(0.01)),
+                  Text(
+                    'This habit takes $totalDays days of consistent practice to form',
+                    style: context.bodySmall.copyWith(
+                      color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
                     ),
-                  ],
-                );
-              },
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ],
             ),
-          ),
-          SizedBox(height: context.height(0.015)),
-          Text(
-            _getFormationMessage(widget.newScore),
-            style: context.bodySmall.copyWith(
-              color: theme.colorScheme.onSurface.withValues(alpha: 0.8),
-              height: 1.4,
-            ),
-            textAlign: TextAlign.center,
           ),
         ],
       ),
@@ -672,16 +768,16 @@ class _AchievementDialogState extends State<AchievementDialog> with TickerProvid
 
     if (score >= 90) {
       if (remainingDays == 0) {
-        return 'Excellent! Your habit is fully formed. Keep maintaining this consistency! 🎉';
+        return 'Congratulations! Your habit is now fully formed and automatic. Keep up the great work! 🎉';
       } else {
-        return 'Excellent! Just $remainingDays more days until your habit is fully formed! 🎉';
+        return 'Outstanding! You\'re $remainingDays days away from forming this habit completely! 🎉';
       }
     } else if (score >= 70) {
-      return 'Great progress! You\'re building a strong habit foundation. $remainingDays days left! 💪';
+      return 'Great progress! You\'re building strong neural pathways. $remainingDays days to go! 💪';
     } else if (score >= 50) {
-      return 'Good work! This $difficultyName habit takes $totalDays days to form. $remainingDays days remaining! 📈';
+      return 'Good work! This $difficultyName habit needs $totalDays days total. $remainingDays days remaining! 📈';
     } else {
-      return 'Keep going! This $difficultyName habit needs more consistency. $remainingDays days to go! 🌱';
+      return 'Keep going! Consistency is key. This $difficultyName habit needs $remainingDays more days! 🌱';
     }
   }
 }

@@ -75,6 +75,51 @@ class _HabitWidgetState extends ConsumerState<HabitWidget> with SingleTickerProv
     );
   }
 
+  Widget _buildCompletionIndicator(bool isCompleted, Color habitColor) {
+    if (isCompleted) {
+      return Container(
+        key: const ValueKey<bool>(true),
+        width: 32,
+        height: 32,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: habitColor,
+          boxShadow: [
+            BoxShadow(
+              color: habitColor.withValues(alpha: 0.3),
+              blurRadius: 8,
+              spreadRadius: 2,
+            ),
+          ],
+        ),
+        child: Icon(
+          CupertinoIcons.checkmark,
+          color: Colors.white,
+          size: 18,
+        ),
+      );
+    } else {
+      return Container(
+        key: const ValueKey<bool>(false),
+        width: 32,
+        height: 32,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: Colors.transparent,
+          border: Border.all(
+            color: habitColor.withValues(alpha: 0.6),
+            width: 2.5,
+          ),
+        ),
+        child: Icon(
+          CupertinoIcons.circle,
+          color: Colors.transparent,
+          size: 20,
+        ),
+      );
+    }
+  }
+
   void _toggleToday() async {
     if (!mounted) return;
 
@@ -143,7 +188,7 @@ class _HabitWidgetState extends ConsumerState<HabitWidget> with SingleTickerProv
         aspectRatio: 1,
         child: Container(
           decoration: BoxDecoration(
-            color: habitColor.withValues(alpha: isTodayCompleted ? 0.2 : 0.075),
+            color: habitColor.withValues(alpha: isTodayCompleted ? 0.1 : 0.025),
             borderRadius: BorderRadius.circular(20),
             border: Border.all(color: habitColor.withValues(alpha: 0.35), width: 2),
           ),
@@ -232,14 +277,18 @@ class _HabitWidgetState extends ConsumerState<HabitWidget> with SingleTickerProv
                       child: ScaleTransition(
                         scale: _tapScaleAnimation,
                         child: AnimatedSwitcher(
-                          duration: const Duration(milliseconds: 350),
-                          transitionBuilder: (child, animation) => FadeTransition(opacity: animation, child: child),
-                          child: Icon(
-                            isTodayCompleted ? CupertinoIcons.circle_fill : CupertinoIcons.circle,
-                            key: ValueKey<bool>(isTodayCompleted),
-                            color: habitColor,
-                            size: 28,
-                          ),
+                          duration: const Duration(milliseconds: 400),
+                          transitionBuilder: (child, animation) {
+                            final curved = CurvedAnimation(parent: animation, curve: Curves.easeInOutCubic);
+                            return FadeTransition(
+                              opacity: curved,
+                              child: ScaleTransition(
+                                scale: Tween<double>(begin: 0.8, end: 1.0).animate(curved),
+                                child: child,
+                              ),
+                            );
+                          },
+                          child: _buildCompletionIndicator(isTodayCompleted, habitColor),
                         ),
                       ),
                     ),
