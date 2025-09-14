@@ -4,6 +4,7 @@ import 'package:habitrise/models/completion_entry/completion_extension.dart';
 import '/core/core.dart';
 import '/features/home/provider/home_provider.dart';
 import '/features/purchase/providers/purchase_provider.dart';
+import '/models/habit/habit_difficulty.dart';
 import '/models/habit/habit_model.dart';
 import '/services/habit_service/habit_service_interface.dart';
 import '/services/habit_service/mock_habit_service.dart';
@@ -102,7 +103,8 @@ class FormationNotifier extends AutoDisposeAsyncNotifier<FormtionState> {
   int _countTotalCompletions(List<Habit> habits) {
     int total = 0;
     for (final habit in habits) {
-      total += habit.completions.calculateFormationScore();
+      // Use first completion date for calculation
+      total += habit.completions.calculateFormationScoreFromFirstCompletion();
     }
     return total;
   }
@@ -122,39 +124,77 @@ class FormationNotifier extends AutoDisposeAsyncNotifier<FormtionState> {
           completedDays: 0,
           progressPercentage: 0,
           startDate: today,
-          difficulty: null,
+          difficulty: habit.difficulty,
+          formationProbability: 0.0,
+          estimatedFormationDays: habit.difficulty.estimatedFormationDays,
+          remainingFormationDays: habit.difficulty.estimatedFormationDays,
         );
         continue;
       }
 
-      // Use extension methods for consistent calculations
-      final completedDays = habit.completions.calculateFormationScore();
-      final progressPercentage = habit.completions.calculateProgressPercentage();
+      // Get habit creation date - handle both timestamp IDs and string IDs
+      final habitCreationDate = _getHabitCreationDate(habit);
+      final startDate = DateUtils.dateOnly(habitCreationDate);
 
-      // Get start date from the earliest completion entry
-      final sortedDates = habit.completions.values.map((entry) => DateUtils.dateOnly(entry.date)).toList()..sort();
-      final startDate = sortedDates.first;
+      // Use extension methods for consistent calculations based on first completion date
+      final completedDays = habit.completions.calculateFormationScoreFromFirstCompletion();
+      final progressPercentage = habit.completions.calculateProgressPercentageFromFirstCompletion();
 
-      // Calculate total days since start
-      final daysSinceStart = today.difference(startDate).inDays + 1;
+      // Calculate total days since first completion (for remaining days calculation)
+      final firstCompletionDate = habit.completions.getFirstCompletionDate();
+      final daysSinceFirstCompletion = firstCompletionDate != null ? today.difference(DateUtils.dateOnly(firstCompletionDate)).inDays + 1 : 0;
+
+      // Calculate formation probability and remaining days
+      final estimatedFormationDays = habit.difficulty.estimatedFormationDays;
+      final formationProbability = habit.completions.calculateFormationProbability(
+        habitCreationDate, // This parameter is now ignored, but kept for compatibility
+        estimatedFormationDays,
+        habit.difficulty.minimumCompletionRate,
+      );
+
+      final remainingFormationDays = (estimatedFormationDays - daysSinceFirstCompletion).clamp(0, estimatedFormationDays);
 
       result[habit.id] = HabitStatistic(
         habitId: habit.id,
         habitName: habit.habitName,
-        totalDays: daysSinceStart,
+        totalDays: daysSinceFirstCompletion,
         completedDays: completedDays,
         progressPercentage: progressPercentage,
-        startDate: startDate,
-        difficulty: null,
+        startDate: firstCompletionDate != null ? DateUtils.dateOnly(firstCompletionDate) : startDate,
+        difficulty: habit.difficulty,
+        formationProbability: formationProbability,
+        estimatedFormationDays: estimatedFormationDays,
+        remainingFormationDays: remainingFormationDays,
       );
     }
 
     return result;
   }
 
+  /// Helper method to get habit creation date from habit ID
+  /// Handles both timestamp-based IDs (real habits) and string IDs (mock habits)
+  DateTime _getHabitCreationDate(Habit habit) {
+    try {
+      // Try to parse as timestamp (for real habits)
+      final timestamp = int.parse(habit.id);
+      return DateTime.fromMillisecondsSinceEpoch(timestamp);
+    } catch (e) {
+      // If parsing fails, it's a mock habit with string ID
+      // For mock habits, use a fixed date 60 days ago to simulate formation data
+      return DateTime.now().subtract(const Duration(days: 60));
+    }
+  }
+
   /// Refreshes all statistics
   Future<void> refreshStatistics() async {
     // HomeProvider'ı yenile, bu otomatik olarak statisticsProvider'ı da güncelleyecek
     ref.invalidate(homeProvider);
+  }
+
+  /// Manually refresh formation statistics without invalidating home provider
+  Future<void> refreshFormationStatistics() async {
+    final purchaseState = ref.read(purchaseProvider);
+    final isProUser = purchaseState.value?.isSubscriptionActive ?? false;
+    state = AsyncData(await _getStatistics(isProUser));
   }
 }

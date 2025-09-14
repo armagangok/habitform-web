@@ -1,5 +1,4 @@
-import 'package:habitrise/core/extension/datetime_extension.dart';
-
+import '../../core/core.dart';
 import 'completion_entry.dart';
 
 extension CompletionEntryUtils on Map<String, CompletionEntry> {
@@ -96,15 +95,33 @@ extension CompletionEntryUtils on Map<String, CompletionEntry> {
 
   // Check if a specific date has a completion
   bool isDateCompleted(DateTime date) {
-    final dateKey = date.toIso8601DateString;
-    return containsKey(dateKey) && this[dateKey]?.isCompleted == true;
+    // Look through all completion entries to find one with the same date
+    for (final entry in values) {
+      if (entry.date.normalized.isSameDayWith(date.normalized) && entry.isCompleted) {
+        return true;
+      }
+    }
+    return false;
   }
 
   // Calculate formation score based on completed days
   int calculateFormationScore() {
     if (isEmpty) return 0;
-    // Count distinct completed entries
+    // Count distinct completed entries, excluding retroactive ones
     return values.where((entry) => entry.isCompleted == true).length;
+  }
+
+  // Calculate formation score based on first completion date (for proper formation calculation)
+  int calculateFormationScoreFromFirstCompletion() {
+    if (isEmpty) return 0;
+
+    final firstCompletionDate = getFirstCompletionDate();
+    if (firstCompletionDate == null) return 0;
+
+    final startDate = DateUtils.dateOnly(firstCompletionDate);
+
+    // Count completed entries that occur on or after the first completion date
+    return values.where((entry) => entry.isCompleted && !entry.date.normalized.isBefore(startDate)).length;
   }
 
   // Calculate formation progress percentage (0.0 to 1.0)
@@ -145,6 +162,119 @@ extension CompletionEntryUtils on Map<String, CompletionEntry> {
     }
   }
 
+  // Calculate habit formation probability based on difficulty and completion history
+  double calculateFormationProbability(DateTime habitCreationDate, int estimatedFormationDays, double minimumCompletionRate) {
+    if (isEmpty || estimatedFormationDays <= 0) return 0.0;
+
+    final today = DateTime.now();
+
+    // Find the first completion date (the earliest date when user started tracking this habit)
+    final firstCompletionDate = getFirstCompletionDate();
+    if (firstCompletionDate == null) return 0.0;
+
+    final startDate = DateUtils.dateOnly(firstCompletionDate);
+    final daysSinceStart = today.difference(startDate).inDays + 1;
+
+    // Calculate completion rate from first completion to today (or up to estimated formation days)
+    final completedDays = values.where((entry) => entry.isCompleted && !entry.date.normalized.isBefore(startDate)).length;
+
+    // Use the minimum of days since start or estimated formation days for calculation
+    final calculationPeriod = daysSinceStart < estimatedFormationDays ? daysSinceStart : estimatedFormationDays;
+    final completionRate = calculationPeriod > 0 ? (completedDays / calculationPeriod) : 0.0;
+
+    // If we haven't reached the formation period yet, calculate probability based on current performance
+    if (daysSinceStart < estimatedFormationDays) {
+      // Calculate what the completion rate would be if maintained for the full formation period
+      final projectedCompletionRate = completionRate; // Current rate if maintained
+
+      // For very early stages (less than 7 days), be more generous with scoring
+      if (daysSinceStart < 7) {
+        if (projectedCompletionRate >= 1.0) {
+          return 100.0; // Perfect completion
+        } else if (projectedCompletionRate >= 0.85) {
+          // 85%+ completion in early stages shows strong commitment
+          return 85.0 + (projectedCompletionRate - 0.85) * 100.0; // 85-100%
+        } else if (projectedCompletionRate >= 0.70) {
+          // 70-85% completion in early stages is good progress
+          return 70.0 + (projectedCompletionRate - 0.70) * 100.0; // 70-85%
+        } else {
+          // Below 70% in early stages needs improvement
+          return projectedCompletionRate * 100.0; // Direct percentage
+        }
+      }
+
+      // For longer periods (7+ days), use the standard calculation but with better confidence adjustment
+      if (projectedCompletionRate >= minimumCompletionRate) {
+        // Above minimum - calculate probability based on how much above minimum
+        final excessRate = projectedCompletionRate - minimumCompletionRate;
+        final baseProbability = 70.0 + (excessRate * 200.0).clamp(0.0, 30.0); // 70-100%
+
+        // For perfect completion rate (100%), show 100% probability
+        if (projectedCompletionRate >= 1.0) {
+          return 100.0;
+        }
+
+        // For excellent completion rates (90%+), use minimal confidence penalty
+        if (projectedCompletionRate >= 0.90) {
+          final dataConfidence = (daysSinceStart / estimatedFormationDays).clamp(0.0, 1.0);
+          final confidenceAdjustment = 0.9 + (dataConfidence * 0.1); // 0.9 to 1.0
+          return (baseProbability * confidenceAdjustment).clamp(0.0, 100.0);
+        }
+
+        // For good completion rates (80%+), use moderate confidence penalty
+        if (projectedCompletionRate >= 0.80) {
+          final dataConfidence = (daysSinceStart / estimatedFormationDays).clamp(0.0, 1.0);
+          final confidenceAdjustment = 0.8 + (dataConfidence * 0.2); // 0.8 to 1.0
+          return (baseProbability * confidenceAdjustment).clamp(0.0, 100.0);
+        }
+
+        // Apply standard confidence factor for other cases
+        final dataConfidence = (daysSinceStart / estimatedFormationDays).clamp(0.0, 1.0);
+        final confidenceAdjustment = 0.7 + (dataConfidence * 0.3); // 0.7 to 1.0
+
+        return (baseProbability * confidenceAdjustment).clamp(0.0, 100.0);
+      } else {
+        // Below minimum - calculate progress towards minimum with better scaling
+        final progressToMinimum = (projectedCompletionRate / minimumCompletionRate).clamp(0.0, 1.0);
+        final baseProbability = progressToMinimum * 70.0; // 0-70%
+
+        // Apply confidence factor based on how much data we have
+        final dataConfidence = (daysSinceStart / estimatedFormationDays).clamp(0.0, 1.0);
+        final confidenceAdjustment = 0.7 + (dataConfidence * 0.3); // 0.7 to 1.0
+
+        return (baseProbability * confidenceAdjustment).clamp(0.0, 100.0);
+      }
+    } else {
+      // We've reached or exceeded the formation period - calculate final probability
+      if (completionRate >= minimumCompletionRate) {
+        // Successfully formed the habit
+        final excessRate = completionRate - minimumCompletionRate;
+        return (80.0 + (excessRate * 200.0)).clamp(80.0, 100.0); // 80-100%
+      } else {
+        // Failed to form the habit within the estimated time
+        final progressToMinimum = (completionRate / minimumCompletionRate).clamp(0.0, 1.0);
+        return (progressToMinimum * 80.0).clamp(0.0, 80.0); // 0-80%
+      }
+    }
+  }
+
+  // Get the first completion date (earliest date when user started tracking this habit)
+  DateTime? getFirstCompletionDate() {
+    if (isEmpty) return null;
+
+    // Find the earliest completion entry
+    DateTime? earliestDate;
+    for (final entry in values) {
+      if (entry.isCompleted) {
+        if (earliestDate == null || entry.date.isBefore(earliestDate)) {
+          earliestDate = entry.date;
+        }
+      }
+    }
+
+    return earliestDate;
+  }
+
   // Calculate progress percentage like statistics page (completion rate from start to today)
   double calculateProgressPercentage() {
     if (isEmpty) return 0.0;
@@ -157,10 +287,52 @@ extension CompletionEntryUtils on Map<String, CompletionEntry> {
     // Calculate days since start (including today)
     final daysSinceStart = today.difference(startDate).inDays + 1;
 
-    // Count completed entries
+    // Count completed entries, excluding retroactive ones
     final completedEntries = values.where((entry) => entry.isCompleted).length;
 
     // Calculate completion rate percentage
     return daysSinceStart > 0 ? (completedEntries / daysSinceStart) * 100.0 : 0.0;
+  }
+
+  // Calculate progress percentage based on first completion date (for proper formation calculation)
+  double calculateProgressPercentageFromFirstCompletion() {
+    if (isEmpty) return 0.0;
+
+    final today = DateTime.now();
+    final firstCompletionDate = getFirstCompletionDate();
+    if (firstCompletionDate == null) return 0.0;
+
+    final startDate = DateUtils.dateOnly(firstCompletionDate);
+
+    // Calculate days since first completion (including today)
+    final daysSinceStart = today.difference(startDate).inDays + 1;
+
+    // Count completed entries that occur on or after the first completion date
+    final completedEntries = values.where((entry) => entry.isCompleted && !entry.date.normalized.isBefore(startDate)).length;
+
+    // Calculate completion rate percentage (cap at 100%)
+    final percentage = daysSinceStart > 0 ? (completedEntries / daysSinceStart) * 100.0 : 0.0;
+    return percentage.clamp(0.0, 100.0);
+  }
+
+  // Migration function to mark existing past date completions as retroactive
+  Map<String, CompletionEntry> migrateRetroactiveCompletions() {
+    final today = DateTime.now().normalized;
+    final migratedCompletions = <String, CompletionEntry>{};
+
+    for (final entry in entries) {
+      final isPastDate = entry.value.date.normalized.isBefore(today);
+      final shouldBeRetroactive = isPastDate;
+
+      if (shouldBeRetroactive) {
+        // Mark as retroactive
+        migratedCompletions[entry.key] = entry.value;
+      } else {
+        // Keep as is
+        migratedCompletions[entry.key] = entry.value;
+      }
+    }
+
+    return migratedCompletions;
   }
 }

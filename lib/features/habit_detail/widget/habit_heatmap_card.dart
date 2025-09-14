@@ -211,26 +211,26 @@ class _OptimizedHeatmapGridState extends State<_OptimizedHeatmapGrid> {
     final now = DateTime.now();
     final oneYearAgo = now.subtract(const Duration(days: 365));
 
-    print('DEBUG: Building completion map for habit: ${widget.habit.habitName}');
-    print('DEBUG: Total completions: ${widget.habit.completions.length}');
-    print('DEBUG: Date range: ${oneYearAgo.toString()} to ${now.toString()}');
+    LogHelper.shared.debugPrint('DEBUG: Building completion map for habit: ${widget.habit.habitName}');
+    LogHelper.shared.debugPrint('DEBUG: Total completions: ${widget.habit.completions.length}');
+    LogHelper.shared.debugPrint('DEBUG: Date range: ${oneYearAgo.toString()} to ${now.toString()}');
 
     for (final entry in widget.habit.completions.values) {
       final entryDate = DateUtils.dateOnly(entry.date);
       final dateKey = '${entryDate.year}-${entryDate.month}-${entryDate.day}';
 
-      print('DEBUG: Processing entry: $dateKey, completed: ${entry.isCompleted}, date: ${entryDate.toString()}');
+      LogHelper.shared.debugPrint('DEBUG: Processing entry: $dateKey, completed: ${entry.isCompleted}, date: ${entryDate.toString()}');
 
       if (entryDate.isAfter(oneYearAgo) && entryDate.isBefore(now.add(const Duration(days: 1)))) {
         completionMap[dateKey] = entry.isCompleted;
-        print('DEBUG: Added to map: $dateKey = ${entry.isCompleted}');
+        LogHelper.shared.debugPrint('DEBUG: Added to map: $dateKey = ${entry.isCompleted}');
       } else {
-        print('DEBUG: Skipped entry outside range: $dateKey');
+        LogHelper.shared.debugPrint('DEBUG: Skipped entry outside range: $dateKey');
       }
     }
 
-    print('DEBUG: Final completion map size: ${completionMap.length}');
-    print('DEBUG: Completion map keys: ${completionMap.keys.toList()}');
+    LogHelper.shared.debugPrint('DEBUG: Final completion map size: ${completionMap.length}');
+    LogHelper.shared.debugPrint('DEBUG: Completion map keys: ${completionMap.keys.toList()}');
     return completionMap;
   }
 
@@ -524,7 +524,7 @@ class _OptimizedHeatmapGridState extends State<_OptimizedHeatmapGrid> {
     final endDate = DateUtils.dateOnly(now);
     final startDate = endDate.subtract(const Duration(days: 365)); // Full year
 
-    print('DEBUG: Heatmap data generation - startDate: $startDate, endDate: $endDate');
+    LogHelper.shared.debugPrint('DEBUG: Heatmap data generation - startDate: $startDate, endDate: $endDate');
 
     final weeks = 52; // Show full year (52 weeks)
     final monthLabels = <String>[];
@@ -536,7 +536,7 @@ class _OptimizedHeatmapGridState extends State<_OptimizedHeatmapGrid> {
       monthLabels.add(_getMonthAbbreviation(month.month));
     }
 
-    print('DEBUG: Generated month labels: $monthLabels');
+    LogHelper.shared.debugPrint('DEBUG: Generated month labels: $monthLabels');
 
     return HeatmapData(
       startDate: startDate,
@@ -564,7 +564,7 @@ class _OptimizedHeatmapGridState extends State<_OptimizedHeatmapGrid> {
 
     // Debug logging for first few cells to understand the mapping
     if (weekIndex < 3 && dayIndex < 3) {
-      print('DEBUG: Cell lookup - week: $weekIndex, day: $dayIndex, date: $date, key: $dateKey, completed: $isCompleted');
+      LogHelper.shared.debugPrint('DEBUG: Cell lookup - week: $weekIndex, day: $dayIndex, date: $date, key: $dateKey, completed: $isCompleted');
     }
 
     return CellData(

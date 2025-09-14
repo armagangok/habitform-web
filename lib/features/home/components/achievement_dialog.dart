@@ -711,10 +711,36 @@ class _CircularProgressPainter extends CustomPainter {
     if (isGradient && gradientColors != null && gradientColors!.length >= 2) {
       // Create gradient shader
       final rect = Rect.fromCircle(center: center, radius: radius);
+
+      // Ensure we have valid angles for SweepGradient
+      final startAngleRad = startAngle * (pi / 180);
+      final endAngleRad = (startAngle + 360 * progress) * (pi / 180);
+
+      // If progress is 0 or very small, use solid color instead of gradient
+      if (progress <= 0.001) {
+        final paint = Paint()
+          ..color = gradientColors!.first
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = strokeWidth
+          ..strokeCap = StrokeCap.round;
+
+        canvas.drawArc(
+          rect,
+          startAngleRad,
+          0.001, // Very small angle to avoid assertion error
+          false,
+          paint,
+        );
+        return;
+      }
+
+      // Ensure endAngle is greater than startAngle
+      final adjustedEndAngle = endAngleRad > startAngleRad ? endAngleRad : startAngleRad + 0.1;
+
       final gradient = SweepGradient(
         colors: gradientColors!,
-        startAngle: startAngle * (pi / 180),
-        endAngle: (startAngle + 360 * progress) * (pi / 180),
+        startAngle: startAngleRad,
+        endAngle: adjustedEndAngle,
       );
 
       final paint = Paint()
@@ -726,7 +752,7 @@ class _CircularProgressPainter extends CustomPainter {
       final sweepAngle = 2 * pi * progress;
       canvas.drawArc(
         rect,
-        startAngle * (pi / 180),
+        startAngleRad,
         sweepAngle,
         false,
         paint,

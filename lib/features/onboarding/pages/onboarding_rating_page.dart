@@ -399,14 +399,8 @@ class _OnboardingRatingPageState extends ConsumerState<OnboardingRatingPage> wit
           width: double.infinity,
           child: CupertinoButton(
             onPressed: _isTransitioning ? null : _skipRating,
-            child: Container(
-              height: context.height(0.055),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(context.width(0.08)),
-                border: Border.all(
-                  color: theme.colorScheme.onSurface.withValues(alpha: 0.2),
-                ),
-              ),
+            child: SizedBox(
+              height: context.height(0.025),
               child: Center(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -416,12 +410,6 @@ class _OnboardingRatingPageState extends ConsumerState<OnboardingRatingPage> wit
                       style: context.bodyMedium.copyWith(
                         color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
                       ),
-                    ),
-                    SizedBox(width: context.width(0.02)),
-                    Icon(
-                      CupertinoIcons.chevron_right,
-                      size: context.width(0.05),
-                      color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
                     ),
                   ],
                 ),

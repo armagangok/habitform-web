@@ -332,7 +332,6 @@ class _OnboardingWelcomePageState extends State<OnboardingWelcomePage> with Tick
                           'Just like that!',
                           style: context.titleLarge.copyWith(
                             fontWeight: FontWeight.w600,
-                            color: Colors.white.withValues(alpha: 0.9),
                             fontSize: context.width(0.06), // Responsive font size
                           ),
                           textAlign: TextAlign.center,
@@ -349,15 +348,30 @@ class _OnboardingWelcomePageState extends State<OnboardingWelcomePage> with Tick
                           curve: Curves.easeOutCubic,
                           child: Padding(
                             padding: context.symmetricPadding(horizontal: 0.025),
-                            child: Text(
-                              'Change your life one habit at a time.',
-                              style: context.headlineLarge.copyWith(
-                                fontSize: context.width(0.08),
-                                height: 1.1,
-                                fontWeight: FontWeight.w600,
-                                color: theme.colorScheme.onSurface,
-                              ),
-                              textAlign: TextAlign.center,
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  'Change your life',
+                                  style: context.headlineLarge.copyWith(
+                                    fontSize: context.width(0.08),
+                                    height: 1.1,
+                                    fontWeight: FontWeight.w600,
+                                    color: theme.colorScheme.onSurface,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                                Text(
+                                  'one habit at a time.',
+                                  style: context.headlineLarge.copyWith(
+                                    fontSize: context.width(0.08),
+                                    height: 1.1,
+                                    fontWeight: FontWeight.w600,
+                                    color: theme.colorScheme.onSurface,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ],
                             ),
                           ),
                         ),

@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '/core/core.dart';
 import '/features/habit_category/provider/habit_category_provider.dart';
+import '/features/habit_formation/provider/habit_formation_provider.dart';
 import '/features/reminder/service/reminder_service.dart';
 import '/models/completion_entry/completion_entry.dart';
 import '/models/habit/habit_extension.dart';
@@ -129,6 +130,9 @@ class HomeNotifier extends AsyncNotifier<HomeState> {
       await habitService.updateHabitCompletionStatus(habitId, completion);
       return HomeState(habits: updatedHabits);
     });
+
+    // Refresh formation statistics after completion update
+    await ref.read(formationProvider.notifier).refreshFormationStatistics();
   }
 
   /// Creates a new habit

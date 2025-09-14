@@ -48,7 +48,7 @@ class _HabitWidgetState extends ConsumerState<HabitWidget> with SingleTickerProv
   }
 
   double _getProgressPercentage(Habit habit) {
-    return habit.completions.calculateProgressPercentage();
+    return habit.completions.calculateProgressPercentageFromFirstCompletion();
   }
 
   Future<void> _showAchievementIfEarned({required Habit previousHabit, required Habit updatedHabit}) async {

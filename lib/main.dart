@@ -15,7 +15,6 @@ import 'core/helpers/notifications/timezone.dart';
 import 'core/theme/providers/theme_provider.dart';
 import 'features/home/provider/home_provider.dart';
 import 'features/home/views/pages/home_page.dart';
-import 'features/onboarding/providers/onboarding_state.dart';
 import 'features/purchase/providers/purchase_provider.dart';
 
 void main() async {
@@ -101,7 +100,6 @@ class _MyAppState extends ConsumerState<MyApp> {
   @override
   Widget build(BuildContext context) {
     final themeMode = ref.watch(themeProvider);
-    final onboardingState = ref.watch(onboardingProvider);
 
     final cupertinoTheme = themeMode == ThemeMode.dark ? Themes.cupertinoDarkTheme : Themes.cupertinoLightTheme;
 
@@ -123,11 +121,12 @@ class _MyAppState extends ConsumerState<MyApp> {
       localizationsDelegates: context.localizationDelegates,
       supportedLocales: context.supportedLocales,
       locale: context.locale,
-      home: _buildHomeScreen(onboardingState),
+      home: _buildHomeScreen,
     );
   }
 
-  Widget _buildHomeScreen(OnboardingState onboardingState) {
+  Widget get _buildHomeScreen {
+    final onboardingState = ref.watch(onboardingProvider);
     if (KDebug.onboardingDebugMode || onboardingState.isFirstLaunch) {
       return const OnboardingWelcomePage();
     }

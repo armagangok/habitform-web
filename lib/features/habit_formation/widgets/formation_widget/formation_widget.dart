@@ -10,45 +10,52 @@ class FormationWidget extends ConsumerWidget {
   const FormationWidget({super.key});
 
   // Alışkanlık oturma durumunu hesapla - difficulty-aware
-  String _getHabitFormationStatus(double completionRate, int completedDays, HabitDifficulty difficulty) {
+  String _getHabitFormationStatus(double completionRate, int completedDays, HabitDifficulty difficulty, double formationProbability) {
     if (completedDays < 10) {
       return LocaleKeys.statistics_formation_status_early.tr();
     }
 
-    final percentage = completionRate.toStringAsFixed(0);
-    final minimumRate = difficulty.minimumCompletionRate * 100;
+    // Use formation probability instead of raw completion rate for consistency
+    final percentage = formationProbability.toStringAsFixed(0);
+    final probabilityPercentage = formationProbability.toStringAsFixed(0);
 
-    if (completionRate >= minimumRate + 15) {
-      return LocaleKeys.statistics_formation_status_excellent.tr(namedArgs: {'percentage': percentage});
-    } else if (completionRate >= minimumRate + 5) {
-      return LocaleKeys.statistics_formation_status_very_good.tr(namedArgs: {'percentage': percentage});
-    } else if (completionRate >= minimumRate) {
-      return LocaleKeys.statistics_formation_status_good.tr(namedArgs: {'percentage': percentage});
-    } else if (completionRate >= minimumRate - 10) {
-      return LocaleKeys.statistics_formation_status_improving.tr(namedArgs: {'percentage': percentage});
+    if (formationProbability >= 90) {
+      return LocaleKeys.statistics_formation_status_excellent.tr(namedArgs: {
+        'percentage': percentage,
+        'probability': probabilityPercentage,
+      });
+    } else if (formationProbability >= 75) {
+      return LocaleKeys.statistics_formation_status_very_good.tr(namedArgs: {
+        'percentage': percentage,
+        'probability': probabilityPercentage,
+      });
+    } else if (formationProbability >= 60) {
+      return LocaleKeys.statistics_formation_status_good.tr(namedArgs: {
+        'percentage': percentage,
+        'probability': probabilityPercentage,
+      });
+    } else if (formationProbability >= 40) {
+      return LocaleKeys.statistics_formation_status_improving.tr(namedArgs: {
+        'percentage': percentage,
+        'probability': probabilityPercentage,
+      });
     } else {
-      return LocaleKeys.statistics_formation_status_needs_work.tr(namedArgs: {'percentage': percentage});
+      return LocaleKeys.statistics_formation_status_needs_work.tr(namedArgs: {
+        'percentage': percentage,
+        'probability': probabilityPercentage,
+      });
     }
   }
 
   // Tahmini alışkanlık oturma süresini hesapla - difficulty-aware
-  String _getEstimatedFormationTime(double completionRate, int completedDays, DateTime startDate, HabitDifficulty difficulty) {
+  String _getEstimatedFormationTime(double completionRate, int completedDays, DateTime startDate, HabitDifficulty difficulty, int remainingFormationDays, int estimatedFormationDays) {
     if (completedDays < 5) {
       return LocaleKeys.statistics_formation_time_not_enough_data.tr();
     }
 
-    // Başlangıçtan bugüne kadar geçen gün sayısı
-    final daysSinceStart = DateTime.now().difference(startDate).inDays + 1;
-
-    // Difficulty-based formation time
-    final estimatedFormationDays = difficulty.estimatedFormationDays;
     final minimumCompletionRate = difficulty.minimumCompletionRate * 100;
 
-    // Kalan gün hesabı
-    int remainingDays = estimatedFormationDays - daysSinceStart;
-    remainingDays = remainingDays < 0 ? 0 : remainingDays;
-
-    if (remainingDays == 0) {
+    if (remainingFormationDays == 0) {
       if (completionRate >= minimumCompletionRate + 15) {
         return LocaleKeys.statistics_formation_time_completed_successful.tr();
       } else if (completionRate >= minimumCompletionRate) {
@@ -57,7 +64,10 @@ class FormationWidget extends ConsumerWidget {
         return LocaleKeys.statistics_formation_time_completed_needs_work.tr();
       }
     } else {
-      return LocaleKeys.statistics_formation_time_remaining_days.tr(namedArgs: {'days': remainingDays.toString()});
+      return LocaleKeys.statistics_formation_time_remaining_days.tr(namedArgs: {
+        'days': remainingFormationDays.toString(),
+        'total': estimatedFormationDays.toString(),
+      });
     }
   }
 
@@ -121,8 +131,20 @@ class FormationWidget extends ConsumerWidget {
         if (selectedHabitIndex >= 0 && selectedHabitIndex < data.habitStatistics.values.length) {
           final selectedHabit = data.habitStatistics.values.elementAt(selectedHabitIndex);
           final HabitDifficulty selectedDifficulty = selectedHabit.difficulty ?? HabitDifficulty.moderate;
-          habitFormationStatus = _getHabitFormationStatus(selectedHabit.progressPercentage, selectedHabit.completedDays, selectedDifficulty);
-          estimatedFormationTime = _getEstimatedFormationTime(selectedHabit.progressPercentage, selectedHabit.completedDays, selectedHabit.startDate, selectedDifficulty);
+          habitFormationStatus = _getHabitFormationStatus(
+            selectedHabit.progressPercentage,
+            selectedHabit.completedDays,
+            selectedDifficulty,
+            selectedHabit.formationProbability,
+          );
+          estimatedFormationTime = _getEstimatedFormationTime(
+            selectedHabit.progressPercentage,
+            selectedHabit.completedDays,
+            selectedHabit.startDate,
+            selectedDifficulty,
+            selectedHabit.remainingFormationDays,
+            selectedHabit.estimatedFormationDays,
+          );
         } else {
           // No valid habit selected, return empty widget
           return const SizedBox.shrink();
@@ -142,6 +164,7 @@ class FormationWidget extends ConsumerWidget {
                     context,
                     data.habitStatistics.values.elementAt(selectedHabitIndex).progressPercentage,
                     data.habitStatistics.values.elementAt(selectedHabitIndex).difficulty ?? HabitDifficulty.moderate,
+                    data.habitStatistics.values.elementAt(selectedHabitIndex).formationProbability,
                   ),
                   const SizedBox(height: 10),
                   Text(
@@ -195,32 +218,31 @@ class FormationWidget extends ConsumerWidget {
     );
   }
 
-  Widget _buildHabitFormationChart(BuildContext context, double progressPercentage, HabitDifficulty difficulty) {
-    // Difficulty-aware color determination
+  Widget _buildHabitFormationChart(BuildContext context, double progressPercentage, HabitDifficulty difficulty, double formationProbability) {
+    // Formation probability-based color determination
     Color progressColor;
     List<Color> progressGradient;
-    final minimumRate = difficulty.minimumCompletionRate * 100;
 
-    if (progressPercentage >= minimumRate + 15) {
-      progressColor = const Color(0xFF4CAF50); // Green
+    if (formationProbability >= 90) {
+      progressColor = const Color(0xFF4CAF50); // Green - Excellent formation probability
       progressGradient = [
         const Color(0xFF66BB6A),
         const Color(0xFF43A047),
       ];
-    } else if (progressPercentage >= minimumRate + 5) {
-      progressColor = const Color(0xFF8BC34A); // Light Green
+    } else if (formationProbability >= 75) {
+      progressColor = const Color(0xFF8BC34A); // Light Green - Very good formation probability
       progressGradient = [
         const Color(0xFF9CCC65),
         const Color(0xFF7CB342),
       ];
-    } else if (progressPercentage >= minimumRate) {
-      progressColor = const Color(0xFFFFC107); // Amber
+    } else if (formationProbability >= 60) {
+      progressColor = const Color(0xFFFFC107); // Amber - Good formation probability
       progressGradient = [
         const Color(0xFFFFD54F),
         const Color(0xFFFFB300),
       ];
     } else {
-      progressColor = const Color(0xFFF44336); // Red
+      progressColor = const Color(0xFFF44336); // Red - Needs improvement
       progressGradient = [
         const Color(0xFFEF5350),
         const Color(0xFFE53935),
@@ -245,7 +267,7 @@ class FormationWidget extends ConsumerWidget {
                   sections: [
                     PieChartSectionData(
                       color: progressColor,
-                      value: progressPercentage,
+                      value: formationProbability,
                       title: '',
                       radius: 25,
                       titleStyle: const TextStyle(
@@ -262,7 +284,7 @@ class FormationWidget extends ConsumerWidget {
                     ),
                     PieChartSectionData(
                       color: Colors.grey.shade200,
-                      value: 100 - progressPercentage,
+                      value: 100 - formationProbability,
                       title: '',
                       radius: 20,
                       titleStyle: const TextStyle(
@@ -304,7 +326,7 @@ class FormationWidget extends ConsumerWidget {
                     Padding(
                       padding: const EdgeInsets.all(10.0),
                       child: Text(
-                        '${progressPercentage.toStringAsFixed(0)}%',
+                        '${formationProbability.toStringAsFixed(0)}%',
                         style: TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
@@ -330,33 +352,33 @@ class FormationWidget extends ConsumerWidget {
                   _buildLegendItem(
                     context,
                     const Color(0xFFF44336),
-                    LocaleKeys.statistics_chart_labels_below_50.tr(),
-                    LocaleKeys.statistics_chart_labels_insufficient.tr(),
-                    isSelected: progressPercentage < minimumRate,
+                    'Below 60%',
+                    'Needs Work',
+                    isSelected: formationProbability < 60,
                   ),
                   _verticalDivider(),
                   _buildLegendItem(
                     context,
                     const Color(0xFFFFC107),
-                    LocaleKeys.statistics_chart_labels_between_50_70.tr(),
-                    LocaleKeys.statistics_chart_labels_moderate.tr(),
-                    isSelected: progressPercentage >= minimumRate && progressPercentage < minimumRate + 5,
+                    '60-75%',
+                    'Good Progress',
+                    isSelected: formationProbability >= 60 && formationProbability < 75,
                   ),
                   _verticalDivider(),
                   _buildLegendItem(
                     context,
                     const Color(0xFF8BC34A),
-                    LocaleKeys.statistics_chart_labels_between_70_90.tr(),
-                    LocaleKeys.statistics_chart_labels_good.tr(),
-                    isSelected: progressPercentage >= minimumRate + 5 && progressPercentage < minimumRate + 15,
+                    '75-90%',
+                    'Very Good',
+                    isSelected: formationProbability >= 75 && formationProbability < 90,
                   ),
                   _verticalDivider(),
                   _buildLegendItem(
                     context,
                     const Color(0xFF4CAF50),
-                    LocaleKeys.statistics_chart_labels_above_90.tr(),
-                    LocaleKeys.statistics_chart_labels_excellent.tr(),
-                    isSelected: progressPercentage >= minimumRate + 15,
+                    'Above 90%',
+                    'Excellent',
+                    isSelected: formationProbability >= 90,
                   ),
                 ],
               ),

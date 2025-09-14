@@ -1,8 +1,10 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '/core/core.dart';
+import '/features/habit_formation/provider/habit_formation_provider.dart';
 import '/models/completion_entry/completion_extension.dart';
 import '/models/habit/habit_model.dart';
+import '../../habit_formation/provider/habit_formation_state.dart';
 import 'statistic_card.dart';
 
 class HabitOverviewWidget extends ConsumerWidget {
@@ -13,8 +15,28 @@ class HabitOverviewWidget extends ConsumerWidget {
     required this.habit,
   });
 
+  /// Calculate days since first completion
+  int _calculateDaysSinceFirstCompletion(Habit habit) {
+    if (habit.completions.isEmpty) return 0;
+
+    final today = DateTime.now();
+    final firstCompletionDate = habit.completions.getFirstCompletionDate();
+    if (firstCompletionDate == null) return 0;
+
+    final startDate = DateUtils.dateOnly(firstCompletionDate);
+    return today.difference(startDate).inDays + 1;
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final formationState = ref.watch(formationProvider);
+
+    // Get habit statistic from formation provider
+    HabitStatistic? habitStatistic;
+    if (formationState.hasValue && formationState.value != null) {
+      habitStatistic = formationState.value!.habitStatistics[habit.id];
+    }
+
     // Calculate statistics for this specific habit
     final currentStreak = habit.completions.calculateCurrentStreak();
     final longestStreak = habit.completions.calculateLongestStreak();
@@ -56,19 +78,11 @@ class HabitOverviewWidget extends ConsumerWidget {
       );
     }
 
-    // Calculate additional statistics using extension methods
-    final successRate = habit.completions.calculateProgressPercentage();
-    final completedEntries = habit.completions.calculateFormationScore();
+    // Use formation provider data if available, otherwise fallback to local calculation
+    final completedEntries = habitStatistic?.completedDays ?? habit.completions.calculateFormationScoreFromFirstCompletion();
 
-    // Calculate days since start for display
-    final today = DateUtils.dateOnly(DateTime.now());
-    final sortedDates = habit.completions.values.map((e) => DateUtils.dateOnly(e.date)).toList()..sort();
-    final startDate = sortedDates.first;
-    final daysSinceStart = today.difference(startDate).inDays + 1;
-
-    // Calculate formation progress using extension method
-    final estimatedFormationDays = 66;
-    final formationProgress = habit.completions.calculateFormationProgress(estimatedFormationDays) * 100.0;
+    // Calculate days since first completion for "Days Active"
+    final daysSinceStart = habitStatistic?.totalDays ?? _calculateDaysSinceFirstCompletion(habit);
 
     return CupertinoListSection.insetGrouped(
       header: Text(LocaleKeys.statistics_overview.tr()),
@@ -86,8 +100,8 @@ class HabitOverviewWidget extends ConsumerWidget {
                       title: LocaleKeys.statistics_current_streak.tr(),
                       value: currentStreak.toString(),
                       unit: "days",
-                      cardColor: Colors.orange.withValues(alpha: 0.15),
-                      iconColor: Colors.orange,
+                      cardColor: Colors.deepOrangeAccent.withValues(alpha: 0.15),
+                      iconColor: Colors.deepOrangeAccent,
                     ),
                   ),
                   const SizedBox(width: 12),
@@ -97,19 +111,8 @@ class HabitOverviewWidget extends ConsumerWidget {
                       title: LocaleKeys.statistics_longest_streak.tr(),
                       value: longestStreak.toString(),
                       unit: "days",
-                      cardColor: Colors.amber.withValues(alpha: 0.15),
-                      iconColor: Colors.amber,
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: StatisticCard(
-                      icon: Icons.track_changes,
-                      title: "Success Rate",
-                      value: successRate.toStringAsFixed(1),
-                      unit: "%",
-                      cardColor: Colors.red.withValues(alpha: 0.15),
-                      iconColor: Colors.red,
+                      cardColor: Colors.redAccent.withValues(alpha: 0.15),
+                      iconColor: Colors.redAccent,
                     ),
                   ),
                 ],
@@ -132,22 +135,11 @@ class HabitOverviewWidget extends ConsumerWidget {
                   Expanded(
                     child: StatisticCard(
                       icon: Icons.calendar_today,
-                      title: "Days Active",
+                      title: LocaleKeys.statistics_total_days.tr(),
                       value: daysSinceStart.toString(),
                       unit: "days",
                       cardColor: Colors.blue.withValues(alpha: 0.15),
                       iconColor: Colors.blue,
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: StatisticCard(
-                      icon: Icons.eco,
-                      title: "Formation Progress",
-                      value: formationProgress.toStringAsFixed(0),
-                      unit: "%",
-                      cardColor: Colors.purple.withValues(alpha: 0.15),
-                      iconColor: Colors.purple,
                     ),
                   ),
                 ],

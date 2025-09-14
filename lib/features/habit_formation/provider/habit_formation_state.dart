@@ -42,8 +42,10 @@ class HabitStatistic {
   final int completedDays;
   final double progressPercentage;
   final DateTime startDate;
-  // Optional difficulty for insights; defaults can be applied where computed
   final HabitDifficulty? difficulty;
+  final double formationProbability; // 0-100 probability of successful formation
+  final int estimatedFormationDays; // Days needed for formation based on difficulty
+  final int remainingFormationDays; // Days remaining to complete formation
 
   const HabitStatistic({
     required this.habitId,
@@ -53,5 +55,8 @@ class HabitStatistic {
     required this.progressPercentage,
     required this.startDate,
     this.difficulty,
+    required this.formationProbability,
+    required this.estimatedFormationDays,
+    required this.remainingFormationDays,
   });
 }

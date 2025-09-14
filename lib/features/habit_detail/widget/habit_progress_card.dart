@@ -7,7 +7,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '/core/core.dart';
 import '/models/completion_entry/completion_entry.dart';
 import '/models/completion_entry/completion_extension.dart';
+import '/models/habit/habit_difficulty.dart';
 import '/models/models.dart';
+import '../../habit_formation/provider/habit_formation_provider.dart';
+import '../../habit_formation/provider/habit_formation_state.dart';
 import '../providers/habit_detail_provider.dart';
 
 class HabitProgressCard extends ConsumerWidget {
@@ -20,8 +23,6 @@ class HabitProgressCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final progressData = _calculateProgressData(habit);
-
     return CupertinoListSection.insetGrouped(
       header: Row(
         mainAxisSize: MainAxisSize.min,
@@ -50,80 +51,53 @@ class HabitProgressCard extends ConsumerWidget {
             children: [
               // Main Progress Circle and Stats
               Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   // Main Progress Circle
-                  Expanded(
-                    flex: 2,
-                    child: Consumer(
-                      builder: (context, ref, child) {
-                        final currentHabit = ref.watch(habitDetailProvider);
-                        final currentProgressData = _calculateProgressData(currentHabit ?? habit);
-                        return _CircularProgress(
-                          progress: currentProgressData.completionRate / 100,
-                          color: Color(habit.colorCode),
-                          centerChild: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                "${currentProgressData.completionRate.toStringAsFixed(0)}%",
-                                style: TextStyle(
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.bold,
-                                  color: context.titleLarge.color,
-                                ),
-                              ),
-                              Text(
-                                "Success Rate",
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  color: context.bodyMedium.color?.withValues(alpha: 0.7),
-                                ),
-                              ),
-                            ],
-                          ),
-                        );
-                      },
-                    ),
-                  ),
+                  Consumer(
+                    builder: (context, ref, child) {
+                      final currentHabit = ref.watch(habitDetailProvider);
+                      final formationState = ref.watch(formationProvider);
 
-                  const SizedBox(width: 24),
+                      // Get habit statistic from formation provider
+                      HabitStatistic? habitStatistic;
+                      if (formationState.hasValue && formationState.value != null) {
+                        habitStatistic = formationState.value!.habitStatistics[habit.id];
+                      }
+
+                      final currentProgressData = _calculateProgressData(currentHabit ?? habit, habitStatistic);
+                      return _CircularProgress(
+                        progress: currentProgressData.formationProgress / 100,
+                        color: Color(habit.colorCode),
+                        centerChild: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "${currentProgressData.formationProgress.toStringAsFixed(0)}%",
+                              style: TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                                color: context.titleLarge.color,
+                              ),
+                            ),
+                            Text(
+                              "Formation",
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: context.bodyMedium.color?.withValues(alpha: 0.7),
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
 
                   // Progress Stats
-                  Expanded(
-                    flex: 3,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        _ProgressStatRow(
-                          icon: FontAwesomeIcons.fire,
-                          color: Colors.orange,
-                          title: "Current Streak",
-                          value: "${progressData.currentStreak} days",
-                          progress: progressData.streakProgress,
-                        ),
-                        const SizedBox(height: 12),
-                        _ProgressStatRow(
-                          icon: FontAwesomeIcons.seedling,
-                          color: Colors.green,
-                          title: "Formation",
-                          value: "${progressData.formationProgress.toStringAsFixed(0)}%",
-                          progress: progressData.formationProgress / 100,
-                        ),
-                        const SizedBox(height: 12),
-                        _ProgressStatRow(
-                          icon: FontAwesomeIcons.calendar,
-                          color: Colors.blue,
-                          title: "This Month",
-                          value: "${progressData.thisMonthCompleted}/${progressData.thisMonthTotal}",
-                          progress: progressData.thisMonthRate,
-                        ),
-                      ],
-                    ),
-                  ),
                 ],
               ),
 
-              const SizedBox(height: 24),
+              const SizedBox(height: 12),
 
               // Weekly Progress Chart
               _WeeklyProgressChart(),
@@ -136,7 +110,7 @@ class HabitProgressCard extends ConsumerWidget {
     );
   }
 
-  ProgressData _calculateProgressData(Habit habit) {
+  ProgressData _calculateProgressData(Habit habit, HabitStatistic? habitStatistic) {
     if (habit.completions.isEmpty) {
       return ProgressData(
         completionRate: 0.0,
@@ -150,15 +124,14 @@ class HabitProgressCard extends ConsumerWidget {
       );
     }
 
-    // Use extension methods for consistent calculations
-    final completionRate = habit.completions.calculateProgressPercentage();
+    // Use formation provider data if available, otherwise fallback to local calculation
+    final completionRate = habitStatistic?.progressPercentage ?? habit.completions.calculateProgressPercentage();
+    final formationProgress = habitStatistic?.formationProbability ?? _calculateLocalFormationProbability(habit);
+
+    // Calculate streaks using extension methods (these are not in formation provider yet)
     final currentStreak = habit.completions.calculateCurrentStreak();
     final longestStreak = habit.completions.calculateLongestStreak();
     final streakProgress = longestStreak > 0 ? (currentStreak / longestStreak).clamp(0.0, 1.0) : 0.0;
-
-    // Calculate formation progress using extension method
-    final estimatedFormationDays = 66; // Default formation days
-    final formationProgress = habit.completions.calculateFormationProgress(estimatedFormationDays) * 100.0;
 
     // This month data using extension method
     final now = DateTime.now();
@@ -184,6 +157,20 @@ class HabitProgressCard extends ConsumerWidget {
       thisMonthTotal: daysInMonth,
       thisMonthRate: thisMonthRate,
       weeklyData: weeklyData,
+    );
+  }
+
+  // Calculate formation probability locally when provider data is not available
+  double _calculateLocalFormationProbability(Habit habit) {
+    if (habit.completions.isEmpty) return 0.0;
+
+    // Use a dummy date since the method now uses first completion date internally
+    final dummyDate = DateTime.now();
+
+    return habit.completions.calculateFormationProbability(
+      dummyDate, // This parameter is now ignored, but kept for compatibility
+      habit.difficulty.estimatedFormationDays,
+      habit.difficulty.minimumCompletionRate,
     );
   }
 }
@@ -298,60 +285,6 @@ class _CircularProgressPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
-}
-
-class _ProgressStatRow extends StatelessWidget {
-  final IconData icon;
-  final Color color;
-  final String title;
-  final String value;
-  final double progress;
-
-  const _ProgressStatRow({
-    required this.icon,
-    required this.color,
-    required this.title,
-    required this.value,
-    required this.progress,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          children: [
-            Icon(icon, size: 14, color: color),
-            const SizedBox(width: 6),
-            Text(
-              title,
-              style: TextStyle(
-                fontSize: 12,
-                color: context.bodyMedium.color?.withValues(alpha: 0.7),
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 4),
-        Text(
-          value,
-          style: TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.bold,
-            color: context.titleLarge.color,
-          ),
-        ),
-        const SizedBox(height: 4),
-        LinearProgressIndicator(
-          value: progress.clamp(0.0, 1.0),
-          backgroundColor: color.withValues(alpha: 0.1),
-          valueColor: AlwaysStoppedAnimation<Color>(color),
-        ),
-      ],
-    );
-  }
 }
 
 class _WeeklyProgressChart extends ConsumerStatefulWidget {

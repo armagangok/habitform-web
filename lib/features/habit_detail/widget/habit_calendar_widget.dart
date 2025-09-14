@@ -128,7 +128,9 @@ class _HabitCalendarCompletionSheetState extends ConsumerState<HabitCalendarComp
 
     // Var olan kaydı güncelle veya yeni oluştur
     final completion = existingEntry != null
-        ? existingEntry.copyWith(isCompleted: willBeCompleted)
+        ? existingEntry.copyWith(
+            isCompleted: willBeCompleted,
+          )
         : CompletionEntry(
             id: selectedDateTime.toIso8601DateString,
             date: selectedDateTime,

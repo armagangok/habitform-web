@@ -4,6 +4,7 @@ import '../../../core/core.dart';
 import '../../../models/completion_entry/completion_entry.dart';
 import '../../../models/habit/habit_model.dart';
 import '../../../services/habit_service/habit_service_interface.dart';
+import '../../habit_formation/provider/habit_formation_provider.dart';
 import '../../home/provider/home_provider.dart';
 
 final habitDetailProvider = AutoDisposeNotifierProvider<HabitDetailNotifier, Habit?>(() {
@@ -48,7 +49,10 @@ class HabitDetailNotifier extends AutoDisposeNotifier<Habit?> {
 
           // Home provider'ı da güncelle
           await ref.read(homeProvider.notifier).refreshHabits();
-          LogHelper.shared.debugPrint("State and home provider updated successfully");
+
+          // Formation provider'ı da güncelle
+          await ref.read(formationProvider.notifier).refreshFormationStatistics();
+          LogHelper.shared.debugPrint("State, home provider, and formation provider updated successfully");
         } else {
           LogHelper.shared.errorPrint("Could not find the updated habit");
         }
@@ -56,6 +60,9 @@ class HabitDetailNotifier extends AutoDisposeNotifier<Habit?> {
         LogHelper.shared.debugPrint("Current habit is not being viewed, only updating home provider");
         // Sadece home provider'ı güncelle
         await ref.read(homeProvider.notifier).refreshHabits();
+
+        // Formation provider'ı da güncelle
+        await ref.read(formationProvider.notifier).refreshFormationStatistics();
       }
     } catch (e, s) {
       LogHelper.shared.errorPrint("Error marking habit as complete: $e\n$s");
@@ -102,6 +109,9 @@ class HabitDetailNotifier extends AutoDisposeNotifier<Habit?> {
 
         // Home provider'ı da güncelle
         await ref.read(homeProvider.notifier).refreshHabits();
+
+        // Formation provider'ı da güncelle
+        await ref.read(formationProvider.notifier).refreshFormationStatistics();
         LogHelper.shared.debugPrint("Successfully removed completion and updated state");
       } else {
         LogHelper.shared.debugPrint("No completion found for the specified date");

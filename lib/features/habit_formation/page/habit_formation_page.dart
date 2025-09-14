@@ -5,8 +5,8 @@ import 'package:shimmer/shimmer.dart';
 import '/core/core.dart' hide showCupertinoSheet;
 import '../../purchase/page/paywall_page.dart';
 import '../provider/habit_formation_provider.dart';
+import '../widgets/formation_widget/formation_insights_widget.dart';
 import '../widgets/habit_selector/habit_selector.dart';
-import '../widgets/formation_widget/insights_widget.dart';
 
 // Seçili alışkanlık indeksi için provider
 final selectedHabitIndexProvider = StateProvider<int>((ref) => -1);
@@ -107,7 +107,7 @@ class HabitFormationPage extends ConsumerWidget {
                                       ref.read(selectedHabitIndexProvider.notifier).state = index;
                                     },
                                   ),
-                                  const InsightsWidget(),
+                                  const FormationInsightsWidget(),
                                   const SizedBox(height: 100), // Extra space for watermark
                                 ],
                               );

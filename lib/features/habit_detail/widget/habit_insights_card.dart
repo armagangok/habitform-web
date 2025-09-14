@@ -1,8 +1,11 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '/core/core.dart';
+import '/features/habit_formation/provider/habit_formation_provider.dart';
 import '/models/completion_entry/completion_extension.dart';
+import '/models/habit/habit_difficulty.dart';
 import '/models/models.dart';
+import '../../habit_formation/provider/habit_formation_state.dart';
 
 class HabitInsightsCard extends ConsumerWidget {
   final Habit habit;
@@ -14,7 +17,15 @@ class HabitInsightsCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final insights = _generateInsights();
+    final formationState = ref.watch(formationProvider);
+
+    // Get habit statistic from formation provider
+    HabitStatistic? habitStatistic;
+    if (formationState.hasValue && formationState.value != null) {
+      habitStatistic = formationState.value!.habitStatistics[habit.id];
+    }
+
+    final insights = _generateInsights(habitStatistic);
 
     return CupertinoListSection.insetGrouped(
       header: Row(
@@ -43,7 +54,7 @@ class HabitInsightsCard extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Formation Status
-              _FormationStatusCard(habit: habit),
+              _FormationStatusCard(habit: habit, habitStatistic: habitStatistic),
 
               const SizedBox(height: 16),
 
@@ -67,10 +78,10 @@ class HabitInsightsCard extends ConsumerWidget {
     );
   }
 
-  HabitInsights _generateInsights() {
+  HabitInsights _generateInsights(HabitStatistic? habitStatistic) {
     final currentStreak = habit.completions.calculateCurrentStreak();
     final longestStreak = habit.completions.calculateLongestStreak();
-    final completionRate = _calculateCompletionRate();
+    final completionRate = habitStatistic?.progressPercentage ?? _calculateCompletionRate();
 
     final achievements = <Achievement>[];
     final insights = <InsightItem>[];
@@ -141,7 +152,7 @@ class HabitInsightsCard extends ConsumerWidget {
       ));
     }
 
-    final formationProgress = _getFormationProgress();
+    final formationProgress = habitStatistic?.formationProbability ?? _getFormationProgress();
     if (formationProgress >= 50 && formationProgress < 100) {
       insights.add(InsightItem(
         title: "Formation Journey",
@@ -195,24 +206,87 @@ class HabitInsightsCard extends ConsumerWidget {
   }
 
   double _getFormationProgress() {
-    final estimatedFormationDays = 66; // Default formation days
+    // Fallback calculation when provider data is not available
+    final estimatedFormationDays = habit.difficulty.estimatedFormationDays;
     return habit.completions.calculateFormationProgress(estimatedFormationDays) * 100.0;
   }
 }
 
 class _FormationStatusCard extends StatelessWidget {
   final Habit habit;
+  final HabitStatistic? habitStatistic;
 
-  const _FormationStatusCard({required this.habit});
+  const _FormationStatusCard({required this.habit, this.habitStatistic});
 
   @override
   Widget build(BuildContext context) {
-    final progress = _getFormationProgress();
-    final estimatedDays = 66; // Default formation days
+    final progress = habitStatistic?.formationProbability ?? _getFormationProgress();
+    final estimatedDays = habitStatistic?.estimatedFormationDays ?? habit.difficulty.estimatedFormationDays;
     // Calculate total days since start for remaining days calculation
     final today = DateUtils.dateOnly(DateTime.now());
-    final sortedDates = habit.completions.values.map((e) => DateUtils.dateOnly(e.date)).toList()..sort();
-    final startDate = sortedDates.first;
+    final startDate = habitStatistic?.startDate ?? DateUtils.dateOnly(DateTime.now());
+
+    // Handle case when habit has no completion entries
+    if (habit.completions.isEmpty) {
+      return Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              Color(habit.colorCode).withValues(alpha: 0.1),
+              Color(habit.colorCode).withValues(alpha: 0.05),
+            ],
+          ),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: Color(habit.colorCode).withValues(alpha: 0.2),
+            width: 1,
+          ),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Icon(
+                  Icons.trending_up,
+                  color: Color(habit.colorCode),
+                  size: 20,
+                ),
+                const SizedBox(width: 8),
+                Text(
+                  'Formation Progress',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    color: Color(habit.colorCode),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 12),
+            Text(
+              'Start your habit to see formation progress!',
+              style: TextStyle(
+                fontSize: 14,
+                color: Colors.grey[600],
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'Complete your first entry to begin tracking your habit formation journey.',
+              style: TextStyle(
+                fontSize: 12,
+                color: Colors.grey[500],
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
     final totalDays = today.difference(startDate).inDays + 1;
     final daysRemaining = (estimatedDays - totalDays).clamp(0, estimatedDays);
 
@@ -277,7 +351,7 @@ class _FormationStatusCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Moderate", // Default difficulty display name
+                      habit.difficulty.displayName,
                       style: TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.w600,
@@ -302,7 +376,8 @@ class _FormationStatusCard extends StatelessWidget {
   }
 
   double _getFormationProgress() {
-    final estimatedFormationDays = 66; // Default formation days
+    // Fallback calculation when provider data is not available
+    final estimatedFormationDays = habit.difficulty.estimatedFormationDays;
     return habit.completions.calculateFormationProgress(estimatedFormationDays) * 100.0;
   }
 }
@@ -613,7 +688,7 @@ class _MotivationCard extends StatelessWidget {
 
   double _calculateCompletionRate() {
     if (habit.completions.isEmpty) return 0.0;
-    return habit.completions.calculateProgressPercentage();
+    return habit.completions.calculateProgressPercentageFromFirstCompletion();
   }
 }
 

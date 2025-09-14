@@ -22,43 +22,18 @@ class StatisticCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
 
     // Default colors based on theme
-    final defaultCardColor = isDark ? theme.colorScheme.surface.withValues(alpha: 0.1) : theme.colorScheme.surface;
+
     final defaultIconColor = theme.colorScheme.primary;
 
-    final effectiveCardColor = cardColor ?? defaultCardColor;
     final effectiveIconColor = iconColor ?? defaultIconColor;
 
     return Container(
-      height: 120, // Fixed height for consistent card sizes
       padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
-        color: effectiveCardColor,
-        borderRadius: BorderRadius.circular(16),
-        gradient: effectiveCardColor != defaultCardColor
-            ? LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [
-                  effectiveCardColor,
-                  effectiveCardColor.withValues(alpha: 0.8),
-                ],
-              )
-            : null,
-        border: Border.all(
-          color: theme.colorScheme.outline.withValues(alpha: 0.1),
-          width: 1,
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: theme.colorScheme.shadow.withValues(alpha: 0.08),
-            blurRadius: 12,
-            offset: const Offset(0, 4),
-            spreadRadius: 0,
-          ),
-        ],
+        color: context.primaryContrastingColor.withValues(alpha: 0.05),
+        borderRadius: BorderRadius.circular(12),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -91,9 +66,9 @@ class StatisticCard extends StatelessWidget {
                           Text(
                             unit!,
                             style: theme.textTheme.bodySmall?.copyWith(
-                              color: theme.colorScheme.onSurface.withValues(alpha: 0.8),
+                              color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
                               fontSize: 11,
-                              fontWeight: FontWeight.w500,
+                              fontWeight: FontWeight.w600,
                               fontFeatures: [
                                 FontFeature.tabularFigures(),
                               ],
@@ -109,8 +84,6 @@ class StatisticCard extends StatelessWidget {
             ],
           ),
 
-          const Spacer(),
-
           // Bottom Left: Icon and Title
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -124,16 +97,16 @@ class StatisticCard extends StatelessWidget {
                 child: Icon(
                   icon,
                   color: effectiveIconColor,
-                  size: 18,
+                  size: 20,
                 ),
               ),
               const SizedBox(height: 5),
               Text(
                 title,
                 style: theme.textTheme.bodyMedium?.copyWith(
-                  color: theme.colorScheme.onSurface.withValues(alpha: 0.9),
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
                   fontWeight: FontWeight.w600,
-                  fontSize: 12,
+                  fontSize: 13,
                 ),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,

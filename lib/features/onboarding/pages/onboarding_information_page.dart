@@ -261,6 +261,7 @@ class _OnboardingInformationPageState extends State<OnboardingInformationPage> w
   Widget _buildHeader(BuildContext context, ThemeData theme) {
     return Column(
       children: [
+        SizedBox(height: context.height(0.02)),
         // Progress indicator
         AnimatedBuilder(
           animation: _progressAnimation,
@@ -291,21 +292,6 @@ class _OnboardingInformationPageState extends State<OnboardingInformationPage> w
         ),
         SizedBox(height: context.height(0.02)),
         // Title
-        Text(
-          'Master Your Habits',
-          style: context.headlineLarge.copyWith(
-            fontWeight: FontWeight.w700,
-            color: theme.colorScheme.onSurface,
-          ),
-          textAlign: TextAlign.center,
-        ),
-        SizedBox(height: context.height(0.01)),
-        Text(
-          'Step ${_currentStep + 1} of ${_habitTips.length}',
-          style: context.bodyMedium.copyWith(
-            color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
-          ),
-        ),
       ],
     );
   }
@@ -327,15 +313,20 @@ class _OnboardingInformationPageState extends State<OnboardingInformationPage> w
                 children: [
                   // Icon with animated background
                   _buildAnimatedIcon(context, currentTip),
+
                   SizedBox(height: context.height(0.04)),
                   // Title
-                  Text(
-                    currentTip.title,
-                    style: context.headlineMedium.copyWith(
-                      fontWeight: FontWeight.w600,
-                      color: theme.colorScheme.onSurface,
+                  FittedBox(
+                    child: Text(
+                      currentTip.title,
+                      style: context.headlineLarge.copyWith(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 27,
+                        color: theme.colorScheme.onSurface,
+                      ),
+                      maxLines: 1,
+                      textAlign: TextAlign.center,
                     ),
-                    textAlign: TextAlign.center,
                   ),
                   SizedBox(height: context.height(0.02)),
                   // Description
