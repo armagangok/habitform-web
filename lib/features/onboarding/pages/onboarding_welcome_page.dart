@@ -394,7 +394,7 @@ class _OnboardingWelcomePageState extends State<OnboardingWelcomePage> with Tick
                             Text(
                               LocaleKeys.onboarding_pages_welcome_journey_begins.tr(),
                               style: context.bodyMedium.copyWith(
-                                color: Colors.white.withValues(alpha: 0.8),
+                                fontWeight: FontWeight.w600,
                               ),
                               textAlign: TextAlign.center,
                             ),
