@@ -33,14 +33,14 @@ class EmojiStep extends ConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Pick an emoji for your habit',
+                  LocaleKeys.create_habit_emoji_title.tr(),
                   style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                         fontWeight: FontWeight.bold,
                       ),
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'Choose an icon that represents your habit. This will help you quickly identify it in your habit list.',
+                  LocaleKeys.create_habit_emoji_description.tr(),
                   style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                         color: Theme.of(context).hintColor,
                       ),

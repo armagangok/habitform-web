@@ -62,14 +62,14 @@ class _CategoryStepState extends ConsumerState<CategoryStep> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Select categories for your habit',
+                  LocaleKeys.create_habit_category_title.tr(),
                   style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                         fontWeight: FontWeight.bold,
                       ),
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'Categories help you organize your habits and track progress in specific areas of your life. You can select multiple categories.',
+                  LocaleKeys.create_habit_category_description.tr(),
                   style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                         color: Theme.of(context).hintColor,
                       ),

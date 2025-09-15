@@ -76,14 +76,14 @@ class _HabitNameStepState extends ConsumerState<HabitNameStep> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'What habit would you like to build?',
+                  LocaleKeys.create_habit_habit_name_title.tr(),
                   style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                         fontWeight: FontWeight.bold,
                       ),
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'Choose a clear, specific name for your habit. For example: "Drink 8 glasses of water" instead of just "Stay hydrated".',
+                  LocaleKeys.create_habit_habit_name_description.tr(),
                   style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                         color: Theme.of(context).hintColor,
                       ),

@@ -30,9 +30,9 @@ class DifficultyStep extends ConsumerWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Difficulty'),
+                Text(LocaleKeys.create_habit_difficulty_title.tr()),
                 Text(
-                  'How difficult is this habit to build?',
+                  LocaleKeys.create_habit_difficulty_question.tr(),
                   style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                         fontWeight: FontWeight.bold,
                       ),

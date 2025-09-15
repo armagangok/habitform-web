@@ -36,14 +36,14 @@ class _ReminderStepState extends ConsumerState<ReminderStep> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Reminder for your habit',
+                  LocaleKeys.create_habit_reminder_title.tr(),
                   style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                         fontWeight: FontWeight.bold,
                       ),
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'Reminders are optional but highly recommended. They help you stay consistent by notifying you when it\'s time to complete your habit.',
+                  LocaleKeys.create_habit_reminder_description.tr(),
                   style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                         color: Theme.of(context).hintColor,
                       ),

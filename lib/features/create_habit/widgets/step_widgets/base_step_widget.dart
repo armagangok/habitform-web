@@ -49,7 +49,12 @@ class BaseStepWidget extends ConsumerWidget {
       child: Column(
         children: [
           Text(
-            'Step ${currentStepIndex + 1} of $totalSteps',
+            LocaleKeys.create_habit_step_progress.tr(
+              namedArgs: {
+                'current': '${currentStepIndex + 1}',
+                'total': '$totalSteps',
+              },
+            ),
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
               color: Theme.of(context).hintColor,
               fontFeatures: [FontFeature.tabularFigures()],
@@ -82,7 +87,7 @@ class BaseStepWidget extends ConsumerWidget {
                       ),
                       const SizedBox(width: 4),
                       Text(
-                        'Back',
+                        LocaleKeys.create_habit_back.tr(),
                         style: TextStyle(
                           color: Theme.of(context).hintColor,
                           fontWeight: FontWeight.w600,
@@ -104,7 +109,7 @@ class BaseStepWidget extends ConsumerWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      step.isLast ? 'Create Habit' : 'Next',
+                      step.isLast ? LocaleKeys.create_habit_create_habit.tr() : LocaleKeys.create_habit_next.tr(),
                       style: TextStyle(
                         color: canProceed ? Colors.white : Theme.of(context).hintColor,
                         fontWeight: FontWeight.w600,

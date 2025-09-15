@@ -31,14 +31,14 @@ class DescriptionStep extends ConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Tell us more about this habit',
+                  LocaleKeys.create_habit_description_title.tr(),
                   style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                         fontWeight: FontWeight.bold,
                       ),
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'This step is optional. You can add more details about your habit, why it\'s important to you, or any specific goals you have.',
+                  LocaleKeys.create_habit_description_description.tr(),
                   style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                         color: Theme.of(context).hintColor,
                       ),

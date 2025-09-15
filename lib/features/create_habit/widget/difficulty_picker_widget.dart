@@ -176,7 +176,7 @@ class DifficultyPickerWidget extends ConsumerWidget {
           const SizedBox(width: 12),
           Expanded(
             child: Text(
-              'Choose how challenging this habit feels. We use this to estimate formation time and personalize insights.',
+              LocaleKeys.create_habit_difficulty_info.tr(),
               style: context.bodySmall.copyWith(
                 height: 1.2,
               ),

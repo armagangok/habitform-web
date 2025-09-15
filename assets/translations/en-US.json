@@ -4,28 +4,18 @@
         "save": "Save",
         "cancel": "Cancel",
         "delete": "Delete",
-        "edit": "Edit",
-        "confirm": "Confirm",
         "back": "Back",
         "none": "None",
-        "app": "App",
-        "general": "General",
         "days": "Days",
-        "version": "1.0.0",
         "made_by": "Made with ☕️ and 🧬️ by Armağan Gök",
-        "icon": "Icon",
         "warning": "Warning",
         "error": "Error",
         "Information": "Information",
-        "pick_your_emoji": "Pick Your Own Icon",
         "custom": "Custom",
+        "pick_your_emoji": "Pick Your Emoji",
         "done": "Done",
-        "no_recent_emojis": "No Recent Emojis",
         "loading_habits": "Loading habits...",
-        "later": "Later",
-        "calendar": "Calendar",
-        "share": "Share",
-        "archive": "Archive"
+        "later": "Later"
     },
     "colors": {
         "color": "Color",
@@ -62,21 +52,8 @@
         "pets": "Pets"
     },
     "onboarding": {
-        "welcome": "Welcome",
-        "get_started": "Get Started",
-        "next": "Next",
         "start_button": "Start 🚀",
         "continue_button": "Continue →",
-        "goals": {
-            "title": "What's your main goal?",
-            "better_productivity": "Better productivity",
-            "build_routine": "Build a routine",
-            "break_bad_habits": "Break bad habits",
-            "get_healthier": "Get healthier",
-            "time_management": "Time management",
-            "reduce_stress": "Reduce stress",
-            "other": "Other"
-        },
         "pages": {
             "small_steps": {
                 "title": "Change your life with a small step.",
@@ -199,16 +176,12 @@
         }
     },
     "habit_detail": {
-        "habitDetail": "Habit Detail",
-        "areYouSureToDeleteHabit": "Are you sure you want to delete this habit?",
         "calendar": "Calendar",
         "share": "Share",
         "archive": "Archive",
         "archive_title": "Archive Habit",
         "archive_confirmation": "Are you sure you want to archive '{{habitName}}'?",
         "archive_info": "You can restore it later from the archived habits section.",
-        "detail": "Details",
-        "habitData": "Habit Data",
         "unlock": "Unlock",
         "days": "days",
         "heatmap_title": "Habit Heatmap",
@@ -252,12 +225,8 @@
         "quote_lao_tzu": "A journey of a thousand miles begins with a single step.",
         "quote_lao_tzu_author": "Lao Tzu",
         "monday": "Mon",
-        "tuesday": "Tue",
         "wednesday": "Wed",
-        "thursday": "Thu",
         "friday": "Fri",
-        "saturday": "Sat",
-        "sunday": "Sun",
         "mon": "Mon",
         "tue": "Tue",
         "wed": "Wed",
@@ -291,44 +260,80 @@
         "habit_name": "Habit Name",
         "habit_description": "Description",
         "reminder": "Reminder",
-        "add_reminder": "Add Reminder",
-        "frequency": "Frequency",
         "daily": "Daily",
-        "weekly": "Weekly",
-        "monthly": "Monthly",
         "create_habit": "Create Habit",
         "no_habit_found": "No habit found",
-        "habit_data": "HABIT DATA",
-        "todayCompleted": "Today Completed",
         "complete": "Complete",
-        "calendar_completion": "Calendar Completion",
         "calendar_tap_info": "Tap on dates to mark or unmark completion",
-        "timeToCompleteYourHabit": "Time to complete your habit",
-        "what_habit_question": "What habit would you like to build?",
-        "habit_name_description": "Choose a clear, specific name for your habit. For example: \"Drink 8 glasses of water\" instead of just \"Stay hydrated\".",
-        "tell_us_more": "Tell us more about this habit",
-        "description_optional": "This step is optional. You can add more details about your habit, why it's important to you, or any specific goals you have.",
-        "difficulty_question": "How difficult is this habit to build?",
-        "reminder_title": "Reminder for your habit",
-        "reminder_description": "Reminders are optional but highly recommended. They help you stay consistent by notifying you when it's time to complete your habit.",
-        "how_many_reminders": "How many reminders?",
-        "single_reminder": "Single reminder",
-        "multiple_reminders": "Multiple reminders",
-        "reminder_times": "Reminder times",
-        "filter": {
-            "all": "All",
-            "morning": "Morning",
-            "noon": "Noon",
-            "evening": "Evening",
-            "night": "Night"
+        "timeToCompleteYourHabit": "Time to complete your habit"
+    },
+    "create_habit": {
+        "step_progress": "Step {{current}} of {{total}}",
+        "back": "Back",
+        "next": "Next",
+        "create_habit": "Create Habit",
+        "habit_name": {
+            "title": "What habit would you like to build?",
+            "description": "Choose a clear, specific name for your habit. For example: \"Drink 8 glasses of water\" instead of just \"Stay hydrated\"."
+        },
+        "description": {
+            "title": "Tell us more about this habit",
+            "description": "This step is optional. You can add more details about your habit, why it's important to you, or any specific goals you have."
+        },
+        "emoji": {
+            "title": "Pick an emoji for your habit",
+            "description": "Choose an emoji that represents your habit. This will help you quickly identify it in your habit list."
+        },
+        "color": {
+            "title": "Choose a color for your habit",
+            "preview": "Your habit will look like this"
+        },
+        "category": {
+            "title": "Select categories for your habit",
+            "description": "Categories help you organize your habits and track progress in specific areas of your life. You can select multiple categories."
+        },
+        "reminder": {
+            "title": "Reminder for your habit",
+            "description": "Reminders are optional but highly recommended. They help you stay consistent by notifying you when it's time to complete your habit."
+        },
+        "difficulty": {
+            "title": "Difficulty",
+            "question": "How difficult is this habit to build?",
+            "info": "Choose how challenging this habit feels. We use this to estimate formation time and personalize insights.",
+            "very_easy": "Very Easy",
+            "easy": "Easy",
+            "moderate": "Moderate",
+            "difficult": "Difficult",
+            "very_difficult": "Very Difficult",
+            "very_easy_description": "Simple habits that require minimal effort and time (e.g., drinking water, taking vitamins)",
+            "easy_description": "Straightforward habits with low physical or mental effort (e.g., making bed, brushing teeth)",
+            "moderate_description": "Habits requiring moderate effort and planning (e.g., reading, light exercise)",
+            "difficult_description": "Challenging habits requiring significant effort and commitment (e.g., intense workouts, learning new skills)",
+            "very_difficult_description": "Very demanding habits requiring high effort, time, and mental strength (e.g., major lifestyle changes)"
+        },
+        "step_titles": {
+            "habit_name": "Habit Name",
+            "description": "Description",
+            "emoji": "Choose Icon",
+            "color": "Choose Color",
+            "reminder": "Set Reminder",
+            "category": "Select Category",
+            "difficulty": "Choose Difficulty"
+        },
+        "step_subtitles": {
+            "habit_name": "What habit would you like to build?",
+            "description": "Tell us more about this habit (optional)",
+            "emoji": "Pick an icon that represents your habit",
+            "color": "Choose a color for your habit",
+            "reminder": "When would you like to be reminded?",
+            "category": "Which category does this habit belong to?",
+            "difficulty": "How difficult is this habit to build?"
+        },
+        "preview": {
+            "your_habit": "Your Habit"
         }
     },
     "edit_habit": {
-        "edit_habit": "Edit Habit",
-        "habit_name": "Habit Name",
-        "habit_description": "Description",
-        "reminder": "Reminder",
-        "add_reminder": "Add Reminder",
         "name_cannot_be_empty": "Name can't be empty"
     },
     "settings": {
@@ -339,8 +344,6 @@
         "system": "System",
         "dark_mode": "Dark Mode",
         "light_mode": "Light Mode",
-        "support": "Support HabitRise",
-        "support_subtitle": "Loved HabitRise? Rate and help us grow!",
         "feedback": "Send Feedback",
         "privacy": "Privacy",
         "terms": "Terms",
@@ -364,12 +367,7 @@
     "subscription": {
         "subscribe_to": "Subscribe to",
         "tap_advantages": "Tap to see all advantages",
-        "popular": "Popular",
-        "billed": "Billed",
-        "restore": "Restore",
-        "myMembership": "My Membership",
         "continue": "Continue",
-        "whatYouWillUnlock": "What you will unlock?",
         "unlimitiedHabits": "Unlimited Habits",
         "unlimitiedHabitsDescription": "Add and track unlimited habits effortlessly.",
         "unlimitiedCustomization": "Unlimited Customization",
@@ -386,26 +384,12 @@
         "statisticsDescription": "Track habits, get motivation, be aware of how long time left to make your habit automatic.",
         "loading": "Loading..",
         "purchaseRestoredSuccessfuly": "Purchase restored successfully",
-        "youDoNotHaveAnyPurchasesToRestore": "You don't have any previous purchase to restore",
         "youAlreadyHaveAnActiveSubscription": "You already have an active subscription",
-        "anIssueOccuredWhilePurchasing": "An error occurred while purchasing",
         "purchaseSuccessful": "Purchase completed successfully",
-        "purchaseError": "An error occurred during purchase",
         "purchaseCancelled": "Purchase was cancelled",
-        "restoreError": "An error occurred while restoring purchases",
-        "continueWithLimitedPlan": "Continue with limited plan",
-        "purchaseTimeout": "Purchase timed out. Please try again.",
         "purchaseInvalidated": "Purchase was invalidated.",
-        "subscriptionExpired": "Your subscription has expired.",
-        "subscriptionPaused": "Your subscription is currently paused.",
-        "subscriptionResumed": "Your subscription has been resumed.",
-        "billingUnavailable": "Billing is currently unavailable. Please try again later.",
-        "billingInvalid": "Invalid billing state. Please try again.",
-        "priceNotLoaded": "Unable to load prices. Please check your connection.",
         "networkError": "Network error. Please check your connection.",
-        "serverError": "Server error. Please try again later.",
         "invalidCredentials": "Invalid credentials. Please check your settings.",
-        "notInitialized": "Payment system not initialized. Please try again.",
         "invalidReceipt": "The receipt is not valid. Please try again.",
         "storeProblem": "Store problem occurred. Please try again.",
         "unsupportedFeature": "This feature is not supported on your device.",
@@ -413,11 +397,9 @@
         "operationInProgress": "Another operation is in progress. Please wait.",
         "invalidAppleKey": "Invalid Apple subscription key.",
         "ineligible": "You are not eligible for this purchase.",
-        "configError": "Configuration error occurred.",
         "unexpectedResponse": "Unexpected response from server.",
         "accountAlreadyUsed": "This account is already in use by another subscriber.",
         "purchaseNotAllowed": "Purchase is not allowed at this time",
-        "purchaseInvalid": "The purchase is invalid",
         "receiptAlreadyInUse": "This receipt is already in use",
         "paymentPending": "Payment is pending",
         "insufficientPermissions": "Insufficient permissions for this purchase",
@@ -427,8 +409,7 @@
         "archiveSupportTitle": "Archive Support",
         "archiveSupportDescription": "Archive and manage your habits",
         "habitReminderTitle": "Reminders",
-        "habitReminderDescription": "Create reminders for your habits",
-        "billingIssueDetectedAt": "Billing Issue Detected At"
+        "habitReminderDescription": "Create reminders for your habits"
     },
     "share": {
         "share": "Share",
@@ -454,37 +435,14 @@
         "deselect_all": "Deselect All",
         "select_time": "Select Time",
         "time": "Time",
-        "habit_reminder_message": "Don't forget to complete your habit!",
-        "times": "times",
-        "mode": "Reminder Mode",
-        "single": "Single",
-        "multiple": "Multiple",
-        "multiple_description": "Set multiple reminder times for the same habit",
-        "add_time": "Add Time",
-        "reminder_times": "Reminder Times"
-    },
-    "habit_data": {
-        "longest_streak": "Longest Streak",
-        "current_streak": "Current Streak"
+        "habit_reminder_message": "Don't forget to complete your habit!"
     },
     "notifications": {
-        "title": "Notifications",
         "settings": "Settings",
         "app_notification_settings": "App Notification Settings",
         "scheduled_notifications": "Scheduled Notifications",
         "no_scheduled_notifications": "No scheduled notifications",
-        "reminders": "reminders",
-        "delete_notification": "Delete Notification",
-        "delete_notification_confirmation": "Are you sure you want to delete this notification?",
-        "notification_deleted": "Notification deleted successfully",
-        "delete_notification_error": "Failed to delete notification",
-        "delete_reminder": "Delete Reminder",
-        "delete_reminder_confirmation": "Are you sure you want to delete the reminder for {{dayInfo}}{{timeInfo}}?",
-        "delete_all_reminders": "Delete All Reminders",
-        "delete_all_reminders_confirmation": "Are you sure you want to delete all {{count}} reminders for \"{{habitName}}\"?",
-        "reminder_deleted_success": "Reminder for {{dayInfo}} deleted successfully",
-        "all_reminders_deleted_success": "All reminders for \"{{habitName}}\" deleted successfully",
-        "failed_to_delete_all_reminders": "Failed to delete all reminders"
+        "reminders": "reminders"
     },
     "archived_habits": {
         "title": "Archived Habits",
@@ -495,17 +453,9 @@
         "archived_on": "Archived on:",
         "restore": "Restore",
         "delete": "Delete",
-        "recover_habit": "Recover Habit",
         "delete_confirmation_title": "Delete Habit",
         "delete_confirmation_message": "Are you sure you want to delete this habit: ",
-        "delete_confirmation_warning": "This action cannot be undone!",
-        "select_mode": "Select Mode",
-        "selected_count": "selected",
-        "select_all": "Select All",
-        "deselect_all": "Deselect All",
-        "delete_selected_title": "Delete Selected Habits",
-        "delete_selected_message": "Are you sure you want to delete {count} habit(s)?",
-        "delete_selected_success": "{count} habit(s) deleted successfully"
+        "delete_confirmation_warning": "This action cannot be undone!"
     },
     "membership_info": {
         "title": "Membership Info",
@@ -521,7 +471,6 @@
         "change_plan_desc": "Click to change your subscription plan"
     },
     "statistics": {
-        "title": "Statistics",
         "no_data_title": "No Statistics Yet",
         "no_data_description": "You'll see detailed statistics here when you start tracking your habits.",
         "overview": "Overview",
@@ -534,11 +483,6 @@
         "current_streak": "Current Streak",
         "about_formation": "About Habit Formation",
         "formation_info": "The percentage above shows how likely your habit is to become automatic based on your current consistency. Higher percentages mean your habit is more likely to stick. According to research, it takes an average of 66 days of regular practice for a habit to become automatic.",
-        "formation_score": "Formation Score",
-        "formation_percentage_breakdown": "Score Breakdown",
-        "formation_progress_status": "Progress Status",
-        "formation_estimated_time": "Estimated Formation Time",
-        "formation_info_title": "About Formation",
         "formation_status": {
             "early": "You're still in the early stages. Keep tracking your habit consistently to see meaningful formation progress.",
             "excellent": "Outstanding progress! With a {percentage}% completion rate, your habit is very likely to become automatic.",
@@ -555,18 +499,8 @@
             "remaining_days": "Estimated {days} days left in the formation period. Keep up the consistent practice."
         },
         "chart_labels": {
-            "insufficient": "Needs Work",
-            "moderate": "Good Progress",
-            "good": "Very Good",
-            "excellent": "Excellent",
-            "below_50": "< 50%",
-            "between_50_70": "50-70%",
-            "between_70_90": "70-90%",
-            "above_90": "> 90%",
             "demo_data_message": "This is demo data, upgrade to unlock real data",
             "upgrade_button": "Upgrade"
-        },
-        "demo_data_message": "This is demo data, upgrade to unlock real data",
-        "upgrade_button": "Upgrade"
+        }
     }
 }

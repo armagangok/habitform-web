@@ -69,7 +69,7 @@ class _ColorStepState extends ConsumerState<ColorStep> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Choose a color for your habit',
+                  LocaleKeys.create_habit_color_title.tr(),
                   style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                         fontWeight: FontWeight.bold,
                       ),
@@ -85,7 +85,7 @@ class _ColorStepState extends ConsumerState<ColorStep> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(
-                  'Your habit will look like this',
+                  LocaleKeys.create_habit_color_preview.tr(),
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.w600,
                         color: context.titleLarge.color,
@@ -98,7 +98,7 @@ class _ColorStepState extends ConsumerState<ColorStep> {
                     child: HabitWidget(
                       habit: Habit(
                         id: '1',
-                        habitName: habitName.isEmpty ? 'Your Habit' : habitName,
+                        habitName: habitName.isEmpty ? LocaleKeys.create_habit_preview_your_habit.tr() : habitName,
                         habitDescription: habitDescription.isEmpty ? '' : habitDescription,
                         emoji: selectedIcon ?? '',
                         colorCode: selectedColor ?? context.primaryContrastingColor.value,

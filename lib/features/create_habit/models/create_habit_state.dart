@@ -17,38 +17,38 @@ extension CreateHabitStepExtension on CreateHabitStep {
   String get title {
     switch (this) {
       case CreateHabitStep.habitName:
-        return 'Habit Name';
+        return LocaleKeys.create_habit_step_titles_habit_name.tr();
       case CreateHabitStep.description:
-        return 'Description';
+        return LocaleKeys.create_habit_step_titles_description.tr();
       case CreateHabitStep.emoji:
-        return 'Choose Icon';
+        return LocaleKeys.create_habit_step_titles_emoji.tr();
       case CreateHabitStep.color:
-        return 'Choose Color';
+        return LocaleKeys.create_habit_step_titles_color.tr();
       case CreateHabitStep.reminder:
-        return 'Set Reminder';
+        return LocaleKeys.create_habit_step_titles_reminder.tr();
       case CreateHabitStep.category:
-        return 'Select Category';
+        return LocaleKeys.create_habit_step_titles_category.tr();
       case CreateHabitStep.difficulty:
-        return 'Choose Difficulty';
+        return LocaleKeys.create_habit_step_titles_difficulty.tr();
     }
   }
 
   String get subtitle {
     switch (this) {
       case CreateHabitStep.habitName:
-        return 'What habit would you like to build?';
+        return LocaleKeys.create_habit_step_subtitles_habit_name.tr();
       case CreateHabitStep.description:
-        return 'Tell us more about this habit (optional)';
+        return LocaleKeys.create_habit_step_subtitles_description.tr();
       case CreateHabitStep.emoji:
-        return 'Pick an icon that represents your habit';
+        return LocaleKeys.create_habit_step_subtitles_emoji.tr();
       case CreateHabitStep.color:
-        return 'Choose a color for your habit';
+        return LocaleKeys.create_habit_step_subtitles_color.tr();
       case CreateHabitStep.reminder:
-        return 'When would you like to be reminded?';
+        return LocaleKeys.create_habit_step_subtitles_reminder.tr();
       case CreateHabitStep.category:
-        return 'Which category does this habit belong to?';
+        return LocaleKeys.create_habit_step_subtitles_category.tr();
       case CreateHabitStep.difficulty:
-        return 'How difficult is this habit to build?';
+        return LocaleKeys.create_habit_step_subtitles_difficulty.tr();
     }
   }
 

@@ -1,5 +1,7 @@
 import 'package:hive_flutter/hive_flutter.dart';
 
+import '../../core/core.dart';
+
 part 'habit_difficulty.g.dart';
 
 @HiveType(typeId: 10)
@@ -25,15 +27,15 @@ extension HabitDifficultyExtension on HabitDifficulty {
   String get displayName {
     switch (this) {
       case HabitDifficulty.veryEasy:
-        return 'Very Easy';
+        return LocaleKeys.create_habit_difficulty_very_easy.tr();
       case HabitDifficulty.easy:
-        return 'Easy';
+        return LocaleKeys.create_habit_difficulty_easy.tr();
       case HabitDifficulty.moderate:
-        return 'Moderate';
+        return LocaleKeys.create_habit_difficulty_moderate.tr();
       case HabitDifficulty.difficult:
-        return 'Difficult';
+        return LocaleKeys.create_habit_difficulty_difficult.tr();
       case HabitDifficulty.veryDifficult:
-        return 'Very Difficult';
+        return LocaleKeys.create_habit_difficulty_very_difficult.tr();
     }
   }
 
@@ -41,15 +43,15 @@ extension HabitDifficultyExtension on HabitDifficulty {
   String get description {
     switch (this) {
       case HabitDifficulty.veryEasy:
-        return 'Simple habits that require minimal effort and time (e.g., drinking water, taking vitamins)';
+        return LocaleKeys.create_habit_difficulty_very_easy_description.tr();
       case HabitDifficulty.easy:
-        return 'Straightforward habits with low physical or mental effort (e.g., making bed, brushing teeth)';
+        return LocaleKeys.create_habit_difficulty_easy_description.tr();
       case HabitDifficulty.moderate:
-        return 'Habits requiring moderate effort and planning (e.g., reading, light exercise)';
+        return LocaleKeys.create_habit_difficulty_moderate_description.tr();
       case HabitDifficulty.difficult:
-        return 'Challenging habits requiring significant effort and commitment (e.g., intense workouts, learning new skills)';
+        return LocaleKeys.create_habit_difficulty_difficult_description.tr();
       case HabitDifficulty.veryDifficult:
-        return 'Very demanding habits requiring high effort, time, and mental strength (e.g., major lifestyle changes)';
+        return LocaleKeys.create_habit_difficulty_very_difficult_description.tr();
     }
   }
 
