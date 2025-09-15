@@ -64,7 +64,7 @@ class MembershipInfoWidget extends ConsumerWidget {
                           onTap: () {
                             navigator.navigateAndClear(
                               path: KRoute.prePaywall,
-                              data: {'isFromOnboarding': false},
+                              data: {'isFromOnboarding': false, 'isFromSettings': true},
                             );
                           },
                         ),

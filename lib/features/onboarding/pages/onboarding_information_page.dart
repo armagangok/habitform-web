@@ -201,24 +201,8 @@ class _OnboardingInformationPageState extends State<OnboardingInformationPage> w
     final theme = Theme.of(context);
 
     return CupertinoPageScaffold(
-      backgroundColor: theme.colorScheme.surface,
       child: Stack(
         children: [
-          // Background gradient
-          Positioned.fill(
-            child: DecoratedBox(
-              decoration: BoxDecoration(
-                gradient: RadialGradient(
-                  center: const Alignment(0, -0.3),
-                  radius: 1.2,
-                  colors: [
-                    _habitTips[_currentStep].color.withValues(alpha: 0.08),
-                    theme.colorScheme.surface,
-                  ],
-                ),
-              ),
-            ),
-          ),
           // Floating particles animation
           Positioned.fill(
             child: AnimatedBuilder(
@@ -270,7 +254,6 @@ class _OnboardingInformationPageState extends State<OnboardingInformationPage> w
               height: context.height(0.006),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(context.height(0.003)),
-                color: theme.colorScheme.onSurface.withValues(alpha: 0.1),
               ),
               child: FractionallySizedBox(
                 alignment: Alignment.centerLeft,

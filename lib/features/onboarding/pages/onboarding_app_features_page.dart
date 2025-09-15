@@ -268,24 +268,8 @@ class _OnboardingAppFeaturesPageState extends State<OnboardingAppFeaturesPage> w
     }
 
     return CupertinoPageScaffold(
-      backgroundColor: theme.colorScheme.surface,
       child: Stack(
         children: [
-          // Background gradient
-          Positioned.fill(
-            child: DecoratedBox(
-              decoration: BoxDecoration(
-                gradient: RadialGradient(
-                  center: const Alignment(0, -0.3),
-                  radius: 1.2,
-                  colors: [
-                    _appFeatures[_currentFeature].color.withValues(alpha: 0.08),
-                    theme.colorScheme.surface,
-                  ],
-                ),
-              ),
-            ),
-          ),
           // Floating particles animation
           Positioned.fill(
             child: AnimatedBuilder(
@@ -339,7 +323,6 @@ class _OnboardingAppFeaturesPageState extends State<OnboardingAppFeaturesPage> w
 
   Widget _buildIntroScreen(BuildContext context, ThemeData theme) {
     return CupertinoPageScaffold(
-      backgroundColor: theme.colorScheme.surface,
       child: AnimatedBuilder(
         animation: _introTransitionAnimation,
         builder: (context, child) {

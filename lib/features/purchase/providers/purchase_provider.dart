@@ -161,7 +161,7 @@ class PurchaseNotifier extends AsyncNotifier<PaywallState> {
   }
 
   /// Attempts to purchase a package
-  Future<void> purchasePackage(Package package, bool isFromOnboarding) async {
+  Future<void> purchasePackage(Package package, bool isFromOnboarding, {bool isFromSettings = false}) async {
     // Mevcut state'i güvenli bir şekilde al
     final currentState = state.valueOrNull;
     if (currentState == null) return;
@@ -190,6 +190,8 @@ class PurchaseNotifier extends AsyncNotifier<PaywallState> {
       // Sonra navigator işlemlerini yap
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (isFromOnboarding) {
+          navigator.navigateAndClear(path: KRoute.homePage);
+        } else if (isFromSettings) {
           navigator.navigateAndClear(path: KRoute.homePage);
         } else {
           navigator.pop();
@@ -225,7 +227,7 @@ class PurchaseNotifier extends AsyncNotifier<PaywallState> {
   }
 
   /// Attempts to restore previous purchases
-  Future<void> restorePurchases(bool isFromOnboarding) async {
+  Future<void> restorePurchases(bool isFromOnboarding, {bool isFromSettings = false}) async {
     // Mevcut state'i güvenli bir şekilde al
     final currentState = state.valueOrNull;
     if (currentState == null) return;
@@ -254,6 +256,8 @@ class PurchaseNotifier extends AsyncNotifier<PaywallState> {
       // Sonra navigator işlemlerini yap
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (isFromOnboarding && isActive) {
+          navigator.navigateAndClear(path: KRoute.homePage);
+        } else if (isFromSettings && isActive) {
           navigator.navigateAndClear(path: KRoute.homePage);
         } else {
           navigator.pop();

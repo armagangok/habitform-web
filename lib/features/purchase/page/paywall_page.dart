@@ -9,9 +9,10 @@ import '../models/paywall_state.dart';
 import '../providers/purchase_provider.dart';
 
 class PaywallPage extends ConsumerStatefulWidget {
-  const PaywallPage({this.isFromOnboarding = false, super.key});
+  const PaywallPage({this.isFromOnboarding = false, this.isFromSettings = false, super.key});
 
   final bool isFromOnboarding;
+  final bool isFromSettings;
 
   @override
   ConsumerState<PaywallPage> createState() => _PaywallWidgetState();
@@ -243,6 +244,7 @@ class _PaywallWidgetState extends ConsumerState<PaywallPage> with TickerProvider
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
     return Material(
+      color: Colors.transparent,
       child: purchaseState.when(
         data: (state) {
           // Initialize selected package to align with selectedIndex and available packages
@@ -316,13 +318,31 @@ class _PaywallWidgetState extends ConsumerState<PaywallPage> with TickerProvider
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(height: 20),
+                Center(
+                  child: Text(
+                    'We become\nwhat we repeatedly do.',
+                    style: context.headlineMedium.copyWith(
+                      fontWeight: FontWeight.bold,
+                      shadows: [
+                        Shadow(
+                          color: context.primaryContrastingColor.withValues(alpha: .7),
+                          blurRadius: 50,
+                          offset: Offset(0, 0),
+                        ),
+                      ],
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                SizedBox(height: 24),
                 Text(
                   'Choose Your Plan',
                   style: context.titleLarge.copyWith(
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.w600,
+                    color: context.headlineMedium.color?.withValues(alpha: 0.7),
                   ),
                 ),
-                SizedBox(height: 20),
+                SizedBox(height: 10),
                 _productSection(state),
               ],
             ),
@@ -346,7 +366,8 @@ class _PaywallWidgetState extends ConsumerState<PaywallPage> with TickerProvider
                 Text(
                   'What You Get',
                   style: context.titleLarge.copyWith(
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.w600,
+                    color: context.headlineMedium.color?.withValues(alpha: 0.7),
                   ),
                 ),
                 SizedBox(height: 16),
@@ -520,6 +541,7 @@ class _PaywallWidgetState extends ConsumerState<PaywallPage> with TickerProvider
                         ref.read(purchaseProvider.notifier).purchasePackage(
                               selectedPackage!,
                               widget.isFromOnboarding,
+                              isFromSettings: widget.isFromSettings,
                             );
                       }
                     },
@@ -661,8 +683,11 @@ class _PaywallWidgetState extends ConsumerState<PaywallPage> with TickerProvider
           ? null
           : CircularActionButton(
               onPressed: () {
-                // If not from onboarding, navigate to home page instead of just popping
-                navigator.navigateAndClear(path: KRoute.homePage);
+                if (widget.isFromSettings) {
+                  navigator.navigateAndClear(path: KRoute.homePage);
+                } else {
+                  navigator.pop();
+                }
               },
               icon: CupertinoIcons.xmark,
             ),
@@ -760,7 +785,7 @@ class _PaywallWidgetState extends ConsumerState<PaywallPage> with TickerProvider
           onPressed: isRestoring
               ? null
               : () {
-                  ref.read(purchaseProvider.notifier).restorePurchases(widget.isFromOnboarding);
+                  ref.read(purchaseProvider.notifier).restorePurchases(widget.isFromOnboarding, isFromSettings: widget.isFromSettings);
                 },
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,

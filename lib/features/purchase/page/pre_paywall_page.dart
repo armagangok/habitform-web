@@ -7,11 +7,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '/core/core.dart' hide LocaleKeys;
 import '../../translation/constants/locale_keys.g.dart';
 import '../providers/purchase_provider.dart';
+import 'paywall_page.dart';
 
 class PrePaywallPage extends ConsumerStatefulWidget {
-  const PrePaywallPage({this.isFromOnboarding = false, super.key});
+  const PrePaywallPage({this.isFromOnboarding = false, this.isFromSettings = false, super.key});
 
   final bool isFromOnboarding;
+  final bool isFromSettings;
 
   @override
   ConsumerState<PrePaywallPage> createState() => _PrePaywallPageState();
@@ -740,9 +742,14 @@ class _PrePaywallPageState extends ConsumerState<PrePaywallPage> with TickerProv
                   padding: EdgeInsets.zero,
                   onPressed: () {
                     HapticFeedback.heavyImpact();
-                    navigator.navigateTo(
-                      path: KRoute.paywall,
-                      data: {'isFromOnboarding': widget.isFromOnboarding},
+
+                    showCupertinoSheet(
+                      enableDrag: false,
+                      context: context,
+                      builder: (context) => PaywallPage(
+                        isFromOnboarding: widget.isFromOnboarding,
+                        isFromSettings: widget.isFromSettings,
+                      ),
                     );
                   },
                   child: Container(
@@ -816,7 +823,18 @@ class _PrePaywallPageState extends ConsumerState<PrePaywallPage> with TickerProv
   CupertinoNavigationBar _navBar(BuildContext context) {
     return CupertinoNavigationBar(
       automaticallyImplyLeading: false,
-      leading: null,
+      leading: widget.isFromOnboarding
+          ? null
+          : CircularActionButton(
+              onPressed: () {
+                if (widget.isFromSettings) {
+                  navigator.navigateAndClear(path: KRoute.homePage);
+                } else {
+                  navigator.pop();
+                }
+              },
+              icon: CupertinoIcons.xmark,
+            ),
       middle: Text(
         'HabitRise Pro',
         style: context.titleMedium.copyWith(

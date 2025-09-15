@@ -6,7 +6,9 @@ import 'package:screenshot/screenshot.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '/core/core.dart';
+import '/features/purchase/providers/purchase_provider.dart';
 import '/models/habit/habit_model.dart';
+import '../purchase/page/paywall_page.dart';
 import 'provider/share_template_provider.dart';
 import 'templates/templates.dart';
 
@@ -237,31 +239,65 @@ class _TemplateSelector extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final provider = ref.watch(shareTemplateProvider);
     final selected = provider.selectedIndex;
+    final isPro = ref.watch(purchaseProvider).value?.isSubscriptionActive ?? false;
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-      child: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
+    final isDark = context.cupertinoTheme.brightness == Brightness.dark;
+
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      physics: const BouncingScrollPhysics(),
+      child: IntrinsicWidth(
         child: CupertinoSegmentedControl<int>(
           groupValue: selected,
-          selectedColor: Color(habit.colorCode),
-          unselectedColor: Color(habit.colorCode).withValues(alpha: .3),
-          borderColor: Color(habit.colorCode).withValues(alpha: .7),
-          pressedColor: Color(habit.colorCode).withValues(alpha: .5),
-          padding: const EdgeInsets.all(4),
+          selectedColor: isDark ? CupertinoColors.lightBackgroundGray.withValues(alpha: .4) : CupertinoColors.darkBackgroundGray.withValues(alpha: .5),
+          unselectedColor: isDark ? CupertinoColors.darkBackgroundGray.withValues(alpha: .2) : CupertinoColors.darkBackgroundGray.withValues(alpha: .2),
+          borderColor: context.primaryContrastingColor.withValues(alpha: .7),
+          pressedColor: CupertinoColors.systemFill.withValues(alpha: 0.6),
           children: {
             for (int i = 0; i < provider.templates.length; i++)
-              i: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-                child: Text(
-                  provider.templates[i].title,
-                  style: TextStyle(
-                    color: selected == i ? Color(habit.colorCode).colorRegardingToBrightness : context.primaryContrastingColor.withValues(alpha: .7),
-                  ),
-                ),
+              i: Builder(
+                builder: (context) {
+                  final bool isSelected = selected == i;
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          provider.templates[i].title,
+                          overflow: TextOverflow.visible,
+                          style: context.bodyMedium.copyWith(
+                            fontWeight: FontWeight.w600,
+                            color: isSelected
+                                ? CupertinoColors.white
+                                : isDark
+                                    ? CupertinoColors.white.withValues(alpha: .7)
+                                    : CupertinoColors.black.withValues(alpha: .7),
+                            fontSize: 14,
+                          ),
+                        ),
+                        if (provider.templates[i].requiresPro && !isPro) ...[
+                          const SizedBox(width: 6),
+                          const Icon(CupertinoIcons.lock_fill, size: 12, color: CupertinoColors.systemGrey),
+                        ],
+                      ],
+                    ),
+                  );
+                },
               ),
           },
-          onValueChanged: (i) => ref.read(shareTemplateProvider.notifier).select(i),
+          onValueChanged: (i) {
+            final template = provider.templates[i];
+            if (template.requiresPro && !isPro) {
+              showCupertinoSheet(
+                context: context,
+                builder: (context) => PaywallPage(isFromOnboarding: false),
+              );
+
+              return;
+            }
+            ref.read(shareTemplateProvider.notifier).select(i);
+          },
         ),
       ),
     );

@@ -154,7 +154,7 @@ class _HabitDataWidgetState extends ConsumerState<HabitDataWidget> {
           style: TextStyle(
             fontSize: 17,
             fontWeight: FontWeight.w600,
-            color: context.scaffoldBackgroundColor.colorRegardingToBrightness,
+            color: Color(widget.habit.colorCode).colorRegardingToBrightness,
           ),
         ),
         CustomButton(

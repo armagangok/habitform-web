@@ -187,7 +187,6 @@ class _OnboardingRatingPageState extends ConsumerState<OnboardingRatingPage> wit
     final theme = Theme.of(context);
 
     return CupertinoPageScaffold(
-      backgroundColor: theme.colorScheme.surface,
       child: Stack(
         children: [
           // Background gradient

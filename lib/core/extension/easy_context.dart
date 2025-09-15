@@ -116,14 +116,12 @@ extension EasyText on BuildContext {
   TextStyle get bodySmall => cupertinoTextTheme.textStyle.copyWith(fontSize: 13);
 
   TextStyle get headlineLarge => cupertinoTextTheme.navLargeTitleTextStyle;
-  TextStyle get headlineMedium => cupertinoTextTheme.navTitleTextStyle;
+  TextStyle get headlineMedium => cupertinoTextTheme.textStyle.copyWith(fontSize: 24, fontWeight: FontWeight.w600);
   TextStyle get headlineSmall => cupertinoTextTheme.textStyle.copyWith(fontSize: 17, fontWeight: FontWeight.w600);
 
   TextStyle get displayLarge => cupertinoTextTheme.textStyle.copyWith(fontSize: 34, fontWeight: FontWeight.bold);
   TextStyle get displayMedium => cupertinoTextTheme.textStyle.copyWith(fontSize: 28, fontWeight: FontWeight.bold);
   TextStyle get displaySmall => cupertinoTextTheme.textStyle.copyWith(fontSize: 22, fontWeight: FontWeight.bold);
-
-  
 
   String? get fontFamily => cupertinoTextTheme.textStyle.fontFamily;
 }

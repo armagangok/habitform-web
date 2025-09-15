@@ -91,24 +91,10 @@ class _OnboardingWelcomePageState extends State<OnboardingWelcomePage> with Tick
     final String logoAsset = isDark ? 'assets/app/habitrise_dark_transparent.png' : 'assets/app/habitrise_light_transparent.png';
 
     return CupertinoPageScaffold(
-      backgroundColor: theme.colorScheme.surface,
       child: Stack(
         children: [
           // A very soft radial vignette for depth/atmosphere
-          Positioned.fill(
-            child: DecoratedBox(
-              decoration: BoxDecoration(
-                gradient: RadialGradient(
-                  center: const Alignment(0, -0.2),
-                  radius: 1.0,
-                  colors: [
-                    theme.colorScheme.surface.withValues(alpha: 0.05),
-                    theme.colorScheme.surface,
-                  ],
-                ),
-              ),
-            ),
-          ),
+
           // Habit demo cards layer
           Positioned.fill(
             child: LayoutBuilder(
@@ -775,7 +761,7 @@ class _BottomCtaButton extends StatelessWidget {
           onPressed: onPressed,
           child: BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
-            child: Material(
+            child: ColoredBox(
               color: theme.colorScheme.onSurface.withValues(alpha: 0.08),
               child: Container(
                 height: buttonHeight,

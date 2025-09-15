@@ -3,7 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class ShareTemplateConfig {
   final String id;
   final String title;
-  const ShareTemplateConfig({required this.id, required this.title});
+  final bool requiresPro;
+  const ShareTemplateConfig({required this.id, required this.title, this.requiresPro = false});
 }
 
 class ShareTemplateState {
@@ -27,9 +28,9 @@ class ShareTemplateNotifier extends Notifier<ShareTemplateState> {
       selectedIndex: 0,
       templates: const [
         ShareTemplateConfig(id: 'calendar', title: 'Calendar'),
-        ShareTemplateConfig(id: 'overview', title: 'Overview'),
-        ShareTemplateConfig(id: 'heatmap', title: 'Heatmap'),
-        ShareTemplateConfig(id: 'poster', title: 'Poster'),
+        ShareTemplateConfig(id: 'overview', title: 'Overview', requiresPro: true),
+        ShareTemplateConfig(id: 'heatmap', title: 'Heatmap', requiresPro: true),
+        ShareTemplateConfig(id: 'poster', title: 'Poster', requiresPro: true),
       ],
     );
   }

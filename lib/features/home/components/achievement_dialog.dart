@@ -622,7 +622,6 @@ class _AchievementDialogState extends State<AchievementDialog> with TickerProvid
           Container(
             padding: EdgeInsets.all(context.width(0.001)),
             decoration: BoxDecoration(
-              color: theme.colorScheme.surface.withValues(alpha: 0.5),
               borderRadius: BorderRadius.circular(context.width(0.04)),
               border: Border.all(
                 color: theme.colorScheme.outline.withValues(alpha: 0.1),

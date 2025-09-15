@@ -4,7 +4,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:habitrise/features/habit_detail/widget/habit_calendar_widget.dart';
 
 import '/core/core.dart';
+import '/features/purchase/providers/purchase_provider.dart';
 import '/models/models.dart';
+import '../../purchase/page/paywall_page.dart';
 
 class HabitHeatmapCard extends ConsumerWidget {
   final Habit habit;
@@ -16,6 +18,8 @@ class HabitHeatmapCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final purchaseState = ref.watch(purchaseProvider);
+    final bool isProUser = purchaseState.value?.isSubscriptionActive ?? false;
     // Safety check to prevent rendering issues
     if (habit.completions.isEmpty) {
       return CupertinoListSection.insetGrouped(
@@ -81,6 +85,13 @@ class HabitHeatmapCard extends ConsumerWidget {
           ),
           CustomButton(
             onPressed: () {
+              if (!isProUser) {
+                navigator.navigateTo(
+                  path: KRoute.prePaywall,
+                  data: {'isFromOnboarding': false},
+                );
+                return;
+              }
               showCupertinoSheet(
                 enableDrag: false,
                 context: context,
@@ -94,7 +105,7 @@ class HabitHeatmapCard extends ConsumerWidget {
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Text(
-                "View Full",
+                isProUser ? "View Full" : "Unlock",
                 style: TextStyle(
                   fontSize: 12,
                   color: Color(habit.colorCode),
@@ -108,16 +119,56 @@ class HabitHeatmapCard extends ConsumerWidget {
       children: [
         CupertinoListTile(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-          title: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          title: Stack(
+            alignment: Alignment.center,
             children: [
-              // Heatmap
-              _OptimizedHeatmapGrid(habit: habit),
-
-              const SizedBox(height: 16),
-
-              // Legend and Stats
-              _OptimizedHeatmapLegend(habit: habit),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _OptimizedHeatmapGrid(habit: habit),
+                  const SizedBox(height: 16),
+                  _OptimizedHeatmapLegend(habit: habit),
+                ],
+              ),
+              if (!isProUser)
+                Positioned.fill(
+                  child: CustomBlurWidget(
+                    borderRadius: BorderRadius.circular(5),
+                    blurValue: 5,
+                    child: Container(
+                      color: context.cupertinoTheme.scaffoldBackgroundColor.withValues(alpha: .4),
+                    ),
+                  ),
+                ),
+              if (!isProUser)
+                CupertinoButton(
+                  padding: EdgeInsets.zero,
+                  minimumSize: Size.zero,
+                  color: Colors.transparent,
+                  onPressed: () {
+                    showCupertinoSheet(
+                      enableDrag: false,
+                      context: context,
+                      builder: (context) => PaywallPage(isFromOnboarding: false),
+                    );
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                    decoration: BoxDecoration(
+                      color: context.cupertinoTheme.barBackgroundColor.withValues(alpha: .95),
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(color: Theme.of(context).dividerColor),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(CupertinoIcons.lock_fill, size: 14, color: context.titleLarge.color),
+                        const SizedBox(width: 6),
+                        Text('Unlock', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: context.titleLarge.color)),
+                      ],
+                    ),
+                  ),
+                ),
             ],
           ),
         ),

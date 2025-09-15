@@ -46,7 +46,7 @@ class TemplateHeatmap extends StatelessWidget {
             ClipRRect(
               borderRadius: BorderRadius.circular(14),
               child: Container(
-                color: context.cupertinoTheme.selectionHandleColor,
+                color: context.cupertinoTheme.barBackgroundColor,
                 padding: const EdgeInsets.all(12),
                 child: HabitHeatmapCompact(habit: habit),
               ),

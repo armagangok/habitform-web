@@ -30,47 +30,44 @@ class TemplateCalendar extends StatelessWidget {
           Column(
             children: [
               SizedBox(height: 20),
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Center(
-                      child: CircleAvatar(
-                        radius: 56,
-                        backgroundColor: context.cupertinoTheme.selectionHandleColor.withValues(alpha: .2),
-                        child: Center(
-                          child: Text(
-                            habit.emoji ?? '🌟',
-                            style: TextStyle(
-                              fontSize: 56,
-                              fontWeight: FontWeight.bold,
-                            ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Center(
+                    child: CircleAvatar(
+                      radius: 50,
+                      backgroundColor: context.cupertinoTheme.selectionHandleColor.withValues(alpha: .2),
+                      child: Center(
+                        child: Text(
+                          habit.emoji ?? '🌟',
+                          style: TextStyle(
+                            fontSize: 56,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
                       ),
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          habit.habitName,
-                          style: context.titleLarge.copyWith(fontWeight: FontWeight.w800, color: textOnAccent),
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 1,
-                        ),
-                      ],
+                  ),
+                  SizedBox(height: 8),
+                  Text(
+                    habit.habitName,
+                    style: context.titleLarge.copyWith(
+                      fontWeight: FontWeight.w800,
+                      color: textOnAccent,
                     ),
-                    const SizedBox(height: 8),
-                    Text(
-                      'This month: ${stats.thisMonthCompleted}',
-                      style: context.labelLarge.copyWith(
-                        color: textOnAccent.withValues(alpha: .9),
-                      ),
-                      textAlign: TextAlign.start,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    'This month: ${stats.thisMonthCompleted}',
+                    style: context.labelLarge.copyWith(
+                      color: textOnAccent.withValues(alpha: .9),
                     ),
-                  ],
-                ),
+                    textAlign: TextAlign.start,
+                  ),
+                  SizedBox(height: 16),
+                ],
               ),
               CupertinoScrollbar(
                 controller: controller,

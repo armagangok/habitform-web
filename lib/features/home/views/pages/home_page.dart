@@ -5,6 +5,7 @@ import '../../../create_habit/create_habit_page.dart';
 import '../../../create_habit/provider/create_habit_provider.dart';
 import '../../../habit_category/widget/home_category_filter.dart';
 import '../../../habit_formation/page/habit_formation_page.dart';
+import '../../../purchase/page/paywall_page.dart';
 import '../../../purchase/providers/purchase_provider.dart';
 import '../../../settings/settings_page.dart';
 import '../../provider/home_provider.dart';
@@ -224,9 +225,12 @@ class HomePage extends ConsumerWidget {
   }
 
   Future<void> _handlePaywallAction(BuildContext context) async {
-    return navigator.navigateTo(
-      path: KRoute.prePaywall,
-      data: {'isFromOnboarding': false},
+    showCupertinoSheet(
+      enableDrag: false,
+      context: context,
+      builder: (contextFromSheet) {
+        return PaywallPage(isFromOnboarding: false);
+      },
     );
   }
 

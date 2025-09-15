@@ -129,7 +129,7 @@ class _DataExportImportPageState extends ConsumerState<DataExportImportPage> {
   void _showPaywallPage() {
     navigator.navigateTo(
       path: KRoute.prePaywall,
-      data: {'isFromOnboarding': false},
+      data: {'isFromOnboarding': false, 'isFromSettings': true},
     );
   }
 

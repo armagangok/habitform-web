@@ -32,7 +32,7 @@ class TemplatePoster extends StatelessWidget {
               children: [
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                  decoration: BoxDecoration(color: onAccent.withOpacity(.12), borderRadius: BorderRadius.circular(10)),
+                  decoration: BoxDecoration(color: onAccent.withValues(alpha: .12), borderRadius: BorderRadius.circular(10)),
                   child: Text(DateTime.now().year.toString(), style: context.labelLarge.copyWith(color: onAccent)),
                 )
               ],
@@ -56,7 +56,7 @@ class TemplatePoster extends StatelessWidget {
             ClipRRect(
               borderRadius: BorderRadius.circular(18),
               child: Container(
-                color: Colors.white.withOpacity(.12),
+                color: Colors.white.withValues(alpha: .12),
                 padding: const EdgeInsets.all(12),
                 child: CupertinoScrollbar(
                   controller: controller,
@@ -95,7 +95,7 @@ class _Badge extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
-        color: color.withOpacity(.12),
+        color: color.withValues(alpha: .12),
         borderRadius: BorderRadius.circular(999),
       ),
       child: Text(text, style: context.labelLarge.copyWith(color: color)),

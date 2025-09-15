@@ -21,7 +21,7 @@ class SubscribeButton extends ConsumerWidget {
             onPressed: () async {
               navigator.navigateTo(
                 path: KRoute.prePaywall,
-                data: {'isFromOnboarding': false},
+                data: {'isFromOnboarding': false, 'isFromSettings': true},
               );
             },
             child: CupertinoListSection.insetGrouped(

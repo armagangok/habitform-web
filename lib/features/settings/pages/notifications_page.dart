@@ -187,6 +187,7 @@ class _NotificationsPageState extends State<NotificationsPage> with SingleTicker
   @override
   Widget build(BuildContext context) {
     return Material(
+      color: Colors.transparent,
       child: CupertinoPageScaffold(
         navigationBar: CupertinoNavigationBar(
           backgroundColor: context.theme.scaffoldBackgroundColor.withValues(alpha: .4),

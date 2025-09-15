@@ -69,9 +69,11 @@ final class NavigationRoute {
       case KRoute.prePaywall:
         final data = args.arguments as Map<String, Object?>?;
         final isFromOnboarding = data != null ? data['isFromOnboarding'] as bool? : false;
+        final isFromSettings = data != null ? data['isFromSettings'] as bool? : false;
         return _getRoute(
           page: PrePaywallPage(
             isFromOnboarding: isFromOnboarding ?? false,
+            isFromSettings: isFromSettings ?? false,
           ),
           settings: args,
         );
@@ -79,9 +81,11 @@ final class NavigationRoute {
       case KRoute.paywall:
         final data = args.arguments as Map<String, Object?>?;
         final isFromOnboarding = data != null ? data['isFromOnboarding'] as bool? : false;
+        final isFromSettings = data != null ? data['isFromSettings'] as bool? : false;
         return _getRoute(
           page: PaywallPage(
             isFromOnboarding: isFromOnboarding ?? false,
+            isFromSettings: isFromSettings ?? false,
           ),
           settings: args,
         );

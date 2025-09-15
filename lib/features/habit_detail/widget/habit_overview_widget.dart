@@ -1,10 +1,14 @@
+import 'dart:ui';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '/core/core.dart';
 import '/features/habit_formation/provider/habit_formation_provider.dart';
+import '/features/purchase/providers/purchase_provider.dart';
 import '/models/completion_entry/completion_extension.dart';
 import '/models/habit/habit_model.dart';
 import '../../habit_formation/provider/habit_formation_state.dart';
+import '../../purchase/page/paywall_page.dart';
 import 'statistic_card.dart';
 
 class HabitOverviewWidget extends ConsumerWidget {
@@ -30,6 +34,8 @@ class HabitOverviewWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final formationState = ref.watch(formationProvider);
+    final purchaseState = ref.watch(purchaseProvider);
+    final bool isProUser = purchaseState.value?.isSubscriptionActive ?? false;
 
     // Get habit statistic from formation provider
     HabitStatistic? habitStatistic;
@@ -122,24 +128,30 @@ class HabitOverviewWidget extends ConsumerWidget {
               Row(
                 children: [
                   Expanded(
-                    child: StatisticCard(
-                      icon: Icons.check_circle_outline,
-                      title: LocaleKeys.statistics_completed.tr(),
-                      value: completedEntries.toString(),
-                      unit: "days",
-                      cardColor: context.scaffoldBackgroundColor,
-                      iconColor: Colors.green,
+                    child: _ProLockedStat(
+                      isPro: isProUser,
+                      child: StatisticCard(
+                        icon: Icons.check_circle_outline,
+                        title: LocaleKeys.statistics_completed.tr(),
+                        value: completedEntries.toString(),
+                        unit: "days",
+                        cardColor: context.scaffoldBackgroundColor,
+                        iconColor: Colors.green,
+                      ),
                     ),
                   ),
                   const SizedBox(width: 12),
                   Expanded(
-                    child: StatisticCard(
-                      icon: Icons.calendar_today,
-                      title: LocaleKeys.statistics_total_days.tr(),
-                      value: daysSinceStart.toString(),
-                      unit: "days",
-                      cardColor: context.scaffoldBackgroundColor,
-                      iconColor: Colors.blue,
+                    child: _ProLockedStat(
+                      isPro: isProUser,
+                      child: StatisticCard(
+                        icon: Icons.calendar_today,
+                        title: LocaleKeys.statistics_total_days.tr(),
+                        value: daysSinceStart.toString(),
+                        unit: "days",
+                        cardColor: context.scaffoldBackgroundColor,
+                        iconColor: Colors.blue,
+                      ),
                     ),
                   ),
                 ],
@@ -181,6 +193,8 @@ class HabitOverviewCompact extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final formationState = ref.watch(formationProvider);
+    final purchaseState = ref.watch(purchaseProvider);
+    final bool isProUser = purchaseState.value?.isSubscriptionActive ?? false;
 
     HabitStatistic? habitStatistic;
     if (formationState.hasValue && formationState.value != null) {
@@ -251,34 +265,105 @@ class HabitOverviewCompact extends ConsumerWidget {
           Row(
             children: [
               Expanded(
-                child: StatisticCard(
-                  icon: CupertinoIcons.checkmark_circle_fill,
-                  title: LocaleKeys.statistics_completed.tr(),
-                  value: completedEntries.toString(),
-                  unit: "days",
-                  cardColor: context.scaffoldBackgroundColor,
-                  iconColor: iconColor ?? Colors.green.shade300,
-                  valueColor: textColor,
-                  titleColor: secondaryTextColor,
+                child: _ProLockedStat(
+                  isPro: isProUser,
+                  child: StatisticCard(
+                    icon: CupertinoIcons.checkmark_circle_fill,
+                    title: LocaleKeys.statistics_completed.tr(),
+                    value: completedEntries.toString(),
+                    unit: "days",
+                    cardColor: context.scaffoldBackgroundColor,
+                    iconColor: iconColor ?? Colors.green.shade300,
+                    valueColor: textColor,
+                    titleColor: secondaryTextColor,
+                  ),
                 ),
               ),
               const SizedBox(width: 20),
               Expanded(
-                child: StatisticCard(
-                  icon: CupertinoIcons.calendar,
-                  title: LocaleKeys.statistics_total_days.tr(),
-                  value: daysSinceStart.toString(),
-                  unit: "days",
-                  cardColor: context.scaffoldBackgroundColor,
-                  iconColor: iconColor ?? Colors.greenAccent,
-                  valueColor: textColor,
-                  titleColor: secondaryTextColor,
+                child: _ProLockedStat(
+                  isPro: isProUser,
+                  child: StatisticCard(
+                    icon: CupertinoIcons.calendar,
+                    title: LocaleKeys.statistics_total_days.tr(),
+                    value: daysSinceStart.toString(),
+                    unit: "days",
+                    cardColor: context.scaffoldBackgroundColor,
+                    iconColor: iconColor ?? Colors.greenAccent,
+                    valueColor: textColor,
+                    titleColor: secondaryTextColor,
+                  ),
                 ),
               ),
             ],
           ),
         ],
       ),
+    );
+  }
+}
+
+class _ProLockedStat extends StatelessWidget {
+  final bool isPro;
+  final Widget child;
+
+  const _ProLockedStat({required this.isPro, required this.child});
+
+  void _showPaywall(BuildContext context) {
+    showCupertinoSheet(
+      enableDrag: false,
+      context: context,
+      builder: (context) => PaywallPage(isFromOnboarding: false),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (isPro) return child;
+
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        AbsorbPointer(
+          absorbing: true,
+          child: Opacity(
+            opacity: 0.25,
+            child: child,
+          ),
+        ),
+        Positioned.fill(
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(12),
+            child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+            ),
+          ),
+        ),
+        CustomButton(
+          onPressed: () => _showPaywall(context),
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+            decoration: BoxDecoration(
+              color: context.cupertinoTheme.barBackgroundColor.withValues(alpha: .9),
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(color: Theme.of(context).dividerColor),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(CupertinoIcons.lock_fill, size: 14, color: context.titleLarge.color),
+                const SizedBox(width: 6),
+                Text('Unlock', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: context.titleLarge.color)),
+              ],
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
