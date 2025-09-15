@@ -184,6 +184,7 @@ class ColorPickerWidgetState extends State<ColorPickerWidget> with SingleTickerP
 
   int selectedCategoryIndex = 0;
   int? selectedColorIndex;
+  Color? actuallySelectedColor; // Track the actually selected color
 
   late final AnimationController controller;
 
@@ -202,9 +203,44 @@ class ColorPickerWidgetState extends State<ColorPickerWidget> with SingleTickerP
           selectedCategoryIndex = i;
           selectedColorIndex = colorIndex;
           customColorForPicker = widget.selectedColor!;
+          actuallySelectedColor = widget.selectedColor!;
           break;
         }
       }
+    }
+  }
+
+  @override
+  void didUpdateWidget(ColorPickerWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.selectedColor != oldWidget.selectedColor) {
+      _updateSelectedColor();
+    }
+  }
+
+  void _updateSelectedColor() {
+    if (widget.selectedColor != null) {
+      // Find the category and index of the selected color
+      for (var i = 0; i < colorCategories.length; i++) {
+        final category = colorCategories.values.elementAt(i);
+        final colorIndex = category.indexOf(widget.selectedColor!);
+        if (colorIndex != -1) {
+          setState(() {
+            selectedCategoryIndex = i;
+            selectedColorIndex = colorIndex;
+            customColorForPicker = widget.selectedColor!;
+            actuallySelectedColor = widget.selectedColor!;
+          });
+          break;
+        }
+      }
+    } else {
+      // Reset selection if no color is provided
+      setState(() {
+        selectedColorIndex = null;
+        actuallySelectedColor = null;
+        customColorForPicker = Colors.blue.shade500;
+      });
     }
   }
 
@@ -245,14 +281,24 @@ class ColorPickerWidgetState extends State<ColorPickerWidget> with SingleTickerP
                 controller.forward(from: 0);
                 setState(() {
                   selectedCategoryIndex = val;
-                  // Preserve selected color index if possible
-                  if (selectedColorIndex != null && selectedColorIndex! < colorCategories[categoryNames[val]]!.length) {
-                    // Keep the same shade index when changing categories
-                    customColorForPicker = colorCategories[categoryNames[val]]![selectedColorIndex!];
+                  final newCategoryColors = colorCategories[categoryNames[val]]!;
+
+                  // Check if the actually selected color exists in the new category
+                  if (actuallySelectedColor != null) {
+                    final colorIndex = newCategoryColors.indexOf(actuallySelectedColor!);
+                    if (colorIndex != -1) {
+                      // Keep the same color if it exists in the new category
+                      selectedColorIndex = colorIndex;
+                      customColorForPicker = actuallySelectedColor!;
+                    } else {
+                      // Reset selection if color doesn't exist in new category
+                      selectedColorIndex = null;
+                      customColorForPicker = newCategoryColors[5];
+                    }
                   } else {
-                    // Default to a middle shade (index 5) if no color was selected
+                    // No color selected yet, use default
                     selectedColorIndex = null;
-                    customColorForPicker = colorCategories[categoryNames[val]]![5];
+                    customColorForPicker = newCategoryColors[5];
                   }
                 });
               },
@@ -290,6 +336,8 @@ class ColorPickerWidgetState extends State<ColorPickerWidget> with SingleTickerP
       onPressed: () {
         setState(() {
           selectedColorIndex = index;
+          actuallySelectedColor = color;
+          customColorForPicker = color;
           widget.onColorSelected(color);
         });
       },

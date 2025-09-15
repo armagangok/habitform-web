@@ -154,7 +154,7 @@ class _HabitDataWidgetState extends ConsumerState<HabitDataWidget> {
           style: TextStyle(
             fontSize: 17,
             fontWeight: FontWeight.w600,
-            color: context.theme.primaryColor,
+            color: context.scaffoldBackgroundColor.colorRegardingToBrightness,
           ),
         ),
         CustomButton(
@@ -224,6 +224,7 @@ class _HabitDataWidgetState extends ConsumerState<HabitDataWidget> {
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16),
+          color: context.scaffoldBackgroundColor.withValues(alpha: 0.9),
         ),
         child: Column(
           children: [
@@ -234,7 +235,7 @@ class _HabitDataWidgetState extends ConsumerState<HabitDataWidget> {
                 style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w600,
-                  color: isCurrentMonth ? color : context.theme.primaryColor,
+                  color: isCurrentMonth ? color : context.scaffoldBackgroundColor.colorRegardingToBrightness,
                 ),
               ),
             ),
@@ -320,8 +321,10 @@ class _HabitDataWidgetState extends ConsumerState<HabitDataWidget> {
           required Color baseColor,
         }) {
           if (isCompleted) return baseColor;
-          if (isBetweenCompletions) return baseColor.withValues(alpha: 0.25);
-          return context.selectionHandleColor.withValues(alpha: 0.25);
+          if (isBetweenCompletions) return baseColor.withValues(alpha: 0.4);
+          // Use a more visible color for incomplete cells with better contrast
+          // Create a darker version of the base color with higher opacity for better visibility
+          return context.primaryContrastingColor;
         }
 
         final cardColor = getCardColor(

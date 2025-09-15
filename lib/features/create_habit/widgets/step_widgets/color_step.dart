@@ -94,13 +94,15 @@ class _ColorStepState extends ConsumerState<ColorStep> {
                 const SizedBox(height: 12),
                 SizedBox(
                   height: 180,
-                  child: HabitWidget(
-                    habit: Habit(
-                      id: '1',
-                      habitName: habitName.isEmpty ? 'Your Habit' : habitName,
-                      habitDescription: habitDescription.isEmpty ? '' : habitDescription,
-                      emoji: selectedIcon ?? '',
-                      colorCode: selectedColor ?? context.primaryContrastingColor.value,
+                  child: AbsorbPointer(
+                    child: HabitWidget(
+                      habit: Habit(
+                        id: '1',
+                        habitName: habitName.isEmpty ? 'Your Habit' : habitName,
+                        habitDescription: habitDescription.isEmpty ? '' : habitDescription,
+                        emoji: selectedIcon ?? '',
+                        colorCode: selectedColor ?? context.primaryContrastingColor.value,
+                      ),
                     ),
                   ),
                 ),
@@ -112,6 +114,7 @@ class _ColorStepState extends ConsumerState<ColorStep> {
 
           // Color picker
           ColorPickerWidget(
+            selectedColor: selectedColor != null ? Color(selectedColor) : null,
             onColorSelected: (color) {
               ref.watch(createHabitProvider.notifier).updateColorCode(color.value);
             },

@@ -62,7 +62,10 @@ class EditHabitPage extends ConsumerWidget {
                             children: [
                               const SizedBox(height: 16),
                               Center(
-                                child: IconPickerButton(selectedIcon: habit.emoji),
+                                child: IconPickerButton(
+                                  selectedIcon: habit.emoji,
+                                  habitColor: Color(habit.colorCode),
+                                ),
                               ),
                             ],
                           ),
@@ -144,6 +147,7 @@ class EditHabitPage extends ConsumerWidget {
 
                     // Color Selection
                     ColorPickerWidget(
+                      selectedColor: Color(habit.colorCode),
                       onColorSelected: (color) {
                         ref.watch(colorProvider.notifier).pickColor(color);
                       },

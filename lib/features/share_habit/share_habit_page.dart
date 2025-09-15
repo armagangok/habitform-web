@@ -1,14 +1,16 @@
 import 'dart:io';
 
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '/core/core.dart';
 import '/models/habit/habit_model.dart';
-import '../habit_detail/widget/habit_data_widget.dart';
+import 'provider/share_template_provider.dart';
+import 'templates/templates.dart';
 
-class ShareHabitPage extends StatefulWidget {
+class ShareHabitPage extends ConsumerStatefulWidget {
   final Habit habit;
 
   const ShareHabitPage({
@@ -17,10 +19,11 @@ class ShareHabitPage extends StatefulWidget {
   });
 
   @override
-  State<ShareHabitPage> createState() => _ShareHabitPageState();
+  @override
+  ConsumerState<ShareHabitPage> createState() => _ShareHabitPageState();
 }
 
-class _ShareHabitPageState extends State<ShareHabitPage> {
+class _ShareHabitPageState extends ConsumerState<ShareHabitPage> {
   bool isShareLoading = false;
   final screenshotController = ScreenshotController();
 
@@ -82,7 +85,9 @@ class _ShareHabitPageState extends State<ShareHabitPage> {
             ListView(
               physics: const NeverScrollableScrollPhysics(),
               children: [
-                SizedBox(height: 20),
+                const SizedBox(height: 8),
+                _TemplateSelector(habit: widget.habit),
+                const SizedBox(height: 12),
                 SafeArea(
                   bottom: false,
                   child: Screenshot(
@@ -110,6 +115,8 @@ class _ShareHabitPageState extends State<ShareHabitPage> {
                       children: [
                         Expanded(
                           child: CupertinoButton.tinted(
+                            color: context.primaryContrastingColor,
+                            foregroundColor: context.primaryContrastingColor.withValues(alpha: 1),
                             onPressed: isShareLoading
                                 ? null
                                 : () {
@@ -136,6 +143,8 @@ class _ShareHabitPageState extends State<ShareHabitPage> {
                           child: CupertinoButton.tinted(
                             sizeStyle: CupertinoButtonSize.small,
                             onPressed: _shareHabitAsText,
+                            color: context.primaryContrastingColor,
+                            foregroundColor: context.primaryContrastingColor.withValues(alpha: 1),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
@@ -200,90 +209,59 @@ class _ShareHabitPreviewState extends State<ShareHabitPreview> {
 
   @override
   Widget build(BuildContext context) {
+    final accent = Color(widget.habit.colorCode);
     return Material(
       color: Colors.transparent,
-      child: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              Color(widget.habit.colorCode).withValues(alpha: .8),
-              Color(widget.habit.colorCode).withValues(alpha: .9),
-              Color(widget.habit.colorCode).withValues(alpha: 1),
-            ],
+      child: Center(
+        child: AspectRatio(
+          aspectRatio: 3 / 4,
+          child: RepaintBoundary(
+            child: ShareTemplateSwitcher(
+              habit: widget.habit,
+              controller: _scrollController,
+              accentColor: accent,
+            ),
           ),
         ),
-        child: Stack(
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 40),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            Expanded(
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    widget.habit.habitName,
-                                    style: context.titleLarge.copyWith(
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  // if (widget.habit.habitDescription != null) ...[
-                                  //   Text(
-                                  //     widget.habit.habitDescription!,
-                                  //     style: context.bodyMedium,
-                                  //   ),
-                                  // ],
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 10),
-                        HabitDataWidget(habit: widget.habit),
-                      ],
-                    ),
+      ),
+    );
+  }
+}
+
+class _TemplateSelector extends ConsumerWidget {
+  final Habit habit;
+
+  const _TemplateSelector({required this.habit});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final provider = ref.watch(shareTemplateProvider);
+    final selected = provider.selectedIndex;
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: CupertinoSegmentedControl<int>(
+          groupValue: selected,
+          selectedColor: Color(habit.colorCode),
+          unselectedColor: Color(habit.colorCode).withValues(alpha: .3),
+          borderColor: Color(habit.colorCode).withValues(alpha: .7),
+          pressedColor: Color(habit.colorCode).withValues(alpha: .5),
+          padding: const EdgeInsets.all(4),
+          children: {
+            for (int i = 0; i < provider.templates.length; i++)
+              i: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                child: Text(
+                  provider.templates[i].title,
+                  style: TextStyle(
+                    color: selected == i ? Color(habit.colorCode).colorRegardingToBrightness : context.primaryContrastingColor.withValues(alpha: .7),
                   ),
-                ],
-              ),
-            ),
-            Positioned.fill(
-              bottom: 10,
-              left: 30,
-              child: Align(
-                alignment: Alignment.bottomLeft,
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Assets.app.appLogoDark.image(
-                      height: 24,
-                      width: 24,
-                    ),
-                    const SizedBox(width: 5),
-                    Text(
-                      "HabitRise",
-                      style: context.bodySmall.copyWith(
-                        color: Color(widget.habit.colorCode).colorRegardingToBrightness,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    )
-                  ],
                 ),
               ),
-            ),
-          ],
+          },
+          onValueChanged: (i) => ref.read(shareTemplateProvider.notifier).select(i),
         ),
       ),
     );

@@ -8,6 +8,8 @@ class StatisticCard extends StatelessWidget {
   final String? unit;
   final Color? cardColor;
   final Color? iconColor;
+  final Color? valueColor;
+  final Color? titleColor;
 
   const StatisticCard({
     super.key,
@@ -17,22 +19,18 @@ class StatisticCard extends StatelessWidget {
     this.unit,
     this.cardColor,
     this.iconColor,
+    this.valueColor,
+    this.titleColor,
   });
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
     // Default colors based on theme
-
-    final defaultIconColor = theme.colorScheme.primary;
-
-    final effectiveIconColor = iconColor ?? defaultIconColor;
 
     return Container(
       padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
-        color: context.primaryContrastingColor.withValues(alpha: 0.05),
+        color: cardColor ?? context.primaryContrastingColor.withValues(alpha: 0.25),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Column(
@@ -40,8 +38,19 @@ class StatisticCard extends StatelessWidget {
         children: [
           // Top Right: Value and Unit
           Row(
-            mainAxisAlignment: MainAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
+              Container(
+                padding: const EdgeInsets.all(4),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Icon(
+                  icon,
+                  size: 20,
+                  color: iconColor?.withValues(alpha: 1) ?? context.primaryContrastingColor.withValues(alpha: 0.15),
+                ),
+              ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
@@ -50,11 +59,11 @@ class StatisticCard extends StatelessWidget {
                       children: [
                         Text(
                           double.parse(value).toStringAsFixed(0),
-                          style: theme.textTheme.headlineSmall?.copyWith(
+                          style: context.headlineSmall.copyWith(
                             fontWeight: FontWeight.bold,
                             fontSize: 20,
-                            color: theme.colorScheme.onSurface,
                             height: 1.0,
+                            color: valueColor ?? context.cupertinoTheme.textTheme.textStyle.color,
                             fontFeatures: [
                               FontFeature.tabularFigures(),
                             ],
@@ -65,8 +74,8 @@ class StatisticCard extends StatelessWidget {
                           const SizedBox(width: 3),
                           Text(
                             unit!,
-                            style: theme.textTheme.bodySmall?.copyWith(
-                              color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+                            style: context.bodySmall.copyWith(
+                              color: (valueColor ?? context.cupertinoTheme.textTheme.textStyle.color)?.withValues(alpha: 0.7),
                               fontSize: 11,
                               fontWeight: FontWeight.w600,
                               fontFeatures: [
@@ -88,23 +97,10 @@ class StatisticCard extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                padding: const EdgeInsets.all(4),
-                decoration: BoxDecoration(
-                  color: effectiveIconColor.withValues(alpha: 0.15),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Icon(
-                  icon,
-                  color: effectiveIconColor,
-                  size: 20,
-                ),
-              ),
-              const SizedBox(height: 5),
               Text(
                 title,
-                style: theme.textTheme.bodyMedium?.copyWith(
-                  color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
+                style: context.bodyMedium.copyWith(
+                  color: titleColor ?? context.primaryContrastingColor.withValues(alpha: 0.7),
                   fontWeight: FontWeight.w600,
                   fontSize: 13,
                 ),

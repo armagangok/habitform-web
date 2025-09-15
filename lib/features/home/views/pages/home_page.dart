@@ -56,6 +56,7 @@ class HomePage extends ConsumerWidget {
                     return _errorWidget(context);
                   },
                 ),
+                SizedBox(height: 20),
               ],
             ),
           ),

@@ -88,7 +88,7 @@ class HabitOverviewWidget extends ConsumerWidget {
       header: Text(LocaleKeys.statistics_overview.tr()),
       children: [
         Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
           child: Column(
             children: [
               // First row
@@ -100,7 +100,7 @@ class HabitOverviewWidget extends ConsumerWidget {
                       title: LocaleKeys.statistics_current_streak.tr(),
                       value: currentStreak.toString(),
                       unit: "days",
-                      cardColor: Colors.deepOrangeAccent.withValues(alpha: 0.15),
+                      cardColor: context.scaffoldBackgroundColor,
                       iconColor: Colors.deepOrangeAccent,
                     ),
                   ),
@@ -111,7 +111,7 @@ class HabitOverviewWidget extends ConsumerWidget {
                       title: LocaleKeys.statistics_longest_streak.tr(),
                       value: longestStreak.toString(),
                       unit: "days",
-                      cardColor: Colors.redAccent.withValues(alpha: 0.15),
+                      cardColor: context.scaffoldBackgroundColor,
                       iconColor: Colors.redAccent,
                     ),
                   ),
@@ -127,7 +127,7 @@ class HabitOverviewWidget extends ConsumerWidget {
                       title: LocaleKeys.statistics_completed.tr(),
                       value: completedEntries.toString(),
                       unit: "days",
-                      cardColor: Colors.green.withValues(alpha: 0.15),
+                      cardColor: context.scaffoldBackgroundColor,
                       iconColor: Colors.green,
                     ),
                   ),
@@ -138,7 +138,7 @@ class HabitOverviewWidget extends ConsumerWidget {
                       title: LocaleKeys.statistics_total_days.tr(),
                       value: daysSinceStart.toString(),
                       unit: "days",
-                      cardColor: Colors.blue.withValues(alpha: 0.15),
+                      cardColor: context.scaffoldBackgroundColor,
                       iconColor: Colors.blue,
                     ),
                   ),
@@ -148,6 +148,137 @@ class HabitOverviewWidget extends ConsumerWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+/// Compact variant for sharing: only statistic cards without section headers
+class HabitOverviewCompact extends ConsumerWidget {
+  final Habit habit;
+  final Color? textColor;
+  final Color? secondaryTextColor;
+  final Color? iconColor;
+  final Color? cardBackgroundColor;
+
+  const HabitOverviewCompact({
+    super.key,
+    required this.habit,
+    this.textColor,
+    this.secondaryTextColor,
+    this.iconColor,
+    this.cardBackgroundColor,
+  });
+
+  int _calculateDaysSinceFirstCompletion(Habit habit) {
+    if (habit.completions.isEmpty) return 0;
+    final today = DateTime.now();
+    final firstCompletionDate = habit.completions.getFirstCompletionDate();
+    if (firstCompletionDate == null) return 0;
+    final startDate = DateUtils.dateOnly(firstCompletionDate);
+    return today.difference(startDate).inDays + 1;
+  }
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final formationState = ref.watch(formationProvider);
+
+    HabitStatistic? habitStatistic;
+    if (formationState.hasValue && formationState.value != null) {
+      habitStatistic = formationState.value!.habitStatistics[habit.id];
+    }
+
+    final currentStreak = habit.completions.calculateCurrentStreak();
+    final longestStreak = habit.completions.calculateLongestStreak();
+
+    if (habit.completions.isEmpty) {
+      return Center(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(Icons.assessment, size: 36, color: Theme.of(context).hintColor.withValues(alpha: 0.5)),
+              const SizedBox(height: 8),
+              Text(
+                LocaleKeys.statistics_no_data_for_habit.tr(),
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Theme.of(context).hintColor),
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
+    final completedEntries = habitStatistic?.completedDays ?? habit.completions.calculateFormationScoreFromFirstCompletion();
+    final daysSinceStart = habitStatistic?.totalDays ?? _calculateDaysSinceFirstCompletion(habit);
+
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(14),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Row(
+            children: [
+              Expanded(
+                child: StatisticCard(
+                  icon: CupertinoIcons.flame_fill,
+                  title: LocaleKeys.statistics_current_streak.tr(),
+                  value: currentStreak.toString(),
+                  unit: "days",
+                  cardColor: cardBackgroundColor,
+                  iconColor: iconColor ?? Colors.deepOrangeAccent,
+                  valueColor: textColor,
+                  titleColor: secondaryTextColor,
+                ),
+              ),
+              const SizedBox(width: 20),
+              Expanded(
+                child: StatisticCard(
+                  icon: CupertinoIcons.flame_fill,
+                  title: LocaleKeys.statistics_longest_streak.tr(),
+                  value: longestStreak.toString(),
+                  unit: "days",
+                  cardColor: context.scaffoldBackgroundColor,
+                  iconColor: iconColor ?? Colors.redAccent,
+                  valueColor: textColor,
+                  titleColor: secondaryTextColor,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          Row(
+            children: [
+              Expanded(
+                child: StatisticCard(
+                  icon: CupertinoIcons.checkmark_circle_fill,
+                  title: LocaleKeys.statistics_completed.tr(),
+                  value: completedEntries.toString(),
+                  unit: "days",
+                  cardColor: context.scaffoldBackgroundColor,
+                  iconColor: iconColor ?? Colors.green.shade300,
+                  valueColor: textColor,
+                  titleColor: secondaryTextColor,
+                ),
+              ),
+              const SizedBox(width: 20),
+              Expanded(
+                child: StatisticCard(
+                  icon: CupertinoIcons.calendar,
+                  title: LocaleKeys.statistics_total_days.tr(),
+                  value: daysSinceStart.toString(),
+                  unit: "days",
+                  cardColor: context.scaffoldBackgroundColor,
+                  iconColor: iconColor ?? Colors.greenAccent,
+                  valueColor: textColor,
+                  titleColor: secondaryTextColor,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }

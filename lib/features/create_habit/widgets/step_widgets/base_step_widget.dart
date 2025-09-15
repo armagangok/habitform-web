@@ -43,35 +43,16 @@ class BaseStepWidget extends ConsumerWidget {
   Widget _buildProgressIndicator(BuildContext context) {
     final totalSteps = CreateHabitStep.values.length;
     final currentStepIndex = CreateHabitStep.values.indexOf(step);
-    final progress = (currentStepIndex + 1) / totalSteps;
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
       child: Column(
         children: [
-          Row(
-            children: [
-              Text(
-                'Step ${currentStepIndex + 1} of $totalSteps',
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: Theme.of(context).hintColor,
-                    ),
-              ),
-              const Spacer(),
-              Text(
-                '${(progress * 100).toInt()}%',
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: Theme.of(context).hintColor,
-                    ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 8),
-          LinearProgressIndicator(
-            value: progress,
-            backgroundColor: Theme.of(context).hintColor.withValues(alpha: 0.2),
-            valueColor: AlwaysStoppedAnimation<Color>(
-              Theme.of(context).colorScheme.primary,
+          Text(
+            'Step ${currentStepIndex + 1} of $totalSteps',
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+              color: Theme.of(context).hintColor,
+              fontFeatures: [FontFeature.tabularFigures()],
             ),
           ),
         ],

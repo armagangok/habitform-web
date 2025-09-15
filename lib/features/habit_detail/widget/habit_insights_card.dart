@@ -639,8 +639,7 @@ class _MotivationCard extends StatelessWidget {
             style: const TextStyle(
               fontSize: 14,
               color: Colors.white,
-              fontStyle: FontStyle.italic,
-              height: 1.4,
+              height: 1.2,
             ),
             maxLines: 999,
           ),

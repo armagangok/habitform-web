@@ -126,6 +126,35 @@ class HabitHeatmapCard extends ConsumerWidget {
   }
 }
 
+/// Compact variant for sharing: shows only the grid and a single stats line.
+class HabitHeatmapCompact extends StatelessWidget {
+  final Habit habit;
+
+  const HabitHeatmapCompact({super.key, required this.habit});
+
+  @override
+  Widget build(BuildContext context) {
+    final stats = calculateHeatmapStatsForHabit(habit);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Grid with month/day labels
+        _OptimizedHeatmapGrid(habit: habit),
+        const SizedBox(height: 12),
+        // Only the stats text
+        Text(
+          "${stats.completedDays} days completed in the last year",
+          style: TextStyle(
+            fontSize: 12,
+            color: context.bodyMedium.color?.withValues(alpha: 0.8),
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
 class _OptimizedHeatmapGrid extends StatefulWidget {
   final Habit habit;
 
@@ -702,31 +731,7 @@ class _OptimizedHeatmapLegendState extends State<_OptimizedHeatmapLegend> {
     }
   }
 
-  HeatmapStats _calculateHeatmapStats() {
-    final now = DateTime.now();
-    final oneYearAgo = now.subtract(const Duration(days: 365));
-
-    int completedDays = 0;
-    int totalDays = 0;
-
-    // Count all days in the 1-year period that have entries
-    for (final entry in widget.habit.completions.values) {
-      final entryDate = DateUtils.dateOnly(entry.date);
-      if (entryDate.isAfter(oneYearAgo) && entryDate.isBefore(now.add(const Duration(days: 1)))) {
-        totalDays++;
-        if (entry.isCompleted) {
-          completedDays++;
-        }
-      }
-    }
-
-    // If we have no completion entries, show 0 but still show the grid
-    return HeatmapStats(
-      completedDays: completedDays,
-      totalDays: totalDays,
-      completionRate: totalDays > 0 ? (completedDays / totalDays) * 100 : 0.0,
-    );
-  }
+  HeatmapStats _calculateHeatmapStats() => calculateHeatmapStatsForHabit(widget.habit);
 }
 
 class HeatmapData {
@@ -767,4 +772,29 @@ class HeatmapStats {
     required this.totalDays,
     required this.completionRate,
   });
+}
+
+/// Shared stats calculator for compact and full variants
+HeatmapStats calculateHeatmapStatsForHabit(Habit habit) {
+  final now = DateTime.now();
+  final oneYearAgo = now.subtract(const Duration(days: 365));
+
+  int completedDays = 0;
+  int totalDays = 0;
+
+  for (final entry in habit.completions.values) {
+    final entryDate = DateUtils.dateOnly(entry.date);
+    if (entryDate.isAfter(oneYearAgo) && entryDate.isBefore(now.add(const Duration(days: 1)))) {
+      totalDays++;
+      if (entry.isCompleted) {
+        completedDays++;
+      }
+    }
+  }
+
+  return HeatmapStats(
+    completedDays: completedDays,
+    totalDays: totalDays,
+    completionRate: totalDays > 0 ? (completedDays / totalDays) * 100 : 0.0,
+  );
 }

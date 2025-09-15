@@ -245,7 +245,25 @@ class _PaywallWidgetState extends ConsumerState<PaywallPage> with TickerProvider
     return Material(
       child: purchaseState.when(
         data: (state) {
-          selectedPackage ??= state.offerings?.current?.lifetime;
+          // Initialize selected package to align with selectedIndex and available packages
+          final availablePackages = state.offerings?.current?.availablePackages;
+          if (selectedPackage == null && availablePackages != null && availablePackages.isNotEmpty) {
+            int defaultIndex = 0;
+            // Prefer an annual/yearly package if present
+            for (int i = 0; i < availablePackages.length; i++) {
+              final identifier = availablePackages[i].storeProduct.identifier.toLowerCase();
+              if (identifier.contains('year') || identifier.contains('annual') || identifier.contains('yearly')) {
+                defaultIndex = i;
+                break;
+              }
+            }
+            // If widget's default is annual (index 1) and it exists, use it, else fall back to detected index
+            if (selectedIndex >= 0 && selectedIndex < availablePackages.length) {
+              defaultIndex = selectedIndex;
+            }
+            selectedIndex = defaultIndex.clamp(0, availablePackages.length - 1);
+            selectedPackage = availablePackages[selectedIndex];
+          }
 
           return CupertinoPageScaffold(
             backgroundColor: isDarkMode ? Color(0xFF0A0A0A) : Color(0xFFFAFAFA),
