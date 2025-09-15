@@ -38,7 +38,7 @@ class HabitInsightsCard extends ConsumerWidget {
           ),
           const SizedBox(width: 8),
           Text(
-            "Insights & Achievements",
+            LocaleKeys.habit_detail_insights_achievements.tr(),
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
@@ -84,8 +84,8 @@ class HabitInsightsCard extends ConsumerWidget {
     // Achievements
     if (currentStreak >= 7) {
       achievements.add(Achievement(
-        title: "Week Warrior",
-        description: "$currentStreak day streak!",
+        title: LocaleKeys.habit_detail_achievement_week_warrior.tr(),
+        description: LocaleKeys.habit_detail_achievement_week_warrior_description.tr().replaceAll('{{streak}}', currentStreak.toString()),
         icon: FontAwesomeIcons.fire,
         color: Colors.orange,
         isNew: currentStreak == 7,
@@ -94,8 +94,8 @@ class HabitInsightsCard extends ConsumerWidget {
 
     if (currentStreak >= 30) {
       achievements.add(Achievement(
-        title: "Monthly Master",
-        description: "30+ day streak!",
+        title: LocaleKeys.habit_detail_achievement_monthly_master.tr(),
+        description: LocaleKeys.habit_detail_achievement_monthly_master_description.tr(),
         icon: FontAwesomeIcons.medal,
         color: Colors.amber,
         isNew: currentStreak == 30,
@@ -104,8 +104,8 @@ class HabitInsightsCard extends ConsumerWidget {
 
     if (longestStreak >= 66) {
       achievements.add(Achievement(
-        title: "Habit Hero",
-        description: "Reached the formation threshold!",
+        title: LocaleKeys.habit_detail_achievement_habit_hero.tr(),
+        description: LocaleKeys.habit_detail_achievement_formation_threshold.tr(),
         icon: FontAwesomeIcons.crown,
         color: Colors.purple,
         isNew: longestStreak == 66,
@@ -114,8 +114,8 @@ class HabitInsightsCard extends ConsumerWidget {
 
     if (completionRate >= 90) {
       achievements.add(Achievement(
-        title: "Perfectionist",
-        description: "${completionRate.toStringAsFixed(0)}% success rate!",
+        title: LocaleKeys.habit_detail_achievement_perfectionist.tr(),
+        description: LocaleKeys.habit_detail_achievement_perfectionist_description.tr().replaceAll('{{rate}}', completionRate.toStringAsFixed(0)),
         icon: FontAwesomeIcons.star,
         color: Colors.blue,
         isNew: false,
@@ -125,24 +125,24 @@ class HabitInsightsCard extends ConsumerWidget {
     // Insights
     if (currentStreak > longestStreak * 0.8) {
       insights.add(InsightItem(
-        title: "Consistency Champion",
-        description: "You're performing at ${(currentStreak / longestStreak * 100).toStringAsFixed(0)}% of your best streak!",
+        title: LocaleKeys.habit_detail_achievement_consistency_champion.tr(),
+        description: LocaleKeys.habit_detail_achievement_consistency_description.tr().replaceAll('{{percentage}}', (currentStreak / longestStreak * 100).toStringAsFixed(0)),
         type: InsightType.positive,
       ));
     }
 
     if (_isWeekendWarrior()) {
       insights.add(InsightItem(
-        title: "Weekend Warrior",
-        description: "You maintain great consistency even on weekends!",
+        title: LocaleKeys.habit_detail_achievement_weekend_warrior.tr(),
+        description: LocaleKeys.habit_detail_achievement_weekend_description.tr(),
         type: InsightType.positive,
       ));
     }
 
     if (_getMissedDaysThisWeek() > 2) {
       insights.add(InsightItem(
-        title: "Weekly Check-in",
-        description: "You've missed ${_getMissedDaysThisWeek()} days this week. Tomorrow is a fresh start!",
+        title: LocaleKeys.habit_detail_achievement_weekly_checkin.tr(),
+        description: LocaleKeys.habit_detail_achievement_weekly_description.tr().replaceAll('{{days}}', _getMissedDaysThisWeek().toString()),
         type: InsightType.motivational,
       ));
     }
@@ -150,8 +150,8 @@ class HabitInsightsCard extends ConsumerWidget {
     final formationProgress = habitStatistic?.formationProbability ?? _getFormationProgress();
     if (formationProgress >= 50 && formationProgress < 100) {
       insights.add(InsightItem(
-        title: "Formation Journey",
-        description: "You're ${formationProgress.toStringAsFixed(0)}% through building this habit. The neural pathways are strengthening!",
+        title: LocaleKeys.habit_detail_achievement_formation_journey.tr(),
+        description: LocaleKeys.habit_detail_achievement_formation_description.tr().replaceAll('{{percentage}}', formationProgress.toStringAsFixed(0)),
         type: InsightType.informational,
       ));
     }
@@ -219,7 +219,7 @@ class _AchievementsSection extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          "Achievements",
+          LocaleKeys.habit_detail_achievements.tr(),
           style: TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.bold,
@@ -291,7 +291,7 @@ class _AchievementBadge extends StatelessWidget {
                         borderRadius: BorderRadius.circular(6),
                       ),
                       child: Text(
-                        "NEW",
+                        LocaleKeys.habit_detail_new.tr(),
                         style: const TextStyle(
                           fontSize: 8,
                           color: Colors.white,
@@ -331,7 +331,7 @@ class _InsightsSection extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          "Smart Insights",
+          LocaleKeys.habit_detail_smart_insights.tr(),
           style: TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.bold,
@@ -489,23 +489,23 @@ class _MotivationCard extends StatelessWidget {
 
     if (currentStreak >= 30) {
       return MotivationalQuote(
-        text: "Excellence is not a single act, but a habit. You are not what you do once in a while; you are what you do consistently.",
-        author: "Aristotle",
+        text: LocaleKeys.habit_detail_quote_aristotle.tr(),
+        author: LocaleKeys.habit_detail_quote_aristotle_author.tr(),
       );
     } else if (completionRate >= 80) {
       return MotivationalQuote(
-        text: "Success is the sum of small efforts, repeated day in and day out.",
-        author: "Robert Collier",
+        text: LocaleKeys.habit_detail_quote_collier.tr(),
+        author: LocaleKeys.habit_detail_quote_collier_author.tr(),
       );
     } else if (currentStreak >= 7) {
       return MotivationalQuote(
-        text: "The secret to getting ahead is getting started.",
-        author: "Mark Twain",
+        text: LocaleKeys.habit_detail_quote_twain.tr(),
+        author: LocaleKeys.habit_detail_quote_twain_author.tr(),
       );
     } else {
       return MotivationalQuote(
-        text: "A journey of a thousand miles begins with a single step.",
-        author: "Lao Tzu",
+        text: LocaleKeys.habit_detail_quote_lao_tzu.tr(),
+        author: LocaleKeys.habit_detail_quote_lao_tzu_author.tr(),
       );
     }
   }

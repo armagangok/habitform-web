@@ -40,7 +40,7 @@ class ActionButtons extends ConsumerWidget {
                 children: [
                   PrimaryActionButton(
                     icon: FontAwesomeIcons.solidCalendarDays,
-                    label: "Calendar",
+                    label: LocaleKeys.habit_detail_calendar.tr(),
                     color: Color(currentHabit.colorCode),
                     onPressed: () {
                       showCupertinoSheet(
@@ -52,7 +52,7 @@ class ActionButtons extends ConsumerWidget {
                   ),
                   PrimaryActionButton(
                     icon: FontAwesomeIcons.share,
-                    label: "Share",
+                    label: LocaleKeys.habit_detail_share.tr(),
                     color: Color(currentHabit.colorCode),
                     onPressed: () {
                       showCupertinoSheet(
@@ -63,7 +63,7 @@ class ActionButtons extends ConsumerWidget {
                   ),
                   PrimaryActionButton(
                     icon: CupertinoIcons.archivebox_fill,
-                    label: "Archive",
+                    label: LocaleKeys.habit_detail_archive.tr(),
                     color: Color(currentHabit.colorCode),
                     onPressed: () => _showArchiveConfirmationDialog(context, currentHabit, ref),
                   ),

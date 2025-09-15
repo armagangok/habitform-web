@@ -138,15 +138,15 @@ class _OnboardingRatingPageState extends ConsumerState<OnboardingRatingPage> wit
     showCupertinoDialog(
       context: context,
       builder: (context) => CupertinoAlertDialog(
-        title: const Text('Thank You!'),
-        content: const Text('Your feedback helps us improve HabitRise and reach more people who need help building better habits.'),
+        title: Text(LocaleKeys.onboarding_rating_thank_you.tr()),
+        content: Text(LocaleKeys.onboarding_rating_feedback_message.tr()),
         actions: [
           CupertinoDialogAction(
             onPressed: () {
               Navigator.of(context).pop();
               _completeOnboarding();
             },
-            child: const Text('Continue'),
+            child: Text(LocaleKeys.onboarding_rating_continue.tr()),
           ),
         ],
       ),
@@ -157,15 +157,15 @@ class _OnboardingRatingPageState extends ConsumerState<OnboardingRatingPage> wit
     showCupertinoDialog(
       context: context,
       builder: (context) => CupertinoAlertDialog(
-        title: const Text('Rate HabitRise'),
-        content: const Text('Thank you for your interest in rating HabitRise! You can rate us on the App Store or Google Play Store.'),
+        title: Text(LocaleKeys.onboarding_rating_rate_title.tr()),
+        content: Text(LocaleKeys.onboarding_rating_rate_message.tr()),
         actions: [
           CupertinoDialogAction(
             onPressed: () {
               Navigator.of(context).pop();
               _completeOnboarding();
             },
-            child: const Text('Continue'),
+            child: Text(LocaleKeys.onboarding_rating_continue.tr()),
           ),
         ],
       ),
@@ -266,7 +266,7 @@ class _OnboardingRatingPageState extends ConsumerState<OnboardingRatingPage> wit
                   SizedBox(height: context.height(0.06)),
                   // Title
                   Text(
-                    'You\'ve just discovered\nHabitRise\'s unique features',
+                    LocaleKeys.onboarding_rating_title.tr(),
                     style: context.headlineLarge.copyWith(
                       fontSize: 28,
                       fontWeight: FontWeight.w700,
@@ -280,7 +280,7 @@ class _OnboardingRatingPageState extends ConsumerState<OnboardingRatingPage> wit
                   Padding(
                     padding: context.symmetricPadding(horizontal: 0.02),
                     child: Text(
-                      'To help us reach more people who need help building better habits, would you give our app a review?',
+                      LocaleKeys.onboarding_rating_description.tr(),
                       style: context.bodyLarge.copyWith(
                         height: 1.5,
                         color: theme.colorScheme.onSurface.withValues(alpha: 0.8),
@@ -381,7 +381,7 @@ class _OnboardingRatingPageState extends ConsumerState<OnboardingRatingPage> wit
                           ),
                           SizedBox(width: context.width(0.02)),
                           Text(
-                            'Rate HabitRise',
+                            LocaleKeys.onboarding_rating_rate_button.tr(),
                             style: context.bodyMedium.copyWith(
                               fontWeight: FontWeight.w600,
                               color: Colors.white,
@@ -405,7 +405,7 @@ class _OnboardingRatingPageState extends ConsumerState<OnboardingRatingPage> wit
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      'Maybe Later',
+                      LocaleKeys.onboarding_rating_maybe_later.tr(),
                       style: context.bodyMedium.copyWith(
                         color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
                       ),

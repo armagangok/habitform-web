@@ -161,8 +161,8 @@ class _HabitCalendarCompletionSheetState extends ConsumerState<HabitCalendarComp
     return CupertinoPopupSurface(
       isSurfacePainted: true,
       child: CupertinoPageScaffold(
-        navigationBar: const SheetHeader(
-          title: "",
+        navigationBar: SheetHeader(
+          title: LocaleKeys.habit_detail_calendar.tr(),
           closeButtonPosition: CloseButtonPosition.left,
         ),
         child: ListView(

@@ -30,7 +30,7 @@ class HabitMilestonesCard extends ConsumerWidget {
           ),
           const SizedBox(width: 8),
           Text(
-            "Milestones",
+            LocaleKeys.habit_detail_milestones.tr(),
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
@@ -60,14 +60,14 @@ class HabitMilestonesCard extends ConsumerWidget {
   }
 
   List<Milestone> _getMilestones() {
-    return const [
-      Milestone(days: 7, title: "One Week Warrior", icon: Icons.calendar_today_outlined),
-      Milestone(days: 30, title: "Monthly Master", icon: Icons.workspace_premium_outlined),
-      Milestone(days: 60, title: "Habit Hero", icon: Icons.star_border),
-      Milestone(days: 90, title: "Quarter Champion", icon: Icons.emoji_events_outlined),
-      Milestone(days: 150, title: "Streak Pro", icon: Icons.military_tech_outlined),
-      Milestone(days: 180, title: "Half-Year Hero", icon: Icons.flag_outlined),
-      Milestone(days: 365, title: "One-Year Legend", icon: Icons.emoji_events_outlined),
+    return [
+      Milestone(days: 7, title: LocaleKeys.habit_detail_milestone_one_week_warrior.tr(), icon: Icons.calendar_today_outlined),
+      Milestone(days: 30, title: LocaleKeys.habit_detail_milestone_monthly_master.tr(), icon: Icons.workspace_premium_outlined),
+      Milestone(days: 60, title: LocaleKeys.habit_detail_milestone_habit_hero.tr(), icon: Icons.star_border),
+      Milestone(days: 90, title: LocaleKeys.habit_detail_milestone_quarter_champion.tr(), icon: Icons.emoji_events_outlined),
+      Milestone(days: 150, title: LocaleKeys.habit_detail_milestone_streak_pro.tr(), icon: Icons.military_tech_outlined),
+      Milestone(days: 180, title: LocaleKeys.habit_detail_milestone_half_year_hero.tr(), icon: Icons.flag_outlined),
+      Milestone(days: 365, title: LocaleKeys.habit_detail_milestone_one_year_legend.tr(), icon: Icons.emoji_events_outlined),
     ];
   }
 
@@ -125,7 +125,7 @@ class _MilestoneItem extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  "${milestone.days} days",
+                  "${milestone.days} ${LocaleKeys.habit_detail_days.tr()}",
                   style: TextStyle(
                     fontSize: 11,
                     color: isCurrent ? Colors.white : (isAchieved ? color.withValues(alpha: 0.9) : context.bodyMedium.color?.withValues(alpha: 0.75)),

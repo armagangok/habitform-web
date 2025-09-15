@@ -7457,7 +7457,10 @@ static const Map<String,dynamic> _en_US = {
     "done": "Done",
     "no_recent_emojis": "No Recent Emojis",
     "loading_habits": "Loading habits...",
-    "later": "Later"
+    "later": "Later",
+    "calendar": "Calendar",
+    "share": "Share",
+    "archive": "Archive"
   },
   "colors": {
     "color": "Color",
@@ -7514,6 +7517,16 @@ static const Map<String,dynamic> _en_US = {
         "title": "Change your life with a small step.",
         "description": "Developing new habits becomes easier and more sustainable when you start with small, manageable steps with HabitRise."
       },
+      "welcome": {
+        "try_tapping": "Try tapping on the habit card",
+        "just_like_that": "Just like that!",
+        "habit_examples": {
+          "running": "Running",
+          "read_book": "Read Book",
+          "meditate": "Meditate",
+          "drink_water": "Drink Water"
+        }
+      },
       "routine": {
         "title": "Routine and repeate help habits take root.",
         "description": "Establishing a consistent routine and repeating actions are key to making habits stick with HabitRise."
@@ -7551,6 +7564,17 @@ static const Map<String,dynamic> _en_US = {
     "calendar_completion": "Calendar Completion",
     "calendar_tap_info": "Tap on dates to mark or unmark completion",
     "timeToCompleteYourHabit": "Time to complete your habit",
+    "what_habit_question": "What habit would you like to build?",
+    "habit_name_description": "Choose a clear, specific name for your habit. For example: \"Drink 8 glasses of water\" instead of just \"Stay hydrated\".",
+    "tell_us_more": "Tell us more about this habit",
+    "description_optional": "This step is optional. You can add more details about your habit, why it's important to you, or any specific goals you have.",
+    "difficulty_question": "How difficult is this habit to build?",
+    "reminder_title": "Reminder for your habit",
+    "reminder_description": "Reminders are optional but highly recommended. They help you stay consistent by notifying you when it's time to complete your habit.",
+    "how_many_reminders": "How many reminders?",
+    "single_reminder": "Single reminder",
+    "multiple_reminders": "Multiple reminders",
+    "reminder_times": "Reminder times",
     "filter": {
       "all": "All",
       "morning": "Morning",
@@ -7719,7 +7743,18 @@ static const Map<String,dynamic> _en_US = {
     "app_notification_settings": "App Notification Settings",
     "scheduled_notifications": "Scheduled Notifications",
     "no_scheduled_notifications": "No scheduled notifications",
-    "reminders": "reminders"
+    "reminders": "reminders",
+    "delete_notification": "Delete Notification",
+    "delete_notification_confirmation": "Are you sure you want to delete this notification?",
+    "notification_deleted": "Notification deleted successfully",
+    "delete_notification_error": "Failed to delete notification",
+    "delete_reminder": "Delete Reminder",
+    "delete_reminder_confirmation": "Are you sure you want to delete the reminder for {{dayInfo}}{{timeInfo}}?",
+    "delete_all_reminders": "Delete All Reminders",
+    "delete_all_reminders_confirmation": "Are you sure you want to delete all {{count}} reminders for \"{{habitName}}\"?",
+    "reminder_deleted_success": "Reminder for {{dayInfo}} deleted successfully",
+    "all_reminders_deleted_success": "All reminders for \"{{habitName}}\" deleted successfully",
+    "failed_to_delete_all_reminders": "Failed to delete all reminders"
   },
   "archived_habits": {
     "title": "Archived Habits",
@@ -7733,7 +7768,14 @@ static const Map<String,dynamic> _en_US = {
     "recover_habit": "Recover Habit",
     "delete_confirmation_title": "Delete Habit",
     "delete_confirmation_message": "Are you sure you want to delete this habit: ",
-    "delete_confirmation_warning": "This action cannot be undone!"
+    "delete_confirmation_warning": "This action cannot be undone!",
+    "select_mode": "Select Mode",
+    "selected_count": "selected",
+    "select_all": "Select All",
+    "deselect_all": "Deselect All",
+    "delete_selected_title": "Delete Selected Habits",
+    "delete_selected_message": "Are you sure you want to delete {count} habit(s)?",
+    "delete_selected_success": "{count} habit(s) deleted successfully"
   },
   "membership_info": {
     "title": "Membership Info",
@@ -7761,26 +7803,31 @@ static const Map<String,dynamic> _en_US = {
     "longest_streak": "Longest Streak",
     "current_streak": "Current Streak",
     "about_formation": "About Habit Formation",
-    "formation_info": "According to research, it takes an average of 66 days for a habit to become automatic. Regular repetition during this period helps the habit become automatic.",
+    "formation_info": "The percentage above shows how likely your habit is to become automatic based on your current consistency. Higher percentages mean your habit is more likely to stick. According to research, it takes an average of 66 days of regular practice for a habit to become automatic.",
+    "formation_score": "Formation Score",
+    "formation_percentage_breakdown": "Score Breakdown",
+    "formation_progress_status": "Progress Status",
+    "formation_estimated_time": "Estimated Formation Time",
+    "formation_info_title": "About Formation",
     "formation_status": {
-      "early": "You're still in the early stages. It takes 18-66 days of regular repetition for a habit to form.",
-      "excellent": "Excellent! With a {percentage}% completion rate, your habit is largely automated.",
-      "very_good": "Very good! With a {percentage}% completion rate, your habit is starting to settle.",
-      "good": "Going well! A {percentage}% completion rate is sufficient for habit formation.",
-      "improving": "You're improving. Try to increase the {percentage}% completion rate above 70%.",
-      "needs_work": "You need to increase your completion rate to form a habit. Currently at {percentage}%."
+      "early": "You're still in the early stages. Keep tracking your habit consistently to see meaningful formation progress.",
+      "excellent": "Outstanding progress! With a {percentage}% completion rate, your habit is very likely to become automatic.",
+      "very_good": "Great consistency! With a {percentage}% completion rate, your habit formation is on track.",
+      "good": "Good progress! Your {percentage}% completion rate shows you're building this habit successfully.",
+      "improving": "You're making progress. Try to increase your completion rate to make habit formation more likely.",
+      "needs_work": "Keep working on consistency. Regular completion will help this habit become automatic."
     },
     "formation_time": {
-      "not_enough_data": "Not enough data yet.",
-      "completed_successful": "Congratulations! Your habit is most likely established.",
-      "completed_good": "Congratulations! You've completed the average 66-day period with a {percentage}% completion rate, and your habit is likely established.",
-      "completed_needs_work": "You've completed the 66-day average period, but it's recommended to increase your completion rate above 70% for the habit to fully establish.",
-      "remaining_days": "Estimated {days} days left for habit formation. Keep up the regular repetition."
+      "not_enough_data": "Keep tracking your habit to see formation progress.",
+      "completed_successful": "Congratulations! Your habit is most likely established and automatic.",
+      "completed_good": "Great job! You've completed the formation period with a {percentage}% completion rate. Your habit is likely established.",
+      "completed_needs_work": "You've completed the formation period. Continue with regular practice to strengthen your habit.",
+      "remaining_days": "Estimated {days} days left in the formation period. Keep up the consistent practice."
     },
     "chart_labels": {
-      "insufficient": "Insufficient",
-      "moderate": "Moderate",
-      "good": "Good",
+      "insufficient": "Needs Work",
+      "moderate": "Good Progress",
+      "good": "Very Good",
       "excellent": "Excellent",
       "below_50": "< 50%",
       "between_50_70": "50-70%",

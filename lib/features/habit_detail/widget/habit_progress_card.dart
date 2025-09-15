@@ -34,7 +34,7 @@ class HabitProgressCard extends ConsumerWidget {
           ),
           const SizedBox(width: 8),
           Text(
-            "Progress",
+            LocaleKeys.habit_detail_progress.tr(),
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
@@ -81,7 +81,7 @@ class HabitProgressCard extends ConsumerWidget {
                               ),
                             ),
                             Text(
-                              "Formation",
+                              LocaleKeys.habit_detail_formation.tr(),
                               style: TextStyle(
                                 fontSize: 12,
                                 color: context.bodyMedium.color?.withValues(alpha: 0.7),
@@ -306,7 +306,7 @@ class _WeeklyProgressChartState extends ConsumerState<_WeeklyProgressChart> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          "Last 7 Days",
+          LocaleKeys.habit_detail_last_7_days.tr(),
           style: TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.bold,
@@ -394,7 +394,7 @@ class _WeeklyDayCell extends StatefulWidget {
 class _WeeklyDayCellState extends State<_WeeklyDayCell> {
   @override
   Widget build(BuildContext context) {
-    const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+    final days = [LocaleKeys.habit_detail_mon.tr(), LocaleKeys.habit_detail_tue.tr(), LocaleKeys.habit_detail_wed.tr(), LocaleKeys.habit_detail_thu.tr(), LocaleKeys.habit_detail_fri.tr(), LocaleKeys.habit_detail_sat.tr(), LocaleKeys.habit_detail_sun.tr()];
 
     return CustomButton(
       onPressed: widget.onTap,

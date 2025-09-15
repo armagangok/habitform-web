@@ -42,7 +42,7 @@ class OnboardingPageWidget extends StatelessWidget {
                           color: Colors.black.withValues(alpha: 0.5),
                           child: Center(
                             child: Text(
-                              'Aristotle',
+                              LocaleKeys.onboarding_pages_become_person_aristotle.tr(),
                               textAlign: TextAlign.left,
                               style: context.bodyLarge.copyWith(
                                 color: Colors.white,

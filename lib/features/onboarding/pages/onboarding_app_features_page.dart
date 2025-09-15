@@ -37,36 +37,52 @@ class _OnboardingAppFeaturesPageState extends State<OnboardingAppFeaturesPage> w
   double _habitFormationRate = 0.0;
   bool _showIntro = true;
 
-  final List<AppFeature> _appFeatures = [
-    AppFeature(
-      title: 'Smart Habit Tracking',
-      description: 'Track your habits with intelligent reminders and progress visualization. See your streaks grow and celebrate every milestone.',
-      icon: CupertinoIcons.chart_bar_alt_fill,
-      color: const Color(0xFF1DB954),
-      subFeatures: ['Daily Reminders', 'Progress Charts', 'Streak Tracking'],
-    ),
-    AppFeature(
-      title: 'Sub-Habits System',
-      description: 'Break down complex habits into smaller, manageable sub-habits. Build your main habit step by step with micro-actions.',
-      icon: CupertinoIcons.layers_fill,
-      color: const Color(0xFF0C6CF2),
-      subFeatures: ['Micro-Actions', 'Habit Breakdown', 'Nested Tracking'],
-    ),
-    AppFeature(
-      title: 'Habit Formation Rate',
-      description: 'Track your habit formation progress with intelligent insights. See how close you are to making your habits stick permanently.',
-      icon: CupertinoIcons.chart_bar_square,
-      color: const Color(0xFF9B59B6),
-      subFeatures: ['Success Prediction', 'Formation Tracking', 'Progress Analytics'],
-    ),
-    AppFeature(
-      title: 'Share Habits',
-      description: 'Share your habit progress with beautiful, customizable images. Choose from different designs to showcase your achievements.',
-      icon: CupertinoIcons.share,
-      color: Colors.deepOrangeAccent,
-      subFeatures: ['Custom Designs', 'Progress Sharing', 'Achievement Images'],
-    ),
-  ];
+  List<AppFeature> get _appFeatures => [
+        AppFeature(
+          title: LocaleKeys.onboarding_app_features_features_smart_tracking_title.tr(),
+          description: LocaleKeys.onboarding_app_features_features_smart_tracking_description.tr(),
+          icon: CupertinoIcons.chart_bar_alt_fill,
+          color: const Color(0xFF1DB954),
+          subFeatures: [
+            LocaleKeys.onboarding_app_features_features_smart_tracking_sub_features_0.tr(),
+            LocaleKeys.onboarding_app_features_features_smart_tracking_sub_features_1.tr(),
+            LocaleKeys.onboarding_app_features_features_smart_tracking_sub_features_2.tr(),
+          ],
+        ),
+        AppFeature(
+          title: LocaleKeys.onboarding_app_features_features_sub_habits_title.tr(),
+          description: LocaleKeys.onboarding_app_features_features_sub_habits_description.tr(),
+          icon: CupertinoIcons.layers_fill,
+          color: const Color(0xFF0C6CF2),
+          subFeatures: [
+            LocaleKeys.onboarding_app_features_features_sub_habits_sub_features_0.tr(),
+            LocaleKeys.onboarding_app_features_features_sub_habits_sub_features_1.tr(),
+            LocaleKeys.onboarding_app_features_features_sub_habits_sub_features_2.tr(),
+          ],
+        ),
+        AppFeature(
+          title: LocaleKeys.onboarding_app_features_features_formation_rate_title.tr(),
+          description: LocaleKeys.onboarding_app_features_features_formation_rate_description.tr(),
+          icon: CupertinoIcons.chart_bar_square,
+          color: const Color(0xFF9B59B6),
+          subFeatures: [
+            LocaleKeys.onboarding_app_features_features_formation_rate_sub_features_0.tr(),
+            LocaleKeys.onboarding_app_features_features_formation_rate_sub_features_1.tr(),
+            LocaleKeys.onboarding_app_features_features_formation_rate_sub_features_2.tr(),
+          ],
+        ),
+        AppFeature(
+          title: LocaleKeys.onboarding_app_features_features_share_habits_title.tr(),
+          description: LocaleKeys.onboarding_app_features_features_share_habits_description.tr(),
+          icon: CupertinoIcons.share,
+          color: Colors.deepOrangeAccent,
+          subFeatures: [
+            LocaleKeys.onboarding_app_features_features_share_habits_sub_features_0.tr(),
+            LocaleKeys.onboarding_app_features_features_share_habits_sub_features_1.tr(),
+            LocaleKeys.onboarding_app_features_features_share_habits_sub_features_2.tr(),
+          ],
+        ),
+      ];
 
   @override
   void initState() {
@@ -376,7 +392,7 @@ class _OnboardingAppFeaturesPageState extends State<OnboardingAppFeaturesPage> w
                       // Title
                       FittedBox(
                         child: Text(
-                          'HabitRise Helps You ...',
+                          LocaleKeys.onboarding_app_features_title.tr(),
                           style: context.headlineLarge.copyWith(
                             fontSize: 30,
                             fontWeight: FontWeight.w700,
@@ -389,7 +405,7 @@ class _OnboardingAppFeaturesPageState extends State<OnboardingAppFeaturesPage> w
                       SizedBox(height: context.height(0.02)),
                       // Subtitle
                       Text(
-                        'Build lasting habits with smart tracking and personalized insights',
+                        LocaleKeys.onboarding_app_features_subtitle.tr(),
                         style: context.bodyLarge.copyWith(
                           color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
                         ),
@@ -591,7 +607,7 @@ class _OnboardingAppFeaturesPageState extends State<OnboardingAppFeaturesPage> w
           child: Column(
             children: [
               Text(
-                'Formation Score',
+                LocaleKeys.onboarding_app_features_formation_score.tr(),
                 style: context.bodyMedium.copyWith(
                   color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
                   fontWeight: FontWeight.w500,
@@ -640,7 +656,7 @@ class _OnboardingAppFeaturesPageState extends State<OnboardingAppFeaturesPage> w
                       ),
                       SizedBox(width: context.width(0.02)),
                       Text(
-                        'Previous',
+                        LocaleKeys.onboarding_app_features_previous.tr(),
                         style: context.bodyMedium.copyWith(
                           color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
                         ),
@@ -682,7 +698,7 @@ class _OnboardingAppFeaturesPageState extends State<OnboardingAppFeaturesPage> w
                   children: [
                     FittedBox(
                       child: Text(
-                        _currentFeature < _appFeatures.length - 1 ? 'Next' : 'Start',
+                        _currentFeature < _appFeatures.length - 1 ? LocaleKeys.onboarding_app_features_next.tr() : LocaleKeys.onboarding_app_features_start.tr(),
                         style: context.bodyMedium.copyWith(
                           fontWeight: FontWeight.w600,
                           color: Colors.white,

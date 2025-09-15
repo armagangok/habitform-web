@@ -33,7 +33,7 @@ class HabitHeatmapCard extends ConsumerWidget {
             ),
             const SizedBox(width: 8),
             Text(
-              "Habit Heatmap",
+              LocaleKeys.habit_detail_heatmap_title.tr(),
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
@@ -47,7 +47,7 @@ class HabitHeatmapCard extends ConsumerWidget {
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
             title: Center(
               child: Text(
-                "No data available yet. Start tracking your habit to see the heatmap!",
+                LocaleKeys.habit_detail_heatmap_no_data.tr(),
                 style: TextStyle(
                   color: context.bodyMedium.color?.withValues(alpha: 0.7),
                   fontSize: 14,
@@ -74,7 +74,7 @@ class HabitHeatmapCard extends ConsumerWidget {
               ),
               const SizedBox(width: 8),
               Text(
-                "Habit Heatmap",
+                LocaleKeys.habit_detail_heatmap_title.tr(),
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
@@ -105,7 +105,7 @@ class HabitHeatmapCard extends ConsumerWidget {
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Text(
-                isProUser ? "View Full" : "Unlock",
+                isProUser ? LocaleKeys.habit_detail_view_full.tr() : LocaleKeys.habit_detail_unlock.tr(),
                 style: TextStyle(
                   fontSize: 12,
                   color: Color(habit.colorCode),
@@ -164,7 +164,7 @@ class HabitHeatmapCard extends ConsumerWidget {
                       children: [
                         Icon(CupertinoIcons.lock_fill, size: 14, color: context.titleLarge.color),
                         const SizedBox(width: 6),
-                        Text('Unlock', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: context.titleLarge.color)),
+                        Text(LocaleKeys.habit_detail_unlock.tr(), style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: context.titleLarge.color)),
                       ],
                     ),
                   ),
@@ -194,7 +194,7 @@ class HabitHeatmapCompact extends StatelessWidget {
         const SizedBox(height: 12),
         // Only the stats text
         Text(
-          "${stats.completedDays} days completed in the last year",
+          LocaleKeys.habit_detail_heatmap_stats_description.tr().replaceAll('{{days}}', stats.completedDays.toString()),
           style: TextStyle(
             fontSize: 12,
             color: context.bodyMedium.color?.withValues(alpha: 0.8),
@@ -608,7 +608,7 @@ class _OptimizedHeatmapGridState extends State<_OptimizedHeatmapGrid> {
 
     final weeks = 52; // Show full year (52 weeks)
     final monthLabels = <String>[];
-    final dayLabels = ['', 'Mon', '', 'Wed', '', 'Fri', ''];
+    final dayLabels = ['', LocaleKeys.habit_detail_monday.tr(), '', LocaleKeys.habit_detail_wednesday.tr(), '', LocaleKeys.habit_detail_friday.tr(), ''];
 
     // Generate month labels for the full year (from oldest to newest)
     for (int i = 11; i >= 0; i--) {
@@ -650,7 +650,7 @@ class _OptimizedHeatmapGridState extends State<_OptimizedHeatmapGrid> {
     return CellData(
       date: date,
       intensity: isCompleted ? 1 : 0,
-      tooltip: isCompleted ? "Completed on ${date.day}/${date.month}/${date.year}" : "Not completed on ${date.day}/${date.month}/${date.year}",
+      tooltip: isCompleted ? LocaleKeys.habit_detail_tooltip_completed.tr().replaceAll('{{day}}', date.day.toString()).replaceAll('{{month}}', date.month.toString()).replaceAll('{{year}}', date.year.toString()) : LocaleKeys.habit_detail_tooltip_not_completed.tr().replaceAll('{{day}}', date.day.toString()).replaceAll('{{month}}', date.month.toString()).replaceAll('{{year}}', date.year.toString()),
     );
   }
 
@@ -668,7 +668,7 @@ class _OptimizedHeatmapGridState extends State<_OptimizedHeatmapGrid> {
   }
 
   String _getMonthAbbreviation(int month) {
-    const months = ['', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    final months = ['', LocaleKeys.habit_detail_jan.tr(), LocaleKeys.habit_detail_feb.tr(), LocaleKeys.habit_detail_mar.tr(), LocaleKeys.habit_detail_apr.tr(), LocaleKeys.habit_detail_may.tr(), LocaleKeys.habit_detail_jun.tr(), LocaleKeys.habit_detail_jul.tr(), LocaleKeys.habit_detail_aug.tr(), LocaleKeys.habit_detail_sep.tr(), LocaleKeys.habit_detail_oct.tr(), LocaleKeys.habit_detail_nov.tr(), LocaleKeys.habit_detail_dec.tr()];
     return months[month];
   }
 }
@@ -723,7 +723,7 @@ class _OptimizedHeatmapLegendState extends State<_OptimizedHeatmapLegend> {
     return Row(
       children: [
         Text(
-          "Less",
+          LocaleKeys.habit_detail_less.tr(),
           style: TextStyle(
             fontSize: 11,
             color: context.bodyMedium.color?.withValues(alpha: 0.6),
@@ -743,7 +743,7 @@ class _OptimizedHeatmapLegendState extends State<_OptimizedHeatmapLegend> {
         }),
         const SizedBox(width: 4),
         Text(
-          "More",
+          LocaleKeys.habit_detail_more.tr(),
           style: TextStyle(
             fontSize: 11,
             color: context.bodyMedium.color?.withValues(alpha: 0.6),
@@ -755,7 +755,7 @@ class _OptimizedHeatmapLegendState extends State<_OptimizedHeatmapLegend> {
 
   Widget _buildStats(BuildContext context) {
     return Text(
-      "${_cachedStats.completedDays} days completed in the last year",
+      LocaleKeys.habit_detail_heatmap_stats_description.tr().replaceAll('{{days}}', _cachedStats.completedDays.toString()),
       style: TextStyle(
         fontSize: 11,
         color: context.bodyMedium.color?.withValues(alpha: 0.7),

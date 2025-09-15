@@ -29,38 +29,38 @@ class _OnboardingInformationPageState extends State<OnboardingInformationPage> w
   int _currentStep = 0;
   bool _isTransitioning = false;
 
-  final List<HabitTip> _habitTips = [
-    HabitTip(
-      title: 'Start Small & Be Specific',
-      description: 'Begin with manageable actions that are easy to incorporate into your daily routine. Instead of "exercise more," try "do 5 push-ups every morning."',
-      icon: CupertinoIcons.circle_fill,
-      color: const Color(0xFF1DB954),
-    ),
-    HabitTip(
-      title: 'Make It Obvious',
-      description: 'Design your environment to make good habits obvious. Place your running shoes by the door, keep a water bottle on your desk, or set visual reminders.',
-      icon: CupertinoIcons.eye_fill,
-      color: const Color(0xFF0C6CF2),
-    ),
-    HabitTip(
-      title: 'Stack Your Habits',
-      description: 'Link new habits to existing ones. After I brush my teeth, I will meditate for 2 minutes. This creates a strong association that makes habits stick.',
-      icon: CupertinoIcons.layers_fill,
-      color: const Color(0xFF9B59B6),
-    ),
-    HabitTip(
-      title: 'Make It Satisfying',
-      description: 'Reward yourself immediately after completing your habit. This could be checking off a box, enjoying a favorite song, or celebrating small wins.',
-      icon: CupertinoIcons.heart_fill,
-      color: const Color(0xFFE91E63),
-    ),
-    HabitTip(
-      title: 'Track Your Progress',
-      description: 'Monitor your habit development to stay motivated. Use HabitRise, journals, or simple checkmarks. Seeing your streak grow creates momentum and accountability.',
-      icon: CupertinoIcons.chart_bar_fill,
-      color: const Color(0xFFFFC107),
-    ),
-  ];
+  List<HabitTip> get _habitTips => [
+        HabitTip(
+          title: LocaleKeys.onboarding_information_tips_start_small_title.tr(),
+          description: LocaleKeys.onboarding_information_tips_start_small_description.tr(),
+          icon: CupertinoIcons.circle_fill,
+          color: const Color(0xFF1DB954),
+        ),
+        HabitTip(
+          title: LocaleKeys.onboarding_information_tips_make_obvious_title.tr(),
+          description: LocaleKeys.onboarding_information_tips_make_obvious_description.tr(),
+          icon: CupertinoIcons.eye_fill,
+          color: const Color(0xFF0C6CF2),
+        ),
+        HabitTip(
+          title: LocaleKeys.onboarding_information_tips_stack_habits_title.tr(),
+          description: LocaleKeys.onboarding_information_tips_stack_habits_description.tr(),
+          icon: CupertinoIcons.layers_fill,
+          color: const Color(0xFF9B59B6),
+        ),
+        HabitTip(
+          title: LocaleKeys.onboarding_information_tips_make_satisfying_title.tr(),
+          description: LocaleKeys.onboarding_information_tips_make_satisfying_description.tr(),
+          icon: CupertinoIcons.heart_fill,
+          color: const Color(0xFFE91E63),
+        ),
+        HabitTip(
+          title: LocaleKeys.onboarding_information_tips_track_progress_title.tr(),
+          description: LocaleKeys.onboarding_information_tips_track_progress_description.tr(),
+          icon: CupertinoIcons.chart_bar_fill,
+          color: const Color(0xFFFFC107),
+        ),
+      ];
 
   @override
   void initState() {
@@ -395,7 +395,7 @@ class _OnboardingInformationPageState extends State<OnboardingInformationPage> w
                       ),
                       SizedBox(width: context.width(0.02)),
                       Text(
-                        'Previous',
+                        LocaleKeys.onboarding_information_previous.tr(),
                         style: context.bodyMedium.copyWith(
                           color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
                         ),
@@ -435,7 +435,7 @@ class _OnboardingInformationPageState extends State<OnboardingInformationPage> w
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      _currentStep < _habitTips.length - 1 ? 'Next' : 'Get Started',
+                      _currentStep < _habitTips.length - 1 ? LocaleKeys.onboarding_information_next.tr() : LocaleKeys.onboarding_information_get_started.tr(),
                       style: context.bodyMedium.copyWith(
                         fontWeight: FontWeight.w600,
                         color: Colors.white,

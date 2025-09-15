@@ -111,7 +111,7 @@ class _OnboardingWelcomePageState extends State<OnboardingWelcomePage> with Tick
                         color: const Color(0xFF0E291E),
                         accent: const Color(0xFF1DB954),
                         emoji: '🏃',
-                        title: 'Running',
+                        title: LocaleKeys.onboarding_pages_welcome_habit_examples_running.tr(),
                         badgeValue: 12,
                         initial: Offset(-context.width(0.025), context.height(0.09)), // top-left with responsive positioning
                         initialRotation: -0.30,
@@ -125,7 +125,7 @@ class _OnboardingWelcomePageState extends State<OnboardingWelcomePage> with Tick
                         color: const Color(0xFF0C2B57),
                         accent: const Color(0xFF0C6CF2),
                         emoji: '📚',
-                        title: 'Read Book',
+                        title: LocaleKeys.onboarding_pages_welcome_habit_examples_read_book.tr(),
                         badgeValue: 21,
                         initial: Offset(size.width - context.width(0.5) + context.width(0.1), context.height(0.1)), // top-right with responsive positioning
                         initialRotation: 0.4,
@@ -139,7 +139,7 @@ class _OnboardingWelcomePageState extends State<OnboardingWelcomePage> with Tick
                         color: const Color(0xFF2A1547),
                         accent: const Color(0xFF9B59B6),
                         emoji: '🧘‍♂️',
-                        title: 'Meditate',
+                        title: LocaleKeys.onboarding_pages_welcome_habit_examples_meditate.tr(),
                         badgeValue: 8,
                         initial: Offset(-context.width(0.025), size.height - context.height(0.36)), // bottom-left with responsive positioning
                         initialRotation: -0.2,
@@ -153,7 +153,7 @@ class _OnboardingWelcomePageState extends State<OnboardingWelcomePage> with Tick
                         color: const Color(0xFF0B2F35),
                         accent: const Color(0xFF2EC7E6),
                         emoji: '💧',
-                        title: 'Drink Water',
+                        title: LocaleKeys.onboarding_pages_welcome_habit_examples_drink_water.tr(),
                         badgeValue: 30,
                         initial: Offset(size.width - context.width(0.5) + context.width(0.012), size.height - context.height(0.36)), // bottom-right with responsive positioning
                         initialRotation: 0.2,
@@ -213,7 +213,7 @@ class _OnboardingWelcomePageState extends State<OnboardingWelcomePage> with Tick
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
                                   Text(
-                                    'Welcome to',
+                                    LocaleKeys.onboarding_pages_welcome_welcome_to.tr(),
                                     style: context.headlineSmall.copyWith(
                                       fontWeight: FontWeight.w600,
                                       color: theme.colorScheme.onSurface.withValues(alpha: 0.92),
@@ -230,7 +230,7 @@ class _OnboardingWelcomePageState extends State<OnboardingWelcomePage> with Tick
                                       ),
                                       SizedBox(height: context.height(0.006)), // Responsive spacing
                                       Text(
-                                        'HabitRise',
+                                        LocaleKeys.onboarding_pages_welcome_app_name.tr(),
                                         style: context.displaySmall.copyWith(
                                           fontWeight: FontWeight.w700,
                                           letterSpacing: 0.5,
@@ -255,7 +255,7 @@ class _OnboardingWelcomePageState extends State<OnboardingWelcomePage> with Tick
                                   child: SizedBox(
                                     width: context.width(0.9),
                                     child: Text(
-                                      'Build your dream life',
+                                      LocaleKeys.onboarding_pages_welcome_build_dream_life.tr(),
                                       style: context.headlineLarge.copyWith(
                                         fontSize: context.width(0.08), // 8% of screen width
                                         height: 1.1,
@@ -296,7 +296,7 @@ class _OnboardingWelcomePageState extends State<OnboardingWelcomePage> with Tick
                             Icon(CupertinoIcons.hand_point_right_fill, size: context.width(0.07), color: theme.colorScheme.primary), // Responsive icon size
                             SizedBox(height: context.height(0.01)), // Responsive spacing
                             Text(
-                              'Try tapping on the habit card',
+                              LocaleKeys.onboarding_pages_welcome_try_tapping.tr(),
                               style: context.titleMedium,
                               textAlign: TextAlign.center,
                             ),
@@ -315,7 +315,7 @@ class _OnboardingWelcomePageState extends State<OnboardingWelcomePage> with Tick
                         duration: const Duration(milliseconds: 600),
                         curve: Curves.easeOutCubic,
                         child: Text(
-                          'Just like that!',
+                          LocaleKeys.onboarding_pages_welcome_just_like_that.tr(),
                           style: context.titleLarge.copyWith(
                             fontWeight: FontWeight.w600,
                             fontSize: context.width(0.06), // Responsive font size
@@ -338,7 +338,7 @@ class _OnboardingWelcomePageState extends State<OnboardingWelcomePage> with Tick
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 Text(
-                                  'Change your life',
+                                  LocaleKeys.onboarding_pages_welcome_change_life.tr(),
                                   style: context.headlineLarge.copyWith(
                                     fontSize: context.width(0.08),
                                     height: 1.1,
@@ -348,7 +348,7 @@ class _OnboardingWelcomePageState extends State<OnboardingWelcomePage> with Tick
                                   textAlign: TextAlign.center,
                                 ),
                                 Text(
-                                  'one habit at a time.',
+                                  LocaleKeys.onboarding_pages_welcome_one_habit_time.tr(),
                                   style: context.headlineLarge.copyWith(
                                     fontSize: context.width(0.08),
                                     height: 1.1,
@@ -377,7 +377,7 @@ class _OnboardingWelcomePageState extends State<OnboardingWelcomePage> with Tick
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Text(
-                              'Congratulations!',
+                              LocaleKeys.onboarding_pages_welcome_congratulations.tr(),
                               style: context.headlineSmall.copyWith(
                                 fontWeight: FontWeight.w700,
                                 color: const Color(0xFF1DB954),
@@ -386,13 +386,13 @@ class _OnboardingWelcomePageState extends State<OnboardingWelcomePage> with Tick
                             ),
                             SizedBox(height: context.height(0.01)), // Responsive spacing
                             Text(
-                              'You\'ve completed your first habit!',
+                              LocaleKeys.onboarding_pages_welcome_completed_first_habit.tr(),
                               style: context.titleMedium.copyWith(),
                               textAlign: TextAlign.center,
                             ),
                             SizedBox(height: context.height(0.005)), // Responsive spacing
                             Text(
-                              'Every journey begins with a single step.',
+                              LocaleKeys.onboarding_pages_welcome_journey_begins.tr(),
                               style: context.bodyMedium.copyWith(
                                 color: Colors.white.withValues(alpha: 0.8),
                               ),
@@ -562,7 +562,7 @@ class _OnboardingWelcomePageState extends State<OnboardingWelcomePage> with Tick
     // Create a mock habit for the achievement dialog
     final mockHabit = Habit(
       id: 'onboarding_running',
-      habitName: 'Running',
+      habitName: LocaleKeys.onboarding_pages_welcome_habit_examples_running.tr(),
       emoji: '🏃',
       colorCode: 0xFF1DB954,
       completions: {},
@@ -579,7 +579,7 @@ class _OnboardingWelcomePageState extends State<OnboardingWelcomePage> with Tick
           pointsGained: 10,
           previousScore: _runningStreak - 1,
           newScore: _runningStreak,
-          message: 'Great job! You completed your first habit in the onboarding!',
+          message: LocaleKeys.onboarding_achievement_first_habit_message.tr(),
         ),
       );
 

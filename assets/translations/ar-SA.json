@@ -79,6 +79,24 @@
                 "title": "غيّر حياتك بخطوات صغيرة.",
                 "description": "مع HabitRise، البدء بخطوات صغيرة وقابلة للإدارة يجعل تطوير عادات جديدة أسهل وأكثر استدامة."
             },
+            "welcome": {
+                "welcome_to": "مرحباً بك في",
+                "app_name": "HabitRise",
+                "build_dream_life": "ابنِ حياة أحلامك",
+                "try_tapping": "جرب النقر على بطاقة العادة",
+                "just_like_that": "تماماً هكذا!",
+                "change_life": "غيّر حياتك",
+                "one_habit_time": "عادة واحدة في كل مرة.",
+                "congratulations": "تهانينا!",
+                "completed_first_habit": "لقد أكملت عادتك الأولى!",
+                "journey_begins": "كل رحلة تبدأ بخطوة واحدة.",
+                "habit_examples": {
+                    "running": "الجري",
+                    "read_book": "قراءة كتاب",
+                    "meditate": "التأمل",
+                    "drink_water": "شرب الماء"
+                }
+            },
             "routine": {
                 "title": "الروتين والتكرار يساعدان العادات على الترسخ.",
                 "description": "إنشاء روتين ثابت وتكرار الأفعال مع HabitRise هو المفتاح لجعل العادات تستمر."
@@ -93,9 +111,177 @@
             },
             "become_person": {
                 "title": "كن الشخص الذي تريد أن تكونه",
-                "aristotleHabitQuote": "نحن ما نفعله بشكل متكرر. التميز، إذن، ليس فعلاً، بل عادة."
+                "aristotleHabitQuote": "نحن ما نفعله بشكل متكرر. التميز، إذن، ليس فعلاً، بل عادة.",
+                "aristotle": "أرسطو"
             }
+        },
+        "app_features": {
+            "title": "HabitRise يساعدك على ...",
+            "subtitle": "بناء عادات دائمة مع التتبع الذكي والرؤى الشخصية",
+            "features": {
+                "smart_tracking": {
+                    "title": "تتبع العادات الذكي",
+                    "description": "تتبع عاداتك مع التذكيرات الذكية وتصور التقدم. شاهد سلاسل نجاحك تنمو واحتفل بكل معلم.",
+                    "sub_features_0": "تذكيرات يومية",
+                    "sub_features_1": "رسوم بيانية للتقدم",
+                    "sub_features_2": "تتبع السلاسل"
+                },
+                "sub_habits": {
+                    "title": "نظام العادات الفرعية",
+                    "description": "قسّم العادات المعقدة إلى عادات فرعية أصغر وقابلة للإدارة. ابنِ عادتك الرئيسية خطوة بخطوة مع الإجراءات الصغيرة.",
+                    "sub_features_0": "الإجراءات الصغيرة",
+                    "sub_features_1": "تقسيم العادات",
+                    "sub_features_2": "التتبع المتداخل"
+                },
+                "formation_rate": {
+                    "title": "معدل تكوين العادة",
+                    "description": "تتبع تقدم تكوين عاداتك مع الرؤى الذكية. شاهد مدى قربك من جعل عاداتك تثبت بشكل دائم.",
+                    "sub_features_0": "توقع النجاح",
+                    "sub_features_1": "تتبع التكوين",
+                    "sub_features_2": "تحليلات التقدم"
+                },
+                "share_habits": {
+                    "title": "مشاركة العادات",
+                    "description": "شارك تقدم عاداتك مع صور جميلة وقابلة للتخصيص. اختر من تصاميم مختلفة لعرض إنجازاتك.",
+                    "sub_features_0": "تصاميم مخصصة",
+                    "sub_features_1": "مشاركة التقدم",
+                    "sub_features_2": "صور الإنجازات"
+                }
+            },
+            "formation_score": "نقاط التكوين",
+            "previous": "السابق",
+            "next": "التالي",
+            "start": "ابدأ"
+        },
+        "information": {
+            "tips": {
+                "start_small": {
+                    "title": "ابدأ صغيراً وكن محدداً",
+                    "description": "ابدأ بأفعال قابلة للإدارة وسهلة الدمج في روتينك اليومي. بدلاً من \"مارس الرياضة أكثر\"، جرب \"قم بعمل 5 تمارين ضغط كل صباح.\""
+                },
+                "make_obvious": {
+                    "title": "اجعله واضحاً",
+                    "description": "صمم بيئتك لجعل العادات الجيدة واضحة. ضع حذاء الجري عند الباب، احتفظ بزجاجة ماء على مكتبك، أو ضع تذكيرات بصرية."
+                },
+                "stack_habits": {
+                    "title": "رص عاداتك",
+                    "description": "اربط عادات جديدة بعادات موجودة. بعد أن أغسل أسناني، سأتأمل لمدة دقيقتين. هذا يخلق ارتباطاً قوياً يجعل العادات تثبت."
+                },
+                "make_satisfying": {
+                    "title": "اجعله مرضياً",
+                    "description": "كافئ نفسك فوراً بعد إكمال عادتك. يمكن أن يكون هذا وضع علامة في مربع، الاستمتاع بأغنية مفضلة، أو الاحتفال بالانتصارات الصغيرة."
+                },
+                "track_progress": {
+                    "title": "تتبع تقدمك",
+                    "description": "راقب تطور عاداتك للبقاء متحمساً. استخدم HabitRise، أو المجلات، أو علامات بسيطة. رؤية سلسلة نجاحك تنمو تخلق زخماً ومسؤولية."
+                }
+            },
+            "previous": "السابق",
+            "next": "التالي",
+            "get_started": "ابدأ الآن"
+        },
+        "rating": {
+            "title": "لقد اكتشفت للتو\nميزات HabitRise الفريدة",
+            "description": "لمساعدتنا في الوصول إلى المزيد من الأشخاص الذين يحتاجون مساعدة في بناء عادات أفضل، هل يمكنك تقييم تطبيقنا؟",
+            "thank_you": "شكراً لك!",
+            "feedback_message": "ملاحظاتك تساعدنا على تحسين HabitRise والوصول إلى المزيد من الأشخاص الذين يحتاجون مساعدة في بناء عادات أفضل.",
+            "rate_title": "قيّم HabitRise",
+            "rate_message": "شكراً لك على اهتمامك بتقييم HabitRise! يمكنك تقييمنا على App Store أو Google Play Store.",
+            "continue": "متابعة",
+            "maybe_later": "ربما لاحقاً",
+            "rate_button": "قيّم HabitRise"
+        },
+        "achievement": {
+            "first_habit_message": "أحسنت! لقد أكملت عادتك الأولى في التعريف بالتطبيق!"
         }
+    },
+    "habit_detail": {
+        "habitDetail": "تفاصيل العادة",
+        "areYouSureToDeleteHabit": "هل أنت متأكد من حذف هذه العادة؟",
+        "calendar": "التقويم",
+        "share": "مشاركة",
+        "archive": "أرشفة",
+        "archive_title": "أرشفة العادة",
+        "archive_confirmation": "هل أنت متأكد من أنك تريد أرشفة '{{habitName}}'؟",
+        "archive_info": "يمكنك استعادتها لاحقاً من قسم العادات المؤرشفة.",
+        "detail": "التفاصيل",
+        "habitData": "بيانات العادة",
+        "unlock": "فتح",
+        "days": "أيام",
+        "heatmap_title": "خريطة حرارة العادة",
+        "heatmap_no_data": "لا توجد بيانات متاحة بعد. ابدأ في تتبع عادتك لرؤية خريطة الحرارة!",
+        "view_full": "عرض كامل",
+        "less": "أقل",
+        "more": "أكثر",
+        "insights_achievements": "الرؤى والإنجازات",
+        "achievements": "الإنجازات",
+        "new": "جديد",
+        "smart_insights": "رؤى ذكية",
+        "achievement_week_warrior": "محارب الأسبوع",
+        "achievement_monthly_master": "سيد الشهر",
+        "achievement_habit_hero": "بطل العادة",
+        "achievement_perfectionist": "الكمالي",
+        "achievement_consistency_champion": "بطل الثبات",
+        "achievement_weekend_warrior": "محارب نهاية الأسبوع",
+        "achievement_weekly_checkin": "التحقق الأسبوعي",
+        "achievement_formation_journey": "رحلة التكوين",
+        "milestones": "المعالم",
+        "milestone_one_week_warrior": "محارب الأسبوع الواحد",
+        "milestone_monthly_master": "سيد الشهر",
+        "milestone_habit_hero": "بطل العادة",
+        "milestone_quarter_champion": "بطل الربع",
+        "milestone_streak_pro": "محترف السلسلة",
+        "milestone_half_year_hero": "بطل نصف السنة",
+        "milestone_one_year_legend": "أسطورة السنة الواحدة",
+        "progress": "التقدم",
+        "formation": "التكوين",
+        
+        "achievement_formation_threshold": "وصلت إلى عتبة التكوين!",
+        "achievement_consistency_description": "أنت تؤدي بنسبة {{percentage}}% من أفضل سلسلة لك!",
+        "achievement_weekend_description": "تحافظ على ثبات رائع حتى في عطلة نهاية الأسبوع!",
+        "achievement_weekly_description": "فوتت {{days}} أيام هذا الأسبوع. الغد بداية جديدة!",
+        "achievement_formation_description": "أنت {{percentage}}% في طريق بناء هذه العادة. المسارات العصبية تتقوى!",
+        "quote_aristotle": "التميز ليس عملاً واحداً، بل عادة. أنت لست ما تفعله أحياناً؛ أنت ما تفعله باستمرار.",
+        "quote_aristotle_author": "أرسطو",
+        "quote_collier": "النجاح هو مجموع الجهود الصغيرة، المتكررة يوماً بعد يوم.",
+        "quote_collier_author": "روبرت كولير",
+        "quote_twain": "سر التقدم هو البدء.",
+        "quote_twain_author": "مارك توين",
+        "quote_lao_tzu": "رحلة الألف ميل تبدأ بخطوة واحدة.",
+        "quote_lao_tzu_author": "لاو تزو",
+        "monday": "الاثنين",
+        "tuesday": "الثلاثاء",
+        "wednesday": "الأربعاء",
+        "thursday": "الخميس",
+        "friday": "الجمعة",
+        "saturday": "السبت",
+        "sunday": "الأحد",
+        "mon": "اثن",
+        "tue": "ثلث",
+        "wed": "أرب",
+        "thu": "خمس",
+        "fri": "جمع",
+        "sat": "سبت",
+        "sun": "أحد",
+        "jan": "يناير",
+        "feb": "فبراير",
+        "mar": "مارس",
+        "apr": "أبريل",
+        "may": "مايو",
+        "jun": "يونيو",
+        "jul": "يوليو",
+        "aug": "أغسطس",
+        "sep": "سبتمبر",
+        "oct": "أكتوبر",
+        "nov": "نوفمبر",
+        "dec": "ديسمبر",
+        "tooltip_completed": "مكتمل في {{day}}/{{month}}/{{year}}",
+        "tooltip_not_completed": "غير مكتمل في {{day}}/{{month}}/{{year}}",
+        "achievement_week_warrior_description": "سلسلة {{streak}} يوم!",
+        "achievement_monthly_master_description": "سلسلة 30+ يوم!",
+        "achievement_perfectionist_description": "معدل نجاح {{rate}}%!",
+        "heatmap_stats_description": "{{days}} يوم مكتمل في السنة الماضية",
+        "last_7_days": "آخر 7 أيام"
     },
     "habit": {
         "add_habit": "إضافة عادة",
@@ -123,16 +309,6 @@
             "evening": "مساء",
             "night": "ليل"
         }
-    },
-    "habit_detail": {
-        "habitDetail": "تفاصيل العادة",
-        "areYouSureToDeleteHabit": "هل أنت متأكد من حذف هذه العادة؟",
-        "calendar": "التقويم",
-        "detail": "التفاصيل",
-        "habitData": "بيانات العادة",
-        "archive_title": "الأرشيف",
-        "archive_confirmation": "هل أنت متأكد من أرشفة {{habitName}}؟",
-        "archive_info": "العادات المؤرشفة لن تظهر في الشاشة الرئيسية"
     },
     "edit_habit": {
         "edit_habit": "تعديل عادة",
