@@ -99,6 +99,7 @@ class EditHabitNotifier extends AutoDisposeNotifier<Habit?> {
           title: habitName,
           body: LocaleKeys.reminder_habit_reminder_message.tr(),
           oldReminder: currentReminderModel,
+          reminderToSchedule: reminderModel,
         );
       }
 

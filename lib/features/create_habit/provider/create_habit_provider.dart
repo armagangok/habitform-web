@@ -137,13 +137,14 @@ class CreateHabitNotifier extends AutoDisposeNotifier<CreateHabitState> {
         difficulty: state.difficulty,
       );
 
-      await ref.read(homeProvider.notifier).createHabit(habit);
+      await ref.watch(homeProvider.notifier).createHabit(habit);
 
       if (reminder != null) {
         LogHelper.shared.debugPrint('Scheduling reminder for new habit: $reminder');
-        await ref.read(reminderProvider.notifier).scheduleReminder(
+        await ref.watch(reminderProvider.notifier).scheduleReminder(
               title: habitName,
               body: LocaleKeys.reminder_habit_reminder_message.tr(),
+              reminderToSchedule: reminder,
             );
       } else {
         LogHelper.shared.debugPrint('No reminder to schedule for new habit');

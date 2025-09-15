@@ -6,6 +6,8 @@ import 'package:timezone/timezone.dart' as tz;
 
 import '/features/reminder/models/days/days_enum.dart';
 import '/features/reminder/models/reminder/reminder_model.dart';
+import '/models/habit/habit_extension.dart';
+import '/services/habit_service/habit_service_interface.dart';
 import '../../core.dart';
 
 /// Smart notification manager that handles iOS 64-notification limit
@@ -26,8 +28,11 @@ class SmartNotificationManager {
     String body,
   ) async {
     try {
-      // Get all upcoming notification times
-      final upcomingNotifications = _getUpcomingNotifications(reminders, title, body);
+      // Ensure notification channel is created (Android)
+      await _ensureNotificationChannel();
+
+      // Get all upcoming notification times with habit names
+      final upcomingNotifications = await _getUpcomingNotificationsWithHabitNames(reminders);
 
       // Sort by priority and time
       upcomingNotifications.sort((a, b) {
@@ -61,22 +66,38 @@ class SmartNotificationManager {
     }
   }
 
-  /// Get all upcoming notifications from reminders
-  List<UpcomingNotification> _getUpcomingNotifications(
+  /// Get all upcoming notifications with individual habit names
+  Future<List<UpcomingNotification>> _getUpcomingNotificationsWithHabitNames(
     List<ReminderModel> reminders,
-    String title,
-    String body,
-  ) {
+  ) async {
     final List<UpcomingNotification> notifications = [];
     final now = tz.TZDateTime.now(tz.local);
+
+    // Get all active habits to match reminder IDs with habit names
+    final activeHabits = await habitService.getHabits();
+    final habitMap = {for (var habit in activeHabits) habit.reminderModel?.id: habit};
 
     for (final reminder in reminders) {
       if (!reminder.hasAnyReminders) continue;
 
+      final habit = habitMap[reminder.id];
+      if (habit == null) {
+        // Skip if habit not found (might be archived)
+        LogHelper.shared.debugPrint('Skipping reminder ${reminder.id} - habit not found in active habits (likely archived)');
+        continue;
+      }
+
+      // Double-check: ensure the habit is not archived
+      if (habit.isArchived) {
+        LogHelper.shared.debugPrint('Skipping reminder ${reminder.id} - habit is archived');
+        continue;
+      }
+
       final times = reminder.allReminderTimes;
       final days = reminder.days ?? Days.values;
 
-      for (final time in times) {
+      for (int timeIndex = 0; timeIndex < times.length; timeIndex++) {
+        final time = times[timeIndex];
         for (final day in days) {
           final scheduledTime = _getNextInstanceOfDay(time, day);
 
@@ -85,14 +106,15 @@ class SmartNotificationManager {
             final priority = _calculatePriority(reminder, time, day);
 
             notifications.add(UpcomingNotification(
-              id: _generateNotificationId(reminder.id, day, time),
+              id: _generateNotificationId(reminder.id, day, time, timeIndex),
               reminderId: reminder.id,
-              title: title,
-              body: body,
+              title: habit.habitName, // Use individual habit name as title
+              body: 'Time to complete your habit!', // Use generic body
               scheduledTime: scheduledTime,
               day: day,
               time: time,
               priority: priority,
+              timeIndex: timeIndex,
             ));
           }
         }
@@ -161,18 +183,18 @@ class SmartNotificationManager {
     return scheduledDateTime;
   }
 
-  /// Generate unique notification ID
-  int _generateNotificationId(int reminderId, Days day, DateTime time) {
-    return reminderId + (day.index * 100) + time.hour * 60 + time.minute;
+  /// Generate unique notification ID (matching NotificationHelper's approach)
+  int _generateNotificationId(int reminderId, Days day, DateTime time, int timeIndex) {
+    return reminderId + (day.index * 100) + timeIndex;
   }
 
   /// Schedule a single notification
   Future<void> _scheduleSingleNotification(UpcomingNotification notification) async {
     try {
       final androidDetails = AndroidNotificationDetails(
-        'HabitRise_Smart_Reminder',
-        'Smart Habit Reminder',
-        channelDescription: 'Intelligent habit reminders within iOS limits',
+        'HabitRise_Habit_Reminder', // Use same channel as NotificationHelper
+        'Habit Reminder', // Use same channel name as NotificationHelper
+        channelDescription: 'Channel for habit reminder notifications', // Use same description as NotificationHelper
         importance: Importance.high,
         priority: Priority.high,
         enableVibration: true,
@@ -192,11 +214,8 @@ class SmartNotificationManager {
       final timeString = "${notification.time.hour.toString().padLeft(2, '0')}:${notification.time.minute.toString().padLeft(2, '0')}";
 
       final payloadData = {
-        'reminderId': notification.reminderId,
         'time': timeString,
-        'day': notification.day.name,
-        'priority': notification.priority,
-        'scheduledTime': notification.scheduledTime.toIso8601String(),
+        'days': [notification.day.name], // Match NotificationHelper format
       };
 
       await _notificationPlugin.zonedSchedule(
@@ -232,6 +251,24 @@ class SmartNotificationManager {
     // This could be stored in SharedPreferences or Hive for persistence
     // For now, we'll just log it
     LogHelper.shared.debugPrint('Stored metadata for ${notifications.length} notifications');
+  }
+
+  /// Ensure notification channel is created (Android)
+  Future<void> _ensureNotificationChannel() async {
+    if (Platform.isAndroid) {
+      final androidPlugin = _notificationPlugin.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>();
+      if (androidPlugin != null) {
+        const channel = AndroidNotificationChannel(
+          'HabitRise_Habit_Reminder', // Channel ID
+          'Habit Reminder', // Channel Name
+          description: 'Channel for habit reminder notifications',
+          importance: Importance.high,
+          enableVibration: true,
+          showBadge: true,
+        );
+        await androidPlugin.createNotificationChannel(channel);
+      }
+    }
   }
 
   /// Reschedule notifications when app becomes active
@@ -273,6 +310,7 @@ class UpcomingNotification {
   final Days day;
   final DateTime time;
   final int priority;
+  final int timeIndex;
 
   UpcomingNotification({
     required this.id,
@@ -283,5 +321,6 @@ class UpcomingNotification {
     required this.day,
     required this.time,
     required this.priority,
+    required this.timeIndex,
   });
 }

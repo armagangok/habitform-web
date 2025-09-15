@@ -1,7 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '/core/core.dart';
+import '/core/helpers/notifications/notification_helper.dart';
 import '/models/models.dart';
+import '/services/app_lifecycle_service.dart';
 import '../../home/provider/home_provider.dart';
 import '../../reminder/service/reminder_service.dart';
 import '../../share_habit/share_habit_page.dart';
@@ -107,10 +109,45 @@ class ActionButtons extends ConsumerWidget {
           CupertinoDialogAction(
             isDestructiveAction: false,
             onPressed: () async {
+              LogHelper.shared.debugPrint('🔄 ARCHIVE PROCESS STARTED for habit: ${habit.habitName} (ID: ${habit.id})');
+
               Navigator.pop(context);
+
+              LogHelper.shared.debugPrint('📱 Step 1: Notifying app lifecycle service that archiving is starting');
+              // Notify app lifecycle service that archiving is starting
+              AppLifecycleService.shared.notifyArchivingStarted();
+
+              LogHelper.shared.debugPrint('🔍 Step 2: Analyzing notification IDs before cancellation');
+              // Debug: Analyze notification IDs before cancellation
+              if (habit.reminderModel != null) {
+                LogHelper.shared.debugPrint('📋 Habit has reminder model: ${habit.reminderModel}');
+                await NotificationHelper.shared.debugNotificationIdsForHabit(
+                  habit.habitName,
+                  habit.reminderModel!.id,
+                  habit.reminderModel!.days,
+                );
+              } else {
+                LogHelper.shared.debugPrint('❌ Habit has NO reminder model');
+              }
+
+              LogHelper.shared.debugPrint('🚫 Step 3: Cancelling notifications BEFORE archiving the habit');
+              // Cancel notifications BEFORE archiving the habit
+              if (habit.reminderModel != null) {
+                LogHelper.shared.debugPrint('🔄 Calling ReminderService.cancelAllReminderNotifications...');
+                await ReminderService.cancelAllReminderNotifications(habit.reminderModel);
+                LogHelper.shared.debugPrint('✅ Notifications cancelled for habit being archived: ${habit.id}');
+              } else {
+                LogHelper.shared.debugPrint('⏭️ Skipping notification cancellation - no reminder model');
+              }
+
+              LogHelper.shared.debugPrint('📦 Step 4: Calling homeProvider.archiveHabit...');
               await ref.read(homeProvider.notifier).archiveHabit(habit);
-              ReminderService.cancelAllReminderNotifications(habit.reminderModel);
+              LogHelper.shared.debugPrint('✅ HomeProvider.archiveHabit completed');
+
+              LogHelper.shared.debugPrint('🔙 Step 5: Navigating back');
               navigator.pop();
+
+              LogHelper.shared.debugPrint('🎉 ARCHIVE PROCESS COMPLETED for habit: ${habit.habitName}');
             },
             child: Text(LocaleKeys.habit_detail_archive_title.tr()),
           ),

@@ -6,10 +6,18 @@ import '../provider/archived_habits_provider.dart';
 
 class ArchivedHabitCard extends ConsumerWidget {
   final Habit habit;
+  final bool isSelectionMode;
+  final bool isSelected;
+  final VoidCallback? onLongPress;
+  final VoidCallback? onTap;
 
   const ArchivedHabitCard({
     super.key,
     required this.habit,
+    this.isSelectionMode = false,
+    this.isSelected = false,
+    this.onLongPress,
+    this.onTap,
   });
 
   @override
@@ -21,28 +29,40 @@ class ArchivedHabitCard extends ConsumerWidget {
 
     final archivedDateString = archivedDate != null ? DateFormat('yyyy-MM-dd').format(archivedDate) : "";
 
-    return CupertinoListSection.insetGrouped(
-      children: [
-        CupertinoListTile(
-          onTap: () {
-            showModalPopUpForActions(context);
-          },
-          leading: Text(
-            habitEmoji,
-            style: context.titleLarge.copyWith(fontSize: 24),
+    return GestureDetector(
+      onLongPress: isSelectionMode ? null : onLongPress,
+      child: CupertinoListSection.insetGrouped(
+        backgroundColor: isSelected ? CupertinoTheme.of(context).primaryColor.withValues(alpha: 0.1) : CupertinoColors.systemBackground,
+        children: [
+          CupertinoListTile(
+            onTap: isSelectionMode
+                ? onTap
+                : () {
+                    showModalPopUpForActions(context);
+                  },
+            leading: isSelectionMode
+                ? Icon(
+                    isSelected ? CupertinoIcons.checkmark_circle_fill : CupertinoIcons.circle,
+                    color: isSelected ? CupertinoTheme.of(context).primaryColor : CupertinoColors.systemGrey,
+                    size: 24,
+                  )
+                : Text(
+                    habitEmoji,
+                    style: context.titleLarge.copyWith(fontSize: 24),
+                  ),
+            title: Text(habit.habitName),
+            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+            subtitle: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (habitDescription != null && habitDescription.isNotEmpty) Text(habitDescription),
+                Text("${LocaleKeys.archived_habits_archived_on.tr()} $archivedDateString"),
+              ],
+            ),
+            trailing: isSelectionMode ? null : const CupertinoListTileChevron(),
           ),
-          title: Text(habit.habitName),
-          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-          subtitle: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              if (habitDescription != null && habitDescription.isNotEmpty) Text(habitDescription),
-              Text("${LocaleKeys.archived_habits_archived_on.tr()} $archivedDateString"),
-            ],
-          ),
-          trailing: CupertinoListTileChevron(),
-        ),
-      ],
+        ],
+      ),
     );
   }
 

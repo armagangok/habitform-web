@@ -55,6 +55,161 @@ class _NotificationsPageState extends State<NotificationsPage> with SingleTicker
     }
   }
 
+  Future<void> _deleteNotification(PendingNotificationRequest notification) async {
+    try {
+      // Parse notification info for better dialog
+      String dayInfo = 'this notification';
+      String timeInfo = '';
+
+      Map<String, dynamic>? payloadData;
+      if (notification.payload != null && notification.payload!.isNotEmpty) {
+        try {
+          payloadData = jsonDecode(notification.payload!);
+          final timeString = payloadData?['time'] ?? '';
+          final days = List<String>.from(payloadData?['days'] ?? []);
+
+          dayInfo = _getSpecificDayForNotification(notification, days);
+          if (timeString.isNotEmpty) {
+            timeInfo = ' at $timeString';
+          }
+        } catch (e) {
+          LogHelper.shared.debugPrint('Error parsing payload for delete dialog: $e');
+        }
+      }
+
+      // Show confirmation dialog
+      final confirmed = await showCupertinoDialog<bool>(
+        context: context,
+        builder: (context) => CupertinoAlertDialog(
+          title: Text('Delete Reminder'),
+          content: Text('Are you sure you want to delete the reminder for $dayInfo$timeInfo?'),
+          actions: [
+            CupertinoDialogAction(
+              child: Text(LocaleKeys.common_cancel.tr()),
+              onPressed: () => Navigator.of(context).pop(false),
+            ),
+            CupertinoDialogAction(
+              isDestructiveAction: true,
+              child: Text(LocaleKeys.common_delete.tr()),
+              onPressed: () => Navigator.of(context).pop(true),
+            ),
+          ],
+        ),
+      );
+
+      if (confirmed == true) {
+        // Cancel the specific notification
+        await NotificationHelper.shared.cancelNotification(notification.id);
+
+        // Reload notifications to update the list
+        await _loadNotifications();
+
+        // Show success message
+        if (mounted) {
+          AppFlushbar.shared.successFlushbar(
+            'Reminder for $dayInfo deleted successfully',
+          );
+        }
+      }
+    } catch (e) {
+      LogHelper.shared.debugPrint('Error deleting notification: $e');
+      if (mounted) {
+        AppFlushbar.shared.errorFlushbar(
+          'Failed to delete notification',
+        );
+      }
+    }
+  }
+
+  Future<void> _deleteAllNotificationsForHabit(String habitName, List<PendingNotificationRequest> notifications) async {
+    try {
+      // Show confirmation dialog
+      final confirmed = await showCupertinoDialog<bool>(
+        context: context,
+        builder: (context) => CupertinoAlertDialog(
+          title: Text('Delete All Reminders'),
+          content: Text('Are you sure you want to delete all ${notifications.length} reminders for "$habitName"?'),
+          actions: [
+            CupertinoDialogAction(
+              child: Text(LocaleKeys.common_cancel.tr()),
+              onPressed: () => Navigator.of(context).pop(false),
+            ),
+            CupertinoDialogAction(
+              isDestructiveAction: true,
+              child: Text(LocaleKeys.common_delete.tr()),
+              onPressed: () => Navigator.of(context).pop(true),
+            ),
+          ],
+        ),
+      );
+
+      if (confirmed == true) {
+        // Cancel all notifications for this habit
+        for (final notification in notifications) {
+          await NotificationHelper.shared.cancelNotification(notification.id);
+        }
+
+        // Reload notifications to update the list
+        await _loadNotifications();
+
+        // Show success message
+        if (mounted) {
+          AppFlushbar.shared.successFlushbar(
+            'All reminders for "$habitName" deleted successfully',
+          );
+        }
+      }
+    } catch (e) {
+      LogHelper.shared.debugPrint('Error deleting all notifications: $e');
+      if (mounted) {
+        AppFlushbar.shared.errorFlushbar(
+          'Failed to delete all reminders',
+        );
+      }
+    }
+  }
+
+  /// Determine which specific day a notification represents based on its ID and payload
+  String _getSpecificDayForNotification(PendingNotificationRequest notification, List<String> days) {
+    if (days.isEmpty) {
+      return 'Unknown Day';
+    }
+
+    if (days.length == 1) {
+      return days.first;
+    }
+
+    // For multiple days, try to infer the specific day from the notification ID
+    // This is based on the notification ID calculation: baseId + (dayIndex * 100) + timeIndex
+    try {
+      final notificationId = notification.id;
+
+      // Try to find which day this notification belongs to by checking the ID pattern
+      // We'll use modulo 100 to get the day index component
+      final dayComponent = notificationId % 100;
+
+      // Map day indices to day names (assuming Days enum order: Monday=0, Tuesday=1, etc.)
+      const dayNames = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+      const shortDayNames = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+
+      if (dayComponent < dayNames.length) {
+        // Try to match with the actual days in the payload
+        final dayName = dayNames[dayComponent];
+        final shortDayName = shortDayNames[dayComponent];
+
+        // Check if this day is in the actual days list
+        if (days.any((day) => day.toLowerCase().contains(dayName.toLowerCase()) || day.toLowerCase().contains(shortDayName.toLowerCase()))) {
+          return shortDayName;
+        }
+      }
+    } catch (e) {
+      LogHelper.shared.debugPrint('Error determining specific day: $e');
+    }
+
+    // Fallback: show first day or count
+    return days.isNotEmpty ? days.first : 'Unknown Day';
+  }
+
   Map<String, List<PendingNotificationRequest>> _groupNotificationsByHabit() {
     final Map<String, List<PendingNotificationRequest>> grouped = {};
     for (var notification in _notifications) {
@@ -105,21 +260,53 @@ class _NotificationsPageState extends State<NotificationsPage> with SingleTicker
       }
     }
 
+    // Determine the specific day for this notification
+    String dayInfo = _getSpecificDayForNotification(notification, days);
+
     return CupertinoListTile(
       padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-      leading: const Icon(
-        CupertinoIcons.clock_fill,
-        color: CupertinoColors.systemGrey,
-        size: 22,
+      leading: Container(
+        width: 40,
+        height: 40,
+        decoration: BoxDecoration(
+          color: CupertinoColors.systemGrey6,
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: const Icon(
+          CupertinoIcons.clock_fill,
+          color: CupertinoColors.systemGrey,
+          size: 20,
+        ),
       ),
       title: Text(
-        timeString.isNotEmpty ? timeString : 'Scheduled',
+        dayInfo,
+        style: context.titleSmall.copyWith(
+          fontWeight: FontWeight.w600,
+        ),
       ),
-      subtitle: days.isNotEmpty
-          ? Text(
-              days.join(', '),
-            )
-          : null,
+      subtitle: Text(
+        timeString.isNotEmpty ? 'At $timeString' : 'Scheduled',
+        style: context.bodySmall.copyWith(
+          color: CupertinoColors.systemGrey,
+        ),
+      ),
+      trailing: CupertinoButton(
+        padding: EdgeInsets.zero,
+        minSize: 0,
+        onPressed: () => _deleteNotification(notification),
+        child: Container(
+          padding: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            color: CupertinoColors.systemRed.withValues(alpha: 0.1),
+            borderRadius: BorderRadius.circular(6),
+          ),
+          child: const Icon(
+            CupertinoIcons.trash,
+            color: CupertinoColors.systemRed,
+            size: 16,
+          ),
+        ),
+      ),
     );
   }
 
@@ -152,6 +339,18 @@ class _NotificationsPageState extends State<NotificationsPage> with SingleTicker
               color: CupertinoColors.systemGrey,
             ),
           ),
+          trailing: notifications.length > 1
+              ? CupertinoButton(
+                  padding: EdgeInsets.zero,
+                  minSize: 0,
+                  onPressed: () => _deleteAllNotificationsForHabit(habitName, notifications),
+                  child: const Icon(
+                    CupertinoIcons.trash_circle,
+                    color: CupertinoColors.systemRed,
+                    size: 24,
+                  ),
+                )
+              : null,
           onTap: () {
             setState(() {
               _expandedStates[habitName] = !isExpanded;

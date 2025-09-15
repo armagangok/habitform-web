@@ -37,7 +37,7 @@ void main() async {
   await AppDefaultsService().initializeAppDefaults();
 
   // Initialize app lifecycle service for smart notifications
-  AppLifecycleService().initialize();
+  AppLifecycleService.shared.initialize();
 
   // Setup habit category providers
   final habitCategoryOverrides = await setupHabitCategoryProviders();

@@ -7,6 +7,10 @@ import '/services/habit_service/habit_service_interface.dart';
 /// Uygulama yaşam döngüsü servis sınıfı.
 /// Bu sınıf, uygulama yaşam döngüsü olaylarını dinler ve gerekli işlemleri tetikler.
 class AppLifecycleService with WidgetsBindingObserver {
+  AppLifecycleService._();
+  static final AppLifecycleService _instance = AppLifecycleService._();
+  static AppLifecycleService get shared => _instance;
+
   bool _initialized = false;
   final SmartNotificationManager _notificationManager = SmartNotificationManager.shared;
 
@@ -14,7 +18,9 @@ class AppLifecycleService with WidgetsBindingObserver {
   DateTime? _backgroundTime;
   static const Duration _minBackgroundDuration = Duration(seconds: 30);
 
-  AppLifecycleService();
+  // Track when archiving operations are in progress to prevent race conditions
+  DateTime? _lastArchivingOperation;
+  static const Duration _archivingCooldown = Duration(seconds: 5);
 
   /// Servisi başlatır ve yaşam döngüsü olaylarını dinlemeye başlar
   void initialize() {
@@ -51,6 +57,12 @@ class AppLifecycleService with WidgetsBindingObserver {
   /// Handle app resumed - reschedule notifications if needed
   Future<void> _handleAppResumed() async {
     try {
+      // Check if we're in the cooldown period after an archiving operation
+      if (_isInArchivingCooldown) {
+        LogHelper.shared.debugPrint('🛡️ APP LIFECYCLE: Skipping notification rescheduling - archiving operation cooldown active');
+        return;
+      }
+
       // Check if app was in background long enough to warrant rescheduling
       final now = DateTime.now();
       final backgroundDuration = _backgroundTime != null ? now.difference(_backgroundTime!) : Duration.zero;
@@ -133,5 +145,20 @@ class AppLifecycleService with WidgetsBindingObserver {
   Future<void> forceRescheduleNotifications() async {
     LogHelper.shared.debugPrint('Force rescheduling notifications...');
     await _rescheduleNotifications();
+  }
+
+  /// Notify that an archiving operation has started
+  /// This prevents app lifecycle rescheduling during archiving
+  void notifyArchivingStarted() {
+    _lastArchivingOperation = DateTime.now();
+    LogHelper.shared.debugPrint('🛡️ APP LIFECYCLE: Archiving operation started, notification rescheduling will be delayed for ${_archivingCooldown.inSeconds} seconds');
+  }
+
+  /// Check if we're in the cooldown period after an archiving operation
+  bool get _isInArchivingCooldown {
+    if (_lastArchivingOperation == null) return false;
+    final now = DateTime.now();
+    final timeSinceArchiving = now.difference(_lastArchivingOperation!);
+    return timeSinceArchiving < _archivingCooldown;
   }
 }

@@ -284,7 +284,11 @@
         "app_notification_settings": "App Notification Settings",
         "scheduled_notifications": "Scheduled Notifications",
         "no_scheduled_notifications": "No scheduled notifications",
-        "reminders": "reminders"
+        "reminders": "reminders",
+        "delete_notification": "Delete Notification",
+        "delete_notification_confirmation": "Are you sure you want to delete this notification?",
+        "notification_deleted": "Notification deleted successfully",
+        "delete_notification_error": "Failed to delete notification"
     },
     "archived_habits": {
         "title": "Archived Habits",
@@ -298,7 +302,14 @@
         "recover_habit": "Recover Habit",
         "delete_confirmation_title": "Delete Habit",
         "delete_confirmation_message": "Are you sure you want to delete this habit: ",
-        "delete_confirmation_warning": "This action cannot be undone!"
+        "delete_confirmation_warning": "This action cannot be undone!",
+        "select_mode": "Select Mode",
+        "selected_count": "selected",
+        "select_all": "Select All",
+        "deselect_all": "Deselect All",
+        "delete_selected_title": "Delete Selected Habits",
+        "delete_selected_message": "Are you sure you want to delete {count} habit(s)?",
+        "delete_selected_success": "{count} habit(s) deleted successfully"
     },
     "membership_info": {
         "title": "Membership Info",

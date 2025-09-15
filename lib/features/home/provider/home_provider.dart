@@ -7,6 +7,7 @@ import '/features/reminder/service/reminder_service.dart';
 import '/models/completion_entry/completion_entry.dart';
 import '/models/habit/habit_extension.dart';
 import '/models/habit/habit_model.dart';
+import '/services/app_lifecycle_service.dart';
 import '/services/habit_service/habit_service_interface.dart';
 import 'home_state.dart';
 
@@ -53,11 +54,37 @@ class HomeNotifier extends AsyncNotifier<HomeState> {
 
   /// Archives a habit by moving it to the archived habits storage
   Future<void> archiveHabit(Habit habit) async {
+    LogHelper.shared.debugPrint('🏠 HOME PROVIDER: archiveHabit called for habit: ${habit.habitName} (ID: ${habit.id})');
+
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(() async {
+      LogHelper.shared.debugPrint('🏠 Step 1: Setting state to loading');
+
+      LogHelper.shared.debugPrint('🏠 Step 2: Notifying app lifecycle service (backup)');
+      // Notify app lifecycle service that archiving is starting (backup)
+      AppLifecycleService.shared.notifyArchivingStarted();
+
+      LogHelper.shared.debugPrint('🏠 Step 3: Backup notification cancellation');
+      // Cancel notifications before archiving (backup in case UI doesn't do it)
+      if (habit.reminderModel != null) {
+        LogHelper.shared.debugPrint('🏠 Habit has reminder model, cancelling notifications (backup)');
+        await ReminderService.cancelAllReminderNotifications(habit.reminderModel);
+        LogHelper.shared.debugPrint('🏠 Backup: Cancelled notifications for habit being archived: ${habit.id}');
+      } else {
+        LogHelper.shared.debugPrint('🏠 Habit has NO reminder model (backup)');
+      }
+
+      LogHelper.shared.debugPrint('🏠 Step 4: Calling habitService.archiveHabit...');
       await habitService.archiveHabit(habit);
-      return await fetchHabits();
+      LogHelper.shared.debugPrint('🏠 habitService.archiveHabit completed');
+
+      LogHelper.shared.debugPrint('🏠 Step 5: Fetching updated habits...');
+      final result = await fetchHabits();
+      LogHelper.shared.debugPrint('🏠 fetchHabits completed, returning result');
+      return result;
     });
+
+    LogHelper.shared.debugPrint('🏠 HOME PROVIDER: archiveHabit completed for habit: ${habit.habitName}');
   }
 
   /// Toggles the completion status of a habit for a specific date
@@ -161,7 +188,7 @@ class HomeNotifier extends AsyncNotifier<HomeState> {
       final habit = await habitService.getHabit(habitId);
       if (habit != null) {
         // Cancel all reminder notifications before archiving
-        ReminderService.cancelAllReminderNotifications(habit.reminderModel);
+        await ReminderService.cancelAllReminderNotifications(habit.reminderModel);
       }
 
       await habitService.deleteHabit(habitId);

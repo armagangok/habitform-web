@@ -54,10 +54,17 @@ final class ReminderService {
 
   /// Cancel all reminder notifications for a habit (including multiple reminders)
   static Future<void> cancelAllReminderNotifications(ReminderModel? reminderModel) async {
-    if (reminderModel == null) return;
+    LogHelper.shared.debugPrint('🔔 REMINDER SERVICE: cancelAllReminderNotifications called');
 
+    if (reminderModel == null) {
+      LogHelper.shared.debugPrint('🔔 REMINDER SERVICE: reminderModel is null, returning early');
+      return;
+    }
+
+    LogHelper.shared.debugPrint('🔔 REMINDER SERVICE: Calling NotificationHelper.cancelReminderNotifications with reminder ID: ${reminderModel.id}');
     // Use the actual reminder model to properly cancel all notifications
     await NotificationHelper.shared.cancelReminderNotifications(reminderModel);
+    LogHelper.shared.debugPrint('🔔 REMINDER SERVICE: cancelAllReminderNotifications completed');
   }
 
   /// Get current notification count

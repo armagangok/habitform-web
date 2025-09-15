@@ -50,16 +50,19 @@ class ReminderNotifier extends AutoDisposeNotifier<ReminderState> {
     required String title,
     required String body,
     ReminderModel? oldReminder,
+    ReminderModel? reminderToSchedule,
   }) async {
     try {
+      // Use the provided reminder or fall back to state reminder
+      final reminder = reminderToSchedule ?? state.reminder;
+
       // Önce mevcut state'i kontrol et
-      if (oldReminder != null && !isReminderChanged(oldReminder, state.reminder)) {
+      if (oldReminder != null && !isReminderChanged(oldReminder, reminder)) {
         LogHelper.shared.debugPrint('Reminder has not changed, skipping schedule');
         return;
       }
 
       state = state.copyWith(isLoading: true, errorMessage: null);
-      final reminder = state.reminder;
 
       if (reminder == null) {
         LogHelper.shared.debugPrint('Reminder is null, cannot schedule');
