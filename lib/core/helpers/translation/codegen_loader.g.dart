@@ -284,7 +284,7 @@ class CodegenLoader extends AssetLoader{
     "timeToCompleteYourHabit": "Time to complete your habit"
   },
   "create_habit": {
-    "step_progress": "Step {{current}} of {{total}}",
+    "step_progress": "Step {current} of {total}",
     "back": "Back",
     "next": "Next",
     "create_habit": "Create Habit",
@@ -350,7 +350,15 @@ class CodegenLoader extends AssetLoader{
     }
   },
   "edit_habit": {
-    "name_cannot_be_empty": "Name can't be empty"
+    "name_cannot_be_empty": "Name can't be empty",
+    "emoji": "Emoji",
+    "emoji_description": "Choose an emoji that represents your habit",
+    "habit_name_description": "Give your habit a clear, memorable name",
+    "habit_description_description": "Add details about your habit to stay motivated",
+    "category": "Category",
+    "difficulty": "Difficulty",
+    "select_difficulty": "Select Difficulty",
+    "difficulty_description": "Choose the difficulty level that best matches your habit"
   },
   "settings": {
     "settings": "Settings",

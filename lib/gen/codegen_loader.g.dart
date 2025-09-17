@@ -1,484 +1,532 @@
 // DO NOT EDIT. This is code generated via package:easy_localization/generate.dart
 
-// ignore_for_file: constant_identifier_names
+// ignore_for_file: prefer_single_quotes, avoid_renaming_method_parameters, constant_identifier_names
 
-abstract class  LocaleKeys {
-  static const common_ok = 'common.ok';
-  static const common_save = 'common.save';
-  static const common_cancel = 'common.cancel';
-  static const common_delete = 'common.delete';
-  static const common_edit = 'common.edit';
-  static const common_confirm = 'common.confirm';
-  static const common_back = 'common.back';
-  static const common_none = 'common.none';
-  static const common_app = 'common.app';
-  static const common_general = 'common.general';
-  static const common_days = 'common.days';
-  static const common_version = 'common.version';
-  static const common_made_by = 'common.made_by';
-  static const common_icon = 'common.icon';
-  static const common_warning = 'common.warning';
-  static const common_error = 'common.error';
-  static const common_Information = 'common.Information';
-  static const common_pick_your_emoji = 'common.pick_your_emoji';
-  static const common_custom = 'common.custom';
-  static const common_done = 'common.done';
-  static const common_no_recent_emojis = 'common.no_recent_emojis';
-  static const common_loading_habits = 'common.loading_habits';
-  static const common_later = 'common.later';
-  static const common = 'common';
-  static const colors_color = 'colors.color';
-  static const colors_blue = 'colors.blue';
-  static const colors_lightBlue = 'colors.lightBlue';
-  static const colors_indigo = 'colors.indigo';
-  static const colors_red = 'colors.red';
-  static const colors_orange = 'colors.orange';
-  static const colors_deepOrange = 'colors.deepOrange';
-  static const colors_amber = 'colors.amber';
-  static const colors_yellow = 'colors.yellow';
-  static const colors_Lime = 'colors.Lime';
-  static const colors_green = 'colors.green';
-  static const colors_cyan = 'colors.cyan';
-  static const colors_teal = 'colors.teal';
-  static const colors_blueGrey = 'colors.blueGrey';
-  static const colors_grey = 'colors.grey';
-  static const colors_purple = 'colors.purple';
-  static const colors_deepPurple = 'colors.deepPurple';
-  static const colors_brown = 'colors.brown';
-  static const colors_pink = 'colors.pink';
-  static const colors = 'colors';
-  static const iconCategories_dailylife = 'iconCategories.dailylife';
-  static const iconCategories_sports = 'iconCategories.sports';
-  static const iconCategories_health = 'iconCategories.health';
-  static const iconCategories_social = 'iconCategories.social';
-  static const iconCategories_nature = 'iconCategories.nature';
-  static const iconCategories_business = 'iconCategories.business';
-  static const iconCategories_art = 'iconCategories.art';
-  static const iconCategories_studyandtask = 'iconCategories.studyandtask';
-  static const iconCategories_science = 'iconCategories.science';
-  static const iconCategories_gardenandyard = 'iconCategories.gardenandyard';
-  static const iconCategories_pets = 'iconCategories.pets';
-  static const iconCategories = 'iconCategories';
-  static const onboarding_welcome = 'onboarding.welcome';
-  static const onboarding_get_started = 'onboarding.get_started';
-  static const onboarding_next = 'onboarding.next';
-  static const onboarding_start_button = 'onboarding.start_button';
-  static const onboarding_continue_button = 'onboarding.continue_button';
-  static const onboarding_goals_title = 'onboarding.goals.title';
-  static const onboarding_goals_better_productivity = 'onboarding.goals.better_productivity';
-  static const onboarding_goals_build_routine = 'onboarding.goals.build_routine';
-  static const onboarding_goals_break_bad_habits = 'onboarding.goals.break_bad_habits';
-  static const onboarding_goals_get_healthier = 'onboarding.goals.get_healthier';
-  static const onboarding_goals_time_management = 'onboarding.goals.time_management';
-  static const onboarding_goals_reduce_stress = 'onboarding.goals.reduce_stress';
-  static const onboarding_goals = 'onboarding.goals';
-  static const onboarding_pages_small_steps_title = 'onboarding.pages.small_steps.title';
-  static const onboarding_pages_small_steps_description = 'onboarding.pages.small_steps.description';
-  static const onboarding_pages_small_steps = 'onboarding.pages.small_steps';
-  static const onboarding_pages_welcome_welcome_to = 'onboarding.pages.welcome.welcome_to';
-  static const onboarding_pages_welcome_app_name = 'onboarding.pages.welcome.app_name';
-  static const onboarding_pages_welcome_build_dream_life = 'onboarding.pages.welcome.build_dream_life';
-  static const onboarding_pages_welcome_try_tapping = 'onboarding.pages.welcome.try_tapping';
-  static const onboarding_pages_welcome_just_like_that = 'onboarding.pages.welcome.just_like_that';
-  static const onboarding_pages_welcome_change_life = 'onboarding.pages.welcome.change_life';
-  static const onboarding_pages_welcome_one_habit_time = 'onboarding.pages.welcome.one_habit_time';
-  static const onboarding_pages_welcome_congratulations = 'onboarding.pages.welcome.congratulations';
-  static const onboarding_pages_welcome_completed_first_habit = 'onboarding.pages.welcome.completed_first_habit';
-  static const onboarding_pages_welcome_journey_begins = 'onboarding.pages.welcome.journey_begins';
-  static const onboarding_pages_welcome_habit_examples_running = 'onboarding.pages.welcome.habit_examples.running';
-  static const onboarding_pages_welcome_habit_examples_read_book = 'onboarding.pages.welcome.habit_examples.read_book';
-  static const onboarding_pages_welcome_habit_examples_meditate = 'onboarding.pages.welcome.habit_examples.meditate';
-  static const onboarding_pages_welcome_habit_examples_drink_water = 'onboarding.pages.welcome.habit_examples.drink_water';
-  static const onboarding_pages_welcome_habit_examples = 'onboarding.pages.welcome.habit_examples';
-  static const onboarding_pages_welcome = 'onboarding.pages.welcome';
-  static const onboarding_pages_routine_title = 'onboarding.pages.routine.title';
-  static const onboarding_pages_routine_description = 'onboarding.pages.routine.description';
-  static const onboarding_pages_routine = 'onboarding.pages.routine';
-  static const onboarding_pages_patience_title = 'onboarding.pages.patience.title';
-  static const onboarding_pages_patience_description = 'onboarding.pages.patience.description';
-  static const onboarding_pages_patience = 'onboarding.pages.patience';
-  static const onboarding_pages_bad_habits_title = 'onboarding.pages.bad_habits.title';
-  static const onboarding_pages_bad_habits_description = 'onboarding.pages.bad_habits.description';
-  static const onboarding_pages_bad_habits = 'onboarding.pages.bad_habits';
-  static const onboarding_pages_become_person_title = 'onboarding.pages.become_person.title';
-  static const onboarding_pages_become_person_aristotleHabitQuote = 'onboarding.pages.become_person.aristotleHabitQuote';
-  static const onboarding_pages_become_person_aristotle = 'onboarding.pages.become_person.aristotle';
-  static const onboarding_pages_become_person = 'onboarding.pages.become_person';
-  static const onboarding_pages = 'onboarding.pages';
-  static const onboarding_app_features_title = 'onboarding.app_features.title';
-  static const onboarding_app_features_subtitle = 'onboarding.app_features.subtitle';
-  static const onboarding_app_features_features_smart_tracking_title = 'onboarding.app_features.features.smart_tracking.title';
-  static const onboarding_app_features_features_smart_tracking_description = 'onboarding.app_features.features.smart_tracking.description';
-  static const onboarding_app_features_features_smart_tracking_sub_features_0 = 'onboarding.app_features.features.smart_tracking.sub_features_0';
-  static const onboarding_app_features_features_smart_tracking_sub_features_1 = 'onboarding.app_features.features.smart_tracking.sub_features_1';
-  static const onboarding_app_features_features_smart_tracking_sub_features_2 = 'onboarding.app_features.features.smart_tracking.sub_features_2';
-  static const onboarding_app_features_features_smart_tracking = 'onboarding.app_features.features.smart_tracking';
-  static const onboarding_app_features_features_sub_habits_title = 'onboarding.app_features.features.sub_habits.title';
-  static const onboarding_app_features_features_sub_habits_description = 'onboarding.app_features.features.sub_habits.description';
-  static const onboarding_app_features_features_sub_habits_sub_features_0 = 'onboarding.app_features.features.sub_habits.sub_features_0';
-  static const onboarding_app_features_features_sub_habits_sub_features_1 = 'onboarding.app_features.features.sub_habits.sub_features_1';
-  static const onboarding_app_features_features_sub_habits_sub_features_2 = 'onboarding.app_features.features.sub_habits.sub_features_2';
-  static const onboarding_app_features_features_sub_habits = 'onboarding.app_features.features.sub_habits';
-  static const onboarding_app_features_features_formation_rate_title = 'onboarding.app_features.features.formation_rate.title';
-  static const onboarding_app_features_features_formation_rate_description = 'onboarding.app_features.features.formation_rate.description';
-  static const onboarding_app_features_features_formation_rate_sub_features_0 = 'onboarding.app_features.features.formation_rate.sub_features_0';
-  static const onboarding_app_features_features_formation_rate_sub_features_1 = 'onboarding.app_features.features.formation_rate.sub_features_1';
-  static const onboarding_app_features_features_formation_rate_sub_features_2 = 'onboarding.app_features.features.formation_rate.sub_features_2';
-  static const onboarding_app_features_features_formation_rate = 'onboarding.app_features.features.formation_rate';
-  static const onboarding_app_features_features_share_habits_title = 'onboarding.app_features.features.share_habits.title';
-  static const onboarding_app_features_features_share_habits_description = 'onboarding.app_features.features.share_habits.description';
-  static const onboarding_app_features_features_share_habits_sub_features_0 = 'onboarding.app_features.features.share_habits.sub_features_0';
-  static const onboarding_app_features_features_share_habits_sub_features_1 = 'onboarding.app_features.features.share_habits.sub_features_1';
-  static const onboarding_app_features_features_share_habits_sub_features_2 = 'onboarding.app_features.features.share_habits.sub_features_2';
-  static const onboarding_app_features_features_share_habits = 'onboarding.app_features.features.share_habits';
-  static const onboarding_app_features_features = 'onboarding.app_features.features';
-  static const onboarding_app_features_formation_score = 'onboarding.app_features.formation_score';
-  static const onboarding_app_features_previous = 'onboarding.app_features.previous';
-  static const onboarding_app_features_next = 'onboarding.app_features.next';
-  static const onboarding_app_features_start = 'onboarding.app_features.start';
-  static const onboarding_app_features = 'onboarding.app_features';
-  static const onboarding_information_tips_start_small_title = 'onboarding.information.tips.start_small.title';
-  static const onboarding_information_tips_start_small_description = 'onboarding.information.tips.start_small.description';
-  static const onboarding_information_tips_start_small = 'onboarding.information.tips.start_small';
-  static const onboarding_information_tips_make_obvious_title = 'onboarding.information.tips.make_obvious.title';
-  static const onboarding_information_tips_make_obvious_description = 'onboarding.information.tips.make_obvious.description';
-  static const onboarding_information_tips_make_obvious = 'onboarding.information.tips.make_obvious';
-  static const onboarding_information_tips_stack_habits_title = 'onboarding.information.tips.stack_habits.title';
-  static const onboarding_information_tips_stack_habits_description = 'onboarding.information.tips.stack_habits.description';
-  static const onboarding_information_tips_stack_habits = 'onboarding.information.tips.stack_habits';
-  static const onboarding_information_tips_make_satisfying_title = 'onboarding.information.tips.make_satisfying.title';
-  static const onboarding_information_tips_make_satisfying_description = 'onboarding.information.tips.make_satisfying.description';
-  static const onboarding_information_tips_make_satisfying = 'onboarding.information.tips.make_satisfying';
-  static const onboarding_information_tips_track_progress_title = 'onboarding.information.tips.track_progress.title';
-  static const onboarding_information_tips_track_progress_description = 'onboarding.information.tips.track_progress.description';
-  static const onboarding_information_tips_track_progress = 'onboarding.information.tips.track_progress';
-  static const onboarding_information_tips = 'onboarding.information.tips';
-  static const onboarding_information_previous = 'onboarding.information.previous';
-  static const onboarding_information_next = 'onboarding.information.next';
-  static const onboarding_information_get_started = 'onboarding.information.get_started';
-  static const onboarding_information = 'onboarding.information';
-  static const onboarding_rating_title = 'onboarding.rating.title';
-  static const onboarding_rating_description = 'onboarding.rating.description';
-  static const onboarding_rating_thank_you = 'onboarding.rating.thank_you';
-  static const onboarding_rating_feedback_message = 'onboarding.rating.feedback_message';
-  static const onboarding_rating_rate_title = 'onboarding.rating.rate_title';
-  static const onboarding_rating_rate_message = 'onboarding.rating.rate_message';
-  static const onboarding_rating_continue = 'onboarding.rating.continue';
-  static const onboarding_rating_maybe_later = 'onboarding.rating.maybe_later';
-  static const onboarding_rating_rate_button = 'onboarding.rating.rate_button';
-  static const onboarding_rating = 'onboarding.rating';
-  static const onboarding_achievement_first_habit_message = 'onboarding.achievement.first_habit_message';
-  static const onboarding_achievement = 'onboarding.achievement';
-  static const onboarding = 'onboarding';
-  static const habit_detail_habitDetail = 'habit_detail.habitDetail';
-  static const habit_detail_areYouSureToDeleteHabit = 'habit_detail.areYouSureToDeleteHabit';
-  static const habit_detail_calendar = 'habit_detail.calendar';
-  static const habit_detail_share = 'habit_detail.share';
-  static const habit_detail_archive = 'habit_detail.archive';
-  static const habit_detail_archive_title = 'habit_detail.archive_title';
-  static const habit_detail_archive_confirmation = 'habit_detail.archive_confirmation';
-  static const habit_detail_archive_info = 'habit_detail.archive_info';
-  static const habit_detail_detail = 'habit_detail.detail';
-  static const habit_detail_habitData = 'habit_detail.habitData';
-  static const habit_detail_unlock = 'habit_detail.unlock';
-  static const habit_detail_days = 'habit_detail.days';
-  static const habit_detail_heatmap_title = 'habit_detail.heatmap_title';
-  static const habit_detail_heatmap_no_data = 'habit_detail.heatmap_no_data';
-  static const habit_detail_view_full = 'habit_detail.view_full';
-  static const habit_detail_less = 'habit_detail.less';
-  static const habit_detail_more = 'habit_detail.more';
-  static const habit_detail_insights_achievements = 'habit_detail.insights_achievements';
-  static const habit_detail_achievements = 'habit_detail.achievements';
-  static const habit_detail_new = 'habit_detail.new';
-  static const habit_detail_smart_insights = 'habit_detail.smart_insights';
-  static const habit_detail_achievement_week_warrior = 'habit_detail.achievement_week_warrior';
-  static const habit_detail_achievement_monthly_master = 'habit_detail.achievement_monthly_master';
-  static const habit_detail_achievement_habit_hero = 'habit_detail.achievement_habit_hero';
-  static const habit_detail_achievement_perfectionist = 'habit_detail.achievement_perfectionist';
-  static const habit_detail_achievement_consistency_champion = 'habit_detail.achievement_consistency_champion';
-  static const habit_detail_achievement_weekend_warrior = 'habit_detail.achievement_weekend_warrior';
-  static const habit_detail_achievement_weekly_checkin = 'habit_detail.achievement_weekly_checkin';
-  static const habit_detail_achievement_formation_journey = 'habit_detail.achievement_formation_journey';
-  static const habit_detail_milestones = 'habit_detail.milestones';
-  static const habit_detail_milestone_one_week_warrior = 'habit_detail.milestone_one_week_warrior';
-  static const habit_detail_milestone_monthly_master = 'habit_detail.milestone_monthly_master';
-  static const habit_detail_milestone_habit_hero = 'habit_detail.milestone_habit_hero';
-  static const habit_detail_milestone_quarter_champion = 'habit_detail.milestone_quarter_champion';
-  static const habit_detail_milestone_streak_pro = 'habit_detail.milestone_streak_pro';
-  static const habit_detail_milestone_half_year_hero = 'habit_detail.milestone_half_year_hero';
-  static const habit_detail_milestone_one_year_legend = 'habit_detail.milestone_one_year_legend';
-  static const habit_detail_progress = 'habit_detail.progress';
-  static const habit_detail_formation = 'habit_detail.formation';
-  static const habit_detail_last_7_days = 'habit_detail.last_7_days';
-  static const habit_detail_achievement_formation_threshold = 'habit_detail.achievement_formation_threshold';
-  static const habit_detail_achievement_consistency_description = 'habit_detail.achievement_consistency_description';
-  static const habit_detail_achievement_weekend_description = 'habit_detail.achievement_weekend_description';
-  static const habit_detail_achievement_weekly_description = 'habit_detail.achievement_weekly_description';
-  static const habit_detail_achievement_formation_description = 'habit_detail.achievement_formation_description';
-  static const habit_detail_quote_aristotle = 'habit_detail.quote_aristotle';
-  static const habit_detail_quote_aristotle_author = 'habit_detail.quote_aristotle_author';
-  static const habit_detail_quote_collier = 'habit_detail.quote_collier';
-  static const habit_detail_quote_collier_author = 'habit_detail.quote_collier_author';
-  static const habit_detail_quote_twain = 'habit_detail.quote_twain';
-  static const habit_detail_quote_twain_author = 'habit_detail.quote_twain_author';
-  static const habit_detail_quote_lao_tzu = 'habit_detail.quote_lao_tzu';
-  static const habit_detail_quote_lao_tzu_author = 'habit_detail.quote_lao_tzu_author';
-  static const habit_detail_monday = 'habit_detail.monday';
-  static const habit_detail_tuesday = 'habit_detail.tuesday';
-  static const habit_detail_wednesday = 'habit_detail.wednesday';
-  static const habit_detail_thursday = 'habit_detail.thursday';
-  static const habit_detail_friday = 'habit_detail.friday';
-  static const habit_detail_saturday = 'habit_detail.saturday';
-  static const habit_detail_sunday = 'habit_detail.sunday';
-  static const habit_detail_mon = 'habit_detail.mon';
-  static const habit_detail_tue = 'habit_detail.tue';
-  static const habit_detail_wed = 'habit_detail.wed';
-  static const habit_detail_thu = 'habit_detail.thu';
-  static const habit_detail_fri = 'habit_detail.fri';
-  static const habit_detail_sat = 'habit_detail.sat';
-  static const habit_detail_sun = 'habit_detail.sun';
-  static const habit_detail_jan = 'habit_detail.jan';
-  static const habit_detail_feb = 'habit_detail.feb';
-  static const habit_detail_mar = 'habit_detail.mar';
-  static const habit_detail_apr = 'habit_detail.apr';
-  static const habit_detail_may = 'habit_detail.may';
-  static const habit_detail_jun = 'habit_detail.jun';
-  static const habit_detail_jul = 'habit_detail.jul';
-  static const habit_detail_aug = 'habit_detail.aug';
-  static const habit_detail_sep = 'habit_detail.sep';
-  static const habit_detail_oct = 'habit_detail.oct';
-  static const habit_detail_nov = 'habit_detail.nov';
-  static const habit_detail_dec = 'habit_detail.dec';
-  static const habit_detail_tooltip_completed = 'habit_detail.tooltip_completed';
-  static const habit_detail_tooltip_not_completed = 'habit_detail.tooltip_not_completed';
-  static const habit_detail_achievement_week_warrior_description = 'habit_detail.achievement_week_warrior_description';
-  static const habit_detail_achievement_monthly_master_description = 'habit_detail.achievement_monthly_master_description';
-  static const habit_detail_achievement_perfectionist_description = 'habit_detail.achievement_perfectionist_description';
-  static const habit_detail_heatmap_stats_description = 'habit_detail.heatmap_stats_description';
-  static const habit_detail = 'habit_detail';
-  static const habit_add_habit = 'habit.add_habit';
-  static const habit_edit_habit = 'habit.edit_habit';
-  static const habit_habit_name = 'habit.habit_name';
-  static const habit_habit_description = 'habit.habit_description';
-  static const habit_reminder = 'habit.reminder';
-  static const habit_add_reminder = 'habit.add_reminder';
-  static const habit_frequency = 'habit.frequency';
-  static const habit_daily = 'habit.daily';
-  static const habit_weekly = 'habit.weekly';
-  static const habit_monthly = 'habit.monthly';
-  static const habit_create_habit = 'habit.create_habit';
-  static const habit_no_habit_found = 'habit.no_habit_found';
-  static const habit_habit_data = 'habit.habit_data';
-  static const habit_todayCompleted = 'habit.todayCompleted';
-  static const habit_complete = 'habit.complete';
-  static const habit_calendar_completion = 'habit.calendar_completion';
-  static const habit_calendar_tap_info = 'habit.calendar_tap_info';
-  static const habit_timeToCompleteYourHabit = 'habit.timeToCompleteYourHabit';
-  static const habit_filter_all = 'habit.filter.all';
-  static const habit_filter_morning = 'habit.filter.morning';
-  static const habit_filter_noon = 'habit.filter.noon';
-  static const habit_filter_evening = 'habit.filter.evening';
-  static const habit_filter_night = 'habit.filter.night';
-  static const habit_filter = 'habit.filter';
-  static const habit = 'habit';
-  static const edit_habit_edit_habit = 'edit_habit.edit_habit';
-  static const edit_habit_habit_name = 'edit_habit.habit_name';
-  static const edit_habit_habit_description = 'edit_habit.habit_description';
-  static const edit_habit_reminder = 'edit_habit.reminder';
-  static const edit_habit_add_reminder = 'edit_habit.add_reminder';
-  static const edit_habit_name_cannot_be_empty = 'edit_habit.name_cannot_be_empty';
-  static const edit_habit = 'edit_habit';
-  static const settings_settings = 'settings.settings';
-  static const settings_language = 'settings.language';
-  static const settings_notifications = 'settings.notifications';
-  static const settings_theme = 'settings.theme';
-  static const settings_system = 'settings.system';
-  static const settings_dark_mode = 'settings.dark_mode';
-  static const settings_light_mode = 'settings.light_mode';
-  static const settings_support = 'settings.support';
-  static const settings_support_subtitle = 'settings.support_subtitle';
-  static const settings_feedback = 'settings.feedback';
-  static const settings_privacy = 'settings.privacy';
-  static const settings_terms = 'settings.terms';
-  static const settings_habitArchive = 'settings.habitArchive';
-  static const settings_data_export_import = 'settings.data_export_import';
-  static const settings_about_data_management = 'settings.about_data_management';
-  static const settings_data_management_description = 'settings.data_management_description';
-  static const settings_export_data = 'settings.export_data';
-  static const settings_export_description = 'settings.export_description';
-  static const settings_import_data = 'settings.import_data';
-  static const settings_import_description = 'settings.import_description';
-  static const settings_exporting = 'settings.exporting';
-  static const settings_importing = 'settings.importing';
-  static const settings_export_success = 'settings.export_success';
-  static const settings_export_error = 'settings.export_error';
-  static const settings_import_success = 'settings.import_success';
-  static const settings_import_error = 'settings.import_error';
-  static const settings_habits_imported = 'settings.habits_imported';
-  static const settings_no_habits_imported = 'settings.no_habits_imported';
-  static const settings = 'settings';
-  static const subscription_subscribe_to = 'subscription.subscribe_to';
-  static const subscription_tap_advantages = 'subscription.tap_advantages';
-  static const subscription_popular = 'subscription.popular';
-  static const subscription_billed = 'subscription.billed';
-  static const subscription_restore = 'subscription.restore';
-  static const subscription_myMembership = 'subscription.myMembership';
-  static const subscription_continue = 'subscription.continue';
-  static const subscription_whatYouWillUnlock = 'subscription.whatYouWillUnlock';
-  static const subscription_unlimitiedHabits = 'subscription.unlimitiedHabits';
-  static const subscription_unlimitiedHabitsDescription = 'subscription.unlimitiedHabitsDescription';
-  static const subscription_unlimitiedCustomization = 'subscription.unlimitiedCustomization';
-  static const subscription_unlimitiedCustomizationDescription = 'subscription.unlimitiedCustomizationDescription';
-  static const subscription_noBoringAds = 'subscription.noBoringAds';
-  static const subscription_noBoringAdsDescription = 'subscription.noBoringAdsDescription';
-  static const subscription_alwaysUpToDate = 'subscription.alwaysUpToDate';
-  static const subscription_alwaysUpToDateDescription = 'subscription.alwaysUpToDateDescription';
-  static const subscription_upcomingFeatures = 'subscription.upcomingFeatures';
-  static const subscription_upcomingFeaturesDescription = 'subscription.upcomingFeaturesDescription';
-  static const subscription_supportAnIndieDev = 'subscription.supportAnIndieDev';
-  static const subscription_supportAnIndieDevDescription = 'subscription.supportAnIndieDevDescription';
-  static const subscription_statisticsTitle = 'subscription.statisticsTitle';
-  static const subscription_statisticsDescription = 'subscription.statisticsDescription';
-  static const subscription_loading = 'subscription.loading';
-  static const subscription_purchaseRestoredSuccessfuly = 'subscription.purchaseRestoredSuccessfuly';
-  static const subscription_youDoNotHaveAnyPurchasesToRestore = 'subscription.youDoNotHaveAnyPurchasesToRestore';
-  static const subscription_youAlreadyHaveAnActiveSubscription = 'subscription.youAlreadyHaveAnActiveSubscription';
-  static const subscription_anIssueOccuredWhilePurchasing = 'subscription.anIssueOccuredWhilePurchasing';
-  static const subscription_purchaseSuccessful = 'subscription.purchaseSuccessful';
-  static const subscription_purchaseError = 'subscription.purchaseError';
-  static const subscription_purchaseCancelled = 'subscription.purchaseCancelled';
-  static const subscription_restoreError = 'subscription.restoreError';
-  static const subscription_continueWithLimitedPlan = 'subscription.continueWithLimitedPlan';
-  static const subscription_purchaseTimeout = 'subscription.purchaseTimeout';
-  static const subscription_purchaseInvalidated = 'subscription.purchaseInvalidated';
-  static const subscription_subscriptionExpired = 'subscription.subscriptionExpired';
-  static const subscription_subscriptionPaused = 'subscription.subscriptionPaused';
-  static const subscription_subscriptionResumed = 'subscription.subscriptionResumed';
-  static const subscription_billingUnavailable = 'subscription.billingUnavailable';
-  static const subscription_billingInvalid = 'subscription.billingInvalid';
-  static const subscription_priceNotLoaded = 'subscription.priceNotLoaded';
-  static const subscription_networkError = 'subscription.networkError';
-  static const subscription_serverError = 'subscription.serverError';
-  static const subscription_invalidCredentials = 'subscription.invalidCredentials';
-  static const subscription_notInitialized = 'subscription.notInitialized';
-  static const subscription_invalidReceipt = 'subscription.invalidReceipt';
-  static const subscription_storeProblem = 'subscription.storeProblem';
-  static const subscription_unsupportedFeature = 'subscription.unsupportedFeature';
-  static const subscription_invalidUserID = 'subscription.invalidUserID';
-  static const subscription_operationInProgress = 'subscription.operationInProgress';
-  static const subscription_invalidAppleKey = 'subscription.invalidAppleKey';
-  static const subscription_ineligible = 'subscription.ineligible';
-  static const subscription_configError = 'subscription.configError';
-  static const subscription_unexpectedResponse = 'subscription.unexpectedResponse';
-  static const subscription_accountAlreadyUsed = 'subscription.accountAlreadyUsed';
-  static const subscription_purchaseNotAllowed = 'subscription.purchaseNotAllowed';
-  static const subscription_purchaseInvalid = 'subscription.purchaseInvalid';
-  static const subscription_receiptAlreadyInUse = 'subscription.receiptAlreadyInUse';
-  static const subscription_paymentPending = 'subscription.paymentPending';
-  static const subscription_insufficientPermissions = 'subscription.insufficientPermissions';
-  static const subscription_unknownError = 'subscription.unknownError';
-  static const subscription_configurationError = 'subscription.configurationError';
-  static const subscription_restoreSuccessful = 'subscription.restoreSuccessful';
-  static const subscription_archiveSupportTitle = 'subscription.archiveSupportTitle';
-  static const subscription_archiveSupportDescription = 'subscription.archiveSupportDescription';
-  static const subscription_habitReminderTitle = 'subscription.habitReminderTitle';
-  static const subscription_habitReminderDescription = 'subscription.habitReminderDescription';
-  static const subscription_billingIssueDetectedAt = 'subscription.billingIssueDetectedAt';
-  static const subscription = 'subscription';
-  static const share_share = 'share.share';
-  static const share_share_image = 'share.share_image';
-  static const share_share_text = 'share.share_text';
-  static const share = 'share';
-  static const days_monday = 'days.monday';
-  static const days_tuesday = 'days.tuesday';
-  static const days_wednesday = 'days.wednesday';
-  static const days_thursday = 'days.thursday';
-  static const days_friday = 'days.friday';
-  static const days_saturday = 'days.saturday';
-  static const days_sunday = 'days.sunday';
-  static const days = 'days';
-  static const errors_something_went_wrong = 'errors.something_went_wrong';
-  static const errors_try_again = 'errors.try_again';
-  static const errors_required_field = 'errors.required_field';
-  static const errors = 'errors';
-  static const reminder_select_all = 'reminder.select_all';
-  static const reminder_deselect_all = 'reminder.deselect_all';
-  static const reminder_select_time = 'reminder.select_time';
-  static const reminder_time = 'reminder.time';
-  static const reminder_habit_reminder_message = 'reminder.habit_reminder_message';
-  static const reminder = 'reminder';
-  static const habit_data_longest_streak = 'habit_data.longest_streak';
-  static const habit_data_current_streak = 'habit_data.current_streak';
-  static const habit_data = 'habit_data';
-  static const notifications_title = 'notifications.title';
-  static const notifications_settings = 'notifications.settings';
-  static const notifications_app_notification_settings = 'notifications.app_notification_settings';
-  static const notifications_scheduled_notifications = 'notifications.scheduled_notifications';
-  static const notifications_no_scheduled_notifications = 'notifications.no_scheduled_notifications';
-  static const notifications_reminders = 'notifications.reminders';
-  static const notifications = 'notifications';
-  static const archived_habits_title = 'archived_habits.title';
-  static const archived_habits_no_habits_found = 'archived_habits.no_habits_found';
-  static const archived_habits_no_habits_hint = 'archived_habits.no_habits_hint';
-  static const archived_habits_unarchive_success = 'archived_habits.unarchive_success';
-  static const archived_habits_marked_for_deletion = 'archived_habits.marked_for_deletion';
-  static const archived_habits_archived_on = 'archived_habits.archived_on';
-  static const archived_habits_restore = 'archived_habits.restore';
-  static const archived_habits_delete = 'archived_habits.delete';
-  static const archived_habits_recover_habit = 'archived_habits.recover_habit';
-  static const archived_habits_delete_confirmation_title = 'archived_habits.delete_confirmation_title';
-  static const archived_habits_delete_confirmation_message = 'archived_habits.delete_confirmation_message';
-  static const archived_habits_delete_confirmation_warning = 'archived_habits.delete_confirmation_warning';
-  static const archived_habits = 'archived_habits';
-  static const membership_info_title = 'membership_info.title';
-  static const membership_info_state = 'membership_info.state';
-  static const membership_info_active = 'membership_info.active';
-  static const membership_info_inactive = 'membership_info.inactive';
-  static const membership_info_plan = 'membership_info.plan';
-  static const membership_info_customer_id = 'membership_info.customer_id';
-  static const membership_info_expiration_date = 'membership_info.expiration_date';
-  static const membership_info_first_purchase_date = 'membership_info.first_purchase_date';
-  static const membership_info_last_purchase_date = 'membership_info.last_purchase_date';
-  static const membership_info_change_plan = 'membership_info.change_plan';
-  static const membership_info_change_plan_desc = 'membership_info.change_plan_desc';
-  static const membership_info = 'membership_info';
-  static const statistics_title = 'statistics.title';
-  static const statistics_no_data_title = 'statistics.no_data_title';
-  static const statistics_no_data_description = 'statistics.no_data_description';
-  static const statistics_overview = 'statistics.overview';
-  static const statistics_no_data_for_habit = 'statistics.no_data_for_habit';
-  static const statistics_start_tracking_habit = 'statistics.start_tracking_habit';
-  static const statistics_habit_formation = 'statistics.habit_formation';
-  static const statistics_completed = 'statistics.completed';
-  static const statistics_total_days = 'statistics.total_days';
-  static const statistics_longest_streak = 'statistics.longest_streak';
-  static const statistics_current_streak = 'statistics.current_streak';
-  static const statistics_about_formation = 'statistics.about_formation';
-  static const statistics_formation_info = 'statistics.formation_info';
-  static const statistics_formation_status_early = 'statistics.formation_status.early';
-  static const statistics_formation_status_excellent = 'statistics.formation_status.excellent';
-  static const statistics_formation_status_very_good = 'statistics.formation_status.very_good';
-  static const statistics_formation_status_good = 'statistics.formation_status.good';
-  static const statistics_formation_status_improving = 'statistics.formation_status.improving';
-  static const statistics_formation_status_needs_work = 'statistics.formation_status.needs_work';
-  static const statistics_formation_status = 'statistics.formation_status';
-  static const statistics_formation_time_not_enough_data = 'statistics.formation_time.not_enough_data';
-  static const statistics_formation_time_completed_successful = 'statistics.formation_time.completed_successful';
-  static const statistics_formation_time_completed_good = 'statistics.formation_time.completed_good';
-  static const statistics_formation_time_completed_needs_work = 'statistics.formation_time.completed_needs_work';
-  static const statistics_formation_time_remaining_days = 'statistics.formation_time.remaining_days';
-  static const statistics_formation_time = 'statistics.formation_time';
-  static const statistics_chart_labels_insufficient = 'statistics.chart_labels.insufficient';
-  static const statistics_chart_labels_moderate = 'statistics.chart_labels.moderate';
-  static const statistics_chart_labels_good = 'statistics.chart_labels.good';
-  static const statistics_chart_labels_excellent = 'statistics.chart_labels.excellent';
-  static const statistics_chart_labels_below_50 = 'statistics.chart_labels.below_50';
-  static const statistics_chart_labels_between_50_70 = 'statistics.chart_labels.between_50_70';
-  static const statistics_chart_labels_between_70_90 = 'statistics.chart_labels.between_70_90';
-  static const statistics_chart_labels_above_90 = 'statistics.chart_labels.above_90';
-  static const statistics_chart_labels_demo_data_message = 'statistics.chart_labels.demo_data_message';
-  static const statistics_chart_labels_upgrade_button = 'statistics.chart_labels.upgrade_button';
-  static const statistics_chart_labels = 'statistics.chart_labels';
-  static const statistics = 'statistics';
+import 'dart:ui';
 
+import 'package:easy_localization/easy_localization.dart' show AssetLoader;
+
+class CodegenLoader extends AssetLoader{
+  const CodegenLoader();
+
+  @override
+  Future<Map<String, dynamic>?> load(String path, Locale locale) {
+    return Future.value(mapLocales[locale.toString()]);
+  }
+
+  static const Map<String,dynamic> _en_US = {
+  "common": {
+    "ok": "Okay",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "back": "Back",
+    "none": "None",
+    "days": "Days",
+    "made_by": "Made with ☕️ and 🧬️ by Armağan Gök",
+    "warning": "Warning",
+    "error": "Error",
+    "Information": "Information",
+    "custom": "Custom",
+    "pick_your_emoji": "Pick Your Emoji",
+    "done": "Done",
+    "loading_habits": "Loading habits...",
+    "later": "Later"
+  },
+  "colors": {
+    "color": "Color",
+    "blue": "Blue",
+    "lightBlue": "Light Blue",
+    "indigo": "Indigo",
+    "red": "Red",
+    "orange": "Orange",
+    "deepOrange": "Deep Orange",
+    "amber": "Amber",
+    "yellow": "Yellow",
+    "Lime": "Lime",
+    "green": "Green",
+    "cyan": "Cyan",
+    "teal": "Teal",
+    "blueGrey": "BlueGrey",
+    "grey": "Grey",
+    "purple": "Purple",
+    "deepPurple": "Deep Purple",
+    "brown": "Brown",
+    "pink": "Pink"
+  },
+  "iconCategories": {
+    "dailylife": "Daily Life",
+    "sports": "Sports",
+    "health": "Health",
+    "social": "Social",
+    "nature": "Nature",
+    "business": "Business",
+    "art": "Art",
+    "studyandtask": "Study & Task",
+    "science": "Science",
+    "gardenandyard": "Garden & Yard",
+    "pets": "Pets"
+  },
+  "onboarding": {
+    "start_button": "Start 🚀",
+    "continue_button": "Continue →",
+    "pages": {
+      "small_steps": {
+        "title": "Change your life with a small step.",
+        "description": "Developing new habits becomes easier and more sustainable when you start with small, manageable steps with HabitRise."
+      },
+      "welcome": {
+        "welcome_to": "Welcome to",
+        "app_name": "HabitRise",
+        "build_dream_life": "Build your dream life",
+        "try_tapping": "Try tapping on the habit card",
+        "just_like_that": "Just like that!",
+        "change_life": "Change your life",
+        "one_habit_time": "one habit at a time.",
+        "congratulations": "Congratulations!",
+        "completed_first_habit": "You've completed your first habit!",
+        "journey_begins": "Every journey begins with a single step.",
+        "habit_examples": {
+          "running": "Running",
+          "read_book": "Read Book",
+          "meditate": "Meditate",
+          "drink_water": "Drink Water"
+        }
+      },
+      "routine": {
+        "title": "Routine and repeate help habits take root.",
+        "description": "Establishing a consistent routine and repeating actions are key to making habits stick with HabitRise."
+      },
+      "patience": {
+        "title": "Patience and consistency help habits bear fruit.",
+        "description": "Forming a habit takes time; enjoying the process is the key with HabitRise."
+      },
+      "bad_habits": {
+        "title": "Breaking bad habits is easy. Replace them with good ones.",
+        "description": "It's much easier to let go of negative habits when you actively replace them with positive and healthy alternatives."
+      },
+      "become_person": {
+        "title": "Become The Person You Want To Be",
+        "aristotleHabitQuote": "We are what we repeatedly do. Therefore, excellence is not an act, but a habit.",
+        "aristotle": "Aristotle"
+      }
+    },
+    "app_features": {
+      "title": "HabitRise Helps You ...",
+      "subtitle": "Build lasting habits with smart tracking and personalized insights",
+      "features": {
+        "smart_tracking": {
+          "title": "Smart Habit Tracking",
+          "description": "Track your habits with intelligent reminders and progress visualization. See your streaks grow and celebrate every milestone.",
+          "sub_features_0": "Daily Reminders",
+          "sub_features_1": "Progress Charts",
+          "sub_features_2": "Streak Tracking"
+        },
+        "sub_habits": {
+          "title": "Sub-Habits System",
+          "description": "Break down complex habits into smaller, manageable sub-habits. Build your main habit step by step with micro-actions.",
+          "sub_features_0": "Micro-Actions",
+          "sub_features_1": "Habit Breakdown",
+          "sub_features_2": "Nested Tracking"
+        },
+        "formation_rate": {
+          "title": "Habit Formation Rate",
+          "description": "Track your habit formation progress with intelligent insights. See how close you are to making your habits stick permanently.",
+          "sub_features_0": "Success Prediction",
+          "sub_features_1": "Formation Tracking",
+          "sub_features_2": "Progress Analytics"
+        },
+        "share_habits": {
+          "title": "Share Habits",
+          "description": "Share your habit progress with beautiful, customizable images. Choose from different designs to showcase your achievements.",
+          "sub_features_0": "Custom Designs",
+          "sub_features_1": "Progress Sharing",
+          "sub_features_2": "Achievement Images"
+        }
+      },
+      "formation_score": "Formation Score",
+      "previous": "Previous",
+      "next": "Next",
+      "start": "Start"
+    },
+    "information": {
+      "tips": {
+        "start_small": {
+          "title": "Start Small & Be Specific",
+          "description": "Begin with manageable actions that are easy to incorporate into your daily routine. Instead of \"exercise more,\" try \"do 5 push-ups every morning.\""
+        },
+        "make_obvious": {
+          "title": "Make It Obvious",
+          "description": "Design your environment to make good habits obvious. Place your running shoes by the door, keep a water bottle on your desk, or set visual reminders."
+        },
+        "stack_habits": {
+          "title": "Stack Your Habits",
+          "description": "Link new habits to existing ones. After I brush my teeth, I will meditate for 2 minutes. This creates a strong association that makes habits stick."
+        },
+        "make_satisfying": {
+          "title": "Make It Satisfying",
+          "description": "Reward yourself immediately after completing your habit. This could be checking off a box, enjoying a favorite song, or celebrating small wins."
+        },
+        "track_progress": {
+          "title": "Track Your Progress",
+          "description": "Monitor your habit development to stay motivated. Use HabitRise, journals, or simple checkmarks. Seeing your streak grow creates momentum and accountability."
+        }
+      },
+      "previous": "Previous",
+      "next": "Next",
+      "get_started": "Get Started"
+    },
+    "rating": {
+      "title": "You've just discovered\nHabitRise's unique features",
+      "description": "To help us reach more people who need help building better habits, would you give our app a review?",
+      "thank_you": "Thank You!",
+      "feedback_message": "Your feedback helps us improve HabitRise and reach more people who need help building better habits.",
+      "rate_title": "Rate HabitRise",
+      "rate_message": "Thank you for your interest in rating HabitRise! You can rate us on the App Store or Google Play Store.",
+      "continue": "Continue",
+      "maybe_later": "Maybe Later",
+      "rate_button": "Rate HabitRise"
+    },
+    "achievement": {
+      "first_habit_message": "Great job! You completed your first habit in the onboarding!"
+    }
+  },
+  "habit_detail": {
+    "calendar": "Calendar",
+    "share": "Share",
+    "archive": "Archive",
+    "archive_title": "Archive Habit",
+    "archive_confirmation": "Are you sure you want to archive '{{habitName}}'?",
+    "archive_info": "You can restore it later from the archived habits section.",
+    "unlock": "Unlock",
+    "days": "days",
+    "heatmap_title": "Habit Heatmap",
+    "heatmap_no_data": "No data available yet. Start tracking your habit to see the heatmap!",
+    "view_full": "View Full",
+    "less": "Less",
+    "more": "More",
+    "insights_achievements": "Insights & Achievements",
+    "achievements": "Achievements",
+    "new": "NEW",
+    "smart_insights": "Smart Insights",
+    "achievement_week_warrior": "Week Warrior",
+    "achievement_monthly_master": "Monthly Master",
+    "achievement_habit_hero": "Habit Hero",
+    "achievement_perfectionist": "Perfectionist",
+    "achievement_consistency_champion": "Consistency Champion",
+    "achievement_weekend_warrior": "Weekend Warrior",
+    "achievement_weekly_checkin": "Weekly Check-in",
+    "achievement_formation_journey": "Formation Journey",
+    "milestones": "Milestones",
+    "milestone_one_week_warrior": "One Week Warrior",
+    "milestone_monthly_master": "Monthly Master",
+    "milestone_habit_hero": "Habit Hero",
+    "milestone_quarter_champion": "Quarter Champion",
+    "milestone_streak_pro": "Streak Pro",
+    "milestone_half_year_hero": "Half-Year Hero",
+    "milestone_one_year_legend": "One-Year Legend",
+    "progress": "Progress",
+    "formation": "Formation",
+    "achievement_formation_threshold": "Reached the formation threshold!",
+    "achievement_consistency_description": "You're performing at {{percentage}}% of your best streak!",
+    "achievement_weekend_description": "You maintain great consistency even on weekends!",
+    "achievement_weekly_description": "You've missed {{days}} days this week. Tomorrow is a fresh start!",
+    "achievement_formation_description": "You're {{percentage}}% through building this habit. The neural pathways are strengthening!",
+    "quote_aristotle": "Excellence is not a single act, but a habit. You are not what you do once in a while; you are what you do consistently.",
+    "quote_aristotle_author": "Aristotle",
+    "quote_collier": "Success is the sum of small efforts, repeated day in and day out.",
+    "quote_collier_author": "Robert Collier",
+    "quote_twain": "The secret to getting ahead is getting started.",
+    "quote_twain_author": "Mark Twain",
+    "quote_lao_tzu": "A journey of a thousand miles begins with a single step.",
+    "quote_lao_tzu_author": "Lao Tzu",
+    "monday": "Mon",
+    "wednesday": "Wed",
+    "friday": "Fri",
+    "mon": "Mon",
+    "tue": "Tue",
+    "wed": "Wed",
+    "thu": "Thu",
+    "fri": "Fri",
+    "sat": "Sat",
+    "sun": "Sun",
+    "jan": "Jan",
+    "feb": "Feb",
+    "mar": "Mar",
+    "apr": "Apr",
+    "may": "May",
+    "jun": "Jun",
+    "jul": "Jul",
+    "aug": "Aug",
+    "sep": "Sep",
+    "oct": "Oct",
+    "nov": "Nov",
+    "dec": "Dec",
+    "tooltip_completed": "Completed on {{day}}/{{month}}/{{year}}",
+    "tooltip_not_completed": "Not completed on {{day}}/{{month}}/{{year}}",
+    "achievement_week_warrior_description": "{{streak}} day streak!",
+    "achievement_monthly_master_description": "30+ day streak!",
+    "achievement_perfectionist_description": "{{rate}}% success rate!",
+    "heatmap_stats_description": "{{days}} days completed in the last year",
+    "last_7_days": "Last 7 Days"
+  },
+  "habit": {
+    "add_habit": "Add Habit",
+    "edit_habit": "Edit Habit",
+    "habit_name": "Habit Name",
+    "habit_description": "Description",
+    "reminder": "Reminder",
+    "daily": "Daily",
+    "create_habit": "Create Habit",
+    "no_habit_found": "No habit found",
+    "complete": "Complete",
+    "calendar_tap_info": "Tap on dates to mark or unmark completion",
+    "timeToCompleteYourHabit": "Time to complete your habit"
+  },
+  "create_habit": {
+    "step_progress": "Step {current} of {total}",
+    "back": "Back",
+    "next": "Next",
+    "create_habit": "Create Habit",
+    "habit_name": {
+      "title": "What habit would you like to build?",
+      "description": "Choose a clear, specific name for your habit. For example: \"Drink 8 glasses of water\" instead of just \"Stay hydrated\"."
+    },
+    "description": {
+      "title": "Tell us more about this habit",
+      "description": "This step is optional. You can add more details about your habit, why it's important to you, or any specific goals you have."
+    },
+    "emoji": {
+      "title": "Pick an emoji for your habit",
+      "description": "Choose an emoji that represents your habit. This will help you quickly identify it in your habit list."
+    },
+    "color": {
+      "title": "Choose a color for your habit",
+      "preview": "Your habit will look like this"
+    },
+    "category": {
+      "title": "Select categories for your habit",
+      "description": "Categories help you organize your habits and track progress in specific areas of your life. You can select multiple categories."
+    },
+    "reminder": {
+      "title": "Reminder for your habit",
+      "description": "Reminders are optional but highly recommended. They help you stay consistent by notifying you when it's time to complete your habit."
+    },
+    "difficulty": {
+      "title": "Difficulty",
+      "question": "How difficult is this habit to build?",
+      "info": "Choose how challenging this habit feels. We use this to estimate formation time and personalize insights.",
+      "very_easy": "Very Easy",
+      "easy": "Easy",
+      "moderate": "Moderate",
+      "difficult": "Difficult",
+      "very_difficult": "Very Difficult",
+      "very_easy_description": "Simple habits that require minimal effort and time (e.g., drinking water, taking vitamins)",
+      "easy_description": "Straightforward habits with low physical or mental effort (e.g., making bed, brushing teeth)",
+      "moderate_description": "Habits requiring moderate effort and planning (e.g., reading, light exercise)",
+      "difficult_description": "Challenging habits requiring significant effort and commitment (e.g., intense workouts, learning new skills)",
+      "very_difficult_description": "Very demanding habits requiring high effort, time, and mental strength (e.g., major lifestyle changes)"
+    },
+    "step_titles": {
+      "habit_name": "Habit Name",
+      "description": "Description",
+      "emoji": "Choose Icon",
+      "color": "Choose Color",
+      "reminder": "Set Reminder",
+      "category": "Select Category",
+      "difficulty": "Choose Difficulty"
+    },
+    "step_subtitles": {
+      "habit_name": "What habit would you like to build?",
+      "description": "Tell us more about this habit (optional)",
+      "emoji": "Pick an icon that represents your habit",
+      "color": "Choose a color for your habit",
+      "reminder": "When would you like to be reminded?",
+      "category": "Which category does this habit belong to?",
+      "difficulty": "How difficult is this habit to build?"
+    },
+    "preview": {
+      "your_habit": "Your Habit"
+    }
+  },
+  "edit_habit": {
+    "name_cannot_be_empty": "Name can't be empty",
+    "emoji": "Emoji",
+    "emoji_description": "Choose an emoji that represents your habit",
+    "habit_name_description": "Give your habit a clear, memorable name",
+    "habit_description_description": "Add details about your habit to stay motivated",
+    "category": "Category",
+    "difficulty": "Difficulty",
+    "select_difficulty": "Select Difficulty",
+    "difficulty_description": "Choose the difficulty level that best matches your habit"
+  },
+  "settings": {
+    "settings": "Settings",
+    "language": "Language",
+    "notifications": "Notifications",
+    "theme": "Theme",
+    "system": "System",
+    "dark_mode": "Dark Mode",
+    "light_mode": "Light Mode",
+    "feedback": "Send Feedback",
+    "privacy": "Privacy",
+    "terms": "Terms",
+    "habitArchive": "Archived Habits",
+    "data_export_import": "Data Management",
+    "about_data_management": "About Data Management",
+    "data_management_description": "Export your habits data to a CSV file for backup or transfer to another device. You can also import previously exported data.",
+    "export_data": "Export Data",
+    "export_description": "Export all your habits and their completion data to a CSV file. This file can be used as a backup or to transfer your data to another device.",
+    "import_data": "Import Data",
+    "import_description": "Import habits from a previously exported CSV file. This will add or update habits in your current collection.",
+    "exporting": "Exporting...",
+    "importing": "Importing...",
+    "export_success": "Data exported successfully",
+    "export_error": "Error exporting data",
+    "import_success": "Data imported successfully",
+    "import_error": "Error importing data",
+    "habits_imported": "habits imported",
+    "no_habits_imported": "No habits were imported"
+  },
+  "subscription": {
+    "subscribe_to": "Subscribe to",
+    "tap_advantages": "Tap to see all advantages",
+    "continue": "Continue",
+    "unlimitiedHabits": "Unlimited Habits",
+    "unlimitiedHabitsDescription": "Add and track unlimited habits effortlessly.",
+    "unlimitiedCustomization": "Unlimited Customization",
+    "unlimitiedCustomizationDescription": "Customize your habits and settings as you like.",
+    "noBoringAds": "No Ads",
+    "noBoringAdsDescription": "Enjoy an uninterrupted, ad-free experience.",
+    "alwaysUpToDate": "Always Up-to-Date",
+    "alwaysUpToDateDescription": "Stay updated and access new features regularly.",
+    "upcomingFeatures": "Upcoming Features",
+    "upcomingFeaturesDescription": "Exciting features you requested are coming soon!",
+    "supportAnIndieDev": "Support An Indie Developer",
+    "supportAnIndieDevDescription": "Your purchase supports an independent app developer",
+    "statisticsTitle": "Statistics",
+    "statisticsDescription": "Track habits, get motivation, be aware of how long time left to make your habit automatic.",
+    "loading": "Loading..",
+    "purchaseRestoredSuccessfuly": "Purchase restored successfully",
+    "youAlreadyHaveAnActiveSubscription": "You already have an active subscription",
+    "purchaseSuccessful": "Purchase completed successfully",
+    "purchaseCancelled": "Purchase was cancelled",
+    "purchaseInvalidated": "Purchase was invalidated.",
+    "networkError": "Network error. Please check your connection.",
+    "invalidCredentials": "Invalid credentials. Please check your settings.",
+    "invalidReceipt": "The receipt is not valid. Please try again.",
+    "storeProblem": "Store problem occurred. Please try again.",
+    "unsupportedFeature": "This feature is not supported on your device.",
+    "invalidUserID": "Invalid user ID. Please try again.",
+    "operationInProgress": "Another operation is in progress. Please wait.",
+    "invalidAppleKey": "Invalid Apple subscription key.",
+    "ineligible": "You are not eligible for this purchase.",
+    "unexpectedResponse": "Unexpected response from server.",
+    "accountAlreadyUsed": "This account is already in use by another subscriber.",
+    "purchaseNotAllowed": "Purchase is not allowed at this time",
+    "receiptAlreadyInUse": "This receipt is already in use",
+    "paymentPending": "Payment is pending",
+    "insufficientPermissions": "Insufficient permissions for this purchase",
+    "unknownError": "An unknown error occurred",
+    "configurationError": "A configuration error occurred",
+    "restoreSuccessful": "Purchases successfully restored",
+    "archiveSupportTitle": "Archive Support",
+    "archiveSupportDescription": "Archive and manage your habits",
+    "habitReminderTitle": "Reminders",
+    "habitReminderDescription": "Create reminders for your habits"
+  },
+  "share": {
+    "share": "Share",
+    "share_image": "Share Image",
+    "share_text": "Share Text"
+  },
+  "days": {
+    "monday": "Monday",
+    "tuesday": "Tuesday",
+    "wednesday": "Wednesday",
+    "thursday": "Thursday",
+    "friday": "Friday",
+    "saturday": "Saturday",
+    "sunday": "Sunday"
+  },
+  "errors": {
+    "something_went_wrong": "Something went wrong",
+    "try_again": "Try again",
+    "required_field": "Please enter the habit name"
+  },
+  "reminder": {
+    "select_all": "Select All",
+    "deselect_all": "Deselect All",
+    "select_time": "Select Time",
+    "time": "Time",
+    "habit_reminder_message": "Don't forget to complete your habit!"
+  },
+  "notifications": {
+    "settings": "Settings",
+    "app_notification_settings": "App Notification Settings",
+    "scheduled_notifications": "Scheduled Notifications",
+    "no_scheduled_notifications": "No scheduled notifications",
+    "reminders": "reminders"
+  },
+  "archived_habits": {
+    "title": "Archived Habits",
+    "no_habits_found": "No archived habits found",
+    "no_habits_hint": "Habits you archive will appear here",
+    "unarchive_success": "Habit successfully unarchived",
+    "marked_for_deletion": "Marked for deletion",
+    "archived_on": "Archived on:",
+    "restore": "Restore",
+    "delete": "Delete",
+    "delete_confirmation_title": "Delete Habit",
+    "delete_confirmation_message": "Are you sure you want to delete this habit: ",
+    "delete_confirmation_warning": "This action cannot be undone!"
+  },
+  "membership_info": {
+    "title": "Membership Info",
+    "state": "Status",
+    "active": "Active",
+    "inactive": "Inactive",
+    "plan": "Plan",
+    "customer_id": "Customer ID",
+    "expiration_date": "Expiration Date",
+    "first_purchase_date": "First Purchase Date",
+    "last_purchase_date": "Last Purchase Date",
+    "change_plan": "Change Plan",
+    "change_plan_desc": "Click to change your subscription plan"
+  },
+  "statistics": {
+    "no_data_title": "No Statistics Yet",
+    "no_data_description": "You'll see detailed statistics here when you start tracking your habits.",
+    "overview": "Overview",
+    "no_data_for_habit": "No statistics data yet",
+    "start_tracking_habit": "Start tracking this habit",
+    "habit_formation": "Habit Formation",
+    "completed": "Completed",
+    "total_days": "Total Days",
+    "longest_streak": "Longest Streak",
+    "current_streak": "Current Streak",
+    "about_formation": "About Habit Formation",
+    "formation_info": "The percentage above shows how likely your habit is to become automatic based on your current consistency. Higher percentages mean your habit is more likely to stick. According to research, it takes an average of 66 days of regular practice for a habit to become automatic.",
+    "formation_status": {
+      "early": "You're still in the early stages. Keep tracking your habit consistently to see meaningful formation progress.",
+      "excellent": "Outstanding progress! With a {percentage}% completion rate, your habit is very likely to become automatic.",
+      "very_good": "Great consistency! With a {percentage}% completion rate, your habit formation is on track.",
+      "good": "Good progress! Your {percentage}% completion rate shows you're building this habit successfully.",
+      "improving": "You're making progress. Try to increase your completion rate to make habit formation more likely.",
+      "needs_work": "Keep working on consistency. Regular completion will help this habit become automatic."
+    },
+    "formation_time": {
+      "not_enough_data": "Keep tracking your habit to see formation progress.",
+      "completed_successful": "Congratulations! Your habit is most likely established and automatic.",
+      "completed_good": "Great job! You've completed the formation period with a {percentage}% completion rate. Your habit is likely established.",
+      "completed_needs_work": "You've completed the formation period. Continue with regular practice to strengthen your habit.",
+      "remaining_days": "Estimated {days} days left in the formation period. Keep up the consistent practice."
+    },
+    "chart_labels": {
+      "demo_data_message": "This is demo data, upgrade to unlock real data",
+      "upgrade_button": "Upgrade"
+    }
+  }
+};
+static const Map<String, Map<String,dynamic>> mapLocales = {"en_US": _en_US};
 }

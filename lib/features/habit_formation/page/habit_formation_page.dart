@@ -132,6 +132,7 @@ class HabitFormationPage extends ConsumerWidget {
                           borderRadius: BorderRadius.circular(12),
                           child: CustomBlurWidget(
                             child: CupertinoCard(
+                              color: context.primaryContrastingColor.withValues(alpha: .1),
                               child: Padding(
                                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                                 child: Row(

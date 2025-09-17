@@ -16,7 +16,7 @@ class DifficultySelectionWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return CupertinoListSection.insetGrouped(
-      header: Text('Difficulty'),
+      header: Text(LocaleKeys.edit_habit_difficulty.tr()),
       children: [
         CupertinoListTile(
           padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
@@ -53,13 +53,13 @@ class DifficultySelectionWidget extends ConsumerWidget {
       context: context,
       builder: (context) => CupertinoActionSheet(
         title: Text(
-          'Select Difficulty',
+          LocaleKeys.edit_habit_select_difficulty.tr(),
           style: context.titleMedium.copyWith(
             fontWeight: FontWeight.w600,
           ),
         ),
         message: Text(
-          'Choose the difficulty level that best matches your habit',
+          LocaleKeys.edit_habit_difficulty_description.tr(),
           style: context.bodyMedium.copyWith(
             color: context.bodyMedium.color?.withValues(alpha: 0.7),
           ),

@@ -298,6 +298,14 @@ abstract class  LocaleKeys {
   static const create_habit_preview = 'create_habit.preview';
   static const create_habit = 'create_habit';
   static const edit_habit_name_cannot_be_empty = 'edit_habit.name_cannot_be_empty';
+  static const edit_habit_emoji = 'edit_habit.emoji';
+  static const edit_habit_emoji_description = 'edit_habit.emoji_description';
+  static const edit_habit_habit_name_description = 'edit_habit.habit_name_description';
+  static const edit_habit_habit_description_description = 'edit_habit.habit_description_description';
+  static const edit_habit_category = 'edit_habit.category';
+  static const edit_habit_difficulty = 'edit_habit.difficulty';
+  static const edit_habit_select_difficulty = 'edit_habit.select_difficulty';
+  static const edit_habit_difficulty_description = 'edit_habit.difficulty_description';
   static const edit_habit = 'edit_habit';
   static const settings_settings = 'settings.settings';
   static const settings_language = 'settings.language';

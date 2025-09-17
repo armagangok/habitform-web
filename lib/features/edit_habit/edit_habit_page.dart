@@ -47,9 +47,9 @@ class EditHabitPage extends ConsumerWidget {
                   children: [
                     // Icon Selection
                     CupertinoListSection.insetGrouped(
-                      header: Text("Emoji"),
+                      header: Text(LocaleKeys.edit_habit_emoji.tr()),
                       footer: Text(
-                        'Choose an emoji that represents your habit',
+                        LocaleKeys.edit_habit_emoji_description.tr(),
                         style: context.bodyMedium.copyWith(
                           color: context.bodyMedium.color?.withValues(alpha: 0.7),
                         ),
@@ -79,7 +79,7 @@ class EditHabitPage extends ConsumerWidget {
                         LocaleKeys.habit_habit_name.tr(),
                       ),
                       footer: Text(
-                        'Give your habit a clear, memorable name',
+                        LocaleKeys.edit_habit_habit_name_description.tr(),
                         style: context.bodyMedium.copyWith(
                           color: context.bodyMedium.color?.withValues(alpha: 0.7),
                         ),
@@ -100,7 +100,7 @@ class EditHabitPage extends ConsumerWidget {
                         LocaleKeys.habit_habit_description.tr(),
                       ),
                       footer: Text(
-                        'Add details about your habit to stay motivated',
+                        LocaleKeys.edit_habit_habit_description_description.tr(),
                         style: context.bodyMedium.copyWith(
                           color: context.bodyMedium.color?.withValues(alpha: 0.7),
                         ),
@@ -142,7 +142,7 @@ class EditHabitPage extends ConsumerWidget {
 
                     // Category Selection
                     CategoryPickerButton(
-                      header: Text("Category"),
+                      header: Text(LocaleKeys.edit_habit_category.tr()),
                     ),
 
                     // Color Selection
