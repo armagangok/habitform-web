@@ -77,16 +77,16 @@ class _HabitNameStepState extends ConsumerState<HabitNameStep> {
               children: [
                 Text(
                   LocaleKeys.create_habit_habit_name_title.tr(),
-                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
+                  style: context.headlineSmall.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 const SizedBox(height: 8),
                 Text(
                   LocaleKeys.create_habit_habit_name_description.tr(),
-                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        color: Theme.of(context).hintColor,
-                      ),
+                  style: context.bodyLarge.copyWith(
+                    color: Theme.of(context).hintColor,
+                  ),
                 ),
               ],
             ),
@@ -100,7 +100,7 @@ class _HabitNameStepState extends ConsumerState<HabitNameStep> {
                   controller: _controller,
                   placeholder: LocaleKeys.habit_habit_name.tr(),
                   decoration: null,
-                  style: Theme.of(context).textTheme.titleMedium,
+                  style: context.titleMedium,
                   autofocus: true,
                 ),
               ),

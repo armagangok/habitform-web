@@ -37,16 +37,16 @@ class _ReminderStepState extends ConsumerState<ReminderStep> {
               children: [
                 Text(
                   LocaleKeys.create_habit_reminder_title.tr(),
-                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
+                  style: context.headlineSmall.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 const SizedBox(height: 8),
                 Text(
                   LocaleKeys.create_habit_reminder_description.tr(),
-                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        color: Theme.of(context).hintColor,
-                      ),
+                  style: context.bodyLarge.copyWith(
+                    color: Theme.of(context).hintColor,
+                  ),
                 ),
               ],
             ),
@@ -75,9 +75,9 @@ class _ReminderStepState extends ConsumerState<ReminderStep> {
                 header: const Text("Daily target per day"),
                 footer: Text(
                   "How many times do you want to complete this habit each day?",
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: Theme.of(context).hintColor,
-                      ),
+                  style: context.bodyMedium.copyWith(
+                    color: Theme.of(context).hintColor,
+                  ),
                 ),
                 children: [
                   Row(
@@ -85,7 +85,7 @@ class _ReminderStepState extends ConsumerState<ReminderStep> {
                     children: [
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                        child: Text("Completions/day", style: Theme.of(context).textTheme.titleMedium),
+                        child: Text("Completions/day", style: context.titleMedium),
                       ),
                       Row(
                         children: [
@@ -94,7 +94,7 @@ class _ReminderStepState extends ConsumerState<ReminderStep> {
                             onPressed: () => ref.read(createHabitProvider.notifier).updateDailyTarget(state.dailyTarget - 1),
                             child: const Icon(CupertinoIcons.minus_circle),
                           ),
-                          Text(state.dailyTarget.toString(), style: Theme.of(context).textTheme.titleMedium),
+                          Text(state.dailyTarget.toString(), style: context.titleMedium),
                           CupertinoButton(
                             padding: const EdgeInsets.all(8),
                             onPressed: () => ref.read(createHabitProvider.notifier).updateDailyTarget(state.dailyTarget + 1),

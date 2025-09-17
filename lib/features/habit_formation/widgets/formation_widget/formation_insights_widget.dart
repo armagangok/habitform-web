@@ -98,16 +98,16 @@ class FormationInsightsWidget extends ConsumerWidget {
                       const SizedBox(height: 16),
                       Text(
                         LocaleKeys.statistics_no_data_for_habit.tr(),
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              color: Theme.of(context).hintColor,
-                            ),
+                        style: context.bodyMedium.copyWith(
+                          color: Theme.of(context).hintColor,
+                        ),
                       ),
                       const SizedBox(height: 8),
                       Text(
                         LocaleKeys.statistics_start_tracking_habit.tr(),
-                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                              color: Theme.of(context).hintColor.withValues(alpha: 0.7),
-                            ),
+                        style: context.bodySmall.copyWith(
+                          color: Theme.of(context).hintColor.withValues(alpha: 0.7),
+                        ),
                         textAlign: TextAlign.center,
                       ),
                     ],
@@ -219,15 +219,15 @@ class FormationInsightsWidget extends ConsumerWidget {
           padding: const EdgeInsets.all(16),
           title: Text(
             'Progress Status',
-            style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
+            style: context.titleSmall.copyWith(
+              fontWeight: FontWeight.bold,
+            ),
           ),
           subtitle: Padding(
             padding: const EdgeInsets.only(top: 8),
             child: Text(
               habitFormationStatus,
-              style: Theme.of(context).textTheme.bodyMedium,
+              style: context.bodyMedium,
               maxLines: 999,
             ),
           ),
@@ -239,15 +239,15 @@ class FormationInsightsWidget extends ConsumerWidget {
           padding: const EdgeInsets.all(16),
           title: Text(
             'Estimated Formation Time',
-            style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
+            style: context.titleSmall.copyWith(
+              fontWeight: FontWeight.bold,
+            ),
           ),
           subtitle: Padding(
             padding: const EdgeInsets.only(top: 8),
             child: Text(
               estimatedFormationTime,
-              style: Theme.of(context).textTheme.bodyMedium,
+              style: context.bodyMedium,
               maxLines: 999,
             ),
           ),
@@ -267,9 +267,9 @@ class FormationInsightsWidget extends ConsumerWidget {
               const SizedBox(width: 8),
               Text(
                 'About Formation',
-                style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
+                style: context.titleSmall.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ],
           ),
@@ -277,9 +277,9 @@ class FormationInsightsWidget extends ConsumerWidget {
             padding: const EdgeInsets.only(top: 8),
             child: Text(
               LocaleKeys.statistics_formation_info.tr(),
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: context.bodySmall.color?.withValues(alpha: .75),
-                  ),
+              style: context.bodySmall.copyWith(
+                color: context.bodySmall.color?.withValues(alpha: .75),
+              ),
               maxLines: 999,
             ),
           ),
@@ -501,10 +501,10 @@ class FormationInsightsWidget extends ConsumerWidget {
             Flexible(
               child: Text(
                 label,
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                      fontSize: 11,
-                    ),
+                style: context.bodySmall.copyWith(
+                  fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                  fontSize: 11,
+                ),
                 textAlign: TextAlign.center,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -518,11 +518,11 @@ class FormationInsightsWidget extends ConsumerWidget {
         Flexible(
           child: Text(
             description,
-            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: isSelected ? Theme.of(context).colorScheme.primary : Theme.of(context).hintColor,
-                  fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                  fontSize: 10,
-                ),
+            style: context.bodySmall.copyWith(
+              color: isSelected ? Theme.of(context).colorScheme.primary : Theme.of(context).hintColor,
+              fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+              fontSize: 10,
+            ),
             textAlign: TextAlign.center,
             overflow: TextOverflow.ellipsis,
             maxLines: 1,

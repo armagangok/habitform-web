@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:habitrise/core/core.dart';
 
 import '/core/helpers/notifications/notification_utils.dart';
 import '/features/reminder/models/days/days_enum.dart';
@@ -178,9 +178,9 @@ class _NotificationIntegrationTestState extends State<NotificationIntegrationTes
                   children: [
                     Text(
                       'Current Status',
-                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
+                      style: context.titleLarge.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     const SizedBox(height: 8),
                     Text('Scheduled notifications: $_currentNotificationCount'),
@@ -202,9 +202,9 @@ class _NotificationIntegrationTestState extends State<NotificationIntegrationTes
                   children: [
                     Text(
                       'Test Statistics',
-                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
+                      style: context.titleLarge.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     const SizedBox(height: 8),
                     Text('Total possible notifications: ${stats.totalNotifications}'),
@@ -270,9 +270,9 @@ class _NotificationIntegrationTestState extends State<NotificationIntegrationTes
                   children: [
                     Text(
                       'Test Results',
-                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
+                      style: context.titleLarge.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     const SizedBox(height: 8),
                     Text(

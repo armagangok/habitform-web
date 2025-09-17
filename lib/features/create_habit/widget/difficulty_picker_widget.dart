@@ -107,10 +107,10 @@ class DifficultyPickerWidget extends ConsumerWidget {
                     children: [
                       Text(
                         diff.displayName,
-                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                              fontWeight: FontWeight.w600,
-                              color: isSelected ? color : null,
-                            ),
+                        style: context.titleMedium.copyWith(
+                          fontWeight: FontWeight.w600,
+                          color: isSelected ? color : null,
+                        ),
                       ),
                     ],
                   ),
@@ -131,11 +131,11 @@ class DifficultyPickerWidget extends ConsumerWidget {
                   ),
                   child: Text(
                     '${diff.estimatedFormationDays}d',
-                    style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                          color: color,
-                          fontWeight: FontWeight.w700,
-                          letterSpacing: 0.5,
-                        ),
+                    style: context.labelMedium.copyWith(
+                      color: color,
+                      fontWeight: FontWeight.w700,
+                      letterSpacing: 0.5,
+                    ),
                   ),
                 ),
               ],
@@ -144,10 +144,10 @@ class DifficultyPickerWidget extends ConsumerWidget {
           const SizedBox(height: 4),
           Text(
             diff.description,
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: Theme.of(context).hintColor,
-                  height: 1.4,
-                ),
+            style: context.bodyMedium.copyWith(
+              color: Theme.of(context).hintColor,
+              height: 1.4,
+            ),
             maxLines: 12,
             overflow: TextOverflow.ellipsis,
           ),

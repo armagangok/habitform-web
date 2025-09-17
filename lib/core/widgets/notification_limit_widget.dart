@@ -155,9 +155,9 @@ class NotificationLimitWidget extends StatelessWidget {
                 const SizedBox(width: 8),
                 Text(
                   '${Platform.isIOS ? 'iOS' : 'Android'} Notification Usage',
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
+                  style: context.titleMedium.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ],
             ),
@@ -170,16 +170,16 @@ class NotificationLimitWidget extends StatelessWidget {
             // Usage text
             Text(
               '${stats.totalNotifications} / ${stats.limit} notifications',
-              style: Theme.of(context).textTheme.bodyMedium,
+              style: context.bodyMedium,
             ),
 
             if (stats.wouldExceedLimit) ...[
               const SizedBox(height: 8),
               Text(
                 '${stats.excessCount} notifications will be automatically managed',
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: Theme.of(context).colorScheme.tertiary,
-                    ),
+                style: context.bodySmall.copyWith(
+                  color: Theme.of(context).colorScheme.tertiary,
+                ),
               ),
             ],
 
@@ -189,9 +189,9 @@ class NotificationLimitWidget extends StatelessWidget {
             if (suggestions.isNotEmpty) ...[
               Text(
                 'Suggestions:',
-                style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
+                style: context.titleSmall.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               const SizedBox(height: 8),
               ...suggestions.map((suggestion) => Padding(
@@ -208,7 +208,7 @@ class NotificationLimitWidget extends StatelessWidget {
                         Expanded(
                           child: Text(
                             suggestion,
-                            style: Theme.of(context).textTheme.bodySmall,
+                            style: context.bodySmall,
                           ),
                         ),
                       ],
@@ -256,10 +256,10 @@ class NotificationLimitWidget extends StatelessWidget {
         const SizedBox(height: 4),
         Text(
           '${stats.percentage}% of ${Platform.isIOS ? 'iOS' : 'Android'} limit used',
-          style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: barColor,
-                fontWeight: FontWeight.w500,
-              ),
+          style: context.bodySmall.copyWith(
+            color: barColor,
+            fontWeight: FontWeight.w500,
+          ),
         ),
       ],
     );
@@ -528,9 +528,9 @@ class NotificationBreakdownDialog extends StatelessWidget {
             if (breakdown.isNotEmpty) ...[
               Text(
                 'Habits by notification count:',
-                style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
+                style: context.titleSmall.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               const SizedBox(height: 8),
               Container(
@@ -567,11 +567,11 @@ class NotificationBreakdownDialog extends StatelessWidget {
                             ),
                             trailing: Text(
                               '${habit.notificationCount}',
-                              style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                                    fontWeight: FontWeight.bold,
-                                    color: _getPriorityColor(context, habit.priority),
-                                    fontSize: 14,
-                                  ),
+                              style: context.titleSmall.copyWith(
+                                fontWeight: FontWeight.bold,
+                                color: _getPriorityColor(context, habit.priority),
+                                fontSize: 14,
+                              ),
                             ),
                           );
                         }).toList(),
@@ -606,11 +606,11 @@ class NotificationBreakdownDialog extends StatelessWidget {
                               ),
                               trailing: Text(
                                 '${habit.notificationCount}',
-                                style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                                      fontWeight: FontWeight.bold,
-                                      color: _getPriorityColor(context, habit.priority),
-                                      fontSize: 14,
-                                    ),
+                                style: context.titleSmall.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  color: _getPriorityColor(context, habit.priority),
+                                  fontSize: 14,
+                                ),
                               ),
                             );
                           }).toList(),
@@ -635,13 +635,13 @@ class NotificationBreakdownDialog extends StatelessWidget {
       children: [
         Text(
           value,
-          style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
+          style: context.titleLarge.copyWith(
+            fontWeight: FontWeight.bold,
+          ),
         ),
         Text(
           label,
-          style: Theme.of(context).textTheme.bodySmall,
+          style: context.bodySmall,
         ),
       ],
     );

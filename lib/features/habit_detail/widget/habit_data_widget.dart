@@ -223,7 +223,7 @@ class _HabitDataWidgetState extends ConsumerState<HabitDataWidget> {
       opacity: opacity,
       child: Container(
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(10),
           color: context.scaffoldBackgroundColor.withValues(alpha: 0.9),
         ),
         child: Column(
@@ -297,41 +297,29 @@ class _HabitDataWidgetState extends ConsumerState<HabitDataWidget> {
         final isToday = currentDate.isToday;
         final isInFuture = currentDate.isAfter(DateTime.now());
 
-        bool isCompleted = false;
-        bool isBetweenCompletions = false;
-
+        // Progressive color based on completion ratio for the day
+        double ratio = 0.0;
         if (!isInFuture) {
-          isCompleted = completions.any((date) => date.isSameDayWith(currentDate));
+          ratio = widget.habit.completions.getCompletionRatioForDate(currentDate, widget.habit.dailyTarget);
+        }
 
-          if (!isCompleted && completions.length >= 2) {
-            for (int i = 0; i < completions.length - 1; i++) {
-              final startDate = completions[i];
-              final endDate = completions[i + 1];
-              if (currentDate.isBetween(startDate, endDate)) {
-                isBetweenCompletions = true;
-                break;
-              }
-            }
+        // Grey out days before the first-ever completion
+        final firstCompletionDate = widget.habit.completions.getFirstCompletionDate();
+        final isBeforeFirstCompletion = firstCompletionDate != null && currentDate.isBefore(DateUtils.dateOnly(firstCompletionDate));
+
+        Color resolveCellColor() {
+          // Match 7-days progressive alpha from habit color
+
+          if (isBeforeFirstCompletion) {
+            return CupertinoColors.systemGrey.withValues(alpha: 0.4);
           }
+
+          if (isInFuture) return CupertinoColors.systemGrey.withValues(alpha: 0.4);
+          final alpha = (0.1 + (0.9 * ratio)).clamp(0.1, 1.0);
+          return color.withValues(alpha: alpha);
         }
 
-        Color getCardColor({
-          required bool isCompleted,
-          required bool isBetweenCompletions,
-          required Color baseColor,
-        }) {
-          if (isCompleted) return baseColor;
-          if (isBetweenCompletions) return baseColor.withValues(alpha: 0.4);
-          // Use a more visible color for incomplete cells with better contrast
-          // Create a darker version of the base color with higher opacity for better visibility
-          return context.primaryContrastingColor;
-        }
-
-        final cardColor = getCardColor(
-          isCompleted: isCompleted,
-          isBetweenCompletions: isBetweenCompletions,
-          baseColor: color,
-        );
+        final cardColor = resolveCellColor();
 
         return Container(
           decoration: BoxDecoration(

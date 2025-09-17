@@ -65,7 +65,9 @@ class _AchievementDialogState extends State<AchievementDialog> with TickerProvid
       CurvedAnimation(parent: _scaleController, curve: Curves.easeOutBack),
     );
 
-    _scoreAnimation = Tween<double>(begin: 0.0, end: widget.newScore.toDouble()).animate(
+    // Calculate formation probability for animation
+    final formationProbability = _calculateFormationProbability();
+    _scoreAnimation = Tween<double>(begin: 0.0, end: formationProbability).animate(
       CurvedAnimation(parent: _scoreController, curve: Curves.easeOutCubic),
     );
 
@@ -778,6 +780,21 @@ class _AchievementDialogState extends State<AchievementDialog> with TickerProvid
     } else {
       return 'Keep going! Consistency is key. This $difficultyName habit needs $remainingDays more days! 🌱';
     }
+  }
+
+  /// Calculate formation probability using the same logic as Habit Detail and Formation pages
+  double _calculateFormationProbability() {
+    if (widget.habit.completions.isEmpty) return 0.0;
+
+    // Use a dummy date since the method now uses first completion date internally
+    final dummyDate = DateTime.now();
+
+    return widget.habit.completions.calculateFormationProbability(
+      dummyDate, // This parameter is now ignored, but kept for compatibility
+      widget.habit.difficulty.estimatedFormationDays,
+      widget.habit.difficulty.minimumCompletionRate,
+      widget.habit.dailyTarget,
+    );
   }
 }
 

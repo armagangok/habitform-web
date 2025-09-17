@@ -23,7 +23,6 @@ class SheetHeader extends StatelessWidget implements ObstructingPreferredSizeWid
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     return CupertinoNavigationBar(
       transitionBetweenRoutes: false,
       leading: leading ??
@@ -40,7 +39,6 @@ class SheetHeader extends StatelessWidget implements ObstructingPreferredSizeWid
           Text(
             title ?? '',
             style: TextStyle(
-              color: theme.textTheme.titleLarge?.color,
               fontWeight: FontWeight.w600,
             ),
           ),

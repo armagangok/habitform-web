@@ -1,6 +1,3 @@
-import 'dart:math' as math;
-import 'dart:math';
-
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -35,8 +32,6 @@ class _PrePaywallPageState extends ConsumerState<PrePaywallPage> with TickerProv
   late Animation<Offset> _testimonialsSlideAnimation;
   late Animation<double> _featuresFadeAnimation;
   late Animation<Offset> _featuresSlideAnimation;
-
-  late Animation<double> _floatingAnimation;
 
   // Scroll controller
   late ScrollController _scrollController;
@@ -195,14 +190,6 @@ class _PrePaywallPageState extends ConsumerState<PrePaywallPage> with TickerProv
       vsync: this,
     );
 
-    _floatingAnimation = Tween<double>(
-      begin: 0.0,
-      end: 1.0,
-    ).animate(CurvedAnimation(
-      parent: _floatingController,
-      curve: Curves.easeInOut,
-    ));
-
     // Start animations
     _startAnimations();
   }
@@ -333,24 +320,17 @@ class _PrePaywallPageState extends ConsumerState<PrePaywallPage> with TickerProv
   @override
   Widget build(BuildContext context) {
     final purchaseState = ref.watch(purchaseProvider);
-    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
-    return PopScope(
-      canPop: false, // Prevent dismissal by back button or swipe
-      child: Material(
-        color: Colors.transparent,
+    return SafeArea(
+      bottom: false,
+      child: PopScope(
+        canPop: false, // Prevent dismissal by back button or swipe
         child: purchaseState.when(
           data: (state) {
             return CupertinoPageScaffold(
               navigationBar: _navBar(context),
               child: Stack(
                 children: [
-                  // Professional background
-                  _buildProfessionalBackground(isDarkMode),
-
-                  // Floating elements
-                  _buildFloatingElements(),
-
                   // Main content
                   SizedBox(
                     width: double.infinity,
@@ -387,76 +367,6 @@ class _PrePaywallPageState extends ConsumerState<PrePaywallPage> with TickerProv
           error: (error, _) => _buildErrorState(),
         ),
       ),
-    );
-  }
-
-  Widget _buildProfessionalBackground(bool isDarkMode) {
-    return AnimatedBuilder(
-      animation: _floatingAnimation,
-      builder: (context, child) {
-        return Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: isDarkMode
-                  ? [
-                      Color(0xFF0A0A0A),
-                      Color(0xFF1A1A1A),
-                      Color(0xFF0A0A0A),
-                    ]
-                  : [
-                      Color(0xFFFAFAFA),
-                      Color(0xFFF5F5F5),
-                      Color(0xFFFAFAFA),
-                    ],
-            ),
-          ),
-          child: CustomPaint(
-            painter: _ProfessionalBackgroundPainter(
-              animation: _floatingAnimation,
-              isDarkMode: isDarkMode,
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  Widget _buildFloatingElements() {
-    return AnimatedBuilder(
-      animation: _floatingAnimation,
-      builder: (context, child) {
-        return Stack(
-          children: [
-            // Subtle floating elements
-            Positioned(
-              top: 100 + sin(_floatingAnimation.value * 2 * math.pi) * 15,
-              right: 30 + cos(_floatingAnimation.value * 2 * math.pi) * 10,
-              child: Container(
-                width: 40,
-                height: 40,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: context.primary.withValues(alpha: 0.05),
-                ),
-              ),
-            ),
-            Positioned(
-              top: 200 + cos(_floatingAnimation.value * 2 * math.pi) * 20,
-              left: 20 + sin(_floatingAnimation.value * 2 * math.pi) * 15,
-              child: Container(
-                width: 30,
-                height: 30,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Colors.blueAccent.withValues(alpha: 0.04),
-                ),
-              ),
-            ),
-          ],
-        );
-      },
     );
   }
 
@@ -682,7 +592,7 @@ class _PrePaywallPageState extends ConsumerState<PrePaywallPage> with TickerProv
                 Text(
                   feature.description,
                   style: context.bodySmall.copyWith(
-                    color: Theme.of(context).textTheme.bodySmall?.color?.withValues(alpha: 0.8),
+                    color: context.bodySmall.color?.withValues(alpha: 0.8),
                     height: 1.3,
                   ),
                 ),
@@ -709,9 +619,9 @@ class _PrePaywallPageState extends ConsumerState<PrePaywallPage> with TickerProv
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
               colors: [
-                Theme.of(context).scaffoldBackgroundColor.withValues(alpha: 0.0),
-                Theme.of(context).scaffoldBackgroundColor.withValues(alpha: 0.8),
-                Theme.of(context).scaffoldBackgroundColor,
+                context.scaffoldBackgroundColor.withValues(alpha: 0.0),
+                context.scaffoldBackgroundColor.withValues(alpha: 0.25),
+                context.scaffoldBackgroundColor.withValues(alpha: 1),
               ],
               stops: [0.0, 0.3, 1.0],
             ),
@@ -720,59 +630,34 @@ class _PrePaywallPageState extends ConsumerState<PrePaywallPage> with TickerProv
             top: false,
             child: Padding(
               padding: EdgeInsets.all(24),
-              child: Container(
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [
-                      context.primary,
-                      context.primary.withValues(alpha: 0.8),
-                    ],
-                  ),
-                  borderRadius: BorderRadius.circular(16),
-                  boxShadow: [
-                    BoxShadow(
-                      color: context.primary.withValues(alpha: 0.3),
-                      blurRadius: 20,
-                      offset: Offset(0, 8),
-                    ),
-                  ],
-                ),
-                child: CupertinoButton(
-                  padding: EdgeInsets.zero,
-                  onPressed: () {
-                    HapticFeedback.heavyImpact();
+              child: CupertinoButton.filled(
+                padding: EdgeInsets.zero,
+                onPressed: () {
+                  HapticFeedback.heavyImpact();
 
-                    showCupertinoSheet(
-                      enableDrag: false,
-                      context: context,
-                      builder: (context) => PaywallPage(
-                        isFromOnboarding: widget.isFromOnboarding,
-                        isFromSettings: widget.isFromSettings,
-                      ),
-                    );
-                  },
-                  child: Container(
-                    padding: EdgeInsets.symmetric(vertical: 18),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          'Continue',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
-                        ),
-                        SizedBox(width: 8),
-                        Icon(
-                          CupertinoIcons.arrow_right_circle_fill,
-                          color: Colors.white,
-                          size: 20,
-                        ),
-                      ],
+                  showCupertinoSheet(
+                    enableDrag: false,
+                    context: context,
+                    builder: (context) => PaywallPage(
+                      isFromOnboarding: widget.isFromOnboarding,
+                      isFromSettings: widget.isFromSettings,
                     ),
+                  );
+                },
+                child: Container(
+                  padding: EdgeInsets.symmetric(vertical: 18),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Continue',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
@@ -864,53 +749,4 @@ class FeatureModel {
   final Color color;
 
   FeatureModel(this.name, this.widget, this.description, this.color);
-}
-
-class _ProfessionalBackgroundPainter extends CustomPainter {
-  final Animation<double> animation;
-  final bool isDarkMode;
-
-  _ProfessionalBackgroundPainter({
-    required this.animation,
-    required this.isDarkMode,
-  });
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..color = (isDarkMode ? Colors.white : Colors.black).withValues(alpha: 0.02)
-      ..maskFilter = MaskFilter.blur(BlurStyle.normal, 20);
-
-    // Draw subtle geometric shapes
-    final centerX = size.width * 0.5;
-    final centerY = size.height * 0.3;
-
-    // Main circle
-    final mainRadius = 60 + sin(animation.value * 2 * math.pi) * 10;
-    canvas.drawCircle(
-      Offset(centerX, centerY),
-      mainRadius,
-      paint,
-    );
-
-    // Secondary circles
-    final secondaryRadius = 30 + cos(animation.value * 2 * math.pi + math.pi) * 8;
-    canvas.drawCircle(
-      Offset(size.width * 0.2, size.height * 0.6),
-      secondaryRadius,
-      paint,
-    );
-
-    final tertiaryRadius = 25 + sin(animation.value * 2 * math.pi + math.pi / 2) * 6;
-    canvas.drawCircle(
-      Offset(size.width * 0.8, size.height * 0.7),
-      tertiaryRadius,
-      paint,
-    );
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) {
-    return oldDelegate is! _ProfessionalBackgroundPainter || oldDelegate.animation != animation || oldDelegate.isDarkMode != isDarkMode;
-  }
 }

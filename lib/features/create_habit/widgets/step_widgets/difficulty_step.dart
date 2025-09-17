@@ -33,9 +33,9 @@ class DifficultyStep extends ConsumerWidget {
                 Text(LocaleKeys.create_habit_difficulty_title.tr()),
                 Text(
                   LocaleKeys.create_habit_difficulty_question.tr(),
-                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
+                  style: context.headlineSmall.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ],
             ),

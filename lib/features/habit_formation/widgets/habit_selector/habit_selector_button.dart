@@ -39,10 +39,10 @@ class HabitSelectorButton extends StatelessWidget {
                 const SizedBox(width: 8),
                 Text(
                   isSelected ? habitName : "",
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                        color: isSelected ? CupertinoColors.white : null,
-                      ),
+                  style: context.titleMedium.copyWith(
+                    fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                    color: isSelected ? CupertinoColors.white : null,
+                  ),
                 ),
               ]
             ],

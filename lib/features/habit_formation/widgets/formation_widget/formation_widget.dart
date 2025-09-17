@@ -100,16 +100,16 @@ class FormationWidget extends ConsumerWidget {
                       const SizedBox(height: 16),
                       Text(
                         LocaleKeys.statistics_no_data_for_habit.tr(),
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              color: Theme.of(context).hintColor,
-                            ),
+                        style: context.bodyMedium.copyWith(
+                          color: Theme.of(context).hintColor,
+                        ),
                       ),
                       const SizedBox(height: 8),
                       Text(
                         LocaleKeys.statistics_start_tracking_habit.tr(),
-                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                              color: Theme.of(context).hintColor.withValues(alpha: 0.7),
-                            ),
+                        style: context.bodySmall.copyWith(
+                          color: Theme.of(context).hintColor.withValues(alpha: 0.7),
+                        ),
                         textAlign: TextAlign.center,
                       ),
                     ],
@@ -169,19 +169,19 @@ class FormationWidget extends ConsumerWidget {
                   const SizedBox(height: 10),
                   Text(
                     LocaleKeys.statistics_about_formation.tr(),
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
+                    style: context.titleMedium.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
                     maxLines: 3,
                   ),
                   Text(
                     habitFormationStatus,
-                    style: Theme.of(context).textTheme.bodyMedium,
+                    style: context.bodyMedium,
                     maxLines: 10,
                   ),
                   Text(
                     estimatedFormationTime,
-                    style: Theme.of(context).textTheme.bodyMedium,
+                    style: context.bodyMedium,
                     maxLines: 10,
                   ),
                   CupertinoCard(
@@ -199,9 +199,9 @@ class FormationWidget extends ConsumerWidget {
                           Expanded(
                             child: Text(
                               LocaleKeys.statistics_formation_info.tr(),
-                              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                    color: context.bodySmall.color?.withValues(alpha: .75),
-                                  ),
+                              style: context.bodySmall.copyWith(
+                                color: context.bodySmall.color?.withValues(alpha: .75),
+                              ),
                               maxLines: 10,
                             ),
                           ),
@@ -430,9 +430,9 @@ class FormationWidget extends ConsumerWidget {
               // Etiket için FittedBox kullanarak metni küçültme
               Text(
                 label,
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                    ),
+                style: context.bodySmall.copyWith(
+                  fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                ),
               ),
             ],
           ),
@@ -445,10 +445,10 @@ class FormationWidget extends ConsumerWidget {
           fit: BoxFit.scaleDown,
           child: Text(
             description,
-            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: isSelected ? Theme.of(context).colorScheme.primary : Theme.of(context).hintColor,
-                  fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                ),
+            style: context.bodySmall.copyWith(
+              color: isSelected ? Theme.of(context).colorScheme.primary : Theme.of(context).hintColor,
+              fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+            ),
             textAlign: TextAlign.center,
           ),
         ),

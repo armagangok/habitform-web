@@ -55,7 +55,7 @@ class BaseStepWidget extends ConsumerWidget {
                 'total': '$totalSteps',
               },
             ),
-            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+            style: context.bodySmall.copyWith(
               color: Theme.of(context).hintColor,
               fontFeatures: [FontFeature.tabularFigures()],
             ),

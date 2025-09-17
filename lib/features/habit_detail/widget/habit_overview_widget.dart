@@ -64,16 +64,16 @@ class HabitOverviewWidget extends ConsumerWidget {
                   const SizedBox(height: 16),
                   Text(
                     LocaleKeys.statistics_no_data_for_habit.tr(),
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: Theme.of(context).hintColor,
-                        ),
+                    style: context.bodyMedium.copyWith(
+                      color: Theme.of(context).hintColor,
+                    ),
                   ),
                   const SizedBox(height: 8),
                   Text(
                     LocaleKeys.statistics_start_tracking_habit.tr(),
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: Theme.of(context).hintColor.withValues(alpha: 0.7),
-                        ),
+                    style: context.bodySmall.copyWith(
+                      color: Theme.of(context).hintColor.withValues(alpha: 0.7),
+                    ),
                     textAlign: TextAlign.center,
                   ),
                 ],
@@ -215,7 +215,7 @@ class HabitOverviewCompact extends ConsumerWidget {
               const SizedBox(height: 8),
               Text(
                 LocaleKeys.statistics_no_data_for_habit.tr(),
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Theme.of(context).hintColor),
+                style: context.bodyMedium.copyWith(color: Theme.of(context).hintColor),
                 textAlign: TextAlign.center,
               ),
             ],

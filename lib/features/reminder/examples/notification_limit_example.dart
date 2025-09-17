@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:habitrise/core/core.dart';
 
 import '/core/helpers/notifications/notification_utils.dart';
 import '/core/widgets/notification_limit_widget.dart';
@@ -147,9 +147,9 @@ class _NotificationLimitExampleState extends State<NotificationLimitExample> {
                   children: [
                     Text(
                       'Current Status',
-                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
+                      style: context.titleLarge.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     const SizedBox(height: 8),
                     Text('Scheduled notifications: $_currentNotificationCount'),
@@ -176,9 +176,9 @@ class _NotificationLimitExampleState extends State<NotificationLimitExample> {
                   children: [
                     Text(
                       'Example Scenarios',
-                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
+                      style: context.titleLarge.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     const SizedBox(height: 16),
                     _buildScenarioItem(
@@ -214,10 +214,10 @@ class _NotificationLimitExampleState extends State<NotificationLimitExample> {
                     const SizedBox(height: 16),
                     Text(
                       'Total: $totalPossible notifications',
-                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.bold,
-                            color: stats.wouldExceedLimit ? Colors.red : Colors.green,
-                          ),
+                      style: context.titleMedium.copyWith(
+                        fontWeight: FontWeight.bold,
+                        color: stats.wouldExceedLimit ? Colors.red : Colors.green,
+                      ),
                     ),
                   ],
                 ),
@@ -260,9 +260,9 @@ class _NotificationLimitExampleState extends State<NotificationLimitExample> {
                   children: [
                     Text(
                       'How This Solves the iOS Limit',
-                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
+                      style: context.titleLarge.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     const SizedBox(height: 16),
                     _buildSolutionItem(
@@ -315,13 +315,13 @@ class _NotificationLimitExampleState extends State<NotificationLimitExample> {
               children: [
                 Text(
                   title,
-                  style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
+                  style: context.titleSmall.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 Text(
                   description,
-                  style: Theme.of(context).textTheme.bodySmall,
+                  style: context.bodySmall,
                 ),
               ],
             ),
@@ -339,16 +339,16 @@ class _NotificationLimitExampleState extends State<NotificationLimitExample> {
         children: [
           Text(
             title,
-            style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                  fontWeight: FontWeight.bold,
-                  color: Theme.of(context).primaryColor,
-                ),
+            style: context.titleSmall.copyWith(
+              fontWeight: FontWeight.bold,
+              color: Theme.of(context).primaryColor,
+            ),
           ),
           const SizedBox(width: 8),
           Expanded(
             child: Text(
               description,
-              style: Theme.of(context).textTheme.bodySmall,
+              style: context.bodySmall,
             ),
           ),
         ],

@@ -70,9 +70,9 @@ class _ColorStepState extends ConsumerState<ColorStep> {
               children: [
                 Text(
                   LocaleKeys.create_habit_color_title.tr(),
-                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
+                  style: context.headlineSmall.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ],
             ),
@@ -86,10 +86,10 @@ class _ColorStepState extends ConsumerState<ColorStep> {
               children: [
                 Text(
                   LocaleKeys.create_habit_color_preview.tr(),
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.w600,
-                        color: context.titleLarge.color,
-                      ),
+                  style: context.titleMedium.copyWith(
+                    fontWeight: FontWeight.w600,
+                    color: context.titleLarge.color,
+                  ),
                 ),
                 const SizedBox(height: 12),
                 SizedBox(

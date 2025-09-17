@@ -437,7 +437,7 @@ class _PaywallWidgetState extends ConsumerState<PaywallPage> with TickerProvider
                 Text(
                   feature.description,
                   style: context.bodySmall.copyWith(
-                    color: Theme.of(context).textTheme.bodySmall?.color?.withValues(alpha: 0.8),
+                    color: context.bodySmall.color?.withValues(alpha: 0.8),
                     height: 1.3,
                   ),
                 ),

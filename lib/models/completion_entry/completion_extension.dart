@@ -202,8 +202,8 @@ extension CompletionEntryUtils on Map<String, CompletionEntry> {
     final startDate = DateUtils.dateOnly(firstCompletionDate);
     final daysSinceStart = today.difference(startDate).inDays + 1;
 
-    // Calculate completion rate from first completion to today (or up to estimated formation days)
-    // Weighted days from first completion onward
+    // Calculate completion rate based on a bounded window
+    // 1) Build weighted ratios by day from first completion onward
     final Map<DateTime, double> ratioByDay = {};
     final effectiveTarget = dailyTarget <= 0 ? 1 : dailyTarget;
     for (final entry in values) {
@@ -214,11 +214,24 @@ extension CompletionEntryUtils on Map<String, CompletionEntry> {
         ratioByDay[day] = (current + ratio).clamp(0.0, 1.0);
       }
     }
-    final completedDays = ratioByDay.values.fold(0.0, (sum, r) => sum + r);
 
-    // Use the minimum of days since start or estimated formation days for calculation
-    final calculationPeriod = daysSinceStart < estimatedFormationDays ? daysSinceStart : estimatedFormationDays;
-    final completionRate = calculationPeriod > 0 ? (completedDays / calculationPeriod) : 0.0;
+    // 2) Determine the calculation window
+    //    - If the habit age is less than estimated days, use from startDate to today
+    //    - Otherwise, use ONLY the most recent estimatedFormationDays window
+    final bool isEarlyPeriod = daysSinceStart < estimatedFormationDays;
+    final int calculationPeriod = isEarlyPeriod ? daysSinceStart : estimatedFormationDays;
+    final DateTime windowStart = isEarlyPeriod ? startDate : DateUtils.dateOnly(today.subtract(Duration(days: estimatedFormationDays - 1)));
+
+    // 3) Sum weighted completions within the window
+    double completedDays = 0.0;
+    ratioByDay.forEach((day, ratio) {
+      if (!day.isBefore(windowStart)) {
+        completedDays += ratio;
+      }
+    });
+
+    // 4) Compute completion rate for the bounded window
+    final double completionRate = calculationPeriod > 0 ? (completedDays / calculationPeriod) : 0.0;
 
     // If we haven't reached the formation period yet, calculate probability based on current performance
     if (daysSinceStart < estimatedFormationDays) {

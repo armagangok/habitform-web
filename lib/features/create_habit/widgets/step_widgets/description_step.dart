@@ -32,16 +32,16 @@ class DescriptionStep extends ConsumerWidget {
               children: [
                 Text(
                   LocaleKeys.create_habit_description_title.tr(),
-                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
+                  style: context.headlineSmall.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 const SizedBox(height: 8),
                 Text(
                   LocaleKeys.create_habit_description_description.tr(),
-                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        color: Theme.of(context).hintColor,
-                      ),
+                  style: context.bodyLarge.copyWith(
+                    color: Theme.of(context).hintColor,
+                  ),
                 ),
               ],
             ),
@@ -57,7 +57,7 @@ class DescriptionStep extends ConsumerWidget {
                   decoration: null,
                   maxLines: 4,
                   minLines: 3,
-                  style: Theme.of(context).textTheme.bodyMedium,
+                  style: context.bodyMedium,
                   autofocus: true,
                 ),
               ),
