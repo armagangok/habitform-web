@@ -24,6 +24,10 @@ class Habit extends HiveObject {
   @HiveField(4)
   final ReminderModel? reminderModel;
 
+  // Number of times the habit is intended to be completed per day (e.g., brush teeth twice)
+  @HiveField(5, defaultValue: 1)
+  final int dailyTarget;
+
   @HiveField(6)
   final int colorCode;
 
@@ -49,6 +53,7 @@ class Habit extends HiveObject {
     this.reminderModel,
     this.emoji,
     this.completions = const {},
+    this.dailyTarget = 1,
     required this.colorCode,
     this.archiveDate,
     this.status = HabitStatus.active,
@@ -64,6 +69,7 @@ class Habit extends HiveObject {
     String? emoji,
     int? colorCode,
     Map<String, CompletionEntry>? completions,
+    int? dailyTarget,
     DateTime? archiveDate,
     HabitStatus? status,
     List<String>? categoryIds,
@@ -76,6 +82,7 @@ class Habit extends HiveObject {
       reminderModel: reminderModel ?? this.reminderModel,
       emoji: emoji ?? this.emoji,
       completions: completions ?? this.completions,
+      dailyTarget: dailyTarget ?? this.dailyTarget,
       colorCode: colorCode ?? this.colorCode,
       archiveDate: archiveDate ?? this.archiveDate,
       status: status ?? this.status,

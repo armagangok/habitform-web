@@ -20,28 +20,27 @@ class CompletionEntryAdapter extends TypeAdapter<CompletionEntry> {
       id: fields[0] as String,
       date: fields[1] as DateTime,
       isCompleted: fields[2] as bool,
+      count: fields[3] == null ? 1 : fields[3] as int,
     );
   }
 
   @override
   void write(BinaryWriter writer, CompletionEntry obj) {
     writer
-      ..writeByte(3)
+      ..writeByte(4)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
       ..write(obj.date)
       ..writeByte(2)
-      ..write(obj.isCompleted);
+      ..write(obj.isCompleted)
+      ..writeByte(3)
+      ..write(obj.count);
   }
 
   @override
   int get hashCode => typeId.hashCode;
 
   @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is CompletionEntryAdapter &&
-          runtimeType == other.runtimeType &&
-          typeId == other.typeId;
+  bool operator ==(Object other) => identical(this, other) || other is CompletionEntryAdapter && runtimeType == other.runtimeType && typeId == other.typeId;
 }

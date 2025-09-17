@@ -48,7 +48,7 @@ class _HabitWidgetState extends ConsumerState<HabitWidget> with SingleTickerProv
   }
 
   double _getProgressPercentage(Habit habit) {
-    return habit.completions.calculateProgressPercentageFromFirstCompletion();
+    return habit.completions.calculateWeightedProgressPercentageFromFirstCompletion(habit.dailyTarget);
   }
 
   Future<void> _showAchievementIfEarned({required Habit previousHabit, required Habit updatedHabit}) async {
@@ -75,8 +75,8 @@ class _HabitWidgetState extends ConsumerState<HabitWidget> with SingleTickerProv
     );
   }
 
-  Widget _buildCompletionIndicator(bool isCompleted, Color habitColor) {
-    if (isCompleted) {
+  Widget _buildCompletionIndicator(double ratio, Color habitColor) {
+    if (ratio >= 1.0) {
       return Container(
         key: const ValueKey<bool>(true),
         width: 32,
@@ -105,11 +105,8 @@ class _HabitWidgetState extends ConsumerState<HabitWidget> with SingleTickerProv
         height: 32,
         decoration: BoxDecoration(
           shape: BoxShape.circle,
-          color: Colors.transparent,
-          border: Border.all(
-            color: habitColor.withValues(alpha: 0.6),
-            width: 2.5,
-          ),
+          color: habitColor.withValues(alpha: (0.12 + 0.88 * ratio).clamp(0.12, 1.0)),
+          border: Border.all(color: habitColor.withValues(alpha: 0.6), width: 2.5),
         ),
         child: Icon(
           CupertinoIcons.circle,
@@ -120,7 +117,9 @@ class _HabitWidgetState extends ConsumerState<HabitWidget> with SingleTickerProv
     }
   }
 
-  void _toggleToday() async {
+  bool _isDecreasingMode = false;
+
+  void _incrementToday() async {
     if (!mounted) return;
 
     try {
@@ -133,35 +132,52 @@ class _HabitWidgetState extends ConsumerState<HabitWidget> with SingleTickerProv
             ),
             orElse: () => widget.habit,
           );
-      final wasCompleted = today.isCompletedInEntries(beforeHabit.completions);
+      final beforeCount = beforeHabit.completions.getCountForDate(today);
+      final beforeTarget = beforeHabit.dailyTarget <= 0 ? 1 : beforeHabit.dailyTarget;
+      final beforeFull = beforeCount >= beforeTarget;
 
       await _controller.forward(from: 0.0);
 
       if (!mounted) return;
-      await homeNotifier.toggleHabitCompletion(widget.habit.id, today);
+      // If currently in decreasing mode, switch to decrement instead
+      await homeNotifier.adjustHabitCompletion(widget.habit.id, today, increment: !_isDecreasingMode);
 
-      if (!wasCompleted) {
-        await Future<void>.delayed(const Duration(milliseconds: 50));
-        if (!mounted) return;
-
-        try {
-          final afterHabit = ref.read(homeProvider).maybeWhen(
-                data: (homeState) => homeState.habits.firstWhere(
-                  (h) => h.id == widget.habit.id,
-                  orElse: () => widget.habit,
-                ),
+      // Only show achievement when crossing from below target to full target
+      await Future<void>.delayed(const Duration(milliseconds: 50));
+      if (!mounted) return;
+      try {
+        final afterHabit = ref.read(homeProvider).maybeWhen(
+              data: (homeState) => homeState.habits.firstWhere(
+                (h) => h.id == widget.habit.id,
                 orElse: () => widget.habit,
-              );
-          if (!mounted) return;
+              ),
+              orElse: () => widget.habit,
+            );
+        if (!mounted) return;
+        final afterCount = afterHabit.completions.getCountForDate(today);
+        final target = afterHabit.dailyTarget <= 0 ? 1 : afterHabit.dailyTarget;
+        final afterFull = afterCount >= target;
+        if (!beforeFull && afterFull) {
           await _showAchievementIfEarned(previousHabit: beforeHabit, updatedHabit: afterHabit);
-        } catch (e) {
-          // Achievement dialog açılamazsa sessizce devam et
-          LogHelper.shared.debugPrint('Achievement dialog error: $e');
         }
+      } catch (e) {
+        LogHelper.shared.debugPrint('Achievement dialog error: $e');
       }
     } catch (e) {
       // Genel hata durumunda sessizce devam et
       LogHelper.shared.debugPrint('Toggle habit error: $e');
+    }
+  }
+
+  void _decrementToday() async {
+    if (!mounted) return;
+    try {
+      final today = DateTime.now();
+      final homeNotifier = ref.read(homeProvider.notifier);
+      _isDecreasingMode = true;
+      await homeNotifier.adjustHabitCompletion(widget.habit.id, today, increment: false);
+    } catch (e) {
+      LogHelper.shared.debugPrint('Decrement habit error: $e');
     }
   }
 
@@ -177,7 +193,14 @@ class _HabitWidgetState extends ConsumerState<HabitWidget> with SingleTickerProv
 
     final habitName = currentHabit.habitName;
     final today = DateTime.now();
-    final isTodayCompleted = today.isCompletedInEntries(currentHabit.completions);
+    final count = currentHabit.completions.getCountForDate(today);
+    final ratio = currentHabit.dailyTarget > 0 ? (count / currentHabit.dailyTarget).clamp(0.0, 1.0) : 0.0;
+    // Update decreasing mode based on current ratio
+    if (ratio >= 1.0) {
+      _isDecreasingMode = true;
+    } else if (ratio == 0.0) {
+      _isDecreasingMode = false;
+    }
     final habitColor = Color(currentHabit.colorCode);
     final emoji = currentHabit.emoji ?? '🎯';
     final streak = currentHabit.completions.calculateCurrentStreak();
@@ -188,7 +211,7 @@ class _HabitWidgetState extends ConsumerState<HabitWidget> with SingleTickerProv
         aspectRatio: 1,
         child: Container(
           decoration: BoxDecoration(
-            color: habitColor.withValues(alpha: isTodayCompleted ? 0.1 : 0.025),
+            color: habitColor.withValues(alpha: ratio > 0 ? 0.1 : 0.025),
             borderRadius: BorderRadius.circular(20),
             border: Border.all(color: habitColor.withValues(alpha: 0.35), width: 2),
           ),
@@ -270,10 +293,9 @@ class _HabitWidgetState extends ConsumerState<HabitWidget> with SingleTickerProv
                     ),
 
                     // Complete button - bottom right
-                    CupertinoButton(
-                      padding: EdgeInsets.zero,
-                      onPressed: _toggleToday,
-                      minimumSize: Size(0, 0),
+                    CustomButton(
+                      onPressed: _incrementToday,
+                      onLongPressed: _decrementToday,
                       child: ScaleTransition(
                         scale: _tapScaleAnimation,
                         child: AnimatedSwitcher(
@@ -288,7 +310,7 @@ class _HabitWidgetState extends ConsumerState<HabitWidget> with SingleTickerProv
                               ),
                             );
                           },
-                          child: _buildCompletionIndicator(isTodayCompleted, habitColor),
+                          child: _buildCompletionIndicator(ratio, habitColor),
                         ),
                       ),
                     ),

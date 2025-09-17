@@ -727,7 +727,7 @@ class _AchievementDialogState extends State<AchievementDialog> with TickerProvid
 
   // Progress ratio based on completions
   double _getFormationProgressByCompletions() {
-    return widget.habit.completions.calculateFormationProgress(_totalFormationDays);
+    return widget.habit.completions.calculateFormationProgress(_totalFormationDays, widget.habit.dailyTarget);
   }
 
   String _getFormationProgressTitle() {

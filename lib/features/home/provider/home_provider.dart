@@ -89,73 +89,62 @@ class HomeNotifier extends AsyncNotifier<HomeState> {
 
   /// Toggles the completion status of a habit for a specific date
   Future<void> toggleHabitCompletion(String habitId, DateTime date) async {
-    LogHelper.shared.debugPrint('Toggling habit completion for habit: $habitId on date: $date');
+    // Backward compatibility: default to increment when tapping
+    await adjustHabitCompletion(habitId, date, increment: true);
+  }
 
-    // Normalize the date (without time components)
+  /// Adjusts completion count progressively (increment/decrement) for a date
+  Future<void> adjustHabitCompletion(String habitId, DateTime date, {required bool increment}) async {
+    LogHelper.shared.debugPrint('Adjusting habit completion for habit: $habitId on date: $date, increment: $increment');
+
+    // Normalize date and fetch current state
     final normalizedDate = DateTime(date.year, date.month, date.day);
     final dateKey = normalizedDate.toIso8601DateString;
-
-    // Get current state
     final currentState = state;
-    if (currentState is! AsyncData<HomeState>) {
-      LogHelper.shared.debugPrint('Cannot toggle habit completion: State is not loaded yet');
-      return;
-    }
+    if (currentState is! AsyncData<HomeState>) return;
 
-    final currentHabits = currentState.value.habits;
-
-    // Find the habit by ID
+    final currentHabits = List<Habit>.from(currentState.value.habits);
     final habitIndex = currentHabits.indexWhere((h) => h.id == habitId);
-    if (habitIndex == -1) {
-      LogHelper.shared.debugPrint('Habit not found with ID: $habitId');
-      throw Exception('Habit not found');
-    }
+    if (habitIndex == -1) throw Exception('Habit not found');
 
     final habit = currentHabits[habitIndex];
+    final target = habit.dailyTarget <= 0 ? 1 : habit.dailyTarget;
 
-    // Check if the habit is already completed for this date
-    bool isCurrentlyCompleted = false;
-    for (var entry in habit.completions.values) {
-      if (entry.date.normalized.isSameDayWith(normalizedDate)) {
-        isCurrentlyCompleted = entry.isCompleted;
+    // Find existing entry
+    final updatedCompletions = Map<String, CompletionEntry>.from(habit.completions);
+    String? existingKey;
+    CompletionEntry? existingEntry;
+    for (final entry in updatedCompletions.entries) {
+      if (entry.value.date.normalized.isSameDayWith(normalizedDate)) {
+        existingKey = entry.key;
+        existingEntry = entry.value;
         break;
       }
     }
 
-    // Create the completion entry
-    final completion = CompletionEntry(
+    int currentCount = existingEntry?.count ?? 0;
+    int newCount = increment ? (currentCount + 1) : (currentCount - 1);
+    if (newCount < 0) newCount = 0;
+    if (newCount > target) newCount = target;
+
+    // Remove old entry and write updated
+    if (existingKey != null) updatedCompletions.remove(existingKey);
+    final updatedEntry = CompletionEntry(
       id: dateKey,
       date: normalizedDate,
-      isCompleted: !isCurrentlyCompleted, // Toggle the completion status
+      isCompleted: newCount > 0,
+      count: newCount,
     );
+    updatedCompletions[dateKey] = updatedEntry;
 
-    // Apply optimistic update
-    final updatedHabits = List<Habit>.from(currentHabits);
-    final updatedCompletions = Map<String, CompletionEntry>.from(habit.completions);
+    // Optimistic state
+    currentHabits[habitIndex] = habit.copyWith(completions: updatedCompletions);
+    state = AsyncData(HomeState(habits: currentHabits));
 
-    if (!isCurrentlyCompleted) {
-      // Mark as completed
-      updatedCompletions[dateKey] = completion;
-    } else {
-      // Remove completion if it exists
-      for (var key in updatedCompletions.keys.toList()) {
-        final entry = updatedCompletions[key]!;
-        if (entry.date.normalized.isSameDayWith(normalizedDate)) {
-          updatedCompletions.remove(key);
-          break;
-        }
-      }
-    }
-
-    updatedHabits[habitIndex] = habit.copyWith(completions: updatedCompletions);
-
-    // Update state with optimistic update
-    state = AsyncData(HomeState(habits: updatedHabits));
-
-    // Update database
-    state = await AsyncValue.guard(() async {
+    // Persist via service using increment/decrement semantics
+    await AsyncValue.guard(() async {
+      final completion = CompletionEntry(id: dateKey, date: normalizedDate, isCompleted: increment);
       await habitService.updateHabitCompletionStatus(habitId, completion);
-      return HomeState(habits: updatedHabits);
     });
 
     // Refresh formation statistics after completion update

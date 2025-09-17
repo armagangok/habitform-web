@@ -104,11 +104,38 @@ extension CompletionEntryUtils on Map<String, CompletionEntry> {
     return false;
   }
 
-  // Calculate formation score based on completed days
-  int calculateFormationScore() {
-    if (isEmpty) return 0;
-    // Count distinct completed entries, excluding retroactive ones
-    return values.where((entry) => entry.isCompleted == true).length;
+  // Get recorded count for a specific date (0 if none)
+  int getCountForDate(DateTime date) {
+    for (final entry in values) {
+      if (entry.date.normalized.isSameDayWith(date.normalized)) {
+        return entry.count;
+      }
+    }
+    return 0;
+  }
+
+  // Get completion ratio for a date given a dailyTarget
+  double getCompletionRatioForDate(DateTime date, int dailyTarget) {
+    if (dailyTarget <= 0) return 0.0;
+    final count = getCountForDate(date);
+    final ratio = count / dailyTarget;
+    return ratio.clamp(0.0, 1.0);
+  }
+
+  // Calculate weighted formation score using per-day ratio (sum of ratios)
+  double calculateWeightedFormationScore(int dailyTarget) {
+    if (isEmpty) return 0.0;
+    if (dailyTarget <= 0) dailyTarget = 1;
+
+    // Sum ratios per calendar day (cap 1.0 per day)
+    final Map<DateTime, double> ratioByDay = {};
+    for (final entry in values) {
+      final day = entry.date.normalized;
+      final ratio = (entry.count / dailyTarget).clamp(0.0, 1.0);
+      final current = ratioByDay[day] ?? 0.0;
+      ratioByDay[day] = (current + ratio).clamp(0.0, 1.0);
+    }
+    return ratioByDay.values.fold(0.0, (sum, r) => sum + r);
   }
 
   // Calculate formation score based on first completion date (for proper formation calculation)
@@ -125,25 +152,25 @@ extension CompletionEntryUtils on Map<String, CompletionEntry> {
   }
 
   // Calculate formation progress percentage (0.0 to 1.0)
-  double calculateFormationProgress(int totalFormationDays) {
+  double calculateFormationProgress(int totalFormationDays, int dailyTarget) {
     if (totalFormationDays <= 0) return 0.0;
-    final completedDays = calculateFormationScore();
-    return (completedDays / totalFormationDays).clamp(0.0, 1.0);
+    final weighted = calculateWeightedFormationScore(dailyTarget);
+    return (weighted / totalFormationDays).clamp(0.0, 1.0);
   }
 
   // Get remaining days for formation
   int getRemainingFormationDays(int totalFormationDays) {
-    final completedDays = calculateFormationScore();
+    final completedDays = calculateFormationScoreFromFirstCompletion();
     final remaining = totalFormationDays - completedDays;
     return remaining > 0 ? remaining : 0;
   }
 
   // Calculate formation likelihood score (0-100) based on completion rate vs difficulty requirements
-  double calculateFormationLikelihoodScore(int totalFormationDays, double minimumCompletionRate) {
+  double calculateFormationLikelihoodScore(int totalFormationDays, double minimumCompletionRate, int dailyTarget) {
     if (totalFormationDays <= 0) return 0.0;
 
-    final completedDays = calculateFormationScore();
-    final completionRate = (completedDays / totalFormationDays) * 100;
+    final weightedDays = calculateWeightedFormationScore(dailyTarget);
+    final completionRate = (weightedDays / totalFormationDays) * 100;
 
     // Calculate how much above/below the minimum requirement
     final scoreAboveMinimum = completionRate - (minimumCompletionRate * 100);
@@ -163,7 +190,7 @@ extension CompletionEntryUtils on Map<String, CompletionEntry> {
   }
 
   // Calculate habit formation probability based on difficulty and completion history
-  double calculateFormationProbability(DateTime habitCreationDate, int estimatedFormationDays, double minimumCompletionRate) {
+  double calculateFormationProbability(DateTime habitCreationDate, int estimatedFormationDays, double minimumCompletionRate, int dailyTarget) {
     if (isEmpty || estimatedFormationDays <= 0) return 0.0;
 
     final today = DateTime.now();
@@ -176,7 +203,18 @@ extension CompletionEntryUtils on Map<String, CompletionEntry> {
     final daysSinceStart = today.difference(startDate).inDays + 1;
 
     // Calculate completion rate from first completion to today (or up to estimated formation days)
-    final completedDays = values.where((entry) => entry.isCompleted && !entry.date.normalized.isBefore(startDate)).length;
+    // Weighted days from first completion onward
+    final Map<DateTime, double> ratioByDay = {};
+    final effectiveTarget = dailyTarget <= 0 ? 1 : dailyTarget;
+    for (final entry in values) {
+      if (!entry.date.normalized.isBefore(startDate)) {
+        final ratio = (entry.count / effectiveTarget).clamp(0.0, 1.0);
+        final day = entry.date.normalized;
+        final current = ratioByDay[day] ?? 0.0;
+        ratioByDay[day] = (current + ratio).clamp(0.0, 1.0);
+      }
+    }
+    final completedDays = ratioByDay.values.fold(0.0, (sum, r) => sum + r);
 
     // Use the minimum of days since start or estimated formation days for calculation
     final calculationPeriod = daysSinceStart < estimatedFormationDays ? daysSinceStart : estimatedFormationDays;
@@ -313,6 +351,32 @@ extension CompletionEntryUtils on Map<String, CompletionEntry> {
     // Calculate completion rate percentage (cap at 100%)
     final percentage = daysSinceStart > 0 ? (completedEntries / daysSinceStart) * 100.0 : 0.0;
     return percentage.clamp(0.0, 100.0);
+  }
+
+  // Weighted progress percentage since first completion using per-day ratios (0..100)
+  double calculateWeightedProgressPercentageFromFirstCompletion(int dailyTarget) {
+    if (isEmpty) return 0.0;
+
+    final firstCompletionDate = getFirstCompletionDate();
+    if (firstCompletionDate == null) return 0.0;
+
+    final startDate = DateUtils.dateOnly(firstCompletionDate);
+    final today = DateTime.now();
+    final daysSinceStart = today.difference(startDate).inDays + 1;
+    if (daysSinceStart <= 0) return 0.0;
+
+    final effectiveTarget = dailyTarget <= 0 ? 1 : dailyTarget;
+    final Map<DateTime, double> ratioByDay = {};
+    for (final entry in values) {
+      if (!entry.date.normalized.isBefore(startDate)) {
+        final ratio = (entry.count / effectiveTarget).clamp(0.0, 1.0);
+        final day = entry.date.normalized;
+        final current = ratioByDay[day] ?? 0.0;
+        ratioByDay[day] = (current + ratio).clamp(0.0, 1.0);
+      }
+    }
+    final weightedDays = ratioByDay.values.fold(0.0, (sum, r) => sum + r);
+    return ((weightedDays / daysSinceStart) * 100.0).clamp(0.0, 100.0);
   }
 
   // Migration function to mark existing past date completions as retroactive

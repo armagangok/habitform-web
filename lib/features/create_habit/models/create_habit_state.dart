@@ -107,6 +107,7 @@ class CreateHabitState {
   final List<String> categoryIds;
   final CreateHabitStep currentStep;
   final HabitDifficulty difficulty;
+  final int dailyTarget;
 
   CreateHabitState({
     this.habitName,
@@ -120,6 +121,7 @@ class CreateHabitState {
     this.categoryIds = const [],
     this.currentStep = CreateHabitStep.habitName,
     this.difficulty = HabitDifficulty.moderate,
+    this.dailyTarget = 1,
   })  : habitNameController = habitNameController ?? TextEditingController(),
         habitDescriptionController = habitDescriptionController ?? TextEditingController();
 
@@ -135,6 +137,7 @@ class CreateHabitState {
     List<String>? categoryIds,
     CreateHabitStep? currentStep,
     HabitDifficulty? difficulty,
+    int? dailyTarget,
   }) {
     return CreateHabitState(
       habitName: title ?? habitName,
@@ -148,6 +151,7 @@ class CreateHabitState {
       categoryIds: categoryIds ?? this.categoryIds,
       currentStep: currentStep ?? this.currentStep,
       difficulty: difficulty ?? this.difficulty,
+      dailyTarget: dailyTarget ?? this.dailyTarget,
     );
   }
 }

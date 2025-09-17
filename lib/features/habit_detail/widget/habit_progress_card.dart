@@ -125,7 +125,7 @@ class HabitProgressCard extends ConsumerWidget {
     }
 
     // Use formation provider data if available, otherwise fallback to local calculation
-    final completionRate = habitStatistic?.progressPercentage ?? habit.completions.calculateProgressPercentage();
+    final completionRate = habitStatistic?.progressPercentage ?? habit.completions.calculateWeightedProgressPercentageFromFirstCompletion(habit.dailyTarget);
     final formationProgress = habitStatistic?.formationProbability ?? _calculateLocalFormationProbability(habit);
 
     // Calculate streaks using extension methods (these are not in formation provider yet)
@@ -144,8 +144,8 @@ class HabitProgressCard extends ConsumerWidget {
     final weeklyData = <double>[];
     for (int i = 6; i >= 0; i--) {
       final date = today.subtract(Duration(days: i));
-      final isCompleted = habit.completions.isDateCompleted(date);
-      weeklyData.add(isCompleted ? 1.0 : 0.0);
+      final ratio = habit.completions.getCompletionRatioForDate(date, habit.dailyTarget);
+      weeklyData.add(ratio);
     }
 
     return ProgressData(
@@ -171,6 +171,7 @@ class HabitProgressCard extends ConsumerWidget {
       dummyDate, // This parameter is now ignored, but kept for compatibility
       habit.difficulty.estimatedFormationDays,
       habit.difficulty.minimumCompletionRate,
+      habit.dailyTarget,
     );
   }
 }
@@ -295,6 +296,8 @@ class _WeeklyProgressChart extends ConsumerStatefulWidget {
 }
 
 class _WeeklyProgressChartState extends ConsumerState<_WeeklyProgressChart> {
+  final Map<String, bool> _decreasingModeByDateKey = {};
+
   @override
   Widget build(BuildContext context) {
     final habit = ref.watch(habitDetailProvider);
@@ -322,13 +325,22 @@ class _WeeklyProgressChartState extends ConsumerState<_WeeklyProgressChart> {
             final dateForIndex = today.subtract(Duration(days: 6 - index));
             final isFuture = dateForIndex.isAfter(today);
 
+            // Decide default mode based on current ratio at build time
+            final dateKey = '${dateForIndex.year}-${dateForIndex.month}-${dateForIndex.day}';
+            final ratio = weeklyData[index];
+            if (ratio >= 1.0) {
+              _decreasingModeByDateKey[dateKey] = true;
+            } else if (ratio == 0.0) {
+              _decreasingModeByDateKey[dateKey] = false;
+            }
+
             return _WeeklyDayCell(
               index: index,
               isCompleted: isCompleted,
               habitColor: Color(habit.colorCode),
               date: dateForIndex,
               isDisabled: isFuture,
-              onTap: () => _toggleCompletion(index, habit),
+              onTap: () => _handleTap(index, habit),
             );
           }),
         ),
@@ -336,12 +348,12 @@ class _WeeklyProgressChartState extends ConsumerState<_WeeklyProgressChart> {
     );
   }
 
-  Future<void> _toggleCompletion(int index, Habit habit) async {
+  Future<void> _adjustCompletion(int index, Habit habit, {required bool increment}) async {
     // Get the current habit from the provider to ensure we have the latest data
     final currentHabit = ref.read(habitDetailProvider);
     if (currentHabit == null) return;
 
-    final isCurrentlyCompleted = _getWeeklyData(currentHabit)[index];
+    final currentRatio = _getWeeklyData(currentHabit)[index];
 
     // Haptic feedback
     HapticFeedback.lightImpact();
@@ -358,7 +370,8 @@ class _WeeklyProgressChartState extends ConsumerState<_WeeklyProgressChart> {
     final completionEntry = CompletionEntry(
       id: '${targetDate.year}-${targetDate.month}-${targetDate.day}',
       date: targetDate,
-      isCompleted: !isCurrentlyCompleted,
+      // true -> increment count, false -> decrement count
+      isCompleted: increment ? (currentRatio < 1.0) : false,
     );
 
     try {
@@ -370,14 +383,44 @@ class _WeeklyProgressChartState extends ConsumerState<_WeeklyProgressChart> {
     }
   }
 
-  List<bool> _getWeeklyData(Habit habit) {
+  Future<void> _handleTap(int index, Habit habit) async {
     final today = DateUtils.dateOnly(DateTime.now());
-    final weeklyData = <bool>[];
+    final targetDate = today.subtract(Duration(days: 6 - index));
+    final dateKey = '${targetDate.year}-${targetDate.month}-${targetDate.day}';
+    final ratio = _getWeeklyData(habit)[index];
+
+    // Determine current mode
+    bool isDecreasing = _decreasingModeByDateKey[dateKey] ?? false;
+    if (ratio >= 1.0) {
+      isDecreasing = true;
+    } else if (ratio == 0.0) {
+      isDecreasing = false;
+    }
+
+    // Choose direction: when decreasing, continue until 0; when increasing, continue until full
+    final shouldIncrement = !isDecreasing;
+    await _adjustCompletion(index, habit, increment: shouldIncrement);
+
+    // Update mode after action based on new ratio estimate
+    final target = habit.dailyTarget <= 0 ? 1 : habit.dailyTarget;
+    final currentCount = habit.completions.getCountForDate(targetDate);
+    final nextCount = shouldIncrement ? (currentCount + 1).clamp(0, target) : (currentCount - 1).clamp(0, target);
+    if (nextCount >= target) {
+      _decreasingModeByDateKey[dateKey] = true;
+    } else if (nextCount <= 0) {
+      _decreasingModeByDateKey[dateKey] = false;
+    }
+    if (mounted) setState(() {});
+  }
+
+  List<double> _getWeeklyData(Habit habit) {
+    final today = DateUtils.dateOnly(DateTime.now());
+    final weeklyData = <double>[];
 
     for (int i = 6; i >= 0; i--) {
       final date = today.subtract(Duration(days: i));
-      final isCompleted = habit.completions.isDateCompleted(date);
-      weeklyData.add(isCompleted);
+      final ratio = habit.completions.getCompletionRatioForDate(date, habit.dailyTarget);
+      weeklyData.add(ratio);
     }
 
     return weeklyData;
@@ -386,9 +429,10 @@ class _WeeklyProgressChartState extends ConsumerState<_WeeklyProgressChart> {
 
 class _WeeklyDayCell extends StatefulWidget {
   final int index;
-  final bool isCompleted;
+  final double isCompleted; // ratio 0..1
   final Color habitColor;
   final VoidCallback onTap;
+  final VoidCallback? onLongPress;
   final DateTime date;
   final bool isDisabled;
 
@@ -397,6 +441,7 @@ class _WeeklyDayCell extends StatefulWidget {
     required this.isCompleted,
     required this.habitColor,
     required this.onTap,
+    this.onLongPress,
     required this.date,
     this.isDisabled = false,
   });
@@ -420,6 +465,7 @@ class _WeeklyDayCellState extends State<_WeeklyDayCell> {
 
     return CustomButton(
       onPressed: widget.isDisabled ? null : widget.onTap,
+      onLongPressed: widget.isDisabled ? null : widget.onLongPress,
       padding: EdgeInsets.zero,
       child: Column(
         children: [
@@ -427,11 +473,11 @@ class _WeeklyDayCellState extends State<_WeeklyDayCell> {
             width: 32,
             height: 32,
             decoration: BoxDecoration(
-              color: widget.isCompleted ? widget.habitColor : widget.habitColor.withValues(alpha: 0.1),
+              color: widget.habitColor.withValues(alpha: (0.1 + (0.9 * widget.isCompleted)).clamp(0.1, 1.0)),
               borderRadius: BorderRadius.circular(8),
             ),
             child: Center(
-              child: widget.isCompleted
+              child: widget.isCompleted >= 1.0
                   ? const Icon(
                       FontAwesomeIcons.check,
                       size: 14,

@@ -49,7 +49,7 @@ class CreateHabitNotifier extends AutoDisposeNotifier<CreateHabitState> {
       case CreateHabitStep.category:
         return true; // optional multi-select
       case CreateHabitStep.difficulty:
-        return true; // always selectable
+        return state.dailyTarget >= 1 && state.dailyTarget <= 24; // daily target sanity
     }
   }
 
@@ -83,6 +83,11 @@ class CreateHabitNotifier extends AutoDisposeNotifier<CreateHabitState> {
 
   void updateDifficulty(HabitDifficulty difficulty) {
     state = state.copyWith(difficulty: difficulty);
+  }
+
+  void updateDailyTarget(int target) {
+    final clamped = target < 1 ? 1 : (target > 24 ? 24 : target);
+    state = state.copyWith(dailyTarget: clamped);
   }
 
   void updateReminder(ReminderModel? reminder) {
@@ -133,6 +138,7 @@ class CreateHabitNotifier extends AutoDisposeNotifier<CreateHabitState> {
         emoji: emoji.selectedEmoji ?? state.emoji ?? '📝',
         colorCode: color?.value ?? state.colorCode ?? defaultColor ?? Colors.blueAccent.value,
         reminderModel: reminder,
+        dailyTarget: state.dailyTarget,
         categoryIds: categoryIds,
         difficulty: state.difficulty,
       );

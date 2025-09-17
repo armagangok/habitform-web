@@ -54,6 +54,13 @@ class EditHabitNotifier extends AutoDisposeNotifier<Habit?> {
 
   HabitDifficulty get selectedDifficulty => _selectedDifficulty;
 
+  void updateDailyTarget(int target) {
+    final clamped = target < 1 ? 1 : (target > 24 ? 24 : target);
+    if (state != null) {
+      state = state?.copyWith(dailyTarget: clamped);
+    }
+  }
+
   void updateHabit() async {
     final habitName = habitNameController.text;
 

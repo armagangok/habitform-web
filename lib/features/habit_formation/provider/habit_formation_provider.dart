@@ -101,12 +101,11 @@ class FormationNotifier extends AutoDisposeAsyncNotifier<FormtionState> {
 
   /// Counts total number of completed days across all habits using extension methods
   int _countTotalCompletions(List<Habit> habits) {
-    int total = 0;
+    double total = 0.0;
     for (final habit in habits) {
-      // Use first completion date for calculation
-      total += habit.completions.calculateFormationScoreFromFirstCompletion();
+      total += habit.completions.calculateWeightedFormationScore(habit.dailyTarget);
     }
-    return total;
+    return total.round();
   }
 
   /// Calculates per-habit statistics using extension methods
@@ -137,8 +136,8 @@ class FormationNotifier extends AutoDisposeAsyncNotifier<FormtionState> {
       final startDate = DateUtils.dateOnly(habitCreationDate);
 
       // Use extension methods for consistent calculations based on first completion date
-      final completedDays = habit.completions.calculateFormationScoreFromFirstCompletion();
-      final progressPercentage = habit.completions.calculateProgressPercentageFromFirstCompletion();
+      final completedDays = habit.completions.calculateWeightedFormationScore(habit.dailyTarget).round();
+      final progressPercentage = habit.completions.calculateWeightedProgressPercentageFromFirstCompletion(habit.dailyTarget);
 
       // Calculate total days since first completion (for remaining days calculation)
       final firstCompletionDate = habit.completions.getFirstCompletionDate();
@@ -150,6 +149,7 @@ class FormationNotifier extends AutoDisposeAsyncNotifier<FormtionState> {
         habitCreationDate, // This parameter is now ignored, but kept for compatibility
         estimatedFormationDays,
         habit.difficulty.minimumCompletionRate,
+        habit.dailyTarget,
       );
 
       final remainingFormationDays = (estimatedFormationDays - daysSinceFirstCompletion).clamp(0, estimatedFormationDays);

@@ -164,7 +164,7 @@ class HabitInsightsCard extends ConsumerWidget {
 
   double _calculateCompletionRate() {
     if (habit.completions.isEmpty) return 0.0;
-    return habit.completions.calculateProgressPercentage();
+    return habit.completions.calculateWeightedProgressPercentageFromFirstCompletion(habit.dailyTarget);
   }
 
   bool _isWeekendWarrior() {
@@ -203,7 +203,7 @@ class HabitInsightsCard extends ConsumerWidget {
   double _getFormationProgress() {
     // Fallback calculation when provider data is not available
     final estimatedFormationDays = habit.difficulty.estimatedFormationDays;
-    return habit.completions.calculateFormationProgress(estimatedFormationDays) * 100.0;
+    return habit.completions.calculateFormationProgress(estimatedFormationDays, habit.dailyTarget) * 100.0;
   }
 }
 

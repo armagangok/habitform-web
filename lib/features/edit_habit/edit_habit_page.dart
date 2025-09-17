@@ -141,6 +141,49 @@ class EditHabitPage extends ConsumerWidget {
                       },
                     ),
 
+                    // Daily target selector (edit)
+                    Consumer(
+                      builder: (context, ref, child) {
+                        final state = ref.watch(editHabitProvider);
+                        final currentTarget = state?.dailyTarget ?? 1;
+                        return CupertinoListSection.insetGrouped(
+                          header: const Text("Daily target per day"),
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                                  child: Text("Completions/day", style: context.titleMedium),
+                                ),
+                                Row(
+                                  children: [
+                                    CupertinoButton(
+                                      padding: const EdgeInsets.all(8),
+                                      onPressed: () {
+                                        final newValue = (currentTarget - 1) < 1 ? 1 : (currentTarget - 1);
+                                        ref.read(editHabitProvider.notifier).updateDailyTarget(newValue);
+                                      },
+                                      child: const Icon(CupertinoIcons.minus_circle),
+                                    ),
+                                    Text(currentTarget.toString(), style: context.titleMedium),
+                                    CupertinoButton(
+                                      padding: const EdgeInsets.all(8),
+                                      onPressed: () {
+                                        final newValue = (currentTarget + 1) > 24 ? 24 : (currentTarget + 1);
+                                        ref.read(editHabitProvider.notifier).updateDailyTarget(newValue);
+                                      },
+                                      child: const Icon(CupertinoIcons.plus_circle),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ],
+                        );
+                      },
+                    ),
+
                     // Reminder Selection
                     Consumer(
                       builder: (context, ref, child) {

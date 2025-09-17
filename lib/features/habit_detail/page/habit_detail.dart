@@ -84,7 +84,6 @@ class HabitDetailPage extends ConsumerWidget {
         habit.habitName,
         textAlign: TextAlign.center,
         style: TextStyle(
-          color: context.titleLarge.color,
           fontWeight: FontWeight.bold,
           fontSize: 18,
         ),
@@ -96,8 +95,8 @@ class HabitDetailPage extends ConsumerWidget {
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
               colors: [
-                Color(habit.colorCode).withValues(alpha: 0.3),
-                Color(habit.colorCode).withValues(alpha: 0.4),
+                Color(habit.colorCode).withValues(alpha: 0.8),
+                Color(habit.colorCode).withValues(alpha: 0.9),
               ],
             ),
           ),

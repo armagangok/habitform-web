@@ -15,8 +15,8 @@ class HabitMilestonesCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final milestones = _getMilestones();
-    // Use total completed days to drive milestone achievements/highlight
-    final totalCompletedDays = habit.completions.calculateFormationScore();
+    // Use weighted completed days to drive milestone achievements/highlight (rounded)
+    final totalCompletedDays = habit.completions.calculateWeightedFormationScore(habit.dailyTarget).round();
     final currentMilestone = _getCurrentMilestone(totalCompletedDays, milestones);
 
     return CupertinoListSection.insetGrouped(

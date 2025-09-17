@@ -21,26 +21,21 @@ class HabitAdapter extends TypeAdapter<Habit> {
       habitName: fields[1] as String,
       habitDescription: fields[2] as String?,
       reminderModel: fields[4] as ReminderModel?,
+      dailyTarget: fields[5] == null ? 1 : fields[5] as int,
       emoji: fields[3] as String?,
-      completions: fields[7] == null
-          ? {}
-          : (fields[7] as Map).cast<String, CompletionEntry>(),
+      completions: fields[7] == null ? {} : (fields[7] as Map).cast<String, CompletionEntry>(),
       colorCode: fields[6] as int,
       archiveDate: fields[8] as DateTime?,
-      status:
-          fields[10] == null ? HabitStatus.active : fields[10] as HabitStatus,
-      categoryIds:
-          fields[11] == null ? [] : (fields[11] as List).cast<String>(),
-      difficulty: fields[12] == null
-          ? HabitDifficulty.moderate
-          : fields[12] as HabitDifficulty,
+      status: fields[10] == null ? HabitStatus.active : fields[10] as HabitStatus,
+      categoryIds: fields[11] == null ? [] : (fields[11] as List).cast<String>(),
+      difficulty: fields[12] == null ? HabitDifficulty.moderate : fields[12] as HabitDifficulty,
     );
   }
 
   @override
   void write(BinaryWriter writer, Habit obj) {
     writer
-      ..writeByte(11)
+      ..writeByte(12)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -51,6 +46,8 @@ class HabitAdapter extends TypeAdapter<Habit> {
       ..write(obj.emoji)
       ..writeByte(4)
       ..write(obj.reminderModel)
+      ..writeByte(5)
+      ..write(obj.dailyTarget)
       ..writeByte(6)
       ..write(obj.colorCode)
       ..writeByte(7)
@@ -69,9 +66,5 @@ class HabitAdapter extends TypeAdapter<Habit> {
   int get hashCode => typeId.hashCode;
 
   @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is HabitAdapter &&
-          runtimeType == other.runtimeType &&
-          typeId == other.typeId;
+  bool operator ==(Object other) => identical(this, other) || other is HabitAdapter && runtimeType == other.runtimeType && typeId == other.typeId;
 }

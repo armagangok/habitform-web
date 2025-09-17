@@ -99,26 +99,44 @@ class LocalHabitService extends HabitService {
       throw Exception('Habit not found');
     }
 
-    // Update completions
+    // Update completions with count semantics (supports multi-completions)
     final updatedCompletions = Map<String, CompletionEntry>.from(habit.completions);
 
     // Find any existing entry for the same date
     String? existingKey;
+    CompletionEntry? existingEntry;
     for (var entry in updatedCompletions.entries) {
       if (entry.value.date.normalized.isSameDayWith(completion.date.normalized)) {
         existingKey = entry.key;
+        existingEntry = entry.value;
         break;
       }
     }
 
-    // Remove existing entry if found
+    // Determine new count based on desired action (completion.isCompleted acts as increment when true, decrement when false)
+    int currentCount = existingEntry?.count ?? 0;
+    int target = habit.dailyTarget <= 0 ? 1 : habit.dailyTarget;
+    int newCount;
+    if (completion.isCompleted) {
+      newCount = (currentCount + 1) > target ? target : (currentCount + 1);
+    } else {
+      newCount = (currentCount - 1) < 0 ? 0 : (currentCount - 1);
+    }
+
+    // Remove existing entry if found (we will rewrite)
     if (existingKey != null) {
       updatedCompletions.remove(existingKey);
     }
 
-    // Always add the completion entry (regardless of completed status)
-    // This allows us to track both completed and incomplete states
-    updatedCompletions[completion.id] = completion;
+    // Write back entry reflecting the new count and derived isCompleted
+    final updatedEntry = CompletionEntry(
+      id: completion.id,
+      date: completion.date.normalized,
+      // Only mark day completed when full target reached (affects streaks)
+      isCompleted: newCount >= target,
+      count: newCount,
+    );
+    updatedCompletions[updatedEntry.id] = updatedEntry;
 
     // Save updated habit
     final updatedHabit = habit.copyWith(completions: updatedCompletions);

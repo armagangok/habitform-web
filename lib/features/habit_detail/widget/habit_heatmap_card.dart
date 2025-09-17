@@ -5,6 +5,7 @@ import 'package:habitrise/features/habit_detail/widget/habit_calendar_widget.dar
 
 import '/core/core.dart';
 import '/features/purchase/providers/purchase_provider.dart';
+import '/models/completion_entry/completion_entry.dart';
 import '/models/models.dart';
 import '../../purchase/page/paywall_page.dart';
 
@@ -222,7 +223,7 @@ class _OptimizedHeatmapGridState extends State<_OptimizedHeatmapGrid> {
   late List<String> visibleMonthLabels;
 
   // Pre-processed completion data for O(1) lookup
-  late Map<String, bool> _completionMap;
+  late Map<String, CompletionEntry> _completionMap;
 
   // Cache for cell widgets to avoid rebuilding
   final Map<String, Widget> _cellWidgetCache = {};
@@ -286,8 +287,8 @@ class _OptimizedHeatmapGridState extends State<_OptimizedHeatmapGrid> {
   }
 
   // Pre-process completion data for O(1) lookup instead of O(n) search
-  Map<String, bool> _buildCompletionMap() {
-    final Map<String, bool> completionMap = {};
+  Map<String, CompletionEntry> _buildCompletionMap() {
+    final Map<String, CompletionEntry> completionMap = {};
     final now = DateTime.now();
     final oneYearAgo = now.subtract(const Duration(days: 365));
 
@@ -302,7 +303,7 @@ class _OptimizedHeatmapGridState extends State<_OptimizedHeatmapGrid> {
       LogHelper.shared.debugPrint('DEBUG: Processing entry: $dateKey, completed: ${entry.isCompleted}, date: ${entryDate.toString()}');
 
       if (entryDate.isAfter(oneYearAgo) && entryDate.isBefore(now.add(const Duration(days: 1)))) {
-        completionMap[dateKey] = entry.isCompleted;
+        completionMap[dateKey] = entry;
         LogHelper.shared.debugPrint('DEBUG: Added to map: $dateKey = ${entry.isCompleted}');
       } else {
         LogHelper.shared.debugPrint('DEBUG: Skipped entry outside range: $dateKey');
@@ -654,7 +655,10 @@ class _OptimizedHeatmapGridState extends State<_OptimizedHeatmapGrid> {
     }
 
     final dateKey = '${date.year}-${date.month}-${date.day}';
-    final isCompleted = _completionMap[dateKey] ?? false;
+    final entry = _completionMap[dateKey];
+    final target = widget.habit.dailyTarget <= 0 ? 1 : widget.habit.dailyTarget;
+    final ratio = entry == null ? 0.0 : (entry.count / target).clamp(0.0, 1.0);
+    final isCompleted = ratio >= 1.0;
 
     // Mark future dates (after today) with a special intensity to render low-opacity color
     final today = DateUtils.dateOnly(DateTime.now());
@@ -665,10 +669,28 @@ class _OptimizedHeatmapGridState extends State<_OptimizedHeatmapGrid> {
       LogHelper.shared.debugPrint('DEBUG: Cell lookup - week: $weekIndex, day: $dayIndex, date: $date, key: $dateKey, completed: $isCompleted');
     }
 
+    // Map ratio to 4 intensity buckets for gradient legend [0, 0.33, 0.66, 1]
+    int intensity;
+    if (isFuture) {
+      intensity = -1;
+    } else if (ratio == 0.0) {
+      intensity = 0;
+    } else if (ratio < 0.34) {
+      intensity = 1;
+    } else if (ratio < 0.67) {
+      intensity = 2;
+    } else if (ratio < 1.0) {
+      intensity = 3;
+    } else {
+      intensity = 4;
+    }
+
+    final tooltip = isFuture ? '' : '${entry?.count ?? 0}/$target';
+
     return CellData(
       date: date,
-      intensity: isFuture ? -1 : (isCompleted ? 1 : 0),
-      tooltip: isCompleted ? LocaleKeys.habit_detail_tooltip_completed.tr().replaceAll('{{day}}', date.day.toString()).replaceAll('{{month}}', date.month.toString()).replaceAll('{{year}}', date.year.toString()) : LocaleKeys.habit_detail_tooltip_not_completed.tr().replaceAll('{{day}}', date.day.toString()).replaceAll('{{month}}', date.month.toString()).replaceAll('{{year}}', date.year.toString()),
+      intensity: intensity,
+      tooltip: tooltip,
     );
   }
 
@@ -682,6 +704,12 @@ class _OptimizedHeatmapGridState extends State<_OptimizedHeatmapGrid> {
       case 0:
         return context.cupertinoTheme.brightness == Brightness.dark ? CupertinoColors.systemGrey6 : CupertinoColors.systemGrey5;
       case 1:
+        return habitColor.withValues(alpha: 0.25);
+      case 2:
+        return habitColor.withValues(alpha: 0.5);
+      case 3:
+        return habitColor.withValues(alpha: 0.75);
+      case 4:
         return habitColor;
       default:
         return habitColor;
