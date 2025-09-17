@@ -156,14 +156,14 @@ class _ArchivedHabitsPageState extends ConsumerState<ArchivedHabitsPage> {
       child: Row(
         children: [
           Text(
-            '${state.selectedHabitIds.length} selected',
+            LocaleKeys.archived_habits_selected_count.tr(namedArgs: {'count': state.selectedHabitIds.length.toString()}),
             style: const TextStyle(fontWeight: FontWeight.w500),
           ),
           const Spacer(),
           CupertinoButton(
             padding: EdgeInsets.zero,
             child: Text(
-              state.selectedHabitIds.length == state.archivedHabits.length ? 'Deselect All' : 'Select All',
+              state.selectedHabitIds.length == state.archivedHabits.length ? LocaleKeys.archived_habits_deselect_all.tr() : LocaleKeys.archived_habits_select_all.tr(),
               style: TextStyle(color: CupertinoTheme.of(context).primaryColor),
             ),
             onPressed: () {
@@ -186,20 +186,22 @@ class _ArchivedHabitsPageState extends ConsumerState<ArchivedHabitsPage> {
     final shouldDelete = await showCupertinoDialog<bool>(
       context: context,
       builder: (context) => CupertinoAlertDialog(
-        title: const Row(
+        title: Row(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(CupertinoIcons.exclamationmark_triangle, color: CupertinoColors.systemRed),
-            SizedBox(width: 8),
-            Text('Delete Selected Habits'),
+            const Icon(CupertinoIcons.exclamationmark_triangle, color: CupertinoColors.systemRed),
+            const SizedBox(width: 8),
+            Text(LocaleKeys.archived_habits_delete_selected_title.tr()),
           ],
         ),
         content: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const SizedBox(height: 8),
-            Text('Are you sure you want to delete $selectedCount habit(s)?'),
+            Text(
+              LocaleKeys.archived_habits_delete_selected_message.tr(namedArgs: {'count': selectedCount.toString()}),
+            ),
             const SizedBox(height: 8),
             Text(
               LocaleKeys.archived_habits_delete_confirmation_warning.tr(),

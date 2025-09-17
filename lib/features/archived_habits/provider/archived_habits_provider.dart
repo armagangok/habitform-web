@@ -61,12 +61,14 @@ class ArchivedHabitsNotifier extends AutoDisposeAsyncNotifier<ArchivedHabitsStat
       // Alışkanlığı arşivden çıkar
       await habitService.unarchiveHabit(habitId);
 
-      // Arşivden çıkarılan alışkanlığın hatırlatıcısını yeniden oluştur
+      // Arşivden çıkarılan alışkanlığın hatırlatıcısını yeniden oluştur (emoji + isim)
       if (archivedHabit.reminderModel != null) {
+        final emoji = archivedHabit.emoji ?? '';
+        final title = emoji.isNotEmpty ? '$emoji ${archivedHabit.habitName}' : archivedHabit.habitName;
         await ReminderService.createReminderNotification(
           archivedHabit.reminderModel!,
-          archivedHabit.habitName,
-          LocaleKeys.reminder_habit_reminder_message.tr(),
+          title,
+          LocaleKeys.reminder_personalized_body.tr(namedArgs: {'habit': title}),
         );
       }
 
@@ -158,7 +160,7 @@ class ArchivedHabitsNotifier extends AutoDisposeAsyncNotifier<ArchivedHabitsStat
         archivedHabits: updatedHabits,
         isSelectionMode: false,
         selectedHabitIds: {},
-        successMessage: '${selectedHabits.length} habit(s) deleted successfully',
+        successMessage: LocaleKeys.archived_habits_delete_selected_success.tr(namedArgs: {'count': selectedHabits.length.toString()}),
       ));
     } catch (e) {
       state = AsyncValue.data(state.value!.copyWith(
@@ -190,12 +192,12 @@ class ArchivedHabitsNotifier extends AutoDisposeAsyncNotifier<ArchivedHabitsStat
         }
       }
 
-      // Reschedule all notifications with only active habits
+      // Reschedule all notifications with only active habits (localized generic title/body)
       if (activeReminders.isNotEmpty) {
         await ReminderService.rescheduleAllNotifications(
           activeReminders,
-          'Habit Reminder',
-          'Time to complete your habit!',
+          LocaleKeys.subscription_habitReminderTitle.tr(),
+          LocaleKeys.habit_timeToCompleteYourHabit.tr(),
         );
         LogHelper.shared.debugPrint('Rescheduled notifications for ${activeReminders.length} active reminders');
       }

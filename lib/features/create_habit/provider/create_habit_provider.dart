@@ -141,9 +141,10 @@ class CreateHabitNotifier extends AutoDisposeNotifier<CreateHabitState> {
 
       if (reminder != null) {
         LogHelper.shared.debugPrint('Scheduling reminder for new habit: $reminder');
+        final displayName = (habit.emoji != null && habit.emoji!.isNotEmpty) ? '${habit.emoji} $habitName' : habitName;
         await ref.watch(reminderProvider.notifier).scheduleReminder(
-              title: habitName,
-              body: LocaleKeys.reminder_habit_reminder_message.tr(),
+              title: displayName,
+              body: LocaleKeys.reminder_personalized_body.tr(namedArgs: {'habit': displayName}),
               reminderToSchedule: reminder,
             );
       } else {

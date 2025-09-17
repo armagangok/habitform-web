@@ -48,8 +48,7 @@ final class NavigationRoute {
       case KRoute.onboardingRating:
         return _getRoute(page: const OnboardingRatingPage(), settings: args);
 
-      case KRoute.iconPage:
-        return _getRoute(page: const EmojiPickerPage(), settings: args);
+
 
       case KRoute.habitCategoryPage:
         return _getRoute(page: const HabitCategoryPage(), settings: args);

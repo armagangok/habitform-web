@@ -323,13 +323,6 @@ class _PaywallWidgetState extends ConsumerState<PaywallPage> with TickerProvider
                     'We become\nwhat we repeatedly do.',
                     style: context.headlineMedium.copyWith(
                       fontWeight: FontWeight.bold,
-                      shadows: [
-                        Shadow(
-                          color: context.primaryContrastingColor.withValues(alpha: .7),
-                          blurRadius: 50,
-                          offset: Offset(0, 0),
-                        ),
-                      ],
                     ),
                     textAlign: TextAlign.center,
                   ),
@@ -683,11 +676,7 @@ class _PaywallWidgetState extends ConsumerState<PaywallPage> with TickerProvider
           ? null
           : CircularActionButton(
               onPressed: () {
-                if (widget.isFromSettings) {
-                  navigator.navigateAndClear(path: KRoute.homePage);
-                } else {
-                  navigator.pop();
-                }
+                navigator.pop();
               },
               icon: CupertinoIcons.xmark,
             ),
@@ -843,7 +832,7 @@ class _PaywallWidgetState extends ConsumerState<PaywallPage> with TickerProvider
             child: AnimatedContainer(
               duration: Duration(milliseconds: 200),
               curve: Curves.easeInOut,
-              padding: EdgeInsets.all(20),
+              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
               decoration: BoxDecoration(
                 color: context.selectionHandleColor.withValues(alpha: 0.05),
                 borderRadius: BorderRadius.circular(16),
@@ -897,14 +886,14 @@ class _PaywallWidgetState extends ConsumerState<PaywallPage> with TickerProvider
                                   Container(
                                     padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                                     decoration: BoxDecoration(
-                                      color: Colors.orange,
+                                      color: context.primary,
                                       borderRadius: BorderRadius.circular(12),
                                     ),
                                     child: Text(
-                                      'POPULAR',
+                                      'POPULAR!',
                                       style: context.bodySmall.copyWith(
                                         color: Colors.white,
-                                        fontWeight: FontWeight.bold,
+                                        fontWeight: FontWeight.w600,
                                         fontSize: 10,
                                       ),
                                     ),
@@ -961,19 +950,33 @@ class _PaywallWidgetState extends ConsumerState<PaywallPage> with TickerProvider
                           ),
                           if (discount != null) ...[
                             SizedBox(height: 4),
-                            Container(
-                              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                              decoration: BoxDecoration(
-                                color: Colors.green,
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: Text(
-                                discount,
-                                style: context.bodySmall.copyWith(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
+                            Row(
+                              children: [
+                                Icon(
+                                  CupertinoIcons.tag_solid,
+                                  color: CupertinoColors.systemGreen,
+                                  size: 16,
                                 ),
-                              ),
+                                SizedBox(width: 4),
+                                Container(
+                                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                  decoration: BoxDecoration(
+                                    color: CupertinoColors.systemGreen,
+                                    borderRadius: BorderRadius.circular(90),
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      Text(
+                                        discount,
+                                        style: context.bodySmall.copyWith(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
                             ),
                           ],
                         ],

@@ -827,11 +827,7 @@ class _PrePaywallPageState extends ConsumerState<PrePaywallPage> with TickerProv
           ? null
           : CircularActionButton(
               onPressed: () {
-                if (widget.isFromSettings) {
-                  navigator.navigateAndClear(path: KRoute.homePage);
-                } else {
-                  navigator.pop();
-                }
+                navigator.pop();
               },
               icon: CupertinoIcons.xmark,
             ),

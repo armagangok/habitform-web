@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:habitrise/features/habit_icon/icon_picker_button.dart';
+import 'package:habitrise/features/habit_emoji/emoji_picker_button.dart';
 
 import '/core/core.dart';
 import '/models/models.dart';
@@ -20,6 +20,15 @@ class EditHabitPage extends ConsumerWidget {
     final editHabitNotifier = ref.watch(editHabitProvider.notifier);
     final editHabitState = ref.watch(editHabitProvider);
     final selectedDifficulty = editHabitState?.difficulty ?? editHabitNotifier.selectedDifficulty;
+
+    final selectedEmoji = ref.watch(editHabitProvider)?.emoji;
+
+    // Initialize edit state and related providers once with the passed habit
+    if (editHabitState == null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        editHabitNotifier.initHabit(habit);
+      });
+    }
 
     return CupertinoPopupSurface(
       child: GestureDetector(
@@ -62,9 +71,11 @@ class EditHabitPage extends ConsumerWidget {
                             children: [
                               const SizedBox(height: 16),
                               Center(
-                                child: IconPickerButton(
-                                  selectedIcon: habit.emoji,
-                                  habitColor: Color(habit.colorCode),
+                                child: EmojiPickerButton(
+                                  selectedIcon: selectedEmoji,
+                                  onEmojiSelected: (emoji) {
+                                    editHabitNotifier.updateEmoji(emoji);
+                                  },
                                 ),
                               ),
                             ],

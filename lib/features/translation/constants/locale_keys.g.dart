@@ -401,6 +401,7 @@ abstract class  LocaleKeys {
   static const reminder_select_time = 'reminder.select_time';
   static const reminder_time = 'reminder.time';
   static const reminder_habit_reminder_message = 'reminder.habit_reminder_message';
+  static const reminder_personalized_body = 'reminder.personalized_body';
   static const reminder = 'reminder';
   static const notifications_settings = 'notifications.settings';
   static const notifications_app_notification_settings = 'notifications.app_notification_settings';
@@ -411,11 +412,17 @@ abstract class  LocaleKeys {
   static const archived_habits_title = 'archived_habits.title';
   static const archived_habits_no_habits_found = 'archived_habits.no_habits_found';
   static const archived_habits_no_habits_hint = 'archived_habits.no_habits_hint';
+  static const archived_habits_selected_count = 'archived_habits.selected_count';
+  static const archived_habits_select_all = 'archived_habits.select_all';
+  static const archived_habits_deselect_all = 'archived_habits.deselect_all';
   static const archived_habits_unarchive_success = 'archived_habits.unarchive_success';
   static const archived_habits_marked_for_deletion = 'archived_habits.marked_for_deletion';
   static const archived_habits_archived_on = 'archived_habits.archived_on';
   static const archived_habits_restore = 'archived_habits.restore';
   static const archived_habits_delete = 'archived_habits.delete';
+  static const archived_habits_delete_selected_title = 'archived_habits.delete_selected_title';
+  static const archived_habits_delete_selected_message = 'archived_habits.delete_selected_message';
+  static const archived_habits_delete_selected_success = 'archived_habits.delete_selected_success';
   static const archived_habits_delete_confirmation_title = 'archived_habits.delete_confirmation_title';
   static const archived_habits_delete_confirmation_message = 'archived_habits.delete_confirmation_message';
   static const archived_habits_delete_confirmation_warning = 'archived_habits.delete_confirmation_warning';

@@ -459,7 +459,8 @@ class CodegenLoader extends AssetLoader{
     "deselect_all": "Deselect All",
     "select_time": "Select Time",
     "time": "Time",
-    "habit_reminder_message": "Don't forget to complete your habit!"
+    "habit_reminder_message": "Don't forget to complete your habit!",
+    "personalized_body": "It's time for: {habit}"
   },
   "notifications": {
     "settings": "Settings",
@@ -472,11 +473,17 @@ class CodegenLoader extends AssetLoader{
     "title": "Archived Habits",
     "no_habits_found": "No archived habits found",
     "no_habits_hint": "Habits you archive will appear here",
+    "selected_count": "{count} selected",
+    "select_all": "Select All",
+    "deselect_all": "Deselect All",
     "unarchive_success": "Habit successfully unarchived",
     "marked_for_deletion": "Marked for deletion",
     "archived_on": "Archived on:",
     "restore": "Restore",
     "delete": "Delete",
+    "delete_selected_title": "Delete Selected Habits",
+    "delete_selected_message": "Are you sure you want to delete {count} habit(s)?",
+    "delete_selected_success": "{count} habit(s) deleted successfully",
     "delete_confirmation_title": "Delete Habit",
     "delete_confirmation_message": "Are you sure you want to delete this habit: ",
     "delete_confirmation_warning": "This action cannot be undone!"
