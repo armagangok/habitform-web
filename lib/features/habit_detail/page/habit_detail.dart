@@ -12,13 +12,60 @@ import '../widget/habit_overview_widget.dart';
 import '../widget/habit_progress_card.dart';
 import '../widget/modern_action_buttons.dart';
 
-class HabitDetailPage extends ConsumerWidget {
-  const HabitDetailPage({
-    super.key,
-  });
+class HabitDetailPage extends ConsumerStatefulWidget {
+  const HabitDetailPage({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<HabitDetailPage> createState() => _HabitDetailPageState();
+}
+
+class _HabitDetailPageState extends ConsumerState<HabitDetailPage> {
+  final ScrollController _scrollController = ScrollController();
+  static const double _expandedHeight = 200.0;
+  double _collapseFraction = 0.0; // 0.0 expanded → 1.0 collapsed
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(_onScroll);
+  }
+
+  @override
+  void dispose() {
+    _scrollController.removeListener(_onScroll);
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _onScroll() {
+    // Compute collapse fraction based on current offset
+    final double maxScroll = (_expandedHeight - kToolbarHeight).clamp(0.0, double.infinity);
+    if (maxScroll <= 0) return;
+    final double newFraction = (_scrollController.offset / maxScroll).clamp(0.0, 1.0);
+    if ((newFraction - _collapseFraction).abs() > 0.02) {
+      setState(() => _collapseFraction = newFraction);
+    }
+  }
+
+  Color _resolveTitleColor(BuildContext context, Habit habit) {
+    // When expanded, prefer on-primary contrast (white). When collapsed, use default title color.
+    final Color expandedColor = Colors.white;
+    final Color collapsedColor = context.titleLarge.color ?? Colors.black;
+    return Color.lerp(expandedColor, collapsedColor, _collapseFraction) ?? collapsedColor;
+  }
+
+  (Color icon, Color bg) _resolveIconColors(BuildContext context) {
+    final Color expandedIcon = Colors.white;
+    final Color collapsedIcon = context.titleLarge.color ?? Colors.black;
+    final Color expandedBg = Colors.white.withValues(alpha: 0.18);
+    final Color collapsedBg = context.cupertinoTheme.barBackgroundColor.withValues(alpha: 0.11);
+    final icon = Color.lerp(expandedIcon, collapsedIcon, _collapseFraction) ?? collapsedIcon;
+    final bg = Color.lerp(expandedBg, collapsedBg, _collapseFraction) ?? collapsedBg;
+    return (icon, bg);
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final currentHabit = ref.watch(habitDetailProvider);
 
     if (currentHabit == null) {
@@ -29,9 +76,10 @@ class HabitDetailPage extends ConsumerWidget {
       child: Stack(
         children: [
           CustomScrollView(
+            controller: _scrollController,
             slivers: [
               // SliverAppBar with habit header
-              _buildSliverAppBar(context, currentHabit, ref),
+              _buildSliverAppBar(context, currentHabit),
 
               // Progress card
               SliverToBoxAdapter(
@@ -70,9 +118,11 @@ class HabitDetailPage extends ConsumerWidget {
     );
   }
 
-  Widget _buildSliverAppBar(BuildContext context, Habit habit, WidgetRef ref) {
+  Widget _buildSliverAppBar(BuildContext context, Habit habit) {
+    final titleColor = _resolveTitleColor(context, habit);
+    final (iconColor, iconBg) = _resolveIconColors(context);
     return SliverAppBar(
-      expandedHeight: 190.0,
+      expandedHeight: _expandedHeight,
       floating: false,
       pinned: true,
       backgroundColor: context.scaffoldBackgroundColor,
@@ -86,6 +136,7 @@ class HabitDetailPage extends ConsumerWidget {
         style: TextStyle(
           fontWeight: FontWeight.bold,
           fontSize: 18,
+          color: titleColor,
         ),
       ),
       flexibleSpace: FlexibleSpaceBar(
@@ -105,19 +156,20 @@ class HabitDetailPage extends ConsumerWidget {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 _habitEmoji(context, habit),
-                const SizedBox(height: 16),
+                const SizedBox(height: 5),
                 if (habit.habitDescription != null && habit.habitDescription!.isNotEmpty)
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 32) + const EdgeInsets.only(bottom: 16),
+                    padding: const EdgeInsets.symmetric(horizontal: 20) + const EdgeInsets.only(bottom: 2),
                     child: Text(
                       habit.habitDescription!,
                       style: TextStyle(
-                        color: context.bodyMedium.color?.withValues(alpha: 0.8),
-                        fontSize: 14,
+                        color: Colors.white.withValues(alpha: 0.7),
+                        fontSize: 13,
+                        height: 1.15,
                       ),
                       textAlign: TextAlign.center,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
+                      maxLines: 4,
+                      overflow: TextOverflow.visible,
                     ),
                   ),
               ],
@@ -129,6 +181,8 @@ class HabitDetailPage extends ConsumerWidget {
         padding: const EdgeInsets.all(13.0),
         child: CircularActionButton(
           icon: CupertinoIcons.back,
+          iconColor: iconColor,
+          backgroundColor: iconBg,
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
@@ -137,6 +191,8 @@ class HabitDetailPage extends ConsumerWidget {
           padding: const EdgeInsets.all(13.0),
           child: CircularActionButton(
             icon: CupertinoIcons.pencil,
+            iconColor: iconColor,
+            backgroundColor: iconBg,
             onPressed: () {
               ref.watch(editHabitProvider.notifier).initHabit(habit);
               showCupertinoSheet(

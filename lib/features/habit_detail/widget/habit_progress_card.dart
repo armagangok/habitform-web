@@ -341,6 +341,7 @@ class _WeeklyProgressChartState extends ConsumerState<_WeeklyProgressChart> {
               date: dateForIndex,
               isDisabled: isFuture,
               onTap: () => _handleTap(index, habit),
+              onLongPress: () => {},
             );
           }),
         ),
