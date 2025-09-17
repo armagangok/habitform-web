@@ -44,7 +44,7 @@ class _ReminderStepState extends ConsumerState<ReminderStep> {
                 const SizedBox(height: 8),
                 Text(
                   LocaleKeys.create_habit_reminder_description.tr(),
-                  style: context.bodyLarge.copyWith(
+                  style: context.bodySmall.copyWith(
                     color: Theme.of(context).hintColor,
                   ),
                 ),
@@ -75,7 +75,7 @@ class _ReminderStepState extends ConsumerState<ReminderStep> {
                 header: Text(LocaleKeys.create_habit_reminder_daily_target_header.tr()),
                 footer: Text(
                   LocaleKeys.create_habit_reminder_daily_target_footer.tr(),
-                  style: context.bodyMedium.copyWith(
+                  style: context.bodySmall.copyWith(
                     color: Theme.of(context).hintColor,
                   ),
                 ),

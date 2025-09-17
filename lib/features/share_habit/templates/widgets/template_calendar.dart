@@ -59,8 +59,9 @@ class TemplateCalendar extends StatelessWidget {
                     maxLines: 1,
                   ),
                   const SizedBox(height: 8),
+                  
                   Text(
-                    'This month: ${stats.thisMonthCompleted}',
+                    '${LocaleKeys.share_templates_this_month.tr()} ${stats.thisMonthCompleted}',
                     style: context.labelLarge.copyWith(
                       color: textOnAccent.withValues(alpha: .9),
                     ),

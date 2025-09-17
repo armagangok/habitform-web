@@ -156,7 +156,7 @@ class _HabitDetailPageState extends ConsumerState<HabitDetailPage> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 _habitEmoji(context, habit),
-                const SizedBox(height: 5),
+                const SizedBox(height: 8),
                 if (habit.habitDescription != null && habit.habitDescription!.isNotEmpty)
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20) + const EdgeInsets.only(bottom: 2),
@@ -172,6 +172,7 @@ class _HabitDetailPageState extends ConsumerState<HabitDetailPage> {
                       overflow: TextOverflow.visible,
                     ),
                   ),
+                SizedBox(height: 8),
               ],
             ),
           ),

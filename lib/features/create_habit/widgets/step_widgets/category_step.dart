@@ -70,7 +70,7 @@ class _CategoryStepState extends ConsumerState<CategoryStep> {
                 const SizedBox(height: 8),
                 Text(
                   LocaleKeys.create_habit_category_description.tr(),
-                  style: context.bodyLarge.copyWith(
+                  style: context.bodySmall.copyWith(
                     color: Theme.of(context).hintColor,
                   ),
                 ),

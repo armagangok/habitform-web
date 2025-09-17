@@ -39,7 +39,7 @@ class DescriptionStep extends ConsumerWidget {
                 const SizedBox(height: 8),
                 Text(
                   LocaleKeys.create_habit_description_description.tr(),
-                  style: context.bodyLarge.copyWith(
+                  style: context.bodySmall.copyWith(
                     color: Theme.of(context).hintColor,
                   ),
                 ),

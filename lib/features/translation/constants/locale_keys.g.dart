@@ -412,6 +412,15 @@ abstract class  LocaleKeys {
   static const paywall_social_app_store_rating = 'paywall.social_app_store_rating';
   static const paywall_social_success_rate = 'paywall.social_success_rate';
   static const paywall_what_users_saying = 'paywall.what_users_saying';
+  static const paywall_testimonial_1_name = 'paywall.testimonial_1_name';
+  static const paywall_testimonial_1_comment = 'paywall.testimonial_1_comment';
+  static const paywall_testimonial_1_user_type = 'paywall.testimonial_1_user_type';
+  static const paywall_testimonial_2_name = 'paywall.testimonial_2_name';
+  static const paywall_testimonial_2_comment = 'paywall.testimonial_2_comment';
+  static const paywall_testimonial_2_user_type = 'paywall.testimonial_2_user_type';
+  static const paywall_testimonial_3_name = 'paywall.testimonial_3_name';
+  static const paywall_testimonial_3_comment = 'paywall.testimonial_3_comment';
+  static const paywall_testimonial_3_user_type = 'paywall.testimonial_3_user_type';
   static const paywall = 'paywall';
   static const days_monday = 'days.monday';
   static const days_tuesday = 'days.tuesday';
@@ -565,6 +574,7 @@ abstract class  LocaleKeys {
   static const share_templates_overview = 'share_templates.overview';
   static const share_templates_heatmap = 'share_templates.heatmap';
   static const share_templates_poster = 'share_templates.poster';
+  static const share_templates_this_month = 'share_templates.this_month';
   static const share_templates = 'share_templates';
   static const csv_service_export_subject = 'csv_service.export_subject';
   static const csv_service_select_csv_file = 'csv_service.select_csv_file';

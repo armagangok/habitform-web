@@ -41,7 +41,7 @@ class CreateHabitNotifier extends AutoDisposeNotifier<CreateHabitState> {
       case CreateHabitStep.description:
         return true; // optional
       case CreateHabitStep.emoji:
-        return state.emoji != null && state.emoji!.isNotEmpty;
+        return true; // optional
       case CreateHabitStep.color:
         return state.colorCode != null;
       case CreateHabitStep.reminder:

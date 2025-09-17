@@ -36,26 +36,26 @@ class _PrePaywallPageState extends ConsumerState<PrePaywallPage> with TickerProv
   // Scroll controller
   late ScrollController _scrollController;
 
-  final List<TestimonialModel> testimonials = [
-    TestimonialModel(
-      "Sarah M.",
-      "⭐⭐⭐⭐⭐",
-      "HabitRise Pro completely transformed my daily routine. I've built 5 new habits in just 2 months!",
-      "HabitRise Pro User",
-    ),
-    TestimonialModel(
-      "Mike C.",
-      "⭐⭐⭐⭐⭐",
-      "The statistics and insights are incredible. I can see exactly how I'm progressing every day.",
-      "HabitRise Pro User",
-    ),
-    TestimonialModel(
-      "Emma J.",
-      "⭐⭐⭐⭐⭐",
-      "Finally, an app that actually helps me stick to my goals. The reminders are perfectly timed.",
-      "HabitRise Pro User",
-    ),
-  ];
+  List<TestimonialModel> get testimonials => [
+        TestimonialModel(
+          LocaleKeys.paywall_testimonial_1_name.tr(),
+          "⭐⭐⭐⭐⭐",
+          LocaleKeys.paywall_testimonial_1_comment.tr(),
+          LocaleKeys.paywall_testimonial_1_user_type.tr(),
+        ),
+        TestimonialModel(
+          LocaleKeys.paywall_testimonial_2_name.tr(),
+          "⭐⭐⭐⭐⭐",
+          LocaleKeys.paywall_testimonial_2_comment.tr(),
+          LocaleKeys.paywall_testimonial_2_user_type.tr(),
+        ),
+        TestimonialModel(
+          LocaleKeys.paywall_testimonial_3_name.tr(),
+          "⭐⭐⭐⭐⭐",
+          LocaleKeys.paywall_testimonial_3_comment.tr(),
+          LocaleKeys.paywall_testimonial_3_user_type.tr(),
+        ),
+      ];
 
   final List<FeatureModel> featureList = [
     FeatureModel(
@@ -250,7 +250,7 @@ class _PrePaywallPageState extends ConsumerState<PrePaywallPage> with TickerProv
                               ),
                             ),
                             Text(
-                              'Active Users',
+                              LocaleKeys.paywall_social_active_users.tr(),
                               style: context.bodySmall.copyWith(
                                 color: context.bodySmall.color?.withValues(alpha: 0.7),
                               ),
@@ -274,7 +274,7 @@ class _PrePaywallPageState extends ConsumerState<PrePaywallPage> with TickerProv
                               ),
                             ),
                             Text(
-                              'App Store Rating',
+                              LocaleKeys.paywall_social_app_store_rating.tr(),
                               style: context.bodySmall.copyWith(
                                 color: context.bodySmall.color?.withValues(alpha: 0.7),
                               ),
@@ -298,7 +298,7 @@ class _PrePaywallPageState extends ConsumerState<PrePaywallPage> with TickerProv
                               ),
                             ),
                             Text(
-                              'Success Rate',
+                              LocaleKeys.paywall_social_success_rate.tr(),
                               style: context.bodySmall.copyWith(
                                 color: context.bodySmall.color?.withValues(alpha: 0.7),
                               ),
@@ -321,19 +321,19 @@ class _PrePaywallPageState extends ConsumerState<PrePaywallPage> with TickerProv
   Widget build(BuildContext context) {
     final purchaseState = ref.watch(purchaseProvider);
 
-    return SafeArea(
-      bottom: false,
-      child: PopScope(
-        canPop: false, // Prevent dismissal by back button or swipe
-        child: purchaseState.when(
-          data: (state) {
-            return CupertinoPageScaffold(
-              navigationBar: _navBar(context),
-              child: Stack(
-                children: [
-                  // Main content
-                  SizedBox(
-                    width: double.infinity,
+    return PopScope(
+      canPop: false, // Prevent dismissal by back button or swipe
+      child: purchaseState.when(
+        data: (state) {
+          return CupertinoPageScaffold(
+            navigationBar: _navBar(context),
+            child: Stack(
+              children: [
+                // Main content
+                SizedBox(
+                  width: double.infinity,
+                  child: SafeArea(
+                    bottom: false,
                     child: ListView(
                       controller: _scrollController,
                       children: [
@@ -356,16 +356,16 @@ class _PrePaywallPageState extends ConsumerState<PrePaywallPage> with TickerProv
                       ],
                     ),
                   ),
+                ),
 
-                  // Fixed continue button
-                  _buildFixedContinueButton(),
-                ],
-              ),
-            );
-          },
-          loading: () => _buildLoadingState(),
-          error: (error, _) => _buildErrorState(),
-        ),
+                // Fixed continue button
+                _buildFixedContinueButton(),
+              ],
+            ),
+          );
+        },
+        loading: () => _buildLoadingState(),
+        error: (error, _) => _buildErrorState(),
       ),
     );
   }

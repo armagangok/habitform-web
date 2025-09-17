@@ -27,17 +27,23 @@ class DifficultyStep extends ConsumerWidget {
           // Step title and description
           Padding(
             padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(LocaleKeys.create_habit_difficulty_title.tr()),
-                Text(
-                  LocaleKeys.create_habit_difficulty_question.tr(),
-                  style: context.headlineSmall.copyWith(
-                    fontWeight: FontWeight.bold,
+            child: SizedBox(
+              width: double.infinity,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    LocaleKeys.create_habit_difficulty_title.tr(),
+                    textAlign: TextAlign.left,
                   ),
-                ),
-              ],
+                  Text(
+                    LocaleKeys.create_habit_difficulty_question.tr(),
+                    style: context.bodySmall.copyWith(
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
 
