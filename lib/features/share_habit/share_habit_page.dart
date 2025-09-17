@@ -28,6 +28,28 @@ class ShareHabitPage extends ConsumerStatefulWidget {
 class _ShareHabitPageState extends ConsumerState<ShareHabitPage> {
   bool isShareLoading = false;
   final screenshotController = ScreenshotController();
+  final GlobalKey _imageShareButtonKey = GlobalKey();
+  final GlobalKey _textShareButtonKey = GlobalKey();
+
+  Rect _shareOriginFor(GlobalKey key) {
+    try {
+      final ctx = key.currentContext;
+      if (ctx != null) {
+        final renderObject = ctx.findRenderObject();
+        if (renderObject is RenderBox && renderObject.hasSize) {
+          final topLeft = renderObject.localToGlobal(Offset.zero);
+          final size = renderObject.size;
+          if (size.width > 0 && size.height > 0) {
+            return topLeft & size;
+          }
+        }
+      }
+    } catch (_) {}
+
+    // Fallback to a tiny rect in the center of the screen (non-zero)
+    final screenSize = MediaQuery.of(context).size;
+    return Rect.fromLTWH(screenSize.width / 2, screenSize.height / 2, 1, 1);
+  }
 
   Future<void> _shareHabitAsImage(BuildContext context) async {
     setState(() {
@@ -51,6 +73,7 @@ class _ShareHabitPageState extends ConsumerState<ShareHabitPage> {
       await Share.shareXFiles(
         [XFile(file.path)],
         text: 'Check out my habit progress!',
+        sharePositionOrigin: _shareOriginFor(_imageShareButtonKey),
       );
     } catch (e) {
       debugPrint('Error sharing habit: $e');
@@ -71,7 +94,10 @@ class _ShareHabitPageState extends ConsumerState<ShareHabitPage> {
 📝 ${LocaleKeys.habit_habit_description.tr()}: ${widget.habit.habitDescription ?? LocaleKeys.common_none.tr()}
     ''';
 
-    await Share.share(shareText);
+    await Share.share(
+      shareText,
+      sharePositionOrigin: _shareOriginFor(_textShareButtonKey),
+    );
   }
 
   @override
@@ -117,6 +143,7 @@ class _ShareHabitPageState extends ConsumerState<ShareHabitPage> {
                       children: [
                         Expanded(
                           child: CupertinoButton.tinted(
+                            key: _imageShareButtonKey,
                             color: context.primaryContrastingColor,
                             foregroundColor: context.primaryContrastingColor.withValues(alpha: 1),
                             onPressed: isShareLoading
@@ -143,6 +170,7 @@ class _ShareHabitPageState extends ConsumerState<ShareHabitPage> {
                         const SizedBox(width: 20),
                         Expanded(
                           child: CupertinoButton.tinted(
+                            key: _textShareButtonKey,
                             sizeStyle: CupertinoButtonSize.small,
                             onPressed: _shareHabitAsText,
                             color: context.primaryContrastingColor,

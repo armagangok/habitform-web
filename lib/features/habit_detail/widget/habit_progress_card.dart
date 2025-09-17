@@ -318,11 +318,16 @@ class _WeeklyProgressChartState extends ConsumerState<_WeeklyProgressChart> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: List.generate(7, (index) {
             final isCompleted = weeklyData[index];
+            final today = DateUtils.dateOnly(DateTime.now());
+            final dateForIndex = today.subtract(Duration(days: 6 - index));
+            final isFuture = dateForIndex.isAfter(today);
 
             return _WeeklyDayCell(
               index: index,
               isCompleted: isCompleted,
               habitColor: Color(habit.colorCode),
+              date: dateForIndex,
+              isDisabled: isFuture,
               onTap: () => _toggleCompletion(index, habit),
             );
           }),
@@ -344,6 +349,11 @@ class _WeeklyProgressChartState extends ConsumerState<_WeeklyProgressChart> {
     // Update completion status using the provider
     final today = DateUtils.dateOnly(DateTime.now());
     final targetDate = today.subtract(Duration(days: 6 - index));
+
+    // Guard: Do not allow marking future dates
+    if (targetDate.isAfter(today)) {
+      return;
+    }
 
     final completionEntry = CompletionEntry(
       id: '${targetDate.year}-${targetDate.month}-${targetDate.day}',
@@ -379,12 +389,16 @@ class _WeeklyDayCell extends StatefulWidget {
   final bool isCompleted;
   final Color habitColor;
   final VoidCallback onTap;
+  final DateTime date;
+  final bool isDisabled;
 
   const _WeeklyDayCell({
     required this.index,
     required this.isCompleted,
     required this.habitColor,
     required this.onTap,
+    required this.date,
+    this.isDisabled = false,
   });
 
   @override
@@ -394,10 +408,18 @@ class _WeeklyDayCell extends StatefulWidget {
 class _WeeklyDayCellState extends State<_WeeklyDayCell> {
   @override
   Widget build(BuildContext context) {
-    final days = [LocaleKeys.habit_detail_mon.tr(), LocaleKeys.habit_detail_tue.tr(), LocaleKeys.habit_detail_wed.tr(), LocaleKeys.habit_detail_thu.tr(), LocaleKeys.habit_detail_fri.tr(), LocaleKeys.habit_detail_sat.tr(), LocaleKeys.habit_detail_sun.tr()];
+    final weekdayLabels = {
+      DateTime.monday: LocaleKeys.habit_detail_mon.tr(),
+      DateTime.tuesday: LocaleKeys.habit_detail_tue.tr(),
+      DateTime.wednesday: LocaleKeys.habit_detail_wed.tr(),
+      DateTime.thursday: LocaleKeys.habit_detail_thu.tr(),
+      DateTime.friday: LocaleKeys.habit_detail_fri.tr(),
+      DateTime.saturday: LocaleKeys.habit_detail_sat.tr(),
+      DateTime.sunday: LocaleKeys.habit_detail_sun.tr(),
+    };
 
     return CustomButton(
-      onPressed: widget.onTap,
+      onPressed: widget.isDisabled ? null : widget.onTap,
       padding: EdgeInsets.zero,
       child: Column(
         children: [
@@ -420,10 +442,10 @@ class _WeeklyDayCellState extends State<_WeeklyDayCell> {
           ),
           const SizedBox(height: 4),
           Text(
-            days[widget.index],
+            weekdayLabels[widget.date.weekday] ?? '',
             style: TextStyle(
               fontSize: 10,
-              color: context.bodyMedium.color?.withValues(alpha: 0.6),
+              color: (context.bodyMedium.color?.withValues(alpha: 0.6))?.withValues(alpha: widget.isDisabled ? 0.3 : 0.6),
             ),
           ),
         ],

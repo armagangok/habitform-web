@@ -601,12 +601,26 @@ class _OptimizedHeatmapGridState extends State<_OptimizedHeatmapGrid> {
 
   HeatmapData _generateHeatmapData() {
     final now = DateTime.now();
-    final endDate = DateUtils.dateOnly(now);
-    final startDate = endDate.subtract(const Duration(days: 365)); // Full year
+    final today = DateUtils.dateOnly(now);
+
+    // Include next 7 days beyond today
+    final futureEnd = today.add(const Duration(days: 7));
+
+    // Align end date to the end of week (Saturday) to keep full weeks in the grid
+    // Dart weekday: Mon=1 ... Sat=6, Sun=7
+    final int daysToSaturday = futureEnd.weekday == DateTime.sunday ? 6 : DateTime.saturday - futureEnd.weekday;
+    final endDate = futureEnd.add(Duration(days: daysToSaturday));
+
+    // Start from about a year back, aligned to start of week (Sunday) for correct day indexing
+    final approxStart = today.subtract(const Duration(days: 365));
+    final int daysSinceSunday = approxStart.weekday % 7; // 0 when Sunday (7 % 7)
+    final startDate = approxStart.subtract(Duration(days: daysSinceSunday));
 
     LogHelper.shared.debugPrint('DEBUG: Heatmap data generation - startDate: $startDate, endDate: $endDate');
 
-    final weeks = 52; // Show full year (52 weeks)
+    // Compute number of weeks to cover start..end inclusively
+    final totalDays = endDate.difference(startDate).inDays + 1;
+    final weeks = (totalDays / 7).ceil();
     final monthLabels = <String>[];
     final dayLabels = ['', LocaleKeys.habit_detail_monday.tr(), '', LocaleKeys.habit_detail_wednesday.tr(), '', LocaleKeys.habit_detail_friday.tr(), ''];
 
@@ -642,6 +656,10 @@ class _OptimizedHeatmapGridState extends State<_OptimizedHeatmapGrid> {
     final dateKey = '${date.year}-${date.month}-${date.day}';
     final isCompleted = _completionMap[dateKey] ?? false;
 
+    // Mark future dates (after today) with a special intensity to render low-opacity color
+    final today = DateUtils.dateOnly(DateTime.now());
+    final bool isFuture = date.isAfter(today);
+
     // Debug logging for first few cells to understand the mapping
     if (weekIndex < 3 && dayIndex < 3) {
       LogHelper.shared.debugPrint('DEBUG: Cell lookup - week: $weekIndex, day: $dayIndex, date: $date, key: $dateKey, completed: $isCompleted');
@@ -649,7 +667,7 @@ class _OptimizedHeatmapGridState extends State<_OptimizedHeatmapGrid> {
 
     return CellData(
       date: date,
-      intensity: isCompleted ? 1 : 0,
+      intensity: isFuture ? -1 : (isCompleted ? 1 : 0),
       tooltip: isCompleted ? LocaleKeys.habit_detail_tooltip_completed.tr().replaceAll('{{day}}', date.day.toString()).replaceAll('{{month}}', date.month.toString()).replaceAll('{{year}}', date.year.toString()) : LocaleKeys.habit_detail_tooltip_not_completed.tr().replaceAll('{{day}}', date.day.toString()).replaceAll('{{month}}', date.month.toString()).replaceAll('{{year}}', date.year.toString()),
     );
   }
@@ -658,6 +676,9 @@ class _OptimizedHeatmapGridState extends State<_OptimizedHeatmapGrid> {
     final habitColor = Color(widget.habit.colorCode);
 
     switch (intensity) {
+      case -1:
+        // Future day: show habit color with lower opacity
+        return habitColor.withValues(alpha: 0.15);
       case 0:
         return context.cupertinoTheme.brightness == Brightness.dark ? CupertinoColors.systemGrey6 : CupertinoColors.systemGrey5;
       case 1:
