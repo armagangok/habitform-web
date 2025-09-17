@@ -82,7 +82,7 @@ class SettingsPage extends ConsumerWidget {
                         cardColor: Colors.blueAccent,
                       ),
                       onTap: () => ref.read(purchaseProvider.notifier).copyCustomerId(),
-                      title: Text("Rc ID"),
+                      title: Text(LocaleKeys.settings_rc_id.tr()),
                       trailing: CupertinoButton(
                         padding: EdgeInsets.zero,
                         minimumSize: Size.zero,
@@ -137,14 +137,14 @@ class SettingsPage extends ConsumerWidget {
                           TextSpan(
                             children: [
                               TextSpan(
-                                text: 'Habit',
+                                text: LocaleKeys.settings_app_name_habit.tr(),
                                 style: context.bodyLarge.copyWith(
                                   color: context.bodyLarge.color?.withValues(alpha: 1),
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
                               TextSpan(
-                                text: 'Rise',
+                                text: LocaleKeys.settings_app_name_rise.tr(),
                                 style: context.bodyLarge.copyWith(
                                   color: Colors.deepOrange,
                                   fontWeight: FontWeight.bold,

@@ -47,9 +47,9 @@ class TemplatePoster extends StatelessWidget {
             const SizedBox(height: 6),
             Row(
               children: [
-                _Badge(text: '${stats.currentStreak}d streak', color: onAccent),
+                _Badge(text: LocaleKeys.share_templates_streak_days.tr(namedArgs: {'days': stats.currentStreak.toString()}), color: onAccent),
                 const SizedBox(width: 8),
-                _Badge(text: '${stats.progressPercent.round()}% progress', color: onAccent),
+                _Badge(text: LocaleKeys.share_templates_progress_percent.tr(namedArgs: {'percent': stats.progressPercent.round().toString()}), color: onAccent),
               ],
             ),
             const SizedBox(height: 12),
@@ -73,7 +73,7 @@ class TemplatePoster extends StatelessWidget {
               children: [
                 Assets.app.appLogoDark.image(height: 22, width: 22),
                 const SizedBox(width: 6),
-                Text('HabitRise', style: context.bodySmall.copyWith(color: onAccent, fontWeight: FontWeight.bold)),
+                Text(LocaleKeys.share_templates_app_name.tr(), style: context.bodySmall.copyWith(color: onAccent, fontWeight: FontWeight.bold)),
               ],
             ),
             Spacer(),

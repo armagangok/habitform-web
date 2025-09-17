@@ -1,12 +1,10 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import '/core/core.dart';
 import '/core/helpers/notifications/notification_helper.dart';
-import '/core/widgets/notification_limit_widget.dart';
 import '/features/reminder/models/reminder/reminder_model.dart';
 import '/services/habit_service/habit_service_interface.dart';
 
@@ -19,7 +17,7 @@ class NotificationsPage extends StatefulWidget {
 
 class _NotificationsPageState extends State<NotificationsPage> with SingleTickerProviderStateMixin {
   List<PendingNotificationRequest> _notifications = [];
-  List<ReminderModel> _activeReminders = [];
+
   bool _isLoading = true;
   final Map<String, bool> _expandedStates = {};
 
@@ -44,7 +42,7 @@ class _NotificationsPageState extends State<NotificationsPage> with SingleTicker
 
       setState(() {
         _notifications = notifications;
-        _activeReminders = reminders;
+
         _isLoading = false;
       });
     } catch (e) {
@@ -58,7 +56,7 @@ class _NotificationsPageState extends State<NotificationsPage> with SingleTicker
   Future<void> _deleteNotification(PendingNotificationRequest notification) async {
     try {
       // Parse notification info for better dialog
-      String dayInfo = 'this notification';
+      String dayInfo = LocaleKeys.notifications_this_notification.tr();
       String timeInfo = '';
 
       Map<String, dynamic>? payloadData;
@@ -70,7 +68,7 @@ class _NotificationsPageState extends State<NotificationsPage> with SingleTicker
 
           dayInfo = _getSpecificDayForNotification(notification, days);
           if (timeString.isNotEmpty) {
-            timeInfo = ' at $timeString';
+            timeInfo = LocaleKeys.notifications_at_time.tr(namedArgs: {'time': timeString});
           }
         } catch (e) {
           LogHelper.shared.debugPrint('Error parsing payload for delete dialog: $e');
@@ -81,8 +79,8 @@ class _NotificationsPageState extends State<NotificationsPage> with SingleTicker
       final confirmed = await showCupertinoDialog<bool>(
         context: context,
         builder: (context) => CupertinoAlertDialog(
-          title: Text('Delete Reminder'),
-          content: Text('Are you sure you want to delete the reminder for $dayInfo$timeInfo?'),
+          title: Text(LocaleKeys.notifications_delete_reminder.tr()),
+          content: Text(LocaleKeys.notifications_delete_reminder_confirmation.tr(namedArgs: {'dayInfo': dayInfo, 'timeInfo': timeInfo})),
           actions: [
             CupertinoDialogAction(
               child: Text(LocaleKeys.common_cancel.tr()),
@@ -107,7 +105,7 @@ class _NotificationsPageState extends State<NotificationsPage> with SingleTicker
         // Show success message
         if (mounted) {
           AppFlushbar.shared.successFlushbar(
-            'Reminder for $dayInfo deleted successfully',
+            LocaleKeys.notifications_reminder_deleted_success.tr(namedArgs: {'dayInfo': dayInfo}),
           );
         }
       }
@@ -115,7 +113,7 @@ class _NotificationsPageState extends State<NotificationsPage> with SingleTicker
       LogHelper.shared.debugPrint('Error deleting notification: $e');
       if (mounted) {
         AppFlushbar.shared.errorFlushbar(
-          'Failed to delete notification',
+          LocaleKeys.notifications_failed_to_delete_notification.tr(),
         );
       }
     }
@@ -127,8 +125,8 @@ class _NotificationsPageState extends State<NotificationsPage> with SingleTicker
       final confirmed = await showCupertinoDialog<bool>(
         context: context,
         builder: (context) => CupertinoAlertDialog(
-          title: Text('Delete All Reminders'),
-          content: Text('Are you sure you want to delete all ${notifications.length} reminders for "$habitName"?'),
+          title: Text(LocaleKeys.notifications_delete_all_reminders.tr()),
+          content: Text(LocaleKeys.notifications_delete_all_reminders_confirmation.tr(namedArgs: {'count': notifications.length.toString(), 'habitName': habitName})),
           actions: [
             CupertinoDialogAction(
               child: Text(LocaleKeys.common_cancel.tr()),
@@ -155,7 +153,7 @@ class _NotificationsPageState extends State<NotificationsPage> with SingleTicker
         // Show success message
         if (mounted) {
           AppFlushbar.shared.successFlushbar(
-            'All reminders for "$habitName" deleted successfully',
+            LocaleKeys.notifications_all_reminders_deleted_success.tr(namedArgs: {'habitName': habitName}),
           );
         }
       }
@@ -163,7 +161,7 @@ class _NotificationsPageState extends State<NotificationsPage> with SingleTicker
       LogHelper.shared.debugPrint('Error deleting all notifications: $e');
       if (mounted) {
         AppFlushbar.shared.errorFlushbar(
-          'Failed to delete all reminders',
+          LocaleKeys.notifications_failed_to_delete_all_reminders.tr(),
         );
       }
     }
@@ -172,7 +170,7 @@ class _NotificationsPageState extends State<NotificationsPage> with SingleTicker
   /// Determine which specific day a notification represents based on its ID and payload
   String _getSpecificDayForNotification(PendingNotificationRequest notification, List<String> days) {
     if (days.isEmpty) {
-      return 'Unknown Day';
+      return LocaleKeys.notifications_unknown_day.tr();
     }
 
     if (days.length == 1) {
@@ -189,8 +187,24 @@ class _NotificationsPageState extends State<NotificationsPage> with SingleTicker
       final dayComponent = notificationId % 100;
 
       // Map day indices to day names (assuming Days enum order: Monday=0, Tuesday=1, etc.)
-      const dayNames = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-      const shortDayNames = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+      final dayNames = [
+        LocaleKeys.notifications_monday.tr(),
+        LocaleKeys.notifications_tuesday.tr(),
+        LocaleKeys.notifications_wednesday.tr(),
+        LocaleKeys.notifications_thursday.tr(),
+        LocaleKeys.notifications_friday.tr(),
+        LocaleKeys.notifications_saturday.tr(),
+        LocaleKeys.notifications_sunday.tr(),
+      ];
+      final shortDayNames = [
+        LocaleKeys.notifications_mon.tr(),
+        LocaleKeys.notifications_tue.tr(),
+        LocaleKeys.notifications_wed.tr(),
+        LocaleKeys.notifications_thu.tr(),
+        LocaleKeys.notifications_fri.tr(),
+        LocaleKeys.notifications_sat.tr(),
+        LocaleKeys.notifications_sun.tr(),
+      ];
 
       if (dayComponent < dayNames.length) {
         // Try to match with the actual days in the payload
@@ -207,33 +221,19 @@ class _NotificationsPageState extends State<NotificationsPage> with SingleTicker
     }
 
     // Fallback: show first day or count
-    return days.isNotEmpty ? days.first : 'Unknown Day';
+    return days.isNotEmpty ? days.first : LocaleKeys.notifications_unknown_day.tr();
   }
 
   Map<String, List<PendingNotificationRequest>> _groupNotificationsByHabit() {
     final Map<String, List<PendingNotificationRequest>> grouped = {};
     for (var notification in _notifications) {
-      final habitName = notification.title ?? 'Unknown Habit';
+      final habitName = notification.title ?? LocaleKeys.notifications_unknown_habit.tr();
       if (!grouped.containsKey(habitName)) {
         grouped[habitName] = [];
       }
       grouped[habitName]!.add(notification);
     }
     return grouped;
-  }
-
-  void _showNotificationBreakdown() {
-    if (Platform.isIOS) {
-      showCupertinoDialog(
-        context: context,
-        builder: (context) => NotificationBreakdownDialog(reminders: _activeReminders),
-      );
-    } else {
-      showDialog(
-        context: context,
-        builder: (context) => NotificationBreakdownDialog(reminders: _activeReminders),
-      );
-    }
   }
 
   Widget _buildNotificationItem(PendingNotificationRequest notification) {
@@ -285,14 +285,14 @@ class _NotificationsPageState extends State<NotificationsPage> with SingleTicker
         ),
       ),
       subtitle: Text(
-        timeString.isNotEmpty ? 'At $timeString' : 'Scheduled',
+        timeString.isNotEmpty ? LocaleKeys.notifications_at_time_display.tr(namedArgs: {'time': timeString}) : LocaleKeys.notifications_scheduled.tr(),
         style: context.bodySmall.copyWith(
           color: CupertinoColors.systemGrey,
         ),
       ),
       trailing: CupertinoButton(
         padding: EdgeInsets.zero,
-        minSize: 0,
+        minimumSize: Size.zero,
         onPressed: () => _deleteNotification(notification),
         child: Container(
           padding: const EdgeInsets.all(8),
@@ -342,7 +342,7 @@ class _NotificationsPageState extends State<NotificationsPage> with SingleTicker
           trailing: notifications.length > 1
               ? CupertinoButton(
                   padding: EdgeInsets.zero,
-                  minSize: 0,
+                  minimumSize: Size.zero,
                   onPressed: () => _deleteAllNotificationsForHabit(habitName, notifications),
                   child: const Icon(
                     CupertinoIcons.trash_circle,
@@ -397,15 +397,6 @@ class _NotificationsPageState extends State<NotificationsPage> with SingleTicker
           bottom: false,
           child: CustomScrollView(
             slivers: [
-              // Notification limit widget
-              if (!_isLoading && _activeReminders.isNotEmpty)
-                SliverToBoxAdapter(
-                  child: NotificationLimitWidget(
-                    reminders: _activeReminders,
-                    onOptimizePressed: () => _showNotificationBreakdown(),
-                  ),
-                ),
-
               SliverToBoxAdapter(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 16),

@@ -57,7 +57,7 @@ class _TimePickerModalState extends State<_TimePickerModal> {
                   ),
                 ),
                 Text(
-                  widget.initialTime != null ? 'Edit time' : 'Choose a time',
+                  widget.initialTime != null ? LocaleKeys.reminder_widgets_edit_time.tr() : LocaleKeys.reminder_widgets_choose_time.tr(),
                   style: context.titleMedium.copyWith(
                     fontWeight: FontWeight.w600,
                   ),
@@ -114,7 +114,7 @@ class _MultipleReminderTimesWidgetState extends ConsumerState<MultipleReminderTi
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Reminder times',
+            LocaleKeys.reminder_widgets_reminder_times.tr(),
             style: context.titleMedium.copyWith(
               fontWeight: FontWeight.w600,
             ),
@@ -142,7 +142,7 @@ class _MultipleReminderTimesWidgetState extends ConsumerState<MultipleReminderTi
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      'No reminder times set',
+                      LocaleKeys.reminder_widgets_no_reminder_times_set.tr(),
                       style: context.bodyMedium.copyWith(
                         color: context.selectionHandleColor.withValues(alpha: 0.7),
                         fontWeight: FontWeight.w500,
@@ -150,7 +150,7 @@ class _MultipleReminderTimesWidgetState extends ConsumerState<MultipleReminderTi
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      'Tap "Add another time" below to get started',
+                      LocaleKeys.reminder_widgets_tap_add_another_time.tr(),
                       style: context.bodySmall.copyWith(
                         color: context.selectionHandleColor.withValues(alpha: 0.5),
                       ),
@@ -185,7 +185,7 @@ class _MultipleReminderTimesWidgetState extends ConsumerState<MultipleReminderTi
                   ),
                   const SizedBox(width: 8),
                   Text(
-                    'Add another time',
+                    LocaleKeys.reminder_widgets_add_another_time.tr(),
                     style: context.bodyMedium.copyWith(
                       color: context.primary,
                       fontWeight: FontWeight.w500,
@@ -200,7 +200,7 @@ class _MultipleReminderTimesWidgetState extends ConsumerState<MultipleReminderTi
     }
 
     return CupertinoListSection.insetGrouped(
-      header: Text('Reminder times'),
+      header: Text(LocaleKeys.reminder_widgets_reminder_times.tr()),
       children: [
         Padding(
           padding: const EdgeInsets.all(8.0),
@@ -288,7 +288,7 @@ class _MultipleReminderTimesWidgetState extends ConsumerState<MultipleReminderTi
                       ),
                       const SizedBox(width: 8),
                       Text(
-                        'Add another time',
+                        LocaleKeys.reminder_widgets_add_another_time.tr(),
                         style: context.bodyMedium.copyWith(
                           color: context.primary,
                           fontWeight: FontWeight.w500,

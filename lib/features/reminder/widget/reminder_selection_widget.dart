@@ -57,7 +57,6 @@ class _ReminderSelectionWidgetState extends ConsumerState<ReminderSelectionWidge
       header: widget.header,
       children: [
         MyListTile(
-          
           trailing: CupertinoListTileChevron(),
           additionalInfo: Row(
             children: [
@@ -158,16 +157,16 @@ class _ReminderSelectionWidgetState extends ConsumerState<ReminderSelectionWidge
                   final shouldOpenSettings = await showCupertinoDialog<bool>(
                     context: context,
                     builder: (context) => CupertinoAlertDialog(
-                      title: const Text('Notifications Permission'),
-                      content: const Text('To set reminders, please enable notifications in settings.'),
+                      title: Text(LocaleKeys.reminder_widgets_notifications_permission.tr()),
+                      content: Text(LocaleKeys.reminder_widgets_enable_notifications_message.tr()),
                       actions: [
                         CupertinoDialogAction(
-                          child: const Text('Cancel'),
+                          child: Text(LocaleKeys.common_cancel.tr()),
                           onPressed: () => Navigator.pop(context, false),
                         ),
                         CupertinoDialogAction(
                           isDefaultAction: true,
-                          child: const Text('Settings'),
+                          child: Text(LocaleKeys.permissions_settings.tr()),
                           onPressed: () => Navigator.pop(context, true),
                         ),
                       ],

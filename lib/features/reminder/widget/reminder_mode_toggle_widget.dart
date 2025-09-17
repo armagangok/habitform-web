@@ -12,7 +12,7 @@ class ReminderModeToggleWidget extends ConsumerWidget {
     final hasMultipleReminders = reminderState.reminder?.hasMultipleReminders ?? false;
 
     return CupertinoListSection.insetGrouped(
-      header: Text('How many reminders?'),
+      header: Text(LocaleKeys.reminder_widgets_how_many_reminders.tr()),
       children: [
         Padding(
           padding: const EdgeInsets.all(8.0),
@@ -43,7 +43,7 @@ class ReminderModeToggleWidget extends ConsumerWidget {
                             ),
                             const SizedBox(width: 8),
                             Text(
-                              'Once a day',
+                              LocaleKeys.reminder_widgets_once_a_day.tr(),
                               style: context.bodyMedium.copyWith(
                                 color: !hasMultipleReminders ? Colors.white : context.cupertinoTextTheme.textStyle.color,
                                 fontWeight: FontWeight.w500,
@@ -78,7 +78,7 @@ class ReminderModeToggleWidget extends ConsumerWidget {
                             ),
                             const SizedBox(width: 8),
                             Text(
-                              'Multiple times',
+                              LocaleKeys.reminder_widgets_multiple_times.tr(),
                               style: context.bodyMedium.copyWith(
                                 color: hasMultipleReminders ? Colors.white : context.cupertinoTextTheme.textStyle.color,
                                 fontWeight: FontWeight.w500,
@@ -112,7 +112,7 @@ class ReminderModeToggleWidget extends ConsumerWidget {
                       const SizedBox(width: 8),
                       Expanded(
                         child: Text(
-                          'Perfect for habits like "Drink Water" - set reminders at 8 AM, 2 PM, and 8 PM',
+                          LocaleKeys.reminder_widgets_multiple_times_tip.tr(),
                           style: context.bodySmall.copyWith(
                             color: context.primary,
                             fontWeight: FontWeight.w500,

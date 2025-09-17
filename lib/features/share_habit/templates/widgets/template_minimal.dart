@@ -23,7 +23,7 @@ class TemplateMinimal extends StatelessWidget {
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Text(habit.emoji ?? '🌟', style: context.displaySmall.copyWith(color: onPrimary)),
+                Text(habit.emoji ?? LocaleKeys.share_templates_default_emoji.tr(), style: context.displaySmall.copyWith(color: onPrimary)),
                 const SizedBox(width: 10),
                 Expanded(
                   child: Text(
@@ -38,11 +38,11 @@ class TemplateMinimal extends StatelessWidget {
             const SizedBox(height: 16),
             Row(
               children: [
-                _Metric(title: 'Current Streak', value: '${stats.currentStreak}d', color: onPrimary),
+                _Metric(title: LocaleKeys.share_templates_current_streak.tr(), value: '${stats.currentStreak}d', color: onPrimary),
                 const SizedBox(width: 16),
-                _Metric(title: 'Best Streak', value: '${stats.longestStreak}d', color: onPrimary),
+                _Metric(title: LocaleKeys.share_templates_best_streak.tr(), value: '${stats.longestStreak}d', color: onPrimary),
                 const SizedBox(width: 16),
-                _Metric(title: 'Completed', value: '${stats.completedDays}', color: onPrimary),
+                _Metric(title: LocaleKeys.share_templates_completed.tr(), value: '${stats.completedDays}', color: onPrimary),
               ],
             ),
             const Spacer(),
@@ -58,7 +58,7 @@ class TemplateMinimal extends StatelessWidget {
               children: [
                 Assets.app.appLogoDark.image(height: 22, width: 22),
                 const SizedBox(width: 8),
-                Text('HabitRise', style: context.bodySmall.copyWith(color: onPrimary, fontWeight: FontWeight.bold)),
+                Text(LocaleKeys.share_templates_app_name.tr(), style: context.bodySmall.copyWith(color: onPrimary, fontWeight: FontWeight.bold)),
               ],
             )
           ],

@@ -391,7 +391,7 @@ class _PrePaywallPageState extends ConsumerState<PrePaywallPage> with TickerProv
                         children: [
                           FittedBox(
                             child: Text(
-                              'We become\nwhat we repeatedly do.',
+                              LocaleKeys.paywall_headline.tr(),
                               style: context.bodyLarge.copyWith(
                                 fontWeight: FontWeight.w600,
                                 fontSize: 21,
@@ -422,7 +422,7 @@ class _PrePaywallPageState extends ConsumerState<PrePaywallPage> with TickerProv
           child: SlideTransition(
             position: _testimonialsSlideAnimation,
             child: CupertinoListSection.insetGrouped(
-              header: Text('What Our Users Are Saying'),
+              header: Text(LocaleKeys.paywall_what_users_saying.tr()),
               children: [
                 Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -515,7 +515,7 @@ class _PrePaywallPageState extends ConsumerState<PrePaywallPage> with TickerProv
           child: SlideTransition(
             position: _featuresSlideAnimation,
             child: CupertinoListSection.insetGrouped(
-              header: Text('What You Get'),
+              header: Text(LocaleKeys.paywall_what_you_get.tr()),
               children: [
                 Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -650,7 +650,7 @@ class _PrePaywallPageState extends ConsumerState<PrePaywallPage> with TickerProv
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        'Continue',
+                        LocaleKeys.paywall_continue.tr(),
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
@@ -676,7 +676,7 @@ class _PrePaywallPageState extends ConsumerState<PrePaywallPage> with TickerProv
           CupertinoActivityIndicator(radius: 20),
           SizedBox(height: 16),
           Text(
-            'Loading...',
+            LocaleKeys.paywall_loading.tr(),
             style: context.bodyMedium,
           ),
         ],
@@ -696,7 +696,7 @@ class _PrePaywallPageState extends ConsumerState<PrePaywallPage> with TickerProv
           ),
           SizedBox(height: 16),
           Text(
-            'Something went wrong',
+            LocaleKeys.paywall_something_went_wrong.tr(),
             style: context.bodyMedium,
             textAlign: TextAlign.center,
           ),
@@ -717,7 +717,7 @@ class _PrePaywallPageState extends ConsumerState<PrePaywallPage> with TickerProv
               icon: CupertinoIcons.xmark,
             ),
       middle: Text(
-        'HabitRise Pro',
+        LocaleKeys.paywall_title.tr(),
         style: context.titleMedium.copyWith(
           fontWeight: FontWeight.bold,
         ),

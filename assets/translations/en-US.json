@@ -297,7 +297,10 @@
         },
         "reminder": {
             "title": "Reminder for your habit",
-            "description": "Reminders are optional but highly recommended. They help you stay consistent by notifying you when it's time to complete your habit."
+            "description": "Reminders are optional but highly recommended. They help you stay consistent by notifying you when it's time to complete your habit.",
+            "daily_target_header": "Daily target per day",
+            "daily_target_footer": "How many times do you want to complete this habit each day?",
+            "completions_per_day": "Completions/day"
         },
         "difficulty": {
             "title": "Difficulty",
@@ -373,7 +376,10 @@
         "import_success": "Data imported successfully",
         "import_error": "Error importing data",
         "habits_imported": "habits imported",
-        "no_habits_imported": "No habits were imported"
+        "no_habits_imported": "No habits were imported",
+        "rc_id": "Rc ID",
+        "app_name_habit": "Habit",
+        "app_name_rise": "Rise"
     },
     "subscription": {
         "subscribe_to": "Subscribe to",
@@ -427,6 +433,27 @@
         "share_image": "Share Image",
         "share_text": "Share Text"
     },
+    "paywall": {
+        "title": "HabitRise Pro",
+        "headline": "We become\nwhat we repeatedly do.",
+        "choose_plan": "Choose Your Plan",
+        "what_you_get": "What You Get",
+        "processing": "Processing...",
+        "continue": "Continue",
+        "continue_limited": "Continue with limited features",
+        "privacy": "Privacy",
+        "terms": "Terms",
+        "loading": "Loading...",
+        "something_went_wrong": "Something went wrong",
+        "popular": "POPULAR!",
+        "try_for_free": "Try for Free",
+        "free_trial_included_days": "{days}-day free trial included",
+        "restore": "Restore",
+        "social_active_users": "Active Users",
+        "social_app_store_rating": "App Store Rating",
+        "social_success_rate": "Success Rate",
+        "what_users_saying": "What Our Users Are Saying"
+    },
     "days": {
         "monday": "Monday",
         "tuesday": "Tuesday",
@@ -454,7 +481,35 @@
         "app_notification_settings": "App Notification Settings",
         "scheduled_notifications": "Scheduled Notifications",
         "no_scheduled_notifications": "No scheduled notifications",
-        "reminders": "reminders"
+        "reminders": "reminders",
+        "delete_reminder": "Delete Reminder",
+        "delete_reminder_confirmation": "Are you sure you want to delete the reminder for {{dayInfo}}{{timeInfo}}?",
+        "reminder_deleted_success": "Reminder for {{dayInfo}} deleted successfully",
+        "failed_to_delete_notification": "Failed to delete notification",
+        "delete_all_reminders": "Delete All Reminders",
+        "delete_all_reminders_confirmation": "Are you sure you want to delete all {{count}} reminders for \"{{habitName}}\"?",
+        "all_reminders_deleted_success": "All reminders for \"{{habitName}}\" deleted successfully",
+        "failed_to_delete_all_reminders": "Failed to delete all reminders",
+        "unknown_day": "Unknown Day",
+        "unknown_habit": "Unknown Habit",
+        "this_notification": "this notification",
+        "at_time": " at {{time}}",
+        "at_time_display": "At {{time}}",
+        "scheduled": "Scheduled",
+        "monday": "Monday",
+        "tuesday": "Tuesday",
+        "wednesday": "Wednesday",
+        "thursday": "Thursday",
+        "friday": "Friday",
+        "saturday": "Saturday",
+        "sunday": "Sunday",
+        "mon": "Mon",
+        "tue": "Tue",
+        "wed": "Wed",
+        "thu": "Thu",
+        "fri": "Fri",
+        "sat": "Sat",
+        "sun": "Sun"
     },
     "archived_habits": {
         "title": "Archived Habits",
@@ -519,6 +574,103 @@
         "chart_labels": {
             "demo_data_message": "This is demo data, upgrade to unlock real data",
             "upgrade_button": "Upgrade"
+        },
+        "formation_score": "Formation Score",
+        "score_breakdown": "Score Breakdown",
+        "progress_status": "Progress Status",
+        "estimated_formation_time": "Estimated Formation Time",
+        "about_formation_title": "About Formation",
+        "legend_below_60": "Below 60%",
+        "legend_needs_work": "Needs Work",
+        "legend_60_75": "60-75%",
+        "legend_good_progress": "Good Progress",
+        "legend_75_90": "75-90%",
+        "legend_very_good": "Very Good",
+        "legend_above_90": "Above 90%",
+        "legend_excellent": "Excellent",
+        "legend_less_60": "< 60%",
+        "legend_good": "Good",
+        "legend_greater_90": "> 90%"
+    },
+    "reminder_widgets": {
+        "edit_time": "Edit time",
+        "choose_time": "Choose a time",
+        "reminder_times": "Reminder times",
+        "no_reminder_times_set": "No reminder times set",
+        "tap_add_another_time": "Tap \"Add another time\" below to get started",
+        "add_another_time": "Add another time",
+        "how_many_reminders": "How many reminders?",
+        "once_a_day": "Once a day",
+        "multiple_times": "Multiple times",
+        "multiple_times_tip": "Perfect for habits like \"Drink Water\" - set reminders at 8 AM, 2 PM, and 8 PM",
+        "notifications_permission": "Notifications Permission",
+        "enable_notifications_message": "To set reminders, please enable notifications in settings."
+    },
+    "share_templates": {
+        "streak_days": "{days}d streak",
+        "progress_percent": "{percent}% progress",
+        "app_name": "HabitRise",
+        "current_streak": "Current Streak",
+        "best_streak": "Best Streak",
+        "completed": "Completed",
+        "default_emoji": "🌟",
+        "calendar": "Calendar",
+        "overview": "Overview",
+        "heatmap": "Heatmap",
+        "poster": "Poster"
+    },
+    "csv_service": {
+        "export_subject": "HabitRise Export",
+        "select_csv_file": "Select CSV File",
+        "could_not_read_file": "Could not read file",
+        "please_select_csv_file": "Please select a CSV file",
+        "csv_file_is_empty": "CSV file is empty",
+        "invalid_csv_format": "Invalid CSV format: {error}",
+        "missing_required_columns": "CSV file is missing required columns (id, name)",
+        "invalid_day_index": "Invalid day index: {index}"
+    },
+    "permissions": {
+        "permission_required": "Permission Required",
+        "storage_permission_message": "HabitRise needs storage permission to import and export your habit data.",
+        "storage_permission_settings_message": "HabitRise needs storage permission to import and export your habit data. Please enable it in your device settings.",
+        "cancel": "Cancel",
+        "try_again": "Try Again",
+        "settings": "Settings"
+    },
+    "emoji_picker": {
+        "pick_your_emoji": "Pick your emoji",
+        "custom": "Custom"
+    },
+    "purchase_dialog": {
+        "pro_required_title": "You need pro to unlock this feature",
+        "pro_required_message": "Unlock HabitRise Pro to access this and many other pro features!"
+    },
+    "habit_category": {
+        "title": "Habit Category",
+        "new": "New",
+        "custom_categories": "Custom Categories",
+        "select_categories": "Select categories",
+        "category_options": "Category Options",
+        "category_options_message": "What would you like to do with '{{categoryName}}'?",
+        "edit": "Edit",
+        "delete": "Delete",
+        "create_category": "Create Category",
+        "edit_category": "Edit Category",
+        "enter_category_name": "Enter a name for your category",
+        "save": "Save",
+        "create": "Create",
+        "error_loading_categories": "Error loading categories: {{error}}",
+        "error": "Error: {{error}}",
+        "default_categories": {
+            "daily_life": "Daily Life",
+            "sports": "Sports",
+            "health": "Health",
+            "nutrition": "Nutrition",
+            "study": "Study",
+            "work": "Work",
+            "art": "Art",
+            "finances": "Finances",
+            "social": "Social"
         }
     }
 }

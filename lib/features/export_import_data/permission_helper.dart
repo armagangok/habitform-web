@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:device_info_plus/device_info_plus.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import '../../core/core.dart';
@@ -117,18 +116,18 @@ class PermissionHelper {
     await showCupertinoDialog(
       context: context,
       builder: (context) => CupertinoAlertDialog(
-        title: Text("Permission Required"),
-        content: Text("HabitRise needs storage permission to import and export your habit data."),
+        title: Text(LocaleKeys.permissions_permission_required.tr()),
+        content: Text(LocaleKeys.permissions_storage_permission_message.tr()),
         actions: [
           CupertinoDialogAction(
-            child: Text("Cancel"),
+            child: Text(LocaleKeys.permissions_cancel.tr()),
             onPressed: () {
               Navigator.of(context).pop();
               result = false;
             },
           ),
           CupertinoDialogAction(
-            child: Text("Try Again"),
+            child: Text(LocaleKeys.permissions_try_again.tr()),
             onPressed: () {
               Navigator.of(context).pop();
               result = true;
@@ -148,18 +147,18 @@ class PermissionHelper {
     await showCupertinoDialog(
       context: context,
       builder: (context) => CupertinoAlertDialog(
-        title: Text("Permission Required"),
-        content: Text("HabitRise needs storage permission to import and export your habit data. Please enable it in your device settings."),
+        title: Text(LocaleKeys.permissions_permission_required.tr()),
+        content: Text(LocaleKeys.permissions_storage_permission_settings_message.tr()),
         actions: [
           CupertinoDialogAction(
-            child: Text("Cancel"),
+            child: Text(LocaleKeys.permissions_cancel.tr()),
             onPressed: () {
               Navigator.of(context).pop();
               result = false;
             },
           ),
           CupertinoDialogAction(
-            child: Text("Settings"),
+            child: Text(LocaleKeys.permissions_settings.tr()),
             onPressed: () {
               openAppSettings();
               Navigator.of(context).pop();

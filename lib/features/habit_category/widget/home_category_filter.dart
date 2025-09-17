@@ -74,7 +74,7 @@ class HomeCategoryFilter extends ConsumerWidget {
                             ),
                             SizedBox(width: 5),
                             Text(
-                              category.name,
+                              category.getDisplayName(),
                               style: context.bodySmall.copyWith(
                                 color: isSelected ? Colors.white : context.bodyMedium.color,
                                 fontWeight: FontWeight.w500,
@@ -93,7 +93,7 @@ class HomeCategoryFilter extends ConsumerWidget {
         },
         loading: () => const Center(child: CupertinoActivityIndicator()),
         error: (error, stack) => Center(
-          child: Text('Error: $error', style: context.bodyMedium),
+          child: Text(LocaleKeys.habit_category_error.tr(args: [error.toString()]), style: context.bodyMedium),
         ),
       ),
     );

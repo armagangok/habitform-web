@@ -183,7 +183,7 @@ class FormationInsightsWidget extends ConsumerWidget {
   Widget _buildScoreSection(BuildContext context, double progressPercentage, HabitDifficulty difficulty, double formationProbability) {
     return CupertinoListSection.insetGrouped(
       backgroundColor: Colors.transparent,
-      header: Text('Formation Score'),
+      header: Text(LocaleKeys.statistics_formation_score.tr()),
       children: [
         Padding(
           padding: const EdgeInsets.all(16.0),
@@ -197,7 +197,7 @@ class FormationInsightsWidget extends ConsumerWidget {
   Widget _buildPercentageLegendSection(BuildContext context, double formationProbability) {
     return CupertinoListSection.insetGrouped(
       backgroundColor: Colors.transparent,
-      header: Text('Score Breakdown'),
+      header: Text(LocaleKeys.statistics_score_breakdown.tr()),
       children: [
         Padding(
           padding: const EdgeInsets.all(16.0),
@@ -218,7 +218,7 @@ class FormationInsightsWidget extends ConsumerWidget {
           backgroundColor: Colors.transparent,
           padding: const EdgeInsets.all(16),
           title: Text(
-            'Progress Status',
+            LocaleKeys.statistics_progress_status.tr(),
             style: context.titleSmall.copyWith(
               fontWeight: FontWeight.bold,
             ),
@@ -238,7 +238,7 @@ class FormationInsightsWidget extends ConsumerWidget {
           backgroundColor: Colors.transparent,
           padding: const EdgeInsets.all(16),
           title: Text(
-            'Estimated Formation Time',
+            LocaleKeys.statistics_estimated_formation_time.tr(),
             style: context.titleSmall.copyWith(
               fontWeight: FontWeight.bold,
             ),
@@ -266,7 +266,7 @@ class FormationInsightsWidget extends ConsumerWidget {
               ),
               const SizedBox(width: 8),
               Text(
-                'About Formation',
+                LocaleKeys.statistics_about_formation_title.tr(),
                 style: context.titleSmall.copyWith(
                   fontWeight: FontWeight.bold,
                 ),
@@ -420,8 +420,8 @@ class FormationInsightsWidget extends ConsumerWidget {
               child: _buildLegendItem(
                 context,
                 const Color(0xFFF44336),
-                '< 60%',
-                'Needs Work',
+                LocaleKeys.statistics_legend_less_60.tr(),
+                LocaleKeys.statistics_legend_needs_work.tr(),
                 isSelected: formationProbability < 60,
               ),
             ),
@@ -430,8 +430,8 @@ class FormationInsightsWidget extends ConsumerWidget {
               child: _buildLegendItem(
                 context,
                 const Color(0xFFFFC107),
-                '60-75%',
-                'Good',
+                LocaleKeys.statistics_legend_60_75.tr(),
+                LocaleKeys.statistics_legend_good.tr(),
                 isSelected: formationProbability >= 60 && formationProbability < 75,
               ),
             ),
@@ -440,8 +440,8 @@ class FormationInsightsWidget extends ConsumerWidget {
               child: _buildLegendItem(
                 context,
                 const Color(0xFF8BC34A),
-                '75-90%',
-                'Very Good',
+                LocaleKeys.statistics_legend_75_90.tr(),
+                LocaleKeys.statistics_legend_very_good.tr(),
                 isSelected: formationProbability >= 75 && formationProbability < 90,
               ),
             ),
@@ -450,8 +450,8 @@ class FormationInsightsWidget extends ConsumerWidget {
               child: _buildLegendItem(
                 context,
                 const Color(0xFF4CAF50),
-                '> 90%',
-                'Excellent',
+                LocaleKeys.statistics_legend_greater_90.tr(),
+                LocaleKeys.statistics_legend_excellent.tr(),
                 isSelected: formationProbability >= 90,
               ),
             ),

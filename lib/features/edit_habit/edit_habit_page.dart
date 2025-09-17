@@ -147,14 +147,14 @@ class EditHabitPage extends ConsumerWidget {
                         final state = ref.watch(editHabitProvider);
                         final currentTarget = state?.dailyTarget ?? 1;
                         return CupertinoListSection.insetGrouped(
-                          header: const Text("Daily target per day"),
+                          header: Text(LocaleKeys.create_habit_reminder_daily_target_header.tr()),
                           children: [
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Padding(
                                   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                                  child: Text("Completions/day", style: context.titleMedium),
+                                  child: Text(LocaleKeys.create_habit_reminder_completions_per_day.tr(), style: context.titleMedium),
                                 ),
                                 Row(
                                   children: [

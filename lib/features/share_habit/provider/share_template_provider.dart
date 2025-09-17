@@ -1,5 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '/core/core.dart';
+
 class ShareTemplateConfig {
   final String id;
   final String title;
@@ -26,11 +28,11 @@ class ShareTemplateNotifier extends Notifier<ShareTemplateState> {
   ShareTemplateState build() {
     return ShareTemplateState(
       selectedIndex: 0,
-      templates: const [
-        ShareTemplateConfig(id: 'calendar', title: 'Calendar'),
-        ShareTemplateConfig(id: 'overview', title: 'Overview', requiresPro: true),
-        ShareTemplateConfig(id: 'heatmap', title: 'Heatmap', requiresPro: true),
-        ShareTemplateConfig(id: 'poster', title: 'Poster', requiresPro: true),
+      templates: [
+        ShareTemplateConfig(id: 'calendar', title: LocaleKeys.share_templates_calendar.tr()),
+        ShareTemplateConfig(id: 'overview', title: LocaleKeys.share_templates_overview.tr(), requiresPro: true),
+        ShareTemplateConfig(id: 'heatmap', title: LocaleKeys.share_templates_heatmap.tr(), requiresPro: true),
+        ShareTemplateConfig(id: 'poster', title: LocaleKeys.share_templates_poster.tr(), requiresPro: true),
       ],
     );
   }

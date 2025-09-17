@@ -87,7 +87,14 @@ class _LockedWrapper extends StatelessWidget {
             children: [
               Icon(CupertinoIcons.lock_fill, size: 14, color: context.titleLarge.color),
               const SizedBox(width: 6),
-              Text('Unlock', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: context.titleLarge.color)),
+              Text(
+                'Unlock',
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w600,
+                  color: context.titleLarge.color,
+                ),
+              ),
             ],
           ),
         ),

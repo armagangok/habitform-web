@@ -40,7 +40,7 @@ class _HabitCategoryPageState extends ConsumerState<HabitCategoryPage> {
 
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
-        middle: Text("Habit Category"),
+        middle: Text(LocaleKeys.habit_category_title.tr()),
         trailing: CupertinoButton(
           padding: EdgeInsets.zero,
           child: Row(
@@ -48,7 +48,7 @@ class _HabitCategoryPageState extends ConsumerState<HabitCategoryPage> {
             children: [
               Icon(CupertinoIcons.add, size: 20),
               SizedBox(width: 4),
-              Text("New"),
+              Text(LocaleKeys.habit_category_new.tr()),
             ],
           ),
           onPressed: () => _showCreateCategoryDialog(),
@@ -63,7 +63,7 @@ class _HabitCategoryPageState extends ConsumerState<HabitCategoryPage> {
                 data: (state) => _buildCategoryList(state, localSelectedIds),
                 loading: () => const Center(child: CupertinoActivityIndicator()),
                 error: (error, _) => Center(
-                  child: Text('Error loading categories: $error', style: context.bodyMedium),
+                  child: Text(LocaleKeys.habit_category_error_loading_categories.tr(args: [error.toString()]), style: context.bodyMedium),
                 ),
               ),
             ),
@@ -120,7 +120,7 @@ class _HabitCategoryPageState extends ConsumerState<HabitCategoryPage> {
           SizedBox(height: 24),
         ],
         if (customCategories.isNotEmpty) ...[
-          _buildSectionHeader('Custom Categories'),
+          _buildSectionHeader(LocaleKeys.habit_category_custom_categories.tr()),
           Wrap(
             spacing: 8.0,
             runSpacing: 8.0,
@@ -176,7 +176,7 @@ class _HabitCategoryPageState extends ConsumerState<HabitCategoryPage> {
               SizedBox(width: 6),
             ],
             Text(
-              category.name,
+              category.getDisplayName(),
               style: context.bodySmall.copyWith(
                 color: isSelected ? Colors.white : null,
                 fontWeight: FontWeight.w600,
@@ -199,15 +199,15 @@ class _HabitCategoryPageState extends ConsumerState<HabitCategoryPage> {
     showCupertinoDialog(
       context: context,
       builder: (dialogContext) => CupertinoAlertDialog(
-        title: Text("Category Options"),
-        content: Text("What would you like to do with '${category.name}'?"),
+        title: Text(LocaleKeys.habit_category_category_options.tr()),
+        content: Text(LocaleKeys.habit_category_category_options_message.tr(namedArgs: {'categoryName': category.getDisplayName()})),
         actions: [
           CupertinoDialogAction(
             onPressed: () {
               Navigator.pop(dialogContext);
               _showEditCategoryDialog(category);
             },
-            child: Text("Edit"),
+            child: Text(LocaleKeys.habit_category_edit.tr()),
           ),
           CupertinoDialogAction(
             isDestructiveAction: true,
@@ -215,11 +215,11 @@ class _HabitCategoryPageState extends ConsumerState<HabitCategoryPage> {
               Navigator.pop(dialogContext);
               await ref.read(habitCategoryProvider.notifier).deleteCategory(category.id);
             },
-            child: Text("Delete"),
+            child: Text(LocaleKeys.habit_category_delete.tr()),
           ),
           CupertinoDialogAction(
             onPressed: () => Navigator.pop(dialogContext),
-            child: Text("Cancel"),
+            child: Text(LocaleKeys.common_cancel.tr()),
           ),
         ],
       ),
@@ -239,7 +239,7 @@ class _HabitCategoryPageState extends ConsumerState<HabitCategoryPage> {
           final selectedIcon = widgetRef.watch(iconSelectionProvider);
 
           return CupertinoActionSheet(
-            title: const Text('Edit Category'),
+            title: Text(LocaleKeys.habit_category_edit_category.tr()),
             message: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -247,7 +247,7 @@ class _HabitCategoryPageState extends ConsumerState<HabitCategoryPage> {
                   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                   child: CupertinoTextField(
                     controller: nameController,
-                    placeholder: 'Enter a name for your category',
+                    placeholder: LocaleKeys.habit_category_enter_category_name.tr(),
                     padding: const EdgeInsets.all(12),
                     autofocus: true,
                     decoration: BoxDecoration(
@@ -316,12 +316,12 @@ class _HabitCategoryPageState extends ConsumerState<HabitCategoryPage> {
                     Navigator.pop(context);
                   }
                 },
-                child: const Text('Save'),
+                child: Text(LocaleKeys.habit_category_save.tr()),
               ),
               CupertinoActionSheetAction(
                 isDestructiveAction: true,
                 onPressed: () => Navigator.pop(context),
-                child: const Text('Cancel'),
+                child: Text(LocaleKeys.common_cancel.tr()),
               ),
             ],
           );
@@ -343,7 +343,7 @@ class _HabitCategoryPageState extends ConsumerState<HabitCategoryPage> {
           final selectedIcon = widgetRef.watch(iconSelectionProvider);
 
           return CupertinoActionSheet(
-            title: const Text('Create Category'),
+            title: Text(LocaleKeys.habit_category_create_category.tr()),
             message: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -351,7 +351,7 @@ class _HabitCategoryPageState extends ConsumerState<HabitCategoryPage> {
                   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                   child: CupertinoTextField(
                     controller: nameController,
-                    placeholder: 'Enter a name for your category',
+                    placeholder: LocaleKeys.habit_category_enter_category_name.tr(),
                     padding: const EdgeInsets.all(12),
                     autofocus: true,
                     decoration: BoxDecoration(
@@ -416,12 +416,12 @@ class _HabitCategoryPageState extends ConsumerState<HabitCategoryPage> {
                     Navigator.pop(context);
                   }
                 },
-                child: const Text('Create'),
+                child: Text(LocaleKeys.habit_category_create.tr()),
               ),
               CupertinoActionSheetAction(
                 isDestructiveAction: true,
                 onPressed: () => Navigator.pop(context),
-                child: const Text('Cancel'),
+                child: Text(LocaleKeys.common_cancel.tr()),
               ),
             ],
           );

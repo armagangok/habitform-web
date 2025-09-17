@@ -7,8 +7,8 @@ Future<void> showUnlockProDialog() async {
   await showCupertinoDialog(
     context: context,
     builder: (context) => CupertinoAlertDialog(
-      title: Text("You need pro to unlock this feature"),
-      content: Text("Unlock HabitRise Pro to access this and many other pro features!"),
+      title: Text(LocaleKeys.purchase_dialog_pro_required_title.tr()),
+      content: Text(LocaleKeys.purchase_dialog_pro_required_message.tr()),
       actions: [
         CupertinoDialogAction(
           onPressed: () => Navigator.pop(context),

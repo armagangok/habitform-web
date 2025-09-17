@@ -9,7 +9,7 @@ import '../util/icon_util.dart';
 
 class CategoryPickerButton extends ConsumerWidget {
   final Widget? header;
-  
+
   const CategoryPickerButton({super.key, this.header});
 
   // Helper method to get FontAwesome icon based on category name
@@ -61,7 +61,7 @@ class CategoryPickerButton extends ConsumerWidget {
             },
             trailing: CupertinoListTileChevron(),
             titleWidget: selectedCategories.isEmpty
-                ? Text('Select categories')
+                ? Text(LocaleKeys.habit_category_select_categories.tr())
                 : Wrap(
                     runAlignment: WrapAlignment.start,
                     alignment: WrapAlignment.start,
@@ -90,7 +90,7 @@ class CategoryPickerButton extends ConsumerWidget {
                             ),
                             SizedBox(width: 6),
                             Text(
-                              category.name,
+                              category.getDisplayName(),
                               style: context.bodySmall.copyWith(
                                 color: context.primary,
                                 fontWeight: FontWeight.w500,

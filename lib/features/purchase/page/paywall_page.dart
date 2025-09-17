@@ -320,7 +320,7 @@ class _PaywallWidgetState extends ConsumerState<PaywallPage> with TickerProvider
                 SizedBox(height: 20),
                 Center(
                   child: Text(
-                    'We become\nwhat we repeatedly do.',
+                    LocaleKeys.paywall_headline.tr(),
                     style: context.headlineMedium.copyWith(
                       fontWeight: FontWeight.bold,
                     ),
@@ -329,7 +329,7 @@ class _PaywallWidgetState extends ConsumerState<PaywallPage> with TickerProvider
                 ),
                 SizedBox(height: 24),
                 Text(
-                  'Choose Your Plan',
+                  LocaleKeys.paywall_choose_plan.tr(),
                   style: context.titleLarge.copyWith(
                     fontWeight: FontWeight.w600,
                     color: context.headlineMedium.color?.withValues(alpha: 0.7),
@@ -357,7 +357,7 @@ class _PaywallWidgetState extends ConsumerState<PaywallPage> with TickerProvider
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'What You Get',
+                  LocaleKeys.paywall_what_you_get.tr(),
                   style: context.titleLarge.copyWith(
                     fontWeight: FontWeight.w600,
                     color: context.headlineMedium.color?.withValues(alpha: 0.7),
@@ -547,7 +547,7 @@ class _PaywallWidgetState extends ConsumerState<PaywallPage> with TickerProvider
                           CupertinoActivityIndicator(radius: 12),
                           SizedBox(width: 12),
                           Text(
-                            'Processing...',
+                            LocaleKeys.paywall_processing.tr(),
                             style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
@@ -586,7 +586,7 @@ class _PaywallWidgetState extends ConsumerState<PaywallPage> with TickerProvider
               navigator.navigateAndClear(path: KRoute.homePage);
             },
             child: Text(
-              'Continue with limited features',
+              LocaleKeys.paywall_continue_limited.tr(),
               style: context.bodySmall.copyWith(
                 color: context.bodySmall.color?.withValues(alpha: 0.7),
                 fontWeight: FontWeight.w500,
@@ -606,7 +606,7 @@ class _PaywallWidgetState extends ConsumerState<PaywallPage> with TickerProvider
                 padding: EdgeInsets.zero,
                 onPressed: UrlLauncherHelper.openPrivacyPolicy,
                 child: Text(
-                  'Privacy',
+                  LocaleKeys.paywall_privacy.tr(),
                   style: context.bodySmall.copyWith(
                     fontWeight: FontWeight.w500,
                   ),
@@ -619,7 +619,7 @@ class _PaywallWidgetState extends ConsumerState<PaywallPage> with TickerProvider
                 padding: EdgeInsets.zero,
                 onPressed: UrlLauncherHelper.openTermsOfUse,
                 child: Text(
-                  'Terms',
+                  LocaleKeys.paywall_terms.tr(),
                   style: context.bodySmall.copyWith(
                     fontWeight: FontWeight.w500,
                   ),
@@ -640,7 +640,7 @@ class _PaywallWidgetState extends ConsumerState<PaywallPage> with TickerProvider
           CupertinoActivityIndicator(radius: 20),
           SizedBox(height: 16),
           Text(
-            'Loading...',
+            LocaleKeys.paywall_loading.tr(),
             style: context.bodyMedium,
           ),
         ],
@@ -660,7 +660,7 @@ class _PaywallWidgetState extends ConsumerState<PaywallPage> with TickerProvider
           ),
           SizedBox(height: 16),
           Text(
-            'Something went wrong',
+            LocaleKeys.paywall_something_went_wrong.tr(),
             style: context.bodyMedium,
             textAlign: TextAlign.center,
           ),
@@ -681,7 +681,7 @@ class _PaywallWidgetState extends ConsumerState<PaywallPage> with TickerProvider
               icon: CupertinoIcons.xmark,
             ),
       middle: Text(
-        'HabitRise Pro',
+        LocaleKeys.paywall_title.tr(),
         style: context.titleMedium.copyWith(
           fontWeight: FontWeight.bold,
         ),
@@ -697,17 +697,17 @@ class _PaywallWidgetState extends ConsumerState<PaywallPage> with TickerProvider
   }
 
   String _getCTAButtonText() {
-    if (selectedPackage == null) return 'Continue';
+    if (selectedPackage == null) return LocaleKeys.paywall_continue.tr();
 
     // Check if the package has an introductory offer (free trial)
     final hasIntroductoryOffer = selectedPackage!.storeProduct.introductoryPrice != null;
 
     if (hasIntroductoryOffer) {
-      return 'Try for Free';
+      return LocaleKeys.paywall_try_for_free.tr();
     }
 
     // No introductory offer available
-    return 'Continue';
+    return LocaleKeys.paywall_continue.tr();
   }
 
   String? _getTrialDaysText(Package package) {
@@ -720,7 +720,7 @@ class _PaywallWidgetState extends ConsumerState<PaywallPage> with TickerProvider
 
     if (days == null || days <= 0) return null;
 
-    return '$days-day free trial included';
+    return LocaleKeys.paywall_free_trial_included_days.tr(namedArgs: {'days': days.toString()});
   }
 
   int? _parseISODurationToDays(String isoDuration) {
@@ -780,7 +780,7 @@ class _PaywallWidgetState extends ConsumerState<PaywallPage> with TickerProvider
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                'Restore',
+                LocaleKeys.paywall_restore.tr(),
                 style: context.bodySmall.copyWith(
                   fontWeight: FontWeight.w500,
                 ),
@@ -890,7 +890,7 @@ class _PaywallWidgetState extends ConsumerState<PaywallPage> with TickerProvider
                                       borderRadius: BorderRadius.circular(12),
                                     ),
                                     child: Text(
-                                      'POPULAR!',
+                                      LocaleKeys.paywall_popular.tr(),
                                       style: context.bodySmall.copyWith(
                                         color: Colors.white,
                                         fontWeight: FontWeight.w600,

@@ -72,9 +72,9 @@ class _ReminderStepState extends ConsumerState<ReminderStep> {
             builder: (context, ref, child) {
               final state = ref.watch(createHabitProvider);
               return CupertinoListSection.insetGrouped(
-                header: const Text("Daily target per day"),
+                header: Text(LocaleKeys.create_habit_reminder_daily_target_header.tr()),
                 footer: Text(
-                  "How many times do you want to complete this habit each day?",
+                  LocaleKeys.create_habit_reminder_daily_target_footer.tr(),
                   style: context.bodyMedium.copyWith(
                     color: Theme.of(context).hintColor,
                   ),
@@ -85,7 +85,7 @@ class _ReminderStepState extends ConsumerState<ReminderStep> {
                     children: [
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                        child: Text("Completions/day", style: context.titleMedium),
+                        child: Text(LocaleKeys.create_habit_reminder_completions_per_day.tr(), style: context.titleMedium),
                       ),
                       Row(
                         children: [

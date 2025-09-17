@@ -94,7 +94,7 @@ class _IconPickerPageState extends ConsumerState<EmojiPickerPage> {
                     ref.read(emojiPickerProvider.notifier).addCustomEmoji(emoji.emoji);
 
                     // Select the emoji
-                    final customCategory = "Custom";
+                    final customCategory = LocaleKeys.emoji_picker_custom.tr();
                     final customCategoryIndex = state.emojiCategories.keys.toList().indexOf(customCategory);
                     final customEmojis = state.emojiCategories[customCategory] ?? [];
                     final emojiIndex = customEmojis.indexOf(emoji.emoji);
@@ -143,7 +143,7 @@ class _IconPickerPageState extends ConsumerState<EmojiPickerPage> {
               padding: EdgeInsets.zero,
               children: [
                 CupertinoListSection.insetGrouped(
-                  header: Text("Pick your emoji"),
+                  header: Text(LocaleKeys.emoji_picker_pick_your_emoji.tr()),
                   children: [
                     IconPicker(
                       onIconSelected: (icon) {
