@@ -252,7 +252,10 @@
         "achievement_monthly_master_description": "30+ day streak!",
         "achievement_perfectionist_description": "{{rate}}% success rate!",
         "heatmap_stats_description": "{{days}} days completed in the last year",
-        "last_7_days": "Last 7 Days"
+        "last_7_days": "Last 7 Days",
+        "formation_info_title": "Formation Score",
+        "formation_info_description": "The Formation Score shows how likely your habit is to become automatic based on your current completion rate. Higher scores mean your habit is more likely to stick permanently.",
+        "formation_info_details": "This score is calculated using your consistency patterns and completion rate. Research shows it takes an average of 66 days of regular practice for a habit to become automatic."
     },
     "habit": {
         "add_habit": "Add Habit",

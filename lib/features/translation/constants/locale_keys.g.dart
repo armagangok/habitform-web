@@ -229,6 +229,9 @@ abstract class  LocaleKeys {
   static const habit_detail_achievement_perfectionist_description = 'habit_detail.achievement_perfectionist_description';
   static const habit_detail_heatmap_stats_description = 'habit_detail.heatmap_stats_description';
   static const habit_detail_last_7_days = 'habit_detail.last_7_days';
+  static const habit_detail_formation_info_title = 'habit_detail.formation_info_title';
+  static const habit_detail_formation_info_description = 'habit_detail.formation_info_description';
+  static const habit_detail_formation_info_details = 'habit_detail.formation_info_details';
   static const habit_detail = 'habit_detail';
   static const habit_add_habit = 'habit.add_habit';
   static const habit_edit_habit = 'habit.edit_habit';

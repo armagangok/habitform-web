@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/core.dart';
 import '../../models/create_habit_state.dart';
 import '../../provider/create_habit_provider.dart';
-import '../../widget/difficulty_picker_widget.dart';
+import '../difficulty_picker_widget.dart';
 import 'base_step_widget.dart';
 
 class DifficultyStep extends ConsumerWidget {

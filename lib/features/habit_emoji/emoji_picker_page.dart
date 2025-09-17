@@ -34,22 +34,14 @@ class _IconPickerPageState extends ConsumerState<EmojiPickerPage> {
   }
 
   void _showEmojiPicker(BuildContext context) {
-    showCupertinoModalPopup(
+    showCupertinoSheet(
       context: context,
-      builder: (context) => Container(
-        height: context.height(0.49),
-        decoration: BoxDecoration(
-          color: context.theme.scaffoldBackgroundColor,
-          borderRadius: const BorderRadius.vertical(
-            top: Radius.circular(12),
-          ),
-        ),
-        child: SafeArea(
-          top: false,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
+      builder: (context) => CupertinoPopupSurface(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            SafeArea(
+              child: Container(
                 height: 6,
                 width: 40,
                 margin: const EdgeInsets.symmetric(vertical: 8),
@@ -58,73 +50,72 @@ class _IconPickerPageState extends ConsumerState<EmojiPickerPage> {
                   borderRadius: BorderRadius.circular(3),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      LocaleKeys.common_pick_your_emoji.tr(),
-                      style: context.titleMedium.copyWith(
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    LocaleKeys.common_pick_your_emoji.tr(),
+                    style: context.titleMedium.copyWith(
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  CupertinoButton(
+                    padding: EdgeInsets.zero,
+                    minimumSize: Size.zero,
+                    onPressed: () => Navigator.pop(context),
+                    child: Text(
+                      LocaleKeys.common_ok.tr(),
+                      style: context.titleSmall.copyWith(
+                        color: context.theme.primaryColor,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
-                    CupertinoButton(
-                      padding: EdgeInsets.zero,
-                      minimumSize: Size.zero,
-                      onPressed: () => Navigator.pop(context),
-                      child: Text(
-                        LocaleKeys.common_ok.tr(),
-                        style: context.titleSmall.copyWith(
-                          color: context.theme.primaryColor,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const Divider(height: 1),
-              Expanded(
-                child: Material(
-                  color: context.theme.scaffoldBackgroundColor,
-                  child: EmojiPicker(
-                    onEmojiSelected: (category, emoji) {
-                      final state = ref.read(emojiPickerProvider);
-
-                      // If emoji is already selected, just close the picker
-                      if (state.selectedEmoji == emoji.emoji) {
-                        Navigator.pop(context);
-                        return;
-                      }
-
-                      // Add the new emoji to custom category
-                      ref.read(emojiPickerProvider.notifier).addCustomEmoji(emoji.emoji);
-
-                      // Select the emoji
-                      final customCategory = "Custom";
-                      final customCategoryIndex = state.emojiCategories.keys.toList().indexOf(customCategory);
-                      final customEmojis = state.emojiCategories[customCategory] ?? [];
-                      final emojiIndex = customEmojis.indexOf(emoji.emoji);
-
-                      // Select custom category
-                      ref.read(emojiPickerProvider.notifier).selectCategory(customCategoryIndex);
-                      // Select the emoji
-                      ref.read(emojiPickerProvider.notifier).selectEmoji(emoji.emoji, emojiIndex);
-
-                      if (widget.onIconSelected != null) {
-                        widget.onIconSelected!(emoji.emoji);
-                      } else if (mounted) {
-                        ref.read(habitEmojiProvider.notifier).pickEmoji(emoji.emoji);
-                      }
-
-                      Navigator.pop(context);
-                    },
                   ),
+                ],
+              ),
+            ),
+            const Divider(height: 1),
+            Expanded(
+              child: Material(
+                child: EmojiPicker(
+                  onEmojiSelected: (category, emoji) {
+                    final state = ref.read(emojiPickerProvider);
+
+                    // If emoji is already selected, just close the picker
+                    if (state.selectedEmoji == emoji.emoji) {
+                      Navigator.pop(context);
+                      return;
+                    }
+
+                    // Add the new emoji to custom category
+                    ref.read(emojiPickerProvider.notifier).addCustomEmoji(emoji.emoji);
+
+                    // Select the emoji
+                    final customCategory = "Custom";
+                    final customCategoryIndex = state.emojiCategories.keys.toList().indexOf(customCategory);
+                    final customEmojis = state.emojiCategories[customCategory] ?? [];
+                    final emojiIndex = customEmojis.indexOf(emoji.emoji);
+
+                    // Select custom category
+                    ref.read(emojiPickerProvider.notifier).selectCategory(customCategoryIndex);
+                    // Select the emoji
+                    ref.read(emojiPickerProvider.notifier).selectEmoji(emoji.emoji, emojiIndex);
+
+                    if (widget.onIconSelected != null) {
+                      widget.onIconSelected!(emoji.emoji);
+                    } else if (mounted) {
+                      ref.read(habitEmojiProvider.notifier).pickEmoji(emoji.emoji);
+                    }
+
+                    Navigator.pop(context);
+                  },
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
@@ -138,7 +129,7 @@ class _IconPickerPageState extends ConsumerState<EmojiPickerPage> {
       children: [
         CupertinoPageScaffold(
           navigationBar: CupertinoNavigationBar(
-            middle: Text("Emoji"),
+            middle: Text(LocaleKeys.edit_habit_emoji.tr()),
             previousPageTitle: LocaleKeys.common_back.tr(),
             trailing: CupertinoButton(
               padding: EdgeInsets.zero,

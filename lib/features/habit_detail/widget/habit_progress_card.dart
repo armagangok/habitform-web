@@ -25,7 +25,7 @@ class HabitProgressCard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return CupertinoListSection.insetGrouped(
       header: Row(
-        mainAxisSize: MainAxisSize.min,
+        mainAxisSize: MainAxisSize.max,
         children: [
           Icon(
             FontAwesomeIcons.chartPie,
@@ -40,6 +40,12 @@ class HabitProgressCard extends ConsumerWidget {
               fontWeight: FontWeight.bold,
               color: context.titleLarge.color,
             ),
+          ),
+          const Spacer(),
+          CircularActionButton(
+            iconSize: 24,
+            onPressed: () => _showFormationInfoDialog(context),
+            icon: CupertinoIcons.info,
           ),
         ],
       ),
@@ -172,6 +178,51 @@ class HabitProgressCard extends ConsumerWidget {
       habit.difficulty.estimatedFormationDays,
       habit.difficulty.minimumCompletionRate,
       habit.dailyTarget,
+    );
+  }
+
+  void _showFormationInfoDialog(BuildContext context) {
+    showCupertinoDialog(
+      context: context,
+      builder: (context) => CupertinoAlertDialog(
+        title: Text(
+          LocaleKeys.habit_detail_formation_info_title.tr(),
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: context.titleLarge.color,
+          ),
+        ),
+        content: Padding(
+          padding: const EdgeInsets.only(top: 16),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                LocaleKeys.habit_detail_formation_info_description.tr(),
+                style: TextStyle(
+                  fontSize: 16,
+                  color: context.bodyMedium.color,
+                  height: 1.1,
+                ),
+              ),
+            ],
+          ),
+        ),
+        actions: [
+          CupertinoDialogAction(
+            onPressed: () => Navigator.of(context).pop(),
+            child: Text(
+              LocaleKeys.common_ok.tr(),
+              style: TextStyle(
+                color: Color(habit.colorCode),
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
