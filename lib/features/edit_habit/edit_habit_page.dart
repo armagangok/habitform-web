@@ -57,12 +57,6 @@ class EditHabitPage extends ConsumerWidget {
                     // Icon Selection
                     CupertinoListSection.insetGrouped(
                       header: Text(LocaleKeys.edit_habit_emoji.tr()),
-                      footer: Text(
-                        LocaleKeys.edit_habit_emoji_description.tr(),
-                        style: context.bodyMedium.copyWith(
-                          color: context.bodyMedium.color?.withValues(alpha: 0.7),
-                        ),
-                      ),
                       children: [
                         Container(
                           padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
@@ -132,6 +126,13 @@ class EditHabitPage extends ConsumerWidget {
                       ],
                     ),
 
+                    ColorPickerWidget(
+                      selectedColor: Color(habit.colorCode),
+                      onColorSelected: (color) {
+                        ref.watch(colorProvider.notifier).pickColor(color);
+                      },
+                    ),
+
                     // Difficulty Selection
                     DifficultySelectionWidget(
                       selectedDifficulty: selectedDifficulty,
@@ -157,12 +158,6 @@ class EditHabitPage extends ConsumerWidget {
                     ),
 
                     // Color Selection
-                    ColorPickerWidget(
-                      selectedColor: Color(habit.colorCode),
-                      onColorSelected: (color) {
-                        ref.watch(colorProvider.notifier).pickColor(color);
-                      },
-                    ),
 
                     const SizedBox(height: 50),
                   ],

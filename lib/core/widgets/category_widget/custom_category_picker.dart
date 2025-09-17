@@ -8,6 +8,7 @@ class CustomCategoryWidget<T> extends StatefulWidget {
   final Color? customColor;
   final String Function(T) categoryLabelBuilder;
   final T selectedCategory;
+  final double? borderRadius;
 
   const CustomCategoryWidget({
     super.key,
@@ -16,6 +17,7 @@ class CustomCategoryWidget<T> extends StatefulWidget {
     this.customColor,
     required this.categoryLabelBuilder,
     required this.selectedCategory,
+    this.borderRadius,
   });
 
   @override
@@ -47,7 +49,7 @@ class CustomCategoryWidgetState<T> extends State<CustomCategoryWidget<T>> {
           minimumSize: Size.zero,
           pressedOpacity: .8,
           padding: EdgeInsets.zero,
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(widget.borderRadius ?? 90),
           color: Colors.transparent,
           onPressed: () {
             HapticFeedback.selectionClick();

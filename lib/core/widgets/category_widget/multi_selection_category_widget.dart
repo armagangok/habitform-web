@@ -8,6 +8,7 @@ class MultiCategoryWidget<T> extends StatefulWidget {
   final String Function(T) categoryLabelBuilder;
   final Color? selection;
   final Color? unselectedColor;
+  final double? borderRadius;
 
   const MultiCategoryWidget({
     super.key,
@@ -17,6 +18,7 @@ class MultiCategoryWidget<T> extends StatefulWidget {
     required this.categoryLabelBuilder,
     this.selection,
     this.unselectedColor,
+    this.borderRadius,
   });
 
   @override
@@ -77,7 +79,7 @@ class MultiCategoryWidgetState<T> extends State<MultiCategoryWidget<T>> {
             final isSelected = selectedItems.contains(item);
             return CustomButton(
               padding: EdgeInsets.zero,
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(widget.borderRadius ?? 90),
               onPressed: () {
                 HapticFeedback.selectionClick();
                 setState(() {

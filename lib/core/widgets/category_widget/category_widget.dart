@@ -7,12 +7,15 @@ class CategoryWidget extends StatefulWidget {
   final Color? customColor;
   final int? initialSelectedIndex;
 
+  final double? borderRadius;
+
   const CategoryWidget({
     super.key,
     required this.categories,
     required this.onCategorySelected,
     this.customColor,
     this.initialSelectedIndex,
+    this.borderRadius,
   });
 
   @override
@@ -154,7 +157,7 @@ class CategoryWidgetState extends State<CategoryWidget> {
               minimumSize: Size.zero,
               pressedOpacity: .8,
               padding: EdgeInsets.zero,
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(widget.borderRadius ?? 90),
               color: Colors.transparent,
               onPressed: () {
                 HapticFeedback.selectionClick();
@@ -170,7 +173,7 @@ class CategoryWidgetState extends State<CategoryWidget> {
                 child: Container(
                   decoration: BoxDecoration(
                     color: isSelected ? widget.customColor ?? context.primary : context.primaryContrastingColor.withValues(alpha: .1),
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(widget.borderRadius ?? 90),
                   ),
                   constraints: BoxConstraints(minHeight: minItemHeight),
                   padding: EdgeInsets.symmetric(
