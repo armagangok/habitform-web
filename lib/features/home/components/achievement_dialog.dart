@@ -152,53 +152,56 @@ class _AchievementDialogState extends State<AchievementDialog> with TickerProvid
                     scale: _scaleAnimation,
                     child: Center(
                       child: CupertinoPopupSurface(
-                        child: ConstrainedBox(
-                          constraints: BoxConstraints(
-                            maxHeight: context.height(0.85),
-                            maxWidth: context.width(0.9),
-                          ),
-                          child: Padding(
-                            padding: context.padding(0.04),
-                            child: SingleChildScrollView(
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  // Achievement Emoji with premium effects
-                                  _buildAnimatedEmoji(context, habitColor),
-                                  SizedBox(height: context.height(0.02)),
+                        child: ColoredBox(
+                          color: habitColor.withValues(alpha: 0.075),
+                          child: ConstrainedBox(
+                            constraints: BoxConstraints(
+                              maxHeight: context.height(0.85),
+                              maxWidth: context.width(0.9),
+                            ),
+                            child: Padding(
+                              padding: context.padding(0.04),
+                              child: SingleChildScrollView(
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    // Achievement Emoji with premium effects
+                                    _buildAnimatedEmoji(context, habitColor),
+                                    SizedBox(height: context.height(0.02)),
 
-                                  // Habit name
-                                  Text(
-                                    widget.habit.habitName,
-                                    style: context.headlineMedium.copyWith(
-                                      fontWeight: FontWeight.w700,
-                                      color: theme.colorScheme.onSurface,
+                                    // Habit name
+                                    Text(
+                                      widget.habit.habitName,
+                                      style: context.headlineMedium.copyWith(
+                                        fontWeight: FontWeight.w700,
+                                        color: theme.colorScheme.onSurface,
+                                      ),
+                                      textAlign: TextAlign.center,
                                     ),
-                                    textAlign: TextAlign.center,
-                                  ),
 
-                                  // Achievement title
-                                  Text(
-                                    widget.pointsGained > 0 ? 'Amazing Progress! 🎉' : 'Keep Going! 💪',
-                                    style: context.titleLarge.copyWith(
-                                      fontWeight: FontWeight.w600,
-                                      color: habitColor,
+                                    // Achievement title
+                                    Text(
+                                      widget.pointsGained > 0 ? LocaleKeys.achievement_dialog_amazing_progress.tr() : LocaleKeys.achievement_dialog_keep_going.tr(),
+                                      style: context.titleLarge.copyWith(
+                                        fontWeight: FontWeight.w600,
+                                        color: habitColor,
+                                      ),
+                                      textAlign: TextAlign.center,
                                     ),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                  SizedBox(height: context.height(0.025)),
+                                    SizedBox(height: context.height(0.02)),
 
-                                  // Score display with premium styling
-                                  _buildScoreDisplay(context, theme, habitColor),
-                                  SizedBox(height: context.height(0.025)),
+                                    // Score display with premium styling
+                                    _buildScoreDisplay(context, theme, habitColor),
+                                    SizedBox(height: context.height(0.02)),
 
-                                  // Progress section
-                                  _buildProgressSection(context, theme, habitColor),
-                                  SizedBox(height: context.height(0.025)),
+                                    // Progress section
+                                    _buildProgressSection(context, theme, habitColor),
+                                    SizedBox(height: context.height(0.02)),
 
-                                  // Continue button with premium styling
-                                  _buildPremiumButton(context, theme, habitColor),
-                                ],
+                                    // Continue button with premium styling
+                                    _buildPremiumButton(context, theme, habitColor),
+                                  ],
+                                ),
                               ),
                             ),
                           ),
@@ -315,86 +318,48 @@ class _AchievementDialogState extends State<AchievementDialog> with TickerProvid
     Color scoreColor,
     ThemeData theme,
   ) {
-    return Stack(
-      alignment: Alignment.center,
-      children: [
-        // Background circle with gradient
-        Container(
-          width: context.width(0.4),
-          height: context.width(0.4),
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            gradient: RadialGradient(
-              colors: [
-                scoreColor.withValues(alpha: 0.1),
-                scoreColor.withValues(alpha: 0.05),
-                Colors.transparent,
-              ],
-            ),
-          ),
+    return Container(
+      width: context.width(0.3),
+      height: context.width(0.3),
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        gradient: RadialGradient(
+          colors: [
+            scoreColor.withValues(alpha: 0.15),
+            scoreColor.withValues(alpha: 0.08),
+            Colors.transparent,
+          ],
         ),
-
-        // Outer ring (background)
-        CustomPaint(
-          size: Size(context.width(0.4), context.width(0.4)),
-          painter: _CircularProgressPainter(
-            progress: 1.0,
-            strokeWidth: 8,
-            color: theme.colorScheme.onSurface.withValues(alpha: 0.1),
-            startAngle: -90,
+        boxShadow: [
+          BoxShadow(
+            color: scoreColor.withValues(alpha: 0.2),
+            blurRadius: 50,
+            spreadRadius: 2,
           ),
-        ),
-
-        // Progress ring with gradient
-        CustomPaint(
-          size: Size(context.width(0.4), context.width(0.4)),
-          painter: _CircularProgressPainter(
-            progress: progress,
-            strokeWidth: 8,
-            color: scoreColor,
-            startAngle: -90,
-            isGradient: true,
-            gradientColors: _getProgressiveColors(progress),
-          ),
-        ),
-
-        // Inner glow effect
-        Container(
-          width: context.width(0.35),
-          height: context.width(0.35),
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            gradient: RadialGradient(
-              colors: [
-                scoreColor.withValues(alpha: 0.15),
-                scoreColor.withValues(alpha: 0.05),
-                Colors.transparent,
-              ],
-            ),
-          ),
-        ),
-
-        // Center content
-        Column(
+        ],
+      ),
+      child: Center(
+        child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // Animated percentage
+            // Large animated score
             AnimatedBuilder(
               animation: _scoreAnimation,
               builder: (context, child) {
                 return Text(
                   '${animatedScore.round()}',
-                  style: context.displaySmall.copyWith(
-                    fontWeight: FontWeight.w900,
+                  style: context.displayLarge.copyWith(
+                    fontWeight: FontWeight.w800,
                     color: scoreColor,
+                    fontSize: 42,
                     fontFeatures: [
                       FontFeature.tabularFigures(),
                     ],
                     shadows: [
                       Shadow(
-                        color: scoreColor.withValues(alpha: 0.3),
-                        blurRadius: 8,
-                        offset: const Offset(0, 2),
+                        color: scoreColor.withValues(alpha: 0.4),
+                        blurRadius: 12,
+                        offset: const Offset(0, 3),
                       ),
                     ],
                   ),
@@ -402,259 +367,138 @@ class _AchievementDialogState extends State<AchievementDialog> with TickerProvid
               },
             ),
 
-            SizedBox(height: context.height(0.005)),
-
             // Formation status
             Text(
               _getFormationStatus(progress),
-              style: context.bodySmall.copyWith(
-                color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
-                fontWeight: FontWeight.w500,
+              style: context.titleMedium.copyWith(
+                color: theme.colorScheme.onSurface.withValues(alpha: 0.8),
+                fontWeight: FontWeight.w600,
+                fontSize: context.width(0.04),
               ),
               textAlign: TextAlign.center,
             ),
           ],
         ),
-
-        // Floating particles around the circle
-        ...List.generate(8, (index) {
-          final angle = (index * 45.0) * (pi / 180);
-          final radius = context.width(0.2);
-          final x = cos(angle) * radius;
-          final y = sin(angle) * radius;
-
-          return Positioned(
-            left: context.width(0.2) + x - 2,
-            top: context.width(0.2) + y - 2,
-            child: AnimatedBuilder(
-              animation: _particleAnimation,
-              builder: (context, child) {
-                final particleProgress = (_particleAnimation.value + index * 0.1) % 1.0;
-                return Opacity(
-                  opacity: (1 - particleProgress) * 0.6,
-                  child: Transform.scale(
-                    scale: 0.5 + particleProgress * 0.5,
-                    child: Container(
-                      width: 4,
-                      height: 4,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: scoreColor.withValues(alpha: 0.8),
-                        boxShadow: [
-                          BoxShadow(
-                            color: scoreColor.withValues(alpha: 0.5),
-                            blurRadius: 4,
-                            spreadRadius: 1,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                );
-              },
-            ),
-          );
-        }),
-      ],
+      ),
     );
   }
 
-  List<Color> _getProgressiveColors(double progress) {
-    if (progress >= 0.9) {
-      return [
-        const Color(0xFF4CAF50),
-        const Color(0xFF8BC34A),
-        const Color(0xFFCDDC39),
-      ];
-    } else if (progress >= 0.7) {
-      return [
-        const Color(0xFF8BC34A),
-        const Color(0xFFCDDC39),
-        const Color(0xFFFFC107),
-      ];
-    } else if (progress >= 0.5) {
-      return [
-        const Color(0xFFFFC107),
-        const Color(0xFFFF9800),
-        const Color(0xFFFF5722),
-      ];
-    } else {
-      return [
-        const Color(0xFFFF5722),
-        const Color(0xFFF44336),
-        const Color(0xFFE91E63),
-      ];
-    }
-  }
-
   String _getFormationStatus(double progress) {
-    if (progress >= 0.9) return 'Excellent!';
-    if (progress >= 0.7) return 'Great!';
-    if (progress >= 0.5) return 'Good';
-    return 'Keep Going';
+    if (progress >= 0.9) return LocaleKeys.achievement_dialog_excellent.tr();
+    if (progress >= 0.7) return LocaleKeys.achievement_dialog_great.tr();
+    if (progress >= 0.5) return LocaleKeys.achievement_dialog_good.tr();
+    return LocaleKeys.achievement_dialog_keep_going_status.tr();
   }
 
   Widget _buildProgressSection(BuildContext context, ThemeData theme, Color habitColor) {
     final remainingDays = _getRemainingDaysByCompletions();
     final totalDays = _totalFormationDays;
-    final progress = _getFormationProgressByCompletions();
 
-    return Container(
-      padding: EdgeInsets.symmetric(
-        horizontal: context.width(0.04),
-        vertical: context.height(0.012),
-      ),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(context.width(0.06)),
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            habitColor.withValues(alpha: 0.08),
-            habitColor.withValues(alpha: 0.04),
-          ],
+    return CupertinoCard(
+      color: habitColor.withValues(alpha: 0.05),
+      child: Container(
+        padding: EdgeInsets.symmetric(
+          horizontal: context.width(0.04),
+          vertical: context.height(0.012),
         ),
-        border: Border.all(
-          color: habitColor.withValues(alpha: 0.2),
-          width: 1,
-        ),
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          // Title and progress indicator
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                child: Text(
-                  _getFormationProgressTitle(),
-                  style: context.titleMedium.copyWith(
-                    fontWeight: FontWeight.w700,
-                    color: habitColor,
-                  ),
-                ),
-              ),
-              Container(
-                padding: EdgeInsets.symmetric(
-                  horizontal: context.width(0.03),
-                  vertical: context.height(0.008),
-                ),
-                decoration: BoxDecoration(
-                  color: habitColor.withValues(alpha: 0.15),
-                  borderRadius: BorderRadius.circular(context.width(0.02)),
-                ),
-                child: Text(
-                  _getFormationDaysText(),
-                  style: context.bodyMedium.copyWith(
-                    fontWeight: FontWeight.w600,
-                    color: habitColor,
-                  ),
-                ),
-              ),
-            ],
-          ),
-
-          SizedBox(height: context.height(0.02)),
-
-          // Progress bar with better visual design
-          Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Progress',
-                    style: context.bodySmall.copyWith(
-                      color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  Text(
-                    '${(progress * 100).round()}%',
-                    style: context.bodySmall.copyWith(
+        decoration: const BoxDecoration(),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // Title and progress indicator
+            Row(
+              mainAxisAlignment: remainingDays == 0 ? MainAxisAlignment.center : MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: Text(
+                    _getFormationProgressTitle(),
+                    style: context.titleMedium.copyWith(
+                      fontWeight: FontWeight.w700,
                       color: habitColor,
-                      fontWeight: FontWeight.w600,
+                    ),
+                    textAlign: remainingDays == 0 ? TextAlign.center : TextAlign.start,
+                  ),
+                ),
+                if (remainingDays > 0) ...[
+                  Container(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: context.width(0.03),
+                      vertical: context.height(0.008),
+                    ),
+                    decoration: BoxDecoration(
+                      color: habitColor.withValues(alpha: 0.15),
+                      borderRadius: BorderRadius.circular(context.width(0.02)),
+                    ),
+                    child: Text(
+                      _getFormationDaysText(),
+                      style: context.bodyMedium.copyWith(
+                        fontWeight: FontWeight.w600,
+                        color: habitColor,
+                      ),
                     ),
                   ),
                 ],
-              ),
-              SizedBox(height: context.height(0.008)),
-              Container(
-                height: context.height(0.01),
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(context.height(0.005)),
-                  color: theme.colorScheme.onSurface.withValues(alpha: 0.1),
-                ),
-                child: LayoutBuilder(
-                  builder: (context, constraints) {
-                    return Stack(
-                      children: [
-                        Container(
-                          width: constraints.maxWidth * progress,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(context.height(0.005)),
-                            gradient: LinearGradient(
-                              colors: [
-                                habitColor,
-                                habitColor.withValues(alpha: 0.8),
-                              ],
-                            ),
-                            boxShadow: [
-                              BoxShadow(
-                                color: habitColor.withValues(alpha: 0.3),
-                                blurRadius: 4,
-                                spreadRadius: 1,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    );
-                  },
-                ),
-              ),
-            ],
-          ),
-
-          SizedBox(height: context.height(0.015)),
-
-          // Clear formation message
-          Container(
-            padding: EdgeInsets.all(context.width(0.001)),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(context.width(0.04)),
-              border: Border.all(
-                color: theme.colorScheme.outline.withValues(alpha: 0.1),
-                width: 1,
-              ),
+              ],
             ),
-            child: Column(
-              children: [
-                Text(
-                  _getFormationMessage(widget.newScore),
+
+            SizedBox(height: context.height(0.02)),
+
+            // Show special message for fully formed habits
+            if (remainingDays == 0) ...[
+              Container(
+                padding: EdgeInsets.symmetric(
+                  horizontal: context.width(0.04),
+                  vertical: context.height(0.012),
+                ),
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [
+                      const Color(0xFF4CAF50).withValues(alpha: 0.15),
+                      const Color(0xFF4CAF50).withValues(alpha: 0.08),
+                    ],
+                  ),
+                ),
+                child: Text(
+                  '${LocaleKeys.achievement_dialog_congratulations_fully_formed.tr()} ${LocaleKeys.achievement_dialog_formation_takes_days.tr(namedArgs: {'total': totalDays.toString()})}',
                   style: context.bodyMedium.copyWith(
-                    color: theme.colorScheme.onSurface,
+                    color: const Color(0xFF4CAF50),
                     height: 1.4,
-                    fontWeight: FontWeight.w500,
+                    fontWeight: FontWeight.w600,
                   ),
                   textAlign: TextAlign.center,
                 ),
-                if (remainingDays > 0) ...[
+              ),
+              SizedBox(height: context.height(0.015)),
+            ],
+
+            // Clear formation message - only show if habit is not fully formed
+            if (remainingDays > 0) ...[
+              Column(
+                children: [
+                  Text(
+                    _getFormationMessage(widget.newScore),
+                    style: context.bodyMedium.copyWith(
+                      color: theme.colorScheme.onSurface,
+                      height: 1.4,
+                      fontWeight: FontWeight.w500,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
                   SizedBox(height: context.height(0.01)),
                   Text(
-                    'This habit takes $totalDays days of consistent practice to form',
+                    LocaleKeys.achievement_dialog_formation_takes_days.tr(namedArgs: {'total': totalDays.toString()}),
                     style: context.bodySmall.copyWith(
                       color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
                     ),
                     textAlign: TextAlign.center,
                   ),
                 ],
-              ],
-            ),
-          ),
-        ],
+              ),
+            ],
+          ],
+        ),
       ),
     );
   }
@@ -672,7 +516,7 @@ class _AchievementDialogState extends State<AchievementDialog> with TickerProvid
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            'Continue',
+            LocaleKeys.achievement_dialog_continue.tr(),
             style: context.bodyLarge.copyWith(
               fontWeight: FontWeight.w600,
               color: Colors.white,
@@ -727,22 +571,17 @@ class _AchievementDialogState extends State<AchievementDialog> with TickerProvid
     return widget.habit.completions.getRemainingFormationDays(_totalFormationDays);
   }
 
-  // Progress ratio based on completions
-  double _getFormationProgressByCompletions() {
-    return widget.habit.completions.calculateFormationProgress(_totalFormationDays, widget.habit.dailyTarget);
-  }
-
   String _getFormationProgressTitle() {
     final remainingDays = _getRemainingDaysByCompletions();
 
     if (remainingDays == 0) {
-      return 'Habit Fully Formed! 🎉';
+      return LocaleKeys.achievement_dialog_habit_fully_formed.tr();
     } else if (remainingDays <= 7) {
-      return 'Almost There! 🔥';
+      return LocaleKeys.achievement_dialog_almost_there.tr();
     } else if (remainingDays <= 14) {
-      return 'Strong Progress! 💪';
+      return LocaleKeys.achievement_dialog_strong_progress.tr();
     } else {
-      return 'Building Momentum! 🚀';
+      return LocaleKeys.achievement_dialog_building_momentum.tr();
     }
   }
 
@@ -751,13 +590,16 @@ class _AchievementDialogState extends State<AchievementDialog> with TickerProvid
     final totalDays = _totalFormationDays;
 
     if (remainingDays == 0) {
-      return 'Complete!';
+      return LocaleKeys.achievement_dialog_complete.tr();
     } else if (remainingDays == 1) {
-      return '1 day left';
+      return LocaleKeys.achievement_dialog_day_left.tr();
     } else if (remainingDays <= 7) {
-      return '$remainingDays days left';
+      return LocaleKeys.achievement_dialog_days_left.tr(namedArgs: {'days': remainingDays.toString()});
     } else {
-      return '$remainingDays of $totalDays days';
+      return LocaleKeys.achievement_dialog_days_of_total.tr(namedArgs: {
+        'remaining': remainingDays.toString(),
+        'total': totalDays.toString(),
+      });
     }
   }
 
@@ -769,16 +611,27 @@ class _AchievementDialogState extends State<AchievementDialog> with TickerProvid
 
     if (score >= 90) {
       if (remainingDays == 0) {
-        return 'Congratulations! Your habit is now fully formed and automatic. Keep up the great work! 🎉';
+        return LocaleKeys.achievement_dialog_congratulations_fully_formed.tr();
       } else {
-        return 'Outstanding! You\'re $remainingDays days away from forming this habit completely! 🎉';
+        return LocaleKeys.achievement_dialog_outstanding_progress.tr(namedArgs: {'days': remainingDays.toString()});
       }
     } else if (score >= 70) {
-      return 'Great progress! You\'re building strong neural pathways. $remainingDays days to go! 💪';
+      if (remainingDays == 0) {
+        return LocaleKeys.achievement_dialog_congratulations_fully_formed.tr();
+      } else {
+        return LocaleKeys.achievement_dialog_great_progress.tr(namedArgs: {'days': remainingDays.toString()});
+      }
     } else if (score >= 50) {
-      return 'Good work! This $difficultyName habit needs $totalDays days total. $remainingDays days remaining! 📈';
+      return LocaleKeys.achievement_dialog_good_work.tr(namedArgs: {
+        'difficulty': difficultyName,
+        'total': totalDays.toString(),
+        'remaining': remainingDays.toString(),
+      });
     } else {
-      return 'Keep going! Consistency is key. This $difficultyName habit needs $remainingDays more days! 🌱';
+      return LocaleKeys.achievement_dialog_keep_going_message.tr(namedArgs: {
+        'difficulty': difficultyName,
+        'remaining': remainingDays.toString(),
+      });
     }
   }
 
@@ -795,104 +648,6 @@ class _AchievementDialogState extends State<AchievementDialog> with TickerProvid
       widget.habit.difficulty.minimumCompletionRate,
       widget.habit.dailyTarget,
     );
-  }
-}
-
-class _CircularProgressPainter extends CustomPainter {
-  final double progress;
-  final double strokeWidth;
-  final Color color;
-  final double startAngle;
-  final bool isGradient;
-  final List<Color>? gradientColors;
-
-  _CircularProgressPainter({
-    required this.progress,
-    required this.strokeWidth,
-    required this.color,
-    required this.startAngle,
-    this.isGradient = false,
-    this.gradientColors,
-  });
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final center = Offset(size.width / 2, size.height / 2);
-    final radius = (size.width - strokeWidth) / 2;
-
-    if (isGradient && gradientColors != null && gradientColors!.length >= 2) {
-      // Create gradient shader
-      final rect = Rect.fromCircle(center: center, radius: radius);
-
-      // Ensure we have valid angles for SweepGradient
-      final startAngleRad = startAngle * (pi / 180);
-      final endAngleRad = (startAngle + 360 * progress) * (pi / 180);
-
-      // If progress is 0 or very small, use solid color instead of gradient
-      if (progress <= 0.001) {
-        final paint = Paint()
-          ..color = gradientColors!.first
-          ..style = PaintingStyle.stroke
-          ..strokeWidth = strokeWidth
-          ..strokeCap = StrokeCap.round;
-
-        canvas.drawArc(
-          rect,
-          startAngleRad,
-          0.001, // Very small angle to avoid assertion error
-          false,
-          paint,
-        );
-        return;
-      }
-
-      // Ensure endAngle is greater than startAngle
-      final adjustedEndAngle = endAngleRad > startAngleRad ? endAngleRad : startAngleRad + 0.1;
-
-      final gradient = SweepGradient(
-        colors: gradientColors!,
-        startAngle: startAngleRad,
-        endAngle: adjustedEndAngle,
-      );
-
-      final paint = Paint()
-        ..shader = gradient.createShader(rect)
-        ..style = PaintingStyle.stroke
-        ..strokeWidth = strokeWidth
-        ..strokeCap = StrokeCap.round;
-
-      final sweepAngle = 2 * pi * progress;
-      canvas.drawArc(
-        rect,
-        startAngleRad,
-        sweepAngle,
-        false,
-        paint,
-      );
-    } else {
-      // Solid color
-      final paint = Paint()
-        ..color = color
-        ..style = PaintingStyle.stroke
-        ..strokeWidth = strokeWidth
-        ..strokeCap = StrokeCap.round;
-
-      final rect = Rect.fromCircle(center: center, radius: radius);
-      final sweepAngle = 2 * pi * progress;
-
-      canvas.drawArc(
-        rect,
-        startAngle * (pi / 180),
-        sweepAngle,
-        false,
-        paint,
-      );
-    }
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) {
-    return oldDelegate is _CircularProgressPainter && (oldDelegate.progress != progress || oldDelegate.color != color || oldDelegate.strokeWidth != strokeWidth);
   }
 }
 

@@ -624,5 +624,28 @@ abstract class  LocaleKeys {
   static const habit_category_default_categories_social = 'habit_category.default_categories.social';
   static const habit_category_default_categories = 'habit_category.default_categories';
   static const habit_category = 'habit_category';
+  static const achievement_dialog_amazing_progress = 'achievement_dialog.amazing_progress';
+  static const achievement_dialog_keep_going = 'achievement_dialog.keep_going';
+  static const achievement_dialog_excellent = 'achievement_dialog.excellent';
+  static const achievement_dialog_great = 'achievement_dialog.great';
+  static const achievement_dialog_good = 'achievement_dialog.good';
+  static const achievement_dialog_keep_going_status = 'achievement_dialog.keep_going_status';
+  static const achievement_dialog_progress = 'achievement_dialog.progress';
+  static const achievement_dialog_continue = 'achievement_dialog.continue';
+  static const achievement_dialog_habit_fully_formed = 'achievement_dialog.habit_fully_formed';
+  static const achievement_dialog_almost_there = 'achievement_dialog.almost_there';
+  static const achievement_dialog_strong_progress = 'achievement_dialog.strong_progress';
+  static const achievement_dialog_building_momentum = 'achievement_dialog.building_momentum';
+  static const achievement_dialog_complete = 'achievement_dialog.complete';
+  static const achievement_dialog_day_left = 'achievement_dialog.day_left';
+  static const achievement_dialog_days_left = 'achievement_dialog.days_left';
+  static const achievement_dialog_days_of_total = 'achievement_dialog.days_of_total';
+  static const achievement_dialog_congratulations_fully_formed = 'achievement_dialog.congratulations_fully_formed';
+  static const achievement_dialog_outstanding_progress = 'achievement_dialog.outstanding_progress';
+  static const achievement_dialog_great_progress = 'achievement_dialog.great_progress';
+  static const achievement_dialog_good_work = 'achievement_dialog.good_work';
+  static const achievement_dialog_keep_going_message = 'achievement_dialog.keep_going_message';
+  static const achievement_dialog_formation_takes_days = 'achievement_dialog.formation_takes_days';
+  static const achievement_dialog = 'achievement_dialog';
 
 }

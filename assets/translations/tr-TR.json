@@ -682,5 +682,29 @@
             "finances": "Finans",
             "social": "Sosyal"
         }
+    },
+    "achievement_dialog": {
+        "amazing_progress": "Harika İlerleme! 🎉",
+        "keep_going": "Devam Et! 💪",
+        "excellent": "Mükemmel!",
+        "great": "Harika!",
+        "good": "İyi",
+        "keep_going_status": "Devam Et",
+        "progress": "İlerleme",
+        "continue": "Devam Et",
+        "habit_fully_formed": "Alışkanlık Tamamen Oluştu! 🎉",
+        "almost_there": "Neredeyse Bitti! 🔥",
+        "strong_progress": "Güçlü İlerleme! 💪",
+        "building_momentum": "Momentum Oluşturuyor! 🚀",
+        "complete": "Tamamlandı!",
+        "day_left": "1 gün kaldı",
+        "days_left": "{days} gün kaldı",
+        "days_of_total": "{remaining} / {total} gün",
+        "congratulations_fully_formed": "Tebrikler! Alışkanlığınız tamamen oluştu! 🎉",
+        "outstanding_progress": "Olağanüstü! Bu alışkanlığı tamamen oluşturmaya {days} gün kaldı! 🎉",
+        "great_progress": "Harika ilerleme! Güçlü sinir yolları oluşturuyorsunuz. {days} gün kaldı! 💪",
+        "good_work": "İyi iş! Bu {difficulty} alışkanlık toplam {total} gün gerektiriyor. {remaining} gün kaldı! 📈",
+        "keep_going_message": "Devam edin! Tutarlılık anahtardır. Bu {difficulty} alışkanlık için {remaining} gün daha gerekiyor! 🌱",
+        "formation_takes_days": "Bu alışkanlık oluşması için {total} günlük tutarlı pratik gerektirir"
     }
 }

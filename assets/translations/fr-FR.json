@@ -682,5 +682,29 @@
             "finances": "Finances",
             "social": "Social"
         }
+    },
+    "achievement_dialog": {
+        "amazing_progress": "Progrès Incroyable! 🎉",
+        "keep_going": "Continuez! 💪",
+        "excellent": "Excellent!",
+        "great": "Génial!",
+        "good": "Bien",
+        "keep_going_status": "Continuez",
+        "progress": "Progrès",
+        "continue": "Continuer",
+        "habit_fully_formed": "Habitude Entièrement Formée! 🎉",
+        "almost_there": "Presque Arrivé! 🔥",
+        "strong_progress": "Progrès Solide! 💪",
+        "building_momentum": "Construire l'Élan! 🚀",
+        "complete": "Terminé!",
+        "day_left": "1 jour restant",
+        "days_left": "{days} jours restants",
+        "days_of_total": "{remaining} sur {total} jours",
+        "congratulations_fully_formed": "Félicitations! Votre habitude est entièrement formée! 🎉",
+        "outstanding_progress": "Exceptionnel! Il vous reste {days} jours pour former complètement cette habitude! 🎉",
+        "great_progress": "Excellent progrès! Vous construisez de solides voies neuronales. {days} jours à faire! 💪",
+        "good_work": "Bon travail! Cette habitude {difficulty} nécessite {total} jours au total. {remaining} jours restants! 📈",
+        "keep_going_message": "Continuez! La constance est la clé. Cette habitude {difficulty} a besoin de {remaining} jours de plus! 🌱",
+        "formation_takes_days": "Cette habitude nécessite {total} jours de pratique constante pour se former"
     }
 }
