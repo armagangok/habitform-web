@@ -56,7 +56,24 @@ class HabitBuilder extends ConsumerWidget {
   Widget _buildHabitList(List<Habit> habits) {
     return Builder(
       builder: (context) {
-        if (context.isTabletOrLandscape) {
+        if (context.isTablet) {
+          // Tablet: 3 cards horizontally
+          return SingleChildScrollView(
+            physics: ClampingScrollPhysics(),
+            child: Wrap(
+              spacing: 20,
+              runSpacing: 20,
+              alignment: WrapAlignment.center,
+              children: habits.map((habit) {
+                return SizedBox(
+                  width: (context.dynamicWidth - 100) / 3, // 3 cards per row
+                  child: HabitWidget(habit: habit),
+                );
+              }).toList(),
+            ),
+          );
+        } else if (context.isLandscape) {
+          // Landscape phone: 2 cards horizontally
           return SingleChildScrollView(
             physics: ClampingScrollPhysics(),
             child: Wrap(
@@ -73,6 +90,7 @@ class HabitBuilder extends ConsumerWidget {
           );
         }
 
+        // Mobile portrait: 2x2 grid
         return GridView.builder(
           shrinkWrap: true,
           physics: ClampingScrollPhysics(),

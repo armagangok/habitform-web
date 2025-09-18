@@ -1,3 +1,4 @@
+import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:habitrise/features/onboarding/pages/onboarding_welcome_page.dart';
@@ -19,6 +20,10 @@ import 'features/purchase/providers/purchase_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Lock orientation to portrait only for all platforms
+  await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+
   await EasyLocalization.ensureInitialized();
   await HiveHelper.shared.initializeHive();
 
@@ -44,21 +49,8 @@ void main() async {
 
   runApp(
     ProviderScope(
-      overrides: [
-        ...habitCategoryOverrides,
-      ],
-      child: EasyLocalization(
-        supportedLocales: const [
-          Locale('en', 'US'),
-          Locale('fr', 'FR'),
-          Locale('tr', 'TR'),
-          Locale('zh', 'CN'),
-          Locale('it', 'IT'),
-        ],
-        path: 'assets/translations',
-        fallbackLocale: const Locale('en', 'US'),
-        child: MyApp(),
-      ),
+      overrides: [...habitCategoryOverrides],
+      child: EasyLocalization(supportedLocales: const [Locale('en', 'US'), Locale('fr', 'FR'), Locale('tr', 'TR'), Locale('zh', 'CN'), Locale('it', 'IT')], path: 'assets/translations', fallbackLocale: const Locale('en', 'US'), child: MyApp()),
     ),
   );
 }
@@ -87,11 +79,7 @@ class _MyAppState extends ConsumerState<MyApp> {
     return CupertinoApp(
       builder: (context, child) {
         return MediaQuery(
-          data: MediaQuery.of(context).copyWith(
-            textScaler: const TextScaler.linear(
-              1,
-            ),
-          ),
+          data: MediaQuery.of(context).copyWith(textScaler: const TextScaler.linear(1)),
           child: child!,
         );
       },
