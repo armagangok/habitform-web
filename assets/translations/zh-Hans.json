@@ -15,7 +15,8 @@
         "pick_your_emoji": "选择你的表情符号",
         "done": "完成",
         "loading_habits": "正在加载习惯...",
-        "later": "稍后"
+        "later": "稍后",
+        "search": "搜索"
     },
     "colors": {
         "color": "颜色",

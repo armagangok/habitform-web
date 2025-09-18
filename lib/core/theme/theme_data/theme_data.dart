@@ -4,7 +4,7 @@ final class Themes {
   static final cupertinoDarkTheme = CupertinoThemeData(
     brightness: Brightness.dark,
     primaryColor: Colors.deepOrangeAccent,
-    selectionHandleColor: CupertinoColors.white.withValues(alpha: .25),
+    selectionHandleColor: CupertinoColors.black.withValues(alpha: .25),
     primaryContrastingColor: CupertinoColors.white.withValues(alpha: .25),
     textTheme: const CupertinoTextThemeData(
       primaryColor: CupertinoColors.white,

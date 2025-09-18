@@ -315,7 +315,7 @@ class _HabitDataWidgetState extends ConsumerState<HabitDataWidget> {
           }
 
           if (isInFuture) return CupertinoColors.systemGrey.withValues(alpha: 0.4);
-          final alpha = (0.1 + (0.9 * ratio)).clamp(0.1, 1.0);
+          final alpha = (0.1 + (0.9 * ratio)).clamp(0.4, 1.0);
           return color.withValues(alpha: alpha);
         }
 

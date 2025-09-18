@@ -56,7 +56,7 @@ class TemplatePoster extends StatelessWidget {
             ClipRRect(
               borderRadius: BorderRadius.circular(18),
               child: Container(
-                color: Colors.white.withValues(alpha: .12),
+                color: context.selectionHandleColor.withValues(alpha: .2),
                 padding: const EdgeInsets.all(12),
                 child: CupertinoScrollbar(
                   controller: controller,

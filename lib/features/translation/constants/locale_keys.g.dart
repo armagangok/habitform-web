@@ -19,6 +19,7 @@ abstract class  LocaleKeys {
   static const common_done = 'common.done';
   static const common_loading_habits = 'common.loading_habits';
   static const common_later = 'common.later';
+  static const common_search = 'common.search';
   static const common = 'common';
   static const colors_color = 'colors.color';
   static const colors_blue = 'colors.blue';

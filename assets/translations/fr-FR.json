@@ -15,7 +15,8 @@
         "pick_your_emoji": "Choisissez votre emoji",
         "done": "Terminé",
         "loading_habits": "Chargement des habitudes...",
-        "later": "Plus tard"
+        "later": "Plus tard",
+        "search": "Rechercher"
     },
     "colors": {
         "color": "Couleur",

@@ -36,86 +36,144 @@ class _IconPickerPageState extends ConsumerState<EmojiPickerPage> {
   void _showEmojiPicker(BuildContext context) {
     showCupertinoSheet(
       context: context,
-      builder: (context) => CupertinoPopupSurface(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            SafeArea(
-              child: Container(
-                height: 6,
-                width: 40,
-                margin: const EdgeInsets.symmetric(vertical: 8),
-                decoration: BoxDecoration(
-                  color: context.theme.selectionHandleColor.withValues(alpha: 0.4),
-                  borderRadius: BorderRadius.circular(3),
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    LocaleKeys.common_pick_your_emoji.tr(),
-                    style: context.titleMedium.copyWith(
-                      fontWeight: FontWeight.w600,
+      builder: (context) => CupertinoPageScaffold(
+        navigationBar: CupertinoNavigationBar(
+          leading: CircularActionButton(
+            onPressed: () => Navigator.pop(context),
+            icon: CupertinoIcons.xmark,
+          ),
+          middle: Text(LocaleKeys.common_pick_your_emoji.tr()),
+          trailing: CupertinoButton(
+            padding: EdgeInsets.zero,
+            minimumSize: Size.zero,
+            onPressed: () => Navigator.pop(context),
+            child: Text(LocaleKeys.common_ok.tr()),
+          ),
+          previousPageTitle: LocaleKeys.common_back.tr(),
+        ),
+        child: SafeArea(
+          child: ListView(
+            children: [
+              //
+              Material(
+                child: Theme(
+                  data: Theme.of(context).copyWith(
+                    brightness: context.theme.brightness,
+                    scaffoldBackgroundColor: context.theme.scaffoldBackgroundColor,
+                    colorScheme: ColorScheme.fromSeed(
+                      seedColor: context.theme.primaryColor,
                     ),
+                    textTheme: Theme.of(context).textTheme.apply(
+                          bodyColor: context.titleLarge.color,
+                          displayColor: context.titleLarge.color,
+                        ),
                   ),
-                  CupertinoButton(
-                    padding: EdgeInsets.zero,
-                    minimumSize: Size.zero,
-                    onPressed: () => Navigator.pop(context),
-                    child: Text(
-                      LocaleKeys.common_ok.tr(),
-                      style: context.titleSmall.copyWith(
-                        color: context.theme.primaryColor,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const Divider(height: 1),
-            Expanded(
-              child: Material(
-                child: EmojiPicker(
-                  onEmojiSelected: (category, emoji) {
-                    final state = ref.read(emojiPickerProvider);
+                  child: EmojiPicker(
+                    onEmojiSelected: (category, emoji) {
+                      final state = ref.read(emojiPickerProvider);
 
-                    // If emoji is already selected, just close the picker
-                    if (state.selectedEmoji == emoji.emoji) {
+                      // If emoji is already selected, just close the picker
+                      if (state.selectedEmoji == emoji.emoji) {
+                        Navigator.pop(context);
+                        return;
+                      }
+
+                      // Add the new emoji to custom category
+                      ref.read(emojiPickerProvider.notifier).addCustomEmoji(emoji.emoji);
+
+                      // Select the emoji
+                      final customCategory = LocaleKeys.emoji_picker_custom.tr();
+                      final customCategoryIndex = state.emojiCategories.keys.toList().indexOf(customCategory);
+                      final customEmojis = state.emojiCategories[customCategory] ?? [];
+                      final emojiIndex = customEmojis.indexOf(emoji.emoji);
+
+                      // Select custom category
+                      ref.read(emojiPickerProvider.notifier).selectCategory(customCategoryIndex);
+                      // Select the emoji
+                      ref.read(emojiPickerProvider.notifier).selectEmoji(emoji.emoji, emojiIndex);
+
+                      if (widget.onIconSelected != null) {
+                        widget.onIconSelected!(emoji.emoji);
+                      } else if (mounted) {
+                        ref.read(habitEmojiProvider.notifier).pickEmoji(emoji.emoji);
+                      }
+
                       Navigator.pop(context);
-                      return;
-                    }
-
-                    // Add the new emoji to custom category
-                    ref.read(emojiPickerProvider.notifier).addCustomEmoji(emoji.emoji);
-
-                    // Select the emoji
-                    final customCategory = LocaleKeys.emoji_picker_custom.tr();
-                    final customCategoryIndex = state.emojiCategories.keys.toList().indexOf(customCategory);
-                    final customEmojis = state.emojiCategories[customCategory] ?? [];
-                    final emojiIndex = customEmojis.indexOf(emoji.emoji);
-
-                    // Select custom category
-                    ref.read(emojiPickerProvider.notifier).selectCategory(customCategoryIndex);
-                    // Select the emoji
-                    ref.read(emojiPickerProvider.notifier).selectEmoji(emoji.emoji, emojiIndex);
-
-                    if (widget.onIconSelected != null) {
-                      widget.onIconSelected!(emoji.emoji);
-                    } else if (mounted) {
-                      ref.read(habitEmojiProvider.notifier).pickEmoji(emoji.emoji);
-                    }
-
-                    Navigator.pop(context);
-                  },
+                    },
+                    config: Config(
+                      emojiViewConfig: EmojiViewConfig(
+                        backgroundColor: context.theme.scaffoldBackgroundColor,
+                      ),
+                      skinToneConfig: const SkinToneConfig(enabled: true),
+                      categoryViewConfig: CategoryViewConfig(
+                        backgroundColor: context.theme.scaffoldBackgroundColor,
+                        iconColor: context.hintColor,
+                        iconColorSelected: context.theme.primaryColor,
+                        indicatorColor: context.theme.primaryColor,
+                      ),
+                      bottomActionBarConfig: BottomActionBarConfig(
+                        backgroundColor: context.theme.scaffoldBackgroundColor,
+                        buttonColor: CupertinoColors.transparent,
+                        buttonIconColor: context.theme.primaryContrastingColor.withValues(alpha: 1),
+                        customBottomActionBar: (config, state, showSearchView) {
+                          return Container(
+                            height: 50,
+                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                            decoration: BoxDecoration(
+                              color: context.theme.scaffoldBackgroundColor,
+                              border: Border(
+                                top: BorderSide(
+                                  color: context.hintColor.withValues(alpha: 0.2),
+                                  width: 0.5,
+                                ),
+                              ),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                // Search button
+                                CupertinoButton.filled(
+                                  color: context.theme.primaryColor,
+                                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                                  onPressed: showSearchView,
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Icon(
+                                        CupertinoIcons.search,
+                                        color: Colors.white,
+                                        size: 16,
+                                      ),
+                                      const SizedBox(width: 6),
+                                      Text(
+                                        LocaleKeys.common_search.tr(),
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
+                      searchViewConfig: SearchViewConfig(
+                        backgroundColor: context.theme.scaffoldBackgroundColor,
+                        hintTextStyle: context.bodyMedium.copyWith(
+                          color: context.hintColor,
+                        ),
+                      ),
+                      checkPlatformCompatibility: true,
+                    ),
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

@@ -15,7 +15,8 @@
         "pick_your_emoji": "Pick Your Emoji",
         "done": "Done",
         "loading_habits": "Loading habits...",
-        "later": "Later"
+        "later": "Later",
+        "search": "Search"
     },
     "colors": {
         "color": "Color",
