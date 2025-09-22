@@ -46,7 +46,7 @@ class HomeCategoryFilter extends ConsumerWidget {
                   final isSelected = state.selectedCategoryIds.contains(category.id);
                   final IconData iconData = category.icon != null ? CategoryIconUtil.getIconFromString(category.icon!) : _getCategoryIcon(category.name);
 
-                  final selectedColor = isSelected ? context.cupertinoTheme.primaryColor : context.theme.primaryColor.withValues(alpha: .7);
+                  final selectedColor = isSelected ? context.cupertinoTheme.primaryColor : context.theme.primaryContrastingColor;
 
                   return Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 4.0),
@@ -61,7 +61,7 @@ class HomeCategoryFilter extends ConsumerWidget {
                           borderRadius: BorderRadius.circular(10),
                           border: Border.all(
                             color: selectedColor,
-                            width: .5,
+                            width: .7,
                           ),
                         ),
                         child: Row(
@@ -70,13 +70,13 @@ class HomeCategoryFilter extends ConsumerWidget {
                             FaIcon(
                               iconData,
                               size: 13,
-                              color: isSelected ? Colors.white : context.textTheme.bodyMedium?.color,
+                              color: isSelected ? Colors.white : context.bodyMedium.color,
                             ),
                             SizedBox(width: 5),
                             Text(
-                              category.name,
-                              style: context.bodySmall?.copyWith(
-                                color: isSelected ? Colors.white : context.textTheme.bodyMedium?.color,
+                              category.getDisplayName(),
+                              style: context.bodySmall.copyWith(
+                                color: isSelected ? Colors.white : context.bodyMedium.color,
                                 fontWeight: FontWeight.w500,
                                 fontSize: 12,
                               ),
@@ -93,7 +93,7 @@ class HomeCategoryFilter extends ConsumerWidget {
         },
         loading: () => const Center(child: CupertinoActivityIndicator()),
         error: (error, stack) => Center(
-          child: Text('Error: $error', style: context.bodyMedium),
+          child: Text(LocaleKeys.habit_category_error.tr(args: [error.toString()]), style: context.bodyMedium),
         ),
       ),
     );

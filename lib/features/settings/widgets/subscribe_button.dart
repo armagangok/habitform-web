@@ -2,7 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/core.dart';
 import '../../../core/theme/providers/theme_provider.dart';
-import '../../purchase/page/paywall_page.dart';
+import '../../purchase/page/pre_paywall_page.dart';
 import '../../purchase/providers/purchase_provider.dart';
 
 class SubscribeButton extends ConsumerWidget {
@@ -20,103 +20,115 @@ class SubscribeButton extends ConsumerWidget {
         } else {
           return CustomButton(
             onPressed: () async {
-              showCupertinoModalBottomSheet(
-                backgroundColor: Colors.transparent,
-                barrierColor: Colors.transparent,
-                expand: true,
+              await showCupertinoSheet(
                 enableDrag: false,
                 context: context,
-                builder: (_) => PaywallPage(),
+                builder: (contextFromSheet) => PrePaywallPage(
+                  isFromOnboarding: false,
+                  isFromSettings: true,
+                ),
               );
             },
-            child: Card(
-              child: SizedBox(
-                width: double.infinity,
-                child: Padding(
-                  padding: EdgeInsets.all(8),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Consumer(
-                        builder: (context, ref, child) {
-                          final themeMode = ref.watch(themeProvider);
-                          return themeMode == ThemeMode.dark
-                              ? Assets.app.habitriseDarkTransparent.image(
-                                  width: 40,
-                                  height: 40,
-                                )
-                              : Assets.app.habitriseLightTransparent.image(
-                                  width: 40,
-                                  height: 40,
-                                );
-                        },
-                      ),
-                      SizedBox(width: 12),
-                      Expanded(
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
+            child: CupertinoListSection.insetGrouped(
+              children: [
+                Column(
+                  children: [
+                    SizedBox(
+                      width: double.infinity,
+                      child: Padding(
+                        padding: EdgeInsets.all(8),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            Row(
-                              mainAxisSize: MainAxisSize.min,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                RichText(
-                                  maxLines: 1,
-                                  text: TextSpan(
-                                    style: context.titleMedium?.copyWith(
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                            Consumer(
+                              builder: (context, ref, child) {
+                                final themeMode = ref.watch(themeProvider);
+                                return themeMode == ThemeMode.dark
+                                    ? Assets.app.habitriseDarkTransparent.image(
+                                        width: 40,
+                                        height: 40,
+                                      )
+                                    : Assets.app.habitriseLightTransparent.image(
+                                        width: 40,
+                                        height: 40,
+                                      );
+                              },
+                            ),
+                            SizedBox(width: 12),
+                            Expanded(
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
                                     children: [
-                                      TextSpan(
-                                        text: LocaleKeys.subscription_subscribe_to.tr(),
-                                        style: context.titleMedium?.copyWith(
-                                          color: context.primary,
-                                          fontWeight: FontWeight.bold,
+                                      RichText(
+                                        maxLines: 1,
+                                        text: TextSpan(
+                                          style: context.titleMedium.copyWith(
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                          children: [
+                                            TextSpan(
+                                              text: LocaleKeys.subscription_subscribe_to.tr(),
+                                              style: context.titleMedium.copyWith(
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                            TextSpan(
+                                              text: ' Habit',
+                                              style: context.titleMedium.copyWith(
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                            TextSpan(
+                                              text: 'Rise ',
+                                              style: context.titleMedium.copyWith(
+                                                fontWeight: FontWeight.bold,
+                                                color: context.primary,
+                                              ),
+                                            ),
+                                          ],
                                         ),
                                       ),
-                                      TextSpan(
-                                        text: ' Habit',
-                                        style: context.titleMedium?.copyWith(
-                                          color: context.primary,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                      TextSpan(
-                                        text: 'Rise ',
-                                        style: context.titleMedium?.copyWith(
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                      TextSpan(
-                                        text: 'Pro',
-                                        style: context.titleMedium?.copyWith(
-                                          color: context.primary,
-                                          fontWeight: FontWeight.bold,
+                                      CupertinoCard(
+                                        color: context.primary,
+                                        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+                                        child: Text(
+                                          'Pro',
+                                          style: context.titleMedium.copyWith(
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.white,
+                                          ),
                                         ),
                                       ),
                                     ],
                                   ),
-                                ),
-                              ],
-                            ),
-                            Column(
-                              children: [
-                                Text(
-                                  LocaleKeys.subscription_tap_advantages.tr(),
-                                  textAlign: TextAlign.start,
-                                ),
-                              ],
+                                  Column(
+                                    children: [
+                                      Text(
+                                        LocaleKeys.subscription_tap_advantages.tr(),
+                                        textAlign: TextAlign.start,
+                                        style: context.bodySmall.copyWith(
+                                          color: context.cupertinoTextTheme.textStyle.color?.withValues(alpha: 0.7),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
                             ),
                           ],
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-              ),
+              ],
             ),
           );
         }

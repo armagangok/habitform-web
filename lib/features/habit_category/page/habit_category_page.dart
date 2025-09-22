@@ -40,36 +40,31 @@ class _HabitCategoryPageState extends ConsumerState<HabitCategoryPage> {
 
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
-        middle: Text("Habit Category"),
-        trailing: Row(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            CupertinoButton(
-              padding: EdgeInsets.zero,
-              child: Text(LocaleKeys.common_done.tr()),
-              onPressed: () {
-                // Update categoryButtonProvider for UI (this is for the category selection button)
-                ref.read(categoryButtonProvider.notifier).setSelectedCategories(localSelectedIds.toList());
-
-                // Clear category selection in habitCategoryProvider to prevent auto-filtering on home page
-                ref.read(habitCategoryProvider.notifier).setSelectedCategories({});
-
-                navigator.pop();
-              },
-            ),
-          ],
+        middle: Text(LocaleKeys.habit_category_title.tr()),
+        trailing: CupertinoButton(
+          padding: EdgeInsets.zero,
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(CupertinoIcons.add, size: 20),
+              SizedBox(width: 4),
+              Text(LocaleKeys.habit_category_new.tr()),
+            ],
+          ),
+          onPressed: () => _showCreateCategoryDialog(),
         ),
       ),
       child: Stack(
         children: [
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: categoryState.when(
-              data: (state) => _buildCategoryList(state, localSelectedIds),
-              loading: () => const Center(child: CupertinoActivityIndicator()),
-              error: (error, _) => Center(
-                child: Text('Error loading categories: $error', style: context.bodyMedium),
+          SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: categoryState.when(
+                data: (state) => _buildCategoryList(state, localSelectedIds),
+                loading: () => const Center(child: CupertinoActivityIndicator()),
+                error: (error, _) => Center(
+                  child: Text(LocaleKeys.habit_category_error_loading_categories.tr(args: [error.toString()]), style: context.bodyMedium),
+                ),
               ),
             ),
           ),
@@ -79,22 +74,25 @@ class _HabitCategoryPageState extends ConsumerState<HabitCategoryPage> {
               child: SafeArea(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
-                  child: CupertinoButton.filled(
-                    onPressed: () => _showCreateCategoryDialog(),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(FontAwesomeIcons.solidPenToSquare, size: 20, color: Colors.white),
-                        SizedBox(width: 8),
-                        Text(
-                          'New Category',
-                          style: context.titleMedium?.copyWith(
-                            color: Colors.white,
-                            fontWeight: FontWeight.w600,
-                          ),
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: CupertinoButton.filled(
+                      onPressed: () {
+                        // Update categoryButtonProvider for UI (this is for the category selection button)
+                        ref.watch(categoryButtonProvider.notifier).setSelectedCategories(localSelectedIds.toList());
+
+                        // Clear category selection in habitCategoryProvider to prevent auto-filtering on home page
+                        ref.watch(habitCategoryProvider.notifier).setSelectedCategories({});
+
+                        navigator.pop();
+                      },
+                      child: Text(
+                        LocaleKeys.common_done.tr(),
+                        style: context.titleMedium.copyWith(
+                          fontWeight: FontWeight.w600,
+                          color: Colors.white,
                         ),
-                      ],
+                      ),
                     ),
                   ),
                 ),
@@ -122,7 +120,7 @@ class _HabitCategoryPageState extends ConsumerState<HabitCategoryPage> {
           SizedBox(height: 24),
         ],
         if (customCategories.isNotEmpty) ...[
-          _buildSectionHeader('Custom Categories'),
+          _buildSectionHeader(LocaleKeys.habit_category_custom_categories.tr()),
           Wrap(
             spacing: 8.0,
             runSpacing: 8.0,
@@ -139,7 +137,7 @@ class _HabitCategoryPageState extends ConsumerState<HabitCategoryPage> {
       padding: const EdgeInsets.only(bottom: 12),
       child: Text(
         title,
-        style: context.bodySmall?.copyWith(
+        style: context.bodySmall.copyWith(
           fontWeight: FontWeight.w600,
           color: Colors.grey,
         ),
@@ -159,7 +157,7 @@ class _HabitCategoryPageState extends ConsumerState<HabitCategoryPage> {
         duration: const Duration(milliseconds: 200),
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         decoration: BoxDecoration(
-          color: isSelected ? context.cupertinoTheme.primaryColor : context.theme.cardColor,
+          color: isSelected ? context.cupertinoTheme.primaryColor : context.selectionHandleColor,
           borderRadius: BorderRadius.circular(8),
           border: Border.all(
             color: isSelected ? Colors.transparent : Colors.grey.withValues(alpha: 0.3),
@@ -173,13 +171,13 @@ class _HabitCategoryPageState extends ConsumerState<HabitCategoryPage> {
               FaIcon(
                 iconData,
                 size: 16,
-                color: isSelected ? Colors.white : context.primary,
+                color: isSelected ? Colors.white : context.primaryContrastingColor.withValues(alpha: isSelected ? 1.0 : 0.5),
               ),
               SizedBox(width: 6),
             ],
             Text(
-              category.name,
-              style: context.bodySmall?.copyWith(
+              category.getDisplayName(),
+              style: context.bodySmall.copyWith(
                 color: isSelected ? Colors.white : null,
                 fontWeight: FontWeight.w600,
               ),
@@ -201,15 +199,15 @@ class _HabitCategoryPageState extends ConsumerState<HabitCategoryPage> {
     showCupertinoDialog(
       context: context,
       builder: (dialogContext) => CupertinoAlertDialog(
-        title: Text("Category Options"),
-        content: Text("What would you like to do with '${category.name}'?"),
+        title: Text(LocaleKeys.habit_category_category_options.tr()),
+        content: Text(LocaleKeys.habit_category_category_options_message.tr(namedArgs: {'categoryName': category.getDisplayName()})),
         actions: [
           CupertinoDialogAction(
             onPressed: () {
               Navigator.pop(dialogContext);
               _showEditCategoryDialog(category);
             },
-            child: Text("Edit"),
+            child: Text(LocaleKeys.habit_category_edit.tr()),
           ),
           CupertinoDialogAction(
             isDestructiveAction: true,
@@ -217,11 +215,11 @@ class _HabitCategoryPageState extends ConsumerState<HabitCategoryPage> {
               Navigator.pop(dialogContext);
               await ref.read(habitCategoryProvider.notifier).deleteCategory(category.id);
             },
-            child: Text("Delete"),
+            child: Text(LocaleKeys.habit_category_delete.tr()),
           ),
           CupertinoDialogAction(
             onPressed: () => Navigator.pop(dialogContext),
-            child: Text("Cancel"),
+            child: Text(LocaleKeys.common_cancel.tr()),
           ),
         ],
       ),
@@ -241,7 +239,7 @@ class _HabitCategoryPageState extends ConsumerState<HabitCategoryPage> {
           final selectedIcon = widgetRef.watch(iconSelectionProvider);
 
           return CupertinoActionSheet(
-            title: const Text('Edit Category'),
+            title: Text(LocaleKeys.habit_category_edit_category.tr()),
             message: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -249,7 +247,7 @@ class _HabitCategoryPageState extends ConsumerState<HabitCategoryPage> {
                   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                   child: CupertinoTextField(
                     controller: nameController,
-                    placeholder: 'Enter a name for your category',
+                    placeholder: LocaleKeys.habit_category_enter_category_name.tr(),
                     padding: const EdgeInsets.all(12),
                     autofocus: true,
                     decoration: BoxDecoration(
@@ -318,12 +316,12 @@ class _HabitCategoryPageState extends ConsumerState<HabitCategoryPage> {
                     Navigator.pop(context);
                   }
                 },
-                child: const Text('Save'),
+                child: Text(LocaleKeys.habit_category_save.tr()),
               ),
               CupertinoActionSheetAction(
                 isDestructiveAction: true,
                 onPressed: () => Navigator.pop(context),
-                child: const Text('Cancel'),
+                child: Text(LocaleKeys.common_cancel.tr()),
               ),
             ],
           );
@@ -345,7 +343,7 @@ class _HabitCategoryPageState extends ConsumerState<HabitCategoryPage> {
           final selectedIcon = widgetRef.watch(iconSelectionProvider);
 
           return CupertinoActionSheet(
-            title: const Text('Create Category'),
+            title: Text(LocaleKeys.habit_category_create_category.tr()),
             message: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -353,7 +351,7 @@ class _HabitCategoryPageState extends ConsumerState<HabitCategoryPage> {
                   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                   child: CupertinoTextField(
                     controller: nameController,
-                    placeholder: 'Enter a name for your category',
+                    placeholder: LocaleKeys.habit_category_enter_category_name.tr(),
                     padding: const EdgeInsets.all(12),
                     autofocus: true,
                     decoration: BoxDecoration(
@@ -418,12 +416,12 @@ class _HabitCategoryPageState extends ConsumerState<HabitCategoryPage> {
                     Navigator.pop(context);
                   }
                 },
-                child: const Text('Create'),
+                child: Text(LocaleKeys.habit_category_create.tr()),
               ),
               CupertinoActionSheetAction(
                 isDestructiveAction: true,
                 onPressed: () => Navigator.pop(context),
-                child: const Text('Cancel'),
+                child: Text(LocaleKeys.common_cancel.tr()),
               ),
             ],
           );

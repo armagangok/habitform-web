@@ -82,47 +82,45 @@ class _HabitDataWidgetState extends ConsumerState<HabitDataWidget> {
   Widget build(BuildContext context) {
     return CustomButton(
       onPressed: () {
-        showCupertinoModalBottomSheet(
+        showCupertinoSheet(
           enableDrag: false,
           context: context,
           builder: (context) => HabitCalendarCompletionSheet(habit: widget.habit),
         );
       },
-      child: Card(
-        child: Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildHeader(),
-              const SizedBox(height: 10),
-              LayoutBuilder(builder: (context, constraints) {
-                final screenWidth = constraints.maxWidth;
-                final monthWidth = (screenWidth - 16) / 3;
-                final gridSquareSize = (monthWidth - 8) / 6;
-                final gridHeight = (gridSquareSize * 7) + 40;
+      child: Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildHeader(),
+            const SizedBox(height: 10),
+            LayoutBuilder(builder: (context, constraints) {
+              final screenWidth = constraints.maxWidth;
+              final monthWidth = (screenWidth - 16) / 3;
+              final gridSquareSize = (monthWidth - 8) / 6;
+              final gridHeight = (gridSquareSize * 7) + 40;
 
-                return SizedBox(
-                  height: gridHeight,
-                  child: PageView.builder(
-                    controller: _pageController,
-                    onPageChanged: _onPageChanged,
-                    physics: ClampingScrollPhysics(),
-                    itemBuilder: (context, index) {
-                      final quarterStartMonth = (index * 3) % 12;
-                      final year = 2020 + (index * 3) ~/ 12;
-                      return _buildQuarterView(
-                        color: Color(widget.habit.colorCode),
-                        startMonth: quarterStartMonth,
-                        year: year,
-                        gridSquareSize: gridSquareSize,
-                      );
-                    },
-                  ),
-                );
-              }),
-            ],
-          ),
+              return SizedBox(
+                height: gridHeight,
+                child: PageView.builder(
+                  controller: _pageController,
+                  onPageChanged: _onPageChanged,
+                  physics: ClampingScrollPhysics(),
+                  itemBuilder: (context, index) {
+                    final quarterStartMonth = (index * 3) % 12;
+                    final year = 2020 + (index * 3) ~/ 12;
+                    return _buildQuarterView(
+                      color: Color(widget.habit.colorCode),
+                      startMonth: quarterStartMonth,
+                      year: year,
+                      gridSquareSize: gridSquareSize,
+                    );
+                  },
+                ),
+              );
+            }),
+          ],
         ),
       ),
     );
@@ -143,17 +141,11 @@ class _HabitDataWidgetState extends ConsumerState<HabitDataWidget> {
               curve: Curves.easeIn,
             );
           },
-          child: Card(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
-            ),
-            color: Color(widget.habit.colorCode),
-            child: Padding(
-              padding: const EdgeInsets.all(4.0),
-              child: Icon(
-                CupertinoIcons.chevron_left,
-                color: Color(widget.habit.colorCode).colorRegardingToBrightness,
-              ),
+          child: Padding(
+            padding: const EdgeInsets.all(4.0),
+            child: Icon(
+              CupertinoIcons.chevron_left,
+              color: Color(widget.habit.colorCode).colorRegardingToBrightness,
             ),
           ),
         ),
@@ -162,7 +154,7 @@ class _HabitDataWidgetState extends ConsumerState<HabitDataWidget> {
           style: TextStyle(
             fontSize: 17,
             fontWeight: FontWeight.w600,
-            color: context.theme.primaryColor,
+            color: Color(widget.habit.colorCode).colorRegardingToBrightness,
           ),
         ),
         CustomButton(
@@ -175,17 +167,11 @@ class _HabitDataWidgetState extends ConsumerState<HabitDataWidget> {
                     curve: Curves.easeIn,
                   );
                 },
-          child: Card(
-            color: Color(widget.habit.colorCode),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(4.0),
-              child: Icon(
-                CupertinoIcons.chevron_right,
-                color: Color(widget.habit.colorCode).colorRegardingToBrightness,
-              ),
+          child: Padding(
+            padding: const EdgeInsets.all(4.0),
+            child: Icon(
+              CupertinoIcons.chevron_right,
+              color: Color(widget.habit.colorCode).colorRegardingToBrightness,
             ),
           ),
         ),
@@ -237,7 +223,8 @@ class _HabitDataWidgetState extends ConsumerState<HabitDataWidget> {
       opacity: opacity,
       child: Container(
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(10),
+          color: context.scaffoldBackgroundColor.withValues(alpha: 0.9),
         ),
         child: Column(
           children: [
@@ -248,7 +235,7 @@ class _HabitDataWidgetState extends ConsumerState<HabitDataWidget> {
                 style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w600,
-                  color: isCurrentMonth ? color : context.theme.primaryColor,
+                  color: isCurrentMonth ? color : context.scaffoldBackgroundColor.colorRegardingToBrightness,
                 ),
               ),
             ),
@@ -310,39 +297,29 @@ class _HabitDataWidgetState extends ConsumerState<HabitDataWidget> {
         final isToday = currentDate.isToday;
         final isInFuture = currentDate.isAfter(DateTime.now());
 
-        bool isCompleted = false;
-        bool isBetweenCompletions = false;
-
+        // Progressive color based on completion ratio for the day
+        double ratio = 0.0;
         if (!isInFuture) {
-          isCompleted = completions.any((date) => date.isSameDayWith(currentDate));
+          ratio = widget.habit.completions.getCompletionRatioForDate(currentDate, widget.habit.dailyTarget);
+        }
 
-          if (!isCompleted && completions.length >= 2) {
-            for (int i = 0; i < completions.length - 1; i++) {
-              final startDate = completions[i];
-              final endDate = completions[i + 1];
-              if (currentDate.isBetween(startDate, endDate)) {
-                isBetweenCompletions = true;
-                break;
-              }
-            }
+        // Grey out days before the first-ever completion
+        final firstCompletionDate = widget.habit.completions.getFirstCompletionDate();
+        final isBeforeFirstCompletion = firstCompletionDate != null && currentDate.isBefore(DateUtils.dateOnly(firstCompletionDate));
+
+        Color resolveCellColor() {
+          // Match 7-days progressive alpha from habit color
+
+          if (isBeforeFirstCompletion) {
+            return CupertinoColors.systemGrey.withValues(alpha: 0.4);
           }
+
+          if (isInFuture) return CupertinoColors.systemGrey.withValues(alpha: 0.4);
+          final alpha = (0.1 + (0.9 * ratio)).clamp(0.4, 1.0);
+          return color.withValues(alpha: alpha);
         }
 
-        Color getCardColor({
-          required bool isCompleted,
-          required bool isBetweenCompletions,
-          required Color baseColor,
-        }) {
-          if (isCompleted) return baseColor;
-          if (isBetweenCompletions) return baseColor.withValues(alpha: 0.25);
-          return context.theme.disabledColor.withValues(alpha: 0.25);
-        }
-
-        final cardColor = getCardColor(
-          isCompleted: isCompleted,
-          isBetweenCompletions: isBetweenCompletions,
-          baseColor: color,
-        );
+        final cardColor = resolveCellColor();
 
         return Container(
           decoration: BoxDecoration(

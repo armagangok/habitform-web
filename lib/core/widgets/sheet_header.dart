@@ -23,15 +23,7 @@ class SheetHeader extends StatelessWidget implements ObstructingPreferredSizeWid
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     return CupertinoNavigationBar(
-      backgroundColor: context.cupertinoTheme.barBackgroundColor.withValues(alpha: .25),
-      border: Border(
-        bottom: BorderSide(
-          color: theme.dividerColor.withValues(alpha: .3),
-          width: 0.5,
-        ),
-      ),
       transitionBetweenRoutes: false,
       leading: leading ??
           Align(
@@ -47,7 +39,6 @@ class SheetHeader extends StatelessWidget implements ObstructingPreferredSizeWid
           Text(
             title ?? '',
             style: TextStyle(
-              color: theme.textTheme.titleLarge?.color,
               fontWeight: FontWeight.w600,
             ),
           ),
@@ -63,38 +54,12 @@ class SheetHeader extends StatelessWidget implements ObstructingPreferredSizeWid
     return Builder(builder: (context) {
       return Align(
         widthFactor: 1,
-        child: CustomButton(
+        child: CircularActionButton(
           onPressed: () {
             onClose?.call();
             navigator.pop();
           },
-          child: SizedBox(
-            width: 28,
-            height: 28,
-            child: CupertinoButton.filled(
-              disabledColor: context.theme.dividerColor.withValues(alpha: .25),
-              borderRadius: BorderRadius.circular(90),
-              padding: EdgeInsets.zero,
-              onPressed: null,
-              child: FittedBox(
-                child: Card(
-                  elevation: 0,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(360),
-                  ),
-                  color: Colors.transparent,
-                  child: Padding(
-                    padding: const EdgeInsets.all(12.0),
-                    child: Icon(
-                      CupertinoIcons.xmark,
-                      color: context.primary.withValues(alpha: .9),
-                      size: 40,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ),
+          icon: CupertinoIcons.xmark,
         ),
       );
     });

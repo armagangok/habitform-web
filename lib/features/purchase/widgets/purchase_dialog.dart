@@ -1,5 +1,4 @@
 import '../../../core/core.dart';
-import '../page/paywall_page.dart';
 
 Future<void> showUnlockProDialog() async {
   final context = navigator.navigatorKey.currentContext;
@@ -8,8 +7,8 @@ Future<void> showUnlockProDialog() async {
   await showCupertinoDialog(
     context: context,
     builder: (context) => CupertinoAlertDialog(
-      title: Text("You need pro to unlock this feature"),
-      content: Text("Unlock HabitRise Pro to access this and many other pro features!"),
+      title: Text(LocaleKeys.purchase_dialog_pro_required_title.tr()),
+      content: Text(LocaleKeys.purchase_dialog_pro_required_message.tr()),
       actions: [
         CupertinoDialogAction(
           onPressed: () => Navigator.pop(context),
@@ -21,10 +20,9 @@ Future<void> showUnlockProDialog() async {
         CupertinoDialogAction(
           onPressed: () {
             Navigator.pop(context);
-            showCupertinoModalBottomSheet(
-              enableDrag: false,
-              context: context,
-              builder: (context) => PaywallPage(),
+            navigator.navigateTo(
+              path: KRoute.prePaywall,
+              data: {'isFromOnboarding': false},
             );
           },
           child: Text(

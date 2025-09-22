@@ -14,9 +14,9 @@ class SettingLeadingWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
+    return CupertinoCard(
       color: cardColor,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+      borderRadius: BorderRadius.circular(6),
       child: Padding(
         padding: EdgeInsets.all(padding ?? 2.5),
         child: Icon(
@@ -24,31 +24,6 @@ class SettingLeadingWidget extends StatelessWidget {
           color: Colors.white.withValues(alpha: .9),
         ),
       ),
-    );
-  }
-}
-
-class SettingItem extends StatelessWidget {
-  const SettingItem({
-    super.key,
-    required this.title,
-    required this.onTap,
-    this.leading,
-    this.trailing,
-  });
-
-  final String title;
-  final VoidCallback onTap;
-  final Widget? leading;
-  final Widget? trailing;
-
-  @override
-  Widget build(BuildContext context) {
-    return CupertinoListTile(
-      leading: leading,
-      title: Text(title),
-      onTap: onTap,
-      trailing: trailing ?? CupertinoListTileChevron(),
     );
   }
 }

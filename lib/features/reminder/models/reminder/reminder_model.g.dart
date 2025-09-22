@@ -20,19 +20,22 @@ class ReminderModelAdapter extends TypeAdapter<ReminderModel> {
       id: fields[0] as int,
       reminderTime: fields[1] as DateTime?,
       days: (fields[2] as List?)?.cast<Days>(),
+      multipleReminders: fields[3] as MultipleReminderModel?,
     );
   }
 
   @override
   void write(BinaryWriter writer, ReminderModel obj) {
     writer
-      ..writeByte(3)
+      ..writeByte(4)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
       ..write(obj.reminderTime)
       ..writeByte(2)
-      ..write(obj.days);
+      ..write(obj.days)
+      ..writeByte(3)
+      ..write(obj.multipleReminders);
   }
 
   @override

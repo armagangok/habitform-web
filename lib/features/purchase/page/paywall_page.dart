@@ -1,6 +1,5 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:habitrise/features/purchase/widgets/product_widget.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 
 import '/core/core.dart' hide LocaleKeys;
@@ -10,17 +9,38 @@ import '../models/paywall_state.dart';
 import '../providers/purchase_provider.dart';
 
 class PaywallPage extends ConsumerStatefulWidget {
-  const PaywallPage({this.isFromOnboarding = false, super.key});
+  const PaywallPage({this.isFromOnboarding = false, this.isFromSettings = false, super.key});
 
   final bool isFromOnboarding;
+  final bool isFromSettings;
 
   @override
   ConsumerState<PaywallPage> createState() => _PaywallWidgetState();
 }
 
-class _PaywallWidgetState extends ConsumerState<PaywallPage> with SingleTickerProviderStateMixin {
-  int selectedIndex = 2;
+class _PaywallWidgetState extends ConsumerState<PaywallPage> with TickerProviderStateMixin {
+  int selectedIndex = 1; // Default to annual plan
   Package? selectedPackage;
+
+  // Animation controllers
+  late AnimationController _heroController;
+  late AnimationController _featuresController;
+  late AnimationController _productsController;
+  late AnimationController _buttonController;
+  late AnimationController _floatingController;
+  late AnimationController _pulseController;
+
+  late Animation<double> _featuresFadeAnimation;
+  late Animation<Offset> _featuresSlideAnimation;
+  late Animation<double> _productsFadeAnimation;
+  late Animation<Offset> _productsSlideAnimation;
+  late Animation<double> _buttonFadeAnimation;
+  late Animation<Offset> _buttonSlideAnimation;
+
+  late Animation<double> _pulseAnimation;
+
+  // Scroll controller
+  late ScrollController _scrollController;
 
   final List<FeatureModel> featureList = [
     FeatureModel(
@@ -80,99 +100,571 @@ class _PaywallWidgetState extends ConsumerState<PaywallPage> with SingleTickerPr
   ];
 
   @override
+  void initState() {
+    super.initState();
+    _initializeAnimations();
+    _scrollController = ScrollController();
+  }
+
+  void _initializeAnimations() {
+    // Hero animations
+    _heroController = AnimationController(
+      duration: Duration(milliseconds: 1000),
+      vsync: this,
+    );
+
+    // Features animations
+    _featuresController = AnimationController(
+      duration: Duration(milliseconds: 800),
+      vsync: this,
+    );
+
+    _featuresFadeAnimation = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(CurvedAnimation(
+      parent: _featuresController,
+      curve: Interval(0.0, 0.7, curve: Curves.easeOut),
+    ));
+
+    _featuresSlideAnimation = Tween<Offset>(
+      begin: Offset(0, 0.3),
+      end: Offset.zero,
+    ).animate(CurvedAnimation(
+      parent: _featuresController,
+      curve: Interval(0.0, 0.8, curve: Curves.easeOutCubic),
+    ));
+
+    // Products animations
+    _productsController = AnimationController(
+      duration: Duration(milliseconds: 600),
+      vsync: this,
+    );
+
+    _productsFadeAnimation = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(CurvedAnimation(
+      parent: _productsController,
+      curve: Interval(0.0, 0.6, curve: Curves.easeOut),
+    ));
+
+    _productsSlideAnimation = Tween<Offset>(
+      begin: Offset(0, 0.2),
+      end: Offset.zero,
+    ).animate(CurvedAnimation(
+      parent: _productsController,
+      curve: Interval(0.0, 0.7, curve: Curves.easeOutCubic),
+    ));
+
+    // Button animations
+    _buttonController = AnimationController(
+      duration: Duration(milliseconds: 500),
+      vsync: this,
+    );
+
+    _buttonFadeAnimation = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(CurvedAnimation(
+      parent: _buttonController,
+      curve: Interval(0.0, 0.5, curve: Curves.easeOut),
+    ));
+
+    _buttonSlideAnimation = Tween<Offset>(
+      begin: Offset(0, 0.3),
+      end: Offset.zero,
+    ).animate(CurvedAnimation(
+      parent: _buttonController,
+      curve: Interval(0.0, 0.8, curve: Curves.easeOutCubic),
+    ));
+
+    // Floating elements animation
+    _floatingController = AnimationController(
+      duration: Duration(seconds: 6),
+      vsync: this,
+    );
+
+    // Pulse animation for CTA
+    _pulseController = AnimationController(
+      duration: Duration(seconds: 2),
+      vsync: this,
+    );
+
+    _pulseAnimation = Tween<double>(
+      begin: 1.0,
+      end: 1.05,
+    ).animate(CurvedAnimation(
+      parent: _pulseController,
+      curve: Curves.easeInOut,
+    ));
+
+    // Start animations
+    _startAnimations();
+  }
+
+  void _startAnimations() {
+    Future.delayed(Duration(milliseconds: 100), () {
+      if (mounted) {
+        _heroController.forward();
+        Future.delayed(Duration(milliseconds: 150), () {
+          if (mounted) _featuresController.forward();
+        });
+        Future.delayed(Duration(milliseconds: 300), () {
+          if (mounted) _productsController.forward();
+        });
+        Future.delayed(Duration(milliseconds: 450), () {
+          if (mounted) _buttonController.forward();
+        });
+        Future.delayed(Duration(milliseconds: 600), () {
+          if (mounted) {
+            _floatingController.repeat(reverse: true);
+            _pulseController.repeat(reverse: true);
+          }
+        });
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _heroController.dispose();
+    _featuresController.dispose();
+    _productsController.dispose();
+    _buttonController.dispose();
+    _floatingController.dispose();
+    _pulseController.dispose();
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final purchaseState = ref.watch(purchaseProvider);
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
     return Material(
+      color: Colors.transparent,
       child: purchaseState.when(
         data: (state) {
-          selectedPackage ??= state.offerings?.current?.lifetime;
+          // Initialize selected package to align with selectedIndex and available packages
+          final availablePackages = state.offerings?.current?.availablePackages;
+          if (selectedPackage == null && availablePackages != null && availablePackages.isNotEmpty) {
+            int defaultIndex = 0;
+            // Prefer an annual/yearly package if present
+            for (int i = 0; i < availablePackages.length; i++) {
+              final identifier = availablePackages[i].storeProduct.identifier.toLowerCase();
+              if (identifier.contains('year') || identifier.contains('annual') || identifier.contains('yearly')) {
+                defaultIndex = i;
+                break;
+              }
+            }
+            // If widget's default is annual (index 1) and it exists, use it, else fall back to detected index
+            if (selectedIndex >= 0 && selectedIndex < availablePackages.length) {
+              defaultIndex = selectedIndex;
+            }
+            selectedIndex = defaultIndex.clamp(0, availablePackages.length - 1);
+            selectedPackage = availablePackages[selectedIndex];
+          }
 
           return CupertinoPageScaffold(
+            backgroundColor: isDarkMode ? Color(0xFF0A0A0A) : Color(0xFFFAFAFA),
             navigationBar: _navBar(context),
             child: Stack(
               children: [
+                // Main content
                 SizedBox(
                   width: double.infinity,
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                    padding: const EdgeInsets.symmetric(horizontal: 24.0),
                     child: ListView(
+                      controller: _scrollController,
                       children: [
-                        SizedBox(height: 20),
-                        _productSection(state),
-                        SizedBox(height: 40),
-                        Text(
-                          LocaleKeys.subscription_whatYouWillUnlock.tr(),
-                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                fontWeight: FontWeight.bold,
-                              ),
-                          textAlign: TextAlign.start,
-                        ),
-                        SizedBox(height: 10),
-                        ListView.separated(
-                          physics: ClampingScrollPhysics(),
-                          itemCount: featureList.length,
-                          shrinkWrap: true,
-                          separatorBuilder: (_, __) => SizedBox(height: 15),
-                          itemBuilder: (context, index) {
-                            final feature = featureList[index];
+                        // Product section
+                        _buildProductSection(state),
 
-                            return Card(
-                              child: Padding(
-                                padding: EdgeInsets.symmetric(
-                                  vertical: 5,
-                                  horizontal: 12,
-                                ),
-                                child: Row(
-                                  children: [
-                                    Card(
-                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                                      color: feature.color,
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(6.0),
-                                        child: Icon(
-                                          feature.widget,
-                                          color: Colors.white,
-                                          size: 20,
-                                        ),
-                                      ),
-                                    ),
-                                    SizedBox(width: 10),
-                                    Expanded(
-                                      child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            feature.name,
-                                            style: context.titleMedium,
-                                          ),
-                                          Text(
-                                            feature.description,
-                                            style: context.bodySmall,
-                                          ),
-                                        ],
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              ),
-                            );
-                          },
-                        ),
-                        SizedBox(height: 160),
+                        SizedBox(height: 20),
+
+                        // Features section
+                        _buildFeaturesSection(),
+
+                        SizedBox(height: 120), // Space for fixed button
                       ],
                     ),
                   ),
                 ),
-                _continueButton(state),
+
+                // Fixed CTA button
+                _buildFixedCTAButton(state),
               ],
             ),
           );
         },
-        loading: () => Center(child: CupertinoActivityIndicator()),
-        error: (error, _) => Center(
-          child: Text(LocaleKeys.errors_something_went_wrong.tr()),
+        loading: () => _buildLoadingState(),
+        error: (error, _) => _buildErrorState(),
+      ),
+    );
+  }
+
+  Widget _buildProductSection(PaywallState state) {
+    return AnimatedBuilder(
+      animation: _productsController,
+      builder: (context, child) {
+        return FadeTransition(
+          opacity: _productsFadeAnimation,
+          child: SlideTransition(
+            position: _productsSlideAnimation,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(height: 20),
+                Center(
+                  child: Text(
+                    LocaleKeys.paywall_headline.tr(),
+                    style: context.headlineMedium.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                SizedBox(height: 24),
+                Text(
+                  LocaleKeys.paywall_choose_plan.tr(),
+                  style: context.titleLarge.copyWith(
+                    fontWeight: FontWeight.w600,
+                    color: context.headlineMedium.color?.withValues(alpha: 0.7),
+                  ),
+                ),
+                SizedBox(height: 10),
+                _productSection(state),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildFeaturesSection() {
+    return AnimatedBuilder(
+      animation: _featuresController,
+      builder: (context, child) {
+        return FadeTransition(
+          opacity: _featuresFadeAnimation,
+          child: SlideTransition(
+            position: _featuresSlideAnimation,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  LocaleKeys.paywall_what_you_get.tr(),
+                  style: context.titleLarge.copyWith(
+                    fontWeight: FontWeight.w600,
+                    color: context.headlineMedium.color?.withValues(alpha: 0.7),
+                  ),
+                ),
+                SizedBox(height: 16),
+                ListView.separated(
+                  physics: ClampingScrollPhysics(),
+                  itemCount: featureList.length,
+                  shrinkWrap: true,
+                  separatorBuilder: (_, __) => SizedBox(height: 12),
+                  itemBuilder: (context, index) {
+                    final feature = featureList[index];
+
+                    return TweenAnimationBuilder<double>(
+                      duration: Duration(milliseconds: 500),
+                      tween: Tween(begin: 0.0, end: 1.0),
+                      curve: Curves.easeOutCubic,
+                      builder: (context, value, child) {
+                        return Transform.translate(
+                          offset: Offset(0, (1 - value) * 20),
+                          child: Opacity(
+                            opacity: value,
+                            child: _buildFeatureItem(feature, index),
+                          ),
+                        );
+                      },
+                    );
+                  },
+                ),
+                SizedBox(height: 60),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildFeatureItem(FeatureModel feature, int index) {
+    return Container(
+      padding: EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: feature.color.withValues(alpha: 0.05),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: feature.color.withValues(alpha: 0.1),
+          width: 1,
         ),
+      ),
+      child: Row(
+        children: [
+          Container(
+            padding: EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: feature.color.withValues(alpha: 0.1),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Icon(
+              feature.widget,
+              color: feature.color,
+              size: 20,
+            ),
+          ),
+          SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  feature.name,
+                  style: context.titleMedium.copyWith(
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                SizedBox(height: 4),
+                Text(
+                  feature.description,
+                  style: context.bodySmall.copyWith(
+                    color: context.bodySmall.color?.withValues(alpha: 0.8),
+                    height: 1.3,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Icon(
+            CupertinoIcons.checkmark_circle_fill,
+            color: feature.color,
+            size: 20,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildFixedCTAButton(PaywallState state) {
+    return Positioned.fill(
+      child: Align(
+        alignment: Alignment.bottomCenter,
+        child: AnimatedBuilder(
+          animation: _buttonController,
+          builder: (context, child) {
+            return FadeTransition(
+              opacity: _buttonFadeAnimation,
+              child: SlideTransition(
+                position: _buttonSlideAnimation,
+                child: CustomBlurWidget(
+                  blurValue: 20,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      border: Border(
+                        top: BorderSide(
+                          color: context.theme.primaryContrastingColor,
+                          width: 0.5,
+                        ),
+                      ),
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [
+                          context.scaffoldBackgroundColor.withValues(alpha: 0.1),
+                          context.scaffoldBackgroundColor.withValues(alpha: 0.2),
+                          context.scaffoldBackgroundColor.withValues(alpha: 0.3),
+                        ],
+                        stops: [
+                          0.0,
+                          0.3,
+                          1.0,
+                        ],
+                      ),
+                    ),
+                    child: SafeArea(
+                      top: false,
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            _buildMainCTAButton(state),
+                            SizedBox(height: 16),
+                            _buildSecondaryButtons(),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            );
+          },
+        ),
+      ),
+    );
+  }
+
+  Widget _buildMainCTAButton(PaywallState state) {
+    final purchaseLoading = state.isPurchasing;
+
+    return AnimatedBuilder(
+      animation: _pulseAnimation,
+      builder: (context, child) {
+        return Transform.scale(
+          scale: _pulseAnimation.value,
+          child: SizedBox(
+            width: double.infinity,
+            child: CupertinoButton.filled(
+              padding: EdgeInsets.zero,
+              onPressed: purchaseLoading || selectedPackage == null
+                  ? null
+                  : () async {
+                      HapticFeedback.heavyImpact();
+                      if (selectedPackage != null) {
+                        ref.read(purchaseProvider.notifier).purchasePackage(
+                              selectedPackage!,
+                              widget.isFromOnboarding,
+                              isFromSettings: widget.isFromSettings,
+                            );
+                      }
+                    },
+              child: Container(
+                padding: EdgeInsets.symmetric(vertical: 18),
+                child: purchaseLoading
+                    ? Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          CupertinoActivityIndicator(radius: 12),
+                          SizedBox(width: 12),
+                          Text(
+                            LocaleKeys.paywall_processing.tr(),
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ],
+                      )
+                    : Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            _getCTAButtonText(),
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ],
+                      ),
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildSecondaryButtons() {
+    return Column(
+      children: [
+        if (widget.isFromOnboarding) ...[
+          CustomButton(
+            onPressed: () {
+              navigator.navigateAndClear(path: KRoute.homePage);
+            },
+            child: Text(
+              LocaleKeys.paywall_continue_limited.tr(),
+              style: context.bodySmall.copyWith(
+                color: context.bodySmall.color?.withValues(alpha: 0.7),
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+          SizedBox(height: 12)
+        ],
+        Row(
+          spacing: 14,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Expanded(child: _restoreButton),
+            Expanded(
+              child: CupertinoButton(
+                minimumSize: Size.zero,
+                padding: EdgeInsets.zero,
+                onPressed: UrlLauncherHelper.openPrivacyPolicy,
+                child: Text(
+                  LocaleKeys.paywall_privacy.tr(),
+                  style: context.bodySmall.copyWith(
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+            ),
+            Expanded(
+              child: CupertinoButton(
+                minimumSize: Size.zero,
+                padding: EdgeInsets.zero,
+                onPressed: UrlLauncherHelper.openTermsOfUse,
+                child: Text(
+                  LocaleKeys.paywall_terms.tr(),
+                  style: context.bodySmall.copyWith(
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildLoadingState() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          CupertinoActivityIndicator(radius: 20),
+          SizedBox(height: 16),
+          Text(
+            LocaleKeys.paywall_loading.tr(),
+            style: context.bodyMedium,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildErrorState() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            CupertinoIcons.exclamationmark_triangle,
+            size: 48,
+            color: Colors.red,
+          ),
+          SizedBox(height: 16),
+          Text(
+            LocaleKeys.paywall_something_went_wrong.tr(),
+            style: context.bodyMedium,
+            textAlign: TextAlign.center,
+          ),
+        ],
       ),
     );
   }
@@ -182,63 +674,17 @@ class _PaywallWidgetState extends ConsumerState<PaywallPage> with SingleTickerPr
       automaticallyImplyLeading: false,
       leading: widget.isFromOnboarding
           ? null
-          : Align(
-              widthFactor: 1,
-              child: SizedBox(
-                height: 28,
-                width: 28,
-                child: CupertinoButton(
-                  color: context.iconTheme.color?.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(90),
-                  padding: EdgeInsets.zero,
-                  onPressed: navigator.pop,
-                  child: FittedBox(
-                    child: Card(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(360),
-                      ),
-                      color: Colors.transparent,
-                      child: Padding(
-                        padding: const EdgeInsets.all(12.0),
-                        child: Icon(
-                          CupertinoIcons.xmark,
-                          color: context.iconTheme.color,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
+          : CircularActionButton(
+              onPressed: () {
+                navigator.pop();
+              },
+              icon: CupertinoIcons.xmark,
             ),
-      middle: Row(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          RichText(
-            text: TextSpan(
-              text: 'Habit',
-              style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
-              children: [
-                TextSpan(
-                  text: 'Rise  ',
-                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        color: Colors.blueAccent,
-                        fontWeight: FontWeight.bold,
-                      ),
-                ),
-                TextSpan(
-                  text: 'Pro',
-                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        color: context.primary,
-                        fontWeight: FontWeight.bold,
-                      ),
-                ),
-              ],
-            ),
-          ),
-        ],
+      middle: Text(
+        LocaleKeys.paywall_title.tr(),
+        style: context.titleMedium.copyWith(
+          fontWeight: FontWeight.bold,
+        ),
       ),
       border: Border(
         bottom: BorderSide(
@@ -250,155 +696,69 @@ class _PaywallWidgetState extends ConsumerState<PaywallPage> with SingleTickerPr
     );
   }
 
-  Widget _continueButton(PaywallState state) {
-    final purchaseLoading = state.isPurchasing;
-    return Align(
-      alignment: Alignment.bottomCenter,
-      child: CustomBlurWidget(
-        blurValue: 20,
-        child: SafeArea(
-          top: false,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              SizedBox(height: 10),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 10.0),
-                child: CupertinoButton(
-                  padding: EdgeInsets.zero,
-                  onPressed: purchaseLoading || selectedPackage == null
-                      ? null
-                      : () async {
-                          HapticFeedback.heavyImpact();
-                          if (selectedPackage != null) {
-                            ref.read(purchaseProvider.notifier).purchasePackage(
-                                  selectedPackage!,
-                                  widget.isFromOnboarding,
-                                );
-                          }
-                        },
-                  child: SizedBox(
-                    width: double.infinity,
-                    child: Card(
-                      color: Colors.blueAccent,
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(vertical: 12),
-                        child: purchaseLoading
-                            ? Row(
-                                mainAxisSize: MainAxisSize.min,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    LocaleKeys.subscription_loading.tr(),
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                  SizedBox(width: 4),
-                                  Text(
-                                    "🔓",
-                                    style: context.cupertinoTextStyle.copyWith(
-                                      fontSize: 24,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                  CupertinoActivityIndicator(radius: 12),
-                                ],
-                              )
-                            : Row(
-                                mainAxisSize: MainAxisSize.min,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    LocaleKeys.subscription_continue.tr(),
-                                    style: context.cupertinoTextStyle.copyWith(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                  Text(
-                                    " 🚀",
-                                    style: context.cupertinoTextStyle.copyWith(
-                                      fontSize: 24,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              if (widget.isFromOnboarding) ...[
-                SizedBox(height: 5),
-                CustomButton(
-                  onPressed: () {
-                    navigator.navigateAndClear(path: KRoute.homePage);
-                  },
-                  child: Text(
-                    LocaleKeys.subscription_continueWithLimitedPlan.tr(),
-                    style: context.bodySmall?.copyWith(
-                      color: context.bodySmall?.color?.withValues(alpha: .7),
-                    ),
-                  ),
-                ),
-              ],
-              FittedBox(
-                child: SizedBox(
-                  height: 40,
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 20.0),
-                    child: IntrinsicHeight(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          CustomButton(
-                            onPressed: UrlLauncherHelper.openPrivacyPolicy,
-                            child: Text(
-                              LocaleKeys.settings_privacy.tr(),
-                              textAlign: TextAlign.center,
-                              style: context.bodySmall?.copyWith(
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(12.0),
-                            child: VerticalDivider(),
-                          ),
-                          _restoreButton,
-                          Padding(
-                            padding: const EdgeInsets.all(12.0),
-                            child: VerticalDivider(),
-                          ),
-                          CustomButton(
-                            onPressed: UrlLauncherHelper.openTermsOfUse,
-                            child: Text(
-                              LocaleKeys.settings_terms.tr(),
-                              textAlign: TextAlign.center,
-                              style: context.bodySmall?.copyWith(
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(height: 5),
-            ],
-          ),
-        ),
-      ),
-    );
+  String _getCTAButtonText() {
+    if (selectedPackage == null) return LocaleKeys.paywall_continue.tr();
+
+    // Check if the package has an introductory offer (free trial)
+    final hasIntroductoryOffer = selectedPackage!.storeProduct.introductoryPrice != null;
+
+    if (hasIntroductoryOffer) {
+      return LocaleKeys.paywall_try_for_free.tr();
+    }
+
+    // No introductory offer available
+    return LocaleKeys.paywall_continue.tr();
+  }
+
+  String? _getTrialDaysText(Package package) {
+    final introductoryPrice = package.storeProduct.introductoryPrice;
+    if (introductoryPrice == null) return null;
+
+    // Parse ISO 8601 duration format (e.g., "P3D" = 3 days, "P1W" = 1 week)
+    final period = introductoryPrice.period;
+    final days = _parseISODurationToDays(period);
+
+    if (days == null || days <= 0) return null;
+
+    return LocaleKeys.paywall_free_trial_included_days.tr(namedArgs: {'days': days.toString()});
+  }
+
+  int? _parseISODurationToDays(String isoDuration) {
+    // Parse ISO 8601 duration format
+    // Examples: "P3D" = 3 days, "P1W" = 7 days, "P1M" = 30 days, "P1Y" = 365 days
+
+    if (!isoDuration.startsWith('P')) return null;
+
+    final duration = isoDuration.substring(1); // Remove 'P' prefix
+
+    // Check for days
+    if (duration.endsWith('D')) {
+      final daysStr = duration.substring(0, duration.length - 1);
+      return int.tryParse(daysStr);
+    }
+
+    // Check for weeks
+    if (duration.endsWith('W')) {
+      final weeksStr = duration.substring(0, duration.length - 1);
+      final weeks = int.tryParse(weeksStr);
+      return weeks != null ? weeks * 7 : null;
+    }
+
+    // Check for months
+    if (duration.endsWith('M')) {
+      final monthsStr = duration.substring(0, duration.length - 1);
+      final months = int.tryParse(monthsStr);
+      return months != null ? months * 30 : null; // Approximate
+    }
+
+    // Check for years
+    if (duration.endsWith('Y')) {
+      final yearsStr = duration.substring(0, duration.length - 1);
+      final years = int.tryParse(yearsStr);
+      return years != null ? years * 365 : null; // Approximate
+    }
+
+    return null;
   }
 
   Widget get _restoreButton {
@@ -409,24 +769,24 @@ class _PaywallWidgetState extends ConsumerState<PaywallPage> with SingleTickerPr
         final isRestoring = state.isRestoring;
 
         return CupertinoButton(
+          minimumSize: Size.zero,
           padding: EdgeInsets.zero,
           onPressed: isRestoring
               ? null
               : () {
-                  ref.read(purchaseProvider.notifier).restorePurchases(widget.isFromOnboarding);
+                  ref.read(purchaseProvider.notifier).restorePurchases(widget.isFromOnboarding, isFromSettings: widget.isFromSettings);
                 },
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                LocaleKeys.subscription_restore.tr(),
-                style: context.bodySmall?.copyWith(
-                  fontWeight: FontWeight.w600,
+                LocaleKeys.paywall_restore.tr(),
+                style: context.bodySmall.copyWith(
+                  fontWeight: FontWeight.w500,
                 ),
-                textAlign: TextAlign.center,
               ),
               if (isRestoring) SizedBox(width: 4),
-              if (isRestoring) CupertinoActivityIndicator()
+              if (isRestoring) CupertinoActivityIndicator(radius: 8)
             ],
           ),
         );
@@ -443,59 +803,192 @@ class _PaywallWidgetState extends ConsumerState<PaywallPage> with SingleTickerPr
       return SizedBox.shrink();
     }
 
-    // String? monthlyCalculated;
-
-    // // Ensure we have at least 2 packages before calculating
-    // if (availablePackages.length > 1) {
-    //   monthlyCalculated = ((availablePackages[1].storeProduct.price / 12).toStringAsFixed(2)).toString();
-    // }
-
     return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        ListView.separated(
-          separatorBuilder: (context, index) => SizedBox(height: 12),
-          physics: ClampingScrollPhysics(),
-          shrinkWrap: true,
-          itemCount: availablePackages.length,
-          itemBuilder: (context, index) {
-            String? stringDiscount;
+      children: availablePackages.asMap().entries.map((entry) {
+        final index = entry.key;
+        final package = entry.value;
+        final isSelected = selectedIndex == index;
+        final isPopular = index == 1 && availablePackages.length > 1;
 
-            // Calculate discount only if we have at least 2 packages
-            if (availablePackages.length > 1) {
-              final annualMonthlyPrice = availablePackages.first.storeProduct.price * 12;
-              final annualPrice = availablePackages[1].storeProduct.price;
-              final discountPercent = (((annualMonthlyPrice - annualPrice) / annualMonthlyPrice) * 100).toStringAsFixed(0);
+        // Calculate discount
+        String? discount;
+        if (availablePackages.length > 1 && index == 1) {
+          final monthlyPrice = availablePackages.first.storeProduct.price * 12;
+          final annualPrice = availablePackages[1].storeProduct.price;
+          final discountPercent = (((monthlyPrice - annualPrice) / monthlyPrice) * 100).toStringAsFixed(0);
+          discount = "-$discountPercent%";
+        }
 
-              stringDiscount = "-$discountPercent%";
-            }
+        return Container(
+          margin: EdgeInsets.only(bottom: 12),
+          child: CustomButton(
+            onPressed: () {
+              HapticFeedback.mediumImpact();
+              setState(() {
+                selectedIndex = index;
+                selectedPackage = package;
+              });
+            },
+            child: AnimatedContainer(
+              duration: Duration(milliseconds: 200),
+              curve: Curves.easeInOut,
+              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+              decoration: BoxDecoration(
+                color: context.selectionHandleColor.withValues(alpha: 0.05),
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(
+                  color: isSelected ? context.primary : Theme.of(context).dividerColor.withValues(alpha: 0.3),
+                  width: 2,
+                ),
+              ),
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      // Selection indicator
+                      Container(
+                        width: 24,
+                        height: 24,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: isSelected ? context.primary : Colors.transparent,
+                          border: Border.all(
+                            color: isSelected ? context.primary : Theme.of(context).dividerColor,
+                            width: 2,
+                          ),
+                        ),
+                        child: isSelected
+                            ? Icon(
+                                CupertinoIcons.checkmark,
+                                color: Colors.white,
+                                size: 16,
+                              )
+                            : null,
+                      ),
+                      SizedBox(width: 16),
 
-            final currentPackage = availablePackages[index];
+                      // Package info
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                Text(
+                                  package.storeProduct.title.getTitleName.toUpperCase(),
+                                  style: context.titleMedium.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                    color: isSelected ? context.primary : null,
+                                  ),
+                                ),
+                                if (isPopular) ...[
+                                  SizedBox(width: 8),
+                                  Container(
+                                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                    decoration: BoxDecoration(
+                                      color: context.primary,
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                    child: Text(
+                                      LocaleKeys.paywall_popular.tr(),
+                                      style: context.bodySmall.copyWith(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 10,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ],
+                            ),
+                            SizedBox(height: 4),
 
-            return CustomButton(
-              onPressed: () {
-                HapticFeedback.mediumImpact();
+                            if (package.storeProduct.description.isNotEmpty) ...[
+                              Text(
+                                package.storeProduct.description,
+                                style: context.bodySmall.copyWith(
+                                  color: context.bodySmall.color?.withValues(alpha: 0.7),
+                                ),
+                              ),
+                            ],
+                            // Trial information
+                            if (_getTrialDaysText(package) != null) ...[
+                              SizedBox(height: 12),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Icon(
+                                    CupertinoIcons.gift_fill,
+                                    color: context.primary,
+                                    size: 16,
+                                  ),
+                                  SizedBox(width: 6),
+                                  Text(
+                                    _getTrialDaysText(package)!,
+                                    style: context.bodySmall.copyWith(
+                                      color: context.primary,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ],
+                        ),
+                      ),
 
-                setState(() {
-                  selectedIndex = index;
-                  selectedPackage = availablePackages[selectedIndex];
-                });
-              },
-              child: index == 1 && availablePackages.length > 1
-                  ? ProductWidget(
-                      package: currentPackage,
-                      isSelected: selectedIndex == index,
-                      discount: stringDiscount,
-                      isPopular: true,
-                    )
-                  : ProductWidget(
-                      package: currentPackage,
-                      isSelected: selectedIndex == index,
-                    ),
-            );
-          },
-        ),
-      ],
+                      // Price and discount
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Text(
+                            package.storeProduct.priceString,
+                            style: context.titleLarge.copyWith(
+                              fontWeight: FontWeight.bold,
+                              color: isSelected ? context.primary : null,
+                            ),
+                          ),
+                          if (discount != null) ...[
+                            SizedBox(height: 4),
+                            Row(
+                              children: [
+                                Icon(
+                                  CupertinoIcons.tag_solid,
+                                  color: CupertinoColors.systemGreen,
+                                  size: 16,
+                                ),
+                                SizedBox(width: 4),
+                                Container(
+                                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                  decoration: BoxDecoration(
+                                    color: CupertinoColors.systemGreen,
+                                    borderRadius: BorderRadius.circular(90),
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      Text(
+                                        discount,
+                                        style: context.bodySmall.copyWith(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ],
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      }).toList(),
     );
   }
 }
@@ -507,4 +1000,17 @@ class FeatureModel {
   final Color color;
 
   FeatureModel(this.name, this.widget, this.description, this.color);
+}
+
+extension _EasyTitleName on String {
+  String get getTitleName {
+    // Remove everything inside parentheses (including nested parentheses)
+    String cleanedText = replaceAll(RegExp('\\(.*?\\)'), '');
+
+    // Remove any remaining double quotes and trim whitespace
+    cleanedText = cleanedText.replaceAll(')', '').trim();
+    cleanedText = cleanedText.replaceAll(' ', '').trim();
+
+    return cleanedText;
+  }
 }

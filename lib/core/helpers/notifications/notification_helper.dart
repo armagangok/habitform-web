@@ -85,7 +85,6 @@ final class NotificationHelper {
         importance: Importance.high,
         priority: Priority.high,
         enableVibration: true,
-        color: Colors.blueAccent,
         icon: 'ic_launcher',
       );
 
@@ -140,7 +139,9 @@ final class NotificationHelper {
         LogHelper.shared.debugPrint('Scheduling notification for day ${day.name} at: $scheduleDate');
         LogHelper.shared.debugPrint('Payload: ${jsonEncode(payloadData)}');
 
-        final notificationId = id + day.index;
+        // Generate unique notification ID for multiple reminders
+        final timeIndex = reminder.hasMultipleReminders ? reminder.multipleReminders!.sortedReminderTimes.indexOf(scheduledTime) : 0;
+        final notificationId = id + (day.index * 100) + timeIndex;
         await _notificationPlugin.zonedSchedule(
           notificationId,
           title,
@@ -185,18 +186,102 @@ final class NotificationHelper {
   /// Cancels all notifications for a given reminder
   Future<void> cancelReminderNotifications(ReminderModel reminder) async {
     try {
-      // Cancel the base reminder notification
+      LogHelper.shared.debugPrint('=== STARTING NOTIFICATION CANCELLATION ===');
+      LogHelper.shared.debugPrint('Reminder ID: ${reminder.id}');
+      LogHelper.shared.debugPrint('Reminder days: ${reminder.days}');
+      LogHelper.shared.debugPrint('Has multiple reminders: ${reminder.hasMultipleReminders}');
+
+      // List pending notifications before cancellation
+      final beforeNotifications = await _notificationPlugin.pendingNotificationRequests();
+      LogHelper.shared.debugPrint('Pending notifications before cancellation: ${beforeNotifications.length}');
+
+      // Cancel the base reminder notification (handles one-time notifications)
       await _notificationPlugin.cancel(reminder.id);
       LogHelper.shared.debugPrint('Cancelled base notification with ID: ${reminder.id}');
 
-      // Cancel notifications for all possible days
-      for (final day in Days.values) {
-        final notificationId = reminder.id + day.index;
-        await _notificationPlugin.cancel(notificationId);
-        LogHelper.shared.debugPrint('Cancelled notification for day ${day.name} with ID: $notificationId');
+      // Only cancel notifications for days that were actually selected for this reminder
+      if (reminder.days != null && reminder.days!.isNotEmpty) {
+        if (reminder.hasMultipleReminders) {
+          // Cancel notifications for multiple reminders
+          final times = reminder.multipleReminders!.sortedReminderTimes;
+          LogHelper.shared.debugPrint('Cancelling multiple reminders for ${times.length} times');
+          for (final day in reminder.days!) {
+            for (int timeIndex = 0; timeIndex < times.length; timeIndex++) {
+              final notificationId = reminder.id + (day.index * 100) + timeIndex;
+              await _notificationPlugin.cancel(notificationId);
+              LogHelper.shared.debugPrint('Cancelled notification for day ${day.name} time $timeIndex with ID: $notificationId');
+            }
+          }
+        } else {
+          // Cancel notifications for single reminder (backward compatibility)
+          LogHelper.shared.debugPrint('Cancelling single reminder for ${reminder.days!.length} days');
+          for (final day in reminder.days!) {
+            // Try both ID formats to ensure we catch all possible notification IDs
+
+            // New format (matching scheduling logic): id + (day.index * 100) + timeIndex
+            final newFormatId = reminder.id + (day.index * 100) + 0;
+            await _notificationPlugin.cancel(newFormatId);
+            LogHelper.shared.debugPrint('Cancelled notification (new format) for day ${day.name} with ID: $newFormatId');
+
+            // Old format (legacy): id + day.index
+            final oldFormatId = reminder.id + day.index;
+            await _notificationPlugin.cancel(oldFormatId);
+            LogHelper.shared.debugPrint('Cancelled notification (old format) for day ${day.name} with ID: $oldFormatId');
+          }
+        }
+      } else {
+        LogHelper.shared.debugPrint('No days selected for reminder ${reminder.id}, only base notification cancelled (one-time notification)');
       }
+
+      // List pending notifications after cancellation
+      final afterNotifications = await _notificationPlugin.pendingNotificationRequests();
+      LogHelper.shared.debugPrint('Pending notifications after cancellation: ${afterNotifications.length}');
+      LogHelper.shared.debugPrint('Notifications cancelled: ${beforeNotifications.length - afterNotifications.length}');
+
+      LogHelper.shared.debugPrint('=== NOTIFICATION CANCELLATION COMPLETED ===');
     } catch (e) {
       LogHelper.shared.debugPrint('Error cancelling notifications: $e');
+    }
+  }
+
+  /// Cancels a single notification by its ID
+  Future<void> cancelNotification(int notificationId) async {
+    try {
+      await _notificationPlugin.cancel(notificationId);
+      LogHelper.shared.debugPrint('Cancelled notification with ID: $notificationId');
+    } catch (e) {
+      LogHelper.shared.debugPrint('Error cancelling notification $notificationId: $e');
+    }
+  }
+
+  /// Debug method to analyze notification IDs for a specific habit
+  Future<void> debugNotificationIdsForHabit(String habitName, int reminderId, List<Days>? days) async {
+    try {
+      LogHelper.shared.debugPrint('=== DEBUG: Analyzing notification IDs for habit "$habitName" ===');
+      LogHelper.shared.debugPrint('Reminder ID: $reminderId');
+      LogHelper.shared.debugPrint('Days: $days');
+
+      final pendingNotifications = await _notificationPlugin.pendingNotificationRequests();
+      final habitNotifications = pendingNotifications.where((n) => n.title == habitName).toList();
+
+      LogHelper.shared.debugPrint('Found ${habitNotifications.length} notifications for habit "$habitName"');
+
+      for (var notification in habitNotifications) {
+        LogHelper.shared.debugPrint('Notification ID: ${notification.id}, Title: ${notification.title}');
+      }
+
+      if (days != null && days.isNotEmpty) {
+        LogHelper.shared.debugPrint('Expected notification IDs for this habit:');
+        for (var day in days) {
+          final newFormatId = reminderId + (day.index * 100) + 0;
+          final oldFormatId = reminderId + day.index;
+          LogHelper.shared.debugPrint('Day ${day.name}: new format = $newFormatId, old format = $oldFormatId');
+        }
+      }
+
+      LogHelper.shared.debugPrint('=== DEBUG COMPLETED ===');
+    } catch (e) {
+      LogHelper.shared.debugPrint('Error in debug analysis: $e');
     }
   }
 

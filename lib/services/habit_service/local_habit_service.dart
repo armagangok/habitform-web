@@ -1,6 +1,7 @@
 import 'package:hive_flutter/hive_flutter.dart';
 
 import '../../core/core.dart';
+import '../../features/reminder/service/reminder_service.dart';
 import '../../models/completion_entry/completion_entry.dart';
 import '../../models/habit/habit_extension.dart';
 import '../../models/habit/habit_model.dart';
@@ -98,27 +99,44 @@ class LocalHabitService extends HabitService {
       throw Exception('Habit not found');
     }
 
-    // Update completions
+    // Update completions with count semantics (supports multi-completions)
     final updatedCompletions = Map<String, CompletionEntry>.from(habit.completions);
 
     // Find any existing entry for the same date
     String? existingKey;
+    CompletionEntry? existingEntry;
     for (var entry in updatedCompletions.entries) {
       if (entry.value.date.normalized.isSameDayWith(completion.date.normalized)) {
         existingKey = entry.key;
+        existingEntry = entry.value;
         break;
       }
     }
 
-    // Remove existing entry if found
+    // Determine new count based on desired action (completion.isCompleted acts as increment when true, decrement when false)
+    int currentCount = existingEntry?.count ?? 0;
+    int target = habit.dailyTarget <= 0 ? 1 : habit.dailyTarget;
+    int newCount;
+    if (completion.isCompleted) {
+      newCount = (currentCount + 1) > target ? target : (currentCount + 1);
+    } else {
+      newCount = (currentCount - 1) < 0 ? 0 : (currentCount - 1);
+    }
+
+    // Remove existing entry if found (we will rewrite)
     if (existingKey != null) {
       updatedCompletions.remove(existingKey);
     }
 
-    // Add new entry if it's marked as completed
-    if (completion.isCompleted) {
-      updatedCompletions[completion.id] = completion;
-    }
+    // Write back entry reflecting the new count and derived isCompleted
+    final updatedEntry = CompletionEntry(
+      id: completion.id,
+      date: completion.date.normalized,
+      // Only mark day completed when full target reached (affects streaks)
+      isCompleted: newCount >= target,
+      count: newCount,
+    );
+    updatedCompletions[updatedEntry.id] = updatedEntry;
 
     // Save updated habit
     final updatedHabit = habit.copyWith(completions: updatedCompletions);
@@ -145,8 +163,19 @@ class LocalHabitService extends HabitService {
   // Archive a habit
   @override
   Future<void> archiveHabit(Habit habit) async {
-    LogHelper.shared.debugPrint('Archiving habit: ${habit.id}');
+    LogHelper.shared.debugPrint('💾 HABIT SERVICE: archiveHabit called for habit: ${habit.habitName} (ID: ${habit.id})');
 
+    LogHelper.shared.debugPrint('💾 Step 1: Checking reminder model');
+    // Cancel all reminder notifications before archiving
+    if (habit.reminderModel != null) {
+      LogHelper.shared.debugPrint('💾 Habit has reminder model, cancelling notifications');
+      await ReminderService.cancelAllReminderNotifications(habit.reminderModel);
+      LogHelper.shared.debugPrint('💾 Cancelled notifications for archived habit: ${habit.id}');
+    } else {
+      LogHelper.shared.debugPrint('💾 Habit has NO reminder model');
+    }
+
+    LogHelper.shared.debugPrint('💾 Step 2: Creating archived habit object');
     // Set habit to archived if it's not already
     final archivedHabit = habit.isArchived
         ? habit
@@ -154,14 +183,19 @@ class LocalHabitService extends HabitService {
             status: HabitStatus.archived,
             archiveDate: DateTime.now(),
           );
+    LogHelper.shared.debugPrint('💾 Archived habit created with status: ${archivedHabit.status}');
 
+    LogHelper.shared.debugPrint('💾 Step 3: Removing from active habits box');
     // Remove from active habits
     await _hiveHelper.deleteData<Habit>(HiveBoxes.habitBox, habit.id);
+    LogHelper.shared.debugPrint('💾 Removed from active habits box');
 
+    LogHelper.shared.debugPrint('💾 Step 4: Adding to archived habits box');
     // Add to archived habits
     await _hiveHelper.putData<Habit>(HiveBoxes.archivedHabitBox, habit.id, archivedHabit);
+    LogHelper.shared.debugPrint('💾 Added to archived habits box');
 
-    LogHelper.shared.debugPrint('Habit archived successfully: ${habit.id}');
+    LogHelper.shared.debugPrint('💾 HABIT SERVICE: Habit archived successfully: ${habit.id}');
   }
 
   // Unarchive a habit

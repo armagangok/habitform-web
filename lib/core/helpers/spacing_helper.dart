@@ -25,6 +25,5 @@ class KSpacing {
   // Specific padding for Scaffold
   static EdgeInsets get scaffoldPadding => const EdgeInsets.all(16.0); // Padding for Scaffold
 
-  // Specific padding for Scaffold
-  static double get betweenListItems => 30.0; // Padding for Scaffold
+  
 }

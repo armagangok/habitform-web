@@ -14,19 +14,19 @@ final class AppFlushbar {
       titleText: Text(
         LocaleKeys.common_error.tr(),
         textAlign: TextAlign.left,
-        style: context?.titleLarge?.copyWith(
+        style: context?.titleLarge.copyWith(
           fontWeight: FontWeight.w600,
         ),
       ),
       messageText: Text(
         message,
         textAlign: TextAlign.left,
-        style: context?.bodyMedium?.copyWith(
+        style: context?.bodyMedium.copyWith(
           fontWeight: FontWeight.w600,
         ),
       ),
       borderRadius: BorderRadius.circular(16),
-      borderColor: context?.theme.dividerColor.withAlpha(75),
+      borderColor: context?.theme.selectionHandleColor.withValues(alpha: .75),
       borderWidth: 1,
       margin: EdgeInsets.all(20),
       barBlur: 10,
@@ -41,20 +41,20 @@ final class AppFlushbar {
       titleText: Text(
         LocaleKeys.common_warning.tr(),
         textAlign: TextAlign.left,
-        style: context?.titleLarge?.copyWith(
+        style: context?.titleLarge.copyWith(
           fontWeight: FontWeight.w600,
         ),
       ),
       messageText: Text(
         message,
         textAlign: TextAlign.left,
-        style: context?.bodyMedium?.copyWith(
+        style: context?.bodyMedium.copyWith(
           fontWeight: FontWeight.w600,
         ),
       ),
       barBlur: 10,
       borderRadius: BorderRadius.circular(16),
-      borderColor: context?.theme.dividerColor.withAlpha(75),
+      borderColor: context?.theme.selectionHandleColor.withValues(alpha: .75),
       borderWidth: 1,
       margin: EdgeInsets.all(20),
       duration: const Duration(seconds: 4),
@@ -67,7 +67,7 @@ final class AppFlushbar {
       backgroundColor: context?.theme.scaffoldBackgroundColor.withValues(alpha: .25) ?? Colors.transparent,
       titleText: Text(
         LocaleKeys.common_Information.tr(),
-        style: context?.titleLarge?.copyWith(
+        style: context?.titleLarge.copyWith(
           fontWeight: FontWeight.w600,
         ),
         textAlign: TextAlign.left,
@@ -78,7 +78,7 @@ final class AppFlushbar {
       ),
       barBlur: 10,
       borderRadius: BorderRadius.circular(16),
-      borderColor: context?.theme.dividerColor.withAlpha(75),
+      borderColor: context?.theme.selectionHandleColor.withValues(alpha: .75),
       borderWidth: 1,
       margin: EdgeInsets.all(20),
       duration: const Duration(seconds: 4),

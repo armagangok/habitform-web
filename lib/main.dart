@@ -1,5 +1,7 @@
+import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:habitrise/features/onboarding/pages/onboarding_welcome_page.dart';
 
 import '/core/core.dart';
 import '/core/theme/theme_data/theme_data.dart';
@@ -7,18 +9,21 @@ import '/features/habit_category/provider/provider_setup.dart';
 import '/features/onboarding/providers/onboarding_provider.dart';
 import '/features/purchase/services/purchase_service.dart';
 import '/services/app_default.dart';
+import '/services/app_lifecycle_service.dart';
 import 'core/constants/debug_constants.dart';
 import 'core/helpers/notifications/notification_helper.dart';
 import 'core/helpers/notifications/timezone.dart';
 import 'core/theme/providers/theme_provider.dart';
 import 'features/home/provider/home_provider.dart';
 import 'features/home/views/pages/home_page.dart';
-import 'features/onboarding/pages/onboarding_main_page.dart';
-import 'features/onboarding/providers/onboarding_state.dart';
 import 'features/purchase/providers/purchase_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Lock orientation to portrait only for all platforms
+  await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+
   await EasyLocalization.ensureInitialized();
   await HiveHelper.shared.initializeHive();
 
@@ -36,45 +41,16 @@ void main() async {
   await TimeZoneHelper.initializeTimeZone();
   await AppDefaultsService().initializeAppDefaults();
 
+  // Initialize app lifecycle service for smart notifications
+  AppLifecycleService.shared.initialize();
+
   // Setup habit category providers
   final habitCategoryOverrides = await setupHabitCategoryProviders();
 
   runApp(
     ProviderScope(
-      overrides: [
-        ...habitCategoryOverrides,
-      ],
-      child: EasyLocalization(
-        supportedLocales: const [
-          Locale('en', 'US'),
-          Locale('tr', 'TR'),
-          Locale('zh', 'CN'),
-          Locale('es', 'ES'),
-          Locale('hi', 'IN'),
-          Locale('ar', 'SA'),
-          Locale('bn', 'BD'),
-          Locale('pt', 'BR'),
-          Locale('ru', 'RU'),
-          Locale('ja', 'JP'),
-          Locale('id', 'ID'),
-          Locale('it', 'IT'),
-          Locale('nl', 'NL'),
-          Locale('sv', 'SE'),
-          Locale('no', 'NO'),
-          Locale('fi', 'FI'),
-          Locale('he', 'IL'),
-          Locale('ko', 'KR'),
-          Locale('da', 'DK'),
-          Locale('ca', 'ES'),
-          Locale('th', 'TH'),
-          Locale('vi', 'VN'),
-          Locale('cs', 'CZ'),
-          Locale('pl', 'PL'),
-        ],
-        path: 'assets/translations',
-        fallbackLocale: const Locale('en', 'US'),
-        child: MyApp(),
-      ),
+      overrides: [...habitCategoryOverrides],
+      child: EasyLocalization(supportedLocales: const [Locale('en', 'US'), Locale('fr', 'FR'), Locale('tr', 'TR'), Locale('zh', 'CN'), Locale('it', 'IT')], path: 'assets/translations', fallbackLocale: const Locale('en', 'US'), child: MyApp()),
     ),
   );
 }
@@ -97,35 +73,31 @@ class _MyAppState extends ConsumerState<MyApp> {
   @override
   Widget build(BuildContext context) {
     final themeMode = ref.watch(themeProvider);
-    final onboardingState = ref.watch(onboardingProvider);
 
-    return MaterialApp(
+    final cupertinoTheme = themeMode == ThemeMode.dark ? Themes.cupertinoDarkTheme : Themes.cupertinoLightTheme;
+
+    return CupertinoApp(
       builder: (context, child) {
         return MediaQuery(
-          data: MediaQuery.of(context).copyWith(
-            textScaler: const TextScaler.linear(
-              1,
-            ),
-          ),
+          data: MediaQuery.of(context).copyWith(textScaler: const TextScaler.linear(1)),
           child: child!,
         );
       },
-      darkTheme: Themes.darkTheme,
-      theme: Themes.lightTheme,
-      themeMode: themeMode,
+      theme: cupertinoTheme,
       debugShowCheckedModeBanner: false,
       navigatorKey: NavigationService.shared.navigatorKey,
       onGenerateRoute: NavigationRoute.shared.generateRoute,
       localizationsDelegates: context.localizationDelegates,
       supportedLocales: context.supportedLocales,
       locale: context.locale,
-      home: _buildHomeScreen(onboardingState),
+      home: _buildHomeScreen,
     );
   }
 
-  Widget _buildHomeScreen(OnboardingState onboardingState) {
+  Widget get _buildHomeScreen {
+    final onboardingState = ref.watch(onboardingProvider);
     if (KDebug.onboardingDebugMode || onboardingState.isFirstLaunch) {
-      return const OnboardingMainPage();
+      return const OnboardingWelcomePage();
     }
 
     return HomePage();

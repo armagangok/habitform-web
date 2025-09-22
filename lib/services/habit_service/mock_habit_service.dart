@@ -1,3 +1,4 @@
+import '../../features/reminder/service/reminder_service.dart';
 import '../../models/completion_entry/completion_entry.dart';
 import '../../models/habit/habit_model.dart';
 import '../../models/habit/habit_status.dart';
@@ -73,6 +74,11 @@ class MockHabitService extends HabitService {
 
   @override
   Future<void> archiveHabit(Habit habit) async {
+    // Cancel all reminder notifications before archiving
+    if (habit.reminderModel != null) {
+      await ReminderService.cancelAllReminderNotifications(habit.reminderModel);
+    }
+
     final updatedHabit = habit.copyWith(
       status: HabitStatus.archived,
       archiveDate: DateTime.now(),

@@ -25,37 +25,35 @@ class SelectTimeWidget extends ConsumerWidget {
           children: [
             CustomButton(
               onPressed: hasSelectedDays ? ref.watch(pickerExtendProvider.notifier).toggleExtend : null,
-              child: Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        LocaleKeys.reminder_select_time.tr(),
-                        style: context.titleMedium?.copyWith(
-                          fontWeight: FontWeight.w500,
-                          color: context.titleMedium?.color?.withValues(alpha: hasSelectedDays ? 1.0 : 0.5),
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      LocaleKeys.reminder_select_time.tr(),
+                      style: context.titleMedium.copyWith(
+                        fontWeight: FontWeight.w500,
+                        color: context.titleMedium.color?.withValues(alpha: hasSelectedDays ? 1.0 : 0.5),
+                      ),
+                    ),
+                    Row(
+                      children: [
+                        Text(
+                          remindTime?.toHHMM() ?? LocaleKeys.common_none.tr(),
+                          style: context.titleMedium.copyWith(
+                            fontWeight: FontWeight.w500,
+                            color: hasSelectedDays ? context.primary : Colors.grey,
+                          ),
                         ),
-                      ),
-                      Row(
-                        children: [
-                          Text(
-                            remindTime?.toHHMM() ?? LocaleKeys.common_none.tr(),
-                            style: context.titleMedium?.copyWith(
-                              fontWeight: FontWeight.w500,
-                              color: hasSelectedDays ? Colors.blueAccent : Colors.grey,
-                            ),
-                          ),
-                          const SizedBox(width: 10),
-                          Icon(
-                            isExtended ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down,
-                            color: context.titleMedium?.color?.withValues(alpha: hasSelectedDays ? 1.0 : 0.5),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
+                        const SizedBox(width: 10),
+                        Icon(
+                          isExtended ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down,
+                          color: context.titleMedium.color?.withValues(alpha: hasSelectedDays ? 1.0 : 0.5),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
               ),
             ),

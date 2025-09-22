@@ -1,4 +1,7 @@
+import '/core/core.dart';
 import '/core/helpers/notifications/notification_helper.dart';
+import '/core/helpers/notifications/smart_notification_manager.dart';
+import '/services/habit_service/habit_service_interface.dart';
 import '../models/reminder/reminder_model.dart';
 
 interface class IReminderService {}
@@ -6,29 +9,103 @@ interface class IReminderService {}
 final class ReminderService {
   const ReminderService._();
 
+  /// Create reminder notification using smart scheduling
   static Future<void> createReminderNotification(
     ReminderModel reminder,
     String title,
     String body,
   ) async {
-    if (reminder.reminderTime != null) {
-      await NotificationHelper.shared.cancelReminderNotifications(reminder);
+    // Get all active reminders to preserve other habits' notifications
+    final allActiveReminders = await _getAllActiveReminders();
 
-      await NotificationHelper.shared.scheduleReminderNotification(
-        reminder.id,
-        title,
-        body,
-        reminder.reminderTime!,
-        reminder,
-      );
-    }
+    // Use smart notification manager for better iOS limit handling
+    await SmartNotificationManager.shared.scheduleSmartNotifications(
+      allActiveReminders,
+      title,
+      body,
+    );
   }
 
+  /// Create multiple reminder notifications using smart scheduling
+  static Future<void> createMultipleReminderNotifications(
+    List<ReminderModel> reminders,
+    String title,
+    String body,
+  ) async {
+    // Get all active reminders to preserve other habits' notifications
+    final allActiveReminders = await _getAllActiveReminders();
+
+    // Use smart notification manager for better iOS limit handling
+    await SmartNotificationManager.shared.scheduleSmartNotifications(
+      allActiveReminders,
+      title,
+      body,
+    );
+  }
+
+  /// Cancel reminder notification
   static Future<void> cancelReminderNotification(int? id) async {
     if (id == null) return;
 
-    // Tüm günlerin bildirimlerini iptal et
+    // Cancel using the legacy method for backward compatibility
     final dummyReminder = ReminderModel(id: id, days: [], reminderTime: null);
     await NotificationHelper.shared.cancelReminderNotifications(dummyReminder);
+  }
+
+  /// Cancel all reminder notifications for a habit (including multiple reminders)
+  static Future<void> cancelAllReminderNotifications(ReminderModel? reminderModel) async {
+    LogHelper.shared.debugPrint('🔔 REMINDER SERVICE: cancelAllReminderNotifications called');
+
+    if (reminderModel == null) {
+      LogHelper.shared.debugPrint('🔔 REMINDER SERVICE: reminderModel is null, returning early');
+      return;
+    }
+
+    LogHelper.shared.debugPrint('🔔 REMINDER SERVICE: Calling NotificationHelper.cancelReminderNotifications with reminder ID: ${reminderModel.id}');
+    // Use the actual reminder model to properly cancel all notifications
+    await NotificationHelper.shared.cancelReminderNotifications(reminderModel);
+    LogHelper.shared.debugPrint('🔔 REMINDER SERVICE: cancelAllReminderNotifications completed');
+  }
+
+  /// Get current notification count
+  static Future<int> getCurrentNotificationCount() async {
+    return await SmartNotificationManager.shared.getCurrentNotificationCount();
+  }
+
+  /// Check if approaching notification limit
+  static Future<bool> isApproachingLimit() async {
+    return await SmartNotificationManager.shared.isApproachingLimit();
+  }
+
+  /// Get all active reminders from all habits
+  static Future<List<ReminderModel>> _getAllActiveReminders() async {
+    try {
+      final activeHabits = await habitService.getHabits();
+      final reminders = <ReminderModel>[];
+
+      for (final habit in activeHabits) {
+        if (habit.reminderModel != null && habit.reminderModel!.hasAnyReminders) {
+          reminders.add(habit.reminderModel!);
+        }
+      }
+
+      return reminders;
+    } catch (e) {
+      LogHelper.shared.debugPrint('Error getting active reminders: $e');
+      return [];
+    }
+  }
+
+  /// Reschedule all notifications (useful when app becomes active)
+  static Future<void> rescheduleAllNotifications(
+    List<ReminderModel> reminders,
+    String title,
+    String body,
+  ) async {
+    await SmartNotificationManager.shared.rescheduleNotifications(
+      reminders,
+      title,
+      body,
+    );
   }
 }

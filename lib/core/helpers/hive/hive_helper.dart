@@ -1,11 +1,13 @@
-import 'package:habitrise/features/habit_category/model/habit_category_model.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 import '/models/models.dart';
+import '../../../features/habit_category/model/habit_category_model.dart';
 import '../../../features/reminder/models/days/days_enum.dart';
+import '../../../features/reminder/models/multiple_reminder/multiple_reminder_model.dart';
 import '../../../features/reminder/models/reminder/reminder_model.dart';
 import '../../../models/app_defaults/app_defaults.dart';
 import '../../../models/completion_entry/completion_entry.dart';
+import '../../../models/habit/habit_difficulty.dart';
 import '../../../models/habit/habit_model.dart';
 import '../../../models/habit/habit_status.dart';
 import '../../../models/user_defaults/user_defaults.dart';
@@ -38,9 +40,11 @@ class HiveHelper {
   void _registerAdapters() {
     try {
       Hive.registerAdapter(HabitStatusAdapter());
+      Hive.registerAdapter(HabitDifficultyAdapter());
       Hive.registerAdapter(HabitCategoryAdapter());
       Hive.registerAdapter(HabitAdapter());
       Hive.registerAdapter(ReminderModelAdapter());
+      Hive.registerAdapter(MultipleReminderModelAdapter());
       Hive.registerAdapter(DaysAdapter());
       Hive.registerAdapter(AppDefaultsAdapter());
       Hive.registerAdapter(CompletionEntryAdapter());

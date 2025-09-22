@@ -1,14 +1,18 @@
 import 'dart:io';
 
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '/core/core.dart';
+import '/features/purchase/providers/purchase_provider.dart';
 import '/models/habit/habit_model.dart';
-import '../habit_detail/widget/habit_data_widget.dart';
+import '../purchase/page/paywall_page.dart';
+import 'provider/share_template_provider.dart';
+import 'templates/templates.dart';
 
-class ShareHabitPage extends StatefulWidget {
+class ShareHabitPage extends ConsumerStatefulWidget {
   final Habit habit;
 
   const ShareHabitPage({
@@ -17,12 +21,35 @@ class ShareHabitPage extends StatefulWidget {
   });
 
   @override
-  State<ShareHabitPage> createState() => _ShareHabitPageState();
+  @override
+  ConsumerState<ShareHabitPage> createState() => _ShareHabitPageState();
 }
 
-class _ShareHabitPageState extends State<ShareHabitPage> {
+class _ShareHabitPageState extends ConsumerState<ShareHabitPage> {
   bool isShareLoading = false;
   final screenshotController = ScreenshotController();
+  final GlobalKey _imageShareButtonKey = GlobalKey();
+  final GlobalKey _textShareButtonKey = GlobalKey();
+
+  Rect _shareOriginFor(GlobalKey key) {
+    try {
+      final ctx = key.currentContext;
+      if (ctx != null) {
+        final renderObject = ctx.findRenderObject();
+        if (renderObject is RenderBox && renderObject.hasSize) {
+          final topLeft = renderObject.localToGlobal(Offset.zero);
+          final size = renderObject.size;
+          if (size.width > 0 && size.height > 0) {
+            return topLeft & size;
+          }
+        }
+      }
+    } catch (_) {}
+
+    // Fallback to a tiny rect in the center of the screen (non-zero)
+    final screenSize = MediaQuery.of(context).size;
+    return Rect.fromLTWH(screenSize.width / 2, screenSize.height / 2, 1, 1);
+  }
 
   Future<void> _shareHabitAsImage(BuildContext context) async {
     setState(() {
@@ -46,6 +73,7 @@ class _ShareHabitPageState extends State<ShareHabitPage> {
       await Share.shareXFiles(
         [XFile(file.path)],
         text: 'Check out my habit progress!',
+        sharePositionOrigin: _shareOriginFor(_imageShareButtonKey),
       );
     } catch (e) {
       debugPrint('Error sharing habit: $e');
@@ -66,14 +94,16 @@ class _ShareHabitPageState extends State<ShareHabitPage> {
 📝 ${LocaleKeys.habit_habit_description.tr()}: ${widget.habit.habitDescription ?? LocaleKeys.common_none.tr()}
     ''';
 
-    await Share.share(shareText);
+    await Share.share(
+      shareText,
+      sharePositionOrigin: _shareOriginFor(_textShareButtonKey),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return CupertinoPopupSurface(
       child: CupertinoPageScaffold(
-        backgroundColor: Colors.transparent,
         navigationBar: SheetHeader(
           closeButtonPosition: CloseButtonPosition.left,
           title: LocaleKeys.share_share.tr(),
@@ -83,7 +113,9 @@ class _ShareHabitPageState extends State<ShareHabitPage> {
             ListView(
               physics: const NeverScrollableScrollPhysics(),
               children: [
-                SizedBox(height: 20),
+                const SizedBox(height: 8),
+                _TemplateSelector(habit: widget.habit),
+                const SizedBox(height: 12),
                 SafeArea(
                   bottom: false,
                   child: Screenshot(
@@ -103,53 +135,57 @@ class _ShareHabitPageState extends State<ShareHabitPage> {
             Positioned.fill(
               child: Align(
                 alignment: Alignment.bottomCenter,
-                child: Card(
-                  child: SafeArea(
-                    top: false,
-                    child: Padding(
-                      padding: const EdgeInsets.all(20),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: CupertinoButton.tinted(
-                              onPressed: isShareLoading
-                                  ? null
-                                  : () {
-                                      _shareHabitAsImage(context);
-                                    },
-                              sizeStyle: CupertinoButtonSize.small,
-                              child: isShareLoading
-                                  ? const CircularProgressIndicator.adaptive()
-                                  : Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        Icon(FontAwesomeIcons.solidFileImage),
-                                        const SizedBox(width: 5),
-                                        Text(
-                                          LocaleKeys.share_share_image.tr(),
-                                          style: TextStyle(fontWeight: FontWeight.w600),
-                                        ),
-                                      ],
-                                    ),
+                child: SafeArea(
+                  top: false,
+                  child: Padding(
+                    padding: const EdgeInsets.all(20),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: CupertinoButton.tinted(
+                            key: _imageShareButtonKey,
+                            color: context.primaryContrastingColor,
+                            foregroundColor: context.primaryContrastingColor.withValues(alpha: 1),
+                            onPressed: isShareLoading
+                                ? null
+                                : () {
+                                    _shareHabitAsImage(context);
+                                  },
+                            sizeStyle: CupertinoButtonSize.small,
+                            child: isShareLoading
+                                ? const CircularProgressIndicator.adaptive()
+                                : Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Icon(FontAwesomeIcons.solidFileImage),
+                                      const SizedBox(width: 5),
+                                      Text(
+                                        LocaleKeys.share_share_image.tr(),
+                                        style: TextStyle(fontWeight: FontWeight.w600),
+                                      ),
+                                    ],
+                                  ),
+                          ),
+                        ),
+                        const SizedBox(width: 20),
+                        Expanded(
+                          child: CupertinoButton.tinted(
+                            key: _textShareButtonKey,
+                            sizeStyle: CupertinoButtonSize.small,
+                            onPressed: _shareHabitAsText,
+                            color: context.primaryContrastingColor,
+                            foregroundColor: context.primaryContrastingColor.withValues(alpha: 1),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(FontAwesomeIcons.solidFileLines),
+                                SizedBox(width: 5),
+                                Text(LocaleKeys.share_share_text.tr()),
+                              ],
                             ),
                           ),
-                          const SizedBox(width: 20),
-                          Expanded(
-                            child: CupertinoButton.tinted(
-                              sizeStyle: CupertinoButtonSize.small,
-                              onPressed: _shareHabitAsText,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(FontAwesomeIcons.solidFileLines),
-                                  SizedBox(width: 5),
-                                  Text(LocaleKeys.share_share_text.tr()),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
@@ -203,97 +239,93 @@ class _ShareHabitPreviewState extends State<ShareHabitPreview> {
 
   @override
   Widget build(BuildContext context) {
+    final accent = Color(widget.habit.colorCode);
     return Material(
       color: Colors.transparent,
-      child: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              Color(widget.habit.colorCode).withValues(alpha: .8),
-              Color(widget.habit.colorCode).withValues(alpha: .9),
-              Color(widget.habit.colorCode).withValues(alpha: 1),
-            ],
+      child: Center(
+        child: AspectRatio(
+          aspectRatio: 3 / 4,
+          child: RepaintBoundary(
+            child: ShareTemplateSwitcher(
+              habit: widget.habit,
+              controller: _scrollController,
+              accentColor: accent,
+            ),
           ),
         ),
-        child: Stack(
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 40),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Card(
-                    child: Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              Expanded(
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      widget.habit.habitName,
-                                      style: context.textTheme.titleLarge?.copyWith(
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    // if (widget.habit.habitDescription != null) ...[
-                                    //   Text(
-                                    //     widget.habit.habitDescription!,
-                                    //     style: context.textTheme.bodyMedium,
-                                    //   ),
-                                    // ],
-                                  ],
-                                ),
-                              ),
-                            ],
+      ),
+    );
+  }
+}
+
+class _TemplateSelector extends ConsumerWidget {
+  final Habit habit;
+
+  const _TemplateSelector({required this.habit});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final provider = ref.watch(shareTemplateProvider);
+    final selected = provider.selectedIndex;
+    final isPro = ref.watch(purchaseProvider).value?.isSubscriptionActive ?? false;
+
+    final isDark = context.cupertinoTheme.brightness == Brightness.dark;
+
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      physics: const BouncingScrollPhysics(),
+      child: IntrinsicWidth(
+        child: CupertinoSegmentedControl<int>(
+          groupValue: selected,
+          selectedColor: isDark ? CupertinoColors.lightBackgroundGray.withValues(alpha: .4) : CupertinoColors.darkBackgroundGray.withValues(alpha: .5),
+          unselectedColor: isDark ? CupertinoColors.darkBackgroundGray.withValues(alpha: .2) : CupertinoColors.darkBackgroundGray.withValues(alpha: .2),
+          borderColor: context.primaryContrastingColor.withValues(alpha: .7),
+          pressedColor: CupertinoColors.systemFill.withValues(alpha: 0.6),
+          children: {
+            for (int i = 0; i < provider.templates.length; i++)
+              i: Builder(
+                builder: (context) {
+                  final bool isSelected = selected == i;
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          provider.templates[i].title,
+                          overflow: TextOverflow.visible,
+                          style: context.bodyMedium.copyWith(
+                            fontWeight: FontWeight.w600,
+                            color: isSelected
+                                ? CupertinoColors.white
+                                : isDark
+                                    ? CupertinoColors.white.withValues(alpha: .7)
+                                    : CupertinoColors.black.withValues(alpha: .7),
+                            fontSize: 14,
                           ),
-                          const SizedBox(height: 10),
-                          HabitDataWidget(habit: widget.habit),
+                        ),
+                        if (provider.templates[i].requiresPro && !isPro) ...[
+                          const SizedBox(width: 6),
+                          const Icon(CupertinoIcons.lock_fill, size: 12, color: CupertinoColors.systemGrey),
                         ],
-                      ),
+                      ],
                     ),
-                  ),
-                ],
+                  );
+                },
               ),
-            ),
-            Positioned.fill(
-              bottom: 10,
-              left: 30,
-              child: Align(
-                alignment: Alignment.bottomLeft,
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Card(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(4),
-                      ),
-                      child: Assets.app.appLogoDark.image(
-                        height: 24,
-                        width: 24,
-                      ),
-                    ),
-                    const SizedBox(width: 5),
-                    Text(
-                      "HabitRise",
-                      style: context.bodySmall?.copyWith(
-                        color: Color(widget.habit.colorCode).colorRegardingToBrightness,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            ),
-          ],
+          },
+          onValueChanged: (i) {
+            final template = provider.templates[i];
+            if (template.requiresPro && !isPro) {
+              showCupertinoSheet(
+                context: context,
+                builder: (context) => PaywallPage(isFromOnboarding: false),
+              );
+
+              return;
+            }
+            ref.read(shareTemplateProvider.notifier).select(i);
+          },
         ),
       ),
     );

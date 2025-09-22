@@ -10,10 +10,12 @@ import 'package:uuid/uuid.dart';
 import '../../core/core.dart';
 import '../../features/reminder/service/reminder_service.dart';
 import '../../models/completion_entry/completion_entry.dart';
+import '../../models/habit/habit_difficulty.dart';
 import '../../models/habit/habit_model.dart';
 import '../../models/habit/habit_status.dart';
 import '../../services/habit_service/habit_service_interface.dart';
 import '../reminder/models/days/days_enum.dart';
+import '../reminder/models/multiple_reminder/multiple_reminder_model.dart';
 import '../reminder/models/reminder/reminder_model.dart';
 
 class CSVService {
@@ -27,36 +29,61 @@ class CSVService {
   // Export habits to CSV
   Future<String> exportHabitsToCSV() async {
     try {
+      debugPrint('Starting CSV export process...');
+      final stopwatch = Stopwatch()..start();
+
       // Get all habits
       final habits = await _habitService.getAllHabits();
+      debugPrint('Retrieved ${habits.length} habits for export');
 
-      // Create CSV header
+      // Create CSV header with all current fields
       List<List<dynamic>> rows = [];
-      rows.add(['id', 'name', 'description', 'emoji', 'color_code', 'status', 'archive_date', 'completion_dates', 'reminder_time', 'reminder_days']);
+      rows.add(['id', 'name', 'description', 'emoji', 'color_code', 'status', 'archive_date', 'completion_dates', 'completion_counts', 'daily_target', 'difficulty', 'category_ids', 'reminder_time', 'reminder_days', 'multiple_reminder_times', 'multiple_reminder_days']);
 
       // Add habit data
       for (var habit in habits) {
         debugPrint('Exporting habit: ${habit.habitName}, emoji: ${habit.emoji}');
 
-        // Convert completion dates to string format
+        // Convert completion dates and counts to string format
         List<String> completionDates = [];
+        List<String> completionCounts = [];
         habit.completions.forEach((key, entry) {
           if (entry.isCompleted) {
             completionDates.add(entry.date.toIso8601String());
+            completionCounts.add(entry.count.toString());
           }
         });
 
         // Get reminder data
         String reminderTime = '';
         String reminderDays = '';
+        String multipleReminderTimes = '';
+        String multipleReminderDays = '';
 
         if (habit.reminderModel != null) {
-          if (habit.reminderModel!.reminderTime != null) {
-            reminderTime = habit.reminderModel!.reminderTime!.toIso8601String();
-          }
+          debugPrint('Processing reminder for habit: ${habit.habitName}');
+          debugPrint('  - hasMultipleReminders: ${habit.reminderModel!.hasMultipleReminders}');
+          debugPrint('  - hasSingleReminder: ${habit.reminderModel!.hasSingleReminder}');
+          debugPrint('  - reminderTime: ${habit.reminderModel!.reminderTime}');
+          debugPrint('  - multipleReminders: ${habit.reminderModel!.multipleReminders}');
 
-          if (habit.reminderModel!.days != null && habit.reminderModel!.days!.isNotEmpty) {
-            reminderDays = habit.reminderModel!.days!.map((day) => day.index).join(',');
+          // Check if this is a multiple reminder setup
+          if (habit.reminderModel!.hasMultipleReminders) {
+            // Multiple reminders - use multiple reminder fields
+            multipleReminderTimes = habit.reminderModel!.multipleReminders!.reminderTimes.map((time) => time.toIso8601String()).join('|');
+
+            if (habit.reminderModel!.multipleReminders!.days != null && habit.reminderModel!.multipleReminders!.days!.isNotEmpty) {
+              multipleReminderDays = habit.reminderModel!.multipleReminders!.days!.map((day) => day.index).join(',');
+            }
+            debugPrint('  - Exported as multiple reminder: $multipleReminderTimes');
+          } else if (habit.reminderModel!.hasSingleReminder) {
+            // Single reminder - use single reminder fields
+            reminderTime = habit.reminderModel!.reminderTime!.toIso8601String();
+
+            if (habit.reminderModel!.days != null && habit.reminderModel!.days!.isNotEmpty) {
+              reminderDays = habit.reminderModel!.days!.map((day) => day.index).join(',');
+            }
+            debugPrint('  - Exported as single reminder: $reminderTime');
           }
         }
 
@@ -77,14 +104,26 @@ class CSVService {
           habit.id,
           habit.habitName,
           habit.habitDescription ?? '',
-          encodedEmoji, // Base64 kodlanmış emoji
+          encodedEmoji, // Base64 encoded emoji
           habit.colorCode,
           habit.status.toString(),
           habit.archiveDate?.toIso8601String() ?? '',
           completionDates.join('|'),
+          completionCounts.join('|'),
+          habit.dailyTarget,
+          habit.difficulty.index,
+          habit.categoryIds.join(','),
           reminderTime,
           reminderDays,
+          multipleReminderTimes,
+          multipleReminderDays,
         ]);
+
+        debugPrint('Final export data for ${habit.habitName}:');
+        debugPrint('  - reminderTime: $reminderTime');
+        debugPrint('  - reminderDays: $reminderDays');
+        debugPrint('  - multipleReminderTimes: $multipleReminderTimes');
+        debugPrint('  - multipleReminderDays: $multipleReminderDays');
       }
 
       // Convert to CSV with proper text delimiters
@@ -106,13 +145,17 @@ class CSVService {
       final filePath = '${directory.path}/$filename';
       final file = File(filePath);
       await file.writeAsString(csv);
+
+      stopwatch.stop();
       debugPrint('File saved to: $filePath');
+      debugPrint('Export completed in ${stopwatch.elapsedMilliseconds}ms');
 
       // Kaydedilen dosyayı paylaş
       final xFile = XFile(filePath);
       await Share.shareXFiles(
         [xFile],
-        subject: 'HabitRise Export',
+        subject: LocaleKeys.csv_service_export_subject.tr(),
+        sharePositionOrigin: const Rect.fromLTWH(0, 0, 100, 100), // iOS için gerekli
       );
 
       return filePath;
@@ -128,7 +171,8 @@ class CSVService {
       final xFile = XFile(filePath);
       await Share.shareXFiles(
         [xFile],
-        subject: 'HabitRise Export',
+        subject: LocaleKeys.csv_service_export_subject.tr(),
+        sharePositionOrigin: const Rect.fromLTWH(0, 0, 100, 100), // iOS için gerekli
       );
     } catch (e) {
       debugPrint('Error sharing CSV file: $e');
@@ -139,12 +183,15 @@ class CSVService {
   // Import habits from CSV
   Future<int> importHabitsFromCSV() async {
     try {
+      debugPrint('Starting CSV import process...');
+      final stopwatch = Stopwatch()..start();
+
       // Pick file
       FilePickerResult? result = await FilePicker.platform.pickFiles(
         type: FileType.any, // CSV yerine herhangi bir dosya türünü kabul et
         allowMultiple: false,
         withData: true,
-        dialogTitle: 'Select CSV File',
+        dialogTitle: LocaleKeys.csv_service_select_csv_file.tr(),
       );
 
       if (result == null || result.files.isEmpty) {
@@ -159,7 +206,7 @@ class CSVService {
         final bytes = result.files.first.bytes;
         if (bytes == null) {
           debugPrint('Could not read file bytes');
-          throw Exception('Could not read file');
+          throw Exception(LocaleKeys.csv_service_could_not_read_file.tr());
         }
 
         // Dosya adını kontrol et
@@ -169,7 +216,7 @@ class CSVService {
         // CSV dosyası değilse uyarı ver
         if (!fileName.endsWith('.csv')) {
           debugPrint('Selected file is not a CSV file');
-          throw Exception('Please select a CSV file');
+          throw Exception(LocaleKeys.csv_service_please_select_csv_file.tr());
         }
 
         csvContent = String.fromCharCodes(bytes);
@@ -196,7 +243,7 @@ class CSVService {
         // CSV dosyası değilse uyarı ver
         if (!fileName.endsWith('.csv')) {
           debugPrint('Selected file is not a CSV file');
-          throw Exception('Please select a CSV file');
+          throw Exception(LocaleKeys.csv_service_please_select_csv_file.tr());
         }
 
         final file = File(filePath);
@@ -210,7 +257,7 @@ class CSVService {
       // Check if content is empty
       if (csvContent.trim().isEmpty) {
         debugPrint('CSV file is empty');
-        throw Exception('CSV file is empty');
+        throw Exception(LocaleKeys.csv_service_csv_file_is_empty.tr());
       }
 
       // Parse CSV with error handling
@@ -231,21 +278,24 @@ class CSVService {
         }
       } catch (e) {
         debugPrint('Error parsing CSV: $e');
-        throw Exception('Invalid CSV format: $e');
+        throw Exception(LocaleKeys.csv_service_invalid_csv_format.tr(namedArgs: {'error': e.toString()}));
       }
 
-      // Skip header
-      if (rowsAsListOfValues.isEmpty) {
-        debugPrint('CSV has no rows');
-        return 0;
+      // Validate CSV data
+      if (!_validateCSVData(rowsAsListOfValues)) {
+        throw Exception(LocaleKeys.csv_service_invalid_csv_format.tr(namedArgs: {'error': 'Invalid CSV structure'}));
       }
+
+      // Get CSV version for compatibility info
+      final csvVersion = _getCSVVersion(rowsAsListOfValues[0].map((e) => e.toString()).toList());
+      debugPrint('CSV version detected: $csvVersion');
 
       // Get header row to determine column indices
       final headerRow = rowsAsListOfValues[0];
       final Map<String, int> columnIndices = {};
 
-      // Define expected columns
-      final expectedColumns = ['id', 'name', 'description', 'emoji', 'color_code', 'status', 'archive_date', 'completion_dates', 'reminder_time', 'reminder_days'];
+      // Define expected columns (backward compatible)
+      final expectedColumns = ['id', 'name', 'description', 'emoji', 'color_code', 'status', 'archive_date', 'completion_dates', 'completion_counts', 'daily_target', 'difficulty', 'category_ids', 'reminder_time', 'reminder_days', 'multiple_reminder_times', 'multiple_reminder_days'];
 
       // Map column indices
       for (int i = 0; i < headerRow.length; i++) {
@@ -257,15 +307,19 @@ class CSVService {
 
       // Check for required columns
       if (!columnIndices.containsKey('id') || !columnIndices.containsKey('name')) {
-        throw Exception('CSV file is missing required columns (id, name)');
+        throw Exception(LocaleKeys.csv_service_missing_required_columns.tr());
       }
 
       // Process data
       int importedCount = 0;
+      int skippedCount = 0;
+      int errorCount = 0;
+
       for (int i = 1; i < rowsAsListOfValues.length; i++) {
         final row = rowsAsListOfValues[i];
         if (row.length < 2) {
           debugPrint('Skipping row $i: insufficient columns (${row.length})');
+          skippedCount++;
           continue;
         }
 
@@ -319,10 +373,18 @@ class CSVService {
           final statusStr = _getColumnValue(row, columnIndices, 'status', 5);
           final archiveDateStr = _getColumnValue(row, columnIndices, 'archive_date', 6);
           final completionDatesStr = _getColumnValue(row, columnIndices, 'completion_dates', 7);
+          final completionCountsStr = _getColumnValue(row, columnIndices, 'completion_counts', 8);
 
-          // Get additional fields
-          final reminderTimeStr = _getColumnValue(row, columnIndices, 'reminder_time', -1);
-          final reminderDaysStr = _getColumnValue(row, columnIndices, 'reminder_days', -1);
+          // Get new fields with backward compatibility
+          final dailyTargetStr = _getColumnValue(row, columnIndices, 'daily_target', 9);
+          final difficultyStr = _getColumnValue(row, columnIndices, 'difficulty', 10);
+          final categoryIdsStr = _getColumnValue(row, columnIndices, 'category_ids', 11);
+
+          // Get reminder fields
+          final reminderTimeStr = _getColumnValue(row, columnIndices, 'reminder_time', 12);
+          final reminderDaysStr = _getColumnValue(row, columnIndices, 'reminder_days', 13);
+          final multipleReminderTimesStr = _getColumnValue(row, columnIndices, 'multiple_reminder_times', 14);
+          final multipleReminderDaysStr = _getColumnValue(row, columnIndices, 'multiple_reminder_days', 15);
 
           // Parse status
           HabitStatus status = HabitStatus.active;
@@ -354,27 +416,42 @@ class CSVService {
             }
           }
 
-          // Parse completion dates
+          // Parse completion dates and counts
           Map<String, CompletionEntry> completions = {};
           if (completionDatesStr.isNotEmpty) {
             debugPrint('Parsing completion dates: $completionDatesStr');
             final dateStrings = completionDatesStr.split('|');
-            for (var dateStr in dateStrings) {
+            final countStrings = completionCountsStr.isNotEmpty ? completionCountsStr.split('|') : <String>[];
+
+            for (int i = 0; i < dateStrings.length; i++) {
               try {
-                final date = DateTime.parse(dateStr);
+                final date = DateTime.parse(dateStrings[i]);
                 final dateKey = date.toIso8601String().split('T')[0];
+
+                // Get count for this date (default to 1 if not available)
+                int count = 1;
+                if (i < countStrings.length && countStrings[i].isNotEmpty) {
+                  try {
+                    count = int.parse(countStrings[i]);
+                    if (count < 1) count = 1; // Ensure minimum count of 1
+                  } catch (e) {
+                    debugPrint('Error parsing completion count: ${countStrings[i]}, using default 1');
+                  }
+                }
+
                 completions[dateKey] = CompletionEntry(
                   id: _uuid.v4(),
                   date: date,
                   isCompleted: true,
+                  count: count,
                 );
-                debugPrint('Successfully parsed completion date: $dateStr -> $dateKey');
+                debugPrint('Successfully parsed completion date: ${dateStrings[i]} -> $dateKey (count: $count)');
               } catch (e) {
-                debugPrint('Error parsing completion date: $dateStr - $e');
+                debugPrint('Error parsing completion date: ${dateStrings[i]} - $e');
                 // Try alternative date formats if standard ISO format fails
                 try {
                   // Try different date formats if needed
-                  final parts = dateStr.split('-');
+                  final parts = dateStrings[i].split('-');
                   if (parts.length == 3) {
                     final datePart = parts[2].contains('T') ? parts[2].split('T')[0] : parts[2];
                     final date = DateTime(
@@ -383,12 +460,25 @@ class CSVService {
                       int.parse(datePart), // day
                     );
                     final dateKey = date.toIso8601String().split('T')[0];
+
+                    // Get count for this date (default to 1 if not available)
+                    int count = 1;
+                    if (i < countStrings.length && countStrings[i].isNotEmpty) {
+                      try {
+                        count = int.parse(countStrings[i]);
+                        if (count < 1) count = 1;
+                      } catch (e) {
+                        debugPrint('Error parsing completion count: ${countStrings[i]}, using default 1');
+                      }
+                    }
+
                     completions[dateKey] = CompletionEntry(
                       id: _uuid.v4(),
                       date: date,
                       isCompleted: true,
+                      count: count,
                     );
-                    debugPrint('Alternative parsing successful for: $dateStr -> $dateKey');
+                    debugPrint('Alternative parsing successful for: ${dateStrings[i]} -> $dateKey (count: $count)');
                   }
                 } catch (e2) {
                   debugPrint('Alternative completion date parsing failed: $e2');
@@ -397,10 +487,38 @@ class CSVService {
             }
           }
 
+          // Parse new fields
+          int dailyTarget = 1;
+          if (dailyTargetStr.isNotEmpty) {
+            try {
+              dailyTarget = int.parse(dailyTargetStr);
+              if (dailyTarget < 1) dailyTarget = 1; // Ensure minimum of 1
+            } catch (e) {
+              debugPrint('Error parsing daily target: $dailyTargetStr, using default 1');
+            }
+          }
+
+          HabitDifficulty difficulty = HabitDifficulty.moderate;
+          if (difficultyStr.isNotEmpty) {
+            try {
+              final difficultyIndex = int.parse(difficultyStr);
+              if (difficultyIndex >= 0 && difficultyIndex < HabitDifficulty.values.length) {
+                difficulty = HabitDifficulty.values[difficultyIndex];
+              }
+            } catch (e) {
+              debugPrint('Error parsing difficulty: $difficultyStr, using default moderate');
+            }
+          }
+
+          List<String> categoryIds = [];
+          if (categoryIdsStr.isNotEmpty) {
+            categoryIds = categoryIdsStr.split(',').where((id) => id.trim().isNotEmpty).toList();
+          }
+
           // Parse reminder model
           ReminderModel? reminderModel;
 
-          // Parse reminder time
+          // Parse single reminder
           DateTime? reminderTime;
           if (reminderTimeStr.isNotEmpty) {
             try {
@@ -411,7 +529,6 @@ class CSVService {
             }
           }
 
-          // Parse reminder days
           List<Days>? reminderDays;
           if (reminderDaysStr.isNotEmpty) {
             try {
@@ -420,7 +537,7 @@ class CSVService {
                 if (index >= 0 && index < Days.values.length) {
                   return Days.values[index];
                 } else {
-                  throw Exception('Invalid day index: $index');
+                  throw Exception(LocaleKeys.csv_service_invalid_day_index.tr(namedArgs: {'index': index.toString()}));
                 }
               }).toList();
               debugPrint('Successfully parsed reminder days: $reminderDaysStr -> $reminderDays');
@@ -429,12 +546,47 @@ class CSVService {
             }
           }
 
-          // Create reminder model if we have either time or days
-          if (reminderTime != null || (reminderDays != null && reminderDays.isNotEmpty)) {
+          // Parse multiple reminders
+          MultipleReminderModel? multipleReminders;
+          if (multipleReminderTimesStr.isNotEmpty) {
+            try {
+              final timeStrings = multipleReminderTimesStr.split('|');
+              final reminderTimes = timeStrings.map((timeStr) => DateTime.parse(timeStr)).toList();
+
+              List<Days>? multipleReminderDays;
+              if (multipleReminderDaysStr.isNotEmpty) {
+                try {
+                  final dayIndices = multipleReminderDaysStr.split(',').map((e) => int.parse(e)).toList();
+                  multipleReminderDays = dayIndices.map((index) {
+                    if (index >= 0 && index < Days.values.length) {
+                      return Days.values[index];
+                    } else {
+                      throw Exception(LocaleKeys.csv_service_invalid_day_index.tr(namedArgs: {'index': index.toString()}));
+                    }
+                  }).toList();
+                } catch (e) {
+                  debugPrint('Error parsing multiple reminder days: $multipleReminderDaysStr - $e');
+                }
+              }
+
+              multipleReminders = MultipleReminderModel(
+                id: int.parse(id.hashCode.toString().substring(0, 5).replaceAll('-', '1')),
+                reminderTimes: reminderTimes,
+                days: multipleReminderDays,
+              );
+              debugPrint('Successfully parsed multiple reminders: $multipleReminderTimesStr');
+            } catch (e) {
+              debugPrint('Error parsing multiple reminder times: $multipleReminderTimesStr - $e');
+            }
+          }
+
+          // Create reminder model if we have any reminder data
+          if (reminderTime != null || (reminderDays != null && reminderDays.isNotEmpty) || (multipleReminders != null && multipleReminders.isValid)) {
             reminderModel = ReminderModel(
               id: int.parse(id.hashCode.toString().substring(0, 5).replaceAll('-', '1')),
               reminderTime: reminderTime,
               days: reminderDays,
+              multipleReminders: multipleReminders,
             );
           }
 
@@ -448,6 +600,9 @@ class CSVService {
             emoji: emoji.isEmpty ? null : emoji.trim(),
             colorCode: colorCode,
             completions: completions,
+            dailyTarget: dailyTarget,
+            difficulty: difficulty,
+            categoryIds: categoryIds,
             archiveDate: archiveDate,
             status: status,
             reminderModel: reminderModel,
@@ -468,21 +623,28 @@ class CSVService {
           // Eğer hatırlatıcı varsa, bildirimleri tekrar ayarla
           if (habit.reminderModel != null && habit.status == HabitStatus.active) {
             debugPrint('Setting up reminder notification for habit: ${habit.habitName}');
-            await ReminderService.createReminderNotification(
-              habit.reminderModel!,
-              habit.habitName,
-              LocaleKeys.habit_timeToCompleteYourHabit.tr(),
-            );
+            try {
+              await ReminderService.createReminderNotification(
+                habit.reminderModel!,
+                habit.habitName,
+                LocaleKeys.habit_timeToCompleteYourHabit.tr(),
+              );
+            } catch (e) {
+              debugPrint('Error setting up reminder notification: $e');
+              // Continue with import even if reminder setup fails
+            }
           }
 
           importedCount++;
         } catch (e) {
           debugPrint('Error processing row $i: $e');
+          errorCount++;
           // Continue with next row
         }
       }
 
-      debugPrint('Import completed. Imported $importedCount habits.');
+      stopwatch.stop();
+      debugPrint('Import completed. Imported $importedCount habits, skipped $skippedCount rows, $errorCount errors in ${stopwatch.elapsedMilliseconds}ms.');
       return importedCount;
     } catch (e) {
       debugPrint('Error importing habits: $e');
@@ -498,5 +660,39 @@ class CSVService {
       return row[fallbackIndex].toString();
     }
     return '';
+  }
+
+  // Validate CSV data before processing
+  bool _validateCSVData(List<List<dynamic>> rows) {
+    if (rows.isEmpty) {
+      debugPrint('CSV validation failed: No rows found');
+      return false;
+    }
+
+    if (rows.length < 2) {
+      debugPrint('CSV validation failed: No data rows found (only header)');
+      return false;
+    }
+
+    // Check if header has required columns
+    final header = rows[0];
+    if (!header.contains('id') || !header.contains('name')) {
+      debugPrint('CSV validation failed: Missing required columns (id, name)');
+      return false;
+    }
+
+    debugPrint('CSV validation passed: ${rows.length - 1} data rows found');
+    return true;
+  }
+
+  // Get CSV version for backward compatibility
+  String _getCSVVersion(List<String> header) {
+    if (header.contains('multiple_reminder_times')) {
+      return '2.0'; // Current version with all features
+    } else if (header.contains('daily_target')) {
+      return '1.1'; // Version with daily target and difficulty
+    } else {
+      return '1.0'; // Original version
+    }
   }
 }

@@ -1,0 +1,22 @@
+{
+    "style": "modern app icon, flat yet playful, high contrast, minimal details, slightly liquid glass effect",
+    "scene": "{personal growth theme} representing {habit tracker}",
+    "elements": {
+        "main_subject": "{personal growth theme}",
+        "theme": "{habit tracker}",
+        "colors": "{deep orange and coal black}"
+    },
+    "composition": {
+        "layout": "centered inside, full frame, strictly no rounded edges within the main logo elements",
+        "perspective": "flat frontal view, simple and iconic",
+        "background colors": "{deep orange and coal black}"
+    },
+    "formatting": {
+        "background": "filled",
+        "aspect_ratio": "1:1",
+        "resolution": "1024x1024"
+    },
+    "design_type": "full square edges, full frame",
+    "additional_info": {
+    }
+}

@@ -8,6 +8,7 @@ class CustomCategoryWidget<T> extends StatefulWidget {
   final Color? customColor;
   final String Function(T) categoryLabelBuilder;
   final T selectedCategory;
+  final double? borderRadius;
 
   const CustomCategoryWidget({
     super.key,
@@ -16,6 +17,7 @@ class CustomCategoryWidget<T> extends StatefulWidget {
     this.customColor,
     required this.categoryLabelBuilder,
     required this.selectedCategory,
+    this.borderRadius,
   });
 
   @override
@@ -44,10 +46,10 @@ class CustomCategoryWidgetState<T> extends State<CustomCategoryWidget<T>> {
       children: widget.categories.map((category) {
         final isSelected = category == selectedCategory;
         return CupertinoButton(
-          minSize: 0,
+          minimumSize: Size.zero,
           pressedOpacity: .8,
           padding: EdgeInsets.zero,
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(widget.borderRadius ?? 90),
           color: Colors.transparent,
           onPressed: () {
             HapticFeedback.selectionClick();
@@ -56,17 +58,13 @@ class CustomCategoryWidgetState<T> extends State<CustomCategoryWidget<T>> {
             });
             widget.onCategorySelected(category);
           },
-          child: Card(
-            color: isSelected ? widget.customColor ?? context.primary : null,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 8),
-              child: Text(
-                widget.categoryLabelBuilder(category),
-                style: context.bodySmall?.copyWith(
-                  color: isSelected ? Colors.white : context.bodySmall?.color?.withValues(alpha: .72),
-                  fontWeight: FontWeight.bold,
-                ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 8),
+            child: Text(
+              widget.categoryLabelBuilder(category),
+              style: context.bodySmall.copyWith(
+                color: isSelected ? Colors.white : context.bodySmall.color?.withValues(alpha: .72),
+                fontWeight: FontWeight.bold,
               ),
             ),
           ),

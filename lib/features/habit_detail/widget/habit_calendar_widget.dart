@@ -17,7 +17,7 @@ class HabitCalendarWidget extends ConsumerWidget {
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       sizeStyle: CupertinoButtonSize.small,
       onPressed: () {
-        showCupertinoModalBottomSheet(
+        showCupertinoSheet(
           enableDrag: false,
           context: context,
           builder: (context) => HabitCalendarCompletionSheet(habit: currentHabit!),
@@ -52,6 +52,12 @@ class _HabitCalendarCompletionSheetState extends ConsumerState<HabitCalendarComp
   late DateTime _focusedDay;
   late Set<DateTime> _completedDays;
 
+  // Track per-day completion ratio (0.0 - 1.0) for progressive coloring
+  late Map<DateTime, double> _ratioByDay;
+
+  // Track whether a given day is in decreasing mode (tap should decrement)
+  final Map<String, bool> _decreasingModeByDateKey = {};
+
   // Cache the calendar style
   late final CalendarStyle _calendarStyle;
 
@@ -61,6 +67,23 @@ class _HabitCalendarCompletionSheetState extends ConsumerState<HabitCalendarComp
     _today = DateTime.now();
     _focusedDay = _today;
     _completedDays = widget.habit.completions.values.where((completion) => completion.isCompleted).map((completion) => completion.date.normalized).toSet();
+
+    // Build initial ratios map for multi-completion visualization
+    final int target = widget.habit.dailyTarget <= 0 ? 1 : widget.habit.dailyTarget;
+    _ratioByDay = {};
+    for (final entry in widget.habit.completions.values) {
+      final day = entry.date.normalized;
+      final ratio = (entry.count / target).clamp(0.0, 1.0);
+      final current = _ratioByDay[day] ?? 0.0;
+      _ratioByDay[day] = (current + ratio).clamp(0.0, 1.0);
+      // Initialize decreasing mode for this day
+      final dateKey = day.toIso8601DateString;
+      if (_ratioByDay[day]! >= 1.0) {
+        _decreasingModeByDateKey[dateKey] = true;
+      } else if (_ratioByDay[day] == 0.0) {
+        _decreasingModeByDateKey[dateKey] = false;
+      }
+    }
 
     // Initialize calendar style
     _calendarStyle = CalendarStyle(
@@ -102,54 +125,131 @@ class _HabitCalendarCompletionSheetState extends ConsumerState<HabitCalendarComp
 
   void _onDaySelected(DateTime selectedDay, DateTime focusedDay) async {
     final selectedDateTime = selectedDay.normalized;
-    final wasCompleted = _completedDays.contains(selectedDateTime);
-    final willBeCompleted = !wasCompleted;
-
     setState(() {
       _focusedDay = focusedDay;
-
-      // Update completed days based on new state
-      if (willBeCompleted) {
-        _completedDays.add(selectedDateTime);
-      } else {
-        _completedDays.remove(selectedDateTime);
-      }
     });
 
-    // Mevcut bir tamamlama kaydı var mı kontrol et
+    // Use latest habit state from provider
+    final latestHabit = ref.read(habitDetailProvider) ?? widget.habit;
+
+    // Existing entry & counts from latest state
     CompletionEntry? existingEntry;
-    for (var entry in widget.habit.completions.values) {
+    for (var entry in latestHabit.completions.values) {
       if (entry.date.normalized.isSameDayWith(selectedDateTime)) {
         existingEntry = entry;
-        LogHelper.shared.debugPrint('Found existing completion entry for the selected date');
         break;
       }
     }
+    final target = latestHabit.dailyTarget <= 0 ? 1 : latestHabit.dailyTarget;
+    final currentCount = existingEntry?.count ?? 0;
 
-    // Var olan kaydı güncelle veya yeni oluştur
-    final completion = existingEntry != null
-        ? existingEntry.copyWith(isCompleted: willBeCompleted)
-        : CompletionEntry(
-            id: selectedDateTime.toIso8601DateString,
-            date: selectedDateTime,
-            isCompleted: willBeCompleted,
-          );
+    final dateKey = selectedDateTime.toIso8601DateString;
+    bool isDecreasing = _decreasingModeByDateKey[dateKey] ?? (currentCount >= target);
+
+    int nextCount;
+    bool incrementAction;
+    if (isDecreasing) {
+      // Decrement path
+      nextCount = (currentCount - 1) < 0 ? 0 : (currentCount - 1);
+      incrementAction = false;
+      if (nextCount == 0) {
+        // Switch back to increasing mode once we hit 0
+        _decreasingModeByDateKey[dateKey] = false;
+      }
+    } else {
+      // Increment path
+      nextCount = (currentCount + 1) > target ? target : (currentCount + 1);
+      incrementAction = true;
+      if (nextCount >= target) {
+        // Switch to decreasing mode once target is reached
+        _decreasingModeByDateKey[dateKey] = true;
+      }
+    }
+
+    final willBeFull = nextCount >= target;
+    final willDropBelowFull = currentCount >= target && nextCount < target;
+
+    // Optimistic UI updates
+    setState(() {
+      if (willBeFull) {
+        _completedDays.add(selectedDateTime);
+      }
+      if (willDropBelowFull) {
+        _completedDays.remove(selectedDateTime);
+      }
+      _ratioByDay[selectedDateTime] = (nextCount / target).clamp(0.0, 1.0);
+    });
+
+    final completion = CompletionEntry(
+      id: dateKey,
+      date: selectedDateTime,
+      // true -> increment, false -> decrement
+      isCompleted: incrementAction,
+    );
 
     try {
-      // Update the habit with new completion using habitDetailProvider
-      await ref.read(habitDetailProvider.notifier).markHabitAsComplete(widget.habit.id, completion);
-
-      // Verify the updated habit
-      final updatedHabit = ref.read(habitDetailProvider);
-      if (updatedHabit != null) {}
+      await ref.read(habitDetailProvider.notifier).markHabitAsComplete(latestHabit.id, completion);
     } catch (e) {
-      // Hata durumunda UI'ı eski haline getir
+      // Revert optimistic changes on error
       setState(() {
-        if (willBeCompleted) {
+        if (willBeFull) {
           _completedDays.remove(selectedDateTime);
-        } else {
+        }
+        if (willDropBelowFull) {
           _completedDays.add(selectedDateTime);
         }
+        _ratioByDay[selectedDateTime] = (currentCount / target).clamp(0.0, 1.0);
+        // Revert decreasing mode to previous state
+        _decreasingModeByDateKey[dateKey] = isDecreasing;
+      });
+    }
+  }
+
+  void _onDayLongPressed(DateTime selectedDay, DateTime focusedDay) async {
+    final selectedDateTime = selectedDay.normalized;
+
+    // Use latest habit state from provider
+    final latestHabit = ref.read(habitDetailProvider) ?? widget.habit;
+
+    // Existing entry & counts from latest state
+    CompletionEntry? existingEntry;
+    for (var entry in latestHabit.completions.values) {
+      if (entry.date.normalized.isSameDayWith(selectedDateTime)) {
+        existingEntry = entry;
+        break;
+      }
+    }
+    final target = latestHabit.dailyTarget <= 0 ? 1 : latestHabit.dailyTarget;
+    final currentCount = existingEntry?.count ?? 0;
+    final nextCount = (currentCount - 1) < 0 ? 0 : (currentCount - 1);
+    final willNoLongerBeFull = currentCount >= target && nextCount < target;
+
+    // Optimistic UI: apply removal from completed and ratio update
+    setState(() {
+      if (willNoLongerBeFull) {
+        _completedDays.remove(selectedDateTime);
+      }
+      _ratioByDay[selectedDateTime] = (nextCount / target).clamp(0.0, 1.0);
+    });
+
+    final completion = CompletionEntry(
+      id: selectedDateTime.toIso8601DateString,
+      date: selectedDateTime,
+      // false here signals decrement by 1 (service floors at 0)
+      isCompleted: false,
+    );
+
+    try {
+      await ref.read(habitDetailProvider.notifier).markHabitAsComplete(latestHabit.id, completion);
+    } catch (e) {
+      // Revert potential optimistic change
+      if (willNoLongerBeFull) {
+        setState(() {
+          _completedDays.add(selectedDateTime);
+        });
+      }
+      setState(() {
+        _ratioByDay[selectedDateTime] = (currentCount / target).clamp(0.0, 1.0);
       });
     }
   }
@@ -159,9 +259,8 @@ class _HabitCalendarCompletionSheetState extends ConsumerState<HabitCalendarComp
     return CupertinoPopupSurface(
       isSurfacePainted: true,
       child: CupertinoPageScaffold(
-        backgroundColor: Colors.transparent,
-        navigationBar: const SheetHeader(
-          title: "",
+        navigationBar: SheetHeader(
+          title: LocaleKeys.habit_detail_calendar.tr(),
           closeButtonPosition: CloseButtonPosition.left,
         ),
         child: ListView(
@@ -182,8 +281,14 @@ class _HabitCalendarCompletionSheetState extends ConsumerState<HabitCalendarComp
                   titleCentered: true,
                 ),
                 calendarStyle: _calendarStyle,
-                selectedDayPredicate: (day) => _completedDays.contains(day),
+                selectedDayPredicate: (day) => _completedDays.contains(day.normalized),
                 onDaySelected: _onDaySelected,
+                onDayLongPressed: _onDayLongPressed,
+                calendarBuilders: CalendarBuilders(
+                  defaultBuilder: (context, day, focusedDay) => _buildRatioCell(day, context, isOutside: false, isToday: false),
+                  todayBuilder: (context, day, focusedDay) => _buildRatioCell(day, context, isOutside: false, isToday: true),
+                  outsideBuilder: (context, day, focusedDay) => _buildRatioCell(day, context, isOutside: true, isToday: false),
+                ),
                 eventLoader: (day) {
                   final normalizedDay = DateTime(day.year, day.month, day.day);
                   return _completedDays.contains(normalizedDay) ? [normalizedDay] : const [];
@@ -198,14 +303,61 @@ class _HabitCalendarCompletionSheetState extends ConsumerState<HabitCalendarComp
               top: false,
               child: Text(
                 LocaleKeys.habit_calendar_tap_info.tr(),
-                style: context.bodySmall?.copyWith(
-                  color: context.theme.hintColor,
+                style: context.bodySmall.copyWith(
+                  color: context.hintColor,
                 ),
                 textAlign: TextAlign.center,
               ),
             ),
             const SizedBox(height: 5),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+extension _RatioCellBuilder on _HabitCalendarCompletionSheetState {
+  Widget _buildRatioCell(DateTime day, BuildContext context, {required bool isOutside, required bool isToday}) {
+    final normalized = day.normalized;
+    final baseColor = Color(widget.habit.colorCode);
+    final ratio = _ratioByDay[normalized] ?? 0.0;
+
+    // Map ratio to progressive alpha similar to Last 7 Days
+    double alpha;
+    if (ratio <= 0.0) {
+      alpha = 0.0;
+    } else if (ratio < 0.34) {
+      alpha = 0.15;
+    } else if (ratio < 0.67) {
+      alpha = 0.35;
+    } else if (ratio < 1.0) {
+      alpha = 0.55;
+    } else {
+      alpha = 0.80;
+    }
+
+    final backgroundColor = alpha == 0.0 ? Colors.transparent : baseColor.withValues(alpha: alpha);
+
+    final borderRadius = BorderRadius.circular(8);
+    final textColor = isOutside ? Theme.of(context).hintColor.withValues(alpha: 0.5) : context.bodyMedium.color;
+
+    final todayOutline = isToday ? baseColor.withValues(alpha: 0.6) : Colors.transparent;
+
+    return Container(
+      margin: const EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        color: backgroundColor,
+        borderRadius: borderRadius,
+        border: Border.all(color: todayOutline, width: isToday ? 1.5 : 0),
+      ),
+      alignment: Alignment.center,
+      child: Text(
+        '${day.day}',
+        style: TextStyle(
+          fontSize: 16,
+          fontWeight: FontWeight.w600,
+          color: textColor,
         ),
       ),
     );

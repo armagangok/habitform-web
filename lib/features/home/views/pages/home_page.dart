@@ -4,10 +4,10 @@ import '/core/core.dart';
 import '../../../create_habit/create_habit_page.dart';
 import '../../../create_habit/provider/create_habit_provider.dart';
 import '../../../habit_category/widget/home_category_filter.dart';
+import '../../../habit_formation/page/habit_formation_page.dart';
 import '../../../purchase/page/paywall_page.dart';
 import '../../../purchase/providers/purchase_provider.dart';
 import '../../../settings/settings_page.dart';
-import '../../../statistics/page/statistics_page.dart';
 import '../../provider/home_provider.dart';
 import '../widgets/habit_builder.dart';
 
@@ -18,16 +18,20 @@ class HomePage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final homeStateAsyncValue = ref.watch(homeProvider);
 
-    return CupertinoScaffold(
-      body: Stack(
-        children: [
-          // Main content
-          CupertinoPageScaffold(
+    return Stack(
+      children: [
+        // Main content
+        CupertinoPopupSurface(
+          child: CupertinoPageScaffold(
             navigationBar: _homePageNavigationBar(ref, context),
             child: ListView(
+              padding: EdgeInsets.zero,
               physics: AlwaysScrollableScrollPhysics(),
               children: <Widget>[
-                SizedBox(height: 16),
+                SafeArea(
+                  bottom: false,
+                  child: SizedBox(height: 16),
+                ),
 
                 // Category filter
                 HomeCategoryFilter(),
@@ -47,13 +51,18 @@ class HomePage extends ConsumerWidget {
                     });
                   },
                   loading: () => _loadingWidget(context),
-                  error: (error, stack) => _errorWidget(context),
+                  error: (error, stack) {
+                    LogHelper.shared.errorPrint('Error: $error');
+                    LogHelper.shared.errorPrint('Stack: $stack');
+                    return _errorWidget(context);
+                  },
                 ),
+                SizedBox(height: 20),
               ],
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
@@ -90,43 +99,27 @@ class HomePage extends ConsumerWidget {
 
     return CupertinoNavigationBar(
       enableBackgroundFilterBlur: true,
-      backgroundColor: context.theme.scaffoldBackgroundColor.withValues(alpha: .1),
       border: Border(
         bottom: BorderSide(
-          color: context.theme.dividerColor.withValues(alpha: .25),
+          color: context.theme.selectionHandleColor.withValues(alpha: .25),
         ),
       ),
-      leading: Builder(
-        builder: (context) {
-          return Align(
-            widthFactor: 1,
-            alignment: Alignment.centerLeft,
-            child: CustomButton(
-              onPressed: () {
-                CupertinoScaffold.showCupertinoModalBottomSheet(
-                  enableDrag: false,
-                  context: context,
-                  builder: (contextFromSheet) {
-                    return const SettingsPage();
-                  },
-                );
+      leading: Align(
+        widthFactor: 1,
+        alignment: Alignment.centerLeft,
+        child: CircularActionButton(
+          onPressed: () {
+            showCupertinoSheet(
+              enableDrag: false,
+              context: context,
+              builder: (contextFromSheet) {
+                return const SettingsPage();
               },
-              child: Container(
-                width: 32,
-                height: 32,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: context.primary.withValues(alpha: .15),
-                ),
-                child: Icon(
-                  FontAwesomeIcons.gear,
-                  size: 20,
-                  color: context.theme.primaryColor.withValues(alpha: .9),
-                ),
-              ),
-            ).animate().fadeIn(curve: Curves.easeInOutCubic),
-          );
-        },
+            );
+          },
+          icon: FontAwesomeIcons.gear,
+          showAnimation: true,
+        ),
       ),
       middle: Row(
         mainAxisSize: MainAxisSize.min,
@@ -140,7 +133,7 @@ class HomePage extends ConsumerWidget {
               ),
               TextSpan(
                 text: "Rise",
-                style: TextStyle(color: Colors.blueAccent),
+                style: TextStyle(color: context.primary),
               ),
             ]),
           ).animate().fadeIn(
@@ -165,23 +158,12 @@ class HomePage extends ConsumerWidget {
           );
         } else if (!isSubActive) {
           buttons.add(
-            CustomButton(
+            CircularActionButton(
               onPressed: () {
                 _handlePaywallAction(context);
               },
-              child: Container(
-                width: 32,
-                height: 32,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: context.primary.withValues(alpha: .15),
-                ),
-                child: Icon(
-                  FontAwesomeIcons.crown,
-                  color: Colors.yellow,
-                  size: 20,
-                ),
-              ),
+              icon: FontAwesomeIcons.crown,
+              iconColor: Colors.yellow,
             ),
           );
         }
@@ -191,29 +173,17 @@ class HomePage extends ConsumerWidget {
 
         // Add statistics button
         buttons.add(
-          CustomButton(
+          CircularActionButton(
             onPressed: () {
-              CupertinoScaffold.showCupertinoModalBottomSheet(
+              showCupertinoSheet(
                 enableDrag: false,
                 context: context,
                 builder: (contextFromSheet) {
-                  return const StatisticsPage();
+                  return const HabitFormationPage();
                 },
               );
             },
-            child: Container(
-              width: 32,
-              height: 32,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: context.primary.withValues(alpha: .15),
-              ),
-              child: Icon(
-                FontAwesomeIcons.chartLine,
-                size: 20,
-                color: context.theme.primaryColor.withValues(alpha: .9),
-              ),
-            ),
+            icon: FontAwesomeIcons.chartLine,
           ),
         );
 
@@ -222,34 +192,28 @@ class HomePage extends ConsumerWidget {
 
         // Add habit button
         buttons.add(
-          CustomButton(
+          CircularActionButton(
             onPressed: () async {
               final homeState = ref.read(homeProvider).value;
               if (homeState != null) {
-                final canCreate = await ref.read(createHabitProvider.notifier).canCreateHabit(
+                final canCreate = await ref.watch(createHabitProvider.notifier).canCreateHabit(
                       homeState.habits.length,
                     );
                 if (canCreate) {
-                  _openCreateHabitPage(context);
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    _openCreateHabitPage(context);
+                  });
                 } else {
-                  _handlePaywallAction(context);
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    _handlePaywallAction(context);
+                  });
                 }
               }
             },
-            child: Container(
-              width: 32,
-              height: 32,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: context.primary.withValues(alpha: .15),
-              ),
-              child: Icon(
-                CupertinoIcons.plus_circle_fill,
-                size: 24,
-                color: context.theme.primaryColor.withValues(alpha: .9),
-              ),
-            ),
-          ).animate().fadeIn(duration: Duration(milliseconds: 350)),
+            icon: CupertinoIcons.plus_circle_fill,
+            iconSize: 24,
+            showAnimation: true,
+          ),
         );
 
         return Row(
@@ -261,15 +225,17 @@ class HomePage extends ConsumerWidget {
   }
 
   Future<void> _handlePaywallAction(BuildContext context) async {
-    return CupertinoScaffold.showCupertinoModalBottomSheet(
+    showCupertinoSheet(
       enableDrag: false,
       context: context,
-      builder: (_) => PaywallPage(),
+      builder: (contextFromSheet) {
+        return PaywallPage(isFromOnboarding: false);
+      },
     );
   }
 
   Future<dynamic> _openCreateHabitPage(BuildContext context) {
-    return CupertinoScaffold.showCupertinoModalBottomSheet(
+    return showCupertinoSheet(
       enableDrag: false,
       context: context,
       builder: (contextFromSheet) {

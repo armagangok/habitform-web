@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../../features/reminder/models/days/days_enum.dart';
 import '../../features/reminder/models/reminder/reminder_model.dart';
 import '../../models/completion_entry/completion_entry.dart';
+import '../../models/habit/habit_difficulty.dart';
 import '../../models/habit/habit_model.dart';
 import '../../models/habit/habit_status.dart';
 
@@ -25,6 +26,7 @@ class MockHabitData {
       ),
       completions: _generateRandomCompletions("habit-wakeup-1"),
       status: HabitStatus.active,
+      difficulty: HabitDifficulty.moderate,
     ),
 
     // 2. Morning Stretch habit (yeni)
@@ -41,6 +43,7 @@ class MockHabitData {
       ),
       completions: _generateRandomCompletions("habit-stretch-1"),
       status: HabitStatus.active,
+      difficulty: HabitDifficulty.easy,
     ),
 
     // 3. Healthy breakfast habit
@@ -250,6 +253,7 @@ class MockHabitData {
       ),
       completions: _generateRandomCompletions("habit-teeth-1"),
       status: HabitStatus.active,
+      difficulty: HabitDifficulty.veryEasy,
     ),
   ];
 
@@ -268,7 +272,7 @@ class MockHabitData {
     }
     seed = (seed + random) % 10000;
 
-    // Generate completions for the last 60 days (increased from 30) with alternating pattern but with some randomness
+    // Generate completions for the last 60 days with more realistic completion rates
     for (int i = 0; i < 60; i++) {
       final date = now.subtract(Duration(days: i));
       final dateString = "${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}";
@@ -276,23 +280,36 @@ class MockHabitData {
       // Generate a random number between 0-99 for this specific day and habit
       final daySpecificSeed = (seed + i * 17 + date.day * 31 + date.month * 12) % 100;
 
-      // Decide whether to include this day based on a pattern with randomness
-      // If i is even, higher chance to include; if i is odd, lower chance to include
+      // Different completion rates based on habit type and time
       bool shouldInclude = false;
 
-      if (i % 2 == 0) {
-        // Even days - 95% chance to include (increased from 80%)
-        shouldInclude = daySpecificSeed < 95;
-      } else {
-        // Odd days - 60% chance to include (increased from 20%)
-        shouldInclude = daySpecificSeed < 60;
+      // Base completion rate varies by habit type
+      int baseCompletionRate = 50; // Default 50%
+
+      if (habitId != null) {
+        if (habitId.contains('water')) {
+          baseCompletionRate = 65; // Water drinking - higher completion rate
+        } else if (habitId.contains('teeth') || habitId.contains('wakeup')) {
+          baseCompletionRate = 75; // Daily routines - very high completion rate
+        } else if (habitId.contains('exercise') || habitId.contains('stretch')) {
+          baseCompletionRate = 45; // Exercise habits - lower completion rate
+        } else if (habitId.contains('meditation') || habitId.contains('gratitude')) {
+          baseCompletionRate = 35; // Mindfulness habits - lower completion rate
+        }
       }
 
-      // Add some additional randomness to break the strict alternating pattern
-      // 5% chance to flip the decision (reduced from 10% to maintain more completions)
-      if (daySpecificSeed >= 95) {
-        shouldInclude = !shouldInclude;
+      // Apply time-based variation (recent days have slightly higher completion rates)
+      if (i < 7) {
+        baseCompletionRate += 10; // Last week - boost completion rate
+      } else if (i < 14) {
+        baseCompletionRate += 5; // Second week - small boost
       }
+
+      // Add some randomness
+      final randomVariation = (daySpecificSeed % 20) - 10; // -10 to +10 variation
+      final finalCompletionRate = (baseCompletionRate + randomVariation).clamp(20, 90);
+
+      shouldInclude = daySpecificSeed < finalCompletionRate;
 
       if (shouldInclude) {
         completions[dateString] = CompletionEntry(

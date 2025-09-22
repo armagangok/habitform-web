@@ -15,59 +15,57 @@ class OnboardingMainPage extends ConsumerWidget {
     final onboardingState = ref.watch(onboardingProvider);
     final onboardingNotifier = ref.read(onboardingProvider.notifier);
 
-    return Material(
-      child: CupertinoPageScaffold(
-        child: Stack(
-          children: [
-            // Sayfa içeriği
-            PageView.builder(
-              controller: onboardingNotifier.pageController,
-              onPageChanged: (page) => onboardingNotifier.onPageChanged(page, OnboardingPages.pages.length),
-              itemCount: OnboardingPages.pages.length,
-              itemBuilder: (context, index) {
-                return OnboardingPageWidget(
-                  pageModel: OnboardingPages.pages[index],
-                  isLastPage: index == OnboardingPages.pages.length - 1,
-                );
-              },
+    return CupertinoPageScaffold(
+      child: Stack(
+        children: [
+          // Sayfa içeriği
+          PageView.builder(
+            controller: onboardingNotifier.pageController,
+            onPageChanged: (page) => onboardingNotifier.onPageChanged(page, OnboardingPages.pages.length),
+            itemCount: OnboardingPages.pages.length,
+            itemBuilder: (context, index) {
+              return OnboardingPageWidget(
+                pageModel: OnboardingPages.pages[index],
+                isLastPage: index == OnboardingPages.pages.length - 1,
+              );
+            },
+          ),
+    
+          // Sayfa göstergeleri
+          SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: List.generate(
+                  OnboardingPages.pages.length,
+                  (index) => _buildPageIndicator(index, onboardingState, context),
+                ),
+              ),
             ),
-
-            // Sayfa göstergeleri
-            SafeArea(
+          ),
+    
+          // Devam et butonu
+          SafeArea(
+            child: Align(
+              alignment: Alignment.bottomCenter,
               child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 16),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: List.generate(
-                    OnboardingPages.pages.length,
-                    (index) => _buildPageIndicator(index, onboardingState, context),
+                padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+                child: Animate(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      OnboardingButton(
+                        onPressed: () => onboardingNotifier.nextPage(context),
+                        buttonText: onboardingState.isLastPage ? LocaleKeys.onboarding_start_button.tr() : LocaleKeys.onboarding_continue_button.tr(),
+                      ),
+                    ],
                   ),
-                ),
+                ).fadeIn(duration: 600.ms, delay: 800.ms),
               ),
             ),
-
-            // Devam et butonu
-            SafeArea(
-              child: Align(
-                alignment: Alignment.bottomCenter,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
-                  child: Animate(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        OnboardingButton(
-                          onPressed: () => onboardingNotifier.nextPage(context),
-                          buttonText: onboardingState.isLastPage ? LocaleKeys.onboarding_start_button.tr() : LocaleKeys.onboarding_continue_button.tr(),
-                        ),
-                      ],
-                    ),
-                  ).fadeIn(duration: 600.ms, delay: 800.ms),
-                ),
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

@@ -48,4 +48,25 @@ final class InAppReviewHelper {
       LogHelper.shared.debugPrint('InAppReviewHelper error: $e');
     }
   }
+
+  /// Directly request a review without any conditions
+  /// Used for onboarding flow when user explicitly wants to rate the app
+  Future<bool> requestReviewDirectly() async {
+    if (KDebug.rateDebugMode) return true;
+
+    try {
+      final isAvailable = await InAppReview.instance.isAvailable();
+      if (isAvailable) {
+        await InAppReview.instance.requestReview();
+        // Update last review request date
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setString(_lastReviewRequestKey, DateTime.now().toIso8601String());
+        return true;
+      }
+      return false;
+    } catch (e) {
+      LogHelper.shared.debugPrint('InAppReviewHelper direct request error: $e');
+      return false;
+    }
+  }
 }

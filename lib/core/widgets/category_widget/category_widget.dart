@@ -7,12 +7,15 @@ class CategoryWidget extends StatefulWidget {
   final Color? customColor;
   final int? initialSelectedIndex;
 
+  final double? borderRadius;
+
   const CategoryWidget({
     super.key,
     required this.categories,
     required this.onCategorySelected,
     this.customColor,
     this.initialSelectedIndex,
+    this.borderRadius,
   });
 
   @override
@@ -145,14 +148,16 @@ class CategoryWidgetState extends State<CategoryWidget> {
           final index = startIndex + entry.key;
           final text = entry.value;
 
+          final isSelected = selectedIndex == index;
+
           return Padding(
             key: _itemKeys[index],
             padding: EdgeInsets.only(right: entry.key == items.length - 1 ? 0 : 5),
             child: CupertinoButton(
-              minSize: 0,
+              minimumSize: Size.zero,
               pressedOpacity: .8,
               padding: EdgeInsets.zero,
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(widget.borderRadius ?? 90),
               color: Colors.transparent,
               onPressed: () {
                 HapticFeedback.selectionClick();
@@ -164,41 +169,29 @@ class CategoryWidgetState extends State<CategoryWidget> {
                   if (mounted) _scrollSelectedItemIntoView();
                 });
               },
-              child: Card(
-                elevation: .1,
-                color: selectedIndex == index ? widget.customColor ?? context.cupertinoTheme.primaryColor.withValues(alpha: .9) : Colors.transparent,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                  side: BorderSide(
-                    color: selectedIndex == index ? Colors.transparent : Theme.of(context).primaryColor.withValues(alpha: .2),
-                    width: 1,
+              child: IntrinsicWidth(
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: isSelected ? widget.customColor ?? context.primary : context.primaryContrastingColor.withValues(alpha: .1),
+                    borderRadius: BorderRadius.circular(widget.borderRadius ?? 90),
                   ),
-                ),
-                child: IntrinsicWidth(
-                  child: Container(
-                    constraints: BoxConstraints(minHeight: minItemHeight),
-                    padding: EdgeInsets.symmetric(
-                      horizontal: horizontalPadding,
-                      vertical: verticalPadding,
-                    ),
-                    child: Center(
-                      child: Text(
-                        text,
-                        style: TextStyle(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w600,
-                          color: selectedIndex == index
-                              ? (widget.customColor ??
-                                      context.cupertinoTheme.primaryColor.withValues(
-                                        alpha: .9,
-                                      ))
-                                  .colorRegardingToBrightness
-                              : context.primary.withValues(alpha: .75),
-                        ),
-                        textAlign: TextAlign.center,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
+                  constraints: BoxConstraints(minHeight: minItemHeight),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: horizontalPadding,
+                    vertical: verticalPadding,
+                  ),
+                  child: Center(
+                    child: Text(
+                      text,
+                      style: TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600,
+                        color: isSelected ? Colors.white : context.primaryContrastingColor.withValues(alpha: .5)
+                          ..colorRegardingToBrightness,
                       ),
+                      textAlign: TextAlign.center,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
                 ),

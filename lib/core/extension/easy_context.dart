@@ -1,7 +1,4 @@
-import 'dart:ui';
-
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 
 extension EasyContext on BuildContext {
   MediaQueryData get mediaQuery => MediaQuery.of(this);
@@ -18,50 +15,10 @@ extension EasyContext on BuildContext {
   bool get isTablet => MediaQuery.of(this).size.width > 600;
 
   bool get isTabletOrLandscape => isTablet || isLandscape;
-  
+
   Object? get arguments => ModalRoute.of(this)?.settings.arguments;
 
   void unfocus() => FocusScope.of(this).unfocus();
-
-  void showSnackBar(SnackBar snackBar) {
-    ScaffoldMessenger.of(this).showSnackBar(snackBar);
-  }
-
-  Future<dynamic> cupertinoDialog({
-    required Widget widget,
-    bool barrierDismissible = true,
-  }) async {
-    await showCupertinoDialog(
-      barrierDismissible: barrierDismissible,
-      context: this,
-      builder: (_) => BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-        child: widget,
-      ),
-    );
-  }
-
-  Future<void> bottomSheet({
-    Widget widget = const SizedBox(),
-    bool isScrollControlled = false,
-    borderRadius = const BorderRadius.only(
-      topLeft: Radius.circular(20),
-      topRight: Radius.circular(20),
-    ),
-  }) async {
-    showModalBottomSheet(
-      isDismissible: false,
-      enableDrag: false,
-      backgroundColor: Colors.transparent,
-      elevation: 0,
-      shape: RoundedRectangleBorder(
-        borderRadius: borderRadius,
-      ),
-      isScrollControlled: isScrollControlled,
-      context: this,
-      builder: (_) => widget,
-    );
-  }
 }
 
 extension EasySize on BuildContext {
@@ -82,12 +39,30 @@ extension EasySize on BuildContext {
   double get bigHeight => dynamicHeight * 0.05;
 }
 
+// A tiny proxy to provide Material-like naming while using Cupertino values
+class CupertinoColorsProxy {
+  CupertinoColorsProxy(this._theme);
+  final CupertinoThemeData _theme;
+
+  Color get primary => _theme.primaryColor;
+  Color get surface => _theme.scaffoldBackgroundColor;
+}
+
 extension EasyTheme on BuildContext {
-  ThemeData get theme => Theme.of(this);
-  Color get primary => colors.primary;
-  Color get backgroundColor => theme.colorScheme.surface;
-  ColorScheme get colors => theme.colorScheme;
-  IconThemeData get iconTheme => theme.iconTheme;
+  CupertinoThemeData get theme => CupertinoTheme.of(this);
+  Color get primary => theme.primaryColor;
+  Color get primaryContrastingColor => theme.primaryContrastingColor;
+  Color get scaffoldBackgroundColor => theme.scaffoldBackgroundColor;
+  Color get barBackgroundColor => theme.barBackgroundColor;
+  CupertinoColorsProxy get colors => CupertinoColorsProxy(theme);
+
+  // Adds selection handler color for consistent access
+  Color get selectionHandleColor => theme.selectionHandleColor;
+
+  // Hint/placeholder color aligned with Cupertino guidelines
+  Color get hintColor => CupertinoColors.placeholderText.resolveFrom(this);
+
+  IconThemeData get iconTheme => IconThemeData(color: theme.primaryColor);
 }
 
 extension EasyPadding on BuildContext {
@@ -123,25 +98,30 @@ extension EasyPadding on BuildContext {
 }
 
 extension EasyText on BuildContext {
-  TextTheme get textTheme => theme.textTheme;
-  String? get fontFamily => theme.textTheme.bodySmall?.fontFamily;
-  TextStyle? get titleSmall => theme.textTheme.titleSmall;
-  TextStyle? get titleMedium => theme.textTheme.titleMedium;
-  TextStyle? get titleLarge => theme.textTheme.titleLarge;
-  TextStyle? get labelSmall => theme.textTheme.labelSmall;
-  TextStyle? get labelMedium => theme.textTheme.labelMedium;
-  TextStyle? get labelLarge => theme.textTheme.labelLarge;
-  TextStyle? get bodyLarge => theme.textTheme.bodyLarge;
-  TextStyle? get bodyMedium => theme.textTheme.bodyMedium;
-  TextStyle? get bodySmall => theme.textTheme.bodySmall;
-  TextStyle? get headlineLarge => theme.textTheme.headlineLarge;
-  TextStyle? get headlineMedium => theme.textTheme.headlineMedium;
-  TextStyle? get headlineSmall => theme.textTheme.headlineSmall;
-  TextStyle? get displayLarge => theme.textTheme.displayLarge;
-  TextStyle? get displayMedium => theme.textTheme.displayMedium;
-  TextStyle? get displaySmall => theme.textTheme.displaySmall;
-
+  // Map common names to Cupertino text theme approximations
   TextStyle get cupertinoTextStyle => CupertinoTheme.of(this).textTheme.textStyle;
   CupertinoTextThemeData get cupertinoTextTheme => CupertinoTheme.of(this).textTheme;
   CupertinoThemeData get cupertinoTheme => CupertinoTheme.of(this);
+
+  TextStyle get titleSmall => cupertinoTextTheme.textStyle.copyWith(fontSize: 13, fontWeight: FontWeight.w600);
+  TextStyle get titleMedium => cupertinoTextTheme.textStyle.copyWith(fontSize: 15, fontWeight: FontWeight.w600);
+  TextStyle get titleLarge => cupertinoTextTheme.navTitleTextStyle;
+
+  TextStyle get labelSmall => cupertinoTextTheme.textStyle.copyWith(fontSize: 11);
+  TextStyle get labelMedium => cupertinoTextTheme.textStyle.copyWith(fontSize: 13);
+  TextStyle get labelLarge => cupertinoTextTheme.textStyle.copyWith(fontSize: 15);
+
+  TextStyle get bodyLarge => cupertinoTextTheme.textStyle.copyWith(fontSize: 17);
+  TextStyle get bodyMedium => cupertinoTextTheme.textStyle.copyWith(fontSize: 15);
+  TextStyle get bodySmall => cupertinoTextTheme.textStyle.copyWith(fontSize: 13);
+
+  TextStyle get headlineLarge => cupertinoTextTheme.navLargeTitleTextStyle;
+  TextStyle get headlineMedium => cupertinoTextTheme.textStyle.copyWith(fontSize: 24, fontWeight: FontWeight.w600);
+  TextStyle get headlineSmall => cupertinoTextTheme.textStyle.copyWith(fontSize: 17, fontWeight: FontWeight.w600);
+
+  TextStyle get displayLarge => cupertinoTextTheme.textStyle.copyWith(fontSize: 34, fontWeight: FontWeight.bold);
+  TextStyle get displayMedium => cupertinoTextTheme.textStyle.copyWith(fontSize: 28, fontWeight: FontWeight.bold);
+  TextStyle get displaySmall => cupertinoTextTheme.textStyle.copyWith(fontSize: 22, fontWeight: FontWeight.bold);
+
+  String? get fontFamily => cupertinoTextTheme.textStyle.fontFamily;
 }

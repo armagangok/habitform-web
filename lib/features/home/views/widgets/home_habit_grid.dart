@@ -87,40 +87,34 @@ class _HomeHabitGridState extends ConsumerState<HomeHabitGrid> with SingleTicker
       margin: EdgeInsets.only(
         right: index != numberOfItems - 1 ? spacing : 0,
       ),
-      child: Card(
-        margin: EdgeInsets.zero,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
-        ),
-        color: isCompletedDate ? habitColor : habitColor.withValues(alpha: .175),
-        child: Center(
-          child: AnimatedSwitcher(
-            duration: Duration(milliseconds: 300),
-            transitionBuilder: (Widget child, Animation<double> animation) {
-              return FadeTransition(
-                opacity: animation,
-                child: ScaleTransition(
-                  scale: animation,
-                  child: child,
-                ),
-              );
-            },
-            child: isCompletedDate && emoji != null
-                ? Text(
-                    emoji,
-                    key: ValueKey('emoji'),
-                    style: TextStyle(
-                      fontSize: itemSize * 0.5,
-                      height: 1.0,
-                    ),
-                  )
-                : isToday
-                    ? Icon(
-                        CupertinoIcons.calendar_today,
-                        size: 24,
-                      )
-                    : null,
-          ),
+      child: Center(
+        child: AnimatedSwitcher(
+          duration: Duration(milliseconds: 300),
+          transitionBuilder: (Widget child, Animation<double> animation) {
+            return FadeTransition(
+              opacity: animation,
+              child: ScaleTransition(
+                scale: animation,
+                child: child,
+              ),
+            );
+          },
+          child: isCompletedDate && emoji != null
+              ? Text(
+                  emoji,
+                  key: ValueKey('emoji'),
+                  style: TextStyle(
+                    fontSize: itemSize * 0.5,
+                    height: 1.0,
+                  ),
+                )
+              : isToday
+                  ? Icon(
+                      CupertinoIcons.calendar_today,
+                      size: 24,
+                      color: habitColor,
+                    )
+                  : null,
         ),
       ),
     );
@@ -189,9 +183,9 @@ class _HomeHabitGridState extends ConsumerState<HomeHabitGrid> with SingleTicker
                           width: finalItemSize,
                           child: Text(
                             dayName,
-                            style: context.bodySmall?.copyWith(
+                            style: context.bodySmall.copyWith(
                               fontSize: 11.5,
-                              color: context.theme.hintColor,
+                              color: context.hintColor,
                               fontWeight: FontWeight.w600,
                             ),
                             textAlign: TextAlign.center,

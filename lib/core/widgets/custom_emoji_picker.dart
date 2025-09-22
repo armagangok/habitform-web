@@ -17,6 +17,7 @@ class CustomEmojiPicker extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
+      bottom: false,
       child: Padding(
         padding: EdgeInsets.only(bottom: 16) + EdgeInsets.symmetric(horizontal: 32),
         child: SizedBox(
@@ -24,8 +25,9 @@ class CustomEmojiPicker extends StatelessWidget {
           child: CupertinoButton.filled(
             child: Text(
               LocaleKeys.common_pick_your_emoji.tr(),
-              style: context.titleMedium?.copyWith(
+              style: context.titleMedium.copyWith(
                 fontWeight: FontWeight.w600,
+                color: Colors.white,
               ),
             ),
             onPressed: () => _showEmojiPicker(context),
@@ -38,64 +40,71 @@ class CustomEmojiPicker extends StatelessWidget {
   void _showEmojiPicker(BuildContext context) {
     showCupertinoModalPopup(
       context: context,
-      builder: (context) => Container(
-        height: context.height(0.49),
-        decoration: BoxDecoration(
-          color: context.theme.scaffoldBackgroundColor,
-          borderRadius: const BorderRadius.vertical(
-            top: Radius.circular(12),
-          ),
+      builder: (context) => AnimatedPadding(
+        padding: EdgeInsets.only(
+          bottom: MediaQuery.viewInsetsOf(context).bottom,
         ),
-        child: SafeArea(
-          top: false,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                height: 6,
-                width: 40,
-                margin: const EdgeInsets.symmetric(vertical: 8),
-                decoration: BoxDecoration(
-                  color: context.theme.dividerColor.withValues(alpha: 0.4),
-                  borderRadius: BorderRadius.circular(3),
+        duration: const Duration(milliseconds: 250),
+        curve: Curves.easeOut,
+        child: Container(
+          height: context.height(0.70),
+          decoration: BoxDecoration(
+            color: context.theme.scaffoldBackgroundColor,
+            borderRadius: const BorderRadius.vertical(
+              top: Radius.circular(12),
+            ),
+          ),
+          child: SafeArea(
+            top: false,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  height: 6,
+                  width: 40,
+                  margin: const EdgeInsets.symmetric(vertical: 8),
+                  decoration: BoxDecoration(
+                    color: context.selectionHandleColor.withValues(alpha: 0.4),
+                    borderRadius: BorderRadius.circular(3),
+                  ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      LocaleKeys.common_pick_your_emoji.tr(),
-                      style: context.titleMedium?.copyWith(
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    CupertinoButton(
-                      padding: EdgeInsets.zero,
-                      minSize: 0,
-                      onPressed: () => Navigator.pop(context),
-                      child: Text(
-                        LocaleKeys.common_ok.tr(),
-                        style: context.titleSmall?.copyWith(
-                          color: context.theme.primaryColor,
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        LocaleKeys.common_pick_your_emoji.tr(),
+                        style: context.titleMedium.copyWith(
                           fontWeight: FontWeight.w600,
                         ),
                       ),
-                    ),
-                  ],
-                ),
-              ),
-              const Divider(height: 1),
-              Expanded(
-                child: Material(
-                  color: Colors.transparent,
-                  child: EmojiPicker(
-                    onEmojiSelected: onEmojiSelected,
+                      CupertinoButton(
+                        padding: EdgeInsets.zero,
+                        minimumSize: Size.zero,
+                        onPressed: () => Navigator.pop(context),
+                        child: Text(
+                          LocaleKeys.common_ok.tr(),
+                          style: context.titleSmall.copyWith(
+                            color: context.theme.primaryColor,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-              ),
-            ],
+                const Divider(height: 1),
+                Expanded(
+                  child: Material(
+                    color: Colors.transparent,
+                    child: EmojiPicker(
+                      onEmojiSelected: onEmojiSelected,
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
