@@ -4,6 +4,7 @@ import '/core/core.dart';
 import '/core/helpers/url_laucher/url_launcher.dart';
 import '/core/theme/widget/theme_mode_widget.dart';
 import '../purchase/providers/purchase_provider.dart';
+import 'widgets/review_request_section.dart';
 import 'widgets/setting_item.dart';
 import 'widgets/subscribe_button.dart';
 
@@ -37,6 +38,7 @@ class SettingsPage extends ConsumerWidget {
                     ],
                   ),
                 ),
+                const ReviewRequestSection(),
                 CupertinoListSection.insetGrouped(
                   children: [
                     ThemeModeFeature(),
