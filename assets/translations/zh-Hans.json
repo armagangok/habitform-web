@@ -58,11 +58,11 @@
         "pages": {
             "small_steps": {
                 "title": "用一小步改变你的生活。",
-                "description": "从小的、可管理的步骤开始，养成新习惯会变得更容易和更可持续，HabitRise 助你实现。"
+                "description": "从小的、可管理的步骤开始，养成新习惯会变得更容易和更可持续，HabitForm 助你实现。"
             },
             "welcome": {
                 "welcome_to": "欢迎来到",
-                "app_name": "HabitRise",
+                "app_name": "HabitForm",
                 "build_dream_life": "构建你的梦想生活",
                 "try_tapping": "试试点击习惯卡片",
                 "just_like_that": "就是这样！",
@@ -80,11 +80,11 @@
             },
             "routine": {
                 "title": "规律和重复帮助习惯扎根。",
-                "description": "建立一致的规律和重复行动是让习惯坚持下去的关键，HabitRise 助你实现。"
+                "description": "建立一致的规律和重复行动是让习惯坚持下去的关键，HabitForm 助你实现。"
             },
             "patience": {
                 "title": "耐心和坚持帮助习惯开花结果。",
-                "description": "养成习惯需要时间；享受这个过程是关键，HabitRise 与你同行。"
+                "description": "养成习惯需要时间；享受这个过程是关键，HabitForm 与你同行。"
             },
             "bad_habits": {
                 "title": "改掉坏习惯很容易。用好的习惯替代它们。",
@@ -97,7 +97,7 @@
             }
         },
         "app_features": {
-            "title": "HabitRise 帮助你...",
+            "title": "HabitForm 帮助你...",
             "subtitle": "通过智能追踪和个性化洞察建立持久的习惯",
             "features": {
                 "smart_tracking": {
@@ -154,7 +154,7 @@
                 },
                 "track_progress": {
                     "title": "追踪你的进度",
-                    "description": "监控你的习惯发展以保持动力。使用 HabitRise、日记或简单的勾选。看到你的连续天数增长会创造动力和责任感。"
+                    "description": "监控你的习惯发展以保持动力。使用 HabitForm、日记或简单的勾选。看到你的连续天数增长会创造动力和责任感。"
                 }
             },
             "previous": "上一页",
@@ -162,15 +162,15 @@
             "get_started": "开始使用"
         },
         "rating": {
-            "title": "你刚刚发现了\nHabitRise 的独特功能",
+            "title": "你刚刚发现了\nHabitForm 的独特功能",
             "description": "为了帮助我们接触到更多需要帮助建立更好习惯的人，你能给我们的应用一个评价吗？",
             "thank_you": "谢谢你！",
-            "feedback_message": "你的反馈帮助我们改进 HabitRise 并接触到更多需要帮助建立更好习惯的人。",
-            "rate_title": "评价 HabitRise",
-            "rate_message": "感谢你对评价 HabitRise 的兴趣！你可以在 App Store 或 Google Play Store 上评价我们。",
+            "feedback_message": "你的反馈帮助我们改进 HabitForm 并接触到更多需要帮助建立更好习惯的人。",
+            "rate_title": "评价 HabitForm",
+            "rate_message": "感谢你对评价 HabitForm 的兴趣！你可以在 App Store 或 Google Play Store 上评价我们。",
             "continue": "继续",
             "maybe_later": "稍后再说",
-            "rate_button": "评价 HabitRise"
+            "rate_button": "评价 HabitForm"
         },
         "achievement": {
             "first_habit_message": "太棒了！你在引导中完成了第一个习惯！"
@@ -380,7 +380,11 @@
         "no_habits_imported": "没有导入任何习惯",
         "rc_id": "Rc ID",
         "app_name_habit": "Habit",
-        "app_name_rise": "Rise"
+        "app_name_rise": "Form",
+        "review_request": {
+            "title": "喜欢 HabitForm 吗？",
+            "subtitle": "为了帮助我们接触更多需要建立习惯的人，请为 HabitForm 留下评价"
+        }
     },
     "subscription": {
         "subscribe_to": "订阅",
@@ -435,7 +439,7 @@
         "share_text": "分享文本"
     },
     "paywall": {
-        "title": "HabitRise Pro",
+        "title": "HabitForm Pro",
         "headline": "我们成为\n我们重复做的事情。",
         "choose_plan": "选择你的计划",
         "what_you_get": "你将获得",
@@ -455,14 +459,14 @@
         "social_success_rate": "成功率",
         "what_users_saying": "用户评价",
         "testimonial_1_name": "Sarah M.",
-        "testimonial_1_comment": "HabitRise Pro完全改变了我的日常习惯。我在短短2个月内养成了5个新习惯！",
-        "testimonial_1_user_type": "HabitRise Pro用户",
+        "testimonial_1_comment": "HabitForm Pro完全改变了我的日常习惯。我在短短2个月内养成了5个新习惯！",
+        "testimonial_1_user_type": "HabitForm Pro用户",
         "testimonial_2_name": "Mike C.",
         "testimonial_2_comment": "统计数据和洞察令人难以置信。我可以清楚地看到我每天的进步。",
-        "testimonial_2_user_type": "HabitRise Pro用户",
+        "testimonial_2_user_type": "HabitForm Pro用户",
         "testimonial_3_name": "Emma J.",
         "testimonial_3_comment": "终于有一个真正帮助我坚持目标的应用程序。提醒时间安排得恰到好处。",
-        "testimonial_3_user_type": "HabitRise Pro用户"
+        "testimonial_3_user_type": "HabitForm Pro用户"
     },
     "days": {
         "monday": "星期一",
@@ -619,7 +623,7 @@
     "share_templates": {
         "streak_days": "{days}天连续",
         "progress_percent": "{percent}% 进度",
-        "app_name": "HabitRise",
+        "app_name": "HabitForm",
         "current_streak": "当前连续",
         "best_streak": "最佳连续",
         "completed": "已完成",
@@ -631,7 +635,7 @@
         "this_month": "本月："
     },
     "csv_service": {
-        "export_subject": "HabitRise 导出",
+        "export_subject": "HabitForm 导出",
         "select_csv_file": "选择CSV文件",
         "could_not_read_file": "无法读取文件",
         "please_select_csv_file": "请选择CSV文件",
@@ -642,8 +646,8 @@
     },
     "permissions": {
         "permission_required": "需要权限",
-        "storage_permission_message": "HabitRise 需要存储权限来导入和导出你的习惯数据。",
-        "storage_permission_settings_message": "HabitRise 需要存储权限来导入和导出你的习惯数据。请在设备设置中启用它。",
+        "storage_permission_message": "HabitForm 需要存储权限来导入和导出你的习惯数据。",
+        "storage_permission_settings_message": "HabitForm 需要存储权限来导入和导出你的习惯数据。请在设备设置中启用它。",
         "cancel": "取消",
         "try_again": "重试",
         "settings": "设置"
@@ -654,7 +658,7 @@
     },
     "purchase_dialog": {
         "pro_required_title": "你需要专业版来解锁此功能",
-        "pro_required_message": "解锁 HabitRise Pro 以访问此功能和许多其他专业功能！"
+        "pro_required_message": "解锁 HabitForm Pro 以访问此功能和许多其他专业功能！"
     },
     "habit_category": {
         "title": "习惯类别",
@@ -692,6 +696,7 @@
         "good": "好",
         "keep_going_status": "继续",
         "progress": "进度",
+        "habit_probability": "习惯概率",
         "continue": "继续",
         "habit_fully_formed": "习惯完全养成！🎉",
         "almost_there": "快到了！🔥",

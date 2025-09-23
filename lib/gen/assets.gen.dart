@@ -1,3 +1,5 @@
+// dart format width=80
+
 /// GENERATED CODE - DO NOT MODIFY BY HAND
 /// *****************************************************
 ///  FlutterGen
@@ -5,7 +7,7 @@
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
-// ignore_for_file: directives_ordering,unnecessary_import,implicit_dynamic_list_literal,deprecated_member_use
+// ignore_for_file: deprecated_member_use,directives_ordering,implicit_dynamic_list_literal,unnecessary_import
 
 import 'package:flutter/widgets.dart';
 
@@ -29,25 +31,8 @@ class $AssetsAppGen {
   AssetGenImage get appLogoDark =>
       const AssetGenImage('assets/app/app_logo_dark.png');
 
-  /// File path: assets/app/app_logo_light.png
-  AssetGenImage get appLogoLight =>
-      const AssetGenImage('assets/app/app_logo_light.png');
-
-  /// File path: assets/app/habitrise_dark_transparent.png
-  AssetGenImage get habitriseDarkTransparent =>
-      const AssetGenImage('assets/app/habitrise_dark_transparent.png');
-
-  /// File path: assets/app/habitrise_light_transparent.png
-  AssetGenImage get habitriseLightTransparent =>
-      const AssetGenImage('assets/app/habitrise_light_transparent.png');
-
   /// List of all assets
-  List<AssetGenImage> get values => [
-        appLogoDark,
-        appLogoLight,
-        habitriseDarkTransparent,
-        habitriseLightTransparent
-      ];
+  List<AssetGenImage> get values => [appLogoDark];
 }
 
 class $AssetsImagesGen {
@@ -71,14 +56,23 @@ class $AssetsLottieGen {
 class $AssetsTranslationsGen {
   const $AssetsTranslationsGen();
 
-  /// File path: assets/translations/ar-SA.json
-  String get arSA => 'assets/translations/ar-SA.json';
-
   /// File path: assets/translations/en-US.json
   String get enUS => 'assets/translations/en-US.json';
 
+  /// File path: assets/translations/fr-FR.json
+  String get frFR => 'assets/translations/fr-FR.json';
+
+  /// File path: assets/translations/it-IT.json
+  String get itIT => 'assets/translations/it-IT.json';
+
+  /// File path: assets/translations/tr-TR.json
+  String get trTR => 'assets/translations/tr-TR.json';
+
+  /// File path: assets/translations/zh-Hans.json
+  String get zhHans => 'assets/translations/zh-Hans.json';
+
   /// List of all assets
-  List<String> get values => [arSA, enUS];
+  List<String> get values => [enUS, frFR, itIT, trTR, zhHans];
 }
 
 class $AssetsImagesOnboardingGen {
@@ -110,7 +104,7 @@ class $AssetsImagesOnboardingGen {
 }
 
 class Assets {
-  Assets._();
+  const Assets._();
 
   static const String aEnv = '.env';
   static const $AssetsAnimationsGen animations = $AssetsAnimationsGen();
@@ -128,12 +122,14 @@ class AssetGenImage {
     this._assetName, {
     this.size,
     this.flavors = const {},
+    this.animation,
   });
 
   final String _assetName;
 
   final Size? size;
   final Set<String> flavors;
+  final AssetGenImageAnimation? animation;
 
   Image image({
     Key? key,
@@ -153,10 +149,10 @@ class AssetGenImage {
     ImageRepeat repeat = ImageRepeat.noRepeat,
     Rect? centerSlice,
     bool matchTextDirection = false,
-    bool gaplessPlayback = false,
+    bool gaplessPlayback = true,
     bool isAntiAlias = false,
     String? package,
-    FilterQuality filterQuality = FilterQuality.low,
+    FilterQuality filterQuality = FilterQuality.medium,
     int? cacheWidth,
     int? cacheHeight,
   }) {
@@ -202,4 +198,16 @@ class AssetGenImage {
   String get path => _assetName;
 
   String get keyName => _assetName;
+}
+
+class AssetGenImageAnimation {
+  const AssetGenImageAnimation({
+    required this.isAnimation,
+    required this.duration,
+    required this.frames,
+  });
+
+  final bool isAnimation;
+  final Duration duration;
+  final int frames;
 }

@@ -68,12 +68,12 @@ class ReviewRequestSection extends StatelessWidget {
             cardColor: CupertinoColors.systemPink,
           ),
           title: Text(
-            "Loved HabitRise?",
+            LocaleKeys.settings_review_request_title.tr(),
             maxLines: 10,
             overflow: TextOverflow.ellipsis,
           ),
           subtitle: Text(
-            "To help us reach more people who need help building habits,give HabitRise a review",
+            LocaleKeys.settings_review_request_subtitle.tr(),
             maxLines: 10,
             overflow: TextOverflow.ellipsis,
           ),

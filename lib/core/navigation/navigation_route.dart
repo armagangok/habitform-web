@@ -1,7 +1,7 @@
-import 'package:habitrise/features/onboarding/pages/onboarding_app_features_page.dart';
-import 'package:habitrise/features/onboarding/pages/onboarding_information_page.dart';
-import 'package:habitrise/features/onboarding/pages/onboarding_rating_page.dart';
-import 'package:habitrise/features/onboarding/pages/onboarding_welcome_page.dart';
+import 'package:habitform/features/onboarding/pages/onboarding_app_features_page.dart';
+import 'package:habitform/features/onboarding/pages/onboarding_information_page.dart';
+import 'package:habitform/features/onboarding/pages/onboarding_rating_page.dart';
+import 'package:habitform/features/onboarding/pages/onboarding_welcome_page.dart';
 
 import '/features/archived_habits/pages/archived_habits_page.dart';
 import '/features/export_import_data/data_export_import_page.dart';

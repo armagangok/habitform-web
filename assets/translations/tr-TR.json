@@ -58,11 +58,11 @@
         "pages": {
             "small_steps": {
                 "title": "Hayatınızı küçük bir adımla değiştirin.",
-                "description": "HabitRise ile yeni alışkanlıklar geliştirmek, küçük, yönetilebilir adımlarla başladığınızda daha kolay ve sürdürülebilir hale gelir."
+                "description": "HabitForm ile yeni alışkanlıklar geliştirmek, küçük, yönetilebilir adımlarla başladığınızda daha kolay ve sürdürülebilir hale gelir."
             },
             "welcome": {
                 "welcome_to": "Hoş geldiniz",
-                "app_name": "HabitRise",
+                "app_name": "HabitForm",
                 "build_dream_life": "Hayalinizdeki hayatı inşa edin",
                 "try_tapping": "Alışkanlık kartına dokunmayı deneyin",
                 "just_like_that": "İşte bu kadar!",
@@ -80,11 +80,11 @@
             },
             "routine": {
                 "title": "Rutin ve tekrar, alışkanlıkların kök salmasına yardımcı olur.",
-                "description": "HabitRise ile tutarlı bir rutin oluşturmak ve eylemleri tekrarlamak, alışkanlıkların kalıcı olmasının anahtarıdır."
+                "description": "HabitForm ile tutarlı bir rutin oluşturmak ve eylemleri tekrarlamak, alışkanlıkların kalıcı olmasının anahtarıdır."
             },
             "patience": {
                 "title": "Sabır ve tutarlılık, alışkanlıkların meyve vermesine yardımcı olur.",
-                "description": "Bir alışkanlık edinmek zaman alır; HabitRise ile sürecin tadını çıkarmak anahtardır."
+                "description": "Bir alışkanlık edinmek zaman alır; HabitForm ile sürecin tadını çıkarmak anahtardır."
             },
             "bad_habits": {
                 "title": "Kötü alışkanlıkları kırmak kolaydır. Onları iyi olanlarla değiştirin.",
@@ -97,7 +97,7 @@
             }
         },
         "app_features": {
-            "title": "HabitRise Size Yardımcı Olur...",
+            "title": "HabitForm Size Yardımcı Olur...",
             "subtitle": "Akıllı takip ve kişiselleştirilmiş içgörülerle kalıcı alışkanlıklar oluşturun",
             "features": {
                 "smart_tracking": {
@@ -154,7 +154,7 @@
                 },
                 "track_progress": {
                     "title": "İlerlemenizi Takip Edin",
-                    "description": "Motive kalmak için alışkanlık gelişiminizi izleyin. HabitRise, günlükleri veya basit işaretlemeleri kullanın. Serinizin büyümesini görmek ivme ve sorumluluk yaratır."
+                    "description": "Motive kalmak için alışkanlık gelişiminizi izleyin. HabitForm, günlükleri veya basit işaretlemeleri kullanın. Serinizin büyümesini görmek ivme ve sorumluluk yaratır."
                 }
             },
             "previous": "Önceki",
@@ -162,15 +162,15 @@
             "get_started": "Başla"
         },
         "rating": {
-            "title": "HabitRise benzersiz özelliklerini\nyeni keşfettiniz",
+            "title": "HabitForm benzersiz özelliklerini\nyeni keşfettiniz",
             "description": "Daha iyi alışkanlıklar edinmeye ihtiyacı olan daha fazla kişiye ulaşmamıza yardımcı olmak için uygulamamızı değerlendirir misiniz?",
             "thank_you": "Teşekkür Ederiz!",
-            "feedback_message": "Geri bildiriminiz, HabitRise geliştirmemize ve daha iyi alışkanlıklar edinmeye ihtiyacı olan daha fazla kişiye ulaşmamıza yardımcı olur.",
-            "rate_title": "HabitRise Değerlendir",
-            "rate_message": "HabitRise değerlendirmeye gösterdiğiniz ilgi için teşekkür ederiz! Bizi App Store veya Google Play Store'da değerlendirebilirsiniz.",
+            "feedback_message": "Geri bildiriminiz, HabitForm geliştirmemize ve daha iyi alışkanlıklar edinmeye ihtiyacı olan daha fazla kişiye ulaşmamıza yardımcı olur.",
+            "rate_title": "HabitForm Değerlendir",
+            "rate_message": "HabitForm değerlendirmeye gösterdiğiniz ilgi için teşekkür ederiz! Bizi App Store veya Google Play Store'da değerlendirebilirsiniz.",
             "continue": "Devam Et",
             "maybe_later": "Belki Daha Sonra",
-            "rate_button": "HabitRise Değerlendir"
+            "rate_button": "HabitForm Değerlendir"
         },
         "achievement": {
             "first_habit_message": "Harika iş! İlk alışkanlığınızı başlangıçta tamamladınız!"
@@ -380,7 +380,11 @@
         "no_habits_imported": "Hiç alışkanlık içe aktarılmadı",
         "rc_id": "Rc Kimliği",
         "app_name_habit": "Habit",
-        "app_name_rise": "Rise"
+        "app_name_rise": "Form",
+        "review_request": {
+            "title": "HabitForm'ı sevdiniz mi?",
+            "subtitle": "Alışkanlık geliştirmeye ihtiyacı olan daha fazla kişiye ulaşmamıza yardımcı olmak için HabitForm'a bir değerlendirme bırakın"
+        }
     },
     "subscription": {
         "subscribe_to": "Abone Ol",
@@ -435,7 +439,7 @@
         "share_text": "Metin Paylaş"
     },
     "paywall": {
-        "title": "HabitRise Pro",
+        "title": "HabitForm Pro",
         "headline": "Tekrar tekrar yaptığımız şeye\ndönüşüyoruz.",
         "choose_plan": "Planınızı Seçin",
         "what_you_get": "Neler Alırsınız",
@@ -455,14 +459,14 @@
         "social_success_rate": "Başarı Oranı",
         "what_users_saying": "Kullanıcılarımız Ne Diyor",
         "testimonial_1_name": "Sarah M.",
-        "testimonial_1_comment": "HabitRise Pro günlük rutinimi tamamen değiştirdi. Sadece 2 ayda 5 yeni alışkanlık edindim!",
-        "testimonial_1_user_type": "HabitRise Pro Kullanıcısı",
+        "testimonial_1_comment": "HabitForm Pro günlük rutinimi tamamen değiştirdi. Sadece 2 ayda 5 yeni alışkanlık edindim!",
+        "testimonial_1_user_type": "HabitForm Pro Kullanıcısı",
         "testimonial_2_name": "Mike C.",
         "testimonial_2_comment": "İstatistikler ve içgörüler inanılmaz. Her gün nasıl ilerlediğimi tam olarak görebiliyorum.",
-        "testimonial_2_user_type": "HabitRise Pro Kullanıcısı",
+        "testimonial_2_user_type": "HabitForm Pro Kullanıcısı",
         "testimonial_3_name": "Emma J.",
         "testimonial_3_comment": "Sonunda hedeflerime bağlı kalmama gerçekten yardımcı olan bir uygulama. Hatırlatıcılar mükemmel zamanlanmış.",
-        "testimonial_3_user_type": "HabitRise Pro Kullanıcısı"
+        "testimonial_3_user_type": "HabitForm Pro Kullanıcısı"
     },
     "days": {
         "monday": "Pazartesi",
@@ -619,7 +623,7 @@
     "share_templates": {
         "streak_days": "{days} günlük seri",
         "progress_percent": "%{percent} ilerleme",
-        "app_name": "HabitRise",
+        "app_name": "HabitForm",
         "current_streak": "Mevcut Seri",
         "best_streak": "En İyi Seri",
         "completed": "Tamamlandı",
@@ -631,7 +635,7 @@
         "this_month": "Bu ay:"
     },
     "csv_service": {
-        "export_subject": "HabitRise Dışa Aktarma",
+        "export_subject": "HabitForm Dışa Aktarma",
         "select_csv_file": "CSV Dosyası Seç",
         "could_not_read_file": "Dosya okunamadı",
         "please_select_csv_file": "Lütfen bir CSV dosyası seçin",
@@ -642,8 +646,8 @@
     },
     "permissions": {
         "permission_required": "İzin Gerekli",
-        "storage_permission_message": "HabitRise, alışkanlık verilerinizi içe ve dışa aktarmak için depolama iznine ihtiyaç duyar.",
-        "storage_permission_settings_message": "HabitRise, alışkanlık verilerinizi içe ve dışa aktarmak için depolama iznine ihtiyaç duyar. Lütfen cihaz ayarlarınızdan etkinleştirin.",
+        "storage_permission_message": "HabitForm, alışkanlık verilerinizi içe ve dışa aktarmak için depolama iznine ihtiyaç duyar.",
+        "storage_permission_settings_message": "HabitForm, alışkanlık verilerinizi içe ve dışa aktarmak için depolama iznine ihtiyaç duyar. Lütfen cihaz ayarlarınızdan etkinleştirin.",
         "cancel": "İptal",
         "try_again": "Tekrar Dene",
         "settings": "Ayarlar"
@@ -654,7 +658,7 @@
     },
     "purchase_dialog": {
         "pro_required_title": "Bu özelliği açmak için Pro'ya ihtiyacınız var",
-        "pro_required_message": "Bu ve diğer birçok Pro özelliğine erişmek için HabitRise Pro'yu açın!"
+        "pro_required_message": "Bu ve diğer birçok Pro özelliğine erişmek için HabitForm Pro'yu açın!"
     },
     "habit_category": {
         "title": "Alışkanlık Kategorisi",
@@ -692,6 +696,7 @@
         "good": "İyi",
         "keep_going_status": "Devam Et",
         "progress": "İlerleme",
+        "habit_probability": "Alışkanlık Olasılığı",
         "continue": "Devam Et",
         "habit_fully_formed": "Alışkanlık Tamamen Oluştu! 🎉",
         "almost_there": "Neredeyse Bitti! 🔥",

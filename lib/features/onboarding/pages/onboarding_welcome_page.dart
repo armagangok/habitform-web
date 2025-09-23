@@ -4,6 +4,8 @@ import 'dart:ui';
 import 'package:confetti/confetti.dart';
 
 import '../../../core/core.dart';
+import '../../../models/completion_entry/completion_entry.dart';
+import '../../../models/habit/habit_difficulty.dart';
 import '../../../models/habit/habit_model.dart';
 import '../../home/components/achievement_dialog.dart';
 import '../enum/onboarding_step_enum.dart';
@@ -13,7 +15,7 @@ import '../enum/onboarding_step_enum.dart';
 /// Layout
 /// - Top: "Welcome to" text
 /// - Center: App logo
-/// - Below logo: App name text (HabitRise)
+/// - Below logo: App name text (HabitForm)
 /// - Bottom: CTA button with a gently oscillating arrow icon
 class OnboardingWelcomePage extends StatefulWidget {
   const OnboardingWelcomePage({super.key, this.onContinue});
@@ -85,10 +87,9 @@ class _OnboardingWelcomePageState extends State<OnboardingWelcomePage> with Tick
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
 
     // Use transparent logo variants if available, falling back to regular app logos
-    final String logoAsset = isDark ? 'assets/app/habitrise_dark_transparent.png' : 'assets/app/habitrise_light_transparent.png';
+    final String logoAsset = Assets.app.appLogoDark.path;
 
     return CupertinoPageScaffold(
       child: Stack(
@@ -127,7 +128,7 @@ class _OnboardingWelcomePageState extends State<OnboardingWelcomePage> with Tick
                         emoji: '📚',
                         title: LocaleKeys.onboarding_pages_welcome_habit_examples_read_book.tr(),
                         badgeValue: 21,
-                        initial: Offset(size.width - context.width(0.5) + context.width(0.1), context.height(0.1)), // top-right with responsive positioning
+                        initial: Offset(size.width - context.width(0.5) + context.width(0.025), context.height(0.1)), // top-right with responsive positioning
                         initialRotation: 0.4,
                         isLeftSide: false,
                         tier: 0,
@@ -155,7 +156,7 @@ class _OnboardingWelcomePageState extends State<OnboardingWelcomePage> with Tick
                         emoji: '💧',
                         title: LocaleKeys.onboarding_pages_welcome_habit_examples_drink_water.tr(),
                         badgeValue: 30,
-                        initial: Offset(size.width - context.width(0.5) + context.width(0.012), size.height - context.height(0.36)), // bottom-right with responsive positioning
+                        initial: Offset(size.width - context.width(0.5) + context.width(0.025), size.height - context.height(0.36)), // bottom-right with responsive positioning
                         initialRotation: 0.2,
                         isLeftSide: false,
                         tier: 1,
@@ -166,28 +167,31 @@ class _OnboardingWelcomePageState extends State<OnboardingWelcomePage> with Tick
               },
             ),
           ),
-          // Confetti overlay (optimized)
-          Align(
-            alignment: const Alignment(0, -0.2), // upper center
-            child: ConfettiWidget(
-              confettiController: _confettiController,
-              blastDirectionality: BlastDirectionality.explosive,
-              emissionFrequency: 0.025, // more particles per tick
-              numberOfParticles: 14, // richer burst
-              minBlastForce: 8, // initial speed min
-              maxBlastForce: 18, // initial speed max
-              gravity: 0.25, // fall speed
-              particleDrag: 0.08, // slow down slightly
-              shouldLoop: false,
-              colors: const [
-                Color(0xFFE91E63), // Pink
-                Color(0xFF2196F3), // Blue
-                Color(0xFF4CAF50), // Green
-                Color(0xFFFFC107), // Yellow
-                Color(0xFFFF5722), // Orange
-                Color(0xFF9C27B0), // Purple
-              ],
-              createParticlePath: _drawStar,
+          // Confetti overlay (optimized) - ignore pointer events so it never blocks taps
+          IgnorePointer(
+            ignoring: true,
+            child: Align(
+              alignment: const Alignment(0, -0.2), // upper center
+              child: ConfettiWidget(
+                confettiController: _confettiController,
+                blastDirectionality: BlastDirectionality.explosive,
+                emissionFrequency: 0.025, // more particles per tick
+                numberOfParticles: 14, // richer burst
+                minBlastForce: 8, // initial speed min
+                maxBlastForce: 18, // initial speed max
+                gravity: 0.25, // fall speed
+                particleDrag: 0.08, // slow down slightly
+                shouldLoop: false,
+                colors: const [
+                  Color(0xFFE91E63), // Pink
+                  Color(0xFF2196F3), // Blue
+                  Color(0xFF4CAF50), // Green
+                  Color(0xFFFFC107), // Yellow
+                  Color(0xFFFF5722), // Orange
+                  Color(0xFF9C27B0), // Purple
+                ],
+                createParticlePath: _drawStar,
+              ),
             ),
           ),
           // Content
@@ -206,61 +210,67 @@ class _OnboardingWelcomePageState extends State<OnboardingWelcomePage> with Tick
                         return Stack(
                           alignment: Alignment.center,
                           children: [
-                            // Welcome block fades out in place
-                            Opacity(
-                              opacity: 1.0 - progress,
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Text(
-                                    LocaleKeys.onboarding_pages_welcome_welcome_to.tr(),
-                                    style: context.headlineSmall.copyWith(
-                                      fontWeight: FontWeight.w600,
-                                      color: theme.colorScheme.onSurface.withValues(alpha: 0.92),
+                            // Welcome block fades out in place (non-interactive, ignore taps)
+                            IgnorePointer(
+                              ignoring: true,
+                              child: Opacity(
+                                opacity: 1.0 - progress,
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text(
+                                      LocaleKeys.onboarding_pages_welcome_welcome_to.tr(),
+                                      style: context.headlineSmall.copyWith(
+                                        fontWeight: FontWeight.w600,
+                                        color: theme.colorScheme.onSurface.withValues(alpha: 0.92),
+                                      ),
+                                      textAlign: TextAlign.center,
                                     ),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                  Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      CupertinoCard(
-                                        color: CupertinoColors.black,
-                                        padding: context.padding(0.04), // Responsive padding
-                                        child: Image.asset(logoAsset, height: context.height(0.1), fit: BoxFit.contain), // Responsive logo size
-                                      ),
-                                      SizedBox(height: context.height(0.006)), // Responsive spacing
-                                      Text(
-                                        LocaleKeys.onboarding_pages_welcome_app_name.tr(),
-                                        style: context.displaySmall.copyWith(
-                                          fontWeight: FontWeight.w700,
-                                          letterSpacing: 0.5,
-                                          color: theme.colorScheme.onSurface,
+                                    Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        ClipRRect(
+                                          borderRadius: BorderRadius.circular(context.width(0.04)),
+
+                                          child: Image.asset(logoAsset, height: context.height(0.1), fit: BoxFit.contain), // Responsive logo size
                                         ),
-                                        textAlign: TextAlign.center,
-                                      ),
-                                    ],
-                                  ),
-                                ],
+                                        SizedBox(height: context.height(0.006)), // Responsive spacing
+                                        Text(
+                                          LocaleKeys.onboarding_pages_welcome_app_name.tr(),
+                                          style: context.displaySmall.copyWith(
+                                            fontWeight: FontWeight.w700,
+                                            letterSpacing: 0.5,
+                                            color: theme.colorScheme.onSurface,
+                                          ),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                             // Tagline fades in, then fades out when center card appears
                             // Never show tagline if final message is shown, if we're in completed state, or if motivational message is showing
                             if (_currentStep == OnboardingStep.cardsStackedAtBottom)
-                              AnimatedOpacity(
-                                opacity: (((progress > 0.02 || _showTagline) && !(_currentStep == OnboardingStep.exerciseCardInCenter && centerProgress > 0.7)) ? (_currentStep == OnboardingStep.exerciseCardInCenter ? (centerProgress > 0.7 ? 0.0 : progress * (1.0 - centerProgress.clamp(0.0, 0.7))) : progress) : 0.0),
-                                duration: const Duration(milliseconds: 400),
-                                curve: Curves.easeOutCubic,
-                                child: Padding(
-                                  padding: context.symmetricPadding(horizontal: 0.025), // Responsive horizontal padding
-                                  child: SizedBox(
-                                    width: context.width(0.9),
-                                    child: Text(
-                                      LocaleKeys.onboarding_pages_welcome_build_dream_life.tr(),
-                                      style: context.headlineLarge.copyWith(
-                                        fontSize: context.width(0.08), // 8% of screen width
-                                        height: 1.1,
+                              IgnorePointer(
+                                ignoring: true,
+                                child: AnimatedOpacity(
+                                  opacity: (((progress > 0.02 || _showTagline) && !(_currentStep == OnboardingStep.exerciseCardInCenter && centerProgress > 0.7)) ? (_currentStep == OnboardingStep.exerciseCardInCenter ? (centerProgress > 0.7 ? 0.0 : progress * (1.0 - centerProgress.clamp(0.0, 0.7))) : progress) : 0.0),
+                                  duration: const Duration(milliseconds: 400),
+                                  curve: Curves.easeOutCubic,
+                                  child: Padding(
+                                    padding: context.symmetricPadding(horizontal: 0.025), // Responsive horizontal padding
+                                    child: SizedBox(
+                                      width: context.width(0.9),
+                                      child: Text(
+                                        LocaleKeys.onboarding_pages_welcome_build_dream_life.tr(),
+                                        style: context.headlineLarge.copyWith(
+                                          fontSize: context.width(0.08), // 8% of screen width
+                                          height: 1.1,
+                                        ),
+                                        textAlign: TextAlign.center,
                                       ),
-                                      textAlign: TextAlign.center,
                                     ),
                                   ),
                                 ),
@@ -559,13 +569,32 @@ class _OnboardingWelcomePageState extends State<OnboardingWelcomePage> with Tick
     // Start confetti animation
     _confettiController.play();
 
-    // Create a mock habit for the achievement dialog
+    // Create a mock habit for the achievement dialog with sample completion data
+    final today = DateTime.now();
+    final mockCompletions = <String, CompletionEntry>{
+      // Son 12 gün boyunca %85 completion rate ile örnek veriler
+      today.subtract(const Duration(days: 11)).toIso8601String(): CompletionEntry(id: '1', date: today.subtract(const Duration(days: 11)), count: 1, isCompleted: true),
+      today.subtract(const Duration(days: 10)).toIso8601String(): CompletionEntry(id: '2', date: today.subtract(const Duration(days: 10)), count: 1, isCompleted: true),
+      today.subtract(const Duration(days: 9)).toIso8601String(): CompletionEntry(id: '3', date: today.subtract(const Duration(days: 9)), count: 1, isCompleted: true),
+      today.subtract(const Duration(days: 8)).toIso8601String(): CompletionEntry(id: '4', date: today.subtract(const Duration(days: 8)), count: 0, isCompleted: false), // Missed day
+      today.subtract(const Duration(days: 7)).toIso8601String(): CompletionEntry(id: '5', date: today.subtract(const Duration(days: 7)), count: 1, isCompleted: true),
+      today.subtract(const Duration(days: 6)).toIso8601String(): CompletionEntry(id: '6', date: today.subtract(const Duration(days: 6)), count: 1, isCompleted: true),
+      today.subtract(const Duration(days: 5)).toIso8601String(): CompletionEntry(id: '7', date: today.subtract(const Duration(days: 5)), count: 1, isCompleted: true),
+      today.subtract(const Duration(days: 4)).toIso8601String(): CompletionEntry(id: '8', date: today.subtract(const Duration(days: 4)), count: 1, isCompleted: true),
+      today.subtract(const Duration(days: 3)).toIso8601String(): CompletionEntry(id: '9', date: today.subtract(const Duration(days: 3)), count: 0, isCompleted: false), // Missed day
+      today.subtract(const Duration(days: 2)).toIso8601String(): CompletionEntry(id: '10', date: today.subtract(const Duration(days: 2)), count: 1, isCompleted: true),
+      today.subtract(const Duration(days: 1)).toIso8601String(): CompletionEntry(id: '11', date: today.subtract(const Duration(days: 1)), count: 1, isCompleted: true),
+      today.toIso8601String(): CompletionEntry(id: '12', date: today, count: 1, isCompleted: true), // Today's completion
+    };
+
     final mockHabit = Habit(
       id: 'onboarding_running',
       habitName: LocaleKeys.onboarding_pages_welcome_habit_examples_running.tr(),
       emoji: '🏃',
       colorCode: 0xFF1DB954,
-      completions: {},
+      completions: mockCompletions,
+      difficulty: HabitDifficulty.moderate, // Moderate difficulty for realistic formation score
+      dailyTarget: 1, // 1 run per day
     );
 
     // Show achievement dialog after a short delay
@@ -607,7 +636,7 @@ class _OnboardingWelcomePageState extends State<OnboardingWelcomePage> with Tick
         };
       case 1: // Read Book card (right side, upper tier)
         return {
-          'x': screenSize.width - cardWidth - context.width(0.045), // Right side with responsive margin
+          'x': screenSize.width - cardWidth + context.width(0.025), // Right side with responsive margin - taşacak
           'y': screenSize.height - context.height(0.22), // Bottom area, slightly higher
           'rotation': -0.35, // Slight right rotation
           'scale': 0.92, // Slightly smaller
@@ -621,7 +650,7 @@ class _OnboardingWelcomePageState extends State<OnboardingWelcomePage> with Tick
         };
       case 3: // Drink Water card (right side, lower tier)
         return {
-          'x': screenSize.width - cardWidth - context.width(0.05), // Right side with responsive margin
+          'x': screenSize.width - cardWidth + context.width(0.025), // Right side with responsive margin - taşacak
           'y': screenSize.height - context.height(0.1), // Bottom area, lower than read book
           'rotation': -0.15, // Very slight right rotation
           'scale': 0.85, // Smallest
@@ -687,20 +716,35 @@ class _OnboardingWelcomePageState extends State<OnboardingWelcomePage> with Tick
       return Positioned(
         left: x,
         top: y,
-        child: Transform.rotate(
-          angle: rotation,
-          child: Transform.scale(
-            scale: scale,
-            child: _HabitCard(
-              size: cardSize,
-              background: color,
-              accent: accent,
-              emoji: emoji,
-              title: title,
-              badgeValue: _runningStreak, // Use dynamic streak value
-              isCompleted: _isCenterCardCompleted,
-              onTap: _onCenterCardTap, // Pass onTap to card
-            ),
+        child: SizedBox(
+          width: cardSize.width,
+          height: cardSize.height,
+          child: Stack(
+            children: [
+              // Full-surface tap catcher to guarantee reliability
+              Positioned.fill(
+                child: GestureDetector(
+                  behavior: HitTestBehavior.opaque,
+                  onTap: _onCenterCardTap,
+                ),
+              ),
+              Transform.rotate(
+                angle: rotation,
+                child: Transform.scale(
+                  scale: scale,
+                  child: _HabitCard(
+                    size: cardSize,
+                    background: color,
+                    accent: accent,
+                    emoji: emoji,
+                    title: title,
+                    badgeValue: _runningStreak, // Use dynamic streak value
+                    isCompleted: _isCenterCardCompleted,
+                    onTap: _onCenterCardTap, // Pass onTap to card
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
       );
@@ -828,80 +872,84 @@ class _HabitCard extends StatelessWidget {
     final double borderRadius = context.width(0.08); // 10% of card width
     final double borderWidth = context.width(0.01); // 1% of card width
 
-    return CupertinoButton(
-      onPressed: onTap,
-      padding: EdgeInsets.zero,
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: onTap,
       child: ClipRRect(
         borderRadius: BorderRadius.circular(borderRadius),
-        child: CustomBlurWidget(
-          child: Container(
-            width: size.width,
-            height: size.height,
-            decoration: BoxDecoration(
-              color: habitColor.withValues(alpha: 0.10),
-              borderRadius: BorderRadius.circular(borderRadius),
-              border: Border.all(color: habitColor.withValues(alpha: 0.35), width: borderWidth),
-            ),
-            child: Padding(
-              padding: context.padding(0.03), // 8% of screen width as padding
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  // Top row: emoji + streak
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container(
-                        width: emojiSize,
-                        height: emojiSize,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: habitColor.withValues(alpha: 0.12),
-                          border: Border.all(color: habitColor.withValues(alpha: 0.25)),
+        child: CupertinoButton(
+          onPressed: onTap,
+          padding: EdgeInsets.zero,
+          child: CustomBlurWidget(
+            child: Container(
+              width: size.width,
+              height: size.height,
+              decoration: BoxDecoration(
+                color: habitColor.withValues(alpha: 0.10),
+                borderRadius: BorderRadius.circular(borderRadius),
+                border: Border.all(color: habitColor.withValues(alpha: 0.35), width: borderWidth),
+              ),
+              child: Padding(
+                padding: context.padding(0.03), // 8% of screen width as padding
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    // Top row: emoji + streak
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          width: emojiSize,
+                          height: emojiSize,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: habitColor.withValues(alpha: 0.12),
+                            border: Border.all(color: habitColor.withValues(alpha: 0.25)),
+                          ),
+                          child: Center(child: Text(emoji, style: TextStyle(fontSize: emojiSize * 0.5))),
                         ),
-                        child: Center(child: Text(emoji, style: TextStyle(fontSize: emojiSize * 0.5))),
-                      ),
-                      Container(
-                        padding: context.symmetricPadding(horizontal: 0.02, vertical: 0.01), // Responsive padding
-                        decoration: BoxDecoration(
-                          color: habitColor.withValues(alpha: 0.18),
-                          borderRadius: BorderRadius.circular(context.width(0.12)), // 12% of card width
-                          border: Border.all(color: habitColor.withValues(alpha: 0.25)),
+                        Container(
+                          padding: context.symmetricPadding(horizontal: 0.02, vertical: 0.01), // Responsive padding
+                          decoration: BoxDecoration(
+                            color: habitColor.withValues(alpha: 0.18),
+                            borderRadius: BorderRadius.circular(context.width(0.12)), // 12% of card width
+                            border: Border.all(color: habitColor.withValues(alpha: 0.25)),
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(CupertinoIcons.flame_fill, size: iconSize, color: habitColor),
+                              SizedBox(width: context.width(0.03)), // 3% of screen width
+                              Text('$badgeValue', style: context.bodyMedium.copyWith(fontWeight: FontWeight.w700, color: habitColor)),
+                            ],
+                          ),
                         ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Icon(CupertinoIcons.flame_fill, size: iconSize, color: habitColor),
-                            SizedBox(width: context.width(0.03)), // 3% of screen width
-                            Text('$badgeValue', style: context.bodyMedium.copyWith(fontWeight: FontWeight.w700, color: habitColor)),
-                          ],
+                      ],
+                    ),
+                    // Bottom row: name + completion icon
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          child: Text(
+                            title,
+                            maxLines: null,
+                            style: context.titleLarge.copyWith(fontWeight: FontWeight.w700),
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                  // Bottom row: name + completion icon
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                        child: Text(
-                          title,
-                          maxLines: null,
-                          style: context.titleLarge.copyWith(fontWeight: FontWeight.w700),
+                        AnimatedSwitcher(
+                          duration: const Duration(milliseconds: 300),
+                          child: Icon(
+                            isCompleted ? CupertinoIcons.checkmark_circle_fill : CupertinoIcons.circle,
+                            key: ValueKey<bool>(isCompleted),
+                            color: habitColor,
+                            size: completionIconSize,
+                          ),
                         ),
-                      ),
-                      AnimatedSwitcher(
-                        duration: const Duration(milliseconds: 300),
-                        child: Icon(
-                          isCompleted ? CupertinoIcons.checkmark_circle_fill : CupertinoIcons.circle,
-                          key: ValueKey<bool>(isCompleted),
-                          color: habitColor,
-                          size: completionIconSize,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

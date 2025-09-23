@@ -148,7 +148,7 @@ class SettingsPage extends ConsumerWidget {
                               TextSpan(
                                 text: LocaleKeys.settings_app_name_rise.tr(),
                                 style: context.bodyLarge.copyWith(
-                                  color: Colors.deepOrange,
+                                  color: context.primary,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),

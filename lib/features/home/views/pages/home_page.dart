@@ -132,7 +132,7 @@ class HomePage extends ConsumerWidget {
                 text: "Habit",
               ),
               TextSpan(
-                text: "Rise",
+                text: "Form",
                 style: TextStyle(color: context.primary),
               ),
             ]),

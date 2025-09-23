@@ -1,7 +1,7 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:habitrise/features/onboarding/pages/onboarding_welcome_page.dart';
+
 
 import '/core/core.dart';
 import '/core/theme/theme_data/theme_data.dart';
@@ -16,6 +16,7 @@ import 'core/helpers/notifications/timezone.dart';
 import 'core/theme/providers/theme_provider.dart';
 import 'features/home/provider/home_provider.dart';
 import 'features/home/views/pages/home_page.dart';
+import 'features/onboarding/pages/onboarding_welcome_page.dart';
 import 'features/purchase/providers/purchase_provider.dart';
 
 void main() async {

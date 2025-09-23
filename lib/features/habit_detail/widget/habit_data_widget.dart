@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:habitrise/models/completion_entry/completion_extension.dart';
+import 'package:habitform/models/completion_entry/completion_extension.dart';
 
 import '/core/core.dart';
 import '/models/models.dart';

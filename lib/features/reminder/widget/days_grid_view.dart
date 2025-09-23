@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:habitrise/core/widgets/category_widget/multi_selection_category_widget.dart';
+import 'package:habitform/core/widgets/category_widget/multi_selection_category_widget.dart';
 
 import '../../../core/core.dart';
 import '../extension/easy_day.dart';

@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:habitrise/features/edit_habit/provider/edit_habit_provider.dart';
-import 'package:habitrise/features/reminder/extension/easy_day.dart';
+import 'package:habitform/features/edit_habit/provider/edit_habit_provider.dart';
+import 'package:habitform/features/reminder/extension/easy_day.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import '/core/core.dart';

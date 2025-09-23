@@ -58,11 +58,11 @@
         "pages": {
             "small_steps": {
                 "title": "Change your life with a small step.",
-                "description": "Developing new habits becomes easier and more sustainable when you start with small, manageable steps with HabitRise."
+                "description": "Developing new habits becomes easier and more sustainable when you start with small, manageable steps with HabitForm."
             },
             "welcome": {
                 "welcome_to": "Welcome to",
-                "app_name": "HabitRise",
+                "app_name": "HabitForm",
                 "build_dream_life": "Build your dream life",
                 "try_tapping": "Try tapping on the habit card",
                 "just_like_that": "Just like that!",
@@ -80,11 +80,11 @@
             },
             "routine": {
                 "title": "Routine and repeate help habits take root.",
-                "description": "Establishing a consistent routine and repeating actions are key to making habits stick with HabitRise."
+                "description": "Establishing a consistent routine and repeating actions are key to making habits stick with HabitForm."
             },
             "patience": {
                 "title": "Patience and consistency help habits bear fruit.",
-                "description": "Forming a habit takes time; enjoying the process is the key with HabitRise."
+                "description": "Forming a habit takes time; enjoying the process is the key with HabitForm."
             },
             "bad_habits": {
                 "title": "Breaking bad habits is easy. Replace them with good ones.",
@@ -97,7 +97,7 @@
             }
         },
         "app_features": {
-            "title": "HabitRise Helps You ...",
+            "title": "HabitForm Helps You ...",
             "subtitle": "Build lasting habits with smart tracking and personalized insights",
             "features": {
                 "smart_tracking": {
@@ -154,7 +154,7 @@
                 },
                 "track_progress": {
                     "title": "Track Your Progress",
-                    "description": "Monitor your habit development to stay motivated. Use HabitRise, journals, or simple checkmarks. Seeing your streak grow creates momentum and accountability."
+                    "description": "Monitor your habit development to stay motivated. Use HabitForm, journals, or simple checkmarks. Seeing your streak grow creates momentum and accountability."
                 }
             },
             "previous": "Previous",
@@ -162,15 +162,15 @@
             "get_started": "Get Started"
         },
         "rating": {
-            "title": "You've just discovered\nHabitRise's unique features",
+            "title": "You've just discovered\nHabitForm's unique features",
             "description": "To help us reach more people who need help building better habits, would you give our app a review?",
             "thank_you": "Thank You!",
-            "feedback_message": "Your feedback helps us improve HabitRise and reach more people who need help building better habits.",
-            "rate_title": "Rate HabitRise",
-            "rate_message": "Thank you for your interest in rating HabitRise! You can rate us on the App Store or Google Play Store.",
+            "feedback_message": "Your feedback helps us improve HabitForm and reach more people who need help building better habits.",
+            "rate_title": "Rate HabitForm",
+            "rate_message": "Thank you for your interest in rating HabitForm! You can rate us on the App Store or Google Play Store.",
             "continue": "Continue",
             "maybe_later": "Maybe Later",
-            "rate_button": "Rate HabitRise"
+            "rate_button": "Rate HabitForm"
         },
         "achievement": {
             "first_habit_message": "Great job! You completed your first habit in the onboarding!"
@@ -380,7 +380,11 @@
         "no_habits_imported": "No habits were imported",
         "rc_id": "Rc ID",
         "app_name_habit": "Habit",
-        "app_name_rise": "Rise"
+        "app_name_rise": "Form",
+        "review_request": {
+            "title": "Loved HabitForm?",
+            "subtitle": "To help us reach more people who need help building habits, give HabitForm a 5-stars review"
+        }
     },
     "subscription": {
         "subscribe_to": "Subscribe to",
@@ -435,7 +439,7 @@
         "share_text": "Share Text"
     },
     "paywall": {
-        "title": "HabitRise Pro",
+        "title": "HabitForm Pro",
         "headline": "We become\nwhat we repeatedly do.",
         "choose_plan": "Choose Your Plan",
         "what_you_get": "What You Get",
@@ -455,14 +459,14 @@
         "social_success_rate": "Success Rate",
         "what_users_saying": "What Our Users Are Saying",
         "testimonial_1_name": "Sarah M.",
-        "testimonial_1_comment": "HabitRise Pro completely transformed my daily routine. I've built 5 new habits in just 2 months!",
-        "testimonial_1_user_type": "HabitRise Pro User",
+        "testimonial_1_comment": "HabitForm Pro completely transformed my daily routine. I've built 5 new habits in just 2 months!",
+        "testimonial_1_user_type": "HabitForm Pro User",
         "testimonial_2_name": "Mike C.",
         "testimonial_2_comment": "The statistics and insights are incredible. I can see exactly how I'm progressing every day.",
-        "testimonial_2_user_type": "HabitRise Pro User",
+        "testimonial_2_user_type": "HabitForm Pro User",
         "testimonial_3_name": "Emma J.",
         "testimonial_3_comment": "Finally, an app that actually helps me stick to my goals. The reminders are perfectly timed.",
-        "testimonial_3_user_type": "HabitRise Pro User"
+        "testimonial_3_user_type": "HabitForm Pro User"
     },
     "days": {
         "monday": "Monday",
@@ -619,7 +623,7 @@
     "share_templates": {
         "streak_days": "{days}d streak",
         "progress_percent": "{percent}% progress",
-        "app_name": "HabitRise",
+        "app_name": "HabitForm",
         "current_streak": "Current Streak",
         "best_streak": "Best Streak",
         "completed": "Completed",
@@ -631,7 +635,7 @@
         "this_month": "This month:"
     },
     "csv_service": {
-        "export_subject": "HabitRise Export",
+        "export_subject": "HabitForm Export",
         "select_csv_file": "Select CSV File",
         "could_not_read_file": "Could not read file",
         "please_select_csv_file": "Please select a CSV file",
@@ -642,8 +646,8 @@
     },
     "permissions": {
         "permission_required": "Permission Required",
-        "storage_permission_message": "HabitRise needs storage permission to import and export your habit data.",
-        "storage_permission_settings_message": "HabitRise needs storage permission to import and export your habit data. Please enable it in your device settings.",
+        "storage_permission_message": "HabitForm needs storage permission to import and export your habit data.",
+        "storage_permission_settings_message": "HabitForm needs storage permission to import and export your habit data. Please enable it in your device settings.",
         "cancel": "Cancel",
         "try_again": "Try Again",
         "settings": "Settings"
@@ -654,7 +658,7 @@
     },
     "purchase_dialog": {
         "pro_required_title": "You need pro to unlock this feature",
-        "pro_required_message": "Unlock HabitRise Pro to access this and many other pro features!"
+        "pro_required_message": "Unlock HabitForm Pro to access this and many other pro features!"
     },
     "habit_category": {
         "title": "Habit Category",
@@ -692,6 +696,7 @@
         "good": "Good",
         "keep_going_status": "Keep Going",
         "progress": "Progress",
+        "habit_probability": "Habit Probability",
         "continue": "Continue",
         "habit_fully_formed": "Habit Fully Formed! 🎉",
         "almost_there": "Almost There! 🔥",

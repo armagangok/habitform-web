@@ -58,11 +58,11 @@
         "pages": {
             "small_steps": {
                 "title": "Changez votre vie avec un petit pas.",
-                "description": "Développer de nouvelles habitudes devient plus facile et plus durable quand vous commencez par de petits pas gérables avec HabitRise."
+                "description": "Développer de nouvelles habitudes devient plus facile et plus durable quand vous commencez par de petits pas gérables avec HabitForm."
             },
             "welcome": {
                 "welcome_to": "Bienvenue dans",
-                "app_name": "HabitRise",
+                "app_name": "HabitForm",
                 "build_dream_life": "Construisez votre vie de rêve",
                 "try_tapping": "Essayez d'appuyer sur la carte d'habitude",
                 "just_like_that": "Comme ça !",
@@ -80,11 +80,11 @@
             },
             "routine": {
                 "title": "La routine et la répétition aident les habitudes à prendre racine.",
-                "description": "Établir une routine cohérente et répéter les actions sont la clé pour faire tenir les habitudes avec HabitRise."
+                "description": "Établir une routine cohérente et répéter les actions sont la clé pour faire tenir les habitudes avec HabitForm."
             },
             "patience": {
                 "title": "La patience et la constance aident les habitudes à porter leurs fruits.",
-                "description": "Former une habitude prend du temps ; apprécier le processus est la clé avec HabitRise."
+                "description": "Former une habitude prend du temps ; apprécier le processus est la clé avec HabitForm."
             },
             "bad_habits": {
                 "title": "Briser les mauvaises habitudes est facile. Remplacez-les par de bonnes.",
@@ -97,7 +97,7 @@
             }
         },
         "app_features": {
-            "title": "HabitRise vous aide à...",
+            "title": "HabitForm vous aide à...",
             "subtitle": "Construire des habitudes durables avec un suivi intelligent et des insights personnalisés",
             "features": {
                 "smart_tracking": {
@@ -154,7 +154,7 @@
                 },
                 "track_progress": {
                     "title": "Suivez vos progrès",
-                    "description": "Surveillez le développement de vos habitudes pour rester motivé. Utilisez HabitRise, des journaux, ou de simples coches. Voir votre série grandir crée de l'élan et de la responsabilité."
+                    "description": "Surveillez le développement de vos habitudes pour rester motivé. Utilisez HabitForm, des journaux, ou de simples coches. Voir votre série grandir crée de l'élan et de la responsabilité."
                 }
             },
             "previous": "Précédent",
@@ -162,15 +162,15 @@
             "get_started": "Commencer"
         },
         "rating": {
-            "title": "Vous venez de découvrir\nles fonctionnalités uniques d'HabitRise",
+            "title": "Vous venez de découvrir\nles fonctionnalités uniques d'HabitForm",
             "description": "Pour nous aider à atteindre plus de personnes qui ont besoin d'aide pour construire de meilleures habitudes, pourriez-vous donner un avis sur notre application ?",
             "thank_you": "Merci !",
-            "feedback_message": "Vos commentaires nous aident à améliorer HabitRise et à atteindre plus de personnes qui ont besoin d'aide pour construire de meilleures habitudes.",
-            "rate_title": "Évaluer HabitRise",
-            "rate_message": "Merci pour votre intérêt à évaluer HabitRise ! Vous pouvez nous évaluer sur l'App Store ou Google Play Store.",
+            "feedback_message": "Vos commentaires nous aident à améliorer HabitForm et à atteindre plus de personnes qui ont besoin d'aide pour construire de meilleures habitudes.",
+            "rate_title": "Évaluer HabitForm",
+            "rate_message": "Merci pour votre intérêt à évaluer HabitForm ! Vous pouvez nous évaluer sur l'App Store ou Google Play Store.",
             "continue": "Continuer",
             "maybe_later": "Peut-être plus tard",
-            "rate_button": "Évaluer HabitRise"
+            "rate_button": "Évaluer HabitForm"
         },
         "achievement": {
             "first_habit_message": "Excellent travail ! Vous avez terminé votre première habitude dans l'intégration !"
@@ -380,7 +380,11 @@
         "no_habits_imported": "Aucune habitude n'a été importée",
         "rc_id": "ID Rc",
         "app_name_habit": "Habit",
-        "app_name_rise": "Rise"
+        "app_name_rise": "Form",
+        "review_request": {
+            "title": "Vous aimez HabitForm ?",
+            "subtitle": "Pour nous aider à atteindre plus de personnes qui ont besoin d'aide pour construire des habitudes, laissez un avis sur HabitForm"
+        }
     },
     "subscription": {
         "subscribe_to": "S'abonner à",
@@ -435,7 +439,7 @@
         "share_text": "Partager le texte"
     },
     "paywall": {
-        "title": "HabitRise Pro",
+        "title": "HabitForm Pro",
         "headline": "Nous devenons\nce que nous faisons de manière répétée.",
         "choose_plan": "Choisissez votre plan",
         "what_you_get": "Ce que vous obtenez",
@@ -455,14 +459,14 @@
         "social_success_rate": "Taux de succès",
         "what_users_saying": "Ce que disent nos utilisateurs",
         "testimonial_1_name": "Sarah M.",
-        "testimonial_1_comment": "HabitRise Pro a complètement transformé ma routine quotidienne. J'ai développé 5 nouvelles habitudes en seulement 2 mois !",
-        "testimonial_1_user_type": "Utilisateur HabitRise Pro",
+        "testimonial_1_comment": "HabitForm Pro a complètement transformé ma routine quotidienne. J'ai développé 5 nouvelles habitudes en seulement 2 mois !",
+        "testimonial_1_user_type": "Utilisateur HabitForm Pro",
         "testimonial_2_name": "Mike C.",
         "testimonial_2_comment": "Les statistiques et les insights sont incroyables. Je peux voir exactement comment je progresse chaque jour.",
-        "testimonial_2_user_type": "Utilisateur HabitRise Pro",
+        "testimonial_2_user_type": "Utilisateur HabitForm Pro",
         "testimonial_3_name": "Emma J.",
         "testimonial_3_comment": "Enfin, une app qui m'aide vraiment à tenir mes objectifs. Les rappels sont parfaitement chronométrés.",
-        "testimonial_3_user_type": "Utilisateur HabitRise Pro"
+        "testimonial_3_user_type": "Utilisateur HabitForm Pro"
     },
     "days": {
         "monday": "Lundi",
@@ -619,7 +623,7 @@
     "share_templates": {
         "streak_days": "Série de {days}j",
         "progress_percent": "{percent}% de progrès",
-        "app_name": "HabitRise",
+        "app_name": "HabitForm",
         "current_streak": "Série actuelle",
         "best_streak": "Meilleure série",
         "completed": "Terminé",
@@ -631,7 +635,7 @@
         "this_month": "Ce mois-ci :"
     },
     "csv_service": {
-        "export_subject": "Export HabitRise",
+        "export_subject": "Export HabitForm",
         "select_csv_file": "Sélectionner un fichier CSV",
         "could_not_read_file": "Impossible de lire le fichier",
         "please_select_csv_file": "Veuillez sélectionner un fichier CSV",
@@ -642,8 +646,8 @@
     },
     "permissions": {
         "permission_required": "Permission requise",
-        "storage_permission_message": "HabitRise a besoin de la permission de stockage pour importer et exporter vos données d'habitudes.",
-        "storage_permission_settings_message": "HabitRise a besoin de la permission de stockage pour importer et exporter vos données d'habitudes. Veuillez l'activer dans les paramètres de votre appareil.",
+        "storage_permission_message": "HabitForm a besoin de la permission de stockage pour importer et exporter vos données d'habitudes.",
+        "storage_permission_settings_message": "HabitForm a besoin de la permission de stockage pour importer et exporter vos données d'habitudes. Veuillez l'activer dans les paramètres de votre appareil.",
         "cancel": "Annuler",
         "try_again": "Réessayer",
         "settings": "Paramètres"
@@ -654,7 +658,7 @@
     },
     "purchase_dialog": {
         "pro_required_title": "Vous avez besoin de la version pro pour débloquer cette fonctionnalité",
-        "pro_required_message": "Débloquez HabitRise Pro pour accéder à cette fonctionnalité et à de nombreuses autres fonctionnalités pro !"
+        "pro_required_message": "Débloquez HabitForm Pro pour accéder à cette fonctionnalité et à de nombreuses autres fonctionnalités pro !"
     },
     "habit_category": {
         "title": "Catégorie d'habitude",
@@ -692,6 +696,7 @@
         "good": "Bien",
         "keep_going_status": "Continuez",
         "progress": "Progrès",
+        "habit_probability": "Probabilité d'habitude",
         "continue": "Continuer",
         "habit_fully_formed": "Habitude Entièrement Formée! 🎉",
         "almost_there": "Presque Arrivé! 🔥",

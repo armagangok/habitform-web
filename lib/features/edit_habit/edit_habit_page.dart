@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:habitrise/features/habit_emoji/emoji_picker_button.dart';
+import 'package:habitform/features/habit_emoji/emoji_picker_button.dart';
 
 import '/core/core.dart';
 import '/models/models.dart';

@@ -13,7 +13,7 @@ extension EasyString on String {
       case "ThemeMode.system":
         return ThemeMode.system;
       default:
-        return ThemeMode.system;
+        return ThemeMode.dark;
     }
   }
 }

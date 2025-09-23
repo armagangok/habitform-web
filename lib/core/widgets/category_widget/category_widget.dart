@@ -1,5 +1,5 @@
 import 'package:flutter/services.dart';
-import 'package:habitrise/core/core.dart';
+import 'package:habitform/core/core.dart';
 
 class CategoryWidget extends StatefulWidget {
   final List<String> categories;

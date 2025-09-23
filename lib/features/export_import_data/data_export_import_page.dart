@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:habitrise/core/widgets/my_list_tile.dart';
+import 'package:habitform/core/widgets/my_list_tile.dart';
 
 import '../../core/core.dart';
 import '../home/provider/home_provider.dart';

@@ -83,6 +83,7 @@ class _TimePickerModalState extends State<_TimePickerModal> {
             child: CupertinoDatePicker(
               mode: CupertinoDatePickerMode.time,
               initialDateTime: selectedTime,
+              use24hFormat: true,
               onDateTimeChanged: (DateTime newTime) {
                 setState(() {
                   selectedTime = newTime;

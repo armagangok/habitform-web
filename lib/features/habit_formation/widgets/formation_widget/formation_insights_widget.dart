@@ -3,7 +3,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:habitrise/core/extension/extensions.dart';
+import 'package:habitform/core/extension/extensions.dart';
 
 import '/features/translation/constants/locale_keys.g.dart';
 import '/models/habit/habit_difficulty.dart';

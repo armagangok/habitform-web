@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:habitrise/core/extension/easy_context.dart';
+import 'package:habitform/core/extension/easy_context.dart';
 
 class OnboardingMessage extends StatelessWidget {
   final String data;

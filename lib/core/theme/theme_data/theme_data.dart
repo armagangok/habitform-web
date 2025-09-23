@@ -3,7 +3,7 @@ import '../../core.dart';
 final class Themes {
   static final cupertinoDarkTheme = CupertinoThemeData(
     brightness: Brightness.dark,
-    primaryColor: Colors.deepOrangeAccent,
+    primaryColor: Colors.orange,
     selectionHandleColor: CupertinoColors.black.withValues(alpha: .25),
     primaryContrastingColor: CupertinoColors.white.withValues(alpha: .25),
     textTheme: const CupertinoTextThemeData(
@@ -13,7 +13,7 @@ final class Themes {
 
   static final cupertinoLightTheme = CupertinoThemeData(
     brightness: Brightness.light,
-    primaryColor: Colors.deepOrangeAccent,
+    primaryColor: Colors.orange,
     selectionHandleColor: CupertinoColors.white,
     primaryContrastingColor: CupertinoColors.black.withValues(alpha: .25),
     scaffoldBackgroundColor: CupertinoColors.tertiarySystemGroupedBackground,

@@ -43,15 +43,24 @@ class SubscribeButton extends ConsumerWidget {
                             Consumer(
                               builder: (context, ref, child) {
                                 final themeMode = ref.watch(themeProvider);
-                                return themeMode == ThemeMode.dark
-                                    ? Assets.app.habitriseDarkTransparent.image(
-                                        width: 40,
-                                        height: 40,
-                                      )
-                                    : Assets.app.habitriseLightTransparent.image(
-                                        width: 40,
-                                        height: 40,
-                                      );
+                                if (themeMode == ThemeMode.dark) {
+                                  return ClipRRect(
+                                    borderRadius: BorderRadius.circular(8),
+                                    child: Assets.app.appLogoDark.image(
+                                      width: 40,
+                                      height: 40,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  );
+                                } else {
+                                  return ClipRRect(
+                                    borderRadius: BorderRadius.circular(8),
+                                    child: Assets.app.appLogoDark.image(
+                                      width: 40,
+                                      height: 40,
+                                    ),
+                                  );
+                                }
                               },
                             ),
                             SizedBox(width: 12),
@@ -86,7 +95,7 @@ class SubscribeButton extends ConsumerWidget {
                                               ),
                                             ),
                                             TextSpan(
-                                              text: 'Rise ',
+                                              text: 'Form ',
                                               style: context.titleMedium.copyWith(
                                                 fontWeight: FontWeight.bold,
                                                 color: context.primary,

@@ -4,11 +4,11 @@ export 'package:flutter/cupertino.dart';
 export 'package:flutter/material.dart' hide RefreshIndicator, RefreshCallback;
 export 'package:flutter_animate/flutter_animate.dart';
 export 'package:font_awesome_flutter/font_awesome_flutter.dart';
-export 'package:habitrise/core/widgets/circular_action_button.dart';
-export 'package:habitrise/core/widgets/cupertino_card.dart';
-export 'package:habitrise/core/widgets/custom_button.dart';
-export 'package:habitrise/core/widgets/flushbar_widget.dart';
-export 'package:habitrise/features/translation/constants/locale_keys.g.dart';
+export 'package:habitform/core/widgets/circular_action_button.dart';
+export 'package:habitform/core/widgets/cupertino_card.dart';
+export 'package:habitform/core/widgets/custom_button.dart';
+export 'package:habitform/core/widgets/flushbar_widget.dart';
+export 'package:habitform/features/translation/constants/locale_keys.g.dart';
 
 export '/core/widgets/blur_widget.dart';
 export '/core/widgets/trailing_button.dart';

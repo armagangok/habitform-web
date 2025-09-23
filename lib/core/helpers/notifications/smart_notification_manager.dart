@@ -192,13 +192,20 @@ class SmartNotificationManager {
   Future<void> _scheduleSingleNotification(UpcomingNotification notification) async {
     try {
       final androidDetails = AndroidNotificationDetails(
-        'HabitRise_Habit_Reminder', // Use same channel as NotificationHelper
+        'HabitForm_Habit_Reminder', // Use same channel as NotificationHelper
         'Habit Reminder', // Use same channel name as NotificationHelper
         channelDescription: 'Channel for habit reminder notifications', // Use same description as NotificationHelper
         importance: Importance.high,
         priority: Priority.high,
         enableVibration: true,
         icon: 'ic_launcher',
+        largeIcon: const DrawableResourceAndroidBitmap('ic_launcher'),
+        styleInformation: BigTextStyleInformation(
+          notification.body,
+          htmlFormatBigText: true,
+          contentTitle: notification.title,
+          htmlFormatContentTitle: true,
+        ),
       );
 
       final notificationDetails = NotificationDetails(
@@ -259,7 +266,7 @@ class SmartNotificationManager {
       final androidPlugin = _notificationPlugin.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>();
       if (androidPlugin != null) {
         const channel = AndroidNotificationChannel(
-          'HabitRise_Habit_Reminder', // Channel ID
+          'HabitForm_Habit_Reminder', // Channel ID
           'Habit Reminder', // Channel Name
           description: 'Channel for habit reminder notifications',
           importance: Importance.high,

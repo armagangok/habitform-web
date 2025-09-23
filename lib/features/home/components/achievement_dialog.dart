@@ -31,18 +31,20 @@ class AchievementDialog extends StatefulWidget {
 class _AchievementDialogState extends State<AchievementDialog> with TickerProviderStateMixin {
   late AnimationController _scaleController;
   late AnimationController _scoreController;
-  late AnimationController _particleController;
+
   late AnimationController _fadeController;
   late AnimationController _slideController;
   late AnimationController _pulseController;
+  late AnimationController _ringRotationController;
   late ConfettiController _confettiController;
 
   late Animation<double> _scaleAnimation;
   late Animation<double> _scoreAnimation;
-  late Animation<double> _particleAnimation;
+
   late Animation<double> _fadeAnimation;
   late Animation<Offset> _slideAnimation;
   late Animation<double> _pulseAnimation;
+  late Animation<double> _ringRotationAnimation;
 
   int _lastNotifiedScore = 0;
 
@@ -55,11 +57,12 @@ class _AchievementDialogState extends State<AchievementDialog> with TickerProvid
 
     _scaleController = AnimationController(duration: const Duration(milliseconds: 600), vsync: this);
     _scoreController = AnimationController(duration: const Duration(milliseconds: 2500), vsync: this);
-    _particleController = AnimationController(duration: const Duration(milliseconds: 3000), vsync: this);
+
     _fadeController = AnimationController(duration: const Duration(milliseconds: 500), vsync: this);
     _slideController = AnimationController(duration: const Duration(milliseconds: 600), vsync: this);
     _pulseController = AnimationController(duration: const Duration(milliseconds: 1500), vsync: this);
     _confettiController = ConfettiController(duration: const Duration(seconds: 3));
+    _ringRotationController = AnimationController(duration: const Duration(milliseconds: 6000), vsync: this);
 
     _scaleAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
       CurvedAnimation(parent: _scaleController, curve: Curves.easeOutBack),
@@ -71,10 +74,6 @@ class _AchievementDialogState extends State<AchievementDialog> with TickerProvid
       CurvedAnimation(parent: _scoreController, curve: Curves.easeOutCubic),
     );
 
-    _particleAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(parent: _particleController, curve: Curves.easeOut),
-    );
-
     _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
       CurvedAnimation(parent: _fadeController, curve: Curves.easeOutCubic),
     );
@@ -84,8 +83,11 @@ class _AchievementDialogState extends State<AchievementDialog> with TickerProvid
       end: Offset.zero,
     ).animate(CurvedAnimation(parent: _slideController, curve: Curves.easeOutCubic));
 
-    _pulseAnimation = Tween<double>(begin: 0.8, end: 1.2).animate(
+    _pulseAnimation = Tween<double>(begin: 0.95, end: 1.05).animate(
       CurvedAnimation(parent: _pulseController, curve: Curves.easeInOut),
+    );
+    _ringRotationAnimation = Tween<double>(begin: 0.0, end: 2 * pi).animate(
+      CurvedAnimation(parent: _ringRotationController, curve: Curves.linear),
     );
 
     _lastNotifiedScore = 0;
@@ -102,12 +104,9 @@ class _AchievementDialogState extends State<AchievementDialog> with TickerProvid
     _slideController.forward();
     _scaleController.forward();
 
-    Future.delayed(const Duration(milliseconds: 200), () {
-      if (mounted) {
-        _pulseController.repeat(reverse: true);
-        _particleController.forward();
-      }
-    });
+    // Subtle breathing/pulse for glow effects
+    _pulseController.repeat(reverse: true);
+    _ringRotationController.repeat();
 
     Future.delayed(const Duration(milliseconds: 400), () {
       if (mounted) {
@@ -124,17 +123,17 @@ class _AchievementDialogState extends State<AchievementDialog> with TickerProvid
   void dispose() {
     _scaleController.dispose();
     _scoreController.dispose();
-    _particleController.dispose();
     _fadeController.dispose();
     _slideController.dispose();
     _pulseController.dispose();
+    _ringRotationController.dispose();
     _confettiController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    final cupertinoTheme = CupertinoTheme.of(context);
     final habitColor = Color(widget.habit.colorCode);
 
     return CustomBlurWidget(
@@ -152,56 +151,48 @@ class _AchievementDialogState extends State<AchievementDialog> with TickerProvid
                     scale: _scaleAnimation,
                     child: Center(
                       child: CupertinoPopupSurface(
-                        child: ColoredBox(
-                          color: habitColor.withValues(alpha: 0.075),
-                          child: ConstrainedBox(
-                            constraints: BoxConstraints(
-                              maxHeight: context.height(0.85),
-                              maxWidth: context.width(0.9),
-                            ),
-                            child: Padding(
-                              padding: context.padding(0.04),
-                              child: SingleChildScrollView(
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    // Achievement Emoji with premium effects
-                                    _buildAnimatedEmoji(context, habitColor),
-                                    SizedBox(height: context.height(0.02)),
-
-                                    // Habit name
-                                    Text(
-                                      widget.habit.habitName,
-                                      style: context.headlineMedium.copyWith(
-                                        fontWeight: FontWeight.w700,
-                                        color: theme.colorScheme.onSurface,
+                        child: ConstrainedBox(
+                          constraints: BoxConstraints(
+                            maxHeight: context.height(0.85),
+                            maxWidth: context.width(0.9),
+                          ),
+                          child: Padding(
+                            padding: context.padding(0.04),
+                            child: SingleChildScrollView(
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  // Achievement Emoji with premium effects
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        LocaleKeys.achievement_dialog_habit_probability.tr(),
+                                        style: context.titleMedium.copyWith(
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 20,
+                                        ),
+                                        textAlign: TextAlign.center,
                                       ),
-                                      textAlign: TextAlign.center,
-                                    ),
+                                    ],
+                                  ),
+                                  SizedBox(height: context.height(0.01)),
 
-                                    // Achievement title
-                                    Text(
-                                      widget.pointsGained > 0 ? LocaleKeys.achievement_dialog_amazing_progress.tr() : LocaleKeys.achievement_dialog_keep_going.tr(),
-                                      style: context.titleLarge.copyWith(
-                                        fontWeight: FontWeight.w600,
-                                        color: habitColor,
-                                      ),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                    SizedBox(height: context.height(0.02)),
+                                  _buildAnimatedEmoji(context, habitColor),
 
-                                    // Score display with premium styling
-                                    _buildScoreDisplay(context, theme, habitColor),
-                                    SizedBox(height: context.height(0.02)),
+                                  SizedBox(height: context.height(0.01)),
 
-                                    // Progress section
-                                    _buildProgressSection(context, theme, habitColor),
-                                    SizedBox(height: context.height(0.02)),
+                                  // Score display with premium styling
+                                  _buildScoreDisplay(context, cupertinoTheme, habitColor),
+                                  SizedBox(height: context.height(0.01)),
 
-                                    // Continue button with premium styling
-                                    _buildPremiumButton(context, theme, habitColor),
-                                  ],
-                                ),
+                                  // Progress section
+                                  _buildProgressSection(context, cupertinoTheme, habitColor),
+                                  SizedBox(height: context.height(0.02)),
+
+                                  // Continue button with premium styling
+                                  _buildPremiumButton(context, habitColor),
+                                ],
                               ),
                             ),
                           ),
@@ -220,7 +211,7 @@ class _AchievementDialogState extends State<AchievementDialog> with TickerProvid
               confettiController: _confettiController,
               blastDirectionality: BlastDirectionality.explosive,
               emissionFrequency: 0.05,
-              numberOfParticles: 20,
+              numberOfParticles: 15,
               minBlastForce: 10,
               maxBlastForce: 25,
               gravity: 0.3,
@@ -233,6 +224,7 @@ class _AchievementDialogState extends State<AchievementDialog> with TickerProvid
                 const Color(0xFFFFD700),
                 const Color(0xFFFF6B6B),
                 const Color(0xFF4ECDC4),
+                const Color.fromARGB(255, 112, 205, 78),
               ],
               createParticlePath: _drawStar,
             ),
@@ -243,44 +235,74 @@ class _AchievementDialogState extends State<AchievementDialog> with TickerProvid
   }
 
   Widget _buildAnimatedEmoji(BuildContext context, Color habitColor) {
+    final size = context.width(0.28);
     return AnimatedBuilder(
-      animation: Listenable.merge([_pulseAnimation, _particleAnimation]),
+      animation: Listenable.merge([
+        _pulseAnimation,
+      ]),
       builder: (context, child) {
-        return Transform.scale(
-          scale: _pulseAnimation.value,
+        final glowScale = _pulseAnimation.value;
+        return SizedBox(
+          width: size,
+          height: size,
           child: Stack(
             alignment: Alignment.center,
             children: [
-              // Floating particles
+              // Soft outer glow
+              Transform.scale(
+                scale: glowScale,
+                child: Container(
+                  width: size,
+                  height: size,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    boxShadow: [
+                      BoxShadow(
+                        color: habitColor.withValues(alpha: 0.30),
+                        blurRadius: 35,
+                        spreadRadius: 6,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              // Gradient ring with subtle sheen
               AnimatedBuilder(
-                animation: _particleAnimation,
-                builder: (context, child) {
+                animation: _ringRotationAnimation,
+                builder: (context, _) {
                   return CustomPaint(
-                    size: Size(context.width(0.3), context.width(0.3)),
-                    painter: _ParticlePainter(
-                      progress: _particleAnimation.value,
-                      color: habitColor,
+                    isComplex: true,
+                    willChange: true,
+                    size: Size.square(size),
+                    painter: _GradientRingPainter(
+                      baseColor: habitColor,
+                      glowFactor: (_pulseAnimation.value - 1.0).abs(),
+                      rotation: _ringRotationAnimation.value,
                     ),
                   );
                 },
               ),
-              // Main icon container with liquid glass effect
+              // Inner glassy circle with emoji
               Container(
-                width: context.width(0.25),
-                height: context.width(0.25),
+                width: size * 0.72,
+                height: size * 0.72,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   gradient: RadialGradient(
                     colors: [
-                      habitColor.withValues(alpha: 0.15),
-                      habitColor.withValues(alpha: 0.08),
+                      habitColor.withValues(alpha: 0.22),
+                      habitColor.withValues(alpha: 0.10),
                     ],
+                  ),
+                  border: Border.all(
+                    color: habitColor.withValues(alpha: 0.35),
+                    width: 1.5,
                   ),
                   boxShadow: [
                     BoxShadow(
-                      color: habitColor.withValues(alpha: 0.25),
-                      blurRadius: 15,
-                      spreadRadius: 3,
+                      color: habitColor.withValues(alpha: 0.20),
+                      blurRadius: 18,
+                      spreadRadius: 2,
                     ),
                   ],
                 ),
@@ -298,7 +320,7 @@ class _AchievementDialogState extends State<AchievementDialog> with TickerProvid
     );
   }
 
-  Widget _buildScoreDisplay(BuildContext context, ThemeData theme, Color habitColor) {
+  Widget _buildScoreDisplay(BuildContext context, CupertinoThemeData theme, Color habitColor) {
     return AnimatedBuilder(
       animation: _scoreAnimation,
       builder: (context, child) {
@@ -306,229 +328,177 @@ class _AchievementDialogState extends State<AchievementDialog> with TickerProvid
         final progress = animatedScore / 100.0;
         final scoreColor = _getFormationScoreColor(animatedScore);
 
-        return _buildAdvancedCircularProgress(context, progress, animatedScore, scoreColor, theme);
+        return _buildProgress(progress, animatedScore, scoreColor, theme);
       },
     );
   }
 
-  Widget _buildAdvancedCircularProgress(
-    BuildContext context,
+  Widget _buildProgress(
     double progress,
     double animatedScore,
     Color scoreColor,
-    ThemeData theme,
+    CupertinoThemeData theme,
   ) {
-    return Container(
-      width: context.width(0.3),
-      height: context.width(0.3),
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        gradient: RadialGradient(
-          colors: [
-            scoreColor.withValues(alpha: 0.15),
-            scoreColor.withValues(alpha: 0.08),
-            Colors.transparent,
-          ],
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: scoreColor.withValues(alpha: 0.2),
-            blurRadius: 50,
-            spreadRadius: 2,
-          ),
-        ],
-      ),
-      child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+    return Builder(builder: (context) {
+      final diameter = context.width(0.5);
+      return SizedBox(
+        height: diameter,
+        width: diameter,
+        child: Stack(
+          alignment: Alignment.center,
           children: [
-            // Large animated score
-            AnimatedBuilder(
-              animation: _scoreAnimation,
-              builder: (context, child) {
-                return Text(
-                  '${animatedScore.round()}',
-                  style: context.displayLarge.copyWith(
-                    fontWeight: FontWeight.w800,
-                    color: scoreColor,
-                    fontSize: 42,
-                    fontFeatures: [
-                      FontFeature.tabularFigures(),
-                    ],
-                    shadows: [
-                      Shadow(
-                        color: scoreColor.withValues(alpha: 0.4),
-                        blurRadius: 12,
-                        offset: const Offset(0, 3),
-                      ),
-                    ],
-                  ),
-                );
-              },
-            ),
-
-            // Formation status
-            Text(
-              _getFormationStatus(progress),
-              style: context.titleMedium.copyWith(
-                color: theme.colorScheme.onSurface.withValues(alpha: 0.8),
-                fontWeight: FontWeight.w600,
-                fontSize: context.width(0.04),
+            // Background ring and progress with sheen
+            CustomPaint(
+              size: Size.square(diameter),
+              painter: _GlossyProgressPainter(
+                progress: progress.clamp(0.0, 1.0),
+                baseColor: scoreColor,
+                sheenPhase: _pulseAnimation.value,
               ),
-              textAlign: TextAlign.center,
+            ),
+            // Centered score and label
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                AnimatedBuilder(
+                  animation: _scoreAnimation,
+                  builder: (context, child) {
+                    return Text(
+                      '${animatedScore.round()}',
+                      style: context.displayLarge.copyWith(
+                        fontWeight: FontWeight.w800,
+                        color: scoreColor,
+                        fontSize: 44,
+                        fontFeatures: [
+                          FontFeature.tabularFigures(),
+                        ],
+                      ),
+                    );
+                  },
+                ),
+              ],
             ),
           ],
         ),
-      ),
-    );
+      );
+    });
   }
 
-  String _getFormationStatus(double progress) {
-    if (progress >= 0.9) return LocaleKeys.achievement_dialog_excellent.tr();
-    if (progress >= 0.7) return LocaleKeys.achievement_dialog_great.tr();
-    if (progress >= 0.5) return LocaleKeys.achievement_dialog_good.tr();
-    return LocaleKeys.achievement_dialog_keep_going_status.tr();
-  }
-
-  Widget _buildProgressSection(BuildContext context, ThemeData theme, Color habitColor) {
+  Widget _buildProgressSection(BuildContext context, CupertinoThemeData theme, Color habitColor) {
+    final cupertinoTheme = CupertinoTheme.of(context);
     final remainingDays = _getRemainingDaysByCompletions();
-    final totalDays = _totalFormationDays;
 
     return CupertinoCard(
       color: habitColor.withValues(alpha: 0.05),
       child: Container(
         padding: EdgeInsets.symmetric(
           horizontal: context.width(0.04),
-          vertical: context.height(0.012),
+          vertical: context.height(0.014),
         ),
-        decoration: const BoxDecoration(),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            // Title and progress indicator
-            Row(
-              mainAxisAlignment: remainingDays == 0 ? MainAxisAlignment.center : MainAxisAlignment.spaceBetween,
+            // Chips row (wrap to avoid overflow)
+            Wrap(
+              alignment: WrapAlignment.center,
+              spacing: context.width(0.02),
+              runSpacing: context.height(0.006),
               children: [
-                Expanded(
-                  child: Text(
-                    _getFormationProgressTitle(),
-                    style: context.titleMedium.copyWith(
-                      fontWeight: FontWeight.w700,
-                      color: habitColor,
-                    ),
-                    textAlign: remainingDays == 0 ? TextAlign.center : TextAlign.start,
-                  ),
+                _InfoChip(
+                  icon: CupertinoIcons.flame_fill,
+                  label: widget.habit.difficulty.displayName,
+                  color: habitColor,
                 ),
-                if (remainingDays > 0) ...[
-                  Container(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: context.width(0.03),
-                      vertical: context.height(0.008),
-                    ),
-                    decoration: BoxDecoration(
-                      color: habitColor.withValues(alpha: 0.15),
-                      borderRadius: BorderRadius.circular(context.width(0.02)),
-                    ),
-                    child: Text(
-                      _getFormationDaysText(),
-                      style: context.bodyMedium.copyWith(
-                        fontWeight: FontWeight.w600,
-                        color: habitColor,
-                      ),
-                    ),
-                  ),
-                ],
+                _InfoChip(
+                  icon: CupertinoIcons.calendar_badge_plus,
+                  label: remainingDays == 0 ? LocaleKeys.achievement_dialog_habit_fully_formed.tr() : '${remainingDays.toString()} ${LocaleKeys.common_days.tr()}',
+                  color: habitColor,
+                ),
               ],
             ),
-
-            SizedBox(height: context.height(0.02)),
-
-            // Show special message for fully formed habits
-            if (remainingDays == 0) ...[
-              Container(
-                padding: EdgeInsets.symmetric(
-                  horizontal: context.width(0.04),
-                  vertical: context.height(0.012),
+            SizedBox(height: context.height(0.012)),
+            if (remainingDays == 0)
+              Text(
+                LocaleKeys.achievement_dialog_congratulations_fully_formed.tr(),
+                style: context.bodyMedium.copyWith(
+                  color: const Color(0xFF4CAF50),
+                  height: 1.4,
+                  fontWeight: FontWeight.w600,
                 ),
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    colors: [
-                      const Color(0xFF4CAF50).withValues(alpha: 0.15),
-                      const Color(0xFF4CAF50).withValues(alpha: 0.08),
-                    ],
-                  ),
+                textAlign: TextAlign.center,
+              )
+            else
+              Text(
+                _getFormationMessage(widget.newScore),
+                style: context.bodyMedium.copyWith(
+                  color: cupertinoTheme.textTheme.textStyle.color ?? CupertinoColors.label,
+                  height: 1.4,
+                  fontWeight: FontWeight.w500,
                 ),
-                child: Text(
-                  '${LocaleKeys.achievement_dialog_congratulations_fully_formed.tr()} ${LocaleKeys.achievement_dialog_formation_takes_days.tr(namedArgs: {'total': totalDays.toString()})}',
-                  style: context.bodyMedium.copyWith(
-                    color: const Color(0xFF4CAF50),
-                    height: 1.4,
-                    fontWeight: FontWeight.w600,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
+                textAlign: TextAlign.center,
               ),
-              SizedBox(height: context.height(0.015)),
-            ],
-
-            // Clear formation message - only show if habit is not fully formed
-            if (remainingDays > 0) ...[
-              Column(
-                children: [
-                  Text(
-                    _getFormationMessage(widget.newScore),
-                    style: context.bodyMedium.copyWith(
-                      color: theme.colorScheme.onSurface,
-                      height: 1.4,
-                      fontWeight: FontWeight.w500,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  SizedBox(height: context.height(0.01)),
-                  Text(
-                    LocaleKeys.achievement_dialog_formation_takes_days.tr(namedArgs: {'total': totalDays.toString()}),
-                    style: context.bodySmall.copyWith(
-                      color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                ],
-              ),
-            ],
           ],
         ),
       ),
     );
   }
 
-  Widget _buildPremiumButton(BuildContext context, ThemeData theme, Color habitColor) {
+  Widget _buildPremiumButton(BuildContext context, Color habitColor) {
+    final gradient = LinearGradient(
+      colors: [
+        habitColor.withValues(alpha: 0.95),
+        habitColor,
+      ],
+      begin: Alignment.topLeft,
+      end: Alignment.bottomRight,
+    );
+
     return CupertinoButton(
-      color: habitColor,
-      borderRadius: BorderRadius.circular(90),
       onPressed: () {
         HapticFeedback.lightImpact();
         Navigator.of(context).pop();
       },
       padding: EdgeInsets.zero,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            LocaleKeys.achievement_dialog_continue.tr(),
-            style: context.bodyLarge.copyWith(
-              fontWeight: FontWeight.w600,
-              color: Colors.white,
+      borderRadius: BorderRadius.circular(90),
+      child: Container(
+        decoration: BoxDecoration(
+          gradient: gradient,
+          borderRadius: BorderRadius.circular(90),
+          boxShadow: [
+            BoxShadow(
+              color: habitColor.withValues(alpha: 0.35),
+              blurRadius: 16,
+              offset: const Offset(0, 3),
             ),
-          ),
-          SizedBox(width: context.width(0.02)),
-          Icon(
-            CupertinoIcons.arrow_right_circle_fill,
-            color: Colors.white,
-            size: context.width(0.05),
-          ),
-        ],
+          ],
+        ),
+        padding: EdgeInsets.symmetric(
+          horizontal: context.width(0.07),
+          vertical: context.height(0.014),
+        ),
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  LocaleKeys.achievement_dialog_continue.tr(),
+                  style: context.bodyLarge.copyWith(
+                    fontWeight: FontWeight.w700,
+                    color: CupertinoColors.white,
+                  ),
+                ),
+                SizedBox(width: context.width(0.02)),
+                const Icon(
+                  CupertinoIcons.arrow_right_circle_fill,
+                  color: CupertinoColors.white,
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -555,10 +525,16 @@ class _AchievementDialogState extends State<AchievementDialog> with TickerProvid
   }
 
   Color _getFormationScoreColor(double score) {
-    if (score >= 90) return const Color(0xFF4CAF50); // Green - Excellent
-    if (score >= 70) return const Color(0xFF8BC34A); // Light Green - Good
-    if (score >= 50) return const Color(0xFFFFC107); // Amber - Moderate
-    return const Color(0xFFF44336); // Red - Insufficient
+    // Map score [0,100] to hue [0 (red) .. 120 (green)] for smoother variety
+    final clamped = score.clamp(0.0, 100.0);
+    final t = clamped / 100.0;
+    final hue = 120.0 * t; // 0 -> red, 120 -> green
+
+    // Slightly increase saturation and lightness for higher scores for richer colors
+    final saturation = 0.55 + (0.25 * t); // 0.55 .. 0.80
+    final lightness = 0.45 + (0.10 * t); // 0.45 .. 0.55
+
+    return HSLColor.fromAHSL(1.0, hue, saturation.clamp(0.0, 1.0), lightness.clamp(0.0, 1.0)).toColor();
   }
 
   // Calculate total formation days needed for this habit
@@ -569,38 +545,6 @@ class _AchievementDialogState extends State<AchievementDialog> with TickerProvid
   // Remaining days to reach formation based on completions
   int _getRemainingDaysByCompletions() {
     return widget.habit.completions.getRemainingFormationDays(_totalFormationDays);
-  }
-
-  String _getFormationProgressTitle() {
-    final remainingDays = _getRemainingDaysByCompletions();
-
-    if (remainingDays == 0) {
-      return LocaleKeys.achievement_dialog_habit_fully_formed.tr();
-    } else if (remainingDays <= 7) {
-      return LocaleKeys.achievement_dialog_almost_there.tr();
-    } else if (remainingDays <= 14) {
-      return LocaleKeys.achievement_dialog_strong_progress.tr();
-    } else {
-      return LocaleKeys.achievement_dialog_building_momentum.tr();
-    }
-  }
-
-  String _getFormationDaysText() {
-    final remainingDays = _getRemainingDaysByCompletions();
-    final totalDays = _totalFormationDays;
-
-    if (remainingDays == 0) {
-      return LocaleKeys.achievement_dialog_complete.tr();
-    } else if (remainingDays == 1) {
-      return LocaleKeys.achievement_dialog_day_left.tr();
-    } else if (remainingDays <= 7) {
-      return LocaleKeys.achievement_dialog_days_left.tr(namedArgs: {'days': remainingDays.toString()});
-    } else {
-      return LocaleKeys.achievement_dialog_days_of_total.tr(namedArgs: {
-        'remaining': remainingDays.toString(),
-        'total': totalDays.toString(),
-      });
-    }
   }
 
   String _getFormationMessage(int score) {
@@ -651,29 +595,193 @@ class _AchievementDialogState extends State<AchievementDialog> with TickerProvid
   }
 }
 
-class _ParticlePainter extends CustomPainter {
-  final double progress;
-  final Color color;
+// Decorative gradient ring behind the emoji
+class _GradientRingPainter extends CustomPainter {
+  _GradientRingPainter({required this.baseColor, required this.glowFactor, this.rotation = 0.0});
 
-  _ParticlePainter({required this.progress, required this.color});
+  final Color baseColor;
+  final double glowFactor; // 0..~ for subtle width/shadow variation
+  final double rotation; // radians
 
   @override
   void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..color = color.withValues(alpha: 0.15 * progress)
-      ..style = PaintingStyle.fill;
+    final rect = Offset.zero & size;
+    final center = rect.center;
+    final radius = size.shortestSide / 2;
 
-    final random = Random(42); // Fixed seed for consistent animation
+    // Background subtle ring with anti-alias
+    final bgPaint = Paint()
+      ..isAntiAlias = true
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 8
+      ..color = baseColor.withValues(alpha: 0.10);
+    canvas.drawCircle(center, radius * 0.86, bgPaint);
 
-    for (int i = 0; i < 12; i++) {
-      final x = random.nextDouble() * size.width;
-      final y = random.nextDouble() * size.height;
-      final radius = (random.nextDouble() * 4 + 2) * progress;
+    // Gradient sweep ring
+    final sweepPaint = Paint()
+      ..isAntiAlias = true
+      ..style = PaintingStyle.stroke
+      ..strokeCap = StrokeCap.round
+      ..strokeWidth = 10 + glowFactor * 2
+      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 1.2)
+      ..shader = SweepGradient(
+        startAngle: 0.0,
+        endAngle: 2 * pi,
+        tileMode: TileMode.repeated,
+        transform: GradientRotation(-pi / 2 + rotation),
+        colors: [
+          baseColor.withValues(alpha: 0.00),
+          baseColor.withValues(alpha: 0.45),
+          const Color(0xFFFFD700).withOpacity(0.55),
+          baseColor.withValues(alpha: 0.45),
+          baseColor.withValues(alpha: 0.00),
+        ],
+        stops: const [0.00, 0.30, 0.50, 0.70, 1.00],
+      ).createShader(rect);
 
-      canvas.drawCircle(Offset(x, y), radius, paint);
-    }
+    final ringRect = Rect.fromCircle(center: center, radius: radius * 0.78);
+    canvas.drawArc(ringRect, -pi / 2, 2 * pi, false, sweepPaint);
+
+    // Inner highlight ring
+    final inner = Paint()
+      ..isAntiAlias = true
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1.5
+      ..color = CupertinoColors.white.withOpacity(0.20);
+    canvas.drawCircle(center, radius * 0.62, inner);
   }
 
   @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
+  bool shouldRepaint(covariant _GradientRingPainter oldDelegate) {
+    return oldDelegate.baseColor != baseColor || oldDelegate.glowFactor != glowFactor || oldDelegate.rotation != rotation;
+  }
+}
+
+// Glossy circular progress with subtle moving sheen
+class _GlossyProgressPainter extends CustomPainter {
+  _GlossyProgressPainter({required this.progress, required this.baseColor, required this.sheenPhase});
+
+  final double progress; // 0..1
+  final Color baseColor;
+  final double sheenPhase; // 0.95..1.05 breathing value
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final rect = Offset.zero & size;
+    final center = rect.center;
+    final radius = size.shortestSide / 2;
+
+    // Background track with soft edges
+    final trackPaint = Paint()
+      ..isAntiAlias = true
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 14
+      ..strokeCap = StrokeCap.round
+      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 1.5)
+      ..color = baseColor.withValues(alpha: 0.10);
+    final ringRect = Rect.fromCircle(center: center, radius: radius * 0.80);
+    canvas.drawArc(ringRect, -pi / 2, 2 * pi, false, trackPaint);
+
+    // Under-glow to soften outer border
+    final glowPaint = Paint()
+      ..isAntiAlias = true
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 20
+      ..strokeCap = StrokeCap.round
+      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 6)
+      ..color = baseColor.withValues(alpha: 0.25);
+    final sweepAngle = (2 * pi) * progress;
+    canvas.drawArc(ringRect, -pi / 2, sweepAngle, false, glowPaint);
+
+    // Progress gradient with seamless ends and clamp tile mode
+    final progressPaint = Paint()
+      ..isAntiAlias = true
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 16
+      ..strokeCap = StrokeCap.round
+      ..shader = SweepGradient(
+        startAngle: 0.0,
+        endAngle: 2 * pi,
+        tileMode: TileMode.clamp,
+        transform: const GradientRotation(-pi / 2),
+        colors: [
+          baseColor.withValues(alpha: 0.15),
+          baseColor.withValues(alpha: 0.90),
+          const Color(0xFFFFD700),
+          baseColor.withValues(alpha: 0.90),
+          baseColor.withValues(alpha: 0.15),
+        ],
+        stops: const [0.00, 0.40, 0.55, 0.70, 1.00],
+      ).createShader(rect);
+    canvas.drawArc(ringRect, -pi / 2, sweepAngle, false, progressPaint);
+
+    // Sheen highlight moving along the progress end
+    final headAngle = -pi / 2 + sweepAngle;
+    final headOffset = Offset(
+      center.dx + (radius * 0.80) * cos(headAngle),
+      center.dy + (radius * 0.80) * sin(headAngle),
+    );
+    final sheenPaint = Paint()
+      ..shader = RadialGradient(
+        colors: [
+          const Color(0xFFFFFFFF).withOpacity(0.90),
+          const Color(0xFFFFFFFF).withOpacity(0.0),
+        ],
+      ).createShader(Rect.fromCircle(center: headOffset, radius: 18 + (sheenPhase - 1.0).abs() * 20));
+    canvas.drawCircle(headOffset, 10 + (sheenPhase - 1.0).abs() * 6, sheenPaint);
+
+    // Inner subtle shadow to enhance depth
+    final innerShadow = Paint()
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1
+      ..color = CupertinoColors.black.withOpacity(0.05);
+    canvas.drawCircle(center, radius * 0.62, innerShadow);
+  }
+
+  @override
+  bool shouldRepaint(covariant _GlossyProgressPainter oldDelegate) {
+    return oldDelegate.progress != progress || oldDelegate.baseColor != baseColor || oldDelegate.sheenPhase != sheenPhase;
+  }
+}
+
+class _InfoChip extends StatelessWidget {
+  const _InfoChip({required this.icon, required this.label, required this.color});
+
+  final IconData icon;
+  final String label;
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) {
+    final maxWidth = context.width(0.42);
+    return Container(
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.10),
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(color: color.withValues(alpha: 0.25), width: 1),
+      ),
+      padding: EdgeInsets.symmetric(
+        horizontal: context.width(0.025),
+        vertical: context.height(0.006),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, size: 16, color: color),
+          SizedBox(width: context.width(0.012)),
+          ConstrainedBox(
+            constraints: BoxConstraints(maxWidth: maxWidth),
+            child: Text(
+              label,
+              overflow: TextOverflow.ellipsis,
+              style: context.bodySmall.copyWith(
+                fontWeight: FontWeight.w600,
+                color: CupertinoTheme.of(context).textTheme.textStyle.color,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }

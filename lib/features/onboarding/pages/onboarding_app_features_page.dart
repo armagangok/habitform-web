@@ -4,7 +4,7 @@ import '../../../core/core.dart';
 
 /// Onboarding - App Features page
 ///
-/// This page showcases how HabitRise will help users build habits,
+/// This page showcases how HabitForm will help users build habits,
 /// including sub-habits functionality and habit formation rate visualization.
 class OnboardingAppFeaturesPage extends StatefulWidget {
   const OnboardingAppFeaturesPage({super.key, this.onContinue});
@@ -187,7 +187,7 @@ class _OnboardingAppFeaturesPageState extends State<OnboardingAppFeaturesPage> w
     await Future.delayed(const Duration(milliseconds: 1000));
     if (mounted) {
       setState(() {
-        _habitFormationRate = 0.73; // 73% habit formation rate
+        _habitFormationRate = 0.84; // 84% habit formation rate - %80 üzeri
       });
     }
   }
@@ -338,6 +338,7 @@ class _OnboardingAppFeaturesPageState extends State<OnboardingAppFeaturesPage> w
   }
 
   Widget _buildIntroScreen(BuildContext context, ThemeData theme) {
+    final String logoAsset = Assets.app.appLogoDark.path;
     return CupertinoPageScaffold(
       child: AnimatedBuilder(
         animation: _introTransitionAnimation,
@@ -352,36 +353,19 @@ class _OnboardingAppFeaturesPageState extends State<OnboardingAppFeaturesPage> w
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      // Animated icon
+                      // Animated logo
                       AnimatedBuilder(
                         animation: _pulseAnimation,
                         builder: (context, child) {
                           return Transform.scale(
                             scale: _pulseAnimation.value,
-                            child: Container(
-                              width: context.width(0.25),
-                              height: context.width(0.25),
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                gradient: RadialGradient(
-                                  colors: [
-                                    const Color(0xFF1DB954).withValues(alpha: 0.2),
-                                    const Color(0xFF1DB954).withValues(alpha: 0.1),
-                                  ],
-                                ),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: const Color(0xFF1DB954).withValues(alpha: 0.3),
-                                    blurRadius: 20,
-                                    spreadRadius: 5,
-                                  ),
-                                ],
-                              ),
-                              child: Center(
-                                child: Icon(
-                                  CupertinoIcons.heart_fill,
-                                  size: context.width(0.12),
-                                  color: const Color(0xFF1DB954),
+                            child: Center(
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(12),
+                                child: Image.asset(
+                                  logoAsset,
+                                  height: context.width(0.2),
+                                  fit: BoxFit.contain,
                                 ),
                               ),
                             ),

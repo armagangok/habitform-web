@@ -343,6 +343,9 @@ abstract class  LocaleKeys {
   static const settings_rc_id = 'settings.rc_id';
   static const settings_app_name_habit = 'settings.app_name_habit';
   static const settings_app_name_rise = 'settings.app_name_rise';
+  static const settings_review_request_title = 'settings.review_request.title';
+  static const settings_review_request_subtitle = 'settings.review_request.subtitle';
+  static const settings_review_request = 'settings.review_request';
   static const settings = 'settings';
   static const subscription_subscribe_to = 'subscription.subscribe_to';
   static const subscription_tap_advantages = 'subscription.tap_advantages';
@@ -632,6 +635,7 @@ abstract class  LocaleKeys {
   static const achievement_dialog_good = 'achievement_dialog.good';
   static const achievement_dialog_keep_going_status = 'achievement_dialog.keep_going_status';
   static const achievement_dialog_progress = 'achievement_dialog.progress';
+  static const achievement_dialog_habit_probability = 'achievement_dialog.habit_probability';
   static const achievement_dialog_continue = 'achievement_dialog.continue';
   static const achievement_dialog_habit_fully_formed = 'achievement_dialog.habit_fully_formed';
   static const achievement_dialog_almost_there = 'achievement_dialog.almost_there';

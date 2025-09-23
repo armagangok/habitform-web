@@ -14,9 +14,10 @@
 
 
     <application
-        android:label="HabitRise"
+        android:label="HabitForm"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/ic_launcher"
+        android:enableOnBackInvokedCallback="true">
 
                 <!-- Disable Impeller Rendering Engine -->
         <meta-data
