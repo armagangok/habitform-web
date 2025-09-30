@@ -498,6 +498,7 @@ abstract class  LocaleKeys {
   static const archived_habits_delete_confirmation_warning = 'archived_habits.delete_confirmation_warning';
   static const archived_habits = 'archived_habits';
   static const membership_info_title = 'membership_info.title';
+  static const membership_info_description = 'membership_info.description';
   static const membership_info_state = 'membership_info.state';
   static const membership_info_active = 'membership_info.active';
   static const membership_info_inactive = 'membership_info.inactive';
@@ -652,5 +653,17 @@ abstract class  LocaleKeys {
   static const achievement_dialog_keep_going_message = 'achievement_dialog.keep_going_message';
   static const achievement_dialog_formation_takes_days = 'achievement_dialog.formation_takes_days';
   static const achievement_dialog = 'achievement_dialog';
+  static const languages_english = 'languages.english';
+  static const languages_turkish = 'languages.turkish';
+  static const languages_chinese = 'languages.chinese';
+  static const languages_spanish = 'languages.spanish';
+  static const languages_hindi = 'languages.hindi';
+  static const languages_arabic = 'languages.arabic';
+  static const languages_finnish = 'languages.finnish';
+  static const languages_portuguese = 'languages.portuguese';
+  static const languages_russian = 'languages.russian';
+  static const languages_japanese = 'languages.japanese';
+  static const languages_italian = 'languages.italian';
+  static const languages = 'languages';
 
 }

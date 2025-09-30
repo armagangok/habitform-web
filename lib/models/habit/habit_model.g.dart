@@ -16,14 +16,27 @@ class HabitAdapter extends TypeAdapter<Habit> {
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
+
+    // Handle migration from old structure to new structure
+    int dailyTarget = 1;
+    if (fields[5] != null) {
+      try {
+        // Try to cast as int first (new structure)
+        dailyTarget = fields[5] as int;
+      } catch (e) {
+        // If it fails, it's likely the old completionDates (List), use default
+        dailyTarget = 1;
+      }
+    }
+
     return Habit(
       id: fields[0] as String,
       habitName: fields[1] as String,
       habitDescription: fields[2] as String?,
       reminderModel: fields[4] as ReminderModel?,
-      dailyTarget: fields[5] == null ? 1 : fields[5] as int,
       emoji: fields[3] as String?,
       completions: fields[7] == null ? {} : (fields[7] as Map).cast<String, CompletionEntry>(),
+      dailyTarget: dailyTarget,
       colorCode: fields[6] as int,
       archiveDate: fields[8] as DateTime?,
       status: fields[10] == null ? HabitStatus.active : fields[10] as HabitStatus,

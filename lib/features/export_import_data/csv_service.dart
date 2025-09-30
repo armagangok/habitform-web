@@ -137,7 +137,7 @@ class CSVService {
       // Dosya adını oluştur
       final now = DateTime.now();
       final formattedDate = "${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}_${now.hour.toString().padLeft(2, '0')}-${now.minute.toString().padLeft(2, '0')}";
-      final filename = 'HabitRise_export_$formattedDate.csv';
+      final filename = 'HabitForm_export_$formattedDate.csv';
       debugPrint('Generated file name: $filename');
 
       // Dosyayı Documents klasörüne kaydet

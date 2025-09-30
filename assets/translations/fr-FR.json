@@ -546,6 +546,7 @@
     },
     "membership_info": {
         "title": "Informations d'adhésion",
+        "description": "Appuyez pour voir vos informations d'adhésion",
         "state": "Statut",
         "active": "Actif",
         "inactive": "Inactif",
@@ -712,5 +713,18 @@
         "good_work": "Bon travail! Cette habitude {difficulty} nécessite {total} jours au total. {remaining} jours restants! 📈",
         "keep_going_message": "Continuez! La constance est la clé. Cette habitude {difficulty} a besoin de {remaining} jours de plus! 🌱",
         "formation_takes_days": "Cette habitude nécessite {total} jours de pratique constante pour se former"
+    },
+    "languages": {
+        "english": "Anglais",
+        "turkish": "Turc",
+        "chinese": "Chinois",
+        "spanish": "Espagnol",
+        "hindi": "Hindi",
+        "arabic": "Arabe",
+        "finnish": "Finnois",
+        "portuguese": "Portugais",
+        "russian": "Russe",
+        "japanese": "Japonais",
+        "italian": "Italien"
     }
 }

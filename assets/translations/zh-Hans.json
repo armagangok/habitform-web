@@ -546,6 +546,7 @@
     },
     "membership_info": {
         "title": "会员信息",
+        "description": "点击查看你的会员信息",
         "state": "状态",
         "active": "活跃",
         "inactive": "非活跃",
@@ -712,5 +713,18 @@
         "good_work": "做得好！这个{difficulty}习惯总共需要{total}天。还剩{remaining}天！📈",
         "keep_going_message": "继续！坚持是关键。这个{difficulty}习惯还需要{remaining}天！🌱",
         "formation_takes_days": "这个习惯需要{total}天的持续练习才能养成"
+    },
+    "languages": {
+        "english": "英语",
+        "turkish": "土耳其语",
+        "chinese": "中文",
+        "spanish": "西班牙语",
+        "hindi": "印地语",
+        "arabic": "阿拉伯语",
+        "finnish": "芬兰语",
+        "portuguese": "葡萄牙语",
+        "russian": "俄语",
+        "japanese": "日语",
+        "italian": "意大利语"
     }
 }

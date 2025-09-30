@@ -546,6 +546,7 @@
     },
     "membership_info": {
         "title": "Üyelik Bilgileri",
+        "description": "Abonelik bilgilerinizi görmek için dokunun",
         "state": "Durum",
         "active": "Aktif",
         "inactive": "Pasif",
@@ -712,5 +713,19 @@
         "good_work": "İyi iş! Bu {difficulty} alışkanlık toplam {total} gün gerektiriyor. {remaining} gün kaldı! 📈",
         "keep_going_message": "Devam edin! Tutarlılık anahtardır. Bu {difficulty} alışkanlık için {remaining} gün daha gerekiyor! 🌱",
         "formation_takes_days": "Bu alışkanlık oluşması için {total} günlük tutarlı pratik gerektirir"
+    },
+    "languages": {
+        "english": "İngilizce",
+        "turkish": "Türkçe",
+        "chinese": "Çince",
+        "spanish": "İspanyolca",
+        "hindi": "Hintçe",
+        "arabic": "Arapça",
+        "finnish": "Fince",
+        "portuguese": "Portekizce",
+        "russian": "Rusça",
+        "japanese": "Japonca",
+        "italian": "İtalyanca"
+
     }
 }

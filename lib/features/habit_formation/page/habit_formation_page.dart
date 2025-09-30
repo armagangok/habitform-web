@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lottie/lottie.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '/core/core.dart' hide showCupertinoSheet;
@@ -36,62 +37,7 @@ class HabitFormationPage extends ConsumerWidget {
                           loading: () => const Center(child: CircularProgressIndicator()),
                           error: (error, stackTrace) => Center(child: Text('${LocaleKeys.errors_something_went_wrong.tr()}: $error')),
                           data: (state) {
-                            if (state.habitStatistics.isEmpty) {
-                              return Padding(
-                                padding: const EdgeInsets.all(24.0),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Container(
-                                      padding: const EdgeInsets.all(20),
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(20),
-                                      ),
-                                      child: Icon(
-                                        FontAwesomeIcons.chartLine,
-                                        size: 48,
-                                        color: Theme.of(context).colorScheme.primary,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 24),
-                                    Text(
-                                      LocaleKeys.statistics_no_data_title.tr(),
-                                      style: TextStyle(
-                                        fontSize: 24,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 12),
-                                    Text(
-                                      LocaleKeys.statistics_no_data_description.tr(),
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        height: 1.5,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 32),
-                                    SizedBox(
-                                      width: double.infinity,
-                                      child: CupertinoButton(
-                                        color: Colors.blueAccent,
-                                        onPressed: () {
-                                          navigator.pop();
-                                        },
-                                        child: Text(
-                                          LocaleKeys.habit_add_habit.tr(),
-                                          style: const TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w700,
-                                            color: Colors.white,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              );
-                            }
+                            if (state.habitStatistics.isEmpty) return NoDataWidgetStatistics();
 
                             return Column(
                               spacing: 20,
@@ -194,6 +140,45 @@ class HabitFormationPage extends ConsumerWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class NoDataWidgetStatistics extends StatelessWidget {
+  const NoDataWidgetStatistics({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(24.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Lottie.asset(
+            Assets.animations.astronout,
+            fit: BoxFit.cover,
+          ),
+          const SizedBox(height: 24),
+          Text(
+            LocaleKeys.statistics_no_data_title.tr(),
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: 12),
+          Text(
+            LocaleKeys.statistics_no_data_description.tr(),
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 16,
+              height: 1.5,
+            ),
+          ),
+        ],
       ),
     );
   }

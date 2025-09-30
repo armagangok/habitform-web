@@ -546,6 +546,7 @@
     },
     "membership_info": {
         "title": "Informazioni Abbonamento",
+        "description": "Tocca per vedere le tue informazioni di abbonamento",
         "state": "Stato",
         "active": "Attivo",
         "inactive": "Inattivo",
@@ -712,5 +713,18 @@
         "good_work": "Buon lavoro! Questa abitudine {difficulty} ha bisogno di {total} giorni totali. {remaining} giorni rimanenti! 📈",
         "keep_going_message": "Continua! La costanza è la chiave. Questa abitudine {difficulty} ha bisogno di {remaining} giorni in più! 🌱",
         "formation_takes_days": "Questa abitudine richiede {total} giorni di pratica costante per formarsi"
+    },
+    "languages": {
+        "english": "Inglese",
+        "turkish": "Turco",
+        "chinese": "Cinese",
+        "spanish": "Spagnolo",
+        "hindi": "Hindi",
+        "arabic": "Arabo",
+        "finnish": "Finlandese",
+        "portuguese": "Portoghese",
+        "russian": "Russo",
+        "japanese": "Giapponese",
+        "italian": "Italiano"
     }
 }

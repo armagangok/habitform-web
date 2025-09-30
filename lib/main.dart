@@ -2,7 +2,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-
 import '/core/core.dart';
 import '/core/theme/theme_data/theme_data.dart';
 import '/features/habit_category/provider/provider_setup.dart';
@@ -51,7 +50,22 @@ void main() async {
   runApp(
     ProviderScope(
       overrides: [...habitCategoryOverrides],
-      child: EasyLocalization(supportedLocales: const [Locale('en', 'US'), Locale('fr', 'FR'), Locale('tr', 'TR'), Locale('zh', 'CN'), Locale('it', 'IT')], path: 'assets/translations', fallbackLocale: const Locale('en', 'US'), child: MyApp()),
+      child: EasyLocalization(
+        supportedLocales: const [
+          Locale('en', 'US'),
+          Locale('fr', 'FR'),
+          Locale('tr', 'TR'),
+          Locale('zh', 'Hans'),
+          Locale('it', 'IT'),
+          Locale('ar', 'SA'),
+          Locale('ja', 'JP'),
+          Locale('fi', 'FI'),
+          Locale('es', 'ES'),
+        ],
+        path: 'assets/translations',
+        fallbackLocale: const Locale('en', 'US'),
+        child: MyApp(),
+      ),
     ),
   );
 }
@@ -74,6 +88,7 @@ class _MyAppState extends ConsumerState<MyApp> {
   @override
   Widget build(BuildContext context) {
     final themeMode = ref.watch(themeProvider);
+    // EasyLocalization drives locale; no custom provider to avoid conflicts
 
     final cupertinoTheme = themeMode == ThemeMode.dark ? Themes.cupertinoDarkTheme : Themes.cupertinoLightTheme;
 

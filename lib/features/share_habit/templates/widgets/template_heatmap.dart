@@ -67,7 +67,7 @@ class TemplateHeatmap extends StatelessWidget {
                 Assets.app.appLogoDark.image(height: 22, width: 22),
                 const SizedBox(width: 6),
                 Text(
-                  'HabitRise',
+                  'HabitForm',
                   style: context.bodySmall.copyWith(
                     color: onAccent,
                     fontWeight: FontWeight.w600,

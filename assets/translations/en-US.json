@@ -546,6 +546,7 @@
     },
     "membership_info": {
         "title": "Membership Info",
+        "description": "Tap to see your membership information",
         "state": "Status",
         "active": "Active",
         "inactive": "Inactive",
@@ -712,5 +713,19 @@
         "good_work": "Good work! This {difficulty} habit needs {total} days total. {remaining} days remaining! 📈",
         "keep_going_message": "Keep going! Consistency is key. This {difficulty} habit needs {remaining} more days! 🌱",
         "formation_takes_days": "This habit takes {total} days of consistent practice to form"
+    },
+    "languages": {
+        "english": "English",
+        "turkish": "Turkish",
+        "chinese": "Chinese",
+        "spanish": "Spanish",
+        "hindi": "Hindi",
+        "arabic": "Arabic",
+        "finnish": "Finnish",
+        "portuguese": "Portuguese",
+        "russian": "Russian",
+        "japanese": "Japanese",
+        "italian": "Italian"
+        
     }
 }

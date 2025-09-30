@@ -8,7 +8,7 @@ import '../../core.dart';
 const _privacyPolicyLink = "https://docs.google.com/document/d/e/2PACX-1vQ76kvKNioMD6L4Y0JvxcBHB2AMr7tIZyN2O6WJeva1ZYkzybIFQsbLhRE3Qdj83ewC_ICzovvb8EmL/pub";
 const _termsOfUseLink = "https://docs.google.com/document/d/e/2PACX-1vRVAZkWkWzZjyxwR4ZKMxIxIowwKJPNWEI9BZTrpfYIuZlvwPUW9ZPNwU76V4yiOmw_ORaLlLuXXVjz/pub";
 const _twitterArmagan = "https://x.com/armaganbuilds";
-const _twitterHabitRise = "https://x.com/HabitFormApp";
+const _twitterHabitFormApp = "https://x.com/HabitFormApp";
 
 class UrlLauncherHelper {
   const UrlLauncherHelper._();
@@ -80,10 +80,10 @@ class UrlLauncherHelper {
     }
   }
 
-  static Future<void> openHabitRiseTwitter() async {
+  static Future<void> openHabitFormTwitter() async {
     try {
       await launchUrl(
-        Uri.parse(_twitterHabitRise),
+        Uri.parse(_twitterHabitFormApp),
         mode: LaunchMode.externalApplication,
       );
     } catch (e) {

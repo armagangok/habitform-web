@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '/core/core.dart';
 import '../constants/constants.dart';
+import '../page/paywall_page.dart';
 import '../providers/purchase_provider.dart';
 
 class MembershipInfoWidget extends ConsumerWidget {
@@ -62,9 +63,12 @@ class MembershipInfoWidget extends ConsumerWidget {
                           text: LocaleKeys.membership_info_change_plan_desc.tr(),
                           trailing: CupertinoListTileChevron(),
                           onTap: () {
-                            navigator.navigateAndClear(
-                              path: KRoute.prePaywall,
-                              data: {'isFromOnboarding': false, 'isFromSettings': true},
+                            showCupertinoSheet(
+                              context: contextFromBuilder,
+                              builder: (context) => PaywallPage(
+                                isFromOnboarding: false,
+                                isFromSettings: true,
+                              ),
                             );
                           },
                         ),

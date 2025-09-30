@@ -1,7 +1,7 @@
 # App Flow Documentation
 
 ## Overview
-This document describes the user flow and navigation structure of the HabitRise application, focusing on the core user journeys and interactions.
+This document describes the user flow and navigation structure of the HabitForm application, focusing on the core user journeys and interactions.
 
 ## Core User Journeys
 

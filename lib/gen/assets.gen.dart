@@ -1,5 +1,3 @@
-// dart format width=80
-
 /// GENERATED CODE - DO NOT MODIFY BY HAND
 /// *****************************************************
 ///  FlutterGen
@@ -7,7 +5,7 @@
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
-// ignore_for_file: deprecated_member_use,directives_ordering,implicit_dynamic_list_literal,unnecessary_import
+// ignore_for_file: directives_ordering,unnecessary_import,implicit_dynamic_list_literal,deprecated_member_use
 
 import 'package:flutter/widgets.dart';
 
@@ -56,14 +54,26 @@ class $AssetsLottieGen {
 class $AssetsTranslationsGen {
   const $AssetsTranslationsGen();
 
+  /// File path: assets/translations/ar-SA.json
+  String get arSA => 'assets/translations/ar-SA.json';
+
   /// File path: assets/translations/en-US.json
   String get enUS => 'assets/translations/en-US.json';
+
+  /// File path: assets/translations/es-ES.json
+  String get esES => 'assets/translations/es-ES.json';
+
+  /// File path: assets/translations/fi-FI.json
+  String get fiFI => 'assets/translations/fi-FI.json';
 
   /// File path: assets/translations/fr-FR.json
   String get frFR => 'assets/translations/fr-FR.json';
 
   /// File path: assets/translations/it-IT.json
   String get itIT => 'assets/translations/it-IT.json';
+
+  /// File path: assets/translations/ja-JP.json
+  String get jaJP => 'assets/translations/ja-JP.json';
 
   /// File path: assets/translations/tr-TR.json
   String get trTR => 'assets/translations/tr-TR.json';
@@ -72,7 +82,8 @@ class $AssetsTranslationsGen {
   String get zhHans => 'assets/translations/zh-Hans.json';
 
   /// List of all assets
-  List<String> get values => [enUS, frFR, itIT, trTR, zhHans];
+  List<String> get values =>
+      [arSA, enUS, esES, fiFI, frFR, itIT, jaJP, trTR, zhHans];
 }
 
 class $AssetsImagesOnboardingGen {
@@ -104,7 +115,7 @@ class $AssetsImagesOnboardingGen {
 }
 
 class Assets {
-  const Assets._();
+  Assets._();
 
   static const String aEnv = '.env';
   static const $AssetsAnimationsGen animations = $AssetsAnimationsGen();
@@ -122,14 +133,12 @@ class AssetGenImage {
     this._assetName, {
     this.size,
     this.flavors = const {},
-    this.animation,
   });
 
   final String _assetName;
 
   final Size? size;
   final Set<String> flavors;
-  final AssetGenImageAnimation? animation;
 
   Image image({
     Key? key,
@@ -149,10 +158,10 @@ class AssetGenImage {
     ImageRepeat repeat = ImageRepeat.noRepeat,
     Rect? centerSlice,
     bool matchTextDirection = false,
-    bool gaplessPlayback = true,
+    bool gaplessPlayback = false,
     bool isAntiAlias = false,
     String? package,
-    FilterQuality filterQuality = FilterQuality.medium,
+    FilterQuality filterQuality = FilterQuality.low,
     int? cacheWidth,
     int? cacheHeight,
   }) {
@@ -198,16 +207,4 @@ class AssetGenImage {
   String get path => _assetName;
 
   String get keyName => _assetName;
-}
-
-class AssetGenImageAnimation {
-  const AssetGenImageAnimation({
-    required this.isAnimation,
-    required this.duration,
-    required this.frames,
-  });
-
-  final bool isAnimation;
-  final Duration duration;
-  final int frames;
 }

@@ -30,9 +30,24 @@
           "locale" : "tr"
         },
         {
+          "description" : "Eén keer betalen, voor altijd toegang.",
+          "displayName" : "Levenslang",
+          "locale" : "nl"
+        },
+        {
+          "description" : "Paga una volta, accesso per sempre",
+          "displayName" : "A vita",
+          "locale" : "it"
+        },
+        {
           "description" : "次付款，终身使用",
           "displayName" : "终身",
           "locale" : "zh_Hans"
+        },
+        {
+          "description" : "Payez une fois, accès à vie",
+          "displayName" : "À vie",
+          "locale" : "fr"
         }
       ],
       "productID" : "habitrise.pro.lifetime",
@@ -42,58 +57,55 @@
   ],
   "settings" : {
     "_applicationInternalID" : "6740816961",
+    "_askToBuyEnabled" : false,
+    "_billingGracePeriodEnabled" : false,
+    "_billingIssuesEnabled" : false,
     "_developerTeamID" : "6WZ7JL7327",
+    "_disableDialogs" : false,
     "_failTransactionsEnabled" : false,
-    "_lastSynchronizedDate" : 779562708.80164301,
+    "_lastSynchronizedDate" : 780485366.68735504,
     "_locale" : "en_US",
+    "_renewalBillingIssuesEnabled" : false,
     "_storefront" : "USA",
     "_storeKitErrors" : [
       {
-        "current" : null,
         "enabled" : false,
         "name" : "Load Products"
       },
       {
-        "current" : null,
         "enabled" : false,
         "name" : "Purchase"
       },
       {
-        "current" : null,
         "enabled" : false,
         "name" : "Verification"
       },
       {
-        "current" : null,
         "enabled" : false,
         "name" : "App Store Sync"
       },
       {
-        "current" : null,
         "enabled" : false,
         "name" : "Subscription Status"
       },
       {
-        "current" : null,
         "enabled" : false,
         "name" : "App Transaction"
       },
       {
-        "current" : null,
         "enabled" : false,
         "name" : "Manage Subscriptions Sheet"
       },
       {
-        "current" : null,
         "enabled" : false,
         "name" : "Refund Request Sheet"
       },
       {
-        "current" : null,
         "enabled" : false,
         "name" : "Offer Code Redeem Sheet"
       }
-    ]
+    ],
+    "_timeRate" : 0
   },
   "subscriptionGroups" : [
     {
@@ -115,26 +127,41 @@
           "groupNumber" : 2,
           "internalID" : "6740823451",
           "introductoryOffer" : {
-            "internalID" : "59F93E25",
+            "internalID" : "B9C1EDF6",
             "numberOfPeriods" : 1,
             "paymentMode" : "free",
             "subscriptionPeriod" : "P1W"
           },
           "localizations" : [
             {
-              "description" : "HabitRise Pro'ya yıllık erişim",
-              "displayName" : "Yıllık",
-              "locale" : "tr"
-            },
-            {
-              "description" : "每年访问 HabitRise Pro",
+              "description" : "每年访问 HabitForm Pro",
               "displayName" : "每年",
               "locale" : "zh_Hans"
             },
             {
-              "description" : "Annual access to HabitRise Pro",
+              "description" : "Accesso annuale a HabitForm Pro",
+              "displayName" : "Annuale",
+              "locale" : "it"
+            },
+            {
+              "description" : "Accès annuel à HabitRise Pro",
+              "displayName" : "Annuel",
+              "locale" : "fr"
+            },
+            {
+              "description" : "Annual access to HabitForm Pro",
               "displayName" : "Annually",
               "locale" : "en_US"
+            },
+            {
+              "description" : "HabitForm Pro'ya yıllık erişim",
+              "displayName" : "Yıllık",
+              "locale" : "tr"
+            },
+            {
+              "description" : "Jaarlijkse toegang tot HabitRise Pro",
+              "displayName" : "Jaarlijks",
+              "locale" : "nl"
             }
           ],
           "productID" : "habitrise.pro.annual",
@@ -157,27 +184,37 @@
           "familyShareable" : false,
           "groupNumber" : 1,
           "internalID" : "6740823447",
-          "introductoryOffer" : {
-            "internalID" : "C5D184BB",
-            "numberOfPeriods" : 1,
-            "paymentMode" : "free",
-            "subscriptionPeriod" : "P3D"
-          },
+          "introductoryOffer" : null,
           "localizations" : [
             {
-              "description" : "Monthly access to HabitRise Pro",
+              "description" : "HabitForm Pro'ya aylık erişim",
+              "displayName" : "Aylık",
+              "locale" : "tr"
+            },
+            {
+              "description" : "Monthly access to HabitForm Pro",
               "displayName" : "Monthly",
               "locale" : "en_US"
             },
             {
-              "description" : "每月访问 HabitRise Pro",
+              "description" : "Accès mensuel à HabitForm Pro",
+              "displayName" : "Mensuel",
+              "locale" : "fr"
+            },
+            {
+              "description" : "每月访问 HabitForm Pro",
               "displayName" : "每月",
               "locale" : "zh_Hans"
             },
             {
-              "description" : "HabitRise Pro'ya aylık erişim",
-              "displayName" : "Aylık",
-              "locale" : "tr"
+              "description" : "Maandelijkse toegang tot HabitForm Pro",
+              "displayName" : "Maandelijks",
+              "locale" : "nl"
+            },
+            {
+              "description" : "Accesso mensile a HabitForm Pro",
+              "displayName" : "Mensile",
+              "locale" : "it"
             }
           ],
           "productID" : "habitrise.pro.monthly",
