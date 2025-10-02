@@ -48,7 +48,7 @@ class TemplateMinimal extends StatelessWidget {
             const Spacer(),
             LinearProgressIndicator(
               value: stats.progressPercent.clamp(0.0, 1.0),
-              backgroundColor: onPrimary.withOpacity(.18),
+              backgroundColor: onPrimary.withValues(alpha: .18),
               color: onPrimary,
               minHeight: 8,
               borderRadius: BorderRadius.circular(10),
@@ -81,7 +81,7 @@ class _Metric extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(title, style: context.labelMedium.copyWith(color: color.withOpacity(.85))),
+          Text(title, style: context.labelMedium.copyWith(color: color.withValues(alpha: .85))),
           const SizedBox(height: 6),
           Text(value, style: context.titleLarge.copyWith(color: color, fontWeight: FontWeight.bold)),
         ],

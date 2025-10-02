@@ -586,7 +586,7 @@ class _AchievementDialogState extends State<AchievementDialog> with TickerProvid
     // Use a dummy date since the method now uses first completion date internally
     final dummyDate = DateTime.now();
 
-    return widget.habit.completions.calculateFormationProbability(
+    return widget.habit.completions.calculateHabitProbability(
       dummyDate, // This parameter is now ignored, but kept for compatibility
       widget.habit.difficulty.estimatedFormationDays,
       widget.habit.difficulty.minimumCompletionRate,
@@ -632,7 +632,7 @@ class _GradientRingPainter extends CustomPainter {
         colors: [
           baseColor.withValues(alpha: 0.00),
           baseColor.withValues(alpha: 0.45),
-          const Color(0xFFFFD700).withOpacity(0.55),
+          const Color(0xFFFFD700).withValues(alpha: 0.55),
           baseColor.withValues(alpha: 0.45),
           baseColor.withValues(alpha: 0.00),
         ],
@@ -647,7 +647,7 @@ class _GradientRingPainter extends CustomPainter {
       ..isAntiAlias = true
       ..style = PaintingStyle.stroke
       ..strokeWidth = 1.5
-      ..color = CupertinoColors.white.withOpacity(0.20);
+      ..color = CupertinoColors.white.withValues(alpha: 0.20);
     canvas.drawCircle(center, radius * 0.62, inner);
   }
 
@@ -724,8 +724,8 @@ class _GlossyProgressPainter extends CustomPainter {
     final sheenPaint = Paint()
       ..shader = RadialGradient(
         colors: [
-          const Color(0xFFFFFFFF).withOpacity(0.90),
-          const Color(0xFFFFFFFF).withOpacity(0.0),
+          const Color(0xFFFFFFFF).withValues(alpha: 0.90),
+          const Color(0xFFFFFFFF).withValues(alpha: 0.0),
         ],
       ).createShader(Rect.fromCircle(center: headOffset, radius: 18 + (sheenPhase - 1.0).abs() * 20));
     canvas.drawCircle(headOffset, 10 + (sheenPhase - 1.0).abs() * 6, sheenPaint);
@@ -734,7 +734,7 @@ class _GlossyProgressPainter extends CustomPainter {
     final innerShadow = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 1
-      ..color = CupertinoColors.black.withOpacity(0.05);
+      ..color = CupertinoColors.black.withValues(alpha: 0.05);
     canvas.drawCircle(center, radius * 0.62, innerShadow);
   }
 

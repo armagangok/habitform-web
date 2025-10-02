@@ -22,7 +22,7 @@ class HabitDetailPage extends ConsumerStatefulWidget {
 class _HabitDetailPageState extends ConsumerState<HabitDetailPage> {
   final ScrollController _scrollController = ScrollController();
   static const double _expandedHeight = 200.0;
-  double _collapseFraction = 0.0; // 0.0 expanded → 1.0 collapsed
+  final ValueNotifier<double> _collapseFraction = ValueNotifier<double>(0.0); // 0.0 expanded → 1.0 collapsed
 
   @override
   void initState() {
@@ -34,6 +34,7 @@ class _HabitDetailPageState extends ConsumerState<HabitDetailPage> {
   void dispose() {
     _scrollController.removeListener(_onScroll);
     _scrollController.dispose();
+    _collapseFraction.dispose();
     super.dispose();
   }
 
@@ -42,25 +43,25 @@ class _HabitDetailPageState extends ConsumerState<HabitDetailPage> {
     final double maxScroll = (_expandedHeight - kToolbarHeight).clamp(0.0, double.infinity);
     if (maxScroll <= 0) return;
     final double newFraction = (_scrollController.offset / maxScroll).clamp(0.0, 1.0);
-    if ((newFraction - _collapseFraction).abs() > 0.02) {
-      setState(() => _collapseFraction = newFraction);
+    if ((newFraction - _collapseFraction.value).abs() > 0.02) {
+      _collapseFraction.value = newFraction;
     }
   }
 
-  Color _resolveTitleColor(BuildContext context, Habit habit) {
+  Color _resolveTitleColor(BuildContext context, Habit habit, double fraction) {
     // When expanded, prefer on-primary contrast (white). When collapsed, use default title color.
     final Color expandedColor = Colors.white;
     final Color collapsedColor = context.titleLarge.color ?? Colors.black;
-    return Color.lerp(expandedColor, collapsedColor, _collapseFraction) ?? collapsedColor;
+    return Color.lerp(expandedColor, collapsedColor, fraction) ?? collapsedColor;
   }
 
-  (Color icon, Color bg) _resolveIconColors(BuildContext context) {
+  (Color icon, Color bg) _resolveIconColors(BuildContext context, double fraction) {
     final Color expandedIcon = Colors.white;
     final Color collapsedIcon = context.titleLarge.color ?? Colors.black;
     final Color expandedBg = Colors.white.withValues(alpha: 0.18);
     final Color collapsedBg = context.cupertinoTheme.barBackgroundColor.withValues(alpha: 0.11);
-    final icon = Color.lerp(expandedIcon, collapsedIcon, _collapseFraction) ?? collapsedIcon;
-    final bg = Color.lerp(expandedBg, collapsedBg, _collapseFraction) ?? collapsedBg;
+    final icon = Color.lerp(expandedIcon, collapsedIcon, fraction) ?? collapsedIcon;
+    final bg = Color.lerp(expandedBg, collapsedBg, fraction) ?? collapsedBg;
     return (icon, bg);
   }
 
@@ -71,6 +72,8 @@ class _HabitDetailPageState extends ConsumerState<HabitDetailPage> {
     if (currentHabit == null) {
       return const SizedBox.shrink();
     }
+
+    // Removed debug print to avoid extra console noise during scroll
 
     return CupertinoPageScaffold(
       child: Stack(
@@ -119,8 +122,6 @@ class _HabitDetailPageState extends ConsumerState<HabitDetailPage> {
   }
 
   Widget _buildSliverAppBar(BuildContext context, Habit habit) {
-    final titleColor = _resolveTitleColor(context, habit);
-    final (iconColor, iconBg) = _resolveIconColors(context);
     return SliverAppBar(
       expandedHeight: _expandedHeight,
       floating: false,
@@ -130,14 +131,20 @@ class _HabitDetailPageState extends ConsumerState<HabitDetailPage> {
       elevation: 0,
       surfaceTintColor: Colors.transparent,
       centerTitle: true,
-      title: Text(
-        habit.habitName,
-        textAlign: TextAlign.center,
-        style: TextStyle(
-          fontWeight: FontWeight.bold,
-          fontSize: 18,
-          color: titleColor,
-        ),
+      title: ValueListenableBuilder<double>(
+        valueListenable: _collapseFraction,
+        builder: (context, fraction, _) {
+          final titleColor = _resolveTitleColor(context, habit, fraction);
+          return Text(
+            habit.habitName,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 18,
+              color: titleColor,
+            ),
+          );
+        },
       ),
       flexibleSpace: FlexibleSpaceBar(
         background: Container(
@@ -178,31 +185,43 @@ class _HabitDetailPageState extends ConsumerState<HabitDetailPage> {
           ),
         ),
       ),
-      leading: Padding(
-        padding: const EdgeInsets.all(13.0),
-        child: CircularActionButton(
-          icon: CupertinoIcons.back,
-          iconColor: iconColor,
-          backgroundColor: iconBg,
-          onPressed: () => Navigator.of(context).pop(),
-        ),
+      leading: ValueListenableBuilder<double>(
+        valueListenable: _collapseFraction,
+        builder: (context, fraction, _) {
+          final (iconColor, iconBg) = _resolveIconColors(context, fraction);
+          return Padding(
+            padding: const EdgeInsets.all(13.0),
+            child: CircularActionButton(
+              icon: CupertinoIcons.back,
+              iconColor: iconColor,
+              backgroundColor: iconBg,
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+          );
+        },
       ),
       actions: [
-        Padding(
-          padding: const EdgeInsets.all(13.0),
-          child: CircularActionButton(
-            icon: CupertinoIcons.pencil,
-            iconColor: iconColor,
-            backgroundColor: iconBg,
-            onPressed: () {
-              ref.watch(editHabitProvider.notifier).initHabit(habit);
-              showCupertinoSheet(
-                enableDrag: false,
-                context: context,
-                builder: (context) => EditHabitPage(habit: habit),
-              );
-            },
-          ),
+        ValueListenableBuilder<double>(
+          valueListenable: _collapseFraction,
+          builder: (context, fraction, _) {
+            final (iconColor, iconBg) = _resolveIconColors(context, fraction);
+            return Padding(
+              padding: const EdgeInsets.all(13.0),
+              child: CircularActionButton(
+                icon: CupertinoIcons.pencil,
+                iconColor: iconColor,
+                backgroundColor: iconBg,
+                onPressed: () {
+                  ref.watch(editHabitProvider.notifier).initHabit(habit);
+                  showCupertinoSheet(
+                    enableDrag: false,
+                    context: context,
+                    builder: (context) => EditHabitPage(habit: habit),
+                  );
+                },
+              ),
+            );
+          },
         ),
       ],
     );

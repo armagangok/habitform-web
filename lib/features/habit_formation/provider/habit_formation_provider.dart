@@ -145,7 +145,7 @@ class FormationNotifier extends AutoDisposeAsyncNotifier<FormtionState> {
 
       // Calculate formation probability and remaining days
       final estimatedFormationDays = habit.difficulty.estimatedFormationDays;
-      final formationProbability = habit.completions.calculateFormationProbability(
+      final formationProbability = habit.completions.calculateHabitProbability(
         habitCreationDate, // This parameter is now ignored, but kept for compatibility
         estimatedFormationDays,
         habit.difficulty.minimumCompletionRate,

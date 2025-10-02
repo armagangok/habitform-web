@@ -79,7 +79,7 @@ class HabitProgressCard extends ConsumerWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              "${currentProgressData.formationProgress.toStringAsFixed(0)}%",
+                              "${currentProgressData.formationProgress.clamp(0, 99).toStringAsFixed(0)}%",
                               style: TextStyle(
                                 fontSize: 24,
                                 fontWeight: FontWeight.bold,
@@ -173,7 +173,7 @@ class HabitProgressCard extends ConsumerWidget {
     // Use a dummy date since the method now uses first completion date internally
     final dummyDate = DateTime.now();
 
-    return habit.completions.calculateFormationProbability(
+    return habit.completions.calculateHabitProbability(
       dummyDate, // This parameter is now ignored, but kept for compatibility
       habit.difficulty.estimatedFormationDays,
       habit.difficulty.minimumCompletionRate,

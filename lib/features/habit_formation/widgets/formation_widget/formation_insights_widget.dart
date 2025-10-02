@@ -393,7 +393,7 @@ class FormationInsightsWidget extends ConsumerWidget {
                 Padding(
                   padding: const EdgeInsets.all(10.0),
                   child: Text(
-                    '${formationProbability.toStringAsFixed(0)}%',
+                    '${formationProbability.clamp(0, 99).toStringAsFixed(0)}%',
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
