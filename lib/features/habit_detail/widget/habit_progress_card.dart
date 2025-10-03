@@ -3,11 +3,10 @@ import 'dart:math' as math;
 
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:habitform/models/habit/habit_extension.dart';
 
 import '/core/core.dart';
 import '/models/completion_entry/completion_entry.dart';
-import '/models/completion_entry/completion_extension.dart';
-import '/models/habit/habit_difficulty.dart';
 import '/models/models.dart';
 import '../../habit_formation/provider/habit_formation_provider.dart';
 import '../../habit_formation/provider/habit_formation_state.dart';
@@ -131,17 +130,17 @@ class HabitProgressCard extends ConsumerWidget {
     }
 
     // Use formation provider data if available, otherwise fallback to local calculation
-    final completionRate = habitStatistic?.progressPercentage ?? habit.completions.calculateWeightedProgressPercentageFromFirstCompletion(habit.dailyTarget);
-    final formationProgress = habitStatistic?.formationProbability ?? _calculateLocalFormationProbability(habit);
+    final completionRate = habitStatistic?.progressPercentage ?? habit.calculateWeightedProgressPercentageFromFirstCompletion();
+    final formationProgress = habitStatistic?.formationProbability ?? habit.calculateHabitProbability();
 
     // Calculate streaks using extension methods (these are not in formation provider yet)
-    final currentStreak = habit.completions.calculateCurrentStreak();
-    final longestStreak = habit.completions.calculateLongestStreak();
+    final currentStreak = habit.calculateCurrentStreak();
+    final longestStreak = habit.calculateLongestStreak();
     final streakProgress = longestStreak > 0 ? (currentStreak / longestStreak).clamp(0.0, 1.0) : 0.0;
 
     // This month data using extension method
     final now = DateTime.now();
-    final thisMonthCompletions = habit.completions.getCompletionsForMonth(now.year, now.month);
+    final thisMonthCompletions = habit.getCompletionsForMonth(now.year, now.month);
     final daysInMonth = DateTime(now.year, now.month + 1, 0).day;
     final thisMonthRate = thisMonthCompletions.length / daysInMonth;
 
@@ -150,7 +149,7 @@ class HabitProgressCard extends ConsumerWidget {
     final weeklyData = <double>[];
     for (int i = 6; i >= 0; i--) {
       final date = today.subtract(Duration(days: i));
-      final ratio = habit.completions.getCompletionRatioForDate(date, habit.dailyTarget);
+      final ratio = habit.getCompletionRatioForDate(date);
       weeklyData.add(ratio);
     }
 
@@ -163,21 +162,6 @@ class HabitProgressCard extends ConsumerWidget {
       thisMonthTotal: daysInMonth,
       thisMonthRate: thisMonthRate,
       weeklyData: weeklyData,
-    );
-  }
-
-  // Calculate formation probability locally when provider data is not available
-  double _calculateLocalFormationProbability(Habit habit) {
-    if (habit.completions.isEmpty) return 0.0;
-
-    // Use a dummy date since the method now uses first completion date internally
-    final dummyDate = DateTime.now();
-
-    return habit.completions.calculateHabitProbability(
-      dummyDate, // This parameter is now ignored, but kept for compatibility
-      habit.difficulty.estimatedFormationDays,
-      habit.difficulty.minimumCompletionRate,
-      habit.dailyTarget,
     );
   }
 
@@ -455,7 +439,7 @@ class _WeeklyProgressChartState extends ConsumerState<_WeeklyProgressChart> {
 
     // Update mode after action based on new ratio estimate
     final target = habit.dailyTarget <= 0 ? 1 : habit.dailyTarget;
-    final currentCount = habit.completions.getCountForDate(targetDate);
+    final currentCount = habit.getCountForDate(targetDate);
     final nextCount = shouldIncrement ? (currentCount + 1).clamp(0, target) : (currentCount - 1).clamp(0, target);
     if (nextCount >= target) {
       _decreasingModeByDateKey[dateKey] = true;
@@ -471,7 +455,7 @@ class _WeeklyProgressChartState extends ConsumerState<_WeeklyProgressChart> {
 
     for (int i = 6; i >= 0; i--) {
       final date = today.subtract(Duration(days: i));
-      final ratio = habit.completions.getCompletionRatioForDate(date, habit.dailyTarget);
+      final ratio = habit.getCompletionRatioForDate(date);
       weeklyData.add(ratio);
     }
 

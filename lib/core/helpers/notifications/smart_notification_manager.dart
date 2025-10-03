@@ -6,8 +6,8 @@ import 'package:timezone/timezone.dart' as tz;
 
 import '/features/reminder/models/days/days_enum.dart';
 import '/features/reminder/models/reminder/reminder_model.dart';
-import '/models/habit/habit_extension.dart';
 import '/services/habit_service/habit_service_interface.dart';
+import '../../../models/habit/habit_status.dart';
 import '../../core.dart';
 
 /// Smart notification manager that handles iOS 64-notification limit
@@ -88,7 +88,7 @@ class SmartNotificationManager {
       }
 
       // Double-check: ensure the habit is not archived
-      if (habit.isArchived) {
+      if (habit.status == HabitStatus.archived) {
         LogHelper.shared.debugPrint('Skipping reminder ${reminder.id} - habit is archived');
         continue;
       }

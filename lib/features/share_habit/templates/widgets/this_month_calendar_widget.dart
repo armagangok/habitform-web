@@ -1,5 +1,5 @@
 import '../../../../core/core.dart';
-import '../../../../models/completion_entry/completion_extension.dart';
+import '../../../../models/habit/habit_extension.dart';
 import '../../../../models/habit/habit_model.dart';
 
 class ThisMonthCalendarWidget extends StatelessWidget {
@@ -84,14 +84,14 @@ class ThisMonthCalendarWidget extends StatelessWidget {
     final firstWeekday = firstDayOfMonth.weekday % 7; // 0 = Sunday, 6 = Saturday
 
     // Get completion data for this month (dates only for ratio calculation)
-    final completions = habit.completions.getCompletionsForMonth(year, month);
-    final firstCompletionDate = habit.completions.getFirstCompletionDate();
+    final completions = habit.getCompletionsForMonth(year, month);
+    final firstCompletionDate = habit.getFirstCompletionDate();
 
     // Create a map of completion ratios for each date
     final Map<DateTime, double> completionRatios = {};
     for (final date in completions) {
       final normalizedDate = DateUtils.dateOnly(date);
-      final ratio = habit.completions.getCompletionRatioForDate(normalizedDate, habit.dailyTarget);
+      final ratio = habit.getCompletionRatioForDate(normalizedDate);
       completionRatios[normalizedDate] = ratio;
     }
 

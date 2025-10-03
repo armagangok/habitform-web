@@ -5,7 +5,6 @@ import '/features/habit_category/provider/habit_category_provider.dart';
 import '/features/habit_formation/provider/habit_formation_provider.dart';
 import '/features/reminder/service/reminder_service.dart';
 import '/models/completion_entry/completion_entry.dart';
-import '/models/habit/habit_extension.dart';
 import '/models/habit/habit_model.dart';
 import '/services/app_lifecycle_service.dart';
 import '/services/habit_service/habit_service_interface.dart';
@@ -49,7 +48,7 @@ class HomeNotifier extends AsyncNotifier<HomeState> {
   Future<HomeState> fetchHabits() async {
     final List<Habit> habits = await habitService.getHabits();
 
-    return HomeState(habits: habits.sortHabitsByTime);
+    return HomeState(habits: habits);
   }
 
   /// Archives a habit by moving it to the archived habits storage

@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:habitform/models/completion_entry/completion_extension.dart';
+import 'package:habitform/models/habit/habit_extension.dart';
 
 import '/core/core.dart';
 import '/models/models.dart';
@@ -69,7 +69,7 @@ class _HabitDataWidgetState extends ConsumerState<HabitDataWidget> {
   }
 
   Map<String, int> _calculateMonthlyStats(int year, int month) {
-    final completionsForMonth = widget.habit.completions.getCompletionsForMonth(year, month + 1);
+    final completionsForMonth = widget.habit.getCompletionsForMonth(year, month + 1);
 
     return {
       'total': completionsForMonth.length,
@@ -270,7 +270,7 @@ class _HabitDataWidgetState extends ConsumerState<HabitDataWidget> {
     const numberOfWeeks = 6;
 
     // Get all completion dates for this month
-    final completions = widget.habit.completions.getCompletionsForMonth(year, monthIndex + 1);
+    final completions = widget.habit.getCompletionsForMonth(year, monthIndex + 1);
     completions.sort((a, b) => a.compareTo(b));
 
     return GridView.builder(
@@ -300,11 +300,11 @@ class _HabitDataWidgetState extends ConsumerState<HabitDataWidget> {
         // Progressive color based on completion ratio for the day
         double ratio = 0.0;
         if (!isInFuture) {
-          ratio = widget.habit.completions.getCompletionRatioForDate(currentDate, widget.habit.dailyTarget);
+          ratio = widget.habit.getCompletionRatioForDate(currentDate);
         }
 
         // Grey out days before the first-ever completion
-        final firstCompletionDate = widget.habit.completions.getFirstCompletionDate();
+        final firstCompletionDate = widget.habit.getFirstCompletionDate();
         final isBeforeFirstCompletion = firstCompletionDate != null && currentDate.isBefore(DateUtils.dateOnly(firstCompletionDate));
 
         Color resolveCellColor() {

@@ -1,11 +1,11 @@
 import 'dart:ui';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:habitform/models/habit/habit_extension.dart';
 
 import '/core/core.dart';
 import '/features/habit_formation/provider/habit_formation_provider.dart';
 import '/features/purchase/providers/purchase_provider.dart';
-import '/models/completion_entry/completion_extension.dart';
 import '/models/habit/habit_model.dart';
 import '../../habit_formation/provider/habit_formation_state.dart';
 import '../../purchase/page/paywall_page.dart';
@@ -24,7 +24,7 @@ class HabitOverviewWidget extends ConsumerWidget {
     if (habit.completions.isEmpty) return 0;
 
     final today = DateTime.now();
-    final firstCompletionDate = habit.completions.getFirstCompletionDate();
+    final firstCompletionDate = habit.getFirstCompletionDate();
     if (firstCompletionDate == null) return 0;
 
     final startDate = DateUtils.dateOnly(firstCompletionDate);
@@ -44,8 +44,8 @@ class HabitOverviewWidget extends ConsumerWidget {
     }
 
     // Calculate statistics for this specific habit
-    final currentStreak = habit.completions.calculateCurrentStreak();
-    final longestStreak = habit.completions.calculateLongestStreak();
+    final currentStreak = habit.calculateCurrentStreak();
+    final longestStreak = habit.calculateLongestStreak();
 
     if (habit.completions.isEmpty) {
       return CupertinoListSection.insetGrouped(
@@ -85,7 +85,7 @@ class HabitOverviewWidget extends ConsumerWidget {
     }
 
     // Use formation provider data if available, otherwise fallback to local calculation
-    final completedEntries = habitStatistic?.completedDays ?? habit.completions.calculateFormationScoreFromFirstCompletion();
+    final completedEntries = habitStatistic?.completedDays ?? habit.calculateFormationScoreFromFirstCompletion();
 
     // Calculate days since first completion for "Days Active"
     final daysSinceStart = habitStatistic?.totalDays ?? _calculateDaysSinceFirstCompletion(habit);
@@ -184,7 +184,7 @@ class HabitOverviewCompact extends ConsumerWidget {
   int _calculateDaysSinceFirstCompletion(Habit habit) {
     if (habit.completions.isEmpty) return 0;
     final today = DateTime.now();
-    final firstCompletionDate = habit.completions.getFirstCompletionDate();
+    final firstCompletionDate = habit.getFirstCompletionDate();
     if (firstCompletionDate == null) return 0;
     final startDate = DateUtils.dateOnly(firstCompletionDate);
     return today.difference(startDate).inDays + 1;
@@ -201,8 +201,8 @@ class HabitOverviewCompact extends ConsumerWidget {
       habitStatistic = formationState.value!.habitStatistics[habit.id];
     }
 
-    final currentStreak = habit.completions.calculateCurrentStreak();
-    final longestStreak = habit.completions.calculateLongestStreak();
+    final currentStreak = habit.calculateCurrentStreak();
+    final longestStreak = habit.calculateLongestStreak();
 
     if (habit.completions.isEmpty) {
       return Center(
@@ -224,7 +224,7 @@ class HabitOverviewCompact extends ConsumerWidget {
       );
     }
 
-    final completedEntries = habitStatistic?.completedDays ?? habit.completions.calculateFormationScoreFromFirstCompletion();
+    final completedEntries = habitStatistic?.completedDays ?? habit.calculateFormationScoreFromFirstCompletion();
     final daysSinceStart = habitStatistic?.totalDays ?? _calculateDaysSinceFirstCompletion(habit);
 
     return ClipRRect(

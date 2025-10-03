@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:habitform/models/completion_entry/completion_extension.dart';
+import 'package:habitform/models/habit/habit_extension.dart';
 
 import '/core/core.dart';
 import '/features/home/provider/home_provider.dart';
@@ -103,7 +103,7 @@ class FormationNotifier extends AutoDisposeAsyncNotifier<FormtionState> {
   int _countTotalCompletions(List<Habit> habits) {
     double total = 0.0;
     for (final habit in habits) {
-      total += habit.completions.calculateWeightedFormationScore(habit.dailyTarget);
+      total += habit.calculateWeightedFormationScore();
     }
     return total.round();
   }
@@ -131,28 +131,19 @@ class FormationNotifier extends AutoDisposeAsyncNotifier<FormtionState> {
         continue;
       }
 
-      // Get habit creation date - handle both timestamp IDs and string IDs
-      final habitCreationDate = _getHabitCreationDate(habit);
-      final startDate = DateUtils.dateOnly(habitCreationDate);
-
       // Use extension methods for consistent calculations based on first completion date
-      final completedDays = habit.completions.calculateWeightedFormationScore(habit.dailyTarget).round();
-      final progressPercentage = habit.completions.calculateWeightedProgressPercentageFromFirstCompletion(habit.dailyTarget);
+      final completedDays = habit.calculateWeightedFormationScore().round();
+      final progressPercentage = habit.calculateWeightedProgressPercentageFromFirstCompletion();
 
       // Calculate total days since first completion (for remaining days calculation)
-      final firstCompletionDate = habit.completions.getFirstCompletionDate();
+      final firstCompletionDate = habit.getFirstCompletionDate();
       final daysSinceFirstCompletion = firstCompletionDate != null ? today.difference(DateUtils.dateOnly(firstCompletionDate)).inDays + 1 : 0;
 
       // Calculate formation probability and remaining days
       final estimatedFormationDays = habit.difficulty.estimatedFormationDays;
-      final formationProbability = habit.completions.calculateHabitProbability(
-        habitCreationDate, // This parameter is now ignored, but kept for compatibility
-        estimatedFormationDays,
-        habit.difficulty.minimumCompletionRate,
-        habit.dailyTarget,
-      );
+      final formationProbability = habit.calculateHabitProbability();
 
-      final remainingFormationDays = (estimatedFormationDays - daysSinceFirstCompletion).clamp(0, estimatedFormationDays);
+      final remainingFormationDays = habit.getRemainingFormationDays();
 
       result[habit.id] = HabitStatistic(
         habitId: habit.id,
@@ -160,7 +151,7 @@ class FormationNotifier extends AutoDisposeAsyncNotifier<FormtionState> {
         totalDays: daysSinceFirstCompletion,
         completedDays: completedDays,
         progressPercentage: progressPercentage,
-        startDate: firstCompletionDate != null ? DateUtils.dateOnly(firstCompletionDate) : startDate,
+        startDate: firstCompletionDate != null ? DateUtils.dateOnly(firstCompletionDate) : today,
         difficulty: habit.difficulty,
         formationProbability: formationProbability,
         estimatedFormationDays: estimatedFormationDays,
@@ -169,20 +160,6 @@ class FormationNotifier extends AutoDisposeAsyncNotifier<FormtionState> {
     }
 
     return result;
-  }
-
-  /// Helper method to get habit creation date from habit ID
-  /// Handles both timestamp-based IDs (real habits) and string IDs (mock habits)
-  DateTime _getHabitCreationDate(Habit habit) {
-    try {
-      // Try to parse as timestamp (for real habits)
-      final timestamp = int.parse(habit.id);
-      return DateTime.fromMillisecondsSinceEpoch(timestamp);
-    } catch (e) {
-      // If parsing fails, it's a mock habit with string ID
-      // For mock habits, use a fixed date 60 days ago to simulate formation data
-      return DateTime.now().subtract(const Duration(days: 60));
-    }
   }
 
   /// Refreshes all statistics

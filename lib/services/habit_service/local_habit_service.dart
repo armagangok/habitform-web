@@ -3,9 +3,9 @@ import 'package:hive_flutter/hive_flutter.dart';
 import '../../core/core.dart';
 import '../../features/reminder/service/reminder_service.dart';
 import '../../models/completion_entry/completion_entry.dart';
-import '../../models/habit/habit_extension.dart';
 import '../../models/habit/habit_model.dart';
 import '../../models/habit/habit_status.dart';
+import '../widget_service.dart';
 import 'habit_service_interface.dart';
 
 class LocalHabitService extends HabitService {
@@ -14,6 +14,7 @@ class LocalHabitService extends HabitService {
   static LocalHabitService get instance => _instance;
 
   final HiveHelper _hiveHelper = HiveHelper.shared;
+  final WidgetService _widgetService = WidgetService();
 
   // Get all habits (both active and archived)
   @override
@@ -77,6 +78,9 @@ class LocalHabitService extends HabitService {
       habit.id,
       habit.copyWith(),
     );
+
+    // Export to widget
+    await _exportHabitsForWidget();
   }
 
   // Update an existing habit
@@ -87,6 +91,9 @@ class LocalHabitService extends HabitService {
       habit.id,
       habit,
     );
+
+    // Export to widget
+    await _exportHabitsForWidget();
   }
 
   // Update habit completion status
@@ -177,7 +184,7 @@ class LocalHabitService extends HabitService {
 
     LogHelper.shared.debugPrint('💾 Step 2: Creating archived habit object');
     // Set habit to archived if it's not already
-    final archivedHabit = habit.isArchived
+    final archivedHabit = habit.status == HabitStatus.archived
         ? habit
         : habit.copyWith(
             status: HabitStatus.archived,
@@ -231,7 +238,7 @@ class LocalHabitService extends HabitService {
     LogHelper.shared.debugPrint('Updating archived habit: ${habit.id}');
 
     // Ensure habit is archived
-    final archivedHabit = habit.isArchived
+    final archivedHabit = habit.status == HabitStatus.archived
         ? habit
         : habit.copyWith(
             status: HabitStatus.archived,
@@ -245,5 +252,15 @@ class LocalHabitService extends HabitService {
     await _hiveHelper.putData<Habit>(HiveBoxes.archivedHabitBox, habit.id, archivedHabit);
 
     LogHelper.shared.debugPrint('Archived habit updated successfully: ${habit.id}');
+  }
+
+  // Helper method to export habits for widget
+  Future<void> _exportHabitsForWidget() async {
+    try {
+      final habits = await getHabits();
+      await _widgetService.exportHabitsForWidget(habits);
+    } catch (e) {
+      LogHelper.shared.debugPrint('Error exporting habits for widget: $e');
+    }
   }
 }

@@ -1,4 +1,5 @@
-import '../../../../models/completion_entry/completion_extension.dart';
+import 'package:habitform/models/habit/habit_extension.dart';
+
 import '../../../../models/habit/habit_model.dart';
 
 class ShareStats {
@@ -18,14 +19,13 @@ class ShareStats {
 }
 
 ShareStats buildShareStats(Habit habit) {
-  final map = habit.completions;
   final now = DateTime.now();
-  final thisMonth = map.getCompletionsForMonth(now.year, now.month);
+  final thisMonth = habit.getCompletionsForMonth(now.year, now.month);
 
-  final current = map.calculateCurrentStreak();
-  final longest = map.calculateLongestStreak();
-  final completed = map.values.where((e) => e.isCompleted).length;
-  final percent = map.calculateProgressPercentageFromFirstCompletion();
+  final current = habit.calculateCurrentStreak();
+  final longest = habit.calculateLongestStreak();
+  final completed = habit.completions.values.where((e) => e.isCompleted).length;
+  final percent = habit.calculateProgressPercentageFromFirstCompletion();
 
   return ShareStats(
     currentStreak: current,
