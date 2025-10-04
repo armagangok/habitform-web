@@ -12,9 +12,10 @@
 		3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */; };
 		4E370FB72E772479005BE567 /* PurchaseTest.storekit in Resources */ = {isa = PBXBuildFile; fileRef = 4E370FB62E772479005BE567 /* PurchaseTest.storekit */; };
 		4E370FB82E772479005BE567 /* PurchaseTest.storekit in Resources */ = {isa = PBXBuildFile; fileRef = 4E370FB62E772479005BE567 /* PurchaseTest.storekit */; };
+		4E7AE80F2E913C3600BF21C5 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4EB8FE542E8ED4210092F4B8 /* WidgetKit.framework */; };
+		4E7AE8102E913C3600BF21C5 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4EB8FE562E8ED4210092F4B8 /* SwiftUI.framework */; };
+		4E7AE81B2E913C3700BF21C5 /* HabitFormWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 4E7AE80E2E913C3600BF21C5 /* HabitFormWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		4EB305E72E40AC6000CBB96E /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4EB305E62E40AC6000CBB96E /* StoreKit.framework */; };
-		4EB8FE552E8ED4210092F4B8 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4EB8FE542E8ED4210092F4B8 /* WidgetKit.framework */; };
-		4EB8FE572E8ED4210092F4B8 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4EB8FE562E8ED4210092F4B8 /* SwiftUI.framework */; };
 		6B0EC44FC64E1EE99928A6F7 /* Pods_RunnerTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC336DE250D6492A73C473FB /* Pods_RunnerTests.framework */; };
 		731038E738B487851692ACCE /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AFC5D1050C2AEA871997064F /* Pods_Runner.framework */; };
 		74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74858FAE1ED2DC5600515810 /* AppDelegate.swift */; };
@@ -31,12 +32,12 @@
 			remoteGlobalIDString = 97C146ED1CF9000F007C117D;
 			remoteInfo = Runner;
 		};
-		4EB8FE622E8ED4220092F4B8 /* PBXContainerItemProxy */ = {
+		4E7AE8192E913C3700BF21C5 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 97C146E61CF9000F007C117D /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 4EB8FE522E8ED4210092F4B8;
-			remoteInfo = HabitWidgetExtension;
+			remoteGlobalIDString = 4E7AE80D2E913C3600BF21C5;
+			remoteInfo = HabitFormWidgetExtension;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -47,6 +48,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
+				4E7AE81B2E913C3700BF21C5 /* HabitFormWidgetExtension.appex in Embed Foundation Extensions */,
 			);
 			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -72,12 +74,13 @@
 		3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = AppFrameworkInfo.plist; path = Flutter/AppFrameworkInfo.plist; sourceTree = "<group>"; };
 		3E5FA8055F359BEAE02C7E35 /* Pods-Runner.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.profile.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.profile.xcconfig"; sourceTree = "<group>"; };
 		4E370FB62E772479005BE567 /* PurchaseTest.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = PurchaseTest.storekit; sourceTree = "<group>"; };
+		4E7AE7E52E913B5300BF21C5 /* HabitWidgetExtension copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "HabitWidgetExtension copy-Info.plist"; path = "/Users/armagangok/Documents/AppSweat/habitrise/ios/HabitWidgetExtension copy-Info.plist"; sourceTree = "<absolute>"; };
+		4E7AE80E2E913C3600BF21C5 /* HabitFormWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = HabitFormWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		4E7AE8282E913C4F00BF21C5 /* HabitFormWidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = HabitFormWidgetExtension.entitlements; sourceTree = "<group>"; };
 		4E985A042D37C9FB0094DA72 /* Runner.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Runner.entitlements; sourceTree = "<group>"; };
 		4EB305E62E40AC6000CBB96E /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
-		4EB8FE532E8ED4210092F4B8 /* HabitWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = HabitWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		4EB8FE542E8ED4210092F4B8 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		4EB8FE562E8ED4210092F4B8 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
-		4EB8FEC32E8EE0190092F4B8 /* HabitWidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = HabitWidgetExtension.entitlements; sourceTree = "<group>"; };
 		5D1D87DC4F6441FB0C73F2A1 /* Pods-RunnerTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunnerTests.debug.xcconfig"; path = "Target Support Files/Pods-RunnerTests/Pods-RunnerTests.debug.xcconfig"; sourceTree = "<group>"; };
 		74858FAD1ED2DC5600515810 /* Runner-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Runner-Bridging-Header.h"; sourceTree = "<group>"; };
 		74858FAE1ED2DC5600515810 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -97,37 +100,37 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		4EB8FE692E8ED4220092F4B8 /* Exceptions for "HabitWidget" folder in "HabitWidgetExtension" target */ = {
+		4E7AE81C2E913C3700BF21C5 /* Exceptions for "HabitFormWidget" folder in "HabitFormWidgetExtension" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
 			);
-			target = 4EB8FE522E8ED4210092F4B8 /* HabitWidgetExtension */;
+			target = 4E7AE80D2E913C3600BF21C5 /* HabitFormWidgetExtension */;
 		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		4EB8FE582E8ED4210092F4B8 /* HabitWidget */ = {
+		4E7AE8112E913C3600BF21C5 /* HabitFormWidget */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				4EB8FE692E8ED4220092F4B8 /* Exceptions for "HabitWidget" folder in "HabitWidgetExtension" target */,
+				4E7AE81C2E913C3700BF21C5 /* Exceptions for "HabitFormWidget" folder in "HabitFormWidgetExtension" target */,
 			);
 			explicitFileTypes = {
 			};
 			explicitFolders = (
 			);
-			path = HabitWidget;
+			path = HabitFormWidget;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		4EB8FE502E8ED4210092F4B8 /* Frameworks */ = {
+		4E7AE80B2E913C3600BF21C5 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4EB8FE572E8ED4210092F4B8 /* SwiftUI.framework in Frameworks */,
-				4EB8FE552E8ED4210092F4B8 /* WidgetKit.framework in Frameworks */,
+				4E7AE8102E913C3600BF21C5 /* SwiftUI.framework in Frameworks */,
+				4E7AE80F2E913C3600BF21C5 /* WidgetKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -185,15 +188,16 @@
 		97C146E51CF9000F007C117D = {
 			isa = PBXGroup;
 			children = (
-				4EB8FEC32E8EE0190092F4B8 /* HabitWidgetExtension.entitlements */,
+				4E7AE8282E913C4F00BF21C5 /* HabitFormWidgetExtension.entitlements */,
 				4E370FB62E772479005BE567 /* PurchaseTest.storekit */,
 				9740EEB11CF90186004384FC /* Flutter */,
 				97C146F01CF9000F007C117D /* Runner */,
-				4EB8FE582E8ED4210092F4B8 /* HabitWidget */,
+				4E7AE8112E913C3600BF21C5 /* HabitFormWidget */,
 				97C146EF1CF9000F007C117D /* Products */,
 				331C8082294A63A400263BE5 /* RunnerTests */,
 				B43BF3345A79C30AF35DE240 /* Pods */,
 				95532DBF46DA28CC4E9C267A /* Frameworks */,
+				4E7AE7E52E913B5300BF21C5 /* HabitWidgetExtension copy-Info.plist */,
 			);
 			sourceTree = "<group>";
 		};
@@ -202,7 +206,7 @@
 			children = (
 				97C146EE1CF9000F007C117D /* Runner.app */,
 				331C8081294A63A400263BE5 /* RunnerTests.xctest */,
-				4EB8FE532E8ED4210092F4B8 /* HabitWidgetExtension.appex */,
+				4E7AE80E2E913C3600BF21C5 /* HabitFormWidgetExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -258,24 +262,24 @@
 			productReference = 331C8081294A63A400263BE5 /* RunnerTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		4EB8FE522E8ED4210092F4B8 /* HabitWidgetExtension */ = {
+		4E7AE80D2E913C3600BF21C5 /* HabitFormWidgetExtension */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 4EB8FE6A2E8ED4220092F4B8 /* Build configuration list for PBXNativeTarget "HabitWidgetExtension" */;
+			buildConfigurationList = 4E7AE81D2E913C3700BF21C5 /* Build configuration list for PBXNativeTarget "HabitFormWidgetExtension" */;
 			buildPhases = (
-				4EB8FE4F2E8ED4210092F4B8 /* Sources */,
-				4EB8FE502E8ED4210092F4B8 /* Frameworks */,
-				4EB8FE512E8ED4210092F4B8 /* Resources */,
+				4E7AE80A2E913C3600BF21C5 /* Sources */,
+				4E7AE80B2E913C3600BF21C5 /* Frameworks */,
+				4E7AE80C2E913C3600BF21C5 /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				4EB8FE582E8ED4210092F4B8 /* HabitWidget */,
+				4E7AE8112E913C3600BF21C5 /* HabitFormWidget */,
 			);
-			name = HabitWidgetExtension;
-			productName = HabitWidgetExtension;
-			productReference = 4EB8FE532E8ED4210092F4B8 /* HabitWidgetExtension.appex */;
+			name = HabitFormWidgetExtension;
+			productName = HabitFormWidgetExtension;
+			productReference = 4E7AE80E2E913C3600BF21C5 /* HabitFormWidgetExtension.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
 		97C146ED1CF9000F007C117D /* Runner */ = {
@@ -288,15 +292,15 @@
 				97C146EB1CF9000F007C117D /* Frameworks */,
 				97C146EC1CF9000F007C117D /* Resources */,
 				9705A1C41CF9048500538489 /* Embed Frameworks */,
-				3B06AD1E1E4923F5004D2608 /* Thin Binary */,
 				4EB8FE652E8ED4220092F4B8 /* Embed Foundation Extensions */,
-				44AF062489C5663D16F8E11B /* [CP] Embed Pods Frameworks */,
 				84EDB498E590AE76FBD65379 /* [CP] Copy Pods Resources */,
+				3B06AD1E1E4923F5004D2608 /* Thin Binary */,
+				44AF062489C5663D16F8E11B /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				4EB8FE632E8ED4220092F4B8 /* PBXTargetDependency */,
+				4E7AE81A2E913C3700BF21C5 /* PBXTargetDependency */,
 			);
 			name = Runner;
 			productName = Runner;
@@ -318,7 +322,7 @@
 						CreatedOnToolsVersion = 14.0;
 						TestTargetID = 97C146ED1CF9000F007C117D;
 					};
-					4EB8FE522E8ED4210092F4B8 = {
+					4E7AE80D2E913C3600BF21C5 = {
 						CreatedOnToolsVersion = 26.0.1;
 					};
 					97C146ED1CF9000F007C117D = {
@@ -342,7 +346,7 @@
 			targets = (
 				97C146ED1CF9000F007C117D /* Runner */,
 				331C8080294A63A400263BE5 /* RunnerTests */,
-				4EB8FE522E8ED4210092F4B8 /* HabitWidgetExtension */,
+				4E7AE80D2E913C3600BF21C5 /* HabitFormWidgetExtension */,
 			);
 		};
 /* End PBXProject section */
@@ -356,7 +360,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		4EB8FE512E8ED4210092F4B8 /* Resources */ = {
+		4E7AE80C2E913C3600BF21C5 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -498,7 +502,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		4EB8FE4F2E8ED4210092F4B8 /* Sources */ = {
+		4E7AE80A2E913C3600BF21C5 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -522,10 +526,10 @@
 			target = 97C146ED1CF9000F007C117D /* Runner */;
 			targetProxy = 331C8085294A63A400263BE5 /* PBXContainerItemProxy */;
 		};
-		4EB8FE632E8ED4220092F4B8 /* PBXTargetDependency */ = {
+		4E7AE81A2E913C3700BF21C5 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 4EB8FE522E8ED4210092F4B8 /* HabitWidgetExtension */;
-			targetProxy = 4EB8FE622E8ED4220092F4B8 /* PBXContainerItemProxy */;
+			target = 4E7AE80D2E913C3600BF21C5 /* HabitFormWidgetExtension */;
+			targetProxy = 4E7AE8192E913C3700BF21C5 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -681,7 +685,7 @@
 			};
 			name = Profile;
 		};
-		4EB8FE662E8ED4220092F4B8 /* Debug */ = {
+		4E7AE81E2E913C3700BF21C5 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -692,15 +696,15 @@
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_ENTITLEMENTS = HabitWidgetExtension.entitlements;
+				CODE_SIGN_ENTITLEMENTS = HabitFormWidgetExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 6WZ7JL7327;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = HabitWidget/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = HabitWidget;
+				INFOPLIST_FILE = HabitFormWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = HabitFormWidget;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -712,7 +716,7 @@
 				MARKETING_VERSION = 1.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.appsweat.habitrise.HabitWidget;
+				PRODUCT_BUNDLE_IDENTIFIER = com.appsweat.habitrise.HabitFormWidget;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
@@ -726,7 +730,7 @@
 			};
 			name = Debug;
 		};
-		4EB8FE672E8ED4220092F4B8 /* Release */ = {
+		4E7AE81F2E913C3700BF21C5 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -737,15 +741,15 @@
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_ENTITLEMENTS = HabitWidgetExtension.entitlements;
+				CODE_SIGN_ENTITLEMENTS = HabitFormWidgetExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 6WZ7JL7327;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = HabitWidget/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = HabitWidget;
+				INFOPLIST_FILE = HabitFormWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = HabitFormWidget;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -756,7 +760,7 @@
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MARKETING_VERSION = 1.0;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.appsweat.habitrise.HabitWidget;
+				PRODUCT_BUNDLE_IDENTIFIER = com.appsweat.habitrise.HabitFormWidget;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
@@ -768,7 +772,7 @@
 			};
 			name = Release;
 		};
-		4EB8FE682E8ED4220092F4B8 /* Profile */ = {
+		4E7AE8202E913C3700BF21C5 /* Profile */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -779,15 +783,15 @@
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_ENTITLEMENTS = HabitWidgetExtension.entitlements;
+				CODE_SIGN_ENTITLEMENTS = HabitFormWidgetExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 6WZ7JL7327;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = HabitWidget/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = HabitWidget;
+				INFOPLIST_FILE = HabitFormWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = HabitFormWidget;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -798,7 +802,7 @@
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MARKETING_VERSION = 1.0;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.appsweat.habitrise.HabitWidget;
+				PRODUCT_BUNDLE_IDENTIFIER = com.appsweat.habitrise.HabitFormWidget;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
@@ -989,12 +993,12 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		4EB8FE6A2E8ED4220092F4B8 /* Build configuration list for PBXNativeTarget "HabitWidgetExtension" */ = {
+		4E7AE81D2E913C3700BF21C5 /* Build configuration list for PBXNativeTarget "HabitFormWidgetExtension" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				4EB8FE662E8ED4220092F4B8 /* Debug */,
-				4EB8FE672E8ED4220092F4B8 /* Release */,
-				4EB8FE682E8ED4220092F4B8 /* Profile */,
+				4E7AE81E2E913C3700BF21C5 /* Debug */,
+				4E7AE81F2E913C3700BF21C5 /* Release */,
+				4E7AE8202E913C3700BF21C5 /* Profile */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
