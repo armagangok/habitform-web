@@ -206,7 +206,7 @@ struct MediumHabitWidgetEntryView: View {
                 .frame(maxWidth: .infinity)
             }
         }
-        .padding(1)
+        
     }
 
     private func dayAbbreviation(for date: Date) -> String {

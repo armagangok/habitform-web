@@ -51,6 +51,41 @@ struct Habit: Codable, Identifiable {
         let dateKey = DateFormatter.habitDateKey.string(from: today)
         return completions[dateKey]?.count ?? 0
     }
+
+    var longestStreak: Int {
+        var maxStreak = 0
+        var currentStreak = 0
+        let calendar = Calendar.current
+        let sortedDates = completions.keys.sorted()
+
+        for dateKey in sortedDates {
+            if let completion = completions[dateKey], completion.isCompleted {
+                currentStreak += 1
+                maxStreak = max(maxStreak, currentStreak)
+            } else {
+                currentStreak = 0
+            }
+        }
+
+        return maxStreak
+    }
+
+    var formationProbability: Double {
+        let totalDays = 90  // Last 90 days
+        let calendar = Calendar.current
+        var completedDays = 0
+
+        for i in 0..<totalDays {
+            if let date = calendar.date(byAdding: .day, value: -i, to: Date()) {
+                let dateKey = DateFormatter.habitDateKey.string(from: date)
+                if let completion = completions[dateKey], completion.isCompleted {
+                    completedDays += 1
+                }
+            }
+        }
+
+        return Double(completedDays) / Double(totalDays)
+    }
 }
 
 struct CompletionEntry: Codable {
@@ -109,16 +144,19 @@ class HabitDataManager {
         let calendar = Calendar.current
         let today = Date()
 
-        // Create realistic completion data for the last 30 days
+        // Create realistic completion data for the last 90 days
         var waterCompletions: [String: CompletionEntry] = [:]
         var exerciseCompletions: [String: CompletionEntry] = [:]
         var meditationCompletions: [String: CompletionEntry] = [:]
+        var readingCompletions: [String: CompletionEntry] = [:]
+        var sleepCompletions: [String: CompletionEntry] = [:]
 
-        // Water - completed most days (25/30)
-        for i in 0..<30 {
+        // Create random but realistic completion patterns for 90 days
+        // Water - 75% completion rate (random)
+        for i in 0..<90 {
             if let date = calendar.date(byAdding: .day, value: -i, to: today) {
                 let dateKey = DateFormatter.habitDateKey.string(from: date)
-                let isCompleted = i < 25  // 25 days completed
+                let isCompleted = Double.random(in: 0...1) < 0.75
                 waterCompletions[dateKey] = CompletionEntry(
                     id: "water-\(i)",
                     date: date,
@@ -128,11 +166,11 @@ class HabitDataManager {
             }
         }
 
-        // Exercise - good streak (20/30)
-        for i in 0..<30 {
+        // Exercise - 60% completion rate (random)
+        for i in 0..<90 {
             if let date = calendar.date(byAdding: .day, value: -i, to: today) {
                 let dateKey = DateFormatter.habitDateKey.string(from: date)
-                let isCompleted = i < 20  // 20 days completed
+                let isCompleted = Double.random(in: 0...1) < 0.60
                 exerciseCompletions[dateKey] = CompletionEntry(
                     id: "exercise-\(i)",
                     date: date,
@@ -142,13 +180,41 @@ class HabitDataManager {
             }
         }
 
-        // Meditation - inconsistent (12/30)
-        for i in 0..<30 {
+        // Meditation - 45% completion rate (random)
+        for i in 0..<90 {
             if let date = calendar.date(byAdding: .day, value: -i, to: today) {
                 let dateKey = DateFormatter.habitDateKey.string(from: date)
-                let isCompleted = i % 3 == 0 && i < 15  // Every 3rd day, up to 15 days
+                let isCompleted = Double.random(in: 0...1) < 0.45
                 meditationCompletions[dateKey] = CompletionEntry(
                     id: "meditation-\(i)",
+                    date: date,
+                    isCompleted: isCompleted,
+                    count: isCompleted ? 1 : 0
+                )
+            }
+        }
+
+        // Reading - 35% completion rate (random)
+        for i in 0..<90 {
+            if let date = calendar.date(byAdding: .day, value: -i, to: today) {
+                let dateKey = DateFormatter.habitDateKey.string(from: date)
+                let isCompleted = Double.random(in: 0...1) < 0.35
+                readingCompletions[dateKey] = CompletionEntry(
+                    id: "reading-\(i)",
+                    date: date,
+                    isCompleted: isCompleted,
+                    count: isCompleted ? 1 : 0
+                )
+            }
+        }
+
+        // Sleep - 25% completion rate (random)
+        for i in 0..<90 {
+            if let date = calendar.date(byAdding: .day, value: -i, to: today) {
+                let dateKey = DateFormatter.habitDateKey.string(from: date)
+                let isCompleted = Double.random(in: 0...1) < 0.25
+                sleepCompletions[dateKey] = CompletionEntry(
+                    id: "sleep-\(i)",
                     date: date,
                     isCompleted: isCompleted,
                     count: isCompleted ? 1 : 0
@@ -203,7 +269,7 @@ class HabitDataManager {
                 status: .active,
                 categoryIds: [],
                 difficulty: .easy,
-                completions: [:]
+                completions: readingCompletions
             ),
             Habit(
                 id: "sleep-habit",
@@ -215,7 +281,7 @@ class HabitDataManager {
                 status: .active,
                 categoryIds: [],
                 difficulty: .difficult,
-                completions: [:]
+                completions: sleepCompletions
             ),
         ]
     }

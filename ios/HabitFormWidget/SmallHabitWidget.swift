@@ -177,7 +177,7 @@ struct SmallHabitWidgetEntryView: View {
                 .buttonStyle(PlainButtonStyle())
             }
         }
-        .padding(8)
+        
     }
 }
 

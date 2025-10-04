@@ -19,8 +19,8 @@ struct SmallGridHabitWidget: Widget {
             SmallGridHabitWidgetEntryView(entry: entry)
                 .containerBackground(.fill.tertiary, for: .widget)
         }
-        .configurationDisplayName("30-Day Habit Grid")
-        .description("View your habit progress over the last 30 days in a compact grid")
+        .configurationDisplayName("60-Day Habit Grid")
+        .description("View your habit progress over the last 60 days in a compact grid")
         .supportedFamilies([.systemSmall])
     }
 }
@@ -95,8 +95,8 @@ struct SmallGridHabitWidgetEntryView: View {
         let today = Date()
         var dates: [Date] = []
 
-        // Last 30 days
-        for i in 0..<30 {
+        // Last 60 days (6 rows x 10 columns) to maximize horizontal space
+        for i in 0..<60 {
             if let date = calendar.date(byAdding: .day, value: -i, to: today) {
                 dates.append(date)
             }
@@ -107,8 +107,17 @@ struct SmallGridHabitWidgetEntryView: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            // Header with emoji, name and streak
+            // Header with emoji and name
+            Spacer()
             HStack {
+                // Habit name - now has maximum space
+                Text(entry.habit.habitName)
+                    .font(.system(size: 12, weight: .bold))
+                    .foregroundColor(.primary)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.7)
+
+                Spacer()
                 // Emoji circle
                 ZStack {
                     Circle()
@@ -117,50 +126,25 @@ struct SmallGridHabitWidgetEntryView: View {
                             Circle()
                                 .stroke(habitColor.opacity(0.25), lineWidth: 1)
                         )
-                        .frame(width: 24, height: 24)
+                        .frame(width: 20, height: 20)
 
                     Text(entry.habit.emoji ?? "🎯")
-                        .font(.system(size: 12))
+                        .font(.system(size: 10))
                 }
 
-                // Habit name
-                Text(entry.habit.habitName)
-                    .font(.system(size: 12, weight: .bold))
-                    .foregroundColor(.primary)
-                    .lineLimit(1)
+               
 
-                Spacer()
-
-                // Streak pill
-                HStack(spacing: 2) {
-                    Image(systemName: "flame.fill")
-                        .font(.system(size: 8))
-                        .foregroundColor(habitColor)
-
-                    Text("\(entry.habit.currentStreak)")
-                        .font(.system(size: 10, weight: .bold, design: .rounded))
-                        .foregroundColor(habitColor)
-                }
-                .padding(.horizontal, 6)
-                .padding(.vertical, 2)
-                .background(
-                    Capsule()
-                        .fill(habitColor.opacity(0.18))
-                        .overlay(
-                            Capsule()
-                                .stroke(habitColor.opacity(0.25), lineWidth: 1)
-                        )
-                )
+                
             }
 
             Spacer()
 
-            // 30-day grid (6 rows x 5 columns)
+            // 60-day grid (6 rows x 10 columns) - maximize horizontal space
             VStack(spacing: 2) {
                 ForEach(0..<6, id: \.self) { row in
                     HStack(spacing: 2) {
-                        ForEach(0..<5, id: \.self) { col in
-                            let index = row * 5 + col
+                        ForEach(0..<10, id: \.self) { col in
+                            let index = row * 10 + col
                             if index < gridData.count {
                                 let date = gridData[index]
                                 let isCompleted =
@@ -175,12 +159,14 @@ struct SmallGridHabitWidgetEntryView: View {
                                             isCompleted
                                                 ? habitColor.opacity(0.8) : habitColor.opacity(0.2)
                                         )
-                                        .frame(width: 8, height: 8)
-                                        .cornerRadius(1)
+                                        .frame(width: 11, height: 11)
+                                        .cornerRadius(2)
                                         .overlay(
-                                            RoundedRectangle(cornerRadius: 1)
+                                            RoundedRectangle(cornerRadius: 2)
                                                 .stroke(
-                                                    isToday ? habitColor : Color.clear,
+                                                    isToday
+                                                        ? (Color.primary.opacity(0.8))
+                                                        : Color.clear,
                                                     lineWidth: 0.5)
                                         )
                                 }
@@ -188,14 +174,15 @@ struct SmallGridHabitWidgetEntryView: View {
                             } else {
                                 Rectangle()
                                     .fill(Color.clear)
-                                    .frame(width: 8, height: 8)
+                                    .frame(width: 11, height: 11)
                             }
                         }
                     }
                 }
             }
+            Spacer()
         }
-        .padding(8)
+
     }
 }
 
