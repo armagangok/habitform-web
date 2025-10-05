@@ -22,17 +22,29 @@ class WidgetService {
         return;
       }
 
-      final filePath = '$containerPath/$_habitsFileName';
-      final file = File(filePath);
+      // Create the directory if it doesn't exist
+      final containerDir = Directory(containerPath);
+      if (!await containerDir.exists()) {
+        await containerDir.create(recursive: true);
+        print('📁 Created App Group container directory: $containerPath');
+      }
+
+      // Write to both the old format and the new format for compatibility
+      final oldFilePath = '$containerPath/$_habitsFileName';
+      final newFilePath = '$containerPath/habits.json';
+
+      final oldFile = File(oldFilePath);
+      final newFile = File(newFilePath);
 
       // Convert habits to widget-compatible format
       final widgetHabits = habits.map((habit) => _convertHabitForWidget(habit)).toList();
 
-      // Write to file
-      await file.writeAsString(jsonEncode(widgetHabits));
-      print('Exported ${habits.length} habits to widget container');
+      // Write to both files
+      await oldFile.writeAsString(jsonEncode(widgetHabits));
+      await newFile.writeAsString(jsonEncode(widgetHabits));
+      print('✅ Exported ${habits.length} habits to widget container');
     } catch (e) {
-      print('Error exporting habits for widget: $e');
+      print('❌ Error exporting habits for widget: $e');
     }
   }
 
@@ -45,7 +57,7 @@ class WidgetService {
       final dateString = '${completion.date.year}-${completion.date.month.toString().padLeft(2, '0')}-${completion.date.day.toString().padLeft(2, '0')}';
       widgetCompletions[dateString] = {
         'id': completion.id,
-        'date': dateString,
+        'date': completion.date.toIso8601String(),
         'isCompleted': completion.isCompleted,
         'count': completion.count,
       };
@@ -53,13 +65,16 @@ class WidgetService {
 
     return {
       'id': habit.id,
-      'name': habit.habitName,
+      'habitName': habit.habitName,
+      'habitDescription': habit.habitDescription,
       'emoji': habit.emoji,
-      'colorCode': habit.colorCode,
       'dailyTarget': habit.dailyTarget,
+      'colorCode': habit.colorCode,
       'completions': widgetCompletions,
-      'difficulty': habit.difficulty.name,
+      'archiveDate': habit.archiveDate?.toIso8601String(),
       'status': habit.status.name,
+      'categoryIds': habit.categoryIds,
+      'difficulty': habit.difficulty.name,
     };
   }
 

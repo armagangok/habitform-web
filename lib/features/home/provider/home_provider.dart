@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '/core/core.dart';
@@ -8,6 +10,7 @@ import '/models/completion_entry/completion_entry.dart';
 import '/models/habit/habit_model.dart';
 import '/services/app_lifecycle_service.dart';
 import '/services/habit_service/habit_service_interface.dart';
+import '/services/widget_sync_service.dart';
 import 'home_state.dart';
 
 /// Provider for filtered habits based on selected categories
@@ -38,10 +41,51 @@ final homeProvider = AsyncNotifierProvider<HomeNotifier, HomeState>(() {
 
 /// Notifier class that handles all habit-related operations
 class HomeNotifier extends AsyncNotifier<HomeState> {
+  StreamSubscription<Map<String, dynamic>>? _widgetUpdateSubscription;
+
   @override
   Future<HomeState> build() async {
     // Initial fetch of habits when the provider is created
-    return await fetchHabits();
+    final initialState = await fetchHabits();
+
+    // Listen for widget updates
+    _setupWidgetUpdateListener();
+
+    return initialState;
+  }
+
+  /// Setup listener for widget completion updates
+  void _setupWidgetUpdateListener() {
+    _widgetUpdateSubscription = WidgetSyncService().widgetUpdates.listen(
+      (update) async {
+        LogHelper.shared.debugPrint('🔄 Received widget update: ${update['habitId']}');
+        await _handleWidgetUpdate(update);
+      },
+      onError: (error) {
+        LogHelper.shared.debugPrint('❌ Widget update stream error: $error');
+      },
+    );
+  }
+
+  /// Handle widget completion update
+  Future<void> _handleWidgetUpdate(Map<String, dynamic> update) async {
+    try {
+      final habitId = update['habitId'] as String;
+
+      LogHelper.shared.debugPrint('🔄 Processing widget update for habit: $habitId');
+
+      // Refresh habits to get the latest state
+      await refreshHabits();
+
+      LogHelper.shared.debugPrint('✅ Widget update processed for habit: $habitId');
+    } catch (e) {
+      LogHelper.shared.debugPrint('❌ Error handling widget update: $e');
+    }
+  }
+
+  /// Clean up resources
+  void dispose() {
+    _widgetUpdateSubscription?.cancel();
   }
 
   /// Fetches all active habits from the service layer and sort
@@ -98,7 +142,7 @@ class HomeNotifier extends AsyncNotifier<HomeState> {
 
     // Normalize date and fetch current state
     final normalizedDate = DateTime(date.year, date.month, date.day);
-    final dateKey = normalizedDate.toIso8601DateString;
+    final dateKey = normalizedDate.toIso8601String();
     final currentState = state;
     if (currentState is! AsyncData<HomeState>) return;
 
@@ -148,6 +192,9 @@ class HomeNotifier extends AsyncNotifier<HomeState> {
 
     // Refresh formation statistics after completion update
     await ref.read(formationProvider.notifier).refreshFormationStatistics();
+
+    // Update widget data
+    await WidgetSyncService().updateWidgetData(currentHabits);
   }
 
   /// Creates a new habit
@@ -155,7 +202,12 @@ class HomeNotifier extends AsyncNotifier<HomeState> {
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(() async {
       await habitService.createHabit(habit);
-      return await fetchHabits();
+      final newState = await fetchHabits();
+
+      // Update widget data
+      await WidgetSyncService().updateWidgetData(newState.habits);
+
+      return newState;
     });
   }
 
@@ -164,7 +216,12 @@ class HomeNotifier extends AsyncNotifier<HomeState> {
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(() async {
       await habitService.updateHabit(habit);
-      return await fetchHabits();
+      final newState = await fetchHabits();
+
+      // Update widget data
+      await WidgetSyncService().updateWidgetData(newState.habits);
+
+      return newState;
     });
   }
 
@@ -180,7 +237,12 @@ class HomeNotifier extends AsyncNotifier<HomeState> {
       }
 
       await habitService.deleteHabit(habitId);
-      return await fetchHabits();
+      final newState = await fetchHabits();
+
+      // Update widget data
+      await WidgetSyncService().updateWidgetData(newState.habits);
+
+      return newState;
     });
   }
 
@@ -188,7 +250,49 @@ class HomeNotifier extends AsyncNotifier<HomeState> {
   Future<void> refreshHabits() async {
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(() async {
-      return await fetchHabits();
+      final newState = await fetchHabits();
+
+      // Update widget data
+      await WidgetSyncService().updateWidgetData(newState.habits);
+
+      return newState;
     });
+  }
+
+  /// Force refresh widget data (for debugging)
+  Future<void> forceRefreshWidgetData() async {
+    try {
+      final currentState = state;
+      if (currentState is AsyncData<HomeState>) {
+        await WidgetSyncService().updateWidgetData(currentState.value.habits);
+        LogHelper.shared.debugPrint('🔄 Force refreshed widget data with ${currentState.value.habits.length} habits');
+      }
+    } catch (e) {
+      LogHelper.shared.debugPrint('❌ Error force refreshing widget data: $e');
+    }
+  }
+
+  /// Check for widget updates manually (for debugging)
+  Future<void> checkForWidgetUpdates() async {
+    try {
+      LogHelper.shared.debugPrint('🔍 Manually checking for widget updates...');
+      await WidgetSyncService().checkForWidgetUpdates();
+    } catch (e) {
+      LogHelper.shared.debugPrint('❌ Error checking for widget updates: $e');
+    }
+  }
+
+  /// Force widget data refresh and timeline reload (for debugging)
+  Future<void> forceWidgetRefresh() async {
+    try {
+      final currentState = state;
+      if (currentState is AsyncData<HomeState>) {
+        LogHelper.shared.debugPrint('🔄 Force refreshing widget data and timelines...');
+        await WidgetSyncService().updateWidgetData(currentState.value.habits);
+        LogHelper.shared.debugPrint('✅ Widget refresh completed');
+      }
+    } catch (e) {
+      LogHelper.shared.debugPrint('❌ Error force refreshing widget: $e');
+    }
   }
 }

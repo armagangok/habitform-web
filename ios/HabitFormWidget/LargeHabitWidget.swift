@@ -31,18 +31,19 @@ struct LargeHabitProvider: AppIntentTimelineProvider {
         LargeHabitEntry(
             date: Date(),
             habit: Habit(
-                id: "placeholder",
-                habitName: "Meditation",
-                habitDescription: "Daily mindfulness practice",
-                emoji: "🧘‍♀️",
+                id: "empty",
+                habitName: "No Habits",
+                habitDescription: "Create a habit in the app to see it here",
+                emoji: "📝",
                 dailyTarget: 1,
-                colorCode: 0x9B59B6,
+                colorCode: 0x999999,
+                completions: [:],
+                archiveDate: nil,
                 status: .active,
                 categoryIds: [],
-                difficulty: .moderate,
-                completions: [:]
+                difficulty: .easy
             ),
-            heatmapData: generatePlaceholderHeatmapData()
+            heatmapData: [:]
         )
     }
 
@@ -50,9 +51,15 @@ struct LargeHabitProvider: AppIntentTimelineProvider {
         -> LargeHabitEntry
     {
         let habits = HabitDataManager.shared.loadHabits()
+
+        // If no habits exist, return empty state
+        guard !habits.isEmpty else {
+            return placeholder(in: context)
+        }
+
         let habit =
             habits.first(where: { $0.id == configuration.habit?.id })
-            ?? placeholder(in: context).habit
+            ?? habits.first!  // Use first habit if configured habit not found
         let heatmapData = HabitDataManager.shared.getHabitCompletionData(for: habit.id, days: 90)
 
         return LargeHabitEntry(date: Date(), habit: habit, heatmapData: heatmapData)
@@ -62,9 +69,18 @@ struct LargeHabitProvider: AppIntentTimelineProvider {
         -> Timeline<LargeHabitEntry>
     {
         let habits = HabitDataManager.shared.loadHabits()
+
+        // If no habits exist, return empty state
+        guard !habits.isEmpty else {
+            let currentDate = Date()
+            let entry = placeholder(in: context)
+            let nextUpdate = Calendar.current.date(byAdding: .hour, value: 1, to: currentDate)!
+            return Timeline(entries: [entry], policy: .after(nextUpdate))
+        }
+
         let habit =
             habits.first(where: { $0.id == configuration.habit?.id })
-            ?? placeholder(in: context).habit
+            ?? habits.first!  // Use first habit if configured habit not found
         let heatmapData = HabitDataManager.shared.getHabitCompletionData(for: habit.id, days: 90)
 
         let currentDate = Date()
@@ -273,7 +289,7 @@ struct LargeHabitWidgetEntryView: View {
                 // Longest Streak Card
                 VStack(alignment: .leading, spacing: 2) {
                     Text("Longest")
-                        .font(.system(size: 11  , weight: .medium))
+                        .font(.system(size: 11, weight: .medium))
                         .foregroundColor(.secondary)
                     HStack(spacing: 4) {
                         Image(systemName: "trophy.fill")
@@ -524,10 +540,11 @@ private func heatmapColor(for isCompleted: Bool, isToday: Bool) -> Color {
             emoji: "🧘‍♀️",
             dailyTarget: 1,
             colorCode: 0x9B59B6,
+            completions: [:],
+            archiveDate: nil,
             status: .active,
             categoryIds: [],
-            difficulty: .moderate,
-            completions: [:]
+            difficulty: .moderate
         ),
         heatmapData: [:]
     )

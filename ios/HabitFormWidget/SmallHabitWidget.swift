@@ -6,6 +6,7 @@
 //
 
 import AppIntents
+import Foundation
 import SwiftUI
 import WidgetKit
 
@@ -27,19 +28,21 @@ struct SmallHabitWidget: Widget {
 
 struct SmallHabitProvider: AppIntentTimelineProvider {
     func placeholder(in context: Context) -> SmallHabitEntry {
+        // Return empty habit for placeholder
         SmallHabitEntry(
             date: Date(),
             habit: Habit(
-                id: "placeholder",
-                habitName: "Drink Water",
-                habitDescription: "Stay hydrated",
-                emoji: "💧",
+                id: "empty",
+                habitName: "No Habits",
+                habitDescription: "Create a habit in the app to see it here",
+                emoji: "📝",
                 dailyTarget: 1,
-                colorCode: 0x4A90E2,
+                colorCode: 0x999999,
+                completions: [:],
+                archiveDate: nil,
                 status: .active,
                 categoryIds: [],
-                difficulty: .easy,
-                completions: [:]
+                difficulty: .easy
             )
         )
     }
@@ -47,27 +50,67 @@ struct SmallHabitProvider: AppIntentTimelineProvider {
     func snapshot(for configuration: HabitConfigurationIntent, in context: Context) async
         -> SmallHabitEntry
     {
+        print("🔍 SmallHabitWidget: snapshot() called at \(Date())")
+        print("🔍 SmallHabitWidget: Configuration habit ID: '\(configuration.habit?.id ?? "nil")'")
+
+        // Test App Group access first
+        HabitDataManager.shared.testAppGroupAccess()
+
         let habits = HabitDataManager.shared.loadHabits()
+        print("🔍 SmallHabitWidget: Loaded \(habits.count) habits from HabitDataManager in snapshot")
+
+        // If no habits exist, return empty state
+        guard !habits.isEmpty else {
+            print("⚠️ SmallHabitWidget: No habits found in snapshot, returning placeholder")
+            return placeholder(in: context)
+        }
+
         let habit =
             habits.first(where: { $0.id == configuration.habit?.id })
-            ?? placeholder(in: context).habit
+            ?? habits.first!  // Use first habit if configured habit not found
 
+        print("✅ SmallHabitWidget: Found habit in snapshot: \(habit.habitName) (\(habit.id))")
         return SmallHabitEntry(date: Date(), habit: habit)
     }
 
     func timeline(for configuration: HabitConfigurationIntent, in context: Context) async
         -> Timeline<SmallHabitEntry>
     {
+        print("🔍 SmallHabitWidget: timeline() called at \(Date())")
+        print("🔍 SmallHabitWidget: Configuration habit ID: '\(configuration.habit?.id ?? "nil")'")
+
+        // Test App Group access first
+        HabitDataManager.shared.testAppGroupAccess()
+
         let habits = HabitDataManager.shared.loadHabits()
+        print("🔍 SmallHabitWidget: Loaded \(habits.count) habits from HabitDataManager")
+        print("🔍 SmallHabitWidget: Available habits: \(habits.map { "\($0.id): \($0.habitName)" })")
+
+        // If no habits exist, return empty state
+        guard !habits.isEmpty else {
+            print("⚠️ SmallHabitWidget: No habits found, showing empty state")
+            let currentDate = Date()
+            let entry = placeholder(in: context)
+            let nextUpdate = Calendar.current.date(byAdding: .hour, value: 1, to: currentDate)!
+            print("📅 SmallHabitWidget: Returning empty timeline, next update at \(nextUpdate)")
+            return Timeline(entries: [entry], policy: .after(nextUpdate))
+        }
+
         let habit =
             habits.first(where: { $0.id == configuration.habit?.id })
-            ?? placeholder(in: context).habit
+            ?? habits.first!  // Use first habit if configured habit not found
+
+        print("✅ SmallHabitWidget: Found habit: \(habit.habitName) (\(habit.id))")
+        print("📊 SmallHabitWidget: Habit has \(habit.completions.count) completions")
 
         let currentDate = Date()
         let entry = SmallHabitEntry(date: currentDate, habit: habit)
 
         // Update every hour
         let nextUpdate = Calendar.current.date(byAdding: .hour, value: 1, to: currentDate)!
+        print(
+            "📅 SmallHabitWidget: Returning timeline with habit '\(habit.habitName)', next update at \(nextUpdate)"
+        )
         return Timeline(entries: [entry], policy: .after(nextUpdate))
     }
 }
@@ -177,7 +220,7 @@ struct SmallHabitWidgetEntryView: View {
                 .buttonStyle(PlainButtonStyle())
             }
         }
-        
+
     }
 }
 
@@ -193,10 +236,11 @@ struct SmallHabitWidgetEntryView: View {
             emoji: "💧",
             dailyTarget: 1,
             colorCode: 0x4A90E2,
+            completions: [:],
+            archiveDate: nil,
             status: .active,
             categoryIds: [],
-            difficulty: .easy,
-            completions: [:]
+            difficulty: .easy
         )
     )
 }

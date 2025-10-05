@@ -1,0 +1,32 @@
+{
+  "source": "/Users/armagangok/Documents/AppSweat/habitrise/ios/HabitFormWidget/CompleteHabitIntent.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "Complete Habit",
+        "location": {
+          "startingColumn": 49,
+          "startingLine": 19
+        }
+      },
+      {
+        "comment": "",
+        "key": "Mark a habit as completed for today",
+        "location": {
+          "startingColumn": 48,
+          "startingLine": 20
+        }
+      },
+      {
+        "comment": "",
+        "key": "Habit ID",
+        "location": {
+          "startingColumn": 23,
+          "startingLine": 22
+        }
+      }
+    ]
+  },
+  "version": 1
+}

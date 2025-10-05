@@ -6,6 +6,7 @@
 //
 
 import AppIntents
+import Foundation
 import SwiftUI
 import WidgetKit
 
@@ -29,8 +30,10 @@ struct ExtraLargeHabitProvider: AppIntentTimelineProvider {
     func placeholder(in context: Context) -> ExtraLargeHabitEntry {
         ExtraLargeHabitEntry(
             date: Date(),
-            habits: generatePlaceholderHabits(),
-            weeklyStats: generatePlaceholderWeeklyStats()
+            habits: [],
+            weeklyStats: WeeklyStats(
+                totalHabits: 0, completedToday: 0, weeklyCompletionRate: 0.0, longestStreak: 0,
+                totalCompletions: 0)
         )
     }
 
@@ -38,6 +41,12 @@ struct ExtraLargeHabitProvider: AppIntentTimelineProvider {
         -> ExtraLargeHabitEntry
     {
         let habits = HabitDataManager.shared.loadHabits()
+
+        // If no habits exist, return empty state
+        guard !habits.isEmpty else {
+            return placeholder(in: context)
+        }
+
         let weeklyStats = calculateWeeklyStats(for: habits)
 
         return ExtraLargeHabitEntry(date: Date(), habits: habits, weeklyStats: weeklyStats)
@@ -47,6 +56,15 @@ struct ExtraLargeHabitProvider: AppIntentTimelineProvider {
         -> Timeline<ExtraLargeHabitEntry>
     {
         let habits = HabitDataManager.shared.loadHabits()
+
+        // If no habits exist, return empty state
+        guard !habits.isEmpty else {
+            let currentDate = Date()
+            let entry = placeholder(in: context)
+            let nextUpdate = Calendar.current.date(byAdding: .hour, value: 1, to: currentDate)!
+            return Timeline(entries: [entry], policy: .after(nextUpdate))
+        }
+
         let weeklyStats = calculateWeeklyStats(for: habits)
 
         let currentDate = Date()
@@ -67,10 +85,11 @@ struct ExtraLargeHabitProvider: AppIntentTimelineProvider {
                 emoji: "💧",
                 dailyTarget: 1,
                 colorCode: 0x4A90E2,
+                completions: [:],
+                archiveDate: nil,
                 status: .active,
                 categoryIds: [],
-                difficulty: .easy,
-                completions: [:]
+                difficulty: .easy
             ),
             Habit(
                 id: "2",
@@ -79,10 +98,11 @@ struct ExtraLargeHabitProvider: AppIntentTimelineProvider {
                 emoji: "🏃‍♂️",
                 dailyTarget: 1,
                 colorCode: 0x50C878,
+                completions: [:],
+                archiveDate: nil,
                 status: .active,
                 categoryIds: [],
-                difficulty: .moderate,
-                completions: [:]
+                difficulty: .moderate
             ),
             Habit(
                 id: "3",
@@ -91,10 +111,11 @@ struct ExtraLargeHabitProvider: AppIntentTimelineProvider {
                 emoji: "🧘‍♀️",
                 dailyTarget: 1,
                 colorCode: 0x9B59B6,
+                completions: [:],
+                archiveDate: nil,
                 status: .active,
                 categoryIds: [],
-                difficulty: .moderate,
-                completions: [:]
+                difficulty: .moderate
             ),
             Habit(
                 id: "4",
@@ -103,10 +124,11 @@ struct ExtraLargeHabitProvider: AppIntentTimelineProvider {
                 emoji: "📚",
                 dailyTarget: 1,
                 colorCode: 0xFF6B6B,
+                completions: [:],
+                archiveDate: nil,
                 status: .active,
                 categoryIds: [],
-                difficulty: .easy,
-                completions: [:]
+                difficulty: .easy
             ),
         ]
     }

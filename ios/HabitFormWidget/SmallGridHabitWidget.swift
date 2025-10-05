@@ -6,6 +6,7 @@
 //
 
 import AppIntents
+import Foundation
 import SwiftUI
 import WidgetKit
 
@@ -30,16 +31,17 @@ struct SmallGridHabitProvider: AppIntentTimelineProvider {
         SmallGridHabitEntry(
             date: Date(),
             habit: Habit(
-                id: "placeholder",
-                habitName: "Drink Water",
-                habitDescription: "Stay hydrated",
-                emoji: "💧",
+                id: "empty",
+                habitName: "No Habits",
+                habitDescription: "Create a habit in the app to see it here",
+                emoji: "📝",
                 dailyTarget: 1,
-                colorCode: 0x4A90E2,
+                colorCode: 0x999999,
+                completions: [:],
+                archiveDate: nil,
                 status: .active,
                 categoryIds: [],
-                difficulty: .easy,
-                completions: [:]
+                difficulty: .easy
             )
         )
     }
@@ -48,9 +50,15 @@ struct SmallGridHabitProvider: AppIntentTimelineProvider {
         -> SmallGridHabitEntry
     {
         let habits = HabitDataManager.shared.loadHabits()
+
+        // If no habits exist, return empty state
+        guard !habits.isEmpty else {
+            return placeholder(in: context)
+        }
+
         let habit =
             habits.first(where: { $0.id == configuration.habit?.id })
-            ?? placeholder(in: context).habit
+            ?? habits.first!  // Use first habit if configured habit not found
 
         return SmallGridHabitEntry(date: Date(), habit: habit)
     }
@@ -59,9 +67,18 @@ struct SmallGridHabitProvider: AppIntentTimelineProvider {
         -> Timeline<SmallGridHabitEntry>
     {
         let habits = HabitDataManager.shared.loadHabits()
+
+        // If no habits exist, return empty state
+        guard !habits.isEmpty else {
+            let currentDate = Date()
+            let entry = placeholder(in: context)
+            let nextUpdate = Calendar.current.date(byAdding: .hour, value: 1, to: currentDate)!
+            return Timeline(entries: [entry], policy: .after(nextUpdate))
+        }
+
         let habit =
             habits.first(where: { $0.id == configuration.habit?.id })
-            ?? placeholder(in: context).habit
+            ?? habits.first!  // Use first habit if configured habit not found
 
         let currentDate = Date()
         let entry = SmallGridHabitEntry(date: currentDate, habit: habit)
@@ -132,9 +149,6 @@ struct SmallGridHabitWidgetEntryView: View {
                         .font(.system(size: 10))
                 }
 
-               
-
-                
             }
 
             Spacer()
@@ -198,10 +212,11 @@ struct SmallGridHabitWidgetEntryView: View {
             emoji: "💧",
             dailyTarget: 1,
             colorCode: 0x4A90E2,
+            completions: [:],
+            archiveDate: nil,
             status: .active,
             categoryIds: [],
-            difficulty: .easy,
-            completions: [:]
+            difficulty: .easy
         )
     )
 }

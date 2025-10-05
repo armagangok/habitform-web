@@ -520,9 +520,9 @@ class _OnboardingWelcomePageState extends State<OnboardingWelcomePage> with Tick
       case OnboardingStep.completed:
         // Final step - handle final CTA button press
         if (_showFinalCta) {
-          // Navigate to information page
+          // Navigate directly to app features page
           if (mounted) {
-            Navigator.of(context).pushNamed('/onboardingInformation');
+            Navigator.of(context).pushNamed('/onboardingAppFeatures');
           }
         } else {
           // If CTA not ready yet, do nothing

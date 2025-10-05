@@ -4,6 +4,7 @@ import '../../../core/core.dart';
 import '../../../models/completion_entry/completion_entry.dart';
 import '../../../models/habit/habit_model.dart';
 import '../../../services/habit_service/habit_service_interface.dart';
+import '../../../services/widget_sync_service.dart';
 import '../../habit_formation/provider/habit_formation_provider.dart';
 import '../../home/provider/home_provider.dart';
 
@@ -52,7 +53,12 @@ class HabitDetailNotifier extends AutoDisposeNotifier<Habit?> {
 
           // Formation provider'ı da güncelle
           await ref.read(formationProvider.notifier).refreshFormationStatistics();
-          LogHelper.shared.debugPrint("State, home provider, and formation provider updated successfully");
+
+          // Widget data'yı güncelle
+          final allHabits = await habitService.getAllHabits();
+          await WidgetSyncService().updateWidgetData(allHabits);
+
+          LogHelper.shared.debugPrint("State, home provider, formation provider, and widget data updated successfully");
         } else {
           LogHelper.shared.errorPrint("Could not find the updated habit");
         }
@@ -63,6 +69,10 @@ class HabitDetailNotifier extends AutoDisposeNotifier<Habit?> {
 
         // Formation provider'ı da güncelle
         await ref.read(formationProvider.notifier).refreshFormationStatistics();
+
+        // Widget data'yı güncelle
+        final allHabits = await habitService.getAllHabits();
+        await WidgetSyncService().updateWidgetData(allHabits);
       }
     } catch (e, s) {
       LogHelper.shared.errorPrint("Error marking habit as complete: $e\n$s");
