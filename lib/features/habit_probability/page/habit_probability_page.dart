@@ -4,21 +4,19 @@ import 'package:shimmer/shimmer.dart';
 
 import '/core/core.dart' hide showCupertinoSheet;
 import '../provider/habit_formation_provider.dart';
+import '../provider/selected_habit_index_provider.dart';
 import '../widgets/formation_widget/formation_insights_widget.dart';
 import '../widgets/habit_selector/habit_selector.dart';
 
-// Seçili alışkanlık indeksi için provider
-final selectedHabitIndexProvider = StateProvider<int>((ref) => -1);
-
-class HabitFormationPage extends ConsumerWidget {
-  const HabitFormationPage({super.key});
+class HabitProbabilityPage extends ConsumerWidget {
+  const HabitProbabilityPage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return CupertinoPageScaffold(
       navigationBar: SheetHeader(
         closeButtonPosition: CloseButtonPosition.left,
-        middle: Text(LocaleKeys.statistics_habit_formation.tr()),
+        middle: Text(LocaleKeys.achievement_dialog_habit_probability.tr()),
       ),
       child: SafeArea(
         bottom: false,
@@ -39,11 +37,18 @@ class HabitFormationPage extends ConsumerWidget {
                           data: (state) {
                             if (state.habitStatistics.isEmpty) return NoDataWidgetStatistics();
 
+                            // Auto-select the first habit if none selected yet
+                            final selectedIndex = ref.read(selectedHabitIndexProvider);
+                            if (selectedIndex < 0 && state.habitStatistics.isNotEmpty) {
+                              WidgetsBinding.instance.addPostFrameCallback((_) {
+                                ref.read(selectedHabitIndexProvider.notifier).state = 0;
+                              });
+                            }
+
                             return Column(
-                              spacing: 20,
+                              spacing: 10,
                               children: [
                                 HabitSelector(
-                                  selectedHabitIndex: ref.watch(selectedHabitIndexProvider),
                                   habitStats: state.habitStatistics.values.toList(),
                                   onHabitSelected: (index) {
                                     ref.read(selectedHabitIndexProvider.notifier).state = index;

@@ -84,7 +84,7 @@ class _HabitDetailPageState extends ConsumerState<HabitDetailPage> {
               // SliverAppBar with habit header
               _buildSliverAppBar(context, currentHabit),
 
-              // Progress card
+              // Progress card (always visible)
               SliverToBoxAdapter(
                 child: HabitProgressCard(habit: currentHabit),
               ),
@@ -94,19 +94,23 @@ class _HabitDetailPageState extends ConsumerState<HabitDetailPage> {
                 child: HabitOverviewWidget(habit: currentHabit),
               ),
 
-              // Heatmap card
+              // Lazy load heavy widgets to improve initial page load performance
               SliverToBoxAdapter(
-                child: HabitHeatmapCard(habit: currentHabit),
+                child: _LazyLoadedWidget(
+                  child: HabitHeatmapCard(habit: currentHabit),
+                ),
               ),
 
-              // Milestones card
               SliverToBoxAdapter(
-                child: HabitMilestonesCard(habit: currentHabit),
+                child: _LazyLoadedWidget(
+                  child: HabitMilestonesCard(habit: currentHabit),
+                ),
               ),
 
-              // Insights card
               SliverToBoxAdapter(
-                child: HabitInsightsCard(habit: currentHabit),
+                child: _LazyLoadedWidget(
+                  child: HabitInsightsCard(habit: currentHabit),
+                ),
               ),
 
               // Bottom spacing for safe area
@@ -254,5 +258,48 @@ class _HabitDetailPageState extends ConsumerState<HabitDetailPage> {
         ),
       ),
     );
+  }
+}
+
+/// Widget that delays rendering its child until after the current frame
+/// This helps improve initial page load performance by deferring heavy widgets
+class _LazyLoadedWidget extends StatefulWidget {
+  final Widget child;
+
+  const _LazyLoadedWidget({required this.child});
+
+  @override
+  State<_LazyLoadedWidget> createState() => _LazyLoadedWidgetState();
+}
+
+class _LazyLoadedWidgetState extends State<_LazyLoadedWidget> {
+  bool _isLoaded = false;
+
+  @override
+  void initState() {
+    super.initState();
+    // Defer loading until after the current frame
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        setState(() {
+          _isLoaded = true;
+        });
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (!_isLoaded) {
+      // Show a placeholder while loading
+      return const SizedBox(
+        height: 200,
+        child: Center(
+          child: CupertinoActivityIndicator(),
+        ),
+      );
+    }
+
+    return widget.child;
   }
 }

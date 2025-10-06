@@ -3,8 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/core.dart';
 import '../../../../models/habit/habit_difficulty.dart';
-import '../../page/habit_formation_page.dart';
 import '../../provider/habit_formation_provider.dart';
+import '../../provider/selected_habit_index_provider.dart';
 
 class FormationWidget extends ConsumerWidget {
   const FormationWidget({super.key});

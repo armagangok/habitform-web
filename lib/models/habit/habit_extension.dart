@@ -24,39 +24,35 @@ extension HabitUtils on Habit {
 
   // Calculate the longest streak of consecutive days completed
   int calculateLongestStreak() {
-    // Tamamlanmış günleri al ve kronolojik sırala
-    final completionsList = completions.values.where((completion) => completion.isCompleted).map((completion) => completion.date.normalized).toList();
-
-    // Boş liste kontrolü
-    if (completionsList.isEmpty) return 0;
-
-    // Mükerrer günleri kaldır (aynı günde birden fazla kayıt olmaması için)
-    final uniqueDates = <DateTime>{};
-    for (var date in completionsList) {
-      uniqueDates.add(date);
+    // Get completed dates and sort them chronologically
+    final completedDates = <DateTime>{};
+    for (final completion in completions.values) {
+      if (completion.isCompleted) {
+        completedDates.add(completion.date.normalized);
+      }
     }
 
-    // Kronolojik sıralama yap
-    final sortedDates = uniqueDates.toList()..sort((a, b) => a.compareTo(b));
+    if (completedDates.isEmpty) return 0;
+    if (completedDates.length == 1) return 1;
 
-    if (sortedDates.isEmpty) return 0;
-    if (sortedDates.length == 1) return 1;
+    // Sort dates chronologically
+    final sortedDates = completedDates.toList()..sort((a, b) => a.compareTo(b));
 
     int currentStreak = 1;
     int longestStreak = 1;
 
     for (int i = 1; i < sortedDates.length; i++) {
-      // Mevcut tarih ile önceki tarih arasındaki fark tam olarak 1 gün mü?
-      final expectedPreviousDay = DateTime(sortedDates[i].year, sortedDates[i].month, sortedDates[i].day - 1);
+      // Check if current date is exactly one day after previous date
+      final daysDifference = sortedDates[i].difference(sortedDates[i - 1]).inDays;
 
-      if (sortedDates[i - 1].isSameDayWith(expectedPreviousDay)) {
-        // Ardışık günler - streak'i artır
+      if (daysDifference == 1) {
+        // Consecutive days - increment streak
         currentStreak++;
         if (currentStreak > longestStreak) {
           longestStreak = currentStreak;
         }
       } else {
-        // Ardışık değil - yeni streak başlat
+        // Not consecutive - start new streak
         currentStreak = 1;
       }
     }
@@ -66,41 +62,41 @@ extension HabitUtils on Habit {
 
   // Calculate the current streak (consecutive days until today or yesterday)
   int calculateCurrentStreak() {
-    // Tamamlanmış günleri al
-    final completionsList = completions.values.where((completion) => completion.isCompleted).map((completion) => completion.date.normalized).toList();
-
-    if (completionsList.isEmpty) return 0;
-
-    // Mükerrer günleri kaldır
-    final uniqueDates = <DateTime>{};
-    for (var date in completionsList) {
-      uniqueDates.add(date);
+    // Get completed dates
+    final completedDates = <DateTime>{};
+    for (final completion in completions.values) {
+      if (completion.isCompleted) {
+        completedDates.add(completion.date.normalized);
+      }
     }
 
-    // Azalan sıralama yap (en yeni tarihten eskiye)
-    final sortedDates = uniqueDates.toList()..sort((a, b) => b.compareTo(a));
+    if (completedDates.isEmpty) return 0;
+
+    // Sort dates in descending order (newest first)
+    final sortedDates = completedDates.toList()..sort((a, b) => b.compareTo(a));
 
     final today = DateTime.now().normalized;
-    final yesterday = DateTime(today.year, today.month, today.day - 1);
+    final yesterday = today.subtract(const Duration(days: 1));
 
-    // En son tamamlanan gün bugün veya dün değilse, streak yoktur
-    if (!sortedDates.first.isSameDayWith(today) && !sortedDates.first.isSameDayWith(yesterday)) {
+    // Check if the most recent completion is today or yesterday
+    final mostRecentDate = sortedDates.first;
+    if (!mostRecentDate.isSameDayWith(today) && !mostRecentDate.isSameDayWith(yesterday)) {
       return 0;
     }
 
     int streak = 1;
-    DateTime currentDate = sortedDates.first;
+    DateTime currentDate = mostRecentDate;
 
-    // Ardışık günleri geriye doğru kontrol et
+    // Check consecutive days going backwards
     for (int i = 1; i < sortedDates.length; i++) {
-      final expectedNextDay = DateTime(currentDate.year, currentDate.month, currentDate.day - 1);
+      final expectedPreviousDay = currentDate.subtract(const Duration(days: 1));
 
-      if (sortedDates[i].isSameDayWith(expectedNextDay)) {
-        // Ardışık bir gün bulundu
+      if (sortedDates[i].isSameDayWith(expectedPreviousDay)) {
+        // Found consecutive day
         streak++;
         currentDate = sortedDates[i];
       } else {
-        // Ardışık olmayan bir gün bulundu, streak sona erdi
+        // Non-consecutive day found, streak ended
         break;
       }
     }
@@ -121,8 +117,18 @@ extension HabitUtils on Habit {
 
   // Get recorded count for a specific date (0 if none)
   int getCountForDate(DateTime date) {
+    final normalizedDate = date.normalized;
+    final dateKey = '${normalizedDate.year}-${normalizedDate.month}-${normalizedDate.day}';
+
+    // Try direct key lookup first (most efficient)
+    final directEntry = completions[dateKey];
+    if (directEntry != null && directEntry.date.normalized.isSameDayWith(normalizedDate)) {
+      return directEntry.count;
+    }
+
+    // Fallback to linear search for legacy data
     for (final entry in completions.values) {
-      if (entry.date.normalized.isSameDayWith(date.normalized)) {
+      if (entry.date.normalized.isSameDayWith(normalizedDate)) {
         return entry.count;
       }
     }

@@ -99,24 +99,43 @@ class LocalHabitService extends HabitService {
   // Update habit completion status
   @override
   Future<void> updateHabitCompletionStatus(String habitId, CompletionEntry completion) async {
+    final serviceStart = DateTime.now();
+    LogHelper.shared.debugPrint('💾 [PERF] Starting updateHabitCompletionStatus at ${serviceStart.millisecondsSinceEpoch}');
+
     // Get the habit
+    final getHabitStart = DateTime.now();
     final habit = await getHabit(habitId);
+    final getHabitEnd = DateTime.now();
+    LogHelper.shared.debugPrint('📖 [PERF] getHabit completed in ${getHabitEnd.difference(getHabitStart).inMilliseconds}ms');
+
     if (habit == null) {
       LogHelper.shared.debugPrint('Habit not found: $habitId');
-      throw Exception('Habit not found');
+      return;
     }
 
     // Update completions with count semantics (supports multi-completions)
     final updatedCompletions = Map<String, CompletionEntry>.from(habit.completions);
 
-    // Find any existing entry for the same date
+    // Find any existing entry for the same date using optimized lookup
+    final normalizedDate = completion.date.normalized;
+    final dateKey = '${normalizedDate.year}-${normalizedDate.month}-${normalizedDate.day}';
+
     String? existingKey;
     CompletionEntry? existingEntry;
-    for (var entry in updatedCompletions.entries) {
-      if (entry.value.date.normalized.isSameDayWith(completion.date.normalized)) {
-        existingKey = entry.key;
-        existingEntry = entry.value;
-        break;
+
+    // Try direct key lookup first (most efficient)
+    final directEntry = updatedCompletions[dateKey];
+    if (directEntry != null && directEntry.date.normalized.isSameDayWith(normalizedDate)) {
+      existingKey = dateKey;
+      existingEntry = directEntry;
+    } else {
+      // Fallback to linear search for legacy data
+      for (var entry in updatedCompletions.entries) {
+        if (entry.value.date.normalized.isSameDayWith(normalizedDate)) {
+          existingKey = entry.key;
+          existingEntry = entry.value;
+          break;
+        }
       }
     }
 
@@ -146,10 +165,14 @@ class LocalHabitService extends HabitService {
     updatedCompletions[updatedEntry.id] = updatedEntry;
 
     // Save updated habit
+    final updateStart = DateTime.now();
     final updatedHabit = habit.copyWith(completions: updatedCompletions);
     await updateHabit(updatedHabit);
+    final updateEnd = DateTime.now();
+    LogHelper.shared.debugPrint('💾 [PERF] updateHabit completed in ${updateEnd.difference(updateStart).inMilliseconds}ms');
 
-    LogHelper.shared.debugPrint('Successfully updated completion status for habit: $habitId');
+    final serviceEnd = DateTime.now();
+    LogHelper.shared.debugPrint('✅ [PERF] updateHabitCompletionStatus total time: ${serviceEnd.difference(serviceStart).inMilliseconds}ms');
   }
 
   // Delete a habit (soft delete)

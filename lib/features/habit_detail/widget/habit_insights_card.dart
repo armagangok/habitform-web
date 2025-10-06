@@ -3,9 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:habitform/models/habit/habit_extension.dart';
 
 import '/core/core.dart';
-import '/features/habit_formation/provider/habit_formation_provider.dart';
+import '../../habit_probability/provider/habit_formation_provider.dart';
 import '/models/models.dart';
-import '../../habit_formation/provider/habit_formation_state.dart';
+import '../../habit_probability/provider/habit_formation_state.dart';
 
 class HabitInsightsCard extends ConsumerWidget {
   final Habit habit;

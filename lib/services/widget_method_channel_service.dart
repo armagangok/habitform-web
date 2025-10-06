@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/services.dart';
+import 'package:habitform/core/core.dart';
 import 'package:habitform/models/habit/habit_extension.dart';
 
 import '../models/completion_entry/completion_entry.dart';
@@ -12,6 +13,10 @@ import 'widget_service.dart';
 class WidgetMethodChannelService {
   static const MethodChannel _channel = MethodChannel('com.appsweat.habitrise/widget');
   static const String _appGroupIdentifier = 'group.com.AppSweat.HabitFormWidget';
+
+  // Cache for widget data to avoid repeated file operations
+  List<Habit>? _cachedHabits;
+  DateTime? _lastCacheUpdate;
 
   static final WidgetMethodChannelService _instance = WidgetMethodChannelService._internal();
   factory WidgetMethodChannelService() => _instance;
@@ -129,7 +134,7 @@ class WidgetMethodChannelService {
       final containerDir = Directory(containerPath);
       if (!await containerDir.exists()) {
         await containerDir.create(recursive: true);
-        print('📁 Created App Group container directory: $containerPath');
+        LogHelper.shared.debugPrint('📁 Created App Group container directory: $containerPath');
       }
 
       final filePath = '$containerPath/completion_updates.json';
@@ -161,9 +166,9 @@ class WidgetMethodChannelService {
 
       // Write back to file
       await file.writeAsString(jsonEncode(updates));
-      print('✅ Written completion update for habit: $habitId');
+      LogHelper.shared.debugPrint('✅ Written completion update for habit: $habitId');
     } catch (e) {
-      print('❌ Error writing completion update: $e');
+      LogHelper.shared.debugPrint('❌ Error writing completion update: $e');
     }
   }
 
@@ -180,16 +185,16 @@ class WidgetMethodChannelService {
         // Use Method Channel to get the correct App Group container path from iOS
         final result = await _channel.invokeMethod('getAppGroupContainerPath');
         if (result != null) {
-          print('📁 Method Channel App Group container path from iOS: $result');
+          LogHelper.shared.debugPrint('📁 Method Channel App Group container path from iOS: $result');
           return result as String;
         } else {
-          print('❌ iOS returned null for App Group container path');
+          LogHelper.shared.debugPrint('❌ iOS returned null for App Group container path');
           return null;
         }
       }
       return null;
     } catch (e) {
-      print('❌ Error getting App Group container path: $e');
+      LogHelper.shared.debugPrint('❌ Error getting App Group container path: $e');
       return null;
     }
   }
@@ -198,46 +203,89 @@ class WidgetMethodChannelService {
   Future<void> updateWidgetData(List<Habit> habits) async {
     if (!Platform.isIOS) return;
 
-    print('🔄 WidgetMethodChannelService: updateWidgetData called with ${habits.length} habits');
+    final methodChannelStart = DateTime.now();
+    LogHelper.shared.debugPrint('📡 [PERF] WidgetMethodChannelService: Starting updateWidgetData at ${methodChannelStart.millisecondsSinceEpoch}');
+
+    // Check if we can use cached data to avoid unnecessary operations
+    final now = DateTime.now();
+    if (_cachedHabits != null && _lastCacheUpdate != null && now.difference(_lastCacheUpdate!).inSeconds < 2 && _habitsAreEqual(_cachedHabits!, habits)) {
+      LogHelper.shared.debugPrint('⏭️ WidgetMethodChannelService: Using cached data (no changes detected)');
+      return;
+    }
+
+    LogHelper.shared.debugPrint('🔄 WidgetMethodChannelService: updateWidgetData called with ${habits.length} habits');
 
     // Filter out archived habits and ensure we have valid habits
     final activeHabits = habits.where((habit) => habit.status.name == 'active').toList();
-    print('🔄 WidgetMethodChannelService: ${activeHabits.length} active habits after filtering');
+    LogHelper.shared.debugPrint('🔄 WidgetMethodChannelService: ${activeHabits.length} active habits after filtering');
 
     for (final habit in activeHabits) {
-      print('  - ${habit.habitName} (${habit.id}) - ${habit.completions.length} completions');
+      LogHelper.shared.debugPrint('  - ${habit.habitName} (${habit.id}) - ${habit.completions.length} completions');
     }
 
     try {
       // Export habits for widget using existing WidgetService
-      print('📤 WidgetMethodChannelService: Exporting habits via WidgetService...');
+      LogHelper.shared.debugPrint('📤 WidgetMethodChannelService: Exporting habits via WidgetService...');
+      final exportStart = DateTime.now();
       await WidgetService().exportHabitsForWidget(activeHabits);
+      final exportEnd = DateTime.now();
+      LogHelper.shared.debugPrint('📤 [PERF] WidgetService export completed in ${exportEnd.difference(exportStart).inMilliseconds}ms');
 
       // Also write to the new format for Method Channel communication
-      print('📤 WidgetMethodChannelService: Writing habits to shared container...');
+      LogHelper.shared.debugPrint('📤 WidgetMethodChannelService: Writing habits to shared container...');
+      final writeStart = DateTime.now();
       await _writeHabitsToSharedContainer(activeHabits);
+      final writeEnd = DateTime.now();
+      LogHelper.shared.debugPrint('📤 [PERF] Shared container write completed in ${writeEnd.difference(writeStart).inMilliseconds}ms');
 
       // Use Method Channel to sync with iOS
-      print('📤 WidgetMethodChannelService: Syncing habits via Method Channel...');
+      LogHelper.shared.debugPrint('📤 WidgetMethodChannelService: Syncing habits via Method Channel...');
+      final syncStart = DateTime.now();
       await _syncHabitsViaMethodChannel(activeHabits);
+      final syncEnd = DateTime.now();
+      LogHelper.shared.debugPrint('📤 [PERF] Method channel sync completed in ${syncEnd.difference(syncStart).inMilliseconds}ms');
 
       // Force reload widget timelines
-      print('📤 WidgetMethodChannelService: Force reloading widget timelines...');
+      LogHelper.shared.debugPrint('📤 WidgetMethodChannelService: Force reloading widget timelines...');
+      final reloadStart = DateTime.now();
       await _forceReloadWidgetTimelines();
+      final reloadEnd = DateTime.now();
+      LogHelper.shared.debugPrint('📤 [PERF] Widget timeline reload completed in ${reloadEnd.difference(reloadStart).inMilliseconds}ms');
 
-      print('✅ WidgetMethodChannelService: Successfully updated widget data');
+      // Update cache
+      _cachedHabits = List.from(habits);
+      _lastCacheUpdate = now;
+
+      final methodChannelEnd = DateTime.now();
+      LogHelper.shared.debugPrint('✅ [PERF] WidgetMethodChannelService total time: ${methodChannelEnd.difference(methodChannelStart).inMilliseconds}ms');
     } catch (e) {
-      print('❌ WidgetMethodChannelService: Error updating widget data: $e');
+      LogHelper.shared.debugPrint('❌ WidgetMethodChannelService: Error updating widget data: $e');
     }
+  }
+
+  /// Check if two habit lists are equal (for caching purposes)
+  bool _habitsAreEqual(List<Habit> habits1, List<Habit> habits2) {
+    if (habits1.length != habits2.length) return false;
+
+    for (int i = 0; i < habits1.length; i++) {
+      final habit1 = habits1[i];
+      final habit2 = habits2[i];
+
+      if (habit1.id != habit2.id || habit1.habitName != habit2.habitName || habit1.completions.length != habit2.completions.length) {
+        return false;
+      }
+    }
+
+    return true;
   }
 
   /// Force reload all widget timelines
   Future<void> _forceReloadWidgetTimelines() async {
     try {
       await _channel.invokeMethod('forceReloadWidgetTimelines');
-      print('✅ WidgetMethodChannelService: Forced widget timeline reload');
+      LogHelper.shared.debugPrint('✅ WidgetMethodChannelService: Forced widget timeline reload');
     } catch (e) {
-      print('❌ WidgetMethodChannelService: Error forcing widget timeline reload: $e');
+      LogHelper.shared.debugPrint('❌ WidgetMethodChannelService: Error forcing widget timeline reload: $e');
     }
   }
 
@@ -246,28 +294,28 @@ class WidgetMethodChannelService {
     try {
       final containerPath = await _getAppGroupContainerPath();
       if (containerPath == null) {
-        print('❌ WidgetMethodChannelService: Failed to get App Group container path');
+        LogHelper.shared.debugPrint('❌ WidgetMethodChannelService: Failed to get App Group container path');
         return;
       }
 
-      print('📁 WidgetMethodChannelService: Using container path: $containerPath');
+      LogHelper.shared.debugPrint('📁 WidgetMethodChannelService: Using container path: $containerPath');
 
       // Create the directory if it doesn't exist
       final containerDir = Directory(containerPath);
       if (!await containerDir.exists()) {
         await containerDir.create(recursive: true);
-        print('📁 WidgetMethodChannelService: Created App Group container directory: $containerPath');
+        LogHelper.shared.debugPrint('📁 WidgetMethodChannelService: Created App Group container directory: $containerPath');
       } else {
-        print('📁 WidgetMethodChannelService: Container directory already exists');
+        LogHelper.shared.debugPrint('📁 WidgetMethodChannelService: Container directory already exists');
       }
 
       final filePath = '$containerPath/habits.json';
       final file = File(filePath);
-      print('📄 WidgetMethodChannelService: Writing to file: $filePath');
+      LogHelper.shared.debugPrint('📄 WidgetMethodChannelService: Writing to file: $filePath');
 
       // Convert habits to widget-compatible format
       final widgetHabits = habits.map((habit) => _convertHabitForWidget(habit)).toList();
-      print('🔄 WidgetMethodChannelService: Converted ${habits.length} habits to widget format');
+      LogHelper.shared.debugPrint('🔄 WidgetMethodChannelService: Converted ${habits.length} habits to widget format');
 
       // Write to file with atomic operation
       final jsonString = jsonEncode(widgetHabits);
@@ -280,27 +328,27 @@ class WidgetMethodChannelService {
       // Atomically move to final location
       await tempFile.rename(filePath);
 
-      print('✅ WidgetMethodChannelService: Written ${widgetHabits.length} habits to $filePath');
-      print('📊 WidgetMethodChannelService: File size: ${jsonString.length} characters');
+      LogHelper.shared.debugPrint('✅ WidgetMethodChannelService: Written ${widgetHabits.length} habits to $filePath');
+      LogHelper.shared.debugPrint('📊 WidgetMethodChannelService: File size: ${jsonString.length} characters');
 
       // Verify the file was written
       if (await file.exists()) {
         final fileSize = await file.length();
-        print('✅ WidgetMethodChannelService: File exists, size: $fileSize bytes');
+        LogHelper.shared.debugPrint('✅ WidgetMethodChannelService: File exists, size: $fileSize bytes');
 
         // Verify the content can be read back
         try {
           final content = await file.readAsString();
           final parsedHabits = jsonDecode(content) as List;
-          print('✅ WidgetMethodChannelService: Verified file content - ${parsedHabits.length} habits readable');
+          LogHelper.shared.debugPrint('✅ WidgetMethodChannelService: Verified file content - ${parsedHabits.length} habits readable');
         } catch (e) {
-          print('❌ WidgetMethodChannelService: Error verifying file content: $e');
+          LogHelper.shared.debugPrint('❌ WidgetMethodChannelService: Error verifying file content: $e');
         }
       } else {
-        print('❌ WidgetMethodChannelService: File does not exist after writing!');
+        LogHelper.shared.debugPrint('❌ WidgetMethodChannelService: File does not exist after writing!');
       }
     } catch (e) {
-      print('❌ WidgetMethodChannelService: Error writing habits to shared container: $e');
+      LogHelper.shared.debugPrint('❌ WidgetMethodChannelService: Error writing habits to shared container: $e');
     }
   }
 
@@ -366,7 +414,7 @@ class WidgetMethodChannelService {
 
       return updates;
     } catch (e) {
-      print('Error checking for completion updates: $e');
+      LogHelper.shared.debugPrint('Error checking for completion updates: $e');
       return [];
     }
   }
@@ -378,18 +426,18 @@ class WidgetMethodChannelService {
       final widgetHabits = habits.map((habit) => _convertHabitForWidget(habit)).toList();
       final habitsJson = jsonEncode(widgetHabits);
 
-      // Debug: Print habit IDs being sent
-      print('🔄 Method Channel: Syncing ${habits.length} habits:');
+      // Debug: LogHelper.shared.debugPrint habit IDs being sent
+      LogHelper.shared.debugPrint('🔄 Method Channel: Syncing ${habits.length} habits:');
       for (final habit in widgetHabits) {
-        print('  - ID: "${habit['id']}", Name: "${habit['habitName']}", Status: "${habit['status']}"');
+        LogHelper.shared.debugPrint('  - ID: "${habit['id']}", Name: "${habit['habitName']}", Status: "${habit['status']}"');
       }
 
       // Call iOS Method Channel
       await _channel.invokeMethod('syncHabitsToWidget', {'habits': habitsJson});
 
-      print('✅ Synced ${habits.length} habits via Method Channel');
+      LogHelper.shared.debugPrint('✅ Synced ${habits.length} habits via Method Channel');
     } catch (e) {
-      print('❌ Error syncing habits via Method Channel: $e');
+      LogHelper.shared.debugPrint('❌ Error syncing habits via Method Channel: $e');
     }
   }
 }

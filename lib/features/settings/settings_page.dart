@@ -161,7 +161,7 @@ class SettingsPage extends ConsumerWidget {
                       ],
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
+                      padding: const EdgeInsets.only(top: 5.0) + EdgeInsets.only(bottom: 30.0),
                       child: CustomButton(
                         onPressed: UrlLauncherHelper.openTwitter,
                         child: Text(

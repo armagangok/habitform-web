@@ -124,7 +124,7 @@ struct SmallGridHabitWidgetEntryView: View {
             }
         }
 
-        return dates.reversed()  // Oldest to newest
+        return dates  // Most recent to oldest (today first)
     }
 
     var body: some View {
@@ -159,25 +159,36 @@ struct SmallGridHabitWidgetEntryView: View {
 
             Spacer()
 
-            // 60-day grid (6 rows x 10 columns) - maximize horizontal space
+            // 60-day grid (6 rows x 10 columns) - column-major bottom-to-top order
             VStack(spacing: 2) {
                 ForEach(0..<6, id: \.self) { row in
                     HStack(spacing: 2) {
                         ForEach(0..<10, id: \.self) { col in
-                            let index = row * 10 + col
+                            // Column-major bottom-to-top mapping: (row, col) → index
+                            // Formula: index = (totalCols - 1 - col) * totalRows + (totalRows - 1 - row)
+                            let totalRows = 6
+                            let totalCols = 10
+                            let index = (totalCols - 1 - col) * totalRows + (totalRows - 1 - row)
+
                             if index < gridData.count {
                                 let date = gridData[index]
-                                let isCompleted =
-                                    entry.habit.completions[
-                                        DateFormatter.habitDateKey.string(from: date)]?.isCompleted
-                                    ?? false
+                                let dateKey = DateFormatter.habitDateKey.string(from: date)
+                                let completion = entry.habit.completions[dateKey]
                                 let isToday = Calendar.current.isDate(date, inSameDayAs: Date())
+
+                                // Calculate completion ratio for multi-completion support
+                                let count = completion?.count ?? 0
+                                let target = entry.habit.dailyTarget
+                                let completionRatio =
+                                    target > 0 ? min(Double(count) / Double(target), 1.0) : 0.0
+                                let isCompleted = completion?.isCompleted ?? false
 
                                 Button(intent: CompleteHabitIntent(habitId: entry.habit.id)) {
                                     Rectangle()
                                         .fill(
                                             isCompleted
-                                                ? habitColor.opacity(0.8) : habitColor.opacity(0.2)
+                                                ? habitColor.opacity(0.8)  // Fully completed - solid color
+                                                : habitColor.opacity(0.2 + 0.6 * completionRatio)  // Progressive color intensity
                                         )
                                         .frame(width: 11, height: 11)
                                         .cornerRadius(2)

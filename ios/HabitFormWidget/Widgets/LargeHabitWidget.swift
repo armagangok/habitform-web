@@ -345,18 +345,25 @@ struct LargeHabitWidgetEntryView: View {
                                 ForEach(0..<7, id: \.self) { day in
                                     let date = getDateForGrid(monthIndex: 0, week: week, day: day)
                                     if let date = date, isDateInMonth(date, monthIndex: 0) {
-                                        let isCompleted =
-                                            entry.habit.completions[
-                                                DateFormatter.habitDateKey.string(from: date)]?
-                                            .isCompleted ?? false
+                                        let dateKey = DateFormatter.habitDateKey.string(from: date)
+                                        let completion = entry.habit.completions[dateKey]
                                         let isToday = Calendar.current.isDate(
                                             date, inSameDayAs: Date())
+
+                                        // Calculate completion ratio for multi-completion support
+                                        let count = completion?.count ?? 0
+                                        let target = entry.habit.dailyTarget
+                                        let completionRatio =
+                                            target > 0
+                                            ? min(Double(count) / Double(target), 1.0) : 0.0
+                                        let isCompleted = completion?.isCompleted ?? false
 
                                         Rectangle()
                                             .fill(
                                                 isCompleted
-                                                    ? habitColor.opacity(0.8)
-                                                    : habitColor.opacity(0.2)
+                                                    ? habitColor.opacity(0.8)  // Fully completed - solid color
+                                                    : habitColor.opacity(
+                                                        0.2 + 0.6 * completionRatio)  // Progressive color intensity
                                             )
                                             .frame(width: 14, height: 14)
                                             .cornerRadius(3.5)
@@ -391,18 +398,25 @@ struct LargeHabitWidgetEntryView: View {
                                 ForEach(0..<7, id: \.self) { day in
                                     let date = getDateForGrid(monthIndex: 1, week: week, day: day)
                                     if let date = date, isDateInMonth(date, monthIndex: 1) {
-                                        let isCompleted =
-                                            entry.habit.completions[
-                                                DateFormatter.habitDateKey.string(from: date)]?
-                                            .isCompleted ?? false
+                                        let dateKey = DateFormatter.habitDateKey.string(from: date)
+                                        let completion = entry.habit.completions[dateKey]
                                         let isToday = Calendar.current.isDate(
                                             date, inSameDayAs: Date())
+
+                                        // Calculate completion ratio for multi-completion support
+                                        let count = completion?.count ?? 0
+                                        let target = entry.habit.dailyTarget
+                                        let completionRatio =
+                                            target > 0
+                                            ? min(Double(count) / Double(target), 1.0) : 0.0
+                                        let isCompleted = completion?.isCompleted ?? false
 
                                         Rectangle()
                                             .fill(
                                                 isCompleted
-                                                    ? habitColor.opacity(0.8)
-                                                    : habitColor.opacity(0.2)
+                                                    ? habitColor.opacity(0.8)  // Fully completed - solid color
+                                                    : habitColor.opacity(
+                                                        0.2 + 0.6 * completionRatio)  // Progressive color intensity
                                             )
                                             .frame(width: 14, height: 14)
                                             .cornerRadius(3.5)
@@ -436,18 +450,25 @@ struct LargeHabitWidgetEntryView: View {
                                 ForEach(0..<7, id: \.self) { day in
                                     let date = getDateForGrid(monthIndex: 2, week: week, day: day)
                                     if let date = date, isDateInMonth(date, monthIndex: 2) {
-                                        let isCompleted =
-                                            entry.habit.completions[
-                                                DateFormatter.habitDateKey.string(from: date)]?
-                                            .isCompleted ?? false
+                                        let dateKey = DateFormatter.habitDateKey.string(from: date)
+                                        let completion = entry.habit.completions[dateKey]
                                         let isToday = Calendar.current.isDate(
                                             date, inSameDayAs: Date())
+
+                                        // Calculate completion ratio for multi-completion support
+                                        let count = completion?.count ?? 0
+                                        let target = entry.habit.dailyTarget
+                                        let completionRatio =
+                                            target > 0
+                                            ? min(Double(count) / Double(target), 1.0) : 0.0
+                                        let isCompleted = completion?.isCompleted ?? false
 
                                         Rectangle()
                                             .fill(
                                                 isCompleted
-                                                    ? habitColor.opacity(0.8)
-                                                    : habitColor.opacity(0.2)
+                                                    ? habitColor.opacity(0.8)  // Fully completed - solid color
+                                                    : habitColor.opacity(
+                                                        0.2 + 0.6 * completionRatio)  // Progressive color intensity
                                             )
                                             .frame(width: 14, height: 14)
                                             .cornerRadius(3.5)

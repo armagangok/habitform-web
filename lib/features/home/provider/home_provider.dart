@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '/core/core.dart';
 import '/features/habit_category/provider/habit_category_provider.dart';
-import '/features/habit_formation/provider/habit_formation_provider.dart';
+import '../../habit_probability/provider/habit_formation_provider.dart';
 import '/features/reminder/service/reminder_service.dart';
 import '/models/completion_entry/completion_entry.dart';
 import '/models/habit/habit_model.dart';
@@ -138,7 +138,8 @@ class HomeNotifier extends AsyncNotifier<HomeState> {
 
   /// Adjusts completion count progressively (increment/decrement) for a date
   Future<void> adjustHabitCompletion(String habitId, DateTime date, {required bool increment}) async {
-    LogHelper.shared.debugPrint('Adjusting habit completion for habit: $habitId on date: $date, increment: $increment');
+    final homeStart = DateTime.now();
+    LogHelper.shared.debugPrint('🏠 [PERF] Starting adjustHabitCompletion at ${homeStart.millisecondsSinceEpoch}');
 
     // Normalize date and fetch current state
     final normalizedDate = DateTime(date.year, date.month, date.day);
@@ -153,15 +154,24 @@ class HomeNotifier extends AsyncNotifier<HomeState> {
     final habit = currentHabits[habitIndex];
     final target = habit.dailyTarget <= 0 ? 1 : habit.dailyTarget;
 
-    // Find existing entry
+    // Find existing entry using optimized lookup
     final updatedCompletions = Map<String, CompletionEntry>.from(habit.completions);
     String? existingKey;
     CompletionEntry? existingEntry;
-    for (final entry in updatedCompletions.entries) {
-      if (entry.value.date.normalized.isSameDayWith(normalizedDate)) {
-        existingKey = entry.key;
-        existingEntry = entry.value;
-        break;
+
+    // Try direct key lookup first (most efficient)
+    final directEntry = updatedCompletions[dateKey];
+    if (directEntry != null && directEntry.date.normalized.isSameDayWith(normalizedDate)) {
+      existingKey = dateKey;
+      existingEntry = directEntry;
+    } else {
+      // Fallback to linear search for legacy data
+      for (final entry in updatedCompletions.entries) {
+        if (entry.value.date.normalized.isSameDayWith(normalizedDate)) {
+          existingKey = entry.key;
+          existingEntry = entry.value;
+          break;
+        }
       }
     }
 
@@ -185,16 +195,28 @@ class HomeNotifier extends AsyncNotifier<HomeState> {
     state = AsyncData(HomeState(habits: currentHabits));
 
     // Persist via service using increment/decrement semantics
+    final persistStart = DateTime.now();
     await AsyncValue.guard(() async {
       final completion = CompletionEntry(id: dateKey, date: normalizedDate, isCompleted: increment);
       await habitService.updateHabitCompletionStatus(habitId, completion);
     });
+    final persistEnd = DateTime.now();
+    LogHelper.shared.debugPrint('💾 [PERF] Habit service persist completed in ${persistEnd.difference(persistStart).inMilliseconds}ms');
 
     // Refresh formation statistics after completion update
+    final formationStart = DateTime.now();
     await ref.read(formationProvider.notifier).refreshFormationStatistics();
+    final formationEnd = DateTime.now();
+    LogHelper.shared.debugPrint('📊 [PERF] Formation provider refresh completed in ${formationEnd.difference(formationStart).inMilliseconds}ms');
 
-    // Update widget data
+    // Update widget data (debounced in WidgetSyncService)
+    final widgetStart = DateTime.now();
     await WidgetSyncService().updateWidgetData(currentHabits);
+    final widgetEnd = DateTime.now();
+    LogHelper.shared.debugPrint('📱 [PERF] Widget sync completed in ${widgetEnd.difference(widgetStart).inMilliseconds}ms');
+
+    final homeEnd = DateTime.now();
+    LogHelper.shared.debugPrint('✅ [PERF] adjustHabitCompletion total time: ${homeEnd.difference(homeStart).inMilliseconds}ms');
   }
 
   /// Creates a new habit

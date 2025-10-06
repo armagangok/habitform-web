@@ -1,8 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:flutter/foundation.dart';
-
+import '../core/helpers/logger/logger.dart';
 import '../models/completion_entry/completion_entry.dart';
 import '../models/habit/habit_model.dart';
 import 'habit_service/habit_service_interface.dart';
@@ -19,7 +18,10 @@ class WidgetSyncService {
   final HabitService _habitService = LocalHabitService.instance;
 
   Timer? _syncTimer;
+  Timer? _debounceTimer;
   bool _isInitialized = false;
+  List<Habit>? _pendingHabits;
+  DateTime? _lastWidgetUpdate;
 
   // Stream controller for widget updates
   final StreamController<Map<String, dynamic>> _widgetUpdateController = StreamController<Map<String, dynamic>>.broadcast();
@@ -30,17 +32,14 @@ class WidgetSyncService {
   /// Initialize the sync service
   Future<void> initialize() async {
     if (_isInitialized || !Platform.isIOS) {
-      if (kDebugMode) {
-        print('WidgetSyncService: ${_isInitialized ? "Already initialized" : "Not iOS platform"}');
-      }
+      LogHelper.shared.debugPrint('WidgetSyncService: ${_isInitialized ? "Already initialized" : "Not iOS platform"}');
+
       return;
     }
 
     _isInitialized = true;
 
-    if (kDebugMode) {
-      print('🚀 WidgetSyncService initialized successfully');
-    }
+    LogHelper.shared.debugPrint('🚀 WidgetSyncService initialized successfully');
 
     // Start periodic sync to check for widget updates
     _startPeriodicSync();
@@ -63,6 +62,7 @@ class WidgetSyncService {
   /// Stop the sync service
   void dispose() {
     _syncTimer?.cancel();
+    _debounceTimer?.cancel();
     _widgetUpdateController.close();
     _isInitialized = false;
   }
@@ -76,9 +76,7 @@ class WidgetSyncService {
         await _processWidgetUpdate(update);
       }
     } catch (e) {
-      if (kDebugMode) {
-        print('Error checking for widget updates: $e');
-      }
+      LogHelper.shared.debugPrint('Error checking for widget updates: $e');
     }
   }
 
@@ -102,39 +100,63 @@ class WidgetSyncService {
       // Notify listeners that a widget update occurred
       _notifyWidgetUpdateListeners(habitId, completion);
 
-      if (kDebugMode) {
-        print('✅ Processed widget update for habit $habitId: ${completion.isCompleted} (count: ${completion.count})');
-      }
+      LogHelper.shared.debugPrint('✅ Processed widget update for habit $habitId: ${completion.isCompleted} (count: ${completion.count})');
     } catch (e) {
-      if (kDebugMode) {
-        print('❌ Error processing widget update: $e');
-      }
+      LogHelper.shared.debugPrint('❌ Error processing widget update: $e');
     }
   }
 
-  /// Update widget data when habits change in the main app
+  /// Update widget data when habits change in the main app (with debouncing)
   Future<void> updateWidgetData(List<Habit> habits) async {
     if (!Platform.isIOS || !_isInitialized) {
-      if (kDebugMode) {
-        print('Widget sync not initialized or not iOS platform');
-      }
+      LogHelper.shared.debugPrint('Widget sync not initialized or not iOS platform');
+      return;
+    }
+
+    // Store the latest habits for debounced update
+    _pendingHabits = habits;
+
+    // Cancel any existing debounce timer
+    _debounceTimer?.cancel();
+
+    // Set a new debounce timer (500ms delay)
+    _debounceTimer = Timer(const Duration(milliseconds: 500), () async {
+      await _performWidgetDataUpdate(_pendingHabits);
+    });
+  }
+
+  /// Actually perform the widget data update
+  Future<void> _performWidgetDataUpdate(List<Habit>? habits) async {
+    if (habits == null) return;
+
+    final widgetUpdateStart = DateTime.now();
+    LogHelper.shared.debugPrint('📱 [PERF] Starting widget data update at ${widgetUpdateStart.millisecondsSinceEpoch}');
+
+    // Throttle widget updates to prevent too frequent updates
+    final now = DateTime.now();
+    if (_lastWidgetUpdate != null && now.difference(_lastWidgetUpdate!).inMilliseconds < 1000) {
+      LogHelper.shared.debugPrint('⏳ Throttling widget update (too frequent)');
       return;
     }
 
     try {
       // Update widget data using the method channel service
+      final methodChannelStart = DateTime.now();
       await _methodChannelService.updateWidgetData(habits);
+      final methodChannelEnd = DateTime.now();
+      LogHelper.shared.debugPrint('📡 [PERF] Method channel update completed in ${methodChannelEnd.difference(methodChannelStart).inMilliseconds}ms');
 
-      if (kDebugMode) {
-        print('✅ Updated widget data with ${habits.length} habits');
-        for (final habit in habits) {
-          print('  - ${habit.habitName} (${habit.id})');
-        }
+      _lastWidgetUpdate = now;
+
+      final widgetUpdateEnd = DateTime.now();
+      LogHelper.shared.debugPrint('✅ [PERF] Widget data update total time: ${widgetUpdateEnd.difference(widgetUpdateStart).inMilliseconds}ms');
+
+      LogHelper.shared.debugPrint('✅ Updated widget data with ${habits.length} habits');
+      for (final habit in habits) {
+        LogHelper.shared.debugPrint('  - ${habit.habitName} (${habit.id})');
       }
     } catch (e) {
-      if (kDebugMode) {
-        print('❌ Error updating widget data: $e');
-      }
+      LogHelper.shared.debugPrint('❌ Error updating widget data: $e');
     }
   }
 
@@ -158,13 +180,9 @@ class WidgetSyncService {
       final habits = await _habitService.getAllHabits();
       await updateWidgetData(habits);
 
-      if (kDebugMode) {
-        print('Handled widget habit completion for $habitId on $date');
-      }
+        LogHelper.shared.debugPrint('Handled widget habit completion for $habitId on $date');
     } catch (e) {
-      if (kDebugMode) {
-        print('Error handling widget habit completion: $e');
-      }
+      LogHelper.shared.debugPrint('Error handling widget habit completion: $e');
     }
   }
 
@@ -188,34 +206,24 @@ class WidgetSyncService {
       final habits = await _habitService.getAllHabits();
       await updateWidgetData(habits);
 
-      if (kDebugMode) {
-        print('Handled widget habit completion update for $habitId on $date: $isCompleted (count: $count)');
-      }
+      LogHelper.shared.debugPrint('Handled widget habit completion update for $habitId on $date: $isCompleted (count: $count)');
     } catch (e) {
-      if (kDebugMode) {
-        print('Error handling widget habit completion update: $e');
-      }
+      LogHelper.shared.debugPrint('Error handling widget habit completion update: $e');
     }
   }
 
   /// Force initial widget data sync on app launch
   Future<void> _forceInitialWidgetSync() async {
     try {
-      if (kDebugMode) {
-        print('🔄 Forcing initial widget data sync...');
-      }
+      LogHelper.shared.debugPrint('🔄 Forcing initial widget data sync...');
 
       // Get all habits and sync to widget
       final habits = await _habitService.getAllHabits();
       await updateWidgetData(habits);
 
-      if (kDebugMode) {
-        print('✅ Initial widget data sync completed with ${habits.length} habits');
-      }
+      LogHelper.shared.debugPrint('✅ Initial widget data sync completed with ${habits.length} habits');
     } catch (e) {
-      if (kDebugMode) {
-        print('❌ Error during initial widget data sync: $e');
-      }
+      LogHelper.shared.debugPrint('❌ Error during initial widget data sync: $e');
     }
   }
 

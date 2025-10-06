@@ -150,10 +150,10 @@ struct SmallHabitWidgetEntryView: View {
                             Circle()
                                 .stroke(habitColor.opacity(0.25), lineWidth: 1)
                         )
-                        .frame(width: 32, height: 32)
+                        .frame(width: 36, height: 36)
 
                     Text(entry.habit.emoji ?? "🎯")
-                        .font(.system(size: 18))
+                        .font(.system(size: 24))
                 }
 
                 Spacer()
@@ -161,15 +161,16 @@ struct SmallHabitWidgetEntryView: View {
                 // Streak pill
                 HStack(spacing: 4) {
                     Image(systemName: "flame.fill")
-                        .font(.system(size: 10))
+                        .font(.system(size: 18))
                         .foregroundColor(habitColor)
 
                     Text("\(entry.habit.currentStreak)")
-                        .font(.system(size: 14, weight: .bold, design: .rounded))
-                        .foregroundColor(habitColor)
+                        .font(.system(size: 18, weight: .bold, design: .rounded))
+                        
                 }
                 .padding(.horizontal, 10)
                 .padding(.vertical, 6)
+                .frame(height: 36)
                 .background(
                     Capsule()
                         .fill(habitColor.opacity(0.18))
@@ -186,9 +187,9 @@ struct SmallHabitWidgetEntryView: View {
             HStack {
                 // Habit name
                 Text(entry.habit.habitName)
-                    .font(.system(size: 14, weight: .bold))
+                    .font(.system(size: 14, weight: .bold, design: .rounded))
                     .foregroundColor(.primary)
-                    .lineLimit(2)
+                    .lineLimit(4)
                     .multilineTextAlignment(.leading)
 
                 Spacer()

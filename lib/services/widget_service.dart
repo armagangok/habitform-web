@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:habitform/models/habit/habit_extension.dart';
 import 'package:path_provider/path_provider.dart';
 
+import '../core/helpers/logger/logger.dart';
 import '../models/habit/habit_model.dart';
 
 class WidgetService {
@@ -19,7 +20,7 @@ class WidgetService {
     try {
       final containerPath = await _getAppGroupContainerPath();
       if (containerPath == null) {
-        print('Failed to get App Group container path');
+        LogHelper.shared.debugPrint('Failed to get App Group container path');
         return;
       }
 
@@ -27,7 +28,7 @@ class WidgetService {
       final containerDir = Directory(containerPath);
       if (!await containerDir.exists()) {
         await containerDir.create(recursive: true);
-        print('📁 Created App Group container directory: $containerPath');
+        LogHelper.shared.debugPrint('📁 Created App Group container directory: $containerPath');
       }
 
       // Write to both the old format and the new format for compatibility
@@ -43,9 +44,9 @@ class WidgetService {
       // Write to both files
       await oldFile.writeAsString(jsonEncode(widgetHabits));
       await newFile.writeAsString(jsonEncode(widgetHabits));
-      print('✅ Exported ${habits.length} habits to widget container');
+      LogHelper.shared.debugPrint('✅ Exported ${habits.length} habits to widget container');
     } catch (e) {
-      print('❌ Error exporting habits for widget: $e');
+      LogHelper.shared.debugPrint('❌ Error exporting habits for widget: $e');
     }
   }
 
@@ -104,7 +105,7 @@ class WidgetService {
       }
       return null;
     } catch (e) {
-      print('Error getting App Group container path: $e');
+      LogHelper.shared.debugPrint('Error getting App Group container path: $e');
       return null;
     }
   }
@@ -114,7 +115,7 @@ class WidgetService {
     try {
       // This method will be called when the widget updates a habit
       // We'll need to sync this back to the main app's database
-      print('Widget updated habit $habitId: $isCompleted');
+      LogHelper.shared.debugPrint('Widget updated habit $habitId: $isCompleted');
 
       // TODO: Implement sync back to main app database
       // This could involve:
@@ -122,7 +123,7 @@ class WidgetService {
       // 2. Using a notification system
       // 3. Using a shared database
     } catch (e) {
-      print('Error updating habit completion from widget: $e');
+      LogHelper.shared.debugPrint('Error updating habit completion from widget: $e');
     }
   }
 }

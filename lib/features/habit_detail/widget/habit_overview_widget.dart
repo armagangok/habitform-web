@@ -4,11 +4,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:habitform/models/habit/habit_extension.dart';
 
 import '/core/core.dart';
-import '/features/habit_formation/provider/habit_formation_provider.dart';
+import '../../habit_probability/provider/habit_formation_provider.dart';
 import '/features/purchase/providers/purchase_provider.dart';
 import '/models/habit/habit_model.dart';
-import '../../habit_formation/provider/habit_formation_state.dart';
+import '../../habit_probability/provider/habit_formation_state.dart';
 import '../../purchase/page/paywall_page.dart';
+import '../providers/habit_statistics_provider.dart';
 import 'statistic_card.dart';
 
 class HabitOverviewWidget extends ConsumerWidget {
@@ -35,6 +36,7 @@ class HabitOverviewWidget extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final formationState = ref.watch(formationProvider);
     final purchaseState = ref.watch(purchaseProvider);
+    final habitStats = ref.watch(habitStatisticsProvider);
     final bool isProUser = purchaseState.value?.isSubscriptionActive ?? false;
 
     // Get habit statistic from formation provider
@@ -43,9 +45,16 @@ class HabitOverviewWidget extends ConsumerWidget {
       habitStatistic = formationState.value!.habitStatistics[habit.id];
     }
 
-    // Calculate statistics for this specific habit
-    final currentStreak = habit.calculateCurrentStreak();
-    final longestStreak = habit.calculateLongestStreak();
+    // Use cached statistics if available, otherwise calculate
+    // Calculate statistics if not cached or invalid (using Future.microtask to avoid build-time modification)
+    if (habitStats == null || !habitStats.isValid) {
+      Future.microtask(() {
+        ref.read(habitStatisticsProvider.notifier).calculateStatistics(habit);
+      });
+    }
+
+    final currentStreak = habitStats?.currentStreak ?? habit.calculateCurrentStreak();
+    final longestStreak = habitStats?.longestStreak ?? habit.calculateLongestStreak();
 
     if (habit.completions.isEmpty) {
       return CupertinoListSection.insetGrouped(
@@ -194,6 +203,7 @@ class HabitOverviewCompact extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final formationState = ref.watch(formationProvider);
     final purchaseState = ref.watch(purchaseProvider);
+    final habitStats = ref.watch(habitStatisticsProvider);
     final bool isProUser = purchaseState.value?.isSubscriptionActive ?? false;
 
     HabitStatistic? habitStatistic;
@@ -201,8 +211,15 @@ class HabitOverviewCompact extends ConsumerWidget {
       habitStatistic = formationState.value!.habitStatistics[habit.id];
     }
 
-    final currentStreak = habit.calculateCurrentStreak();
-    final longestStreak = habit.calculateLongestStreak();
+    // Calculate statistics if not cached or invalid (using Future.microtask to avoid build-time modification)
+    if (habitStats == null || !habitStats.isValid) {
+      Future.microtask(() {
+        ref.read(habitStatisticsProvider.notifier).calculateStatistics(habit);
+      });
+    }
+
+    final currentStreak = habitStats?.currentStreak ?? habit.calculateCurrentStreak();
+    final longestStreak = habitStats?.longestStreak ?? habit.calculateLongestStreak();
 
     if (habit.completions.isEmpty) {
       return Center(

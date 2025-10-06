@@ -8,9 +8,8 @@ import 'package:habitform/models/habit/habit_extension.dart';
 import '/core/core.dart';
 import '/models/completion_entry/completion_entry.dart';
 import '/models/models.dart';
-import '../../habit_formation/provider/habit_formation_provider.dart';
-import '../../habit_formation/provider/habit_formation_state.dart';
 import '../providers/habit_detail_provider.dart';
+import '../providers/habit_statistics_provider.dart';
 
 class HabitProgressCard extends ConsumerWidget {
   final Habit habit;
@@ -55,51 +54,46 @@ class HabitProgressCard extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Main Progress Circle and Stats
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  // Main Progress Circle
-                  Consumer(
-                    builder: (context, ref, child) {
-                      final currentHabit = ref.watch(habitDetailProvider);
-                      final formationState = ref.watch(formationProvider);
+              Center(
+                child: Consumer(
+                  builder: (context, ref, child) {
+                    final currentHabit = ref.watch(habitDetailProvider);
+                    final habitStats = ref.watch(habitStatisticsProvider);
 
-                      // Get habit statistic from formation provider
-                      HabitStatistic? habitStatistic;
-                      if (formationState.hasValue && formationState.value != null) {
-                        habitStatistic = formationState.value!.habitStatistics[habit.id];
-                      }
+                    // Calculate statistics if not cached or invalid (using Future.microtask to avoid build-time modification)
+                    if (habitStats == null || !habitStats.isValid) {
+                      Future.microtask(() {
+                        ref.read(habitStatisticsProvider.notifier).calculateStatistics(currentHabit ?? habit);
+                      });
+                    }
 
-                      final currentProgressData = _calculateProgressData(currentHabit ?? habit, habitStatistic);
-                      return _CircularProgress(
-                        progress: currentProgressData.formationProgress / 100,
-                        color: Color(habit.colorCode),
-                        centerChild: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              "${currentProgressData.formationProgress.clamp(0, 99).toStringAsFixed(0)}%",
-                              style: TextStyle(
-                                fontSize: 24,
-                                fontWeight: FontWeight.bold,
-                                color: context.titleLarge.color,
-                              ),
+                    final formationProgress = habitStats?.formationProgress ?? 0.0;
+                    return _CircularProgress(
+                      progress: formationProgress / 100,
+                      color: Color(habit.colorCode),
+                      centerChild: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "${formationProgress.clamp(0, 99).toStringAsFixed(0)}%",
+                            style: TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                              color: context.titleLarge.color,
                             ),
-                            Text(
-                              LocaleKeys.habit_detail_formation.tr(),
-                              style: TextStyle(
-                                fontSize: 12,
-                                color: context.bodyMedium.color?.withValues(alpha: 0.7),
-                              ),
+                          ),
+                          Text(
+                            LocaleKeys.habit_detail_formation.tr(),
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: context.bodyMedium.color?.withValues(alpha: 0.7),
                             ),
-                          ],
-                        ),
-                      );
-                    },
-                  ),
-
-                  // Progress Stats
-                ],
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
               ),
 
               const SizedBox(height: 12),
@@ -112,56 +106,6 @@ class HabitProgressCard extends ConsumerWidget {
           ),
         ),
       ],
-    );
-  }
-
-  ProgressData _calculateProgressData(Habit habit, HabitStatistic? habitStatistic) {
-    if (habit.completions.isEmpty) {
-      return ProgressData(
-        completionRate: 0.0,
-        currentStreak: 0,
-        streakProgress: 0.0,
-        formationProgress: 0.0,
-        thisMonthCompleted: 0,
-        thisMonthTotal: 0,
-        thisMonthRate: 0.0,
-        weeklyData: List.filled(7, 0.0),
-      );
-    }
-
-    // Use formation provider data if available, otherwise fallback to local calculation
-    final completionRate = habitStatistic?.progressPercentage ?? habit.calculateWeightedProgressPercentageFromFirstCompletion();
-    final formationProgress = habitStatistic?.formationProbability ?? habit.calculateHabitProbability();
-
-    // Calculate streaks using extension methods (these are not in formation provider yet)
-    final currentStreak = habit.calculateCurrentStreak();
-    final longestStreak = habit.calculateLongestStreak();
-    final streakProgress = longestStreak > 0 ? (currentStreak / longestStreak).clamp(0.0, 1.0) : 0.0;
-
-    // This month data using extension method
-    final now = DateTime.now();
-    final thisMonthCompletions = habit.getCompletionsForMonth(now.year, now.month);
-    final daysInMonth = DateTime(now.year, now.month + 1, 0).day;
-    final thisMonthRate = thisMonthCompletions.length / daysInMonth;
-
-    // Weekly data (last 7 days) using extension method
-    final today = DateUtils.dateOnly(DateTime.now());
-    final weeklyData = <double>[];
-    for (int i = 6; i >= 0; i--) {
-      final date = today.subtract(Duration(days: i));
-      final ratio = habit.getCompletionRatioForDate(date);
-      weeklyData.add(ratio);
-    }
-
-    return ProgressData(
-      completionRate: completionRate,
-      currentStreak: currentStreak,
-      streakProgress: streakProgress,
-      formationProgress: formationProgress,
-      thisMonthCompleted: thisMonthCompletions.length,
-      thisMonthTotal: daysInMonth,
-      thisMonthRate: thisMonthRate,
-      weeklyData: weeklyData,
     );
   }
 
@@ -338,7 +282,8 @@ class _WeeklyProgressChartState extends ConsumerState<_WeeklyProgressChart> {
     final habit = ref.watch(habitDetailProvider);
     if (habit == null) return const SizedBox.shrink();
 
-    final weeklyData = _getWeeklyData(habit);
+    final habitStats = ref.watch(habitStatisticsProvider);
+    final weeklyData = habitStats?.weeklyData ?? _getWeeklyData(habit);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

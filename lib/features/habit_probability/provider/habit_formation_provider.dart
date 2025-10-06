@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:habitform/models/habit/habit_extension.dart';
 
@@ -19,8 +21,20 @@ final formationProvider = AutoDisposeAsyncNotifierProvider<FormationNotifier, Fo
 class FormationNotifier extends AutoDisposeAsyncNotifier<FormtionState> {
   late final MockHabitService _mockHabitService = MockHabitService();
 
+  // Caching and debouncing
+  FormtionState? _cachedState;
+  DateTime? _lastCalculation;
+  Timer? _debounceTimer;
+  static const Duration _cacheValidityDuration = Duration(minutes: 1);
+  static const Duration _debounceDelay = Duration(milliseconds: 500);
+
   @override
   Future<FormtionState> build() async {
+    // Clean up timer when provider is disposed
+    ref.onDispose(() {
+      _debounceTimer?.cancel();
+    });
+
     // Check if user is pro
     final purchaseState = ref.watch(purchaseProvider);
     final isProUser = purchaseState.value?.isSubscriptionActive ?? false;
@@ -29,17 +43,16 @@ class FormationNotifier extends AutoDisposeAsyncNotifier<FormtionState> {
     ref.listen(homeProvider, (previous, next) async {
       if (next is AsyncData && next.value != null) {
         // HomeProvider güncellendiğinde istatistikleri yeniden hesapla
-        final purchaseState = ref.read(purchaseProvider);
-        final isProUser = purchaseState.value?.isSubscriptionActive ?? false;
-        state = AsyncData(await _getStatistics(isProUser));
+        // Use the optimized refresh method instead of direct calculation
+        await refreshFormationStatistics();
       }
     });
 
     // Listen to purchase state changes to refresh stats when subscription status changes
     ref.listen(purchaseProvider, (previous, next) async {
       if (previous?.value?.isSubscriptionActive != next.value?.isSubscriptionActive) {
-        final isProUser = next.value?.isSubscriptionActive ?? false;
-        state = AsyncData(await _getStatistics(isProUser));
+        // Force refresh when subscription status changes (clear cache)
+        await forceRefreshFormationStatistics();
       }
     });
 
@@ -47,46 +60,77 @@ class FormationNotifier extends AutoDisposeAsyncNotifier<FormtionState> {
   }
 
   Future<FormtionState> _getStatistics(bool isProUser) async {
+    final calculationStart = DateTime.now();
+    LogHelper.shared.debugPrint("🔄 [PERF] FormationProvider: _getStatistics called for ${isProUser ? 'pro' : 'free'} user");
+
+    FormtionState result;
+
     if (isProUser) {
       // Pro user - use real data
       final homeState = ref.watch(homeProvider);
 
-      return homeState.when(
-        data: (data) => calculateStatistics(data.habits),
+      result = await homeState.when(
+        data: (data) async {
+          LogHelper.shared.debugPrint("🔄 [PERF] FormationProvider: Calculating statistics for ${data.habits.length} habits");
+          return calculateStatistics(data.habits);
+        },
         loading: () async {
           // HomeProvider yüklenirken, servis katmanından alışkanlıkları al
+          LogHelper.shared.debugPrint("🔄 [PERF] FormationProvider: HomeProvider loading, fetching habits from service");
           final habits = await habitService.getHabits();
           return calculateStatistics(habits);
         },
         error: (error, stackTrace) async {
           // Hata durumunda boş istatistikler döndür
+          LogHelper.shared.errorPrint("❌ [PERF] FormationProvider: Error in homeProvider: $error");
           return FormtionState.initial();
         },
       );
     } else {
       // Free user - use mock data
+      LogHelper.shared.debugPrint("🔄 [PERF] FormationProvider: Using mock data for free user");
       final mockHabits = await _mockHabitService.getHabits();
-      return calculateStatistics(mockHabits, isMockData: true);
+      result = calculateStatistics(mockHabits, isMockData: true);
     }
+
+    final calculationEnd = DateTime.now();
+    LogHelper.shared.debugPrint("✅ [PERF] FormationProvider: _getStatistics completed in ${calculationEnd.difference(calculationStart).inMilliseconds}ms");
+
+    return result;
   }
 
   /// Calculates all statistics based on habits data
   FormtionState calculateStatistics(List<Habit> habits, {bool isMockData = false}) {
+    final calculationStart = DateTime.now();
+    LogHelper.shared.debugPrint("🔄 [PERF] FormationProvider: calculateStatistics called for ${habits.length} habits");
+
     // Hiç alışkanlık yoksa veya tüm alışkanlıkların tamamlanma verisi yoksa boş istatistikler döndür
     if (habits.isEmpty || _hasNoCompletionData(habits)) {
+      LogHelper.shared.debugPrint("⚡ [PERF] FormationProvider: No completion data, returning initial state");
       return FormtionState.initial(isMockData: isMockData);
     }
 
+    final totalCompletionsStart = DateTime.now();
     final totalCompletions = _countTotalCompletions(habits);
+    final totalCompletionsEnd = DateTime.now();
+    LogHelper.shared.debugPrint("📊 [PERF] FormationProvider: Total completions calculated in ${totalCompletionsEnd.difference(totalCompletionsStart).inMilliseconds}ms");
 
     // Calculate habit-specific statistics
+    final habitStatsStart = DateTime.now();
     final habitStatistics = _calculateHabitStatistics(habits);
+    final habitStatsEnd = DateTime.now();
+    LogHelper.shared.debugPrint("📈 [PERF] FormationProvider: Habit statistics calculated in ${habitStatsEnd.difference(habitStatsStart).inMilliseconds}ms");
 
-    return FormtionState(
+    final result = FormtionState(
       totalCompletedDays: totalCompletions,
       habitStatistics: habitStatistics,
       isMockData: isMockData,
     );
+
+    final calculationEnd = DateTime.now();
+    LogHelper.shared.debugPrint("✅ [PERF] FormationProvider: calculateStatistics completed in ${calculationEnd.difference(calculationStart).inMilliseconds}ms");
+
+    return result;
   }
 
   /// Tüm alışkanlıkların tamamlanma verisi olup olmadığını kontrol eder
@@ -170,8 +214,68 @@ class FormationNotifier extends AutoDisposeAsyncNotifier<FormtionState> {
 
   /// Manually refresh formation statistics without invalidating home provider
   Future<void> refreshFormationStatistics() async {
-    final purchaseState = ref.read(purchaseProvider);
-    final isProUser = purchaseState.value?.isSubscriptionActive ?? false;
-    state = AsyncData(await _getStatistics(isProUser));
+    final startTime = DateTime.now();
+    LogHelper.shared.debugPrint("🔄 [PERF] FormationProvider: refreshFormationStatistics called");
+
+    // Check if we have valid cached data
+    if (_cachedState != null && _lastCalculation != null && DateTime.now().difference(_lastCalculation!) < _cacheValidityDuration) {
+      LogHelper.shared.debugPrint("⚡ [PERF] FormationProvider: Using cached data (${DateTime.now().difference(_lastCalculation!).inMilliseconds}ms old)");
+      state = AsyncData(_cachedState!);
+      return;
+    }
+
+    // Cancel any pending debounced updates
+    _debounceTimer?.cancel();
+
+    // Debounce the actual calculation
+    _debounceTimer = Timer(_debounceDelay, () async {
+      await _performStatisticsCalculation();
+    });
+
+    final totalTime = DateTime.now().difference(startTime);
+    LogHelper.shared.debugPrint("✅ [PERF] FormationProvider: refreshFormationStatistics completed in ${totalTime.inMilliseconds}ms");
+  }
+
+  /// Perform the actual statistics calculation
+  Future<void> _performStatisticsCalculation() async {
+    final calculationStart = DateTime.now();
+    LogHelper.shared.debugPrint("🔄 [PERF] FormationProvider: Starting actual statistics calculation");
+
+    try {
+      final purchaseState = ref.read(purchaseProvider);
+      final isProUser = purchaseState.value?.isSubscriptionActive ?? false;
+      final newState = await _getStatistics(isProUser);
+
+      // Cache the result
+      _cachedState = newState;
+      _lastCalculation = DateTime.now();
+
+      // Update the state
+      state = AsyncData(newState);
+
+      final calculationEnd = DateTime.now();
+      LogHelper.shared.debugPrint("✅ [PERF] FormationProvider: Statistics calculation completed in ${calculationEnd.difference(calculationStart).inMilliseconds}ms");
+    } catch (e) {
+      LogHelper.shared.errorPrint("❌ [PERF] FormationProvider: Error calculating statistics: $e");
+    }
+  }
+
+  /// Force refresh without using cache
+  Future<void> forceRefreshFormationStatistics() async {
+    final startTime = DateTime.now();
+    LogHelper.shared.debugPrint("🔄 [PERF] FormationProvider: forceRefreshFormationStatistics called");
+
+    // Cancel any pending debounced updates
+    _debounceTimer?.cancel();
+
+    // Clear cache
+    _cachedState = null;
+    _lastCalculation = null;
+
+    // Perform immediate calculation
+    await _performStatisticsCalculation();
+
+    final totalTime = DateTime.now().difference(startTime);
+    LogHelper.shared.debugPrint("✅ [PERF] FormationProvider: forceRefreshFormationStatistics completed in ${totalTime.inMilliseconds}ms");
   }
 }

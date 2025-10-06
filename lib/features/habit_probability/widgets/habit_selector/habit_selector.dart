@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../provider/selected_habit_index_provider.dart';
 import '/core/core.dart';
 import '/features/home/provider/home_provider.dart';
 import '/models/habit/habit_model.dart';
@@ -19,17 +20,16 @@ final mockHabitsProvider = FutureProvider<List<Habit>>((ref) async {
 class HabitSelector extends ConsumerWidget {
   const HabitSelector({
     super.key,
-    required this.selectedHabitIndex,
     required this.habitStats,
     required this.onHabitSelected,
   });
 
-  final int selectedHabitIndex;
   final List<HabitStatistic> habitStats;
   final Function(int) onHabitSelected;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final selectedHabitIndex = ref.watch(selectedHabitIndexProvider);
     // Eğer hiç alışkanlık yoksa veya seçili alışkanlık yoksa (-1), ilk alışkanlığı seç
     if (habitStats.isNotEmpty && selectedHabitIndex == -1) {
       // İlk alışkanlığı seç
@@ -61,7 +61,7 @@ class HabitSelector extends ConsumerWidget {
             child: Row(
               children: [
                 // Alışkanlık butonları
-                for (int i = 0; i < habitStats.length; i++) isMockData ? _buildMockHabitButton(context, ref, i, habitStats[i]) : _buildRealHabitButton(context, ref, i, habitStats[i]),
+                for (int i = 0; i < habitStats.length; i++) isMockData ? _buildMockHabitButton(context, ref, i, habitStats[i], selectedHabitIndex) : _buildRealHabitButton(context, ref, i, habitStats[i], selectedHabitIndex),
               ],
             ),
           ),
@@ -71,7 +71,7 @@ class HabitSelector extends ConsumerWidget {
   }
 
   // Build a habit button for real data
-  Widget _buildRealHabitButton(BuildContext context, WidgetRef ref, int index, HabitStatistic habitStat) {
+  Widget _buildRealHabitButton(BuildContext context, WidgetRef ref, int index, HabitStatistic habitStat, int selectedHabitIndex) {
     final homeState = ref.watch(homeProvider);
 
     return homeState.when(
@@ -103,7 +103,7 @@ class HabitSelector extends ConsumerWidget {
   }
 
   // Build a habit button for mock data
-  Widget _buildMockHabitButton(BuildContext context, WidgetRef ref, int index, HabitStatistic habitStat) {
+  Widget _buildMockHabitButton(BuildContext context, WidgetRef ref, int index, HabitStatistic habitStat, int selectedHabitIndex) {
     final mockHabitsAsync = ref.watch(mockHabitsProvider);
 
     return mockHabitsAsync.when(
