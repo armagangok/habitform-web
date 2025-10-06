@@ -41,7 +41,12 @@ struct SmallGridHabitProvider: AppIntentTimelineProvider {
                 archiveDate: nil,
                 status: .active,
                 categoryIds: [],
-                difficulty: .easy
+                difficulty: .easy,
+                flutterFormationProbability: 0.0,
+                flutterLongestStreak: 0,
+                flutterCurrentStreak: 0,
+                flutterCompletedDays: 0,
+                flutterTotalDays: 0
             )
         )
     }
@@ -129,9 +134,10 @@ struct SmallGridHabitWidgetEntryView: View {
             HStack {
                 // Habit name - now has maximum space
                 Text(entry.habit.habitName)
-                    .font(.system(size: 12, weight: .bold))
+
+                    .font(.system(size: 14, weight: .medium, design: .rounded))
                     .foregroundColor(.primary)
-                    .lineLimit(1)
+                    .lineLimit(3)
                     .minimumScaleFactor(0.7)
 
                 Spacer()
@@ -143,10 +149,10 @@ struct SmallGridHabitWidgetEntryView: View {
                             Circle()
                                 .stroke(habitColor.opacity(0.25), lineWidth: 1)
                         )
-                        .frame(width: 20, height: 20)
+                        .frame(width: 32, height: 32)
 
                     Text(entry.habit.emoji ?? "🎯")
-                        .font(.system(size: 10))
+                        .font(.system(size: 16))
                 }
 
             }
@@ -216,7 +222,12 @@ struct SmallGridHabitWidgetEntryView: View {
             archiveDate: nil,
             status: .active,
             categoryIds: [],
-            difficulty: .easy
+            difficulty: .easy,
+            flutterFormationProbability: 0.0,
+            flutterLongestStreak: 0,
+            flutterCurrentStreak: 0,
+            flutterCompletedDays: 0,
+            flutterTotalDays: 0
         )
     )
 }

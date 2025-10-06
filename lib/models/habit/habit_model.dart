@@ -90,4 +90,6 @@ class Habit extends HiveObject {
       difficulty: difficulty ?? this.difficulty,
     );
   }
+
+  
 }

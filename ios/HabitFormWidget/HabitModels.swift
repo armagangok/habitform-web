@@ -23,8 +23,16 @@ struct Habit: Codable, Identifiable {
     let categoryIds: [String]
     let difficulty: HabitDifficulty
 
+    // Flutter-provided calculated values
+    let flutterFormationProbability: Double?
+    let flutterLongestStreak: Int?
+    let flutterCurrentStreak: Int?
+    let flutterCompletedDays: Int?
+    let flutterTotalDays: Int?
+
     var isCompletedToday: Bool {
-        let today = Date()
+        // Use normalized date for consistency
+        let today = Calendar.current.startOfDay(for: Date())
         let dateKey = DateFormatter.habitDateKey.string(from: today)
         return completions[dateKey]?.isCompleted ?? false
     }
@@ -32,7 +40,7 @@ struct Habit: Codable, Identifiable {
     var currentStreak: Int {
         var streak = 0
         let calendar = Calendar.current
-        var currentDate = Date()
+        var currentDate = Calendar.current.startOfDay(for: Date())
 
         while true {
             let dateKey = DateFormatter.habitDateKey.string(from: currentDate)
@@ -49,12 +57,19 @@ struct Habit: Codable, Identifiable {
     }
 
     var completionCountToday: Int {
-        let today = Date()
+        // Use normalized date for consistency
+        let today = Calendar.current.startOfDay(for: Date())
         let dateKey = DateFormatter.habitDateKey.string(from: today)
         return completions[dateKey]?.count ?? 0
     }
 
     var longestStreak: Int {
+        // Use Flutter-provided value if available, otherwise fallback to local calculation
+        if let flutterValue = flutterLongestStreak {
+            return flutterValue
+        }
+
+        // Fallback to local calculation
         var maxStreak = 0
         var currentStreak = 0
         let sortedDates = completions.keys.sorted()
@@ -72,20 +87,21 @@ struct Habit: Codable, Identifiable {
     }
 
     var formationProbability: Double {
-        let totalDays = 90  // Last 90 days
-        let calendar = Calendar.current
-        var completedDays = 0
+        // Use Flutter-provided value if available, otherwise return 0
+        return flutterFormationProbability ?? 0.0
+    }
 
-        for i in 0..<totalDays {
-            if let date = calendar.date(byAdding: .day, value: -i, to: Date()) {
-                let dateKey = DateFormatter.habitDateKey.string(from: date)
-                if let completion = completions[dateKey], completion.isCompleted {
-                    completedDays += 1
-                }
-            }
-        }
+    // Computed properties for Flutter-provided data
+    var currentStreakFromFlutter: Int {
+        return flutterCurrentStreak ?? currentStreak
+    }
 
-        return Double(completedDays) / Double(totalDays)
+    var completedDaysFromFlutter: Int {
+        return flutterCompletedDays ?? completions.values.filter { $0.isCompleted }.count
+    }
+
+    var totalDaysFromFlutter: Int {
+        return flutterTotalDays ?? completions.count
     }
 }
 
@@ -309,7 +325,8 @@ class HabitDataManager {
 
             if let index = habits.firstIndex(where: { $0.id == habitId }) {
                 let habit = habits[index]
-                let today = Date()
+                // Use normalized date for consistency
+                let today = Calendar.current.startOfDay(for: Date())
                 let dateKey = DateFormatter.habitDateKey.string(from: today)
 
                 print("✅ HabitDataManager: Found habit '\(habit.habitName)' for completion")
@@ -349,7 +366,12 @@ class HabitDataManager {
                     archiveDate: habit.archiveDate,
                     status: habit.status,
                     categoryIds: habit.categoryIds,
-                    difficulty: habit.difficulty
+                    difficulty: habit.difficulty,
+                    flutterFormationProbability: habit.flutterFormationProbability,
+                    flutterLongestStreak: habit.flutterLongestStreak,
+                    flutterCurrentStreak: habit.flutterCurrentStreak,
+                    flutterCompletedDays: habit.flutterCompletedDays,
+                    flutterTotalDays: habit.flutterTotalDays
                 )
 
                 habits[index] = updatedHabit
@@ -385,9 +407,11 @@ class HabitDataManager {
 
         for i in 0..<days {
             if let date = calendar.date(byAdding: .day, value: -i, to: Date()) {
-                let dateKey = DateFormatter.habitDateKey.string(from: date)
+                // Normalize the date to start of day for consistent dictionary keys
+                let normalizedDate = calendar.startOfDay(for: date)
+                let dateKey = DateFormatter.habitDateKey.string(from: normalizedDate)
                 let isCompleted = habit.completions[dateKey]?.isCompleted ?? false
-                completionData[date] = isCompleted
+                completionData[normalizedDate] = isCompleted
             }
         }
 
@@ -416,7 +440,9 @@ class HabitDataManager {
 
             if let index = habits.firstIndex(where: { $0.id == habitId }) {
                 let habit = habits[index]
-                let dateKey = DateFormatter.habitDateKey.string(from: date)
+                // Normalize the date to start of day for consistent storage
+                let normalizedDate = Calendar.current.startOfDay(for: date)
+                let dateKey = DateFormatter.habitDateKey.string(from: normalizedDate)
 
                 var updatedCompletions = habit.completions
                 updatedCompletions[dateKey] = CompletionEntry(
@@ -437,7 +463,12 @@ class HabitDataManager {
                     archiveDate: habit.archiveDate,
                     status: habit.status,
                     categoryIds: habit.categoryIds,
-                    difficulty: habit.difficulty
+                    difficulty: habit.difficulty,
+                    flutterFormationProbability: habit.flutterFormationProbability,
+                    flutterLongestStreak: habit.flutterLongestStreak,
+                    flutterCurrentStreak: habit.flutterCurrentStreak,
+                    flutterCompletedDays: habit.flutterCompletedDays,
+                    flutterTotalDays: habit.flutterTotalDays
                 )
 
                 habits[index] = updatedHabit

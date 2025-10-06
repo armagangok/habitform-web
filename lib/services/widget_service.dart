@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:habitform/models/habit/habit_extension.dart';
 import 'package:path_provider/path_provider.dart';
 
 import '../models/habit/habit_model.dart';
@@ -63,6 +64,13 @@ class WidgetService {
       };
     });
 
+    // Calculate Flutter-provided values
+    final formationProbability = habit.calculateHabitProbability();
+    final longestStreak = habit.calculateLongestStreak();
+    final currentStreak = habit.calculateCurrentStreak();
+    final completedDays = habit.completions.values.where((e) => e.isCompleted).length;
+    final totalDays = habit.completions.length;
+
     return {
       'id': habit.id,
       'habitName': habit.habitName,
@@ -75,6 +83,12 @@ class WidgetService {
       'status': habit.status.name,
       'categoryIds': habit.categoryIds,
       'difficulty': habit.difficulty.name,
+      // Flutter-provided calculated values
+      'flutterFormationProbability': formationProbability,
+      'flutterLongestStreak': longestStreak,
+      'flutterCurrentStreak': currentStreak,
+      'flutterCompletedDays': completedDays,
+      'flutterTotalDays': totalDays,
     };
   }
 

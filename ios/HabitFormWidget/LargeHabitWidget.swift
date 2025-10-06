@@ -34,14 +34,19 @@ struct LargeHabitProvider: AppIntentTimelineProvider {
                 id: "empty",
                 habitName: "No Habits",
                 habitDescription: "Create a habit in the app to see it here",
-                emoji: "📝",
+                emoji: "",
                 dailyTarget: 1,
                 colorCode: 0x999999,
                 completions: [:],
                 archiveDate: nil,
                 status: .active,
                 categoryIds: [],
-                difficulty: .easy
+                difficulty: .easy,
+                flutterFormationProbability: 0.0,
+                flutterLongestStreak: 0,
+                flutterCurrentStreak: 0,
+                flutterCompletedDays: 0,
+                flutterTotalDays: 0
             ),
             heatmapData: [:]
         )
@@ -228,7 +233,7 @@ struct LargeHabitWidgetEntryView: View {
     }
 
     var body: some View {
-        VStack(spacing: 8) {
+        VStack(spacing: 5) {
             // Header with habit name and emoji
             HStack {
                 // Habit name on the left
@@ -248,96 +253,81 @@ struct LargeHabitWidgetEntryView: View {
                             Circle()
                                 .stroke(habitColor.opacity(0.25), lineWidth: 1)
                         )
-                        .frame(width: 36, height: 36)
+                        .frame(width: 32, height: 32)
 
                     Text(entry.habit.emoji ?? "🎯")
-                        .font(.system(size: 20))
+                        .font(.system(size: 17))
                 }
+                // Complete button at the bottom
+                Button(
+                    intent: CompleteHabitIntent(habitId: entry.habit.id)
+                ) {
+                    HStack(spacing: 0) {
+
+                        Image(
+                            systemName: entry.habit.isCompletedToday
+                                ? "checkmark" : "circle"
+                        )
+                        .font(.system(size: 17, weight: .medium))
+                        .foregroundColor(entry.habit.isCompletedToday ? .white : habitColor)
+
+                    }
+                    .frame(width: 32, height: 32)
+                    .background(
+                        RoundedRectangle(cornerRadius: 90)
+                            .fill(
+                                entry.habit.isCompletedToday ? habitColor : habitColor.opacity(0.1)
+                            )
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 90)
+                                    .stroke(habitColor, lineWidth: 2)
+                            )
+                    )
+                }
+                .buttonStyle(PlainButtonStyle())
             }
+            .padding(.bottom, 20)
 
-            Spacer()
+            // Overview stats grid (2x2 layout exactly like in app)
+            VStack(spacing: 12) {
+                // First row
+                HStack(spacing: 12) {
+                    OverviewStatCard(
+                        title: "Current Streak",
+                        value: entry.habit.currentStreakFromFlutter,
+                        unit: "days",
+                        icon: "flame.fill",
+                        color: Color.orange
+                    )
 
-            // Stats row - Current Streak, Longest Streak, Formation Probability
-            // Stats row - 3 separate cards
-            HStack(spacing: 8) {
-                // Current Streak Card
-                VStack(alignment: .leading, spacing: 2) {
-                    Text("Current")
-                        .font(.system(size: 11, weight: .medium))
-                        .foregroundColor(.secondary)
-                    HStack(spacing: 4) {
-                        Image(systemName: "flame.fill")
-                            .font(.system(size: 12))
-                            .foregroundColor(habitColor)
-                        Text("\(entry.habit.currentStreak)")
-                            .font(.system(size: 16, weight: .bold))
-                            .foregroundColor(.primary)
-                    }
+                    OverviewStatCard(
+                        title: "Longest Streak",
+                        value: entry.habit.longestStreak,
+                        unit: "days",
+                        icon: "trophy.fill",
+                        color: Color.red
+                    )
                 }
-                .frame(maxWidth: .infinity)
-                .padding(.horizontal, 8)
-                .padding(.vertical, 6)
-                .background(
-                    RoundedRectangle(cornerRadius: 8)
-                        .fill(habitColor.opacity(0.08))
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 8)
-                                .stroke(habitColor.opacity(0.15), lineWidth: 1)
-                        )
-                )
 
-                // Longest Streak Card
-                VStack(alignment: .leading, spacing: 2) {
-                    Text("Longest")
-                        .font(.system(size: 11, weight: .medium))
-                        .foregroundColor(.secondary)
-                    HStack(spacing: 4) {
-                        Image(systemName: "trophy.fill")
-                            .font(.system(size: 12))
-                            .foregroundColor(habitColor)
-                        Text("\(entry.habit.longestStreak)")
-                            .font(.system(size: 16, weight: .bold))
-                            .foregroundColor(.primary)
-                    }
-                }
-                .frame(maxWidth: .infinity)
-                .padding(.horizontal, 8)
-                .padding(.vertical, 6)
-                .background(
-                    RoundedRectangle(cornerRadius: 8)
-                        .fill(habitColor.opacity(0.08))
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 8)
-                                .stroke(habitColor.opacity(0.15), lineWidth: 1)
-                        )
-                )
+                // Second row
+                HStack(spacing: 12) {
+                    OverviewStatCard(
+                        title: "Completed",
+                        value: entry.habit.completedDaysFromFlutter,
+                        unit: "days",
+                        icon: "checkmark.circle.fill",
+                        color: Color.green
+                    )
 
-                // Formation Probability Card
-                VStack(alignment: .leading, spacing: 2) {
-                    Text("Probability")
-                        .font(.system(size: 11, weight: .medium))
-                        .foregroundColor(.secondary)
-                    HStack(spacing: 4) {
-                        Image(systemName: "chart.line.uptrend.xyaxis")
-                            .font(.system(size: 12))
-                            .foregroundColor(habitColor)
-                        Text("\(Int(entry.habit.formationProbability * 100))%")
-                            .font(.system(size: 16, weight: .bold))
-                            .foregroundColor(.primary)
-                    }
+                    OverviewStatCard(
+                        title: "Total Days",
+                        value: entry.habit.totalDaysFromFlutter,
+                        unit: "days",
+                        icon: "calendar",
+                        color: Color.blue
+                    )
                 }
-                .frame(maxWidth: .infinity)
-                .padding(.horizontal, 8)
-                .padding(.vertical, 6)
-                .background(
-                    RoundedRectangle(cornerRadius: 8)
-                        .fill(habitColor.opacity(0.08))
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 8)
-                                .stroke(habitColor.opacity(0.15), lineWidth: 1)
-                        )
-                )
-            }
+            }.padding(.horizontal, 10)
 
             Spacer()
 
@@ -482,41 +472,6 @@ struct LargeHabitWidgetEntryView: View {
             }
         }
 
-        Spacer()
-        Spacer()
-        Spacer()
-
-        // Complete button at the bottom
-        Button(
-            intent: CompleteHabitIntent(habitId: entry.habit.id)
-        ) {
-            HStack(spacing: 6) {
-
-                Text(entry.habit.isCompletedToday ? "Completed" : "Complete")
-                    .font(.system(size: 14, weight: .semibold))
-                    .foregroundColor(entry.habit.isCompletedToday ? .white : habitColor)
-
-                Image(
-                    systemName: entry.habit.isCompletedToday
-                        ? "checkmark.circle.fill" : "circle"
-                )
-                .font(.system(size: 14, weight: .medium))
-                .foregroundColor(entry.habit.isCompletedToday ? .white : habitColor)
-            }
-            .padding(.horizontal, 16)
-            .padding(.vertical, 8)
-            .background(
-                RoundedRectangle(cornerRadius: 90)
-                    .fill(
-                        entry.habit.isCompletedToday ? habitColor : habitColor.opacity(0.1)
-                    )
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 90)
-                            .stroke(habitColor, lineWidth: 1)
-                    )
-            )
-        }
-        .buttonStyle(PlainButtonStyle())
     }
 }
 
@@ -544,7 +499,12 @@ private func heatmapColor(for isCompleted: Bool, isToday: Bool) -> Color {
             archiveDate: nil,
             status: .active,
             categoryIds: [],
-            difficulty: .moderate
+            difficulty: .moderate,
+            flutterFormationProbability: 0.0,
+            flutterLongestStreak: 0,
+            flutterCurrentStreak: 0,
+            flutterCompletedDays: 0,
+            flutterTotalDays: 0
         ),
         heatmapData: [:]
     )

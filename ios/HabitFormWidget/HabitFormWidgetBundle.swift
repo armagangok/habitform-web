@@ -16,6 +16,6 @@ struct HabitFormWidgetBundle: WidgetBundle {
         SmallGridHabitWidget()
         MediumHabitWidget()
         LargeHabitWidget()
-        ExtraLargeHabitWidget()
+        
     }
 }

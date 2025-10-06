@@ -16,8 +16,8 @@ enum IntentError: Error {
 }
 
 struct CompleteHabitIntent: AppIntent {
-    static var title: LocalizedStringResource = "Complete Habit"
-    static var description = IntentDescription("Mark a habit as completed for today")
+    static var title: LocalizedStringResource = "Toggle Habit"
+    static var description = IntentDescription("Toggle habit completion for today")
 
     @Parameter(title: "Habit ID")
     var habitId: String
@@ -29,7 +29,7 @@ struct CompleteHabitIntent: AppIntent {
     }
 
     func perform() async throws -> some IntentResult {
-        print("🔄 CompleteHabitIntent: Starting completion for habit ID: '\(habitId)'")
+        print("🔄 CompleteHabitIntent: Starting toggle for habit ID: '\(habitId)'")
 
         // Validate habit ID
         guard !habitId.isEmpty && habitId != "empty" else {
@@ -37,27 +37,49 @@ struct CompleteHabitIntent: AppIntent {
             throw IntentError.invalidHabitId
         }
 
-        // Complete the habit locally and write to shared file
-        await completeHabitAndNotify()
+        // Check if habit is already completed today
+        let habits = HabitDataManager.shared.loadHabits()
+        guard let habit = habits.first(where: { $0.id == habitId }) else {
+            print("❌ CompleteHabitIntent: Habit not found: '\(habitId)'")
+            throw IntentError.habitNotFound
+        }
+
+        let isCurrentlyCompleted = habit.isCompletedToday
+        print(
+            "📊 CompleteHabitIntent: Habit '\(habitId)' is currently completed: \(isCurrentlyCompleted)"
+        )
+
+        // Toggle the habit completion
+        await toggleHabitAndNotify(isCurrentlyCompleted: isCurrentlyCompleted)
 
         // Reload all widget timelines
         WidgetCenter.shared.reloadAllTimelines()
 
-        print("✅ CompleteHabitIntent: Successfully completed habit: '\(habitId)'")
+        let action = isCurrentlyCompleted ? "uncompleted" : "completed"
+        print("✅ CompleteHabitIntent: Successfully \(action) habit: '\(habitId)'")
         return .result()
     }
 
-    private func completeHabitAndNotify() async {
-        print("🔄 CompleteHabitIntent: Completing habit locally...")
+    private func toggleHabitAndNotify(isCurrentlyCompleted: Bool) async {
+        print("🔄 CompleteHabitIntent: Toggling habit locally...")
 
-        // Complete the habit locally
-        HabitDataManager.shared.completeHabit(habitId)
+        // Use normalized date for consistency
+        let today = Calendar.current.startOfDay(for: Date())
 
-        // Write completion update to shared file for Flutter to pick up
-        let today = Date()
-        writeCompletionUpdate(habitId: habitId, date: today, isCompleted: true, count: 1)
+        if isCurrentlyCompleted {
+            // Uncomplete the habit
+            print("🔄 CompleteHabitIntent: Uncompleting habit...")
+            HabitDataManager.shared.updateHabitCompletion(
+                habitId: habitId, date: today, isCompleted: false, count: 0)
+            writeCompletionUpdate(habitId: habitId, date: today, isCompleted: false, count: 0)
+        } else {
+            // Complete the habit
+            print("🔄 CompleteHabitIntent: Completing habit...")
+            HabitDataManager.shared.completeHabit(habitId)
+            writeCompletionUpdate(habitId: habitId, date: today, isCompleted: true, count: 1)
+        }
 
-        print("✅ CompleteHabitIntent: Habit completion and notification completed")
+        print("✅ CompleteHabitIntent: Habit toggle and notification completed")
     }
 
     private func writeCompletionUpdate(habitId: String, date: Date, isCompleted: Bool, count: Int) {
@@ -103,6 +125,10 @@ struct CompleteHabitIntent: AppIntent {
             // Write back to file
             let data = try JSONSerialization.data(withJSONObject: updates)
             try data.write(to: updatesURL)
+
+            print(
+                "📝 CompleteHabitIntent: Written completion update - habitId: \(habitId), isCompleted: \(isCompleted), count: \(count)"
+            )
 
         } catch {
             print("Error writing completion update: \(error)")

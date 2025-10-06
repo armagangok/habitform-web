@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/services.dart';
+import 'package:habitform/models/habit/habit_extension.dart';
 
 import '../models/completion_entry/completion_entry.dart';
 import '../models/habit/habit_model.dart';
@@ -45,6 +46,8 @@ class WidgetMethodChannelService {
       final Map<String, dynamic> args = Map<String, dynamic>.from(arguments);
       final String habitId = args['habitId'] as String;
       final String dateString = args['date'] as String;
+      final bool isCompleted = args['isCompleted'] as bool? ?? true;
+      final int count = args['count'] as int? ?? 1;
 
       // Parse date
       final DateTime date = DateTime.parse(dateString);
@@ -53,8 +56,8 @@ class WidgetMethodChannelService {
       final completion = CompletionEntry(
         id: '${habitId}_$dateString',
         date: date,
-        isCompleted: true,
-        count: 1,
+        isCompleted: isCompleted,
+        count: count,
       );
 
       // This will be handled by the main app's habit service
@@ -316,6 +319,13 @@ class WidgetMethodChannelService {
       };
     });
 
+    // Calculate Flutter-provided values
+    final formationProbability = habit.calculateHabitProbability();
+    final longestStreak = habit.calculateLongestStreak();
+    final currentStreak = habit.calculateCurrentStreak();
+    final completedDays = habit.completions.values.where((e) => e.isCompleted).length;
+    final totalDays = habit.completions.length;
+
     return {
       'id': habit.id,
       'habitName': habit.habitName,
@@ -328,6 +338,12 @@ class WidgetMethodChannelService {
       'status': habit.status.name,
       'categoryIds': habit.categoryIds,
       'difficulty': habit.difficulty.name,
+      // Flutter-provided calculated values
+      'flutterFormationProbability': formationProbability,
+      'flutterLongestStreak': longestStreak,
+      'flutterCurrentStreak': currentStreak,
+      'flutterCompletedDays': completedDays,
+      'flutterTotalDays': totalDays,
     };
   }
 

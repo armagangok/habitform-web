@@ -42,7 +42,12 @@ struct SmallHabitProvider: AppIntentTimelineProvider {
                 archiveDate: nil,
                 status: .active,
                 categoryIds: [],
-                difficulty: .easy
+                difficulty: .easy,
+                flutterFormationProbability: 0.0,
+                flutterLongestStreak: 0,
+                flutterCurrentStreak: 0,
+                flutterCompletedDays: 0,
+                flutterTotalDays: 0
             )
         )
     }
@@ -240,7 +245,12 @@ struct SmallHabitWidgetEntryView: View {
             archiveDate: nil,
             status: .active,
             categoryIds: [],
-            difficulty: .easy
+            difficulty: .easy,
+            flutterFormationProbability: 0.0,
+            flutterLongestStreak: 0,
+            flutterCurrentStreak: 0,
+            flutterCompletedDays: 0,
+            flutterTotalDays: 0
         )
     )
 }

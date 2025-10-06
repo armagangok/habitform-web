@@ -41,7 +41,12 @@ struct MediumHabitProvider: AppIntentTimelineProvider {
                 archiveDate: nil,
                 status: .active,
                 categoryIds: [],
-                difficulty: .easy
+                difficulty: .easy,
+                flutterFormationProbability: 0.0,
+                flutterLongestStreak: 0,
+                flutterCurrentStreak: 0,
+                flutterCompletedDays: 0,
+                flutterTotalDays: 0
             ),
             weekData: [:]
         )
@@ -86,8 +91,8 @@ struct MediumHabitProvider: AppIntentTimelineProvider {
         let currentDate = Date()
         let entry = MediumHabitEntry(date: currentDate, habit: habit, weekData: weekData)
 
-        // Update every hour
-        let nextUpdate = Calendar.current.date(byAdding: .hour, value: 1, to: currentDate)!
+        // Update every 15 minutes to ensure day changes are reflected quickly
+        let nextUpdate = Calendar.current.date(byAdding: .minute, value: 15, to: currentDate)!
         return Timeline(entries: [entry], policy: .after(nextUpdate))
     }
 
@@ -97,7 +102,7 @@ struct MediumHabitProvider: AppIntentTimelineProvider {
 
         for i in 0..<7 {
             if let date = calendar.date(byAdding: .day, value: -i, to: Date()) {
-                data[date] = i % 2 == 0  // Alternate completion for demo
+                data[date] = false  // Default to not completed for placeholder
             }
         }
 
@@ -125,7 +130,23 @@ struct MediumHabitWidgetEntryView: View {
     }
 
     private var sortedWeekData: [(Date, Bool)] {
-        entry.weekData.sorted { $0.key > $1.key }
+        // Sort so that today appears on the right (most recent first, then reverse for display)
+        let calendar = Calendar.current
+        let today = Date()
+
+        // Get last 7 days ending with today
+        var weekData: [(Date, Bool)] = []
+        for i in 0..<7 {
+            if let date = calendar.date(byAdding: .day, value: -i, to: today) {
+                // Normalize the date to start of day to match the dictionary keys
+                let normalizedDate = calendar.startOfDay(for: date)
+                let isCompleted = entry.weekData[normalizedDate] ?? false
+                weekData.append((date, isCompleted))
+            }
+        }
+
+        // Reverse so today appears on the right
+        return weekData.reversed()
     }
 
     private var completionRate: Double {
@@ -191,12 +212,15 @@ struct MediumHabitWidgetEntryView: View {
             HStack(spacing: 8) {
                 ForEach(Array(sortedWeekData.enumerated()), id: \.offset) { index, item in
                     let (date, isCompleted) = item
-                    Button(intent: CompleteHabitIntent(habitId: entry.habit.id)) {
+                    let isToday = Calendar.current.isDate(date, inSameDayAs: Date())
+
+                    Button(intent: CompleteHabitForDateIntent(habitId: entry.habit.id, date: date))
+                    {
                         VStack(spacing: 6) {
                             // Day indicator
                             Text(dayAbbreviation(for: date))
                                 .font(.system(size: 11, weight: .medium))
-                                .foregroundColor(.secondary)
+                                .foregroundColor(isToday ? habitColor : .secondary)
 
                             // Completion indicator - larger and more prominent
                             ZStack {
@@ -206,8 +230,11 @@ struct MediumHabitWidgetEntryView: View {
                                     .overlay(
                                         Circle()
                                             .stroke(
-                                                isCompleted ? habitColor : habitColor.opacity(0.4),
-                                                lineWidth: 2)
+                                                isToday
+                                                    ? habitColor
+                                                    : (isCompleted
+                                                        ? habitColor : habitColor.opacity(0.4)),
+                                                lineWidth: isToday ? 3 : 2)
                                     )
 
                                 if isCompleted {
@@ -249,7 +276,12 @@ struct MediumHabitWidgetEntryView: View {
             archiveDate: nil,
             status: .active,
             categoryIds: [],
-            difficulty: .moderate
+            difficulty: .moderate,
+            flutterFormationProbability: 0.0,
+            flutterLongestStreak: 0,
+            flutterCurrentStreak: 0,
+            flutterCompletedDays: 0,
+            flutterTotalDays: 0
         ),
         weekData: [:]
     )
