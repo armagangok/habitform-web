@@ -5,7 +5,7 @@ import '/models/habit/habit_extension.dart';
 import '/models/models.dart';
 import '../../../habit_detail/page/habit_detail.dart';
 import '../../../habit_detail/providers/habit_detail_provider.dart';
-import '../../components/achievement_dialog.dart';
+import '../../components/habit_probability_dialog.dart';
 import '../../provider/home_provider.dart';
 
 class HabitWidget extends ConsumerStatefulWidget {
@@ -65,7 +65,7 @@ class _HabitWidgetState extends ConsumerState<HabitWidget> with SingleTickerProv
     await showCupertinoDialog(
       context: context,
       barrierDismissible: true,
-      builder: (_) => AchievementDialog(
+      builder: (_) => HabitProbabilityDialog(
         habit: updatedHabit,
         pointsGained: 10,
         previousScore: previousScore.round(),

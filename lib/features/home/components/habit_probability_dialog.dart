@@ -8,8 +8,8 @@ import '../../../core/core.dart';
 import '../../../models/habit/habit_difficulty.dart';
 import '../../../models/habit/habit_model.dart';
 
-class AchievementDialog extends StatefulWidget {
-  const AchievementDialog({
+class HabitProbabilityDialog extends StatefulWidget {
+  const HabitProbabilityDialog({
     super.key,
     required this.habit,
     required this.pointsGained,
@@ -25,10 +25,10 @@ class AchievementDialog extends StatefulWidget {
   final String message;
 
   @override
-  State<AchievementDialog> createState() => _AchievementDialogState();
+  State<HabitProbabilityDialog> createState() => _HabitProbabilityDialogState();
 }
 
-class _AchievementDialogState extends State<AchievementDialog> with TickerProviderStateMixin {
+class _HabitProbabilityDialogState extends State<HabitProbabilityDialog> with TickerProviderStateMixin {
   late AnimationController _scaleController;
   late AnimationController _scoreController;
 
@@ -188,7 +188,7 @@ class _AchievementDialogState extends State<AchievementDialog> with TickerProvid
 
                                   // Progress section
                                   _buildProgressSection(context, cupertinoTheme, habitColor),
-                                  SizedBox(height: context.height(0.02)),
+                                  SizedBox(height: context.height(0.01)),
 
                                   // Continue button with premium styling
                                   _buildPremiumButton(context, habitColor),
@@ -407,11 +407,6 @@ class _AchievementDialogState extends State<AchievementDialog> with TickerProvid
                 _InfoChip(
                   icon: CupertinoIcons.flame_fill,
                   label: widget.habit.difficulty.displayName,
-                  color: habitColor,
-                ),
-                _InfoChip(
-                  icon: CupertinoIcons.calendar_badge_plus,
-                  label: remainingDays == 0 ? LocaleKeys.achievement_dialog_habit_fully_formed.tr() : '${remainingDays.toString()} ${LocaleKeys.common_days.tr()}',
                   color: habitColor,
                 ),
               ],

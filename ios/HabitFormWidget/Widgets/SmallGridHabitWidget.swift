@@ -134,26 +134,28 @@ struct SmallGridHabitWidgetEntryView: View {
             HStack {
                 // Habit name - now has maximum space
                 Text(entry.habit.habitName)
-
                     .font(.system(size: 14, weight: .medium, design: .rounded))
                     .foregroundColor(.primary)
                     .lineLimit(3)
                     .minimumScaleFactor(0.7)
 
                 Spacer()
-                // Emoji circle
-                ZStack {
-                    Circle()
-                        .fill(habitColor.opacity(0.12))
-                        .overlay(
-                            Circle()
-                                .stroke(habitColor.opacity(0.25), lineWidth: 1)
-                        )
-                        .frame(width: 32, height: 32)
+                // Emoji circle (tappable to complete today)
+                Button(intent: CompleteHabitIntent(habitId: entry.habit.id)) {
+                    ZStack {
+                        Circle()
+                            .fill(habitColor.opacity(0.12))
+                            .overlay(
+                                Circle()
+                                    .stroke(habitColor.opacity(0.25), lineWidth: 1)
+                            )
+                            .frame(width: 32, height: 32)
 
-                    Text(entry.habit.emoji ?? "🎯")
-                        .font(.system(size: 16))
+                        Text(entry.habit.emoji ?? "🎯")
+                            .font(.system(size: 16))
+                    }
                 }
+                .buttonStyle(PlainButtonStyle())
 
             }
 

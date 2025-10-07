@@ -258,31 +258,34 @@ struct LargeHabitWidgetEntryView: View {
                     Text(entry.habit.emoji ?? "🎯")
                         .font(.system(size: 17))
                 }
-                // Complete button at the bottom
-                Button(
-                    intent: CompleteHabitIntent(habitId: entry.habit.id)
-                ) {
-                    HStack(spacing: 0) {
+                // Complete button aligned with Small widget styling
+                Button(intent: CompleteHabitIntent(habitId: entry.habit.id)) {
+                    ZStack {
+                        if completionRatio >= 1.0 {
+                            // Completed state (filled circle with checkmark)
+                            Circle()
+                                .fill(habitColor)
+                                .frame(width: 28, height: 28)
+                                .shadow(color: habitColor.opacity(0.3), radius: 4, x: 0, y: 2)
 
-                        Image(
-                            systemName: entry.habit.isCompletedToday
-                                ? "checkmark" : "circle"
-                        )
-                        .font(.system(size: 17, weight: .medium))
-                        .foregroundColor(entry.habit.isCompletedToday ? .white : habitColor)
+                            Image(systemName: "checkmark")
+                                .font(.system(size: 14, weight: .bold))
+                                .foregroundColor(.white)
+                        } else {
+                            // Incomplete state (outlined circle, progressive fill)
+                            Circle()
+                                .fill(habitColor.opacity(0.12 + 0.88 * completionRatio))
+                                .overlay(
+                                    Circle()
+                                        .stroke(habitColor.opacity(0.6), lineWidth: 2)
+                                )
+                                .frame(width: 28, height: 28)
 
+                            Image(systemName: "circle")
+                                .font(.system(size: 14))
+                                .foregroundColor(.clear)
+                        }
                     }
-                    .frame(width: 32, height: 32)
-                    .background(
-                        RoundedRectangle(cornerRadius: 90)
-                            .fill(
-                                entry.habit.isCompletedToday ? habitColor : habitColor.opacity(0.1)
-                            )
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 90)
-                                    .stroke(habitColor, lineWidth: 2)
-                            )
-                    )
                 }
                 .buttonStyle(PlainButtonStyle())
             }

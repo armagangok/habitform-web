@@ -197,7 +197,7 @@ class _OnboardingRatingPageState extends ConsumerState<OnboardingRatingPage> wit
                   center: const Alignment(0, -0.3),
                   radius: 1.2,
                   colors: [
-                    const Color(0xFF1DB954).withValues(alpha: 0.08),
+                    theme.colorScheme.primary.withValues(alpha: 0.08),
                     theme.colorScheme.surface,
                   ],
                 ),
@@ -212,6 +212,7 @@ class _OnboardingRatingPageState extends ConsumerState<OnboardingRatingPage> wit
                 return CustomPaint(
                   painter: _SparklePainter(
                     progress: _sparkleAnimation.value,
+                    color: theme.colorScheme.primary,
                   ),
                 );
               },
@@ -298,6 +299,9 @@ class _OnboardingRatingPageState extends ConsumerState<OnboardingRatingPage> wit
   }
 
   Widget _buildAnimatedIcon(BuildContext context) {
+    final theme = Theme.of(context);
+    final String logoAsset = Assets.app.appLogoDark.path;
+
     return AnimatedBuilder(
       animation: _pulseAnimation,
       builder: (context, child) {
@@ -310,23 +314,27 @@ class _OnboardingRatingPageState extends ConsumerState<OnboardingRatingPage> wit
               shape: BoxShape.circle,
               gradient: RadialGradient(
                 colors: [
-                  const Color(0xFF1DB954).withValues(alpha: 0.2),
-                  const Color(0xFF1DB954).withValues(alpha: 0.1),
+                  theme.colorScheme.primary.withValues(alpha: 0.2),
+                  theme.colorScheme.primary.withValues(alpha: 0.1),
                 ],
               ),
               boxShadow: [
                 BoxShadow(
-                  color: const Color(0xFF1DB954).withValues(alpha: 0.3),
+                  color: theme.colorScheme.primary.withValues(alpha: 0.3),
                   blurRadius: 20,
                   spreadRadius: 5,
                 ),
               ],
             ),
             child: Center(
-              child: Icon(
-                CupertinoIcons.star_fill,
-                size: context.width(0.12),
-                color: const Color(0xFF1DB954),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: Image.asset(
+                  logoAsset,
+                  width: context.width(0.12),
+                  height: context.width(0.12),
+                  fit: BoxFit.contain,
+                ),
               ),
             ),
           ),
@@ -348,15 +356,15 @@ class _OnboardingRatingPageState extends ConsumerState<OnboardingRatingPage> wit
               height: context.height(0.055),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(context.width(0.08)),
-                gradient: const LinearGradient(
+                gradient: LinearGradient(
                   colors: [
-                    Color(0xFF1DB954),
-                    Color(0xFF17A085),
+                    theme.colorScheme.primary,
+                    theme.colorScheme.primary.withValues(alpha: 0.8),
                   ],
                 ),
                 boxShadow: [
                   BoxShadow(
-                    color: const Color(0xFF1DB954).withValues(alpha: 0.3),
+                    color: theme.colorScheme.primary.withValues(alpha: 0.3),
                     blurRadius: 10,
                     spreadRadius: 2,
                   ),
@@ -423,13 +431,14 @@ class _OnboardingRatingPageState extends ConsumerState<OnboardingRatingPage> wit
 
 class _SparklePainter extends CustomPainter {
   final double progress;
+  final Color color;
 
-  _SparklePainter({required this.progress});
+  _SparklePainter({required this.progress, required this.color});
 
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = const Color(0xFF1DB954).withValues(alpha: 0.1 * progress)
+      ..color = color.withValues(alpha: 0.1 * progress)
       ..style = PaintingStyle.fill;
 
     final random = Random(42); // Fixed seed for consistent animation
@@ -440,7 +449,7 @@ class _SparklePainter extends CustomPainter {
       final radius = (random.nextDouble() * 2 + 1) * progress;
       final opacity = (random.nextDouble() * 0.5 + 0.3) * progress;
 
-      paint.color = const Color(0xFF1DB954).withValues(alpha: opacity);
+      paint.color = color.withValues(alpha: opacity);
       canvas.drawCircle(Offset(x, y), radius, paint);
     }
   }

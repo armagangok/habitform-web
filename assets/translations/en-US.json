@@ -97,36 +97,50 @@
             }
         },
         "app_features": {
-            "title": "HabitForm Helps You ...",
-            "subtitle": "Build lasting habits with smart tracking and personalized insights",
+            "title": "HabitForm's Unique Features",
+            "subtitle": "Our most advanced features for our most dedicated users",
             "features": {
-                "smart_tracking": {
-                    "title": "Smart Habit Tracking",
-                    "description": "Track your habits with intelligent reminders and progress visualization. See your streaks grow and celebrate every milestone.",
-                    "sub_features_0": "Daily Reminders",
-                    "sub_features_1": "Progress Charts",
-                    "sub_features_2": "Streak Tracking"
+                "habit_probability": {
+                    "title": "Habit Probability",
+                    "description": "See exactly how likely you are to succeed with each habit. Get personalized insights that help you stay motivated and build lasting habits.",
+                    "sub_features_0": "Know Your Success Rate",
+                    "sub_features_1": "Stay Motivated Daily",
+                    "sub_features_2": "Build Confidence"
                 },
-                "sub_habits": {
-                    "title": "Sub-Habits System",
-                    "description": "Break down complex habits into smaller, manageable sub-habits. Build your main habit step by step with micro-actions.",
-                    "sub_features_0": "Micro-Actions",
-                    "sub_features_1": "Habit Breakdown",
-                    "sub_features_2": "Nested Tracking"
+                "home_widget": {
+                    "title": "Home Widget",
+                    "description": "Track your habits without opening the app. Complete your daily goals directly from your iPhone home screen in seconds.",
+                    "sub_features_0": "Instant Access",
+                    "sub_features_1": "Save Time Daily",
+                    "sub_features_2": "Never Forget Again"
                 },
-                "formation_rate": {
-                    "title": "Habit Formation Rate",
-                    "description": "Track your habit formation progress with intelligent insights. See how close you are to making your habits stick permanently.",
-                    "sub_features_0": "Success Prediction",
-                    "sub_features_1": "Formation Tracking",
-                    "sub_features_2": "Progress Analytics"
+                "goal_setting": {
+                    "title": "Goal Setting",
+                    "description": "Break down big dreams into achievable daily actions. Set meaningful goals that actually work and keep you moving forward.",
+                    "sub_features_0": "Clear Daily Actions",
+                    "sub_features_1": "Achieve Big Dreams",
+                    "sub_features_2": "Stay Focused"
+                },
+                "customizable": {
+                    "title": "Customizable",
+                    "description": "Make HabitForm truly yours. Choose colors, themes, and layouts that match your personality and keep you engaged.",
+                    "sub_features_0": "Personal Themes",
+                    "sub_features_1": "Your Style",
+                    "sub_features_2": "Better Experience"
+                },
+                "habit_archive": {
+                    "title": "Habit Archive",
+                    "description": "Keep your progress history safe and organized. View past achievements and restart habits whenever you're ready.",
+                    "sub_features_0": "Never Lose Progress",
+                    "sub_features_1": "Track Your Journey",
+                    "sub_features_2": "Restart Anytime"
                 },
                 "share_habits": {
                     "title": "Share Habits",
-                    "description": "Share your habit progress with beautiful, customizable images. Choose from different designs to showcase your achievements.",
-                    "sub_features_0": "Custom Designs",
-                    "sub_features_1": "Progress Sharing",
-                    "sub_features_2": "Achievement Images"
+                    "description": "Celebrate your wins with friends and family. Share beautiful progress images that inspire others and keep you accountable.",
+                    "sub_features_0": "Inspire Others",
+                    "sub_features_1": "Stay Accountable",
+                    "sub_features_2": "Celebrate Wins"
                 }
             },
             "formation_score": "Formation Score",
@@ -726,6 +740,5 @@
         "russian": "Russian",
         "japanese": "Japanese",
         "italian": "Italian"
-        
     }
 }

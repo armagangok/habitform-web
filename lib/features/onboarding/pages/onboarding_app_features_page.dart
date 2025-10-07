@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'dart:ui' as ui;
 
 import '../../../core/core.dart';
 
@@ -27,59 +28,81 @@ class _OnboardingAppFeaturesPageState extends State<OnboardingAppFeaturesPage> w
   late final Animation<double> _fadeAnimation;
   late final Animation<Offset> _slideAnimation;
   late final Animation<double> _scaleAnimation;
-  late final Animation<double> _progressAnimation;
+
   late final Animation<double> _pulseAnimation;
-  late final Animation<double> _habitFormationAnimation;
+
   late final Animation<double> _introTransitionAnimation;
 
   int _currentFeature = 0;
   bool _isTransitioning = false;
-  double _habitFormationRate = 0.0;
+
   bool _showIntro = true;
 
   List<AppFeature> get _appFeatures => [
         AppFeature(
-          title: LocaleKeys.onboarding_app_features_features_smart_tracking_title.tr(),
-          description: LocaleKeys.onboarding_app_features_features_smart_tracking_description.tr(),
-          icon: CupertinoIcons.chart_bar_alt_fill,
-          color: const Color(0xFF1DB954),
-          subFeatures: [
-            LocaleKeys.onboarding_app_features_features_smart_tracking_sub_features_0.tr(),
-            LocaleKeys.onboarding_app_features_features_smart_tracking_sub_features_1.tr(),
-            LocaleKeys.onboarding_app_features_features_smart_tracking_sub_features_2.tr(),
-          ],
-        ),
-        AppFeature(
-          title: LocaleKeys.onboarding_app_features_features_sub_habits_title.tr(),
-          description: LocaleKeys.onboarding_app_features_features_sub_habits_description.tr(),
-          icon: CupertinoIcons.layers_fill,
-          color: const Color(0xFF0C6CF2),
-          subFeatures: [
-            LocaleKeys.onboarding_app_features_features_sub_habits_sub_features_0.tr(),
-            LocaleKeys.onboarding_app_features_features_sub_habits_sub_features_1.tr(),
-            LocaleKeys.onboarding_app_features_features_sub_habits_sub_features_2.tr(),
-          ],
-        ),
-        AppFeature(
-          title: LocaleKeys.onboarding_app_features_features_formation_rate_title.tr(),
-          description: LocaleKeys.onboarding_app_features_features_formation_rate_description.tr(),
+          title: "Habit Probability",
+          description: "See exactly how likely you are to succeed with each habit. Get personalized insights that help you stay motivated and build lasting habits.",
           icon: CupertinoIcons.chart_bar_square,
           color: const Color(0xFF9B59B6),
           subFeatures: [
-            LocaleKeys.onboarding_app_features_features_formation_rate_sub_features_0.tr(),
-            LocaleKeys.onboarding_app_features_features_formation_rate_sub_features_1.tr(),
-            LocaleKeys.onboarding_app_features_features_formation_rate_sub_features_2.tr(),
+            "Know Your Success Rate",
+            "Stay Motivated Daily",
+            "Build Confidence",
           ],
         ),
         AppFeature(
-          title: LocaleKeys.onboarding_app_features_features_share_habits_title.tr(),
-          description: LocaleKeys.onboarding_app_features_features_share_habits_description.tr(),
+          title: "Home Widget",
+          description: "Track your habits without opening the app. Complete your daily goals directly from your phone home screen in seconds.",
+          icon: CupertinoIcons.square_grid_2x2_fill,
+          color: const Color(0xFF2ECC71),
+          subFeatures: [
+            "Instant Access",
+            "Save Time Daily",
+            "Never Forget Again",
+          ],
+        ),
+        AppFeature(
+          title: "Goal Setting",
+          description: "Break down big dreams into achievable daily actions. Set meaningful goals that actually work and keep you moving forward.",
+          icon: CupertinoIcons.checkmark_circle_fill,
+          color: const Color(0xFF0C6CF2),
+          subFeatures: [
+            "Clear Daily Actions",
+            "Achieve Big Dreams",
+            "Stay Focused",
+          ],
+        ),
+        AppFeature(
+          title: "Customizable",
+          description: "Make HabitForm truly yours. Choose colors, themes, and layouts that match your personality and keep you engaged.",
+          icon: CupertinoIcons.paintbrush_fill,
+          color: const Color(0xFFE67E22),
+          subFeatures: [
+            "Personal Themes",
+            "Your Style",
+            "Better Experience",
+          ],
+        ),
+        AppFeature(
+          title: "Habit Archive",
+          description: "Keep your progress history safe and organized. View past achievements and restart habits whenever you're ready.",
+          icon: CupertinoIcons.archivebox_fill,
+          color: const Color(0xFF34495E),
+          subFeatures: [
+            "Never Lose Progress",
+            "Track Your Journey",
+            "Restart Anytime",
+          ],
+        ),
+        AppFeature(
+          title: "Share Habits",
+          description: "Celebrate your wins with friends and family. Share beautiful progress visuals that inspire others and keep you accountable.",
           icon: CupertinoIcons.share,
           color: Colors.deepOrangeAccent,
           subFeatures: [
-            LocaleKeys.onboarding_app_features_features_share_habits_sub_features_0.tr(),
-            LocaleKeys.onboarding_app_features_features_share_habits_sub_features_1.tr(),
-            LocaleKeys.onboarding_app_features_features_share_habits_sub_features_2.tr(),
+            "Inspire Others",
+            "Stay Accountable",
+            "Celebrate Wins",
           ],
         ),
       ];
@@ -89,7 +112,6 @@ class _OnboardingAppFeaturesPageState extends State<OnboardingAppFeaturesPage> w
     super.initState();
     _initializeAnimations();
     _startInitialAnimation();
-    _simulateHabitFormationRate();
     _startIntroTimer();
   }
 
@@ -156,16 +178,8 @@ class _OnboardingAppFeaturesPageState extends State<OnboardingAppFeaturesPage> w
       CurvedAnimation(parent: _scaleController, curve: Curves.elasticOut),
     );
 
-    _progressAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(parent: _progressController, curve: Curves.easeOutCubic),
-    );
-
     _pulseAnimation = Tween<double>(begin: 0.8, end: 1.2).animate(
       CurvedAnimation(parent: _pulseController, curve: Curves.easeInOut),
-    );
-
-    _habitFormationAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(parent: _habitFormationController, curve: Curves.easeOutCubic),
     );
 
     _introTransitionAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
@@ -180,16 +194,6 @@ class _OnboardingAppFeaturesPageState extends State<OnboardingAppFeaturesPage> w
     _scaleController.forward();
     _progressController.forward();
     _habitFormationController.forward();
-  }
-
-  void _simulateHabitFormationRate() async {
-    // Simulate habit formation rate calculation
-    await Future.delayed(const Duration(milliseconds: 1000));
-    if (mounted) {
-      setState(() {
-        _habitFormationRate = 0.84; // 84% habit formation rate - %80 üzeri
-      });
-    }
   }
 
   @override
@@ -300,6 +304,36 @@ class _OnboardingAppFeaturesPageState extends State<OnboardingAppFeaturesPage> w
               },
             ),
           ),
+          // Top blur overlay to prevent glow bleeding under header
+          Positioned(
+            top: 0,
+            left: 0,
+            right: 0,
+            height: context.height(0.13),
+            child: IgnorePointer(
+              child: ClipRRect(
+                // Subtle rounding so it blends with design
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(context.width(0.04)),
+                  bottomRight: Radius.circular(context.width(0.04)),
+                ),
+                child: BackdropFilter(
+                  filter: ui.ImageFilter.blur(sigmaX: 14, sigmaY: 14),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).colorScheme.surface.withValues(alpha: 0.18),
+                      border: Border(
+                        bottom: BorderSide(
+                          color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.06),
+                          width: 1,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
           // Main content
           SafeArea(
             child: Padding(
@@ -317,11 +351,6 @@ class _OnboardingAppFeaturesPageState extends State<OnboardingAppFeaturesPage> w
                       child: Column(
                         children: [
                           _buildMainContent(context, theme),
-                          // Habit Formation Rate Widget (only for feature 2)
-                          if (_currentFeature == 2) ...[
-                            SizedBox(height: context.height(0.03)),
-                            _buildHabitFormationRate(context, theme),
-                          ],
                         ],
                       ),
                     ),
@@ -340,68 +369,146 @@ class _OnboardingAppFeaturesPageState extends State<OnboardingAppFeaturesPage> w
   Widget _buildIntroScreen(BuildContext context, ThemeData theme) {
     final String logoAsset = Assets.app.appLogoDark.path;
     return CupertinoPageScaffold(
-      child: AnimatedBuilder(
-        animation: _introTransitionAnimation,
-        builder: (context, child) {
-          return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: Opacity(
-              opacity: 1.0 - _introTransitionAnimation.value,
-              child: Transform.scale(
-                scale: 1.0 - (_introTransitionAnimation.value * 0.1),
-                child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      // Animated logo
-                      AnimatedBuilder(
-                        animation: _pulseAnimation,
-                        builder: (context, child) {
-                          return Transform.scale(
-                            scale: _pulseAnimation.value,
-                            child: Center(
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(12),
-                                child: Image.asset(
-                                  logoAsset,
-                                  height: context.width(0.2),
-                                  fit: BoxFit.contain,
-                                ),
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                      SizedBox(height: context.height(0.06)),
-                      // Title
-                      FittedBox(
-                        child: Text(
-                          LocaleKeys.onboarding_app_features_title.tr(),
-                          style: context.headlineLarge.copyWith(
-                            fontSize: 30,
-                            fontWeight: FontWeight.w700,
-                            color: theme.colorScheme.onSurface,
-                          ),
-                          maxLines: 1,
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                      SizedBox(height: context.height(0.02)),
-                      // Subtitle
-                      Text(
-                        LocaleKeys.onboarding_app_features_subtitle.tr(),
-                        style: context.bodyLarge.copyWith(
-                          color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
-                  ),
-                ),
+      child: Stack(
+        children: [
+          // Background gradient
+          Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  theme.colorScheme.surface,
+                  theme.colorScheme.surface.withValues(alpha: 0.1),
+                  theme.colorScheme.surface,
+                ],
               ),
             ),
-          );
-        },
+          ),
+          // Floating particles
+          Positioned.fill(
+            child: CustomPaint(
+              painter: _IntroParticlePainter(),
+            ),
+          ),
+          // Main content
+          AnimatedBuilder(
+            animation: _introTransitionAnimation,
+            builder: (context, child) {
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: Opacity(
+                  opacity: 1.0 - _introTransitionAnimation.value,
+                  child: Transform.scale(
+                    scale: 1.0 - (_introTransitionAnimation.value * 0.1),
+                    child: Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          // Animated logo with enhanced effects
+                          AnimatedBuilder(
+                            animation: _pulseAnimation,
+                            builder: (context, child) {
+                              return Transform.scale(
+                                scale: _pulseAnimation.value,
+                                child: Container(
+                                  padding: EdgeInsets.all(context.width(0.04)),
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    gradient: RadialGradient(
+                                      colors: [
+                                        theme.colorScheme.primary.withValues(alpha: 0.1),
+                                        Colors.transparent,
+                                      ],
+                                    ),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: theme.colorScheme.primary.withValues(alpha: 0.2),
+                                        blurRadius: 30,
+                                        spreadRadius: 5,
+                                      ),
+                                    ],
+                                  ),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(12),
+                                    child: Image.asset(
+                                      logoAsset,
+                                      height: context.width(0.2),
+                                      fit: BoxFit.contain,
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                          SizedBox(height: context.height(0.06)),
+                          // Title with enhanced styling
+                          FittedBox(
+                            child: Text(
+                              LocaleKeys.onboarding_app_features_title.tr(),
+                              style: context.headlineLarge.copyWith(
+                                fontSize: 32,
+                                fontWeight: FontWeight.w800,
+                                color: theme.colorScheme.onSurface,
+                                letterSpacing: 0.5,
+                              ),
+                              maxLines: 2,
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                          SizedBox(height: context.height(0.03)),
+                          // Subtitle with better formatting
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: context.width(0.1)),
+                            child: Text(
+                              LocaleKeys.onboarding_app_features_subtitle.tr(),
+                              style: context.bodyLarge.copyWith(
+                                color: theme.colorScheme.onSurface.withValues(alpha: 0.8),
+                                height: 1.5,
+                                fontSize: 16,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                          SizedBox(height: context.height(0.04)),
+                          // Loading indicator
+                          AnimatedBuilder(
+                            animation: _progressController,
+                            builder: (context, child) {
+                              return Container(
+                                width: context.width(0.6),
+                                height: context.height(0.004),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(context.height(0.002)),
+                                  color: theme.colorScheme.onSurface.withValues(alpha: 0.1),
+                                ),
+                                child: FractionallySizedBox(
+                                  alignment: Alignment.centerLeft,
+                                  widthFactor: _progressController.value,
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(context.height(0.002)),
+                                      gradient: LinearGradient(
+                                        colors: [
+                                          theme.colorScheme.primary,
+                                          theme.colorScheme.primary.withValues(alpha: 0.7),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              );
+            },
+          ),
+        ],
       ),
     );
   }
@@ -409,41 +516,33 @@ class _OnboardingAppFeaturesPageState extends State<OnboardingAppFeaturesPage> w
   Widget _buildHeader(BuildContext context, ThemeData theme) {
     return Column(
       children: [
-        // Progress indicator
-        AnimatedBuilder(
-          animation: _progressAnimation,
-          builder: (context, child) {
-            return Container(
+        // Page indicators (moved from bottom)
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: List.generate(_appFeatures.length, (index) {
+            final isActive = index == _currentFeature;
+            final isPast = index < _currentFeature;
+
+            return AnimatedContainer(
+              duration: const Duration(milliseconds: 300),
+              margin: EdgeInsets.symmetric(horizontal: context.width(0.01)),
+              width: isActive ? context.width(0.06) : context.width(0.012),
               height: context.height(0.006),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(context.height(0.003)),
-                color: Colors.transparent,
-              ),
-              child: FractionallySizedBox(
-                alignment: Alignment.centerLeft,
-                widthFactor: _progressAnimation.value * ((_currentFeature + 1) / _appFeatures.length),
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(context.height(0.003)),
-                    gradient: LinearGradient(
-                      colors: [
-                        _appFeatures[_currentFeature].color,
-                        _appFeatures[_currentFeature].color.withValues(alpha: 0.7),
-                      ],
-                    ),
-                  ),
-                ),
+                color: isActive || isPast ? _appFeatures[_currentFeature].color : theme.colorScheme.onSurface.withValues(alpha: 0.2),
+                boxShadow: isActive
+                    ? [
+                        BoxShadow(
+                          color: _appFeatures[_currentFeature].color.withValues(alpha: 0.4),
+                          blurRadius: 8,
+                          spreadRadius: 2,
+                        ),
+                      ]
+                    : null,
               ),
             );
-          },
-        ),
-        SizedBox(height: context.height(0.02)),
-        // Step counter
-        Text(
-          '${_currentFeature + 1} of ${_appFeatures.length}',
-          style: context.bodyMedium.copyWith(
-            color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
-          ),
+          }),
         ),
       ],
     );
@@ -465,32 +564,37 @@ class _OnboardingAppFeaturesPageState extends State<OnboardingAppFeaturesPage> w
                 children: [
                   // Icon with animated background
                   _buildAnimatedIcon(context, currentFeature),
-                  SizedBox(height: context.height(0.04)),
+                  SizedBox(height: context.height(0.03)),
+
                   // Title
                   Text(
                     currentFeature.title,
                     style: context.headlineMedium.copyWith(
-                      fontWeight: FontWeight.w600,
+                      fontWeight: FontWeight.w700,
                       color: theme.colorScheme.onSurface,
+                      fontSize: 28,
                     ),
                     textAlign: TextAlign.center,
                   ),
                   SizedBox(height: context.height(0.02)),
+
                   // Description
                   Padding(
                     padding: context.symmetricPadding(horizontal: 0.02),
                     child: Text(
                       currentFeature.description,
                       style: context.bodyLarge.copyWith(
-                        height: 1.5,
+                        height: 1.6,
                         color: theme.colorScheme.onSurface.withValues(alpha: 0.8),
+                        fontSize: 16,
                       ),
                       textAlign: TextAlign.center,
                     ),
                   ),
                   SizedBox(height: context.height(0.03)),
-                  // Sub-features
-                  _buildSubFeatures(context, currentFeature, theme),
+
+                  // Sub-features with enhanced design
+                  _buildEnhancedSubFeatures(context, currentFeature, theme),
                 ],
               ),
             ),
@@ -500,29 +604,81 @@ class _OnboardingAppFeaturesPageState extends State<OnboardingAppFeaturesPage> w
     );
   }
 
-  Widget _buildSubFeatures(BuildContext context, AppFeature feature, ThemeData theme) {
-    return Wrap(
-      spacing: context.width(0.02),
-      runSpacing: context.height(0.01),
-      alignment: WrapAlignment.center,
-      children: feature.subFeatures.map((subFeature) {
-        return Container(
-          padding: context.symmetricPadding(horizontal: 0.03, vertical: 0.01),
-          decoration: BoxDecoration(
-            color: feature.color.withValues(alpha: 0.1),
-            borderRadius: BorderRadius.circular(context.width(0.08)),
-            border: Border.all(
-              color: feature.color.withValues(alpha: 0.3),
-              width: 1,
-            ),
-          ),
-          child: Text(
-            subFeature,
-            style: context.bodySmall.copyWith(
-              color: feature.color.withValues(alpha: 1),
-              fontWeight: FontWeight.w600,
-            ),
-          ),
+  Widget _buildEnhancedSubFeatures(BuildContext context, AppFeature feature, ThemeData theme) {
+    return Column(
+      children: feature.subFeatures.asMap().entries.map((entry) {
+        final index = entry.key;
+        final subFeature = entry.value;
+
+        return AnimatedBuilder(
+          animation: _fadeAnimation,
+          builder: (context, child) {
+            return SlideTransition(
+              position: Tween<Offset>(
+                begin: Offset(0, 0.3),
+                end: Offset.zero,
+              ).animate(CurvedAnimation(
+                parent: _fadeAnimation,
+                curve: Interval(
+                  index * 0.1,
+                  (index * 0.1) + 0.8,
+                  curve: Curves.easeOutCubic,
+                ),
+              )),
+              child: FadeTransition(
+                opacity: CurvedAnimation(
+                  parent: _fadeAnimation,
+                  curve: Interval(
+                    index * 0.1,
+                    (index * 0.1) + 0.8,
+                    curve: Curves.easeOutCubic,
+                  ),
+                ),
+                child: Container(
+                  margin: EdgeInsets.only(bottom: context.height(0.015)),
+                  padding: context.symmetricPadding(horizontal: 0.04, vertical: 0.015),
+                  decoration: BoxDecoration(
+                    color: feature.color.withValues(alpha: 0.08),
+                    borderRadius: BorderRadius.circular(context.width(0.06)),
+                    border: Border.all(
+                      color: feature.color.withValues(alpha: 0.2),
+                      width: 1,
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: feature.color.withValues(alpha: 0.1),
+                        blurRadius: 4,
+                        spreadRadius: 0.5,
+                      ),
+                    ],
+                  ),
+                  child: Row(
+                    children: [
+                      Container(
+                        width: context.width(0.012),
+                        height: context.width(0.012),
+                        decoration: BoxDecoration(
+                          color: feature.color,
+                          shape: BoxShape.circle,
+                        ),
+                      ),
+                      SizedBox(width: context.width(0.03)),
+                      Expanded(
+                        child: Text(
+                          subFeature,
+                          style: context.bodyMedium.copyWith(
+                            color: theme.colorScheme.onSurface.withValues(alpha: 0.9),
+                            fontWeight: FontWeight.w600,
+                            fontSize: 14,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            );
+          },
         );
       }).toList(),
     );
@@ -532,78 +688,354 @@ class _OnboardingAppFeaturesPageState extends State<OnboardingAppFeaturesPage> w
     return AnimatedBuilder(
       animation: Listenable.merge([_scaleController, _pulseController]),
       builder: (context, child) {
-        return Transform.scale(
-          scale: _pulseAnimation.value,
-          child: Container(
-            width: context.width(0.25),
-            height: context.width(0.25),
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              gradient: RadialGradient(
-                colors: [
-                  feature.color.withValues(alpha: 0.2),
-                  feature.color.withValues(alpha: 0.1),
-                ],
-              ),
-              boxShadow: [
-                BoxShadow(
-                  color: feature.color.withValues(alpha: 0.3),
-                  blurRadius: 20,
-                  spreadRadius: 5,
+        return Stack(
+          alignment: Alignment.center,
+          children: [
+            // Outer glow effect
+            Transform.scale(
+              scale: _pulseAnimation.value * 1.3,
+              child: Container(
+                width: context.width(0.35),
+                height: context.width(0.35),
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  gradient: RadialGradient(
+                    colors: [
+                      feature.color.withValues(alpha: 0.1),
+                      feature.color.withValues(alpha: 0.05),
+                      Colors.transparent,
+                    ],
+                  ),
                 ),
-              ],
-            ),
-            child: Center(
-              child: Icon(
-                feature.icon,
-                size: context.width(0.12),
-                color: feature.color,
               ),
             ),
+            // Main preview container
+            Transform.scale(
+              scale: _pulseAnimation.value,
+              child: Container(
+                width: context.width(0.28),
+                height: context.width(0.28),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(context.width(0.08)),
+                  gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [
+                      feature.color.withValues(alpha: 0.15),
+                      feature.color.withValues(alpha: 0.08),
+                      feature.color.withValues(alpha: 0.05),
+                    ],
+                  ),
+                  border: Border.all(
+                    color: feature.color.withValues(alpha: 0.3),
+                    width: 1.5,
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: feature.color.withValues(alpha: 0.4),
+                      blurRadius: 25,
+                      spreadRadius: 8,
+                    ),
+                    BoxShadow(
+                      color: feature.color.withValues(alpha: 0.2),
+                      blurRadius: 15,
+                      spreadRadius: 3,
+                    ),
+                  ],
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(context.width(0.08)),
+                  child: _buildFeaturePreview(context, feature),
+                ),
+              ),
+            ),
+            // Inner highlight
+            Transform.scale(
+              scale: _pulseAnimation.value * 0.8,
+              child: Container(
+                width: context.width(0.18),
+                height: context.width(0.18),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(context.width(0.06)),
+                  gradient: RadialGradient(
+                    colors: [
+                      Colors.white.withValues(alpha: 0.2),
+                      Colors.transparent,
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget _buildFeaturePreview(BuildContext context, AppFeature feature) {
+    // Determine which preview to show based on feature title
+    if (feature.title.contains("Habit Probability")) {
+      return _buildFormationRatePreview(context, feature);
+    } else if (feature.title.contains("Home Widget")) {
+      return _buildHomeWidgetPreview(context, feature);
+    } else if (feature.title.contains("Goal Setting")) {
+      return _buildGoalSettingPreview(context, feature);
+    } else if (feature.title.contains("Customizable")) {
+      return _buildCustomizablePreview(context, feature);
+    } else if (feature.title.contains("Habit Archive")) {
+      return _buildArchivePreview(context, feature);
+    } else if (feature.title.contains("Share")) {
+      return _buildSharePreview(context, feature);
+    }
+
+    // Fallback to icon if no specific preview
+    return Center(
+      child: Icon(
+        feature.icon,
+        size: context.width(0.12),
+        color: feature.color,
+      ),
+    );
+  }
+
+  Widget _buildFormationRatePreview(BuildContext context, AppFeature feature) {
+    return AnimatedBuilder(
+      animation: _pulseAnimation,
+      builder: (context, child) {
+        return Container(
+          padding: EdgeInsets.all(context.width(0.02)),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              // Circular progress
+              SizedBox(
+                width: context.width(0.12),
+                height: context.width(0.12),
+                child: Stack(
+                  children: [
+                    // Background circle
+                    Container(
+                      width: context.width(0.12),
+                      height: context.width(0.12),
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: feature.color.withValues(alpha: 0.2),
+                      ),
+                    ),
+                    // Progress arc
+                    CustomPaint(
+                      size: Size(context.width(0.12), context.width(0.12)),
+                      painter: _CircularProgressPainter(
+                        progress: 0.8 + (sin(_pulseAnimation.value * 2 * pi) * 0.1),
+                        color: feature.color,
+                      ),
+                    ),
+                    // Center percentage
+                    Center(
+                      child: Text(
+                        '${(84 + (sin(_pulseAnimation.value * 2 * pi) * 5)).round()}',
+                        style: TextStyle(
+                          color: feature.color,
+                          fontWeight: FontWeight.w800,
+                          fontSize: context.width(0.025),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(height: context.height(0.006)),
+
+              // Mini chart
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: List.generate(3, (index) {
+                  final height = 0.008 + (sin((index + _pulseAnimation.value * 3) * 1.2) * 0.004);
+                  return Container(
+                    width: context.width(0.012),
+                    height: context.height(height),
+                    decoration: BoxDecoration(
+                      color: feature.color.withValues(alpha: 0.8),
+                      borderRadius: BorderRadius.circular(context.width(0.006)),
+                    ),
+                  );
+                }),
+              ),
+            ],
           ),
         );
       },
     );
   }
 
-  Widget _buildHabitFormationRate(BuildContext context, ThemeData theme) {
-    final habitColor = const Color(0xFF9B59B6);
-
+  Widget _buildHomeWidgetPreview(BuildContext context, AppFeature feature) {
     return AnimatedBuilder(
-      animation: _habitFormationAnimation,
+      animation: _pulseAnimation,
       builder: (context, child) {
-        final animatedScore = _habitFormationAnimation.value * _habitFormationRate * 100;
         return Container(
-          padding: context.padding(0.04),
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [
-                habitColor.withValues(alpha: 0.1),
-                habitColor.withValues(alpha: 0.05),
-              ],
-            ),
-            borderRadius: BorderRadius.circular(context.width(0.06)),
-            border: Border.all(
-              color: habitColor.withValues(alpha: 0.3),
-              width: 1,
-            ),
-          ),
+          padding: EdgeInsets.all(context.width(0.015)),
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
-                LocaleKeys.onboarding_app_features_formation_score.tr(),
-                style: context.bodyMedium.copyWith(
-                  color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
-                  fontWeight: FontWeight.w500,
+              // Widget preview card
+              SizedBox(
+                width: context.width(0.26),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(height: context.height(0.008)),
+
+                    // Habit items
+                    _buildWidgetHabitItem(context, feature, '💧', 'Drink Water', 0.82),
+                    SizedBox(height: context.height(0.004)),
+                    _buildWidgetHabitItem(context, feature, '🏃', 'Running', 0.63),
+                  ],
                 ),
               ),
-              SizedBox(height: context.height(0.01)),
-              Text(
-                '${animatedScore.round()}',
-                style: context.displaySmall.copyWith(
-                  fontWeight: FontWeight.w800,
-                  color: habitColor,
-                  fontFeatures: [FontFeature.tabularFigures()],
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildWidgetHabitItem(BuildContext context, AppFeature feature, String emoji, String name, double progress) {
+    return Container(
+      margin: EdgeInsets.only(bottom: context.height(0.003)),
+      padding: EdgeInsets.symmetric(horizontal: context.width(0.01), vertical: context.height(0.004)),
+      decoration: BoxDecoration(
+        color: Colors.white.withValues(alpha: 0.7),
+        borderRadius: BorderRadius.circular(context.width(0.02)),
+        border: Border.all(
+          color: feature.color.withValues(alpha: 0.18),
+          width: 1,
+        ),
+      ),
+      child: Row(
+        children: [
+          // Emoji badge
+          Container(
+            width: context.width(0.036),
+            height: context.width(0.036),
+            decoration: BoxDecoration(
+              color: feature.color.withValues(alpha: 0.15),
+              shape: BoxShape.circle,
+            ),
+            alignment: Alignment.center,
+            child: Text(
+              emoji,
+              style: TextStyle(fontSize: context.width(0.022)),
+            ),
+          ),
+          SizedBox(width: context.width(0.012)),
+
+          // Title and progress
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  name,
+                  style: TextStyle(
+                    fontSize: context.width(0.017),
+                    fontWeight: FontWeight.w700,
+                    color: Colors.black87,
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                ),
+                SizedBox(height: context.height(0.003)),
+                Container(
+                  height: context.height(0.004),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(context.height(0.002)),
+                    color: feature.color.withValues(alpha: 0.18),
+                  ),
+                  child: FractionallySizedBox(
+                    alignment: Alignment.centerLeft,
+                    widthFactor: progress,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(context.height(0.002)),
+                        gradient: LinearGradient(
+                          colors: [
+                            feature.color,
+                            feature.color.withValues(alpha: 0.85),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSharePreview(BuildContext context, AppFeature feature) {
+    return AnimatedBuilder(
+      animation: _pulseAnimation,
+      builder: (context, child) {
+        return Container(
+          padding: EdgeInsets.all(context.width(0.02)),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              // Share card preview
+              Container(
+                width: context.width(0.18),
+                height: context.width(0.12),
+                decoration: BoxDecoration(
+                  color: Colors.white.withValues(alpha: 0.9),
+                  borderRadius: BorderRadius.circular(context.width(0.015)),
+                  border: Border.all(
+                    color: feature.color.withValues(alpha: 0.3),
+                    width: 1,
+                  ),
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      '🏆',
+                      style: TextStyle(fontSize: context.width(0.03)),
+                    ),
+                    SizedBox(height: context.height(0.002)),
+                    Text(
+                      '7 Day Streak!',
+                      style: TextStyle(
+                        fontSize: context.width(0.018),
+                        fontWeight: FontWeight.w700,
+                        color: feature.color,
+                      ),
+                    ),
+                    SizedBox(height: context.height(0.001)),
+                    Text(
+                      'Exercise',
+                      style: TextStyle(
+                        fontSize: context.width(0.015),
+                        color: Colors.black87,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(height: context.height(0.006)),
+
+              // Share icon
+              Container(
+                width: context.width(0.04),
+                height: context.width(0.04),
+                decoration: BoxDecoration(
+                  color: feature.color,
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(
+                  CupertinoIcons.share,
+                  color: Colors.white,
+                  size: context.width(0.02),
                 ),
               ),
             ],
@@ -614,96 +1046,257 @@ class _OnboardingAppFeaturesPageState extends State<OnboardingAppFeaturesPage> w
   }
 
   Widget _buildNavigationButtons(BuildContext context, ThemeData theme) {
-    return Row(
+    return Column(
       children: [
-        // Previous button
-        if (_currentFeature > 0)
-          Expanded(
-            child: CupertinoButton(
-              onPressed: _isTransitioning ? null : _previousFeature,
-              child: Container(
-                height: context.height(0.055),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(context.width(0.08)),
-                  border: Border.all(
-                    color: theme.colorScheme.onSurface.withValues(alpha: 0.2),
-                  ),
-                ),
-                child: Center(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        CupertinoIcons.chevron_left,
-                        size: context.width(0.05),
-                        color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
-                      ),
-                      SizedBox(width: context.width(0.02)),
-                      Text(
-                        LocaleKeys.onboarding_app_features_previous.tr(),
-                        style: context.bodyMedium.copyWith(
-                          color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
+        // Navigation buttons (indicators moved to header)
+        Row(
+          children: [
+            // Previous button
+            if (_currentFeature > 0)
+              Expanded(
+                child: AnimatedBuilder(
+                  animation: _fadeAnimation,
+                  builder: (context, child) {
+                    return Transform.scale(
+                      scale: _fadeAnimation.value * 0.05 + 0.95,
+                      child: CupertinoButton(
+                        onPressed: _isTransitioning ? null : _previousFeature,
+                        child: Container(
+                          height: context.height(0.055),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(context.width(0.08)),
+                            border: Border.all(
+                              color: theme.colorScheme.onSurface.withValues(alpha: 0.2),
+                              width: 1.5,
+                            ),
+                            color: theme.colorScheme.surface,
+                            boxShadow: [
+                              BoxShadow(
+                                color: theme.colorScheme.onSurface.withValues(alpha: 0.1),
+                                blurRadius: 8,
+                                spreadRadius: 1,
+                              ),
+                            ],
+                          ),
+                          child: Center(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  CupertinoIcons.chevron_left,
+                                  size: context.width(0.05),
+                                  color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
+                                ),
+                                SizedBox(width: context.width(0.02)),
+                                Text(
+                                  LocaleKeys.onboarding_app_features_previous.tr(),
+                                  style: context.bodyMedium.copyWith(
+                                    color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
                         ),
                       ),
-                    ],
-                  ),
+                    );
+                  },
                 ),
               ),
-            ),
-          ),
-        if (_currentFeature > 0) SizedBox(width: context.width(0.0025)),
-        // Next/Complete button
-        Expanded(
-          flex: _currentFeature > 0 ? 1 : 2,
-          child: CupertinoButton(
-            onPressed: _isTransitioning ? null : (_currentFeature < _appFeatures.length - 1 ? _nextFeature : _completeOnboarding),
-            child: Container(
-              height: context.height(0.055),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(context.width(0.08)),
-                gradient: LinearGradient(
-                  colors: [
-                    _appFeatures[_currentFeature].color,
-                    _appFeatures[_currentFeature].color.withValues(alpha: 0.8),
-                  ],
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: _appFeatures[_currentFeature].color.withValues(alpha: 0.3),
-                    blurRadius: 10,
-                    spreadRadius: 2,
-                  ),
-                ],
-              ),
-              child: Center(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    FittedBox(
-                      child: Text(
-                        _currentFeature < _appFeatures.length - 1 ? LocaleKeys.onboarding_app_features_next.tr() : LocaleKeys.onboarding_app_features_start.tr(),
-                        style: context.bodyMedium.copyWith(
-                          fontWeight: FontWeight.w600,
-                          color: Colors.white,
+            if (_currentFeature > 0) SizedBox(width: context.width(0.03)),
+
+            // Next/Complete button
+            Expanded(
+              flex: _currentFeature > 0 ? 1 : 2,
+              child: AnimatedBuilder(
+                animation: Listenable.merge([_fadeAnimation, _pulseController]),
+                builder: (context, child) {
+                  return Transform.scale(
+                    scale: _fadeAnimation.value * 0.05 + 0.95,
+                    child: CupertinoButton(
+                      onPressed: _isTransitioning ? null : (_currentFeature < _appFeatures.length - 1 ? _nextFeature : _completeOnboarding),
+                      child: Container(
+                        height: context.height(0.055),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(context.width(0.08)),
+                          gradient: LinearGradient(
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                            colors: [
+                              _appFeatures[_currentFeature].color,
+                              _appFeatures[_currentFeature].color.withValues(alpha: 0.8),
+                              _appFeatures[_currentFeature].color.withValues(alpha: 0.9),
+                            ],
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: _appFeatures[_currentFeature].color.withValues(alpha: 0.4),
+                              blurRadius: 15,
+                              spreadRadius: 3,
+                            ),
+                            BoxShadow(
+                              color: _appFeatures[_currentFeature].color.withValues(alpha: 0.2),
+                              blurRadius: 8,
+                              spreadRadius: 1,
+                            ),
+                          ],
                         ),
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
+                        child: Center(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              FittedBox(
+                                child: Text(
+                                  _currentFeature < _appFeatures.length - 1 ? LocaleKeys.onboarding_app_features_next.tr() : LocaleKeys.onboarding_app_features_start.tr(),
+                                  style: context.bodyMedium.copyWith(
+                                    fontWeight: FontWeight.w700,
+                                    color: Colors.white,
+                                    fontSize: 16,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 1,
+                                ),
+                              ),
+                              SizedBox(width: context.width(0.02)),
+                              Icon(
+                                _currentFeature < _appFeatures.length - 1 ? CupertinoIcons.chevron_right : CupertinoIcons.rocket_fill,
+                                size: context.width(0.05),
+                                color: Colors.white,
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
                     ),
-                    SizedBox(width: context.width(0.02)),
-                    Icon(
-                      _currentFeature < _appFeatures.length - 1 ? CupertinoIcons.chevron_right : CupertinoIcons.rocket_fill,
-                      size: context.width(0.05),
-                      color: Colors.white,
-                    ),
-                  ],
-                ),
+                  );
+                },
               ),
             ),
-          ),
+          ],
         ),
       ],
+    );
+  }
+
+  Widget _buildGoalSettingPreview(BuildContext context, AppFeature feature) {
+    return AnimatedBuilder(
+      animation: _pulseAnimation,
+      builder: (context, child) {
+        return Container(
+          width: context.width(0.3),
+          height: context.width(0.3),
+          decoration: BoxDecoration(
+            color: feature.color.withValues(alpha: 0.1),
+            borderRadius: BorderRadius.circular(context.width(0.04)),
+            border: Border.all(
+              color: feature.color.withValues(alpha: 0.3),
+              width: 2,
+            ),
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                CupertinoIcons.checkmark_circle_fill,
+                size: context.width(0.08),
+                color: feature.color,
+              ),
+              SizedBox(height: context.height(0.01)),
+              Text(
+                "Goal\nSetting",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: context.width(0.035),
+                  fontWeight: FontWeight.w600,
+                  color: feature.color,
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildCustomizablePreview(BuildContext context, AppFeature feature) {
+    return AnimatedBuilder(
+      animation: _pulseAnimation,
+      builder: (context, child) {
+        return Container(
+          width: context.width(0.3),
+          height: context.width(0.3),
+          decoration: BoxDecoration(
+            color: feature.color.withValues(alpha: 0.1),
+            borderRadius: BorderRadius.circular(context.width(0.04)),
+            border: Border.all(
+              color: feature.color.withValues(alpha: 0.3),
+              width: 2,
+            ),
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                CupertinoIcons.paintbrush_fill,
+                size: context.width(0.08),
+                color: feature.color,
+              ),
+              SizedBox(height: context.height(0.01)),
+              Text(
+                "Customizable\nThemes",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: context.width(0.035),
+                  fontWeight: FontWeight.w600,
+                  color: feature.color,
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildArchivePreview(BuildContext context, AppFeature feature) {
+    return AnimatedBuilder(
+      animation: _pulseAnimation,
+      builder: (context, child) {
+        return Container(
+          width: context.width(0.3),
+          height: context.width(0.3),
+          decoration: BoxDecoration(
+            color: feature.color.withValues(alpha: 0.1),
+            borderRadius: BorderRadius.circular(context.width(0.04)),
+            border: Border.all(
+              color: feature.color.withValues(alpha: 0.3),
+              width: 2,
+            ),
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                CupertinoIcons.archivebox_fill,
+                size: context.width(0.08),
+                color: feature.color,
+              ),
+              SizedBox(height: context.height(0.01)),
+              Text(
+                "Habit\nArchive",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: context.width(0.035),
+                  fontWeight: FontWeight.w600,
+                  color: feature.color,
+                ),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }
@@ -745,6 +1338,59 @@ class _ParticlePainter extends CustomPainter {
 
       canvas.drawCircle(Offset(x, y), radius, paint);
     }
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
+}
+
+class _IntroParticlePainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = Colors.blue.withValues(alpha: 0.05)
+      ..style = PaintingStyle.fill;
+
+    final random = Random(123); // Different seed for intro
+
+    for (int i = 0; i < 20; i++) {
+      final x = random.nextDouble() * size.width;
+      final y = random.nextDouble() * size.height;
+      final radius = random.nextDouble() * 4 + 1;
+
+      canvas.drawCircle(Offset(x, y), radius, paint);
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+}
+
+class _CircularProgressPainter extends CustomPainter {
+  final double progress;
+  final Color color;
+
+  _CircularProgressPainter({required this.progress, required this.color});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = color
+      ..strokeWidth = 2.0
+      ..style = PaintingStyle.stroke
+      ..strokeCap = StrokeCap.round;
+
+    final center = Offset(size.width / 2, size.height / 2);
+    final radius = (size.width - 4) / 2;
+
+    // Draw progress arc
+    canvas.drawArc(
+      Rect.fromCircle(center: center, radius: radius),
+      -pi / 2, // Start from top
+      2 * pi * progress, // Progress in radians
+      false,
+      paint,
+    );
   }
 
   @override

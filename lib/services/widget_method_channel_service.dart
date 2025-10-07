@@ -12,7 +12,7 @@ import 'widget_service.dart';
 /// Service for handling Method Channel communication with iOS widgets
 class WidgetMethodChannelService {
   static const MethodChannel _channel = MethodChannel('com.appsweat.habitrise/widget');
-  static const String _appGroupIdentifier = 'group.com.AppSweat.HabitFormWidget';
+  // static const String _appGroupIdentifier = 'group.com.AppSweat.HabitFormWidget';
 
   // Cache for widget data to avoid repeated file operations
   List<Habit>? _cachedHabits;
@@ -372,7 +372,15 @@ class WidgetMethodChannelService {
     final longestStreak = habit.calculateLongestStreak();
     final currentStreak = habit.calculateCurrentStreak();
     final completedDays = habit.completions.values.where((e) => e.isCompleted).length;
-    final totalDays = habit.completions.length;
+
+    // Align "Total Days" with Habit Detail: days since first completion (inclusive)
+    int totalDaysSinceFirstCompletion = 0;
+    final firstCompletionDate = habit.getFirstCompletionDate();
+    if (firstCompletionDate != null) {
+      final startDate = DateUtils.dateOnly(firstCompletionDate);
+      final today = DateTime.now();
+      totalDaysSinceFirstCompletion = today.difference(startDate).inDays + 1;
+    }
 
     return {
       'id': habit.id,
@@ -391,7 +399,7 @@ class WidgetMethodChannelService {
       'flutterLongestStreak': longestStreak,
       'flutterCurrentStreak': currentStreak,
       'flutterCompletedDays': completedDays,
-      'flutterTotalDays': totalDays,
+      'flutterTotalDays': totalDaysSinceFirstCompletion,
     };
   }
 

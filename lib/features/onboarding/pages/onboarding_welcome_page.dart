@@ -7,7 +7,7 @@ import '../../../core/core.dart';
 import '../../../models/completion_entry/completion_entry.dart';
 import '../../../models/habit/habit_difficulty.dart';
 import '../../../models/habit/habit_model.dart';
-import '../../home/components/achievement_dialog.dart';
+import '../../home/components/habit_probability_dialog.dart';
 import '../enum/onboarding_step_enum.dart';
 
 /// Onboarding - Welcome page
@@ -603,7 +603,7 @@ class _OnboardingWelcomePageState extends State<OnboardingWelcomePage> with Tick
       await showDialog(
         context: context,
         barrierDismissible: false,
-        builder: (context) => AchievementDialog(
+        builder: (context) => HabitProbabilityDialog(
           habit: mockHabit,
           pointsGained: 10,
           previousScore: _runningStreak - 1,
