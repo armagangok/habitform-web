@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../provider/selected_habit_index_provider.dart';
 import '/core/core.dart';
 import '/features/home/provider/home_provider.dart';
 import '/models/habit/habit_model.dart';
 import '/services/habit_service/mock_habit_service.dart';
-import '../../provider/habit_formation_provider.dart';
-import '../../provider/habit_formation_state.dart';
+import '../../provider/habit_probability_provider.dart';
+import '../../provider/habit_probability_state.dart';
+import '../../provider/selected_habit_index_provider.dart';
 import 'habit_selector_button.dart';
 
 // Mock habit service provider
@@ -47,7 +47,7 @@ class HabitSelector extends ConsumerWidget {
     }
 
     // Check if we're using mock data
-    final statisticsState = ref.watch(formationProvider);
+    final statisticsState = ref.watch(probabilityProvider);
     final isMockData = statisticsState.value?.isMockData ?? false;
 
     return Column(

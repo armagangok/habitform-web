@@ -3,7 +3,7 @@ import 'package:lottie/lottie.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '/core/core.dart' hide showCupertinoSheet;
-import '../provider/habit_formation_provider.dart';
+import '../provider/habit_probability_provider.dart';
 import '../provider/selected_habit_index_provider.dart';
 import '../widgets/formation_widget/formation_insights_widget.dart';
 import '../widgets/habit_selector/habit_selector.dart';
@@ -29,7 +29,7 @@ class HabitProbabilityPage extends ConsumerWidget {
                   children: [
                     Consumer(
                       builder: (context, ref, child) {
-                        final statisticsAsyncValue = ref.watch(formationProvider);
+                        final statisticsAsyncValue = ref.watch(probabilityProvider);
 
                         return statisticsAsyncValue.when(
                           loading: () => const Center(child: CircularProgressIndicator()),
@@ -70,7 +70,7 @@ class HabitProbabilityPage extends ConsumerWidget {
             // Watermark for mock data
             Consumer(
               builder: (context, ref, child) {
-                final statisticsAsyncValue = ref.watch(formationProvider);
+                final statisticsAsyncValue = ref.watch(probabilityProvider);
 
                 if (statisticsAsyncValue is AsyncData && statisticsAsyncValue.value?.isMockData == true && statisticsAsyncValue.value?.habitStatistics.isNotEmpty == true) {
                   return Positioned(

@@ -114,7 +114,7 @@
                     "sub_features_1": "Tavan pilkkominen",
                     "sub_features_2": "Sisäkkäinen seuranta"
                 },
-                "formation_rate": {
+                "probability_rate": {
                     "title": "Tavan muodostumisaste",
                     "description": "Seuraa tavan muodostumisen edistymistä älykkäillä oivalluksilla. Näe, kuinka lähellä olet tavan pysyvää juurtumista.",
                     "sub_features_0": "Onnistumisen ennuste",
@@ -129,7 +129,7 @@
                     "sub_features_2": "Saavutuskuvat"
                 }
             },
-            "formation_score": "Muodostumispisteet",
+            "probability_score": "Muodostumispisteet",
             "previous": "Edellinen",
             "next": "Seuraava",
             "start": "Aloita"
@@ -201,7 +201,7 @@
         "achievement_consistency_champion": "Johdonmukaisuuden mestari",
         "achievement_weekend_warrior": "Viikonloppusoturi",
         "achievement_weekly_checkin": "Viikoittainen tsekkaus",
-        "achievement_formation_journey": "Muodostumismatka",
+        "achievement_probability_journey": "Muodostumismatka",
         "milestones": "Etapit",
         "milestone_one_week_warrior": "Yhden viikon sankari",
         "milestone_monthly_master": "Kuukauden mestari",
@@ -211,12 +211,12 @@
         "milestone_half_year_hero": "Puolivuotissankari",
         "milestone_one_year_legend": "Vuosilegenda",
         "progress": "Edistys",
-        "formation": "Muodostuminen",
-        "achievement_formation_threshold": "Saavutit muodostumiskynnyksen!",
+        "formation": "Probability",
+        "achievement_probability_threshold": "Saavutit muodostumiskynnyksen!",
         "achievement_consistency_description": "Toimit {{percentage}}% parhaasta putkestasi!",
         "achievement_weekend_description": "Pidät erinomaisen johdonmukaisuuden myös viikonloppuna!",
         "achievement_weekly_description": "Olet missannut {{days}} päivää tällä viikolla. Huomenna on uusi alku!",
-        "achievement_formation_description": "Olet {{percentage}}% matkalla tämän tavan muodostamiseen. Hermoradat vahvistuvat!",
+        "achievement_probability_description": "Olet {{percentage}}% matkalla tämän tavan muodostamiseen. Hermoradat vahvistuvat!",
         "quote_aristotle": "Erinomaisuus ei ole yksittäinen teko, vaan tapa. Et ole sitä, mitä teet silloin tällöin; olet sitä, mitä teet johdonmukaisesti.",
         "quote_aristotle_author": "Aristoteles",
         "quote_collier": "Menestys on pienten ponnistelujen summa, toistettuna päivästä toiseen.",
@@ -254,9 +254,9 @@
         "achievement_perfectionist_description": "{{rate}}% onnistumisprosentti!",
         "heatmap_stats_description": "{{days}} päivää suoritettu viimeisen vuoden aikana",
         "last_7_days": "Viimeiset 7 päivää",
-        "formation_info_title": "Muodostumispisteet",
-        "formation_info_description": "Muodostumispisteet näyttävät, kuinka todennäköisesti tapasi muuttuu automaattiseksi nykyisen suoritusasteesi perusteella. Korkeammat pisteet tarkoittavat, että tapasi on todennäköisemmin pysyvä.",
-        "formation_info_details": "Tämä piste lasketaan johdonmukaisuutesi ja suoritusasteesi perusteella. Tutkimusten mukaan keskimäärin 66 päivää säännöllistä harjoittelua tarvitaan, jotta tavasta tulee automaattinen."
+        "probability_info_title": "Muodostumispisteet",
+        "probability_info_description": "Muodostumispisteet näyttävät, kuinka todennäköisesti tapasi muuttuu automaattiseksi nykyisen suoritusasteesi perusteella. Korkeammat pisteet tarkoittavat, että tapasi on todennäköisemmin pysyvä.",
+        "probability_info_details": "Tämä piste lasketaan johdonmukaisuutesi ja suoritusasteesi perusteella. Tutkimusten mukaan keskimäärin 66 päivää säännöllistä harjoittelua tarvitaan, jotta tavasta tulee automaattinen."
     },
     "habit": {
         "add_habit": "Lisää tapa",
@@ -564,37 +564,37 @@
         "overview": "Yleiskatsaus",
         "no_data_for_habit": "Ei tilastodataa vielä",
         "start_tracking_habit": "Aloita tämän tavan seuranta",
-        "habit_formation": "Tavan muodostuminen",
+        "habit_formation": "Habit Probability",
         "completed": "Suoritettu",
         "total_days": "Päiviä yhteensä",
         "longest_streak": "Pis­kä putki",
         "current_streak": "Nykyinen putki",
-        "about_formation": "Tietoa tavan muodostumisesta",
+        "about_formation": "Todennäköisyydestä",
         "formation_info": "Yllä oleva prosenttiosuus näyttää, kuinka todennäköisesti tavasta tulee automaattinen nykyisen johdonmukaisuutesi perusteella. Korkeampi prosentti tarkoittaa suurempaa todennäköisyyttä.",
-        "formation_status": {
+        "probability_status": {
             "early": "Olet vielä alkuvaiheessa. Jatka johdonmukaista seurantaa nähdäksesi edistymistä.",
             "excellent": "Erinomaista edistystä! {percentage}% suoritusasteella tapasi on erittäin todennäköisesti muodostumassa automaattiseksi.",
             "very_good": "Hienoa johdonmukaisuutta! {percentage}% suoritusasteella tapasi on hyvällä mallilla.",
             "good": "Hyvää edistystä! {percentage}% suoritusaste osoittaa, että rakennat tätä tapaa onnistuneesti.",
-            "improving": "Teet edistystä. Yritä nostaa suoritusastetta, jotta tavan muodostuminen olisi todennäköisempää.",
+            "improving": "Teet edistystä. Yritä nostaa suoritusastetta, jotta tavan todennäköisyys olisi suurempi.",
             "needs_work": "Tarvitsee työtä. Säännöllinen suorittaminen auttaa tämän tavan automatisoitumista."
         },
-        "formation_time": {
-            "not_enough_data": "Jatka tavan seurantaa nähdäksesi muodostumisen edistymisen.",
+        "probability_time": {
+            "not_enough_data": "Jatka tavan seurantaa nähdäksesi todennäköisyyden edistymisen.",
             "completed_successful": "Onnittelut! Tapasi on todennäköisimmin vakiintunut ja automaattinen.",
-            "completed_good": "Hienoa! Olet suorittanut muodostumisjakson {percentage}% suoritusasteella. Tapasi on todennäköisesti vakiintunut.",
-            "completed_needs_work": "Olet suorittanut muodostumisjakson. Jatka säännöllistä harjoittelua vahvistaaksesi tapaa.",
-            "remaining_days": "Arviolta {days} päivää jäljellä muodostumisjaksossa. Jatka samalla linjalla."
+            "completed_good": "Hienoa! Olet suorittanut todennäköisyysjakson {percentage}% suoritusasteella. Tapasi on todennäköisesti vakiintunut.",
+            "completed_needs_work": "Olet suorittanut todennäköisyysjakson. Jatka säännöllistä harjoittelua vahvistaaksesi tapaa.",
+            "remaining_days": "Arviolta {days} päivää jäljellä todennäköisyysjaksossa. Jatka samalla linjalla."
         },
         "chart_labels": {
             "demo_data_message": "Tämä on demodata, päivitä avataksesi oikean datan",
             "upgrade_button": "Päivitä"
         },
-        "formation_score": "Muodostumispisteet",
+        "probability_score": "Todennäköisyyspisteet",
         "score_breakdown": "Pisteiden erittely",
         "progress_status": "Edistystila",
-        "estimated_formation_time": "Arvioitu muodostumisaika",
-        "about_formation_title": "Tietoa muodostumisesta",
+        "estimated_probability_time": "Arvioitu todennäköisyysaika",
+        "about_formation_title": "Todennäköisyydestä",
         "legend_below_60": "Alle 60%",
         "legend_needs_work": "Tarvitsee työtä",
         "legend_60_75": "60–75%",
@@ -726,6 +726,5 @@
         "russian": "Venäjä",
         "japanese": "Japani",
         "italian": "Itali"
-        
     }
 }

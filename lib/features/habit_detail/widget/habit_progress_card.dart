@@ -114,7 +114,7 @@ class HabitProgressCard extends ConsumerWidget {
       context: context,
       builder: (context) => CupertinoAlertDialog(
         title: Text(
-          LocaleKeys.habit_detail_formation_info_title.tr(),
+          LocaleKeys.habit_detail_probability_info_title.tr(),
           style: TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.bold,
@@ -128,7 +128,7 @@ class HabitProgressCard extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                LocaleKeys.habit_detail_formation_info_description.tr(),
+                LocaleKeys.habit_detail_probability_info_description.tr(),
                 style: TextStyle(
                   fontSize: 16,
                   color: context.bodyMedium.color,

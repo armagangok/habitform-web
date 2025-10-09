@@ -114,7 +114,7 @@
                     "sub_features_1": "习惯分解",
                     "sub_features_2": "嵌套追踪"
                 },
-                "formation_rate": {
+                "probability_rate": {
                     "title": "习惯养成率",
                     "description": "通过智能洞察追踪你的习惯养成进度。看看你离让习惯永久坚持还有多远。",
                     "sub_features_0": "成功预测",
@@ -129,7 +129,7 @@
                     "sub_features_2": "成就图片"
                 }
             },
-            "formation_score": "养成分数",
+            "probability_score": "养成分数",
             "previous": "上一页",
             "next": "下一页",
             "start": "开始"
@@ -201,7 +201,7 @@
         "achievement_consistency_champion": "一致性冠军",
         "achievement_weekend_warrior": "周末战士",
         "achievement_weekly_checkin": "周检查",
-        "achievement_formation_journey": "养成之旅",
+        "achievement_probability_journey": "养成之旅",
         "milestones": "里程碑",
         "milestone_one_week_warrior": "一周战士",
         "milestone_monthly_master": "月度大师",
@@ -211,12 +211,12 @@
         "milestone_half_year_hero": "半年英雄",
         "milestone_one_year_legend": "一年传奇",
         "progress": "进度",
-        "formation": "养成",
-        "achievement_formation_threshold": "达到养成阈值！",
+        "formation": "Probability",
+        "achievement_probability_threshold": "达到养成阈值！",
         "achievement_consistency_description": "你的表现达到了最佳连续天数的 {{percentage}}%！",
         "achievement_weekend_description": "即使在周末你也保持很好的一致性！",
         "achievement_weekly_description": "你这周错过了 {{days}} 天。明天是新的开始！",
-        "achievement_formation_description": "你已完成这个习惯养成的 {{percentage}}%。神经通路正在加强！",
+        "achievement_probability_description": "你已完成这个习惯养成的 {{percentage}}%。神经通路正在加强！",
         "quote_aristotle": "卓越不是单一的行为，而是一种习惯。你不是偶尔做什么，而是持续做什么。",
         "quote_aristotle_author": "亚里士多德",
         "quote_collier": "成功是日复一日重复的小努力的总和。",
@@ -254,9 +254,9 @@
         "achievement_perfectionist_description": "{{rate}}% 成功率！",
         "heatmap_stats_description": "去年完成了 {{days}} 天",
         "last_7_days": "最近7天",
-        "formation_info_title": "养成分数",
-        "formation_info_description": "养成分数显示基于你当前完成率，你的习惯变得自动化的可能性。分数越高意味着你的习惯越可能永久坚持。",
-        "formation_info_details": "这个分数是根据你的一致性模式和完成率计算的。研究表明，习惯平均需要66天的规律练习才能变得自动化。"
+        "probability_info_title": "养成分数",
+        "probability_info_description": "养成分数显示基于你当前完成率，你的习惯变得自动化的可能性。分数越高意味着你的习惯越可能永久坚持。",
+        "probability_info_details": "这个分数是根据你的一致性模式和完成率计算的。研究表明，习惯平均需要66天的规律练习才能变得自动化。"
     },
     "habit": {
         "add_habit": "添加习惯",
@@ -564,37 +564,37 @@
         "overview": "概览",
         "no_data_for_habit": "暂无统计数据",
         "start_tracking_habit": "开始追踪这个习惯",
-        "habit_formation": "习惯养成",
+        "habit_formation": "Habit Probability",
         "completed": "已完成",
         "total_days": "总天数",
         "longest_streak": "最长连续",
         "current_streak": "当前连续",
-        "about_formation": "关于习惯养成",
+        "about_formation": "关于习惯概率",
         "formation_info": "上面的百分比显示基于你当前一致性，你的习惯变得自动化的可能性。百分比越高意味着你的习惯越可能坚持。根据研究，习惯平均需要66天的规律练习才能变得自动化。",
-        "formation_status": {
-            "early": "你仍处于早期阶段。持续追踪你的习惯以看到有意义的养成进度。",
+        "probability_status": {
+            "early": "你仍处于早期阶段。持续追踪你的习惯以看到有意义的概率进度。",
             "excellent": "出色的进度！{{percentage}}% 的完成率，你的习惯很可能变得自动化。",
-            "very_good": "很好的一致性！{{percentage}}% 的完成率，你的习惯养成正在正轨上。",
+            "very_good": "很好的一致性！{{percentage}}% 的完成率，你的习惯概率正在正轨上。",
             "good": "良好的进度！你 {{percentage}}% 的完成率显示你正在成功建立这个习惯。",
-            "improving": "你正在进步。尝试提高你的完成率以使习惯养成更可能。",
+            "improving": "你正在进步。尝试提高你的完成率以使习惯概率更可能。",
             "needs_work": "继续努力保持一致性。规律完成将帮助这个习惯变得自动化。"
         },
-        "formation_time": {
-            "not_enough_data": "继续追踪你的习惯以看到养成进度。",
+        "probability_time": {
+            "not_enough_data": "继续追踪你的习惯以看到概率进度。",
             "completed_successful": "恭喜！你的习惯很可能已经建立并自动化。",
-            "completed_good": "做得好！你以 {{percentage}}% 的完成率完成了养成期。你的习惯很可能已经建立。",
-            "completed_needs_work": "你已完成养成期。继续规律练习以加强你的习惯。",
-            "remaining_days": "养成期估计还剩 {days} 天。保持一致的练习。"
+            "completed_good": "做得好！你以 {{percentage}}% 的完成率完成了概率期。你的习惯很可能已经建立。",
+            "completed_needs_work": "你已完成概率期。继续规律练习以加强你的习惯。",
+            "remaining_days": "概率期估计还剩 {days} 天。保持一致的练习。"
         },
         "chart_labels": {
             "demo_data_message": "这是演示数据，升级以解锁真实数据",
             "upgrade_button": "升级"
         },
-        "formation_score": "养成分数",
+        "probability_score": "概率分数",
         "score_breakdown": "分数分解",
         "progress_status": "进度状态",
-        "estimated_formation_time": "估计养成时间",
-        "about_formation_title": "关于养成",
+        "estimated_probability_time": "估计概率时间",
+        "about_formation_title": "关于概率",
         "legend_below_60": "低于60%",
         "legend_needs_work": "需要努力",
         "legend_60_75": "60-75%",

@@ -66,7 +66,7 @@ class WidgetService {
     });
 
     // Calculate Flutter-provided values
-    final formationProbability = habit.calculateHabitProbability();
+    final probabilityScore = habit.calculateHabitProbability();
     final longestStreak = habit.calculateLongestStreak();
     final currentStreak = habit.calculateCurrentStreak();
     final completedDays = habit.completions.values.where((e) => e.isCompleted).length;
@@ -85,7 +85,7 @@ class WidgetService {
       'categoryIds': habit.categoryIds,
       'difficulty': habit.difficulty.name,
       // Flutter-provided calculated values
-      'flutterFormationProbability': formationProbability,
+      'flutterProbabilityScore': probabilityScore,
       'flutterLongestStreak': longestStreak,
       'flutterCurrentStreak': currentStreak,
       'flutterCompletedDays': completedDays,

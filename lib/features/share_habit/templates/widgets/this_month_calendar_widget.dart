@@ -2,7 +2,7 @@ import '../../../../core/core.dart';
 import '../../../../models/habit/habit_extension.dart';
 import '../../../../models/habit/habit_model.dart';
 
-class ThisMonthCalendarWidget extends StatelessWidget {
+class ThisMonthCalendarWidget extends StatefulWidget {
   final Habit habit;
 
   const ThisMonthCalendarWidget({
@@ -11,12 +11,51 @@ class ThisMonthCalendarWidget extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
-    final now = DateTime.now();
-    final currentMonth = now.month;
-    final currentYear = now.year;
+  State<ThisMonthCalendarWidget> createState() => _ThisMonthCalendarWidgetState();
+}
 
-    final habitColor = Color(habit.colorCode);
+class _ThisMonthCalendarWidgetState extends State<ThisMonthCalendarWidget> {
+  late DateTime selectedDate;
+
+  @override
+  void initState() {
+    super.initState();
+    selectedDate = DateTime.now();
+  }
+
+  void _showMonthPicker() {
+    showCupertinoModalPopup<void>(
+      context: context,
+      builder: (BuildContext context) => Container(
+        height: 216,
+        padding: const EdgeInsets.only(top: 6.0),
+        margin: EdgeInsets.only(
+          bottom: MediaQuery.of(context).viewInsets.bottom,
+        ),
+        color: CupertinoColors.systemBackground.resolveFrom(context),
+        child: SafeArea(
+          top: false,
+          child: CupertinoDatePicker(
+            initialDateTime: selectedDate,
+            mode: CupertinoDatePickerMode.monthYear,
+            use24hFormat: true,
+            onDateTimeChanged: (DateTime newDate) {
+              setState(() {
+                selectedDate = newDate;
+              });
+            },
+          ),
+        ),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final currentMonth = selectedDate.month;
+    final currentYear = selectedDate.year;
+
+    final habitColor = Color(widget.habit.colorCode);
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -45,31 +84,32 @@ class ThisMonthCalendarWidget extends StatelessWidget {
     final date = DateTime(year, month);
     final monthName = DateFormat('MMMM yyyy', context.locale.languageCode).format(date);
     // Sum total completions (counts) in this month for multi-completion support
-    final int monthlyTotalCount = habit.completions.values.where((entry) => entry.date.year == year && entry.date.month == month && entry.isCompleted).fold<int>(0, (sum, entry) => sum + entry.count);
 
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text(
-          monthName,
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.w600,
-            color: context.primaryContrastingColor.withValues(alpha: 0.9),
-          ),
-        ),
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-          decoration: BoxDecoration(
-            color: context.primaryContrastingColor.withValues(alpha: 0.125),
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: Text(
-            '${LocaleKeys.share_templates_this_month.tr()} $monthlyTotalCount',
-            style: TextStyle(
-              fontSize: 13,
-              fontWeight: FontWeight.w600,
-              color: context.primaryContrastingColor.withValues(alpha: 0.9),
+        CupertinoButton(
+          onPressed: _showMonthPicker,
+          padding: EdgeInsets.zero,
+          minimumSize: Size.zero,
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            decoration: BoxDecoration(
+              color: context.primaryContrastingColor.withValues(alpha: 0.1),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  monthName,
+                  style: TextStyle(
+                    fontSize: 15,
+                    color: context.primaryContrastingColor.withValues(alpha: 0.9),
+                  ),
+                ),
+              ],
             ),
           ),
         ),
@@ -84,14 +124,14 @@ class ThisMonthCalendarWidget extends StatelessWidget {
     final firstWeekday = firstDayOfMonth.weekday % 7; // 0 = Sunday, 6 = Saturday
 
     // Get completion data for this month (dates only for ratio calculation)
-    final completions = habit.getCompletionsForMonth(year, month);
-    final firstCompletionDate = habit.getFirstCompletionDate();
+    final completions = widget.habit.getCompletionsForMonth(year, month);
+    final firstCompletionDate = widget.habit.getFirstCompletionDate();
 
     // Create a map of completion ratios for each date
     final Map<DateTime, double> completionRatios = {};
     for (final date in completions) {
       final normalizedDate = DateUtils.dateOnly(date);
-      final ratio = habit.getCompletionRatioForDate(normalizedDate);
+      final ratio = widget.habit.getCompletionRatioForDate(normalizedDate);
       completionRatios[normalizedDate] = ratio;
     }
 

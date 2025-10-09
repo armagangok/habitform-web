@@ -99,6 +99,7 @@
         "app_features": {
             "title": "HabitForm's Unique Features",
             "subtitle": "Our most advanced features for our most dedicated users",
+            "continue": "Continue",
             "features": {
                 "habit_probability": {
                     "title": "Habit Probability",
@@ -143,7 +144,7 @@
                     "sub_features_2": "Celebrate Wins"
                 }
             },
-            "formation_score": "Formation Score",
+            "formation_score": "Probability Score",
             "previous": "Previous",
             "next": "Next",
             "start": "Start"
@@ -215,7 +216,7 @@
         "achievement_consistency_champion": "Consistency Champion",
         "achievement_weekend_warrior": "Weekend Warrior",
         "achievement_weekly_checkin": "Weekly Check-in",
-        "achievement_formation_journey": "Formation Journey",
+        "achievement_probability_journey": "Probability Journey",
         "milestones": "Milestones",
         "milestone_one_week_warrior": "One Week Warrior",
         "milestone_monthly_master": "Monthly Master",
@@ -225,12 +226,12 @@
         "milestone_half_year_hero": "Half-Year Hero",
         "milestone_one_year_legend": "One-Year Legend",
         "progress": "Progress",
-        "formation": "Formation",
-        "achievement_formation_threshold": "Reached the formation threshold!",
+        "formation": "Probability",
+        "achievement_probability_threshold": "Reached the probability threshold!",
         "achievement_consistency_description": "You're performing at {{percentage}}% of your best streak!",
         "achievement_weekend_description": "You maintain great consistency even on weekends!",
         "achievement_weekly_description": "You've missed {{days}} days this week. Tomorrow is a fresh start!",
-        "achievement_formation_description": "You're {{percentage}}% through building this habit. The neural pathways are strengthening!",
+        "achievement_probability_description": "You're {{percentage}}% through building this habit. The neural pathways are strengthening!",
         "quote_aristotle": "Excellence is not a single act, but a habit. You are not what you do once in a while; you are what you do consistently.",
         "quote_aristotle_author": "Aristotle",
         "quote_collier": "Success is the sum of small efforts, repeated day in and day out.",
@@ -268,9 +269,9 @@
         "achievement_perfectionist_description": "{{rate}}% success rate!",
         "heatmap_stats_description": "{{days}} days completed in the last year",
         "last_7_days": "Last 7 Days",
-        "formation_info_title": "Formation Score",
-        "formation_info_description": "The Formation Score shows how likely your habit is to become automatic based on your current completion rate. Higher scores mean your habit is more likely to stick permanently.",
-        "formation_info_details": "This score is calculated using your consistency patterns and completion rate. Research shows it takes an average of 66 days of regular practice for a habit to become automatic."
+        "probability_info_title": "Probability Score",
+        "probability_info_description": "The Probability Score shows how likely your habit is to become automatic based on your current completion rate. Higher scores mean your habit is more likely to stick permanently.",
+        "probability_info_details": "This score is calculated using your consistency patterns and completion rate. Research shows it takes an average of 66 days of regular practice for a habit to become automatic."
     },
     "habit": {
         "add_habit": "Add Habit",
@@ -319,8 +320,8 @@
         },
         "difficulty": {
             "title": "Difficulty",
-            "question": "How difficult is this habit to build?",
-            "info": "Choose how challenging this habit feels. We use this to estimate formation time and personalize insights.",
+            "question": "How challenging does this habit feel? We’ll tailor the estimated formation time based on your choice.",
+            "info": "We use a research‑based model to estimate how long it takes for this habit to become automatic. Easier habits get shorter timelines, while more challenging habits require longer ones. Your consistency can accelerate the timeline.",
             "very_easy": "Very Easy",
             "easy": "Easy",
             "moderate": "Moderate",
@@ -578,37 +579,37 @@
         "overview": "Overview",
         "no_data_for_habit": "No statistics data yet",
         "start_tracking_habit": "Start tracking this habit",
-        "habit_formation": "Habit Formation",
+        "habit_formation": "Habit Probability",
         "completed": "Completed",
         "total_days": "Total Days",
         "longest_streak": "Longest Streak",
         "current_streak": "Current Streak",
-        "about_formation": "About Habit Formation",
+        "about_formation": "About Habit Probability",
         "formation_info": "The percentage above shows how likely your habit is to become automatic based on your current consistency. Higher percentages mean your habit is more likely to stick. According to research, it takes an average of 66 days of regular practice for a habit to become automatic.",
-        "formation_status": {
-            "early": "You're still in the early stages. Keep tracking your habit consistently to see meaningful formation progress.",
+        "probability_status": {
+            "early": "You're still in the early stages. Keep tracking your habit consistently to see meaningful probability progress.",
             "excellent": "Outstanding progress! With a {percentage}% completion rate, your habit is very likely to become automatic.",
-            "very_good": "Great consistency! With a {percentage}% completion rate, your habit formation is on track.",
+            "very_good": "Great consistency! With a {percentage}% completion rate, your habit probability is on track.",
             "good": "Good progress! Your {percentage}% completion rate shows you're building this habit successfully.",
-            "improving": "You're making progress. Try to increase your completion rate to make habit formation more likely.",
+            "improving": "You're making progress. Try to increase your completion rate to make habit probability more likely.",
             "needs_work": "Keep working on consistency. Regular completion will help this habit become automatic."
         },
-        "formation_time": {
-            "not_enough_data": "Keep tracking your habit to see formation progress.",
+        "probability_time": {
+            "not_enough_data": "Keep tracking your habit to see probability progress.",
             "completed_successful": "Congratulations! Your habit is most likely established and automatic.",
-            "completed_good": "Great job! You've completed the formation period with a {percentage}% completion rate. Your habit is likely established.",
-            "completed_needs_work": "You've completed the formation period. Continue with regular practice to strengthen your habit.",
-            "remaining_days": "Estimated {days} days left in the formation period. Keep up the consistent practice."
+            "completed_good": "Great job! You've completed the probability period with a {percentage}% completion rate. Your habit is likely established.",
+            "completed_needs_work": "You've completed the probability period. Continue with regular practice to strengthen your habit.",
+            "remaining_days": "Estimated {days} days left in the probability period. Keep up the consistent practice."
         },
         "chart_labels": {
             "demo_data_message": "This is demo data, upgrade to unlock real data",
             "upgrade_button": "Upgrade"
         },
-        "formation_score": "Formation Score",
+        "probability_score": "Probability Score",
         "score_breakdown": "Score Breakdown",
         "progress_status": "Progress Status",
-        "estimated_formation_time": "Estimated Formation Time",
-        "about_formation_title": "About Formation",
+        "estimated_probability_time": "Estimated Probability Time",
+        "about_formation_title": "About Probability",
         "legend_below_60": "Below 60%",
         "legend_needs_work": "Needs Work",
         "legend_60_75": "60-75%",
@@ -726,7 +727,7 @@
         "great_progress": "Great progress! You're building strong neural pathways. {days} days to go! 💪",
         "good_work": "Good work! This {difficulty} habit needs {total} days total. {remaining} days remaining! 📈",
         "keep_going_message": "Keep going! Consistency is key. This {difficulty} habit needs {remaining} more days! 🌱",
-        "formation_takes_days": "This habit takes {total} days of consistent practice to form"
+        "formation_takes_days": "This habit takes {total} days of consistent practice to establish"
     },
     "languages": {
         "english": "English",

@@ -114,7 +114,7 @@
                     "sub_features_1": "習慣の分解",
                     "sub_features_2": "ネストトラッキング"
                 },
-                "formation_rate": {
+                "probability_rate": {
                     "title": "習慣形成率",
                     "description": "インテリジェントなインサイトで習慣形成の進捗を追跡。習慣を永続的に定着させるまでどれくらい近いかを見てください。",
                     "sub_features_0": "成功予測",
@@ -129,7 +129,7 @@
                     "sub_features_2": "成果画像"
                 }
             },
-            "formation_score": "形成スコア",
+            "probability_score": "形成スコア",
             "previous": "前へ",
             "next": "次へ",
             "start": "スタート"
@@ -201,7 +201,7 @@
         "achievement_consistency_champion": "一貫性チャンピオン",
         "achievement_weekend_warrior": "週末戦士",
         "achievement_weekly_checkin": "週次チェックイン",
-        "achievement_formation_journey": "形成の旅",
+        "achievement_probability_journey": "形成の旅",
         "milestones": "マイルストーン",
         "milestone_one_week_warrior": "1週間戦士",
         "milestone_monthly_master": "月間マスター",
@@ -211,12 +211,12 @@
         "milestone_half_year_hero": "半年ヒーロー",
         "milestone_one_year_legend": "1年伝説",
         "progress": "進捗",
-        "formation": "形成",
-        "achievement_formation_threshold": "形成閾値に到達しました！",
+        "formation": "Probability",
+        "achievement_probability_threshold": "形成閾値に到達しました！",
         "achievement_consistency_description": "最高ストリークの{{percentage}}%のパフォーマンスです！",
         "achievement_weekend_description": "週末でも素晴らしい一貫性を維持しています！",
         "achievement_weekly_description": "今週{{days}}日間逃しました。明日は新しいスタートです！",
-        "achievement_formation_description": "この習慣の構築を{{percentage}}%完了しました。神経経路が強化されています！",
+        "achievement_probability_description": "この習慣の構築を{{percentage}}%完了しました。神経経路が強化されています！",
         "quote_aristotle": "卓越性は単一の行為ではなく、習慣です。あなたは時々するものではなく、一貫してするものなのです。",
         "quote_aristotle_author": "アリストテレス",
         "quote_collier": "成功は、日々繰り返される小さな努力の積み重ねです。",
@@ -254,9 +254,9 @@
         "achievement_perfectionist_description": "{{rate}}%成功率！",
         "heatmap_stats_description": "過去1年で{{days}}日完了",
         "last_7_days": "過去7日間",
-        "formation_info_title": "形成スコア",
-        "formation_info_description": "形成スコアは、現在の完了率に基づいて習慣が自動的になる可能性を示します。スコアが高いほど、習慣が永続的に定着する可能性が高くなります。",
-        "formation_info_details": "このスコアは一貫性パターンと完了率を使用して計算されます。研究によると、習慣が自動的になるまで平均66日間の定期的な練習が必要です。"
+        "probability_info_title": "形成スコア",
+        "probability_info_description": "形成スコアは、現在の完了率に基づいて習慣が自動的になる可能性を示します。スコアが高いほど、習慣が永続的に定着する可能性が高くなります。",
+        "probability_info_details": "このスコアは一貫性パターンと完了率を使用して計算されます。研究によると、習慣が自動的になるまで平均66日間の定期的な練習が必要です。"
     },
     "habit": {
         "add_habit": "習慣を追加",
@@ -564,37 +564,37 @@
         "overview": "概要",
         "no_data_for_habit": "まだ統計データがありません",
         "start_tracking_habit": "この習慣の追跡を開始",
-        "habit_formation": "習慣形成",
+        "habit_formation": "Habit Probability",
         "completed": "完了",
         "total_days": "総日数",
         "longest_streak": "最長ストリーク",
         "current_streak": "現在のストリーク",
-        "about_formation": "習慣形成について",
+        "about_formation": "習慣の確率について",
         "formation_info": "上記のパーセンテージは、現在の一貫性に基づいて習慣が自動的になる可能性を示しています。パーセンテージが高いほど、習慣が定着する可能性が高くなります。研究によると、習慣が自動的になるまで平均66日間の定期的な練習が必要です。",
-        "formation_status": {
-            "early": "まだ初期段階です。意味のある形成の進捗を見るために、習慣を一貫して追跡し続けてください。",
+        "probability_status": {
+            "early": "まだ初期段階です。意味のある確率の進捗を見るために、習慣を一貫して追跡し続けてください。",
             "excellent": "素晴らしい進捗！{percentage}%の完了率で、習慣が自動的になる可能性が非常に高いです。",
-            "very_good": "素晴らしい一貫性！{percentage}%の完了率で、習慣形成は順調です。",
+            "very_good": "素晴らしい一貫性！{percentage}%の完了率で、習慣の確率は順調です。",
             "good": "良い進捗！{percentage}%の完了率は、この習慣を成功裏に築いていることを示しています。",
-            "improving": "進歩しています。習慣形成の可能性を高めるために完了率を上げてみてください。",
+            "improving": "進歩しています。習慣の確率の可能性を高めるために完了率を上げてみてください。",
             "needs_work": "一貫性に取り組み続けてください。定期的な完了がこの習慣を自動的にするのに役立ちます。"
         },
-        "formation_time": {
-            "not_enough_data": "形成の進捗を見るために習慣の追跡を続けてください。",
+        "probability_time": {
+            "not_enough_data": "確率の進捗を見るために習慣の追跡を続けてください。",
             "completed_successful": "おめでとうございます！習慣は確立され、自動的になっている可能性が高いです。",
-            "completed_good": "素晴らしい！{percentage}%の完了率で形成期間を完了しました。習慣は確立されている可能性が高いです。",
-            "completed_needs_work": "形成期間を完了しました。習慣を強化するために定期的な練習を続けてください。",
-            "remaining_days": "形成期間まで推定{days}日残っています。一貫した練習を続けてください。"
+            "completed_good": "素晴らしい！{percentage}%の完了率で確率期間を完了しました。習慣は確立されている可能性が高いです。",
+            "completed_needs_work": "確率期間を完了しました。習慣を強化するために定期的な練習を続けてください。",
+            "remaining_days": "確率期間まで推定{days}日残っています。一貫した練習を続けてください。"
         },
         "chart_labels": {
             "demo_data_message": "これはデモデータです。実際のデータをアンロックするにはアップグレードしてください",
             "upgrade_button": "アップグレード"
         },
-        "formation_score": "形成スコア",
+        "probability_score": "確率スコア",
         "score_breakdown": "スコア内訳",
         "progress_status": "進捗ステータス",
-        "estimated_formation_time": "推定形成時間",
-        "about_formation_title": "形成について",
+        "estimated_probability_time": "推定確率時間",
+        "about_formation_title": "確率について",
         "legend_below_60": "60%未満",
         "legend_needs_work": "要改善",
         "legend_60_75": "60-75%",

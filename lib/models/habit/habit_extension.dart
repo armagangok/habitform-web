@@ -173,9 +173,9 @@ extension HabitUtils on Habit {
   }
 
   // Get remaining days for formation
-  int getRemainingFormationDays() {
+  int getRemainingProbabilityDays() {
     final completedDays = calculateFormationScoreFromFirstCompletion();
-    final remaining = difficulty.estimatedFormationDays - completedDays;
+    final remaining = difficulty.estimatedProbabilityDays - completedDays;
     return remaining > 0 ? remaining : 0;
   }
 
@@ -255,7 +255,7 @@ extension HabitUtils on Habit {
   double _calculateGrowthRate() {
     // Base growth rate inversely related to formation days
     // Easier habits (fewer days) get higher growth rates
-    final double baseRate = 66.0 / difficulty.estimatedFormationDays; // Normalize to 66-day baseline
+    final double baseRate = 66.0 / difficulty.estimatedProbabilityDays; // Normalize to 66-day baseline
 
     // Adjust based on minimum completion rate (easier habits have higher requirements)
     final double adjustedRate = baseRate * (0.8 + difficulty.minimumCompletionRate * 0.4);
@@ -269,7 +269,7 @@ extension HabitUtils on Habit {
   double _calculateDecayRate() {
     // Base decay rate directly related to formation days
     // Easier habits (fewer days) get lower decay rates
-    final double baseRate = difficulty.estimatedFormationDays / 66.0; // Normalize to 66-day baseline
+    final double baseRate = difficulty.estimatedProbabilityDays / 66.0; // Normalize to 66-day baseline
 
     // Adjust based on minimum completion rate
     final double adjustedRate = baseRate * (0.8 + (1 - difficulty.minimumCompletionRate) * 0.4);

@@ -5,7 +5,7 @@ import '../../../models/completion_entry/completion_entry.dart';
 import '../../../models/habit/habit_model.dart';
 import '../../../services/habit_service/habit_service_interface.dart';
 import '../../../services/widget_sync_service.dart';
-import '../../habit_probability/provider/habit_formation_provider.dart';
+import '../../habit_probability/provider/habit_probability_provider.dart';
 import '../../home/provider/home_provider.dart';
 import 'habit_statistics_provider.dart';
 
@@ -128,7 +128,7 @@ class HabitDetailNotifier extends AutoDisposeNotifier<Habit?> {
 
         // Update formation provider
         final formationStart = DateTime.now();
-        await ref.read(formationProvider.notifier).refreshFormationStatistics();
+        await ref.read(probabilityProvider.notifier).refreshFormationStatistics();
         final formationEnd = DateTime.now();
         LogHelper.shared.debugPrint("📊 [PERF] Formation provider updated in ${formationEnd.difference(formationStart).inMilliseconds}ms");
 
@@ -188,7 +188,7 @@ class HabitDetailNotifier extends AutoDisposeNotifier<Habit?> {
         await ref.read(homeProvider.notifier).refreshHabits();
 
         // Formation provider'ı da güncelle
-        await ref.read(formationProvider.notifier).refreshFormationStatistics();
+        await ref.read(probabilityProvider.notifier).refreshFormationStatistics();
         LogHelper.shared.debugPrint("Successfully removed completion and updated state");
       } else {
         LogHelper.shared.debugPrint("No completion found for the specified date");

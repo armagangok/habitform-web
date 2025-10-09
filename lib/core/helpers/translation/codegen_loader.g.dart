@@ -130,7 +130,7 @@ class CodegenLoader extends AssetLoader{
           "sub_features_1": "Scomposizione Abitudini",
           "sub_features_2": "Monitoraggio Annidato"
         },
-        "formation_rate": {
+        "probability_rate": {
           "title": "Tasso di Formazione Abitudini",
           "description": "Tieni traccia dei tuoi progressi nella formazione delle abitudini con approfondimenti intelligenti. Vedi quanto sei vicino a rendere le tue abitudini permanenti.",
           "sub_features_0": "Previsione Successo",
@@ -145,7 +145,7 @@ class CodegenLoader extends AssetLoader{
           "sub_features_2": "Immagini Successi"
         }
       },
-      "formation_score": "Punteggio Formazione",
+      "probability_score": "Punteggio Formazione",
       "previous": "Precedente",
       "next": "Prossimo",
       "start": "Inizia"
@@ -217,7 +217,7 @@ class CodegenLoader extends AssetLoader{
     "achievement_consistency_champion": "Campione di Costanza",
     "achievement_weekend_warrior": "Guerriero del Weekend",
     "achievement_weekly_checkin": "Check-in Settimanale",
-    "achievement_formation_journey": "Viaggio di Formazione",
+    "achievement_probability_journey": "Viaggio di Formazione",
     "milestones": "Traguardi",
     "milestone_one_week_warrior": "Guerriero di Una Settimana",
     "milestone_monthly_master": "Maestro Mensile",
@@ -227,12 +227,12 @@ class CodegenLoader extends AssetLoader{
     "milestone_half_year_hero": "Eroe del Semestre",
     "milestone_one_year_legend": "Leggenda dell'Anno",
     "progress": "Progresso",
-    "formation": "Formazione",
-    "achievement_formation_threshold": "Soglia di formazione raggiunta!",
+    "formation": "Probability",
+    "achievement_probability_threshold": "Soglia di formazione raggiunta!",
     "achievement_consistency_description": "Stai performando al {{percentage}}% della tua serie migliore!",
     "achievement_weekend_description": "Mantieni un'ottima costanza anche nei weekend!",
     "achievement_weekly_description": "Hai saltato {{days}} giorni questa settimana. Domani è un nuovo inizio!",
-    "achievement_formation_description": "Sei al {{percentage}}% della costruzione di questa abitudine. I percorsi neurali si stanno rafforzando!",
+    "achievement_probability_description": "Sei al {{percentage}}% della costruzione di questa abitudine. I percorsi neurali si stanno rafforzando!",
     "quote_aristotle": "L'eccellenza non è un atto singolo, ma un'abitudine. Non sei ciò che fai una volta ogni tanto; sei ciò che fai costantemente.",
     "quote_aristotle_author": "Aristotele",
     "quote_collier": "Il successo è la somma di piccoli sforzi, ripetuti giorno dopo giorno.",
@@ -270,9 +270,9 @@ class CodegenLoader extends AssetLoader{
     "achievement_perfectionist_description": "Tasso di successo del {{rate}}%!",
     "heatmap_stats_description": "{{days}} giorni completati nell'ultimo anno",
     "last_7_days": "Ultimi 7 Giorni",
-    "formation_info_title": "Punteggio Formazione",
-    "formation_info_description": "Il Punteggio di Formazione mostra quanto è probabile che la tua abitudine diventi automatica in base al tuo attuale tasso di completamento. Punteggi più alti significano che è più probabile che la tua abitudine resti permanentemente.",
-    "formation_info_details": "Questo punteggio è calcolato utilizzando i tuoi modelli di costanza e tasso di completamento. La ricerca mostra che occorrono in media 66 giorni di pratica regolare affinché un'abitudine diventi automatica."
+    "probability_info_title": "Punteggio Formazione",
+    "probability_info_description": "Il Punteggio di Formazione mostra quanto è probabile che la tua abitudine diventi automatica in base al tuo attuale tasso di completamento. Punteggi più alti significano che è più probabile che la tua abitudine resti permanentemente.",
+    "probability_info_details": "Questo punteggio è calcolato utilizzando i tuoi modelli di costanza e tasso di completamento. La ricerca mostra che occorrono in media 66 giorni di pratica regolare affinché un'abitudine diventi automatica."
   },
   "habit": {
     "add_habit": "Aggiungi Abitudine",
@@ -580,37 +580,37 @@ class CodegenLoader extends AssetLoader{
     "overview": "Panoramica",
     "no_data_for_habit": "Ancora nessun dato statistico",
     "start_tracking_habit": "Inizia a tracciare questa abitudine",
-    "habit_formation": "Formazione Abitudine",
+    "habit_formation": "Habit Probability",
     "completed": "Completate",
     "total_days": "Giorni Totali",
     "longest_streak": "Serie Più Lunga",
     "current_streak": "Serie Attuale",
-    "about_formation": "Informazioni sulla Formazione delle Abitudini",
+    "about_formation": "Sulla Probabilità delle Abitudini",
     "formation_info": "La percentuale sopra mostra quanto è probabile che la tua abitudine diventi automatica in base alla tua attuale costanza. Percentuali più alte significano che è più probabile che la tua abitudine resti. Secondo la ricerca, occorrono in media 66 giorni di pratica regolare affinché un'abitudine diventi automatica.",
-    "formation_status": {
-      "early": "Sei ancora nelle fasi iniziali. Continua a tracciare la tua abitudine con costanza per vedere progressi significativi nella formazione.",
+    "probability_status": {
+      "early": "Sei ancora nelle fasi iniziali. Continua a tracciare la tua abitudine con costanza per vedere progressi significativi nella probabilità.",
       "excellent": "Progressi eccezionali! Con un tasso di completamento del {percentage}%, è molto probabile che la tua abitudine diventi automatica.",
-      "very_good": "Grande costanza! Con un tasso di completamento del {percentage}%, la formazione della tua abitudine è sulla buona strada.",
+      "very_good": "Grande costanza! Con un tasso di completamento del {percentage}%, la probabilità della tua abitudine è sulla buona strada.",
       "good": "Buoni progressi! Il tuo tasso di completamento del {percentage}% mostra che stai costruendo con successo questa abitudine.",
-      "improving": "Stai facendo progressi. Prova ad aumentare il tuo tasso di completamento per rendere più probabile la formazione dell'abitudine.",
+      "improving": "Stai facendo progressi. Prova ad aumentare il tuo tasso di completamento per rendere più probabile la probabilità dell'abitudine.",
       "needs_work": "Continua a lavorare sulla costanza. Il completamento regolare aiuterà questa abitudine a diventare automatica."
     },
-    "formation_time": {
-      "not_enough_data": "Continua a tracciare la tua abitudine per vedere i progressi di formazione.",
+    "probability_time": {
+      "not_enough_data": "Continua a tracciare la tua abitudine per vedere i progressi di probabilità.",
       "completed_successful": "Congratulazioni! La tua abitudine è molto probabilmente stabilita e automatica.",
-      "completed_good": "Ottimo lavoro! Hai completato il periodo di formazione con un tasso di completamento del {percentage}%. La tua abitudine è probabilmente stabilita.",
-      "completed_needs_work": "Hai completato il periodo di formazione. Continua con la pratica regolare per rafforzare la tua abitudine.",
-      "remaining_days": "Rimangono circa {days} giorni nel periodo di formazione. Continua con la pratica costante."
+      "completed_good": "Ottimo lavoro! Hai completato il periodo di probabilità con un tasso di completamento del {percentage}%. La tua abitudine è probabilmente stabilita.",
+      "completed_needs_work": "Hai completato il periodo di probabilità. Continua con la pratica regolare per rafforzare la tua abitudine.",
+      "remaining_days": "Rimangono circa {days} giorni nel periodo di probabilità. Continua con la pratica costante."
     },
     "chart_labels": {
       "demo_data_message": "Questi sono dati dimostrativi, effettua l'upgrade per sbloccare i dati reali",
       "upgrade_button": "Effettua l'Upgrade"
     },
-    "formation_score": "Punteggio Formazione",
+    "probability_score": "Punteggio Probabilità",
     "score_breakdown": "Dettaglio Punteggio",
     "progress_status": "Stato Progressi",
-    "estimated_formation_time": "Tempo di Formazione Stimato",
-    "about_formation_title": "Informazioni sulla Formazione",
+    "estimated_probability_time": "Tempo Stimato di Probabilità",
+    "about_formation_title": "Sulla Probabilità",
     "legend_below_60": "Sotto il 60%",
     "legend_needs_work": "Necessita Lavoro",
     "legend_60_75": "60-75%",
@@ -845,6 +845,7 @@ static const Map<String,dynamic> _es_ES = {
     "app_features": {
       "title": "HabitForm te ayuda a...",
       "subtitle": "Construir hábitos duraderos con seguimiento inteligente e ideas personalizadas",
+      "continue": "Continuar",
       "features": {
         "smart_tracking": {
           "title": "Seguimiento inteligente de hábitos",
@@ -860,7 +861,7 @@ static const Map<String,dynamic> _es_ES = {
           "sub_features_1": "Desglose de hábitos",
           "sub_features_2": "Seguimiento anidado"
         },
-        "formation_rate": {
+        "probability_rate": {
           "title": "Tasa de formación de hábitos",
           "description": "Rastrea tu progreso de formación de hábitos con ideas inteligentes. Ve qué tan cerca estás de hacer que tus hábitos se mantengan permanentemente.",
           "sub_features_0": "Predicción de éxito",
@@ -875,7 +876,7 @@ static const Map<String,dynamic> _es_ES = {
           "sub_features_2": "Imágenes de logros"
         }
       },
-      "formation_score": "Puntaje de formación",
+      "probability_score": "Puntaje de formación",
       "previous": "Anterior",
       "next": "Siguiente",
       "start": "Comenzar"
@@ -947,7 +948,7 @@ static const Map<String,dynamic> _es_ES = {
     "achievement_consistency_champion": "Campeón de consistencia",
     "achievement_weekend_warrior": "Guerrero de fin de semana",
     "achievement_weekly_checkin": "Revisión semanal",
-    "achievement_formation_journey": "Viaje de formación",
+    "achievement_probability_journey": "Viaje de formación",
     "milestones": "Hitos",
     "milestone_one_week_warrior": "Guerrero de una semana",
     "milestone_monthly_master": "Maestro mensual",
@@ -957,12 +958,12 @@ static const Map<String,dynamic> _es_ES = {
     "milestone_half_year_hero": "Héroe de medio año",
     "milestone_one_year_legend": "Leyenda de un año",
     "progress": "Progreso",
-    "formation": "Formación",
-    "achievement_formation_threshold": "¡Se alcanzó el umbral de formación!",
+    "formation": "Probability",
+    "achievement_probability_threshold": "¡Se alcanzó el umbral de formación!",
     "achievement_consistency_description": "¡Estás rindiendo al {{percentage}}% de tu mejor racha!",
     "achievement_weekend_description": "¡Mantienes una gran consistencia incluso los fines de semana!",
     "achievement_weekly_description": "Has faltado {{days}} días esta semana. ¡Mañana es un nuevo comienzo!",
-    "achievement_formation_description": "Vas al {{percentage}}% de formar este hábito. ¡Las vías neuronales se están fortaleciendo!",
+    "achievement_probability_description": "Vas al {{percentage}}% de formar este hábito. ¡Las vías neuronales se están fortaleciendo!",
     "quote_aristotle": "La excelencia no es un acto único, sino un hábito. No eres lo que haces de vez en cuando; eres lo que haces consistentemente.",
     "quote_aristotle_author": "Aristóteles",
     "quote_collier": "El éxito es la suma de pequeños esfuerzos, repetidos día tras día.",
@@ -1000,9 +1001,9 @@ static const Map<String,dynamic> _es_ES = {
     "achievement_perfectionist_description": "¡{{rate}}% de tasa de éxito!",
     "heatmap_stats_description": "{{days}} días completados en el último año",
     "last_7_days": "Últimos 7 días",
-    "formation_info_title": "Puntaje de formación",
-    "formation_info_description": "El Puntaje de Formación muestra qué tan probable es que tu hábito se vuelva automático según tu tasa de finalización actual. Un puntaje más alto significa que es más probable que tu hábito se mantenga permanentemente.",
-    "formation_info_details": "Este puntaje se calcula usando tus patrones de consistencia y tasa de finalización. La investigación muestra que se necesitan en promedio 66 días de práctica regular para que un hábito se vuelva automático."
+    "probability_info_title": "Puntaje de formación",
+    "probability_info_description": "El Puntaje de Formación muestra qué tan probable es que tu hábito se vuelva automático según tu tasa de finalización actual. Un puntaje más alto significa que es más probable que tu hábito se mantenga permanentemente.",
+    "probability_info_details": "Este puntaje se calcula usando tus patrones de consistencia y tasa de finalización. La investigación muestra que se necesitan en promedio 66 días de práctica regular para que un hábito se vuelva automático."
   },
   "habit": {
     "add_habit": "Agregar hábito",
@@ -1310,37 +1311,37 @@ static const Map<String,dynamic> _es_ES = {
     "overview": "Resumen",
     "no_data_for_habit": "Aún no hay datos de estadísticas",
     "start_tracking_habit": "Comenzar a rastrear este hábito",
-    "habit_formation": "Formación de hábitos",
+    "habit_formation": "Habit Probability",
     "completed": "Completado",
     "total_days": "Días totales",
     "longest_streak": "Racha más larga",
     "current_streak": "Racha actual",
-    "about_formation": "Acerca de la formación de hábitos",
+    "about_formation": "Acerca de la Probabilidad del Hábito",
     "formation_info": "El porcentaje de arriba muestra qué tan probable es que tu hábito se vuelva automático basado en tu consistencia actual. Porcentajes más altos significan que es más probable que tu hábito se mantenga. Según la investigación, se necesitan en promedio 66 días de práctica regular para que un hábito se vuelva automático.",
-    "formation_status": {
-      "early": "Aún estás en las primeras etapas. Sigue rastreando tu hábito consistentemente para ver un progreso significativo de formación.",
+    "probability_status": {
+      "early": "Aún estás en las primeras etapas. Sigue rastreando tu hábito consistentemente para ver un progreso significativo de probabilidad.",
       "excellent": "¡Progreso excepcional! Con una tasa de finalización del {percentage}%, tu hábito es muy probable que se vuelva automático.",
-      "very_good": "¡Gran consistencia! Con una tasa de finalización del {percentage}%, tu formación de hábitos está en camino.",
+      "very_good": "¡Gran consistencia! Con una tasa de finalización del {percentage}%, tu probabilidad de hábitos está en camino.",
       "good": "¡Buen progreso! Tu tasa de finalización del {percentage}% muestra que estás construyendo este hábito exitosamente.",
-      "improving": "Estás haciendo progreso. Trata de aumentar tu tasa de finalización para hacer más probable la formación del hábito.",
+      "improving": "Estás haciendo progreso. Trata de aumentar tu tasa de finalización para hacer más probable la probabilidad del hábito.",
       "needs_work": "Sigue trabajando en la consistencia. La finalización regular ayudará a que este hábito se vuelva automático."
     },
-    "formation_time": {
-      "not_enough_data": "Sigue rastreando tu hábito para ver el progreso de formación.",
+    "probability_time": {
+      "not_enough_data": "Sigue rastreando tu hábito para ver el progreso de probabilidad.",
       "completed_successful": "¡Felicidades! Tu hábito es muy probable que esté establecido y sea automático.",
-      "completed_good": "¡Excelente trabajo! Has completado el período de formación con una tasa de finalización del {percentage}%. Tu hábito es probable que esté establecido.",
-      "completed_needs_work": "Has completado el período de formación. Continúa con la práctica regular para fortalecer tu hábito.",
-      "remaining_days": "Quedan aproximadamente {days} días en el período de formación. Mantén la práctica consistente."
+      "completed_good": "¡Excelente trabajo! Has completado el período de probabilidad con una tasa de finalización del {percentage}%. Tu hábito es probable que esté establecido.",
+      "completed_needs_work": "Has completado el período de probabilidad. Continúa con la práctica regular para fortalecer tu hábito.",
+      "remaining_days": "Quedan aproximadamente {days} días en el período de probabilidad. Mantén la práctica consistente."
     },
     "chart_labels": {
       "demo_data_message": "Estos son datos de demostración, actualiza para desbloquear datos reales",
       "upgrade_button": "Actualizar"
     },
-    "formation_score": "Puntaje de formación",
+    "probability_score": "Puntaje de Probabilidad",
     "score_breakdown": "Desglose del puntaje",
     "progress_status": "Estado del progreso",
-    "estimated_formation_time": "Tiempo estimado de formación",
-    "about_formation_title": "Acerca de la formación",
+    "estimated_probability_time": "Tiempo Estimado de Probabilidad",
+    "about_formation_title": "Acerca de la Probabilidad",
     "legend_below_60": "Por debajo del 60%",
     "legend_needs_work": "Necesita trabajo",
     "legend_60_75": "60-75%",
@@ -1590,7 +1591,7 @@ static const Map<String,dynamic> _ja_JP = {
           "sub_features_1": "習慣の分解",
           "sub_features_2": "ネストトラッキング"
         },
-        "formation_rate": {
+        "probability_rate": {
           "title": "習慣形成率",
           "description": "インテリジェントなインサイトで習慣形成の進捗を追跡。習慣を永続的に定着させるまでどれくらい近いかを見てください。",
           "sub_features_0": "成功予測",
@@ -1605,7 +1606,7 @@ static const Map<String,dynamic> _ja_JP = {
           "sub_features_2": "成果画像"
         }
       },
-      "formation_score": "形成スコア",
+      "probability_score": "形成スコア",
       "previous": "前へ",
       "next": "次へ",
       "start": "スタート"
@@ -1677,7 +1678,7 @@ static const Map<String,dynamic> _ja_JP = {
     "achievement_consistency_champion": "一貫性チャンピオン",
     "achievement_weekend_warrior": "週末戦士",
     "achievement_weekly_checkin": "週次チェックイン",
-    "achievement_formation_journey": "形成の旅",
+    "achievement_probability_journey": "形成の旅",
     "milestones": "マイルストーン",
     "milestone_one_week_warrior": "1週間戦士",
     "milestone_monthly_master": "月間マスター",
@@ -1687,12 +1688,12 @@ static const Map<String,dynamic> _ja_JP = {
     "milestone_half_year_hero": "半年ヒーロー",
     "milestone_one_year_legend": "1年伝説",
     "progress": "進捗",
-    "formation": "形成",
-    "achievement_formation_threshold": "形成閾値に到達しました！",
+    "formation": "Probability",
+    "achievement_probability_threshold": "形成閾値に到達しました！",
     "achievement_consistency_description": "最高ストリークの{{percentage}}%のパフォーマンスです！",
     "achievement_weekend_description": "週末でも素晴らしい一貫性を維持しています！",
     "achievement_weekly_description": "今週{{days}}日間逃しました。明日は新しいスタートです！",
-    "achievement_formation_description": "この習慣の構築を{{percentage}}%完了しました。神経経路が強化されています！",
+    "achievement_probability_description": "この習慣の構築を{{percentage}}%完了しました。神経経路が強化されています！",
     "quote_aristotle": "卓越性は単一の行為ではなく、習慣です。あなたは時々するものではなく、一貫してするものなのです。",
     "quote_aristotle_author": "アリストテレス",
     "quote_collier": "成功は、日々繰り返される小さな努力の積み重ねです。",
@@ -1730,9 +1731,9 @@ static const Map<String,dynamic> _ja_JP = {
     "achievement_perfectionist_description": "{{rate}}%成功率！",
     "heatmap_stats_description": "過去1年で{{days}}日完了",
     "last_7_days": "過去7日間",
-    "formation_info_title": "形成スコア",
-    "formation_info_description": "形成スコアは、現在の完了率に基づいて習慣が自動的になる可能性を示します。スコアが高いほど、習慣が永続的に定着する可能性が高くなります。",
-    "formation_info_details": "このスコアは一貫性パターンと完了率を使用して計算されます。研究によると、習慣が自動的になるまで平均66日間の定期的な練習が必要です。"
+    "probability_info_title": "形成スコア",
+    "probability_info_description": "形成スコアは、現在の完了率に基づいて習慣が自動的になる可能性を示します。スコアが高いほど、習慣が永続的に定着する可能性が高くなります。",
+    "probability_info_details": "このスコアは一貫性パターンと完了率を使用して計算されます。研究によると、習慣が自動的になるまで平均66日間の定期的な練習が必要です。"
   },
   "habit": {
     "add_habit": "習慣を追加",
@@ -2040,37 +2041,37 @@ static const Map<String,dynamic> _ja_JP = {
     "overview": "概要",
     "no_data_for_habit": "まだ統計データがありません",
     "start_tracking_habit": "この習慣の追跡を開始",
-    "habit_formation": "習慣形成",
+    "habit_formation": "Habit Probability",
     "completed": "完了",
     "total_days": "総日数",
     "longest_streak": "最長ストリーク",
     "current_streak": "現在のストリーク",
-    "about_formation": "習慣形成について",
+    "about_formation": "習慣の確率について",
     "formation_info": "上記のパーセンテージは、現在の一貫性に基づいて習慣が自動的になる可能性を示しています。パーセンテージが高いほど、習慣が定着する可能性が高くなります。研究によると、習慣が自動的になるまで平均66日間の定期的な練習が必要です。",
-    "formation_status": {
-      "early": "まだ初期段階です。意味のある形成の進捗を見るために、習慣を一貫して追跡し続けてください。",
+    "probability_status": {
+      "early": "まだ初期段階です。意味のある確率の進捗を見るために、習慣を一貫して追跡し続けてください。",
       "excellent": "素晴らしい進捗！{percentage}%の完了率で、習慣が自動的になる可能性が非常に高いです。",
-      "very_good": "素晴らしい一貫性！{percentage}%の完了率で、習慣形成は順調です。",
+      "very_good": "素晴らしい一貫性！{percentage}%の完了率で、習慣の確率は順調です。",
       "good": "良い進捗！{percentage}%の完了率は、この習慣を成功裏に築いていることを示しています。",
-      "improving": "進歩しています。習慣形成の可能性を高めるために完了率を上げてみてください。",
+      "improving": "進歩しています。習慣の確率の可能性を高めるために完了率を上げてみてください。",
       "needs_work": "一貫性に取り組み続けてください。定期的な完了がこの習慣を自動的にするのに役立ちます。"
     },
-    "formation_time": {
-      "not_enough_data": "形成の進捗を見るために習慣の追跡を続けてください。",
+    "probability_time": {
+      "not_enough_data": "確率の進捗を見るために習慣の追跡を続けてください。",
       "completed_successful": "おめでとうございます！習慣は確立され、自動的になっている可能性が高いです。",
-      "completed_good": "素晴らしい！{percentage}%の完了率で形成期間を完了しました。習慣は確立されている可能性が高いです。",
-      "completed_needs_work": "形成期間を完了しました。習慣を強化するために定期的な練習を続けてください。",
-      "remaining_days": "形成期間まで推定{days}日残っています。一貫した練習を続けてください。"
+      "completed_good": "素晴らしい！{percentage}%の完了率で確率期間を完了しました。習慣は確立されている可能性が高いです。",
+      "completed_needs_work": "確率期間を完了しました。習慣を強化するために定期的な練習を続けてください。",
+      "remaining_days": "確率期間まで推定{days}日残っています。一貫した練習を続けてください。"
     },
     "chart_labels": {
       "demo_data_message": "これはデモデータです。実際のデータをアンロックするにはアップグレードしてください",
       "upgrade_button": "アップグレード"
     },
-    "formation_score": "形成スコア",
+    "probability_score": "確率スコア",
     "score_breakdown": "スコア内訳",
     "progress_status": "進捗ステータス",
-    "estimated_formation_time": "推定形成時間",
-    "about_formation_title": "形成について",
+    "estimated_probability_time": "推定確率時間",
+    "about_formation_title": "確率について",
     "legend_below_60": "60%未満",
     "legend_needs_work": "要改善",
     "legend_60_75": "60-75%",
@@ -2306,6 +2307,7 @@ static const Map<String,dynamic> _tr_TR = {
     "app_features": {
       "title": "HabitForm Size Yardımcı Olur...",
       "subtitle": "Akıllı takip ve kişiselleştirilmiş içgörülerle kalıcı alışkanlıklar oluşturun",
+      "continue": "Devam Et",
       "features": {
         "smart_tracking": {
           "title": "Akıllı Alışkanlık Takibi",
@@ -2321,7 +2323,7 @@ static const Map<String,dynamic> _tr_TR = {
           "sub_features_1": "Alışkanlık Ayrıştırma",
           "sub_features_2": "İç İçe Takip"
         },
-        "formation_rate": {
+        "probability_rate": {
           "title": "Alışkanlık Oluşum Oranı",
           "description": "Alışkanlık oluşum ilerlemenizi akıllı içgörülerle takip edin. Alışkanlıklarınızın kalıcı hale gelmesine ne kadar yakın olduğunuzu görün.",
           "sub_features_0": "Başarı Tahmini",
@@ -2336,7 +2338,7 @@ static const Map<String,dynamic> _tr_TR = {
           "sub_features_2": "Başarı Görselleri"
         }
       },
-      "formation_score": "Oluşum Skoru",
+      "probability_score": "Oluşum Skoru",
       "previous": "Önceki",
       "next": "Sonraki",
       "start": "Başla"
@@ -2408,7 +2410,7 @@ static const Map<String,dynamic> _tr_TR = {
     "achievement_consistency_champion": "Tutarlılık Şampiyonu",
     "achievement_weekend_warrior": "Hafta Sonu Savaşçısı",
     "achievement_weekly_checkin": "Haftalık Kontrol",
-    "achievement_formation_journey": "Oluşum Yolculuğu",
+    "achievement_probability_journey": "Oluşum Yolculuğu",
     "milestones": "Dönüm Noktaları",
     "milestone_one_week_warrior": "Bir Hafta Savaşçısı",
     "milestone_monthly_master": "Aylık Usta",
@@ -2418,12 +2420,12 @@ static const Map<String,dynamic> _tr_TR = {
     "milestone_half_year_hero": "Yarım Yıl Kahramanı",
     "milestone_one_year_legend": "Bir Yıl Efsanesi",
     "progress": "İlerleme",
-    "formation": "Oluşum",
-    "achievement_formation_threshold": "Oluşum eşiğine ulaşıldı!",
+    "formation": "Probability",
+    "achievement_probability_threshold": "Oluşum eşiğine ulaşıldı!",
     "achievement_consistency_description": "En iyi serinizin %{{percentage}}'si kadar performans gösteriyorsunuz!",
     "achievement_weekend_description": "Hafta sonları bile harika bir tutarlılık sergiliyorsunuz!",
     "achievement_weekly_description": "Bu hafta {{days}} gün kaçırdınız. Yarın yeni bir başlangıç!",
-    "achievement_formation_description": "Bu alışkanlığı oluşturmanın %{{percentage}}'sindesiniz. Sinir yolları güçleniyor!",
+    "achievement_probability_description": "Bu alışkanlığı oluşturmanın %{{percentage}}'sindesiniz. Sinir yolları güçleniyor!",
     "quote_aristotle": "Mükemmellik tek bir eylem değil, bir alışkanlıktır. Arada sırada yaptığınız şey değil; sürekli yaptığınız şeysiniz.",
     "quote_aristotle_author": "Aristoteles",
     "quote_collier": "Başarı, her gün tekrarlanan küçük çabaların toplamıdır.",
@@ -2461,9 +2463,9 @@ static const Map<String,dynamic> _tr_TR = {
     "achievement_perfectionist_description": "%{{rate}} başarı oranı!",
     "heatmap_stats_description": "Geçen yıl {{days}} gün tamamlandı",
     "last_7_days": "Son 7 Gün",
-    "formation_info_title": "Oluşum Skoru",
-    "formation_info_description": "Oluşum Skoru, alışkanlığınızın mevcut tamamlama oranınıza göre otomatik hale gelme olasılığını gösterir. Daha yüksek skorlar, alışkanlığınızın kalıcı olma olasılığının daha yüksek olduğu anlamına gelir.",
-    "formation_info_details": "Bu skor, tutarlılık kalıplarınız ve tamamlama oranınız kullanılarak hesaplanır. Araştırmalar, bir alışkanlığın otomatik hale gelmesi için ortalama 66 günlük düzenli pratik gerektiğini göstermektedir."
+    "probability_info_title": "Oluşum Skoru",
+    "probability_info_description": "Oluşum Skoru, alışkanlığınızın mevcut tamamlama oranınıza göre otomatik hale gelme olasılığını gösterir. Daha yüksek skorlar, alışkanlığınızın kalıcı olma olasılığının daha yüksek olduğu anlamına gelir.",
+    "probability_info_details": "Bu skor, tutarlılık kalıplarınız ve tamamlama oranınız kullanılarak hesaplanır. Araştırmalar, bir alışkanlığın otomatik hale gelmesi için ortalama 66 günlük düzenli pratik gerektiğini göstermektedir."
   },
   "habit": {
     "add_habit": "Alışkanlık Ekle",
@@ -2771,14 +2773,14 @@ static const Map<String,dynamic> _tr_TR = {
     "overview": "Genel Bakış",
     "no_data_for_habit": "Henüz istatistik verisi yok",
     "start_tracking_habit": "Bu alışkanlığı takip etmeye başla",
-    "habit_formation": "Alışkanlık Oluşumu",
+    "habit_formation": "Habit Probability",
     "completed": "Tamamlandı",
     "total_days": "Toplam Gün",
     "longest_streak": "En Uzun Seri",
     "current_streak": "Mevcut Seri",
-    "about_formation": "Alışkanlık Oluşumu Hakkında",
+    "about_formation": "About Habit Probability",
     "formation_info": "Yukarıdaki yüzde, alışkanlığınızın mevcut tutarlılığınıza göre otomatik hale gelme olasılığını gösterir. Daha yüksek yüzdeler, alışkanlığınızın kalıcı olma olasılığının daha yüksek olduğu anlamına gelir. Araştırmalara göre, bir alışkanlığın otomatik hale gelmesi için ortalama 66 günlük düzenli pratik gerekir.",
-    "formation_status": {
+    "probability_status": {
       "early": "Henüz erken aşamalardasınız. Anlamlı oluşum ilerlemesi görmek için alışkanlığınızı tutarlı bir şekilde takip etmeye devam edin.",
       "excellent": "Olağanüstü ilerleme! %{{percentage}} tamamlama oranıyla alışkanlığınızın otomatik hale gelme olasılığı çok yüksek.",
       "very_good": "Harika tutarlılık! %{{percentage}} tamamlama oranıyla alışkanlık oluşumunuz yolunda.",
@@ -2786,7 +2788,7 @@ static const Map<String,dynamic> _tr_TR = {
       "improving": "İlerleme kaydediyorsunuz. Alışkanlık oluşumunu daha olası hale getirmek için tamamlama oranınızı artırmaya çalışın.",
       "needs_work": "Tutarlılık üzerinde çalışmaya devam edin. Düzenli tamamlama, bu alışkanlığın otomatik hale gelmesine yardımcı olacaktır."
     },
-    "formation_time": {
+    "probability_time": {
       "not_enough_data": "Oluşum ilerlemesini görmek için alışkanlığınızı takip etmeye devam edin.",
       "completed_successful": "Tebrikler! Alışkanlığınız büyük olasılıkla yerleşmiş ve otomatiktir.",
       "completed_good": "Harika iş! Oluşum dönemini %{{percentage}} tamamlama oranıyla tamamladınız. Alışkanlığınız muhtemelen yerleşmiş durumda.",
@@ -2797,11 +2799,11 @@ static const Map<String,dynamic> _tr_TR = {
       "demo_data_message": "Bu demo verisidir, gerçek verileri açmak için yükseltin",
       "upgrade_button": "Yükselt"
     },
-    "formation_score": "Oluşum Skoru",
+    "probability_score": "Oluşum Skoru",
     "score_breakdown": "Skor Dağılımı",
     "progress_status": "İlerleme Durumu",
-    "estimated_formation_time": "Tahmini Oluşum Süresi",
-    "about_formation_title": "Oluşum Hakkında",
+    "estimated_probability_time": "Estimated Probability Time",
+    "about_formation_title": "About Probability",
     "legend_below_60": "%60 Altı",
     "legend_needs_work": "Çalışma Gerekiyor",
     "legend_60_75": "%60-75",
@@ -3051,7 +3053,7 @@ static const Map<String,dynamic> _ar_SA = {
           "sub_features_1": "تفكيك العادة",
           "sub_features_2": "تتبع متداخل"
         },
-        "formation_rate": {
+        "probability_rate": {
           "title": "معدل تشكيل العادة",
           "description": "تابع تقدم تشكيل عاداتك برؤى ذكية. تعرف إلى مدى اقترابك من ترسيخ عاداتك بشكل دائم.",
           "sub_features_0": "تنبؤ بالنجاح",
@@ -3066,7 +3068,7 @@ static const Map<String,dynamic> _ar_SA = {
           "sub_features_2": "صور الإنجازات"
         }
       },
-      "formation_score": "درجة التشكّل",
+      "probability_score": "درجة التشكّل",
       "previous": "السابق",
       "next": "التالي",
       "start": "ابدأ"
@@ -3138,7 +3140,7 @@ static const Map<String,dynamic> _ar_SA = {
     "achievement_consistency_champion": "بطل الاتساق",
     "achievement_weekend_warrior": "محارب عطلة الأسبوع",
     "achievement_weekly_checkin": "مراجعة أسبوعية",
-    "achievement_formation_journey": "رحلة التشكّل",
+    "achievement_probability_journey": "رحلة التشكّل",
     "milestones": "المعالم",
     "milestone_one_week_warrior": "محارب أسبوع واحد",
     "milestone_monthly_master": "سيد الشهر",
@@ -3148,12 +3150,12 @@ static const Map<String,dynamic> _ar_SA = {
     "milestone_half_year_hero": "بطل نصف السنة",
     "milestone_one_year_legend": "أسطورة السنة",
     "progress": "التقدم",
-    "formation": "التشكّل",
-    "achievement_formation_threshold": "تم بلوغ عتبة التشكّل!",
+    "formation": "Probability",
+    "achievement_probability_threshold": "تم بلوغ عتبة التشكّل!",
     "achievement_consistency_description": "أداؤك يعادل {{percentage}}% من أفضل سلسلة لديك!",
     "achievement_weekend_description": "تحافظ على اتساق رائع حتى في عطلة الأسبوع!",
     "achievement_weekly_description": "فاتك {{days}} يومًا هذا الأسبوع. غدًا بداية جديدة!",
-    "achievement_formation_description": "أكملت {{percentage}}% من بناء هذه العادة. المسارات العصبية تزداد قوة!",
+    "achievement_probability_description": "أكملت {{percentage}}% من بناء هذه العادة. المسارات العصبية تزداد قوة!",
     "quote_aristotle": "التميز ليس فعلًا واحدًا، بل عادة. لست ما تفعله أحيانًا؛ أنت ما تفعله باستمرار.",
     "quote_aristotle_author": "أرسطو",
     "quote_collier": "النجاح هو مجموع الجهود الصغيرة، المتكررة يومًا بعد يوم.",
@@ -3191,9 +3193,9 @@ static const Map<String,dynamic> _ar_SA = {
     "achievement_perfectionist_description": "معدل نجاح {{rate}}%!",
     "heatmap_stats_description": "تم إكمال {{days}} يومًا خلال السنة الماضية",
     "last_7_days": "آخر 7 أيام",
-    "formation_info_title": "درجة التشكّل",
-    "formation_info_description": "تُظهر درجة التشكّل مدى احتمالية أن تصبح عادتك تلقائية بناءً على معدل الإكمال الحالي. كلما زادت الدرجة زادت إمكانية ترسخ العادة بشكل دائم.",
-    "formation_info_details": "تُحتسب هذه الدرجة باستخدام أنماط الاتساق ومعدل الإكمال. تُظهر الأبحاث أن الأمر يستغرق في المتوسط 66 يومًا من الممارسة المنتظمة لتصبح العادة تلقائية."
+    "probability_info_title": "درجة التشكّل",
+    "probability_info_description": "تُظهر درجة التشكّل مدى احتمالية أن تصبح عادتك تلقائية بناءً على معدل الإكمال الحالي. كلما زادت الدرجة زادت إمكانية ترسخ العادة بشكل دائم.",
+    "probability_info_details": "تُحتسب هذه الدرجة باستخدام أنماط الاتساق ومعدل الإكمال. تُظهر الأبحاث أن الأمر يستغرق في المتوسط 66 يومًا من الممارسة المنتظمة لتصبح العادة تلقائية."
   },
   "habit": {
     "add_habit": "إضافة عادة",
@@ -3501,14 +3503,14 @@ static const Map<String,dynamic> _ar_SA = {
     "overview": "نظرة عامة",
     "no_data_for_habit": "لا توجد بيانات إحصائية بعد",
     "start_tracking_habit": "ابدأ تتبع هذه العادة",
-    "habit_formation": "تشكيل العادة",
+    "habit_formation": "Habit Probability",
     "completed": "مكتمل",
     "total_days": "إجمالي الأيام",
     "longest_streak": "أطول سلسلة",
     "current_streak": "السلسلة الحالية",
-    "about_formation": "حول تشكيل العادة",
+    "about_formation": "About Habit Probability",
     "formation_info": "تُظهر النسبة أعلاه مدى احتمالية أن تصبح عادتك تلقائية بناءً على اتساقك الحالي. كلما ارتفعت النسبة، زادت فرص ترسخ العادة. وفقًا للأبحاث، يستغرق الأمر في المتوسط 66 يومًا من الممارسة المنتظمة لتصبح العادة تلقائية.",
-    "formation_status": {
+    "probability_status": {
       "early": "لا تزال في المراحل الأولى. استمر في تتبع عادتك باستمرار لرؤية تقدم ملحوظ في التشكّل.",
       "excellent": "تقدم رائع! مع معدل إكمال {percentage}%، من المرجح جدًا أن تصبح عادتك تلقائية.",
       "very_good": "اتساق ممتاز! مع معدل إكمال {percentage}%، تشكيل العادة على المسار الصحيح.",
@@ -3516,7 +3518,7 @@ static const Map<String,dynamic> _ar_SA = {
       "improving": "أنت تتحسن. حاول زيادة معدل الإكمال لتعزيز احتمالية التشكّل.",
       "needs_work": "واصل العمل على الاتساق. الإكمال المنتظم يساعد هذه العادة على أن تصبح تلقائية."
     },
-    "formation_time": {
+    "probability_time": {
       "not_enough_data": "استمر في تتبع عادتك لرؤية تقدم التشكّل.",
       "completed_successful": "تهانينا! من المرجح أن عادتك قد ترسخت وأصبحت تلقائية.",
       "completed_good": "عمل رائع! أكملت فترة التشكّل بمعدل إكمال {percentage}%. من المحتمل أن تكون عادتك قد ترسخت.",
@@ -3527,11 +3529,11 @@ static const Map<String,dynamic> _ar_SA = {
       "demo_data_message": "هذه بيانات تجريبية. قم بالترقية لفتح البيانات الحقيقية",
       "upgrade_button": "ترقية"
     },
-    "formation_score": "درجة التشكّل",
+    "probability_score": "درجة التشكّل",
     "score_breakdown": "تفصيل الدرجات",
     "progress_status": "حالة التقدم",
-    "estimated_formation_time": "الوقت التقديري للتشكّل",
-    "about_formation_title": "حول التشكّل",
+    "estimated_probability_time": "Estimated Probability Time",
+    "about_formation_title": "About Probability",
     "legend_below_60": "أقل من 60%",
     "legend_needs_work": "يحتاج إلى تحسين",
     "legend_60_75": "60-75%",
@@ -3781,7 +3783,7 @@ static const Map<String,dynamic> _zh_Hans = {
           "sub_features_1": "习惯分解",
           "sub_features_2": "嵌套追踪"
         },
-        "formation_rate": {
+        "probability_rate": {
           "title": "习惯养成率",
           "description": "通过智能洞察追踪你的习惯养成进度。看看你离让习惯永久坚持还有多远。",
           "sub_features_0": "成功预测",
@@ -3796,7 +3798,7 @@ static const Map<String,dynamic> _zh_Hans = {
           "sub_features_2": "成就图片"
         }
       },
-      "formation_score": "养成分数",
+      "probability_score": "养成分数",
       "previous": "上一页",
       "next": "下一页",
       "start": "开始"
@@ -3868,7 +3870,7 @@ static const Map<String,dynamic> _zh_Hans = {
     "achievement_consistency_champion": "一致性冠军",
     "achievement_weekend_warrior": "周末战士",
     "achievement_weekly_checkin": "周检查",
-    "achievement_formation_journey": "养成之旅",
+    "achievement_probability_journey": "养成之旅",
     "milestones": "里程碑",
     "milestone_one_week_warrior": "一周战士",
     "milestone_monthly_master": "月度大师",
@@ -3878,12 +3880,12 @@ static const Map<String,dynamic> _zh_Hans = {
     "milestone_half_year_hero": "半年英雄",
     "milestone_one_year_legend": "一年传奇",
     "progress": "进度",
-    "formation": "养成",
-    "achievement_formation_threshold": "达到养成阈值！",
+    "formation": "Probability",
+    "achievement_probability_threshold": "达到养成阈值！",
     "achievement_consistency_description": "你的表现达到了最佳连续天数的 {{percentage}}%！",
     "achievement_weekend_description": "即使在周末你也保持很好的一致性！",
     "achievement_weekly_description": "你这周错过了 {{days}} 天。明天是新的开始！",
-    "achievement_formation_description": "你已完成这个习惯养成的 {{percentage}}%。神经通路正在加强！",
+    "achievement_probability_description": "你已完成这个习惯养成的 {{percentage}}%。神经通路正在加强！",
     "quote_aristotle": "卓越不是单一的行为，而是一种习惯。你不是偶尔做什么，而是持续做什么。",
     "quote_aristotle_author": "亚里士多德",
     "quote_collier": "成功是日复一日重复的小努力的总和。",
@@ -3921,9 +3923,9 @@ static const Map<String,dynamic> _zh_Hans = {
     "achievement_perfectionist_description": "{{rate}}% 成功率！",
     "heatmap_stats_description": "去年完成了 {{days}} 天",
     "last_7_days": "最近7天",
-    "formation_info_title": "养成分数",
-    "formation_info_description": "养成分数显示基于你当前完成率，你的习惯变得自动化的可能性。分数越高意味着你的习惯越可能永久坚持。",
-    "formation_info_details": "这个分数是根据你的一致性模式和完成率计算的。研究表明，习惯平均需要66天的规律练习才能变得自动化。"
+    "probability_info_title": "养成分数",
+    "probability_info_description": "养成分数显示基于你当前完成率，你的习惯变得自动化的可能性。分数越高意味着你的习惯越可能永久坚持。",
+    "probability_info_details": "这个分数是根据你的一致性模式和完成率计算的。研究表明，习惯平均需要66天的规律练习才能变得自动化。"
   },
   "habit": {
     "add_habit": "添加习惯",
@@ -4231,37 +4233,37 @@ static const Map<String,dynamic> _zh_Hans = {
     "overview": "概览",
     "no_data_for_habit": "暂无统计数据",
     "start_tracking_habit": "开始追踪这个习惯",
-    "habit_formation": "习惯养成",
+    "habit_formation": "Habit Probability",
     "completed": "已完成",
     "total_days": "总天数",
     "longest_streak": "最长连续",
     "current_streak": "当前连续",
-    "about_formation": "关于习惯养成",
+    "about_formation": "关于习惯概率",
     "formation_info": "上面的百分比显示基于你当前一致性，你的习惯变得自动化的可能性。百分比越高意味着你的习惯越可能坚持。根据研究，习惯平均需要66天的规律练习才能变得自动化。",
-    "formation_status": {
-      "early": "你仍处于早期阶段。持续追踪你的习惯以看到有意义的养成进度。",
+    "probability_status": {
+      "early": "你仍处于早期阶段。持续追踪你的习惯以看到有意义的概率进度。",
       "excellent": "出色的进度！{{percentage}}% 的完成率，你的习惯很可能变得自动化。",
-      "very_good": "很好的一致性！{{percentage}}% 的完成率，你的习惯养成正在正轨上。",
+      "very_good": "很好的一致性！{{percentage}}% 的完成率，你的习惯概率正在正轨上。",
       "good": "良好的进度！你 {{percentage}}% 的完成率显示你正在成功建立这个习惯。",
-      "improving": "你正在进步。尝试提高你的完成率以使习惯养成更可能。",
+      "improving": "你正在进步。尝试提高你的完成率以使习惯概率更可能。",
       "needs_work": "继续努力保持一致性。规律完成将帮助这个习惯变得自动化。"
     },
-    "formation_time": {
-      "not_enough_data": "继续追踪你的习惯以看到养成进度。",
+    "probability_time": {
+      "not_enough_data": "继续追踪你的习惯以看到概率进度。",
       "completed_successful": "恭喜！你的习惯很可能已经建立并自动化。",
-      "completed_good": "做得好！你以 {{percentage}}% 的完成率完成了养成期。你的习惯很可能已经建立。",
-      "completed_needs_work": "你已完成养成期。继续规律练习以加强你的习惯。",
-      "remaining_days": "养成期估计还剩 {days} 天。保持一致的练习。"
+      "completed_good": "做得好！你以 {{percentage}}% 的完成率完成了概率期。你的习惯很可能已经建立。",
+      "completed_needs_work": "你已完成概率期。继续规律练习以加强你的习惯。",
+      "remaining_days": "概率期估计还剩 {days} 天。保持一致的练习。"
     },
     "chart_labels": {
       "demo_data_message": "这是演示数据，升级以解锁真实数据",
       "upgrade_button": "升级"
     },
-    "formation_score": "养成分数",
+    "probability_score": "概率分数",
     "score_breakdown": "分数分解",
     "progress_status": "进度状态",
-    "estimated_formation_time": "估计养成时间",
-    "about_formation_title": "关于养成",
+    "estimated_probability_time": "估计概率时间",
+    "about_formation_title": "关于概率",
     "legend_below_60": "低于60%",
     "legend_needs_work": "需要努力",
     "legend_60_75": "60-75%",
@@ -4496,6 +4498,7 @@ static const Map<String,dynamic> _fr_FR = {
     "app_features": {
       "title": "HabitForm vous aide à...",
       "subtitle": "Construire des habitudes durables avec un suivi intelligent et des insights personnalisés",
+      "continue": "Continuer",
       "features": {
         "smart_tracking": {
           "title": "Suivi intelligent des habitudes",
@@ -4511,11 +4514,11 @@ static const Map<String,dynamic> _fr_FR = {
           "sub_features_1": "Décomposition des habitudes",
           "sub_features_2": "Suivi imbriqué"
         },
-        "formation_rate": {
-          "title": "Taux de formation des habitudes",
-          "description": "Suivez vos progrès de formation d'habitudes avec des insights intelligents. Voyez à quel point vous êtes proche de faire tenir vos habitudes de façon permanente.",
+        "probability_rate": {
+          "title": "Taux de probabilité des habitudes",
+          "description": "Suivez vos progrès de probabilité d'habitudes avec des insights intelligents. Voyez à quel point vous êtes proche de faire tenir vos habitudes de façon permanente.",
           "sub_features_0": "Prédiction de succès",
-          "sub_features_1": "Suivi de formation",
+          "sub_features_1": "Suivi de probabilité",
           "sub_features_2": "Analyses de progrès"
         },
         "share_habits": {
@@ -4526,7 +4529,7 @@ static const Map<String,dynamic> _fr_FR = {
           "sub_features_2": "Images de réussite"
         }
       },
-      "formation_score": "Score de formation",
+      "probability_score": "Score de formation",
       "previous": "Précédent",
       "next": "Suivant",
       "start": "Commencer"
@@ -4598,7 +4601,7 @@ static const Map<String,dynamic> _fr_FR = {
     "achievement_consistency_champion": "Champion de constance",
     "achievement_weekend_warrior": "Guerrier du week-end",
     "achievement_weekly_checkin": "Point hebdomadaire",
-    "achievement_formation_journey": "Voyage de formation",
+    "achievement_probability_journey": "Voyage de formation",
     "milestones": "Étapes importantes",
     "milestone_one_week_warrior": "Guerrier d'une semaine",
     "milestone_monthly_master": "Maître mensuel",
@@ -4608,12 +4611,12 @@ static const Map<String,dynamic> _fr_FR = {
     "milestone_half_year_hero": "Héros du semestre",
     "milestone_one_year_legend": "Légende d'un an",
     "progress": "Progrès",
-    "formation": "Formation",
-    "achievement_formation_threshold": "Seuil de formation atteint !",
+    "formation": "Probability",
+    "achievement_probability_threshold": "Seuil de formation atteint !",
     "achievement_consistency_description": "Vous performez à {{percentage}}% de votre meilleure série !",
     "achievement_weekend_description": "Vous maintenez une excellente constance même le week-end !",
     "achievement_weekly_description": "Vous avez manqué {{days}} jours cette semaine. Demain est un nouveau départ !",
-    "achievement_formation_description": "Vous êtes à {{percentage}}% de la construction de cette habitude. Les voies neuronales se renforcent !",
+    "achievement_probability_description": "Vous êtes à {{percentage}}% de la construction de cette habitude. Les voies neuronales se renforcent !",
     "quote_aristotle": "L'excellence n'est pas un acte unique, mais une habitude. Vous n'êtes pas ce que vous faites de temps en temps ; vous êtes ce que vous faites de manière constante.",
     "quote_aristotle_author": "Aristote",
     "quote_collier": "Le succès est la somme de petits efforts, répétés jour après jour.",
@@ -4651,9 +4654,9 @@ static const Map<String,dynamic> _fr_FR = {
     "achievement_perfectionist_description": "Taux de réussite de {{rate}}% !",
     "heatmap_stats_description": "{{days}} jours terminés l'année dernière",
     "last_7_days": "7 derniers jours",
-    "formation_info_title": "Score de formation",
-    "formation_info_description": "Le Score de formation montre la probabilité que votre habitude devienne automatique basée sur votre taux de completion actuel. Des scores plus élevés signifient que votre habitude est plus susceptible de tenir de façon permanente.",
-    "formation_info_details": "Ce score est calculé en utilisant vos modèles de constance et votre taux de completion. La recherche montre qu'il faut en moyenne 66 jours de pratique régulière pour qu'une habitude devienne automatique."
+    "probability_info_title": "Score de formation",
+    "probability_info_description": "Le Score de formation montre la probabilité que votre habitude devienne automatique basée sur votre taux de completion actuel. Des scores plus élevés signifient que votre habitude est plus susceptible de tenir de façon permanente.",
+    "probability_info_details": "Ce score est calculé en utilisant vos modèles de constance et votre taux de completion. La recherche montre qu'il faut en moyenne 66 jours de pratique régulière pour qu'une habitude devienne automatique."
   },
   "habit": {
     "add_habit": "Ajouter une habitude",
@@ -4961,14 +4964,14 @@ static const Map<String,dynamic> _fr_FR = {
     "overview": "Aperçu",
     "no_data_for_habit": "Pas encore de données statistiques",
     "start_tracking_habit": "Commencer à suivre cette habitude",
-    "habit_formation": "Formation des habitudes",
+    "habit_formation": "Habit Probability",
     "completed": "Terminé",
     "total_days": "Total des jours",
     "longest_streak": "Série la plus longue",
     "current_streak": "Série actuelle",
-    "about_formation": "À propos de la formation des habitudes",
+    "about_formation": "About Habit Probability",
     "formation_info": "Le pourcentage ci-dessus montre la probabilité que votre habitude devienne automatique basée sur votre constance actuelle. Des pourcentages plus élevés signifient que votre habitude est plus susceptible de tenir. Selon la recherche, il faut en moyenne 66 jours de pratique régulière pour qu'une habitude devienne automatique.",
-    "formation_status": {
+    "probability_status": {
       "early": "Vous êtes encore dans les premiers stades. Continuez à suivre votre habitude de manière constante pour voir des progrès de formation significatifs.",
       "excellent": "Progrès exceptionnel ! Avec un taux de completion de {percentage}%, votre habitude est très susceptible de devenir automatique.",
       "very_good": "Excellente constance ! Avec un taux de completion de {percentage}%, votre formation d'habitude est sur la bonne voie.",
@@ -4976,7 +4979,7 @@ static const Map<String,dynamic> _fr_FR = {
       "improving": "Vous faites des progrès. Essayez d'augmenter votre taux de completion pour rendre la formation d'habitude plus probable.",
       "needs_work": "Continuez à travailler sur la constance. Une completion régulière aidera cette habitude à devenir automatique."
     },
-    "formation_time": {
+    "probability_time": {
       "not_enough_data": "Continuez à suivre votre habitude pour voir les progrès de formation.",
       "completed_successful": "Félicitations ! Votre habitude est très probablement établie et automatique.",
       "completed_good": "Excellent travail ! Vous avez terminé la période de formation avec un taux de completion de {percentage}%. Votre habitude est probablement établie.",
@@ -4987,11 +4990,11 @@ static const Map<String,dynamic> _fr_FR = {
       "demo_data_message": "Ce sont des données de démonstration, mettez à niveau pour débloquer les vraies données",
       "upgrade_button": "Mettre à niveau"
     },
-    "formation_score": "Score de formation",
+    "probability_score": "Score de formation",
     "score_breakdown": "Détail du score",
     "progress_status": "Statut des progrès",
-    "estimated_formation_time": "Temps de formation estimé",
-    "about_formation_title": "À propos de la formation",
+    "estimated_probability_time": "Estimated Probability Time",
+    "about_formation_title": "About Probability",
     "legend_below_60": "En dessous de 60%",
     "legend_needs_work": "Nécessite du travail",
     "legend_60_75": "60-75%",
@@ -5226,6 +5229,7 @@ static const Map<String,dynamic> _en_US = {
     "app_features": {
       "title": "HabitForm's Unique Features",
       "subtitle": "Our most advanced features for our most dedicated users",
+      "continue": "Continue",
       "features": {
         "habit_probability": {
           "title": "Habit Probability",
@@ -5270,7 +5274,7 @@ static const Map<String,dynamic> _en_US = {
           "sub_features_2": "Celebrate Wins"
         }
       },
-      "formation_score": "Formation Score",
+      "formation_score": "Probability Score",
       "previous": "Previous",
       "next": "Next",
       "start": "Start"
@@ -5342,7 +5346,7 @@ static const Map<String,dynamic> _en_US = {
     "achievement_consistency_champion": "Consistency Champion",
     "achievement_weekend_warrior": "Weekend Warrior",
     "achievement_weekly_checkin": "Weekly Check-in",
-    "achievement_formation_journey": "Formation Journey",
+    "achievement_probability_journey": "Probability Journey",
     "milestones": "Milestones",
     "milestone_one_week_warrior": "One Week Warrior",
     "milestone_monthly_master": "Monthly Master",
@@ -5352,12 +5356,12 @@ static const Map<String,dynamic> _en_US = {
     "milestone_half_year_hero": "Half-Year Hero",
     "milestone_one_year_legend": "One-Year Legend",
     "progress": "Progress",
-    "formation": "Formation",
-    "achievement_formation_threshold": "Reached the formation threshold!",
+    "formation": "Probability",
+    "achievement_probability_threshold": "Reached the probability threshold!",
     "achievement_consistency_description": "You're performing at {{percentage}}% of your best streak!",
     "achievement_weekend_description": "You maintain great consistency even on weekends!",
     "achievement_weekly_description": "You've missed {{days}} days this week. Tomorrow is a fresh start!",
-    "achievement_formation_description": "You're {{percentage}}% through building this habit. The neural pathways are strengthening!",
+    "achievement_probability_description": "You're {{percentage}}% through building this habit. The neural pathways are strengthening!",
     "quote_aristotle": "Excellence is not a single act, but a habit. You are not what you do once in a while; you are what you do consistently.",
     "quote_aristotle_author": "Aristotle",
     "quote_collier": "Success is the sum of small efforts, repeated day in and day out.",
@@ -5395,9 +5399,9 @@ static const Map<String,dynamic> _en_US = {
     "achievement_perfectionist_description": "{{rate}}% success rate!",
     "heatmap_stats_description": "{{days}} days completed in the last year",
     "last_7_days": "Last 7 Days",
-    "formation_info_title": "Formation Score",
-    "formation_info_description": "The Formation Score shows how likely your habit is to become automatic based on your current completion rate. Higher scores mean your habit is more likely to stick permanently.",
-    "formation_info_details": "This score is calculated using your consistency patterns and completion rate. Research shows it takes an average of 66 days of regular practice for a habit to become automatic."
+    "probability_info_title": "Probability Score",
+    "probability_info_description": "The Probability Score shows how likely your habit is to become automatic based on your current completion rate. Higher scores mean your habit is more likely to stick permanently.",
+    "probability_info_details": "This score is calculated using your consistency patterns and completion rate. Research shows it takes an average of 66 days of regular practice for a habit to become automatic."
   },
   "habit": {
     "add_habit": "Add Habit",
@@ -5447,7 +5451,7 @@ static const Map<String,dynamic> _en_US = {
     "difficulty": {
       "title": "Difficulty",
       "question": "How difficult is this habit to build?",
-      "info": "Choose how challenging this habit feels. We use this to estimate formation time and personalize insights.",
+      "info": "Choose how challenging this habit feels. We use this to estimate probability time and personalize insights.",
       "very_easy": "Very Easy",
       "easy": "Easy",
       "moderate": "Moderate",
@@ -5705,37 +5709,37 @@ static const Map<String,dynamic> _en_US = {
     "overview": "Overview",
     "no_data_for_habit": "No statistics data yet",
     "start_tracking_habit": "Start tracking this habit",
-    "habit_formation": "Habit Formation",
+    "habit_formation": "Habit Probability",
     "completed": "Completed",
     "total_days": "Total Days",
     "longest_streak": "Longest Streak",
     "current_streak": "Current Streak",
-    "about_formation": "About Habit Formation",
+    "about_formation": "About Habit Probability",
     "formation_info": "The percentage above shows how likely your habit is to become automatic based on your current consistency. Higher percentages mean your habit is more likely to stick. According to research, it takes an average of 66 days of regular practice for a habit to become automatic.",
-    "formation_status": {
-      "early": "You're still in the early stages. Keep tracking your habit consistently to see meaningful formation progress.",
+    "probability_status": {
+      "early": "You're still in the early stages. Keep tracking your habit consistently to see meaningful probability progress.",
       "excellent": "Outstanding progress! With a {percentage}% completion rate, your habit is very likely to become automatic.",
-      "very_good": "Great consistency! With a {percentage}% completion rate, your habit formation is on track.",
+      "very_good": "Great consistency! With a {percentage}% completion rate, your habit probability is on track.",
       "good": "Good progress! Your {percentage}% completion rate shows you're building this habit successfully.",
-      "improving": "You're making progress. Try to increase your completion rate to make habit formation more likely.",
+      "improving": "You're making progress. Try to increase your completion rate to make habit probability more likely.",
       "needs_work": "Keep working on consistency. Regular completion will help this habit become automatic."
     },
-    "formation_time": {
-      "not_enough_data": "Keep tracking your habit to see formation progress.",
+    "probability_time": {
+      "not_enough_data": "Keep tracking your habit to see probability progress.",
       "completed_successful": "Congratulations! Your habit is most likely established and automatic.",
-      "completed_good": "Great job! You've completed the formation period with a {percentage}% completion rate. Your habit is likely established.",
-      "completed_needs_work": "You've completed the formation period. Continue with regular practice to strengthen your habit.",
-      "remaining_days": "Estimated {days} days left in the formation period. Keep up the consistent practice."
+      "completed_good": "Great job! You've completed the probability period with a {percentage}% completion rate. Your habit is likely established.",
+      "completed_needs_work": "You've completed the probability period. Continue with regular practice to strengthen your habit.",
+      "remaining_days": "Estimated {days} days left in the probability period. Keep up the consistent practice."
     },
     "chart_labels": {
       "demo_data_message": "This is demo data, upgrade to unlock real data",
       "upgrade_button": "Upgrade"
     },
-    "formation_score": "Formation Score",
+    "formation_score": "Probability Score",
     "score_breakdown": "Score Breakdown",
     "progress_status": "Progress Status",
-    "estimated_formation_time": "Estimated Formation Time",
-    "about_formation_title": "About Formation",
+    "estimated_probability_time": "Estimated Probability Time",
+    "about_formation_title": "About Probability",
     "legend_below_60": "Below 60%",
     "legend_needs_work": "Needs Work",
     "legend_60_75": "60-75%",
@@ -5853,7 +5857,7 @@ static const Map<String,dynamic> _en_US = {
     "great_progress": "Great progress! You're building strong neural pathways. {days} days to go! 💪",
     "good_work": "Good work! This {difficulty} habit needs {total} days total. {remaining} days remaining! 📈",
     "keep_going_message": "Keep going! Consistency is key. This {difficulty} habit needs {remaining} more days! 🌱",
-    "formation_takes_days": "This habit takes {total} days of consistent practice to form"
+    "formation_takes_days": "This habit takes {total} days of consistent practice to establish"
   },
   "languages": {
     "english": "English",
@@ -5985,7 +5989,7 @@ static const Map<String,dynamic> _fi_FI = {
           "sub_features_1": "Tavan pilkkominen",
           "sub_features_2": "Sisäkkäinen seuranta"
         },
-        "formation_rate": {
+        "probability_rate": {
           "title": "Tavan muodostumisaste",
           "description": "Seuraa tavan muodostumisen edistymistä älykkäillä oivalluksilla. Näe, kuinka lähellä olet tavan pysyvää juurtumista.",
           "sub_features_0": "Onnistumisen ennuste",
@@ -6000,7 +6004,7 @@ static const Map<String,dynamic> _fi_FI = {
           "sub_features_2": "Saavutuskuvat"
         }
       },
-      "formation_score": "Muodostumispisteet",
+      "probability_score": "Muodostumispisteet",
       "previous": "Edellinen",
       "next": "Seuraava",
       "start": "Aloita"
@@ -6072,7 +6076,7 @@ static const Map<String,dynamic> _fi_FI = {
     "achievement_consistency_champion": "Johdonmukaisuuden mestari",
     "achievement_weekend_warrior": "Viikonloppusoturi",
     "achievement_weekly_checkin": "Viikoittainen tsekkaus",
-    "achievement_formation_journey": "Muodostumismatka",
+    "achievement_probability_journey": "Muodostumismatka",
     "milestones": "Etapit",
     "milestone_one_week_warrior": "Yhden viikon sankari",
     "milestone_monthly_master": "Kuukauden mestari",
@@ -6082,12 +6086,12 @@ static const Map<String,dynamic> _fi_FI = {
     "milestone_half_year_hero": "Puolivuotissankari",
     "milestone_one_year_legend": "Vuosilegenda",
     "progress": "Edistys",
-    "formation": "Muodostuminen",
-    "achievement_formation_threshold": "Saavutit muodostumiskynnyksen!",
+    "formation": "Probability",
+    "achievement_probability_threshold": "Saavutit muodostumiskynnyksen!",
     "achievement_consistency_description": "Toimit {{percentage}}% parhaasta putkestasi!",
     "achievement_weekend_description": "Pidät erinomaisen johdonmukaisuuden myös viikonloppuna!",
     "achievement_weekly_description": "Olet missannut {{days}} päivää tällä viikolla. Huomenna on uusi alku!",
-    "achievement_formation_description": "Olet {{percentage}}% matkalla tämän tavan muodostamiseen. Hermoradat vahvistuvat!",
+    "achievement_probability_description": "Olet {{percentage}}% matkalla tämän tavan muodostamiseen. Hermoradat vahvistuvat!",
     "quote_aristotle": "Erinomaisuus ei ole yksittäinen teko, vaan tapa. Et ole sitä, mitä teet silloin tällöin; olet sitä, mitä teet johdonmukaisesti.",
     "quote_aristotle_author": "Aristoteles",
     "quote_collier": "Menestys on pienten ponnistelujen summa, toistettuna päivästä toiseen.",
@@ -6125,9 +6129,9 @@ static const Map<String,dynamic> _fi_FI = {
     "achievement_perfectionist_description": "{{rate}}% onnistumisprosentti!",
     "heatmap_stats_description": "{{days}} päivää suoritettu viimeisen vuoden aikana",
     "last_7_days": "Viimeiset 7 päivää",
-    "formation_info_title": "Muodostumispisteet",
-    "formation_info_description": "Muodostumispisteet näyttävät, kuinka todennäköisesti tapasi muuttuu automaattiseksi nykyisen suoritusasteesi perusteella. Korkeammat pisteet tarkoittavat, että tapasi on todennäköisemmin pysyvä.",
-    "formation_info_details": "Tämä piste lasketaan johdonmukaisuutesi ja suoritusasteesi perusteella. Tutkimusten mukaan keskimäärin 66 päivää säännöllistä harjoittelua tarvitaan, jotta tavasta tulee automaattinen."
+    "probability_info_title": "Muodostumispisteet",
+    "probability_info_description": "Muodostumispisteet näyttävät, kuinka todennäköisesti tapasi muuttuu automaattiseksi nykyisen suoritusasteesi perusteella. Korkeammat pisteet tarkoittavat, että tapasi on todennäköisemmin pysyvä.",
+    "probability_info_details": "Tämä piste lasketaan johdonmukaisuutesi ja suoritusasteesi perusteella. Tutkimusten mukaan keskimäärin 66 päivää säännöllistä harjoittelua tarvitaan, jotta tavasta tulee automaattinen."
   },
   "habit": {
     "add_habit": "Lisää tapa",
@@ -6435,37 +6439,37 @@ static const Map<String,dynamic> _fi_FI = {
     "overview": "Yleiskatsaus",
     "no_data_for_habit": "Ei tilastodataa vielä",
     "start_tracking_habit": "Aloita tämän tavan seuranta",
-    "habit_formation": "Tavan muodostuminen",
+    "habit_formation": "Habit Probability",
     "completed": "Suoritettu",
     "total_days": "Päiviä yhteensä",
     "longest_streak": "Pis­kä putki",
     "current_streak": "Nykyinen putki",
-    "about_formation": "Tietoa tavan muodostumisesta",
+    "about_formation": "Todennäköisyydestä",
     "formation_info": "Yllä oleva prosenttiosuus näyttää, kuinka todennäköisesti tavasta tulee automaattinen nykyisen johdonmukaisuutesi perusteella. Korkeampi prosentti tarkoittaa suurempaa todennäköisyyttä.",
-    "formation_status": {
+    "probability_status": {
       "early": "Olet vielä alkuvaiheessa. Jatka johdonmukaista seurantaa nähdäksesi edistymistä.",
       "excellent": "Erinomaista edistystä! {percentage}% suoritusasteella tapasi on erittäin todennäköisesti muodostumassa automaattiseksi.",
       "very_good": "Hienoa johdonmukaisuutta! {percentage}% suoritusasteella tapasi on hyvällä mallilla.",
       "good": "Hyvää edistystä! {percentage}% suoritusaste osoittaa, että rakennat tätä tapaa onnistuneesti.",
-      "improving": "Teet edistystä. Yritä nostaa suoritusastetta, jotta tavan muodostuminen olisi todennäköisempää.",
+      "improving": "Teet edistystä. Yritä nostaa suoritusastetta, jotta tavan todennäköisyys olisi suurempi.",
       "needs_work": "Tarvitsee työtä. Säännöllinen suorittaminen auttaa tämän tavan automatisoitumista."
     },
-    "formation_time": {
-      "not_enough_data": "Jatka tavan seurantaa nähdäksesi muodostumisen edistymisen.",
+    "probability_time": {
+      "not_enough_data": "Jatka tavan seurantaa nähdäksesi todennäköisyyden edistymisen.",
       "completed_successful": "Onnittelut! Tapasi on todennäköisimmin vakiintunut ja automaattinen.",
-      "completed_good": "Hienoa! Olet suorittanut muodostumisjakson {percentage}% suoritusasteella. Tapasi on todennäköisesti vakiintunut.",
-      "completed_needs_work": "Olet suorittanut muodostumisjakson. Jatka säännöllistä harjoittelua vahvistaaksesi tapaa.",
-      "remaining_days": "Arviolta {days} päivää jäljellä muodostumisjaksossa. Jatka samalla linjalla."
+      "completed_good": "Hienoa! Olet suorittanut todennäköisyysjakson {percentage}% suoritusasteella. Tapasi on todennäköisesti vakiintunut.",
+      "completed_needs_work": "Olet suorittanut todennäköisyysjakson. Jatka säännöllistä harjoittelua vahvistaaksesi tapaa.",
+      "remaining_days": "Arviolta {days} päivää jäljellä todennäköisyysjaksossa. Jatka samalla linjalla."
     },
     "chart_labels": {
       "demo_data_message": "Tämä on demodata, päivitä avataksesi oikean datan",
       "upgrade_button": "Päivitä"
     },
-    "formation_score": "Muodostumispisteet",
+    "probability_score": "Todennäköisyyspisteet",
     "score_breakdown": "Pisteiden erittely",
     "progress_status": "Edistystila",
-    "estimated_formation_time": "Arvioitu muodostumisaika",
-    "about_formation_title": "Tietoa muodostumisesta",
+    "estimated_probability_time": "Arvioitu todennäköisyysaika",
+    "about_formation_title": "Todennäköisyydestä",
     "legend_below_60": "Alle 60%",
     "legend_needs_work": "Tarvitsee työtä",
     "legend_60_75": "60–75%",

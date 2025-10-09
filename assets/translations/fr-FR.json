@@ -99,6 +99,7 @@
         "app_features": {
             "title": "HabitForm vous aide à...",
             "subtitle": "Construire des habitudes durables avec un suivi intelligent et des insights personnalisés",
+            "continue": "Continuer",
             "features": {
                 "smart_tracking": {
                     "title": "Suivi intelligent des habitudes",
@@ -114,11 +115,11 @@
                     "sub_features_1": "Décomposition des habitudes",
                     "sub_features_2": "Suivi imbriqué"
                 },
-                "formation_rate": {
-                    "title": "Taux de formation des habitudes",
-                    "description": "Suivez vos progrès de formation d'habitudes avec des insights intelligents. Voyez à quel point vous êtes proche de faire tenir vos habitudes de façon permanente.",
+                "probability_rate": {
+                    "title": "Taux de probabilité des habitudes",
+                    "description": "Suivez vos progrès de probabilité d'habitudes avec des insights intelligents. Voyez à quel point vous êtes proche de faire tenir vos habitudes de façon permanente.",
                     "sub_features_0": "Prédiction de succès",
-                    "sub_features_1": "Suivi de formation",
+                    "sub_features_1": "Suivi de probabilité",
                     "sub_features_2": "Analyses de progrès"
                 },
                 "share_habits": {
@@ -129,7 +130,7 @@
                     "sub_features_2": "Images de réussite"
                 }
             },
-            "formation_score": "Score de formation",
+            "probability_score": "Score de formation",
             "previous": "Précédent",
             "next": "Suivant",
             "start": "Commencer"
@@ -201,7 +202,7 @@
         "achievement_consistency_champion": "Champion de constance",
         "achievement_weekend_warrior": "Guerrier du week-end",
         "achievement_weekly_checkin": "Point hebdomadaire",
-        "achievement_formation_journey": "Voyage de formation",
+        "achievement_probability_journey": "Voyage de formation",
         "milestones": "Étapes importantes",
         "milestone_one_week_warrior": "Guerrier d'une semaine",
         "milestone_monthly_master": "Maître mensuel",
@@ -211,12 +212,12 @@
         "milestone_half_year_hero": "Héros du semestre",
         "milestone_one_year_legend": "Légende d'un an",
         "progress": "Progrès",
-        "formation": "Formation",
-        "achievement_formation_threshold": "Seuil de formation atteint !",
+        "formation": "Probability",
+        "achievement_probability_threshold": "Seuil de formation atteint !",
         "achievement_consistency_description": "Vous performez à {{percentage}}% de votre meilleure série !",
         "achievement_weekend_description": "Vous maintenez une excellente constance même le week-end !",
         "achievement_weekly_description": "Vous avez manqué {{days}} jours cette semaine. Demain est un nouveau départ !",
-        "achievement_formation_description": "Vous êtes à {{percentage}}% de la construction de cette habitude. Les voies neuronales se renforcent !",
+        "achievement_probability_description": "Vous êtes à {{percentage}}% de la construction de cette habitude. Les voies neuronales se renforcent !",
         "quote_aristotle": "L'excellence n'est pas un acte unique, mais une habitude. Vous n'êtes pas ce que vous faites de temps en temps ; vous êtes ce que vous faites de manière constante.",
         "quote_aristotle_author": "Aristote",
         "quote_collier": "Le succès est la somme de petits efforts, répétés jour après jour.",
@@ -254,9 +255,9 @@
         "achievement_perfectionist_description": "Taux de réussite de {{rate}}% !",
         "heatmap_stats_description": "{{days}} jours terminés l'année dernière",
         "last_7_days": "7 derniers jours",
-        "formation_info_title": "Score de formation",
-        "formation_info_description": "Le Score de formation montre la probabilité que votre habitude devienne automatique basée sur votre taux de completion actuel. Des scores plus élevés signifient que votre habitude est plus susceptible de tenir de façon permanente.",
-        "formation_info_details": "Ce score est calculé en utilisant vos modèles de constance et votre taux de completion. La recherche montre qu'il faut en moyenne 66 jours de pratique régulière pour qu'une habitude devienne automatique."
+        "probability_info_title": "Score de formation",
+        "probability_info_description": "Le Score de formation montre la probabilité que votre habitude devienne automatique basée sur votre taux de completion actuel. Des scores plus élevés signifient que votre habitude est plus susceptible de tenir de façon permanente.",
+        "probability_info_details": "Ce score est calculé en utilisant vos modèles de constance et votre taux de completion. La recherche montre qu'il faut en moyenne 66 jours de pratique régulière pour qu'une habitude devienne automatique."
     },
     "habit": {
         "add_habit": "Ajouter une habitude",
@@ -564,14 +565,14 @@
         "overview": "Aperçu",
         "no_data_for_habit": "Pas encore de données statistiques",
         "start_tracking_habit": "Commencer à suivre cette habitude",
-        "habit_formation": "Formation des habitudes",
+        "habit_formation": "Habit Probability",
         "completed": "Terminé",
         "total_days": "Total des jours",
         "longest_streak": "Série la plus longue",
         "current_streak": "Série actuelle",
-        "about_formation": "À propos de la formation des habitudes",
+        "about_formation": "About Habit Probability",
         "formation_info": "Le pourcentage ci-dessus montre la probabilité que votre habitude devienne automatique basée sur votre constance actuelle. Des pourcentages plus élevés signifient que votre habitude est plus susceptible de tenir. Selon la recherche, il faut en moyenne 66 jours de pratique régulière pour qu'une habitude devienne automatique.",
-        "formation_status": {
+        "probability_status": {
             "early": "Vous êtes encore dans les premiers stades. Continuez à suivre votre habitude de manière constante pour voir des progrès de formation significatifs.",
             "excellent": "Progrès exceptionnel ! Avec un taux de completion de {percentage}%, votre habitude est très susceptible de devenir automatique.",
             "very_good": "Excellente constance ! Avec un taux de completion de {percentage}%, votre formation d'habitude est sur la bonne voie.",
@@ -579,7 +580,7 @@
             "improving": "Vous faites des progrès. Essayez d'augmenter votre taux de completion pour rendre la formation d'habitude plus probable.",
             "needs_work": "Continuez à travailler sur la constance. Une completion régulière aidera cette habitude à devenir automatique."
         },
-        "formation_time": {
+        "probability_time": {
             "not_enough_data": "Continuez à suivre votre habitude pour voir les progrès de formation.",
             "completed_successful": "Félicitations ! Votre habitude est très probablement établie et automatique.",
             "completed_good": "Excellent travail ! Vous avez terminé la période de formation avec un taux de completion de {percentage}%. Votre habitude est probablement établie.",
@@ -590,11 +591,11 @@
             "demo_data_message": "Ce sont des données de démonstration, mettez à niveau pour débloquer les vraies données",
             "upgrade_button": "Mettre à niveau"
         },
-        "formation_score": "Score de formation",
+        "probability_score": "Score de formation",
         "score_breakdown": "Détail du score",
         "progress_status": "Statut des progrès",
-        "estimated_formation_time": "Temps de formation estimé",
-        "about_formation_title": "À propos de la formation",
+        "estimated_probability_time": "Estimated Probability Time",
+        "about_formation_title": "About Probability",
         "legend_below_60": "En dessous de 60%",
         "legend_needs_work": "Nécessite du travail",
         "legend_60_75": "60-75%",

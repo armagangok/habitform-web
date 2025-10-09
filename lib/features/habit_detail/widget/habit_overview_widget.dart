@@ -4,10 +4,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:habitform/models/habit/habit_extension.dart';
 
 import '/core/core.dart';
-import '../../habit_probability/provider/habit_formation_provider.dart';
 import '/features/purchase/providers/purchase_provider.dart';
 import '/models/habit/habit_model.dart';
-import '../../habit_probability/provider/habit_formation_state.dart';
+import '../../habit_probability/provider/habit_probability_provider.dart';
+import '../../habit_probability/provider/habit_probability_state.dart';
 import '../../purchase/page/paywall_page.dart';
 import '../providers/habit_statistics_provider.dart';
 import 'statistic_card.dart';
@@ -34,7 +34,7 @@ class HabitOverviewWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final formationState = ref.watch(formationProvider);
+    final formationState = ref.watch(probabilityProvider);
     final purchaseState = ref.watch(purchaseProvider);
     final habitStats = ref.watch(habitStatisticsProvider);
     final bool isProUser = purchaseState.value?.isSubscriptionActive ?? false;
@@ -201,7 +201,7 @@ class HabitOverviewCompact extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final formationState = ref.watch(formationProvider);
+    final formationState = ref.watch(probabilityProvider);
     final purchaseState = ref.watch(purchaseProvider);
     final habitStats = ref.watch(habitStatisticsProvider);
     final bool isProUser = purchaseState.value?.isSubscriptionActive ?? false;

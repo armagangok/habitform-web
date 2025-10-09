@@ -24,7 +24,7 @@ struct Habit: Codable, Identifiable {
     let difficulty: HabitDifficulty
 
     // Flutter-provided calculated values
-    let flutterFormationProbability: Double?
+    let flutterProbabilityScore: Double?
     let flutterLongestStreak: Int?
     let flutterCurrentStreak: Int?
     let flutterCompletedDays: Int?
@@ -86,9 +86,9 @@ struct Habit: Codable, Identifiable {
         return maxStreak
     }
 
-    var formationProbability: Double {
+    var probabilityScore: Double {
         // Use Flutter-provided value if available, otherwise return 0
-        return flutterFormationProbability ?? 0.0
+        return flutterProbabilityScore ?? 0.0
     }
 
     // Computed properties for Flutter-provided data
@@ -367,7 +367,7 @@ class HabitDataManager {
                     status: habit.status,
                     categoryIds: habit.categoryIds,
                     difficulty: habit.difficulty,
-                    flutterFormationProbability: habit.flutterFormationProbability,
+                    flutterProbabilityScore: habit.flutterProbabilityScore,
                     flutterLongestStreak: habit.flutterLongestStreak,
                     flutterCurrentStreak: habit.flutterCurrentStreak,
                     flutterCompletedDays: habit.flutterCompletedDays,
@@ -464,7 +464,7 @@ class HabitDataManager {
                     status: habit.status,
                     categoryIds: habit.categoryIds,
                     difficulty: habit.difficulty,
-                    flutterFormationProbability: habit.flutterFormationProbability,
+                    flutterProbabilityScore: habit.flutterProbabilityScore,
                     flutterLongestStreak: habit.flutterLongestStreak,
                     flutterCurrentStreak: habit.flutterCurrentStreak,
                     flutterCompletedDays: habit.flutterCompletedDays,

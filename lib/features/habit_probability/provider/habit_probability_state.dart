@@ -1,32 +1,32 @@
 import '../../../models/habit/habit_difficulty.dart';
 
 /// State model for statistics
-class FormtionState {
+class ProbabilityState {
   final int totalCompletedDays;
   final Map<String, HabitStatistic> habitStatistics;
   final bool isMockData;
 
-  const FormtionState({
+  const ProbabilityState({
     required this.totalCompletedDays,
     required this.habitStatistics,
     this.isMockData = false,
   });
 
   // Factory constructor for initial state with default values
-  factory FormtionState.initial({bool isMockData = false}) => FormtionState(
+  factory ProbabilityState.initial({bool isMockData = false}) => ProbabilityState(
         totalCompletedDays: 0,
         habitStatistics: {},
         isMockData: isMockData,
       );
 
   // CopyWith method for immutability
-  FormtionState copyWith({
+  ProbabilityState copyWith({
     int? totalCompletedDays,
     int? longestStreak,
     Map<String, HabitStatistic>? habitStatistics,
     bool? isMockData,
   }) {
-    return FormtionState(
+    return ProbabilityState(
       totalCompletedDays: totalCompletedDays ?? this.totalCompletedDays,
       habitStatistics: habitStatistics ?? this.habitStatistics,
       isMockData: isMockData ?? this.isMockData,
@@ -43,9 +43,9 @@ class HabitStatistic {
   final double progressPercentage;
   final DateTime startDate;
   final HabitDifficulty? difficulty;
-  final double formationProbability; // 0-100 probability of successful formation
-  final int estimatedFormationDays; // Days needed for formation based on difficulty
-  final int remainingFormationDays; // Days remaining to complete formation
+  final double probabilityScore; // 0-100 probability of successful habit formation
+  final int estimatedProbabilityDays; // Days needed for habit formation based on difficulty
+  final int remainingProbabilityDays; // Days remaining to complete habit formation
 
   const HabitStatistic({
     required this.habitId,
@@ -55,8 +55,8 @@ class HabitStatistic {
     required this.progressPercentage,
     required this.startDate,
     this.difficulty,
-    required this.formationProbability,
-    required this.estimatedFormationDays,
-    required this.remainingFormationDays,
+    required this.probabilityScore,
+    required this.estimatedProbabilityDays,
+    required this.remainingProbabilityDays,
   });
 }

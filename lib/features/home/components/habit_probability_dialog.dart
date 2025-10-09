@@ -68,9 +68,9 @@ class _HabitProbabilityDialogState extends State<HabitProbabilityDialog> with Ti
       CurvedAnimation(parent: _scaleController, curve: Curves.easeOutBack),
     );
 
-    // Calculate formation probability for animation
-    final formationProbability = _calculateFormationProbability();
-    _scoreAnimation = Tween<double>(begin: 0.0, end: formationProbability).animate(
+    // Calculate probability score for animation
+    final probabilityScore = _calculateProbabilityScore();
+    _scoreAnimation = Tween<double>(begin: 0.0, end: probabilityScore).animate(
       CurvedAnimation(parent: _scoreController, curve: Curves.easeOutCubic),
     );
 
@@ -326,7 +326,7 @@ class _HabitProbabilityDialogState extends State<HabitProbabilityDialog> with Ti
       builder: (context, child) {
         final animatedScore = _scoreAnimation.value;
         final progress = animatedScore / 100.0;
-        final scoreColor = _getFormationScoreColor(animatedScore);
+        final scoreColor = _getProbabilityScoreColor(animatedScore);
 
         return _buildProgress(progress, animatedScore, scoreColor, theme);
       },
@@ -424,7 +424,7 @@ class _HabitProbabilityDialogState extends State<HabitProbabilityDialog> with Ti
               )
             else
               Text(
-                _getFormationMessage(widget.newScore),
+                _getProbabilityMessage(widget.newScore),
                 style: context.bodyMedium.copyWith(
                   color: cupertinoTheme.textTheme.textStyle.color ?? CupertinoColors.label,
                   height: 1.4,
@@ -519,7 +519,7 @@ class _HabitProbabilityDialogState extends State<HabitProbabilityDialog> with Ti
     return path;
   }
 
-  Color _getFormationScoreColor(double score) {
+  Color _getProbabilityScoreColor(double score) {
     // Map score [0,100] to hue [0 (red) .. 120 (green)] for smoother variety
     final clamped = score.clamp(0.0, 100.0);
     final t = clamped / 100.0;
@@ -532,19 +532,19 @@ class _HabitProbabilityDialogState extends State<HabitProbabilityDialog> with Ti
     return HSLColor.fromAHSL(1.0, hue, saturation.clamp(0.0, 1.0), lightness.clamp(0.0, 1.0)).toColor();
   }
 
-  // Calculate total formation days needed for this habit
-  int get _totalFormationDays => widget.habit.difficulty.estimatedFormationDays;
+  // Calculate total probability days needed for this habit
+  int get _totalProbabilityDays => widget.habit.difficulty.estimatedProbabilityDays;
 
   // Count completed unique days for the habit
 
   // Remaining days to reach formation based on completions
   int _getRemainingDaysByCompletions() {
-    return widget.habit.getRemainingFormationDays();
+    return widget.habit.getRemainingProbabilityDays();
   }
 
-  String _getFormationMessage(int score) {
+  String _getProbabilityMessage(int score) {
     final remainingDays = _getRemainingDaysByCompletions();
-    final totalDays = _totalFormationDays;
+    final totalDays = _totalProbabilityDays;
     final difficulty = widget.habit.difficulty;
     final difficultyName = difficulty.displayName;
 
@@ -575,7 +575,7 @@ class _HabitProbabilityDialogState extends State<HabitProbabilityDialog> with Ti
   }
 
   /// Calculate formation probability using the same logic as Habit Detail and Formation pages
-  double _calculateFormationProbability() {
+  double _calculateProbabilityScore() {
     return widget.habit.calculateHabitProbability();
   }
 }

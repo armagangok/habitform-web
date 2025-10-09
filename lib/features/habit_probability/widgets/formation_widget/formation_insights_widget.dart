@@ -5,42 +5,41 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:habitform/core/extension/extensions.dart';
 
-import '../../provider/selected_habit_index_provider.dart';
 import '/features/translation/constants/locale_keys.g.dart';
 import '/models/habit/habit_difficulty.dart';
-
-import '../../provider/habit_formation_provider.dart';
+import '../../provider/habit_probability_provider.dart';
+import '../../provider/selected_habit_index_provider.dart';
 
 class FormationInsightsWidget extends ConsumerWidget {
   const FormationInsightsWidget({super.key});
 
   // Alışkanlık oturma durumunu hesapla - difficulty-aware
-  String _getHabitFormationStatus(double completionRate, int completedDays, HabitDifficulty difficulty, double formationProbability) {
+  String _getHabitProbabilityStatus(double completionRate, int completedDays, HabitDifficulty difficulty, double probabilityScore) {
     if (completedDays < 10) {
-      return LocaleKeys.statistics_formation_status_early.tr();
+      return LocaleKeys.statistics_probability_status_early.tr();
     }
 
     // Use formation probability instead of raw completion rate for consistency
-    final percentage = formationProbability.toStringAsFixed(0);
+    final percentage = probabilityScore.toStringAsFixed(0);
 
-    if (formationProbability >= 90) {
-      return LocaleKeys.statistics_formation_status_excellent.tr(namedArgs: {
+    if (probabilityScore >= 90) {
+      return LocaleKeys.statistics_probability_status_excellent.tr(namedArgs: {
         'percentage': percentage,
       });
-    } else if (formationProbability >= 75) {
-      return LocaleKeys.statistics_formation_status_very_good.tr(namedArgs: {
+    } else if (probabilityScore >= 75) {
+      return LocaleKeys.statistics_probability_status_very_good.tr(namedArgs: {
         'percentage': percentage,
       });
-    } else if (formationProbability >= 60) {
-      return LocaleKeys.statistics_formation_status_good.tr(namedArgs: {
+    } else if (probabilityScore >= 60) {
+      return LocaleKeys.statistics_probability_status_good.tr(namedArgs: {
         'percentage': percentage,
       });
-    } else if (formationProbability >= 40) {
-      return LocaleKeys.statistics_formation_status_improving.tr(namedArgs: {
+    } else if (probabilityScore >= 40) {
+      return LocaleKeys.statistics_probability_status_improving.tr(namedArgs: {
         'percentage': percentage,
       });
     } else {
-      return LocaleKeys.statistics_formation_status_needs_work.tr(namedArgs: {
+      return LocaleKeys.statistics_probability_status_needs_work.tr(namedArgs: {
         'percentage': percentage,
       });
     }
@@ -49,21 +48,21 @@ class FormationInsightsWidget extends ConsumerWidget {
   // Tahmini alışkanlık oturma süresini hesapla - difficulty-aware
   String _getEstimatedFormationTime(double completionRate, int completedDays, DateTime startDate, HabitDifficulty difficulty, int remainingFormationDays, int estimatedFormationDays) {
     if (completedDays < 5) {
-      return LocaleKeys.statistics_formation_time_not_enough_data.tr();
+      return LocaleKeys.statistics_probability_time_not_enough_data.tr();
     }
 
     final minimumCompletionRate = difficulty.minimumCompletionRate * 100;
 
     if (remainingFormationDays == 0) {
       if (completionRate >= minimumCompletionRate + 15) {
-        return LocaleKeys.statistics_formation_time_completed_successful.tr();
+        return LocaleKeys.statistics_probability_time_completed_successful.tr();
       } else if (completionRate >= minimumCompletionRate) {
-        return LocaleKeys.statistics_formation_time_completed_good.tr(namedArgs: {'percentage': completionRate.toStringAsFixed(0)});
+        return LocaleKeys.statistics_probability_time_completed_good.tr(namedArgs: {'percentage': completionRate.toStringAsFixed(0)});
       } else {
-        return LocaleKeys.statistics_formation_time_completed_needs_work.tr();
+        return LocaleKeys.statistics_probability_time_completed_needs_work.tr();
       }
     } else {
-      return LocaleKeys.statistics_formation_time_remaining_days.tr(namedArgs: {
+      return LocaleKeys.statistics_probability_time_remaining_days.tr(namedArgs: {
         'days': remainingFormationDays.toString(),
         'total': estimatedFormationDays.toString(),
       });
@@ -72,7 +71,7 @@ class FormationInsightsWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final state = ref.watch(formationProvider);
+    final state = ref.watch(probabilityProvider);
     final selectedHabitIndex = ref.watch(selectedHabitIndexProvider);
 
     return state.when(
@@ -83,6 +82,7 @@ class FormationInsightsWidget extends ConsumerWidget {
         if (data.totalCompletedDays == 0) {
           return CupertinoListSection.insetGrouped(
             backgroundColor: Colors.transparent,
+
             header: Text(LocaleKeys.statistics_habit_formation.tr()),
             children: [
               CupertinoListTile(
@@ -129,19 +129,19 @@ class FormationInsightsWidget extends ConsumerWidget {
         if (selectedHabitIndex >= 0 && selectedHabitIndex < data.habitStatistics.values.length) {
           final selectedHabit = data.habitStatistics.values.elementAt(selectedHabitIndex);
           final HabitDifficulty selectedDifficulty = selectedHabit.difficulty ?? HabitDifficulty.moderate;
-          habitFormationStatus = _getHabitFormationStatus(
+          habitFormationStatus = _getHabitProbabilityStatus(
             selectedHabit.progressPercentage,
             selectedHabit.completedDays,
             selectedDifficulty,
-            selectedHabit.formationProbability,
+            selectedHabit.probabilityScore,
           );
           estimatedFormationTime = _getEstimatedFormationTime(
             selectedHabit.progressPercentage,
             selectedHabit.completedDays,
             selectedHabit.startDate,
             selectedDifficulty,
-            selectedHabit.remainingFormationDays,
-            selectedHabit.estimatedFormationDays,
+            selectedHabit.remainingProbabilityDays,
+            selectedHabit.estimatedProbabilityDays,
           );
         } else {
           // No valid habit selected, return empty widget
@@ -155,7 +155,7 @@ class FormationInsightsWidget extends ConsumerWidget {
               context,
               data.habitStatistics.values.elementAt(selectedHabitIndex).progressPercentage,
               data.habitStatistics.values.elementAt(selectedHabitIndex).difficulty ?? HabitDifficulty.moderate,
-              data.habitStatistics.values.elementAt(selectedHabitIndex).formationProbability,
+              data.habitStatistics.values.elementAt(selectedHabitIndex).probabilityScore,
             ),
 
             const SizedBox(height: 20),
@@ -163,12 +163,12 @@ class FormationInsightsWidget extends ConsumerWidget {
             // Percentage Legend Section
             _buildPercentageLegendSection(
               context,
-              data.habitStatistics.values.elementAt(selectedHabitIndex).formationProbability,
+              data.habitStatistics.values.elementAt(selectedHabitIndex).probabilityScore,
             ),
 
             const SizedBox(height: 20),
 
-            // About Habit Formation Section
+            // About Habit Probability Section
             _buildAboutFormationSection(
               context,
               habitFormationStatus,
@@ -181,34 +181,34 @@ class FormationInsightsWidget extends ConsumerWidget {
   }
 
   // Score Section - Formation Probability Chart
-  Widget _buildScoreSection(BuildContext context, double progressPercentage, HabitDifficulty difficulty, double formationProbability) {
+  Widget _buildScoreSection(BuildContext context, double progressPercentage, HabitDifficulty difficulty, double probabilityScore) {
     return CupertinoListSection.insetGrouped(
       backgroundColor: Colors.transparent,
-      header: Text(LocaleKeys.statistics_formation_score.tr()),
+      header: Text(LocaleKeys.statistics_probability_score.tr()),
       children: [
         Padding(
           padding: const EdgeInsets.all(16.0),
-          child: _buildHabitFormationChart(context, progressPercentage, difficulty, formationProbability),
+          child: _buildHabitProbabilityChart(context, progressPercentage, difficulty, probabilityScore),
         ),
       ],
     );
   }
 
   // Percentage Legend Section
-  Widget _buildPercentageLegendSection(BuildContext context, double formationProbability) {
+  Widget _buildPercentageLegendSection(BuildContext context, double probabilityScore) {
     return CupertinoListSection.insetGrouped(
       backgroundColor: Colors.transparent,
       header: Text(LocaleKeys.statistics_score_breakdown.tr()),
       children: [
         Padding(
           padding: const EdgeInsets.all(16.0),
-          child: _buildPercentageLegend(context, formationProbability),
+          child: _buildPercentageLegend(context, probabilityScore),
         ),
       ],
     );
   }
 
-  // About Habit Formation Section with separate subsections
+  // About Habit Probability Section with separate subsections
   Widget _buildAboutFormationSection(BuildContext context, String habitFormationStatus, String estimatedFormationTime) {
     return CupertinoListSection.insetGrouped(
       backgroundColor: Colors.transparent,
@@ -239,7 +239,7 @@ class FormationInsightsWidget extends ConsumerWidget {
           backgroundColor: Colors.transparent,
           padding: const EdgeInsets.all(16),
           title: Text(
-            LocaleKeys.statistics_estimated_formation_time.tr(),
+            LocaleKeys.statistics_estimated_probability_time.tr(),
             style: context.titleSmall.copyWith(
               fontWeight: FontWeight.bold,
             ),
@@ -289,24 +289,24 @@ class FormationInsightsWidget extends ConsumerWidget {
     );
   }
 
-  Widget _buildHabitFormationChart(BuildContext context, double progressPercentage, HabitDifficulty difficulty, double formationProbability) {
+  Widget _buildHabitProbabilityChart(BuildContext context, double progressPercentage, HabitDifficulty difficulty, double probabilityScore) {
     // Formation probability-based color determination
     Color progressColor;
     List<Color> progressGradient;
 
-    if (formationProbability >= 90) {
+    if (probabilityScore >= 90) {
       progressColor = const Color(0xFF4CAF50); // Green - Excellent formation probability
       progressGradient = [
         const Color(0xFF66BB6A),
         const Color(0xFF43A047),
       ];
-    } else if (formationProbability >= 75) {
+    } else if (probabilityScore >= 75) {
       progressColor = const Color(0xFF8BC34A); // Light Green - Very good formation probability
       progressGradient = [
         const Color(0xFF9CCC65),
         const Color(0xFF7CB342),
       ];
-    } else if (formationProbability >= 60) {
+    } else if (probabilityScore >= 60) {
       progressColor = const Color(0xFFFFC107); // Amber - Good formation probability
       progressGradient = [
         const Color(0xFFFFD54F),
@@ -335,7 +335,7 @@ class FormationInsightsWidget extends ConsumerWidget {
               sections: [
                 PieChartSectionData(
                   color: progressColor,
-                  value: formationProbability,
+                  value: probabilityScore,
                   title: '',
                   radius: 25,
                   titleStyle: const TextStyle(
@@ -352,7 +352,7 @@ class FormationInsightsWidget extends ConsumerWidget {
                 ),
                 PieChartSectionData(
                   color: Colors.grey.shade200,
-                  value: 100 - formationProbability,
+                  value: 100 - probabilityScore,
                   title: '',
                   radius: 20,
                   titleStyle: const TextStyle(
@@ -394,7 +394,7 @@ class FormationInsightsWidget extends ConsumerWidget {
                 Padding(
                   padding: const EdgeInsets.all(10.0),
                   child: Text(
-                    '${formationProbability.toStringAsFixed(0)}%',
+                    '${probabilityScore.toStringAsFixed(0)}%',
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
@@ -411,7 +411,7 @@ class FormationInsightsWidget extends ConsumerWidget {
   }
 
   // Separate percentage legend method
-  Widget _buildPercentageLegend(BuildContext context, double formationProbability) {
+  Widget _buildPercentageLegend(BuildContext context, double probabilityScore) {
     return IntrinsicHeight(
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 6),
@@ -423,7 +423,7 @@ class FormationInsightsWidget extends ConsumerWidget {
                 const Color(0xFFF44336),
                 LocaleKeys.statistics_legend_less_60.tr(),
                 LocaleKeys.statistics_legend_needs_work.tr(),
-                isSelected: formationProbability < 60,
+                isSelected: probabilityScore < 60,
               ),
             ),
             _verticalDivider(),
@@ -433,7 +433,7 @@ class FormationInsightsWidget extends ConsumerWidget {
                 const Color(0xFFFFC107),
                 LocaleKeys.statistics_legend_60_75.tr(),
                 LocaleKeys.statistics_legend_good.tr(),
-                isSelected: formationProbability >= 60 && formationProbability < 75,
+                isSelected: probabilityScore >= 60 && probabilityScore < 75,
               ),
             ),
             _verticalDivider(),
@@ -443,7 +443,7 @@ class FormationInsightsWidget extends ConsumerWidget {
                 const Color(0xFF8BC34A),
                 LocaleKeys.statistics_legend_75_90.tr(),
                 LocaleKeys.statistics_legend_very_good.tr(),
-                isSelected: formationProbability >= 75 && formationProbability < 90,
+                isSelected: probabilityScore >= 75 && probabilityScore < 90,
               ),
             ),
             _verticalDivider(),
@@ -453,7 +453,7 @@ class FormationInsightsWidget extends ConsumerWidget {
                 const Color(0xFF4CAF50),
                 LocaleKeys.statistics_legend_greater_90.tr(),
                 LocaleKeys.statistics_legend_excellent.tr(),
-                isSelected: formationProbability >= 90,
+                isSelected: probabilityScore >= 90,
               ),
             ),
           ],

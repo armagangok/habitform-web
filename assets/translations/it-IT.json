@@ -114,7 +114,7 @@
                     "sub_features_1": "Scomposizione Abitudini",
                     "sub_features_2": "Monitoraggio Annidato"
                 },
-                "formation_rate": {
+                "probability_rate": {
                     "title": "Tasso di Formazione Abitudini",
                     "description": "Tieni traccia dei tuoi progressi nella formazione delle abitudini con approfondimenti intelligenti. Vedi quanto sei vicino a rendere le tue abitudini permanenti.",
                     "sub_features_0": "Previsione Successo",
@@ -129,7 +129,7 @@
                     "sub_features_2": "Immagini Successi"
                 }
             },
-            "formation_score": "Punteggio Formazione",
+            "probability_score": "Punteggio Formazione",
             "previous": "Precedente",
             "next": "Prossimo",
             "start": "Inizia"
@@ -201,7 +201,7 @@
         "achievement_consistency_champion": "Campione di Costanza",
         "achievement_weekend_warrior": "Guerriero del Weekend",
         "achievement_weekly_checkin": "Check-in Settimanale",
-        "achievement_formation_journey": "Viaggio di Formazione",
+        "achievement_probability_journey": "Viaggio di Formazione",
         "milestones": "Traguardi",
         "milestone_one_week_warrior": "Guerriero di Una Settimana",
         "milestone_monthly_master": "Maestro Mensile",
@@ -211,12 +211,12 @@
         "milestone_half_year_hero": "Eroe del Semestre",
         "milestone_one_year_legend": "Leggenda dell'Anno",
         "progress": "Progresso",
-        "formation": "Formazione",
-        "achievement_formation_threshold": "Soglia di formazione raggiunta!",
+        "formation": "Probability",
+        "achievement_probability_threshold": "Soglia di formazione raggiunta!",
         "achievement_consistency_description": "Stai performando al {{percentage}}% della tua serie migliore!",
         "achievement_weekend_description": "Mantieni un'ottima costanza anche nei weekend!",
         "achievement_weekly_description": "Hai saltato {{days}} giorni questa settimana. Domani è un nuovo inizio!",
-        "achievement_formation_description": "Sei al {{percentage}}% della costruzione di questa abitudine. I percorsi neurali si stanno rafforzando!",
+        "achievement_probability_description": "Sei al {{percentage}}% della costruzione di questa abitudine. I percorsi neurali si stanno rafforzando!",
         "quote_aristotle": "L'eccellenza non è un atto singolo, ma un'abitudine. Non sei ciò che fai una volta ogni tanto; sei ciò che fai costantemente.",
         "quote_aristotle_author": "Aristotele",
         "quote_collier": "Il successo è la somma di piccoli sforzi, ripetuti giorno dopo giorno.",
@@ -254,9 +254,9 @@
         "achievement_perfectionist_description": "Tasso di successo del {{rate}}%!",
         "heatmap_stats_description": "{{days}} giorni completati nell'ultimo anno",
         "last_7_days": "Ultimi 7 Giorni",
-        "formation_info_title": "Punteggio Formazione",
-        "formation_info_description": "Il Punteggio di Formazione mostra quanto è probabile che la tua abitudine diventi automatica in base al tuo attuale tasso di completamento. Punteggi più alti significano che è più probabile che la tua abitudine resti permanentemente.",
-        "formation_info_details": "Questo punteggio è calcolato utilizzando i tuoi modelli di costanza e tasso di completamento. La ricerca mostra che occorrono in media 66 giorni di pratica regolare affinché un'abitudine diventi automatica."
+        "probability_info_title": "Punteggio Formazione",
+        "probability_info_description": "Il Punteggio di Formazione mostra quanto è probabile che la tua abitudine diventi automatica in base al tuo attuale tasso di completamento. Punteggi più alti significano che è più probabile che la tua abitudine resti permanentemente.",
+        "probability_info_details": "Questo punteggio è calcolato utilizzando i tuoi modelli di costanza e tasso di completamento. La ricerca mostra che occorrono in media 66 giorni di pratica regolare affinché un'abitudine diventi automatica."
     },
     "habit": {
         "add_habit": "Aggiungi Abitudine",
@@ -564,37 +564,37 @@
         "overview": "Panoramica",
         "no_data_for_habit": "Ancora nessun dato statistico",
         "start_tracking_habit": "Inizia a tracciare questa abitudine",
-        "habit_formation": "Formazione Abitudine",
+        "habit_formation": "Habit Probability",
         "completed": "Completate",
         "total_days": "Giorni Totali",
         "longest_streak": "Serie Più Lunga",
         "current_streak": "Serie Attuale",
-        "about_formation": "Informazioni sulla Formazione delle Abitudini",
+        "about_formation": "Sulla Probabilità delle Abitudini",
         "formation_info": "La percentuale sopra mostra quanto è probabile che la tua abitudine diventi automatica in base alla tua attuale costanza. Percentuali più alte significano che è più probabile che la tua abitudine resti. Secondo la ricerca, occorrono in media 66 giorni di pratica regolare affinché un'abitudine diventi automatica.",
-        "formation_status": {
-            "early": "Sei ancora nelle fasi iniziali. Continua a tracciare la tua abitudine con costanza per vedere progressi significativi nella formazione.",
+        "probability_status": {
+            "early": "Sei ancora nelle fasi iniziali. Continua a tracciare la tua abitudine con costanza per vedere progressi significativi nella probabilità.",
             "excellent": "Progressi eccezionali! Con un tasso di completamento del {percentage}%, è molto probabile che la tua abitudine diventi automatica.",
-            "very_good": "Grande costanza! Con un tasso di completamento del {percentage}%, la formazione della tua abitudine è sulla buona strada.",
+            "very_good": "Grande costanza! Con un tasso di completamento del {percentage}%, la probabilità della tua abitudine è sulla buona strada.",
             "good": "Buoni progressi! Il tuo tasso di completamento del {percentage}% mostra che stai costruendo con successo questa abitudine.",
-            "improving": "Stai facendo progressi. Prova ad aumentare il tuo tasso di completamento per rendere più probabile la formazione dell'abitudine.",
+            "improving": "Stai facendo progressi. Prova ad aumentare il tuo tasso di completamento per rendere più probabile la probabilità dell'abitudine.",
             "needs_work": "Continua a lavorare sulla costanza. Il completamento regolare aiuterà questa abitudine a diventare automatica."
         },
-        "formation_time": {
-            "not_enough_data": "Continua a tracciare la tua abitudine per vedere i progressi di formazione.",
+        "probability_time": {
+            "not_enough_data": "Continua a tracciare la tua abitudine per vedere i progressi di probabilità.",
             "completed_successful": "Congratulazioni! La tua abitudine è molto probabilmente stabilita e automatica.",
-            "completed_good": "Ottimo lavoro! Hai completato il periodo di formazione con un tasso di completamento del {percentage}%. La tua abitudine è probabilmente stabilita.",
-            "completed_needs_work": "Hai completato il periodo di formazione. Continua con la pratica regolare per rafforzare la tua abitudine.",
-            "remaining_days": "Rimangono circa {days} giorni nel periodo di formazione. Continua con la pratica costante."
+            "completed_good": "Ottimo lavoro! Hai completato il periodo di probabilità con un tasso di completamento del {percentage}%. La tua abitudine è probabilmente stabilita.",
+            "completed_needs_work": "Hai completato il periodo di probabilità. Continua con la pratica regolare per rafforzare la tua abitudine.",
+            "remaining_days": "Rimangono circa {days} giorni nel periodo di probabilità. Continua con la pratica costante."
         },
         "chart_labels": {
             "demo_data_message": "Questi sono dati dimostrativi, effettua l'upgrade per sbloccare i dati reali",
             "upgrade_button": "Effettua l'Upgrade"
         },
-        "formation_score": "Punteggio Formazione",
+        "probability_score": "Punteggio Probabilità",
         "score_breakdown": "Dettaglio Punteggio",
         "progress_status": "Stato Progressi",
-        "estimated_formation_time": "Tempo di Formazione Stimato",
-        "about_formation_title": "Informazioni sulla Formazione",
+        "estimated_probability_time": "Tempo Stimato di Probabilità",
+        "about_formation_title": "Sulla Probabilità",
         "legend_below_60": "Sotto il 60%",
         "legend_needs_work": "Necessita Lavoro",
         "legend_60_75": "60-75%",

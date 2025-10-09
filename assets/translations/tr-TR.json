@@ -99,6 +99,7 @@
         "app_features": {
             "title": "HabitForm Size Yardımcı Olur...",
             "subtitle": "Akıllı takip ve kişiselleştirilmiş içgörülerle kalıcı alışkanlıklar oluşturun",
+            "continue": "Devam Et",
             "features": {
                 "smart_tracking": {
                     "title": "Akıllı Alışkanlık Takibi",
@@ -114,7 +115,7 @@
                     "sub_features_1": "Alışkanlık Ayrıştırma",
                     "sub_features_2": "İç İçe Takip"
                 },
-                "formation_rate": {
+                "probability_rate": {
                     "title": "Alışkanlık Oluşum Oranı",
                     "description": "Alışkanlık oluşum ilerlemenizi akıllı içgörülerle takip edin. Alışkanlıklarınızın kalıcı hale gelmesine ne kadar yakın olduğunuzu görün.",
                     "sub_features_0": "Başarı Tahmini",
@@ -129,7 +130,7 @@
                     "sub_features_2": "Başarı Görselleri"
                 }
             },
-            "formation_score": "Oluşum Skoru",
+            "probability_score": "Oluşum Skoru",
             "previous": "Önceki",
             "next": "Sonraki",
             "start": "Başla"
@@ -201,7 +202,7 @@
         "achievement_consistency_champion": "Tutarlılık Şampiyonu",
         "achievement_weekend_warrior": "Hafta Sonu Savaşçısı",
         "achievement_weekly_checkin": "Haftalık Kontrol",
-        "achievement_formation_journey": "Oluşum Yolculuğu",
+        "achievement_probability_journey": "Oluşum Yolculuğu",
         "milestones": "Dönüm Noktaları",
         "milestone_one_week_warrior": "Bir Hafta Savaşçısı",
         "milestone_monthly_master": "Aylık Usta",
@@ -211,12 +212,12 @@
         "milestone_half_year_hero": "Yarım Yıl Kahramanı",
         "milestone_one_year_legend": "Bir Yıl Efsanesi",
         "progress": "İlerleme",
-        "formation": "Oluşum",
-        "achievement_formation_threshold": "Oluşum eşiğine ulaşıldı!",
+        "formation": "Probability",
+        "achievement_probability_threshold": "Oluşum eşiğine ulaşıldı!",
         "achievement_consistency_description": "En iyi serinizin %{{percentage}}'si kadar performans gösteriyorsunuz!",
         "achievement_weekend_description": "Hafta sonları bile harika bir tutarlılık sergiliyorsunuz!",
         "achievement_weekly_description": "Bu hafta {{days}} gün kaçırdınız. Yarın yeni bir başlangıç!",
-        "achievement_formation_description": "Bu alışkanlığı oluşturmanın %{{percentage}}'sindesiniz. Sinir yolları güçleniyor!",
+        "achievement_probability_description": "Bu alışkanlığı oluşturmanın %{{percentage}}'sindesiniz. Sinir yolları güçleniyor!",
         "quote_aristotle": "Mükemmellik tek bir eylem değil, bir alışkanlıktır. Arada sırada yaptığınız şey değil; sürekli yaptığınız şeysiniz.",
         "quote_aristotle_author": "Aristoteles",
         "quote_collier": "Başarı, her gün tekrarlanan küçük çabaların toplamıdır.",
@@ -254,9 +255,9 @@
         "achievement_perfectionist_description": "%{{rate}} başarı oranı!",
         "heatmap_stats_description": "Geçen yıl {{days}} gün tamamlandı",
         "last_7_days": "Son 7 Gün",
-        "formation_info_title": "Oluşum Skoru",
-        "formation_info_description": "Oluşum Skoru, alışkanlığınızın mevcut tamamlama oranınıza göre otomatik hale gelme olasılığını gösterir. Daha yüksek skorlar, alışkanlığınızın kalıcı olma olasılığının daha yüksek olduğu anlamına gelir.",
-        "formation_info_details": "Bu skor, tutarlılık kalıplarınız ve tamamlama oranınız kullanılarak hesaplanır. Araştırmalar, bir alışkanlığın otomatik hale gelmesi için ortalama 66 günlük düzenli pratik gerektiğini göstermektedir."
+        "probability_info_title": "Oluşum Skoru",
+        "probability_info_description": "Oluşum Skoru, alışkanlığınızın mevcut tamamlama oranınıza göre otomatik hale gelme olasılığını gösterir. Daha yüksek skorlar, alışkanlığınızın kalıcı olma olasılığının daha yüksek olduğu anlamına gelir.",
+        "probability_info_details": "Bu skor, tutarlılık kalıplarınız ve tamamlama oranınız kullanılarak hesaplanır. Araştırmalar, bir alışkanlığın otomatik hale gelmesi için ortalama 66 günlük düzenli pratik gerektiğini göstermektedir."
     },
     "habit": {
         "add_habit": "Alışkanlık Ekle",
@@ -564,14 +565,14 @@
         "overview": "Genel Bakış",
         "no_data_for_habit": "Henüz istatistik verisi yok",
         "start_tracking_habit": "Bu alışkanlığı takip etmeye başla",
-        "habit_formation": "Alışkanlık Oluşumu",
+        "habit_formation": "Habit Probability",
         "completed": "Tamamlandı",
         "total_days": "Toplam Gün",
         "longest_streak": "En Uzun Seri",
         "current_streak": "Mevcut Seri",
-        "about_formation": "Alışkanlık Oluşumu Hakkında",
+        "about_formation": "About Habit Probability",
         "formation_info": "Yukarıdaki yüzde, alışkanlığınızın mevcut tutarlılığınıza göre otomatik hale gelme olasılığını gösterir. Daha yüksek yüzdeler, alışkanlığınızın kalıcı olma olasılığının daha yüksek olduğu anlamına gelir. Araştırmalara göre, bir alışkanlığın otomatik hale gelmesi için ortalama 66 günlük düzenli pratik gerekir.",
-        "formation_status": {
+        "probability_status": {
             "early": "Henüz erken aşamalardasınız. Anlamlı oluşum ilerlemesi görmek için alışkanlığınızı tutarlı bir şekilde takip etmeye devam edin.",
             "excellent": "Olağanüstü ilerleme! %{{percentage}} tamamlama oranıyla alışkanlığınızın otomatik hale gelme olasılığı çok yüksek.",
             "very_good": "Harika tutarlılık! %{{percentage}} tamamlama oranıyla alışkanlık oluşumunuz yolunda.",
@@ -579,7 +580,7 @@
             "improving": "İlerleme kaydediyorsunuz. Alışkanlık oluşumunu daha olası hale getirmek için tamamlama oranınızı artırmaya çalışın.",
             "needs_work": "Tutarlılık üzerinde çalışmaya devam edin. Düzenli tamamlama, bu alışkanlığın otomatik hale gelmesine yardımcı olacaktır."
         },
-        "formation_time": {
+        "probability_time": {
             "not_enough_data": "Oluşum ilerlemesini görmek için alışkanlığınızı takip etmeye devam edin.",
             "completed_successful": "Tebrikler! Alışkanlığınız büyük olasılıkla yerleşmiş ve otomatiktir.",
             "completed_good": "Harika iş! Oluşum dönemini %{{percentage}} tamamlama oranıyla tamamladınız. Alışkanlığınız muhtemelen yerleşmiş durumda.",
@@ -590,11 +591,11 @@
             "demo_data_message": "Bu demo verisidir, gerçek verileri açmak için yükseltin",
             "upgrade_button": "Yükselt"
         },
-        "formation_score": "Oluşum Skoru",
+        "probability_score": "Oluşum Skoru",
         "score_breakdown": "Skor Dağılımı",
         "progress_status": "İlerleme Durumu",
-        "estimated_formation_time": "Tahmini Oluşum Süresi",
-        "about_formation_title": "Oluşum Hakkında",
+        "estimated_probability_time": "Estimated Probability Time",
+        "about_formation_title": "About Probability",
         "legend_below_60": "%60 Altı",
         "legend_needs_work": "Çalışma Gerekiyor",
         "legend_60_75": "%60-75",
@@ -726,6 +727,5 @@
         "russian": "Rusça",
         "japanese": "Japonca",
         "italian": "İtalyanca"
-
     }
 }

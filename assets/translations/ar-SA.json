@@ -114,7 +114,7 @@
                     "sub_features_1": "تفكيك العادة",
                     "sub_features_2": "تتبع متداخل"
                 },
-                "formation_rate": {
+                "probability_rate": {
                     "title": "معدل تشكيل العادة",
                     "description": "تابع تقدم تشكيل عاداتك برؤى ذكية. تعرف إلى مدى اقترابك من ترسيخ عاداتك بشكل دائم.",
                     "sub_features_0": "تنبؤ بالنجاح",
@@ -129,7 +129,7 @@
                     "sub_features_2": "صور الإنجازات"
                 }
             },
-            "formation_score": "درجة التشكّل",
+            "probability_score": "درجة التشكّل",
             "previous": "السابق",
             "next": "التالي",
             "start": "ابدأ"
@@ -201,7 +201,7 @@
         "achievement_consistency_champion": "بطل الاتساق",
         "achievement_weekend_warrior": "محارب عطلة الأسبوع",
         "achievement_weekly_checkin": "مراجعة أسبوعية",
-        "achievement_formation_journey": "رحلة التشكّل",
+        "achievement_probability_journey": "رحلة التشكّل",
         "milestones": "المعالم",
         "milestone_one_week_warrior": "محارب أسبوع واحد",
         "milestone_monthly_master": "سيد الشهر",
@@ -211,12 +211,12 @@
         "milestone_half_year_hero": "بطل نصف السنة",
         "milestone_one_year_legend": "أسطورة السنة",
         "progress": "التقدم",
-        "formation": "التشكّل",
-        "achievement_formation_threshold": "تم بلوغ عتبة التشكّل!",
+        "formation": "Probability",
+        "achievement_probability_threshold": "تم بلوغ عتبة التشكّل!",
         "achievement_consistency_description": "أداؤك يعادل {{percentage}}% من أفضل سلسلة لديك!",
         "achievement_weekend_description": "تحافظ على اتساق رائع حتى في عطلة الأسبوع!",
         "achievement_weekly_description": "فاتك {{days}} يومًا هذا الأسبوع. غدًا بداية جديدة!",
-        "achievement_formation_description": "أكملت {{percentage}}% من بناء هذه العادة. المسارات العصبية تزداد قوة!",
+        "achievement_probability_description": "أكملت {{percentage}}% من بناء هذه العادة. المسارات العصبية تزداد قوة!",
         "quote_aristotle": "التميز ليس فعلًا واحدًا، بل عادة. لست ما تفعله أحيانًا؛ أنت ما تفعله باستمرار.",
         "quote_aristotle_author": "أرسطو",
         "quote_collier": "النجاح هو مجموع الجهود الصغيرة، المتكررة يومًا بعد يوم.",
@@ -254,9 +254,9 @@
         "achievement_perfectionist_description": "معدل نجاح {{rate}}%!",
         "heatmap_stats_description": "تم إكمال {{days}} يومًا خلال السنة الماضية",
         "last_7_days": "آخر 7 أيام",
-        "formation_info_title": "درجة التشكّل",
-        "formation_info_description": "تُظهر درجة التشكّل مدى احتمالية أن تصبح عادتك تلقائية بناءً على معدل الإكمال الحالي. كلما زادت الدرجة زادت إمكانية ترسخ العادة بشكل دائم.",
-        "formation_info_details": "تُحتسب هذه الدرجة باستخدام أنماط الاتساق ومعدل الإكمال. تُظهر الأبحاث أن الأمر يستغرق في المتوسط 66 يومًا من الممارسة المنتظمة لتصبح العادة تلقائية."
+        "probability_info_title": "درجة التشكّل",
+        "probability_info_description": "تُظهر درجة التشكّل مدى احتمالية أن تصبح عادتك تلقائية بناءً على معدل الإكمال الحالي. كلما زادت الدرجة زادت إمكانية ترسخ العادة بشكل دائم.",
+        "probability_info_details": "تُحتسب هذه الدرجة باستخدام أنماط الاتساق ومعدل الإكمال. تُظهر الأبحاث أن الأمر يستغرق في المتوسط 66 يومًا من الممارسة المنتظمة لتصبح العادة تلقائية."
     },
     "habit": {
         "add_habit": "إضافة عادة",
@@ -564,14 +564,14 @@
         "overview": "نظرة عامة",
         "no_data_for_habit": "لا توجد بيانات إحصائية بعد",
         "start_tracking_habit": "ابدأ تتبع هذه العادة",
-        "habit_formation": "تشكيل العادة",
+        "habit_formation": "Habit Probability",
         "completed": "مكتمل",
         "total_days": "إجمالي الأيام",
         "longest_streak": "أطول سلسلة",
         "current_streak": "السلسلة الحالية",
-        "about_formation": "حول تشكيل العادة",
+        "about_formation": "About Habit Probability",
         "formation_info": "تُظهر النسبة أعلاه مدى احتمالية أن تصبح عادتك تلقائية بناءً على اتساقك الحالي. كلما ارتفعت النسبة، زادت فرص ترسخ العادة. وفقًا للأبحاث، يستغرق الأمر في المتوسط 66 يومًا من الممارسة المنتظمة لتصبح العادة تلقائية.",
-        "formation_status": {
+        "probability_status": {
             "early": "لا تزال في المراحل الأولى. استمر في تتبع عادتك باستمرار لرؤية تقدم ملحوظ في التشكّل.",
             "excellent": "تقدم رائع! مع معدل إكمال {percentage}%، من المرجح جدًا أن تصبح عادتك تلقائية.",
             "very_good": "اتساق ممتاز! مع معدل إكمال {percentage}%، تشكيل العادة على المسار الصحيح.",
@@ -579,7 +579,7 @@
             "improving": "أنت تتحسن. حاول زيادة معدل الإكمال لتعزيز احتمالية التشكّل.",
             "needs_work": "واصل العمل على الاتساق. الإكمال المنتظم يساعد هذه العادة على أن تصبح تلقائية."
         },
-        "formation_time": {
+        "probability_time": {
             "not_enough_data": "استمر في تتبع عادتك لرؤية تقدم التشكّل.",
             "completed_successful": "تهانينا! من المرجح أن عادتك قد ترسخت وأصبحت تلقائية.",
             "completed_good": "عمل رائع! أكملت فترة التشكّل بمعدل إكمال {percentage}%. من المحتمل أن تكون عادتك قد ترسخت.",
@@ -590,11 +590,11 @@
             "demo_data_message": "هذه بيانات تجريبية. قم بالترقية لفتح البيانات الحقيقية",
             "upgrade_button": "ترقية"
         },
-        "formation_score": "درجة التشكّل",
+        "probability_score": "درجة التشكّل",
         "score_breakdown": "تفصيل الدرجات",
         "progress_status": "حالة التقدم",
-        "estimated_formation_time": "الوقت التقديري للتشكّل",
-        "about_formation_title": "حول التشكّل",
+        "estimated_probability_time": "Estimated Probability Time",
+        "about_formation_title": "About Probability",
         "legend_below_60": "أقل من 60%",
         "legend_needs_work": "يحتاج إلى تحسين",
         "legend_60_75": "60-75%",

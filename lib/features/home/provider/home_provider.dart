@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '/core/core.dart';
 import '/features/habit_category/provider/habit_category_provider.dart';
-import '../../habit_probability/provider/habit_formation_provider.dart';
+import '../../habit_probability/provider/habit_probability_provider.dart';
 import '/features/reminder/service/reminder_service.dart';
 import '/models/completion_entry/completion_entry.dart';
 import '/models/habit/habit_model.dart';
@@ -205,7 +205,7 @@ class HomeNotifier extends AsyncNotifier<HomeState> {
 
     // Refresh formation statistics after completion update
     final formationStart = DateTime.now();
-    await ref.read(formationProvider.notifier).refreshFormationStatistics();
+    await ref.read(probabilityProvider.notifier).refreshFormationStatistics();
     final formationEnd = DateTime.now();
     LogHelper.shared.debugPrint('📊 [PERF] Formation provider refresh completed in ${formationEnd.difference(formationStart).inMilliseconds}ms');
 

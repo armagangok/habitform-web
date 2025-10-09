@@ -99,6 +99,7 @@
         "app_features": {
             "title": "HabitForm te ayuda a...",
             "subtitle": "Construir hábitos duraderos con seguimiento inteligente e ideas personalizadas",
+            "continue": "Continuar",
             "features": {
                 "smart_tracking": {
                     "title": "Seguimiento inteligente de hábitos",
@@ -114,7 +115,7 @@
                     "sub_features_1": "Desglose de hábitos",
                     "sub_features_2": "Seguimiento anidado"
                 },
-                "formation_rate": {
+                "probability_rate": {
                     "title": "Tasa de formación de hábitos",
                     "description": "Rastrea tu progreso de formación de hábitos con ideas inteligentes. Ve qué tan cerca estás de hacer que tus hábitos se mantengan permanentemente.",
                     "sub_features_0": "Predicción de éxito",
@@ -129,7 +130,7 @@
                     "sub_features_2": "Imágenes de logros"
                 }
             },
-            "formation_score": "Puntaje de formación",
+            "probability_score": "Puntaje de formación",
             "previous": "Anterior",
             "next": "Siguiente",
             "start": "Comenzar"
@@ -201,7 +202,7 @@
         "achievement_consistency_champion": "Campeón de consistencia",
         "achievement_weekend_warrior": "Guerrero de fin de semana",
         "achievement_weekly_checkin": "Revisión semanal",
-        "achievement_formation_journey": "Viaje de formación",
+        "achievement_probability_journey": "Viaje de formación",
         "milestones": "Hitos",
         "milestone_one_week_warrior": "Guerrero de una semana",
         "milestone_monthly_master": "Maestro mensual",
@@ -211,12 +212,12 @@
         "milestone_half_year_hero": "Héroe de medio año",
         "milestone_one_year_legend": "Leyenda de un año",
         "progress": "Progreso",
-        "formation": "Formación",
-        "achievement_formation_threshold": "¡Se alcanzó el umbral de formación!",
+        "formation": "Probability",
+        "achievement_probability_threshold": "¡Se alcanzó el umbral de formación!",
         "achievement_consistency_description": "¡Estás rindiendo al {{percentage}}% de tu mejor racha!",
         "achievement_weekend_description": "¡Mantienes una gran consistencia incluso los fines de semana!",
         "achievement_weekly_description": "Has faltado {{days}} días esta semana. ¡Mañana es un nuevo comienzo!",
-        "achievement_formation_description": "Vas al {{percentage}}% de formar este hábito. ¡Las vías neuronales se están fortaleciendo!",
+        "achievement_probability_description": "Vas al {{percentage}}% de formar este hábito. ¡Las vías neuronales se están fortaleciendo!",
         "quote_aristotle": "La excelencia no es un acto único, sino un hábito. No eres lo que haces de vez en cuando; eres lo que haces consistentemente.",
         "quote_aristotle_author": "Aristóteles",
         "quote_collier": "El éxito es la suma de pequeños esfuerzos, repetidos día tras día.",
@@ -254,9 +255,9 @@
         "achievement_perfectionist_description": "¡{{rate}}% de tasa de éxito!",
         "heatmap_stats_description": "{{days}} días completados en el último año",
         "last_7_days": "Últimos 7 días",
-        "formation_info_title": "Puntaje de formación",
-        "formation_info_description": "El Puntaje de Formación muestra qué tan probable es que tu hábito se vuelva automático según tu tasa de finalización actual. Un puntaje más alto significa que es más probable que tu hábito se mantenga permanentemente.",
-        "formation_info_details": "Este puntaje se calcula usando tus patrones de consistencia y tasa de finalización. La investigación muestra que se necesitan en promedio 66 días de práctica regular para que un hábito se vuelva automático."
+        "probability_info_title": "Puntaje de formación",
+        "probability_info_description": "El Puntaje de Formación muestra qué tan probable es que tu hábito se vuelva automático según tu tasa de finalización actual. Un puntaje más alto significa que es más probable que tu hábito se mantenga permanentemente.",
+        "probability_info_details": "Este puntaje se calcula usando tus patrones de consistencia y tasa de finalización. La investigación muestra que se necesitan en promedio 66 días de práctica regular para que un hábito se vuelva automático."
     },
     "habit": {
         "add_habit": "Agregar hábito",
@@ -564,37 +565,37 @@
         "overview": "Resumen",
         "no_data_for_habit": "Aún no hay datos de estadísticas",
         "start_tracking_habit": "Comenzar a rastrear este hábito",
-        "habit_formation": "Formación de hábitos",
+        "habit_formation": "Habit Probability",
         "completed": "Completado",
         "total_days": "Días totales",
         "longest_streak": "Racha más larga",
         "current_streak": "Racha actual",
-        "about_formation": "Acerca de la formación de hábitos",
+        "about_formation": "Acerca de la Probabilidad del Hábito",
         "formation_info": "El porcentaje de arriba muestra qué tan probable es que tu hábito se vuelva automático basado en tu consistencia actual. Porcentajes más altos significan que es más probable que tu hábito se mantenga. Según la investigación, se necesitan en promedio 66 días de práctica regular para que un hábito se vuelva automático.",
-        "formation_status": {
-            "early": "Aún estás en las primeras etapas. Sigue rastreando tu hábito consistentemente para ver un progreso significativo de formación.",
+        "probability_status": {
+            "early": "Aún estás en las primeras etapas. Sigue rastreando tu hábito consistentemente para ver un progreso significativo de probabilidad.",
             "excellent": "¡Progreso excepcional! Con una tasa de finalización del {percentage}%, tu hábito es muy probable que se vuelva automático.",
-            "very_good": "¡Gran consistencia! Con una tasa de finalización del {percentage}%, tu formación de hábitos está en camino.",
+            "very_good": "¡Gran consistencia! Con una tasa de finalización del {percentage}%, tu probabilidad de hábitos está en camino.",
             "good": "¡Buen progreso! Tu tasa de finalización del {percentage}% muestra que estás construyendo este hábito exitosamente.",
-            "improving": "Estás haciendo progreso. Trata de aumentar tu tasa de finalización para hacer más probable la formación del hábito.",
+            "improving": "Estás haciendo progreso. Trata de aumentar tu tasa de finalización para hacer más probable la probabilidad del hábito.",
             "needs_work": "Sigue trabajando en la consistencia. La finalización regular ayudará a que este hábito se vuelva automático."
         },
-        "formation_time": {
-            "not_enough_data": "Sigue rastreando tu hábito para ver el progreso de formación.",
+        "probability_time": {
+            "not_enough_data": "Sigue rastreando tu hábito para ver el progreso de probabilidad.",
             "completed_successful": "¡Felicidades! Tu hábito es muy probable que esté establecido y sea automático.",
-            "completed_good": "¡Excelente trabajo! Has completado el período de formación con una tasa de finalización del {percentage}%. Tu hábito es probable que esté establecido.",
-            "completed_needs_work": "Has completado el período de formación. Continúa con la práctica regular para fortalecer tu hábito.",
-            "remaining_days": "Quedan aproximadamente {days} días en el período de formación. Mantén la práctica consistente."
+            "completed_good": "¡Excelente trabajo! Has completado el período de probabilidad con una tasa de finalización del {percentage}%. Tu hábito es probable que esté establecido.",
+            "completed_needs_work": "Has completado el período de probabilidad. Continúa con la práctica regular para fortalecer tu hábito.",
+            "remaining_days": "Quedan aproximadamente {days} días en el período de probabilidad. Mantén la práctica consistente."
         },
         "chart_labels": {
             "demo_data_message": "Estos son datos de demostración, actualiza para desbloquear datos reales",
             "upgrade_button": "Actualizar"
         },
-        "formation_score": "Puntaje de formación",
+        "probability_score": "Puntaje de Probabilidad",
         "score_breakdown": "Desglose del puntaje",
         "progress_status": "Estado del progreso",
-        "estimated_formation_time": "Tiempo estimado de formación",
-        "about_formation_title": "Acerca de la formación",
+        "estimated_probability_time": "Tiempo Estimado de Probabilidad",
+        "about_formation_title": "Acerca de la Probabilidad",
         "legend_below_60": "Por debajo del 60%",
         "legend_needs_work": "Necesita trabajo",
         "legend_60_75": "60-75%",

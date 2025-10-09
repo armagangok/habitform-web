@@ -42,7 +42,7 @@ struct SmallGridHabitProvider: AppIntentTimelineProvider {
                 status: .active,
                 categoryIds: [],
                 difficulty: .easy,
-                flutterFormationProbability: 0.0,
+                flutterProbabilityScore: 0.0,
                 flutterLongestStreak: 0,
                 flutterCurrentStreak: 0,
                 flutterCompletedDays: 0,
@@ -140,19 +140,23 @@ struct SmallGridHabitWidgetEntryView: View {
                     .minimumScaleFactor(0.7)
 
                 Spacer()
-                // Emoji circle (tappable to complete today)
+                // Emoji circle (tappable) — shows completed state as filled color
                 Button(intent: CompleteHabitIntent(habitId: entry.habit.id)) {
+                    let isCompletedToday = (completionRatio >= 1.0)
                     ZStack {
                         Circle()
-                            .fill(habitColor.opacity(0.12))
+                            .fill(isCompletedToday ? habitColor : habitColor.opacity(0.12))
                             .overlay(
                                 Circle()
-                                    .stroke(habitColor.opacity(0.25), lineWidth: 1)
+                                    .stroke(
+                                        habitColor.opacity(isCompletedToday ? 0.6 : 0.25),
+                                        lineWidth: 1)
                             )
                             .frame(width: 32, height: 32)
 
                         Text(entry.habit.emoji ?? "🎯")
                             .font(.system(size: 16))
+                            .foregroundColor(isCompletedToday ? .white : .primary)
                     }
                 }
                 .buttonStyle(PlainButtonStyle())
@@ -166,11 +170,15 @@ struct SmallGridHabitWidgetEntryView: View {
                 ForEach(0..<6, id: \.self) { row in
                     HStack(spacing: 2) {
                         ForEach(0..<10, id: \.self) { col in
-                            // Column-major bottom-to-top mapping: (row, col) → index
-                            // Formula: index = (totalCols - 1 - col) * totalRows + (totalRows - 1 - row)
+                            // Snake mapping per your spec:
+                            // Start at bottom-right and go up; next column (moving left) goes down; and so on.
+                            // We index dates from most recent (today) to oldest: gridData[0] is today.
                             let totalRows = 6
                             let totalCols = 10
-                            let index = (totalCols - 1 - col) * totalRows + (totalRows - 1 - row)
+                            let colFromRight = (totalCols - 1 - col)
+                            let isUpwards = (colFromRight % 2 == 0)  // even columns from right go bottom→top
+                            let offsetWithinColumn = isUpwards ? (totalRows - 1 - row) : row
+                            let index = colFromRight * totalRows + offsetWithinColumn
 
                             if index < gridData.count {
                                 let date = gridData[index]
@@ -185,25 +193,22 @@ struct SmallGridHabitWidgetEntryView: View {
                                     target > 0 ? min(Double(count) / Double(target), 1.0) : 0.0
                                 let isCompleted = completion?.isCompleted ?? false
 
-                                Button(intent: CompleteHabitIntent(habitId: entry.habit.id)) {
-                                    Rectangle()
-                                        .fill(
-                                            isCompleted
-                                                ? habitColor.opacity(0.8)  // Fully completed - solid color
-                                                : habitColor.opacity(0.2 + 0.6 * completionRatio)  // Progressive color intensity
-                                        )
-                                        .frame(width: 11, height: 11)
-                                        .cornerRadius(2)
-                                        .overlay(
-                                            RoundedRectangle(cornerRadius: 2)
-                                                .stroke(
-                                                    isToday
-                                                        ? (Color.primary.opacity(0.8))
-                                                        : Color.clear,
-                                                    lineWidth: 0.5)
-                                        )
-                                }
-                                .buttonStyle(PlainButtonStyle())
+                                Rectangle()
+                                    .fill(
+                                        isCompleted
+                                            ? habitColor.opacity(0.8)  // Fully completed - solid color
+                                            : habitColor.opacity(0.2 + 0.6 * completionRatio)  // Progressive color intensity
+                                    )
+                                    .frame(width: 11, height: 11)
+                                    .cornerRadius(2)
+                                    .overlay(
+                                        RoundedRectangle(cornerRadius: 2)
+                                            .stroke(
+                                                isToday
+                                                    ? (Color.primary.opacity(0.8))
+                                                    : Color.clear,
+                                                lineWidth: 0.5)
+                                    )
                             } else {
                                 Rectangle()
                                     .fill(Color.clear)
@@ -236,7 +241,7 @@ struct SmallGridHabitWidgetEntryView: View {
             status: .active,
             categoryIds: [],
             difficulty: .easy,
-            flutterFormationProbability: 0.0,
+            flutterProbabilityScore: 0.0,
             flutterLongestStreak: 0,
             flutterCurrentStreak: 0,
             flutterCompletedDays: 0,

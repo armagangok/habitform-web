@@ -10,26 +10,26 @@ import '/models/habit/habit_difficulty.dart';
 import '/models/habit/habit_model.dart';
 import '/services/habit_service/habit_service_interface.dart';
 import '/services/habit_service/mock_habit_service.dart';
-import 'habit_formation_state.dart';
+import 'habit_probability_state.dart';
 
 /// Provider for managing statistics
-final formationProvider = AutoDisposeAsyncNotifierProvider<FormationNotifier, FormtionState>(() {
-  return FormationNotifier();
+final probabilityProvider = AutoDisposeAsyncNotifierProvider<ProbabilityNotifier, ProbabilityState>(() {
+  return ProbabilityNotifier();
 });
 
 /// Notifier class that handles all statistics-related operations
-class FormationNotifier extends AutoDisposeAsyncNotifier<FormtionState> {
+class ProbabilityNotifier extends AutoDisposeAsyncNotifier<ProbabilityState> {
   late final MockHabitService _mockHabitService = MockHabitService();
 
   // Caching and debouncing
-  FormtionState? _cachedState;
+  ProbabilityState? _cachedState;
   DateTime? _lastCalculation;
   Timer? _debounceTimer;
   static const Duration _cacheValidityDuration = Duration(minutes: 1);
   static const Duration _debounceDelay = Duration(milliseconds: 500);
 
   @override
-  Future<FormtionState> build() async {
+  Future<ProbabilityState> build() async {
     // Clean up timer when provider is disposed
     ref.onDispose(() {
       _debounceTimer?.cancel();
@@ -59,11 +59,11 @@ class FormationNotifier extends AutoDisposeAsyncNotifier<FormtionState> {
     return _getStatistics(isProUser);
   }
 
-  Future<FormtionState> _getStatistics(bool isProUser) async {
+  Future<ProbabilityState> _getStatistics(bool isProUser) async {
     final calculationStart = DateTime.now();
     LogHelper.shared.debugPrint("🔄 [PERF] FormationProvider: _getStatistics called for ${isProUser ? 'pro' : 'free'} user");
 
-    FormtionState result;
+    ProbabilityState result;
 
     if (isProUser) {
       // Pro user - use real data
@@ -83,7 +83,7 @@ class FormationNotifier extends AutoDisposeAsyncNotifier<FormtionState> {
         error: (error, stackTrace) async {
           // Hata durumunda boş istatistikler döndür
           LogHelper.shared.errorPrint("❌ [PERF] FormationProvider: Error in homeProvider: $error");
-          return FormtionState.initial();
+          return ProbabilityState.initial();
         },
       );
     } else {
@@ -100,14 +100,14 @@ class FormationNotifier extends AutoDisposeAsyncNotifier<FormtionState> {
   }
 
   /// Calculates all statistics based on habits data
-  FormtionState calculateStatistics(List<Habit> habits, {bool isMockData = false}) {
+  ProbabilityState calculateStatistics(List<Habit> habits, {bool isMockData = false}) {
     final calculationStart = DateTime.now();
     LogHelper.shared.debugPrint("🔄 [PERF] FormationProvider: calculateStatistics called for ${habits.length} habits");
 
     // Hiç alışkanlık yoksa veya tüm alışkanlıkların tamamlanma verisi yoksa boş istatistikler döndür
     if (habits.isEmpty || _hasNoCompletionData(habits)) {
       LogHelper.shared.debugPrint("⚡ [PERF] FormationProvider: No completion data, returning initial state");
-      return FormtionState.initial(isMockData: isMockData);
+      return ProbabilityState.initial(isMockData: isMockData);
     }
 
     final totalCompletionsStart = DateTime.now();
@@ -121,7 +121,7 @@ class FormationNotifier extends AutoDisposeAsyncNotifier<FormtionState> {
     final habitStatsEnd = DateTime.now();
     LogHelper.shared.debugPrint("📈 [PERF] FormationProvider: Habit statistics calculated in ${habitStatsEnd.difference(habitStatsStart).inMilliseconds}ms");
 
-    final result = FormtionState(
+    final result = ProbabilityState(
       totalCompletedDays: totalCompletions,
       habitStatistics: habitStatistics,
       isMockData: isMockData,
@@ -168,9 +168,9 @@ class FormationNotifier extends AutoDisposeAsyncNotifier<FormtionState> {
           progressPercentage: 0,
           startDate: today,
           difficulty: habit.difficulty,
-          formationProbability: 0.0,
-          estimatedFormationDays: habit.difficulty.estimatedFormationDays,
-          remainingFormationDays: habit.difficulty.estimatedFormationDays,
+          probabilityScore: 0.0,
+          estimatedProbabilityDays: habit.difficulty.estimatedProbabilityDays,
+          remainingProbabilityDays: habit.difficulty.estimatedProbabilityDays,
         );
         continue;
       }
@@ -184,10 +184,10 @@ class FormationNotifier extends AutoDisposeAsyncNotifier<FormtionState> {
       final daysSinceFirstCompletion = firstCompletionDate != null ? today.difference(DateUtils.dateOnly(firstCompletionDate)).inDays + 1 : 0;
 
       // Calculate formation probability and remaining days
-      final estimatedFormationDays = habit.difficulty.estimatedFormationDays;
-      final formationProbability = habit.calculateHabitProbability();
+      final estimatedProbabilityDays = habit.difficulty.estimatedProbabilityDays;
+      final probabilityScore = habit.calculateHabitProbability();
 
-      final remainingFormationDays = habit.getRemainingFormationDays();
+      final remainingProbabilityDays = habit.getRemainingProbabilityDays();
 
       result[habit.id] = HabitStatistic(
         habitId: habit.id,
@@ -197,9 +197,9 @@ class FormationNotifier extends AutoDisposeAsyncNotifier<FormtionState> {
         progressPercentage: progressPercentage,
         startDate: firstCompletionDate != null ? DateUtils.dateOnly(firstCompletionDate) : today,
         difficulty: habit.difficulty,
-        formationProbability: formationProbability,
-        estimatedFormationDays: estimatedFormationDays,
-        remainingFormationDays: remainingFormationDays,
+        probabilityScore: probabilityScore,
+        estimatedProbabilityDays: estimatedProbabilityDays,
+        remainingProbabilityDays: remainingProbabilityDays,
       );
     }
 
