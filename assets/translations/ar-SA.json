@@ -127,6 +127,37 @@
                     "sub_features_0": "تصاميم مخصصة",
                     "sub_features_1": "مشاركة التقدم",
                     "sub_features_2": "صور الإنجازات"
+                },
+                "home_widget": {
+                    "title": "ودجت الشاشة الرئيسية",
+                    "description": "تتبع عاداتك دون فتح التطبيق. أكمل أهدافك اليومية مباشرة من شاشة آيفون الرئيسية في ثوانٍ.",
+                    "sub_features_0": "وصول فوري",
+                    "sub_features_1": "وفر الوقت يومياً",
+                    "sub_features_2": "لا تنس أبداً",
+                    "widget_config": {
+                        "small_title": "متتبع العادات",
+                        "small_description": "تتبع عاداتك اليومية مع عداد السلسلة",
+                        "medium_title": "عرض العادات لـ 7 أيام",
+                        "medium_description": "عرض تقدم عاداتك خلال آخر 7 أيام",
+                        "large_title": "خريطة حرارية للعادات",
+                        "large_description": "خريطة حرارية بأسلوب GitHub تُظهر إكمال عاداتك عبر الوقت",
+                        "grid_title": "شبكة العادات لـ 60 يوماً",
+                        "grid_description": "عرض تقدم عاداتك خلال آخر 60 يوماً في شبكة مدمجة"
+                    },
+                    "empty_state": {
+                        "no_habits": "لا توجد عادات",
+                        "create_habit_hint": "أنشئ عادة في التطبيق لرؤيتها هنا"
+                    },
+                    "stats": {
+                        "current_streak": "السلسلة الحالية",
+                        "longest_streak": "أطول سلسلة",
+                        "completed": "مكتمل",
+                        "total_days": "إجمالي الأيام",
+                        "days": "أيام"
+                    },
+                    "pro_restriction": {
+                        "upgrade_pro": "ترقية إلى PRO"
+                    }
                 }
             },
             "probability_score": "درجة التشكّل",

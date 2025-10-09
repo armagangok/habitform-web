@@ -127,6 +127,37 @@
                     "sub_features_0": "Mukautetut designit",
                     "sub_features_1": "Edistyksen jakaminen",
                     "sub_features_2": "Saavutuskuvat"
+                },
+                "home_widget": {
+                    "title": "Kotivalikko Widget",
+                    "description": "Seuraa tapoja avaamatta sovellusta. Suorita päivittäiset tavoitteesi suoraan iPhonen kotivalikosta sekunneissa.",
+                    "sub_features_0": "Välitön pääsy",
+                    "sub_features_1": "Säästä aikaa päivittäin",
+                    "sub_features_2": "Älä koskaan unohda",
+                    "widget_config": {
+                        "small_title": "Tapaseuranta",
+                        "small_description": "Seuraa päivittäisiä tapojasi putken laskurilla",
+                        "medium_title": "7 Päivän Tapojenäkymä",
+                        "medium_description": "Katso tapojesi edistystä viimeisten 7 päivän ajalta",
+                        "large_title": "Tapojen Lämpökartta",
+                        "large_description": "GitHub-tyylinen lämpökartta, joka näyttää tapojesi suorittamisen ajan myötä",
+                        "grid_title": "60 Päivän Tapojen Ruudukko",
+                        "grid_description": "Katso tapojesi edistystä viimeisten 60 päivän ajalta kompaktissa ruudukossa"
+                    },
+                    "empty_state": {
+                        "no_habits": "Ei tapoja",
+                        "create_habit_hint": "Luo tapa sovelluksessa nähdäksesi sen täällä"
+                    },
+                    "stats": {
+                        "current_streak": "Nykyinen putki",
+                        "longest_streak": "Pisin putki",
+                        "completed": "Valmiit",
+                        "total_days": "Yhteensä päiviä",
+                        "days": "päivää"
+                    },
+                    "pro_restriction": {
+                        "upgrade_pro": "Päivitä PRO:ksi"
+                    }
                 }
             },
             "probability_score": "Muodostumispisteet",

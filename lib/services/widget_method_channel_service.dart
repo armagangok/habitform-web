@@ -200,7 +200,7 @@ class WidgetMethodChannelService {
   }
 
   /// Called by main app to update widget data
-  Future<void> updateWidgetData(List<Habit> habits) async {
+  Future<void> updateWidgetData(List<Habit> habits, {bool isProMember = false}) async {
     if (!Platform.isIOS) return;
 
     final methodChannelStart = DateTime.now();
@@ -234,14 +234,14 @@ class WidgetMethodChannelService {
       // Also write to the new format for Method Channel communication
       LogHelper.shared.debugPrint('📤 WidgetMethodChannelService: Writing habits to shared container...');
       final writeStart = DateTime.now();
-      await _writeHabitsToSharedContainer(activeHabits);
+      await _writeHabitsToSharedContainer(activeHabits, isProMember: isProMember);
       final writeEnd = DateTime.now();
       LogHelper.shared.debugPrint('📤 [PERF] Shared container write completed in ${writeEnd.difference(writeStart).inMilliseconds}ms');
 
       // Use Method Channel to sync with iOS
       LogHelper.shared.debugPrint('📤 WidgetMethodChannelService: Syncing habits via Method Channel...');
       final syncStart = DateTime.now();
-      await _syncHabitsViaMethodChannel(activeHabits);
+      await _syncHabitsViaMethodChannel(activeHabits, isProMember: isProMember);
       final syncEnd = DateTime.now();
       LogHelper.shared.debugPrint('📤 [PERF] Method channel sync completed in ${syncEnd.difference(syncStart).inMilliseconds}ms');
 
@@ -290,7 +290,7 @@ class WidgetMethodChannelService {
   }
 
   /// Write habits to shared container in Method Channel format
-  Future<void> _writeHabitsToSharedContainer(List<Habit> habits) async {
+  Future<void> _writeHabitsToSharedContainer(List<Habit> habits, {bool isProMember = false}) async {
     try {
       final containerPath = await _getAppGroupContainerPath();
       if (containerPath == null) {
@@ -314,7 +314,7 @@ class WidgetMethodChannelService {
       LogHelper.shared.debugPrint('📄 WidgetMethodChannelService: Writing to file: $filePath');
 
       // Convert habits to widget-compatible format
-      final widgetHabits = habits.map((habit) => _convertHabitForWidget(habit)).toList();
+      final widgetHabits = habits.map((habit) => _convertHabitForWidget(habit, isProMember: isProMember)).toList();
       LogHelper.shared.debugPrint('🔄 WidgetMethodChannelService: Converted ${habits.length} habits to widget format');
 
       // Write to file with atomic operation
@@ -353,7 +353,7 @@ class WidgetMethodChannelService {
   }
 
   /// Convert Flutter Habit model to widget-compatible format
-  Map<String, dynamic> _convertHabitForWidget(Habit habit) {
+  Map<String, dynamic> _convertHabitForWidget(Habit habit, {bool isProMember = false}) {
     // Convert completions map to widget format
     final widgetCompletions = <String, Map<String, dynamic>>{};
 
@@ -400,6 +400,8 @@ class WidgetMethodChannelService {
       'flutterCurrentStreak': currentStreak,
       'flutterCompletedDays': completedDays,
       'flutterTotalDays': totalDaysSinceFirstCompletion,
+      // Pro membership status
+      'isProMember': isProMember,
     };
   }
 
@@ -428,10 +430,10 @@ class WidgetMethodChannelService {
   }
 
   /// Sync habits via Method Channel to iOS
-  Future<void> _syncHabitsViaMethodChannel(List<Habit> habits) async {
+  Future<void> _syncHabitsViaMethodChannel(List<Habit> habits, {bool isProMember = false}) async {
     try {
       // Convert habits to JSON string
-      final widgetHabits = habits.map((habit) => _convertHabitForWidget(habit)).toList();
+      final widgetHabits = habits.map((habit) => _convertHabitForWidget(habit, isProMember: isProMember)).toList();
       final habitsJson = jsonEncode(widgetHabits);
 
       // Debug: LogHelper.shared.debugPrint habit IDs being sent

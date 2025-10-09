@@ -128,6 +128,37 @@
                     "sub_features_0": "Diseños personalizados",
                     "sub_features_1": "Compartir progreso",
                     "sub_features_2": "Imágenes de logros"
+                },
+                "home_widget": {
+                    "title": "Widget de Inicio",
+                    "description": "Rastrea tus hábitos sin abrir la aplicación. Completa tus objetivos diarios directamente desde la pantalla de inicio de tu iPhone en segundos.",
+                    "sub_features_0": "Acceso Instantáneo",
+                    "sub_features_1": "Ahorra Tiempo Diario",
+                    "sub_features_2": "Nunca Olvides",
+                    "widget_config": {
+                        "small_title": "Rastreador de Hábitos",
+                        "small_description": "Rastrea tus hábitos diarios con contador de rachas",
+                        "medium_title": "Vista de Hábitos de 7 Días",
+                        "medium_description": "Ve tu progreso de hábitos durante los últimos 7 días",
+                        "large_title": "Mapa de Calor de Hábitos",
+                        "large_description": "Mapa de calor estilo GitHub que muestra tu finalización de hábitos a lo largo del tiempo",
+                        "grid_title": "Cuadrícula de Hábitos de 60 Días",
+                        "grid_description": "Ve tu progreso de hábitos durante los últimos 60 días en una cuadrícula compacta"
+                    },
+                    "empty_state": {
+                        "no_habits": "Sin Hábitos",
+                        "create_habit_hint": "Crea un hábito en la aplicación para verlo aquí"
+                    },
+                    "stats": {
+                        "current_streak": "Racha Actual",
+                        "longest_streak": "Racha Más Larga",
+                        "completed": "Completados",
+                        "total_days": "Días Totales",
+                        "days": "días"
+                    },
+                    "pro_restriction": {
+                        "upgrade_pro": "Actualizar a PRO"
+                    }
                 }
             },
             "probability_score": "Puntaje de formación",

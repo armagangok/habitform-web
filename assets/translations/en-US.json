@@ -113,7 +113,31 @@
                     "description": "Track your habits without opening the app. Complete your daily goals directly from your iPhone home screen in seconds.",
                     "sub_features_0": "Instant Access",
                     "sub_features_1": "Save Time Daily",
-                    "sub_features_2": "Never Forget Again"
+                    "sub_features_2": "Never Forget Again",
+                    "widget_config": {
+                        "small_title": "Habit Tracker",
+                        "small_description": "Track your daily habits with streak counter",
+                        "medium_title": "7-Day Habit View",
+                        "medium_description": "View your habit progress over the last 7 days",
+                        "large_title": "Habit Heatmap",
+                        "large_description": "GitHub-style heatmap showing your habit completion over time",
+                        "grid_title": "60-Day Habit Grid",
+                        "grid_description": "View your habit progress over the last 60 days in a compact grid"
+                    },
+                    "empty_state": {
+                        "no_habits": "No Habits",
+                        "create_habit_hint": "Create a habit in the app to see it here"
+                    },
+                    "stats": {
+                        "current_streak": "Current Streak",
+                        "longest_streak": "Longest Streak",
+                        "completed": "Completed",
+                        "total_days": "Total Days",
+                        "days": "days"
+                    },
+                    "pro_restriction": {
+                        "upgrade_pro": "Upgrade PRO"
+                    }
                 },
                 "goal_setting": {
                     "title": "Goal Setting",

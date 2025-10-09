@@ -127,6 +127,37 @@
                     "sub_features_0": "Design Personalizzati",
                     "sub_features_1": "Condivisione Progressi",
                     "sub_features_2": "Immagini Successi"
+                },
+                "home_widget": {
+                    "title": "Widget Home",
+                    "description": "Traccia le tue abitudini senza aprire l'app. Completa i tuoi obiettivi quotidiani direttamente dalla schermata home del tuo iPhone in pochi secondi.",
+                    "sub_features_0": "Accesso Istantaneo",
+                    "sub_features_1": "Risparmia Tempo Quotidiano",
+                    "sub_features_2": "Non Dimenticare Mai",
+                    "widget_config": {
+                        "small_title": "Tracciatore Abitudini",
+                        "small_description": "Traccia le tue abitudini quotidiane con contatore di serie",
+                        "medium_title": "Vista Abitudini 7 Giorni",
+                        "medium_description": "Visualizza i tuoi progressi delle abitudini negli ultimi 7 giorni",
+                        "large_title": "Mappa Termica Abitudini",
+                        "large_description": "Mappa termica stile GitHub che mostra il completamento delle tue abitudini nel tempo",
+                        "grid_title": "Griglia Abitudini 60 Giorni",
+                        "grid_description": "Visualizza i tuoi progressi delle abitudini negli ultimi 60 giorni in una griglia compatta"
+                    },
+                    "empty_state": {
+                        "no_habits": "Nessuna Abitudine",
+                        "create_habit_hint": "Crea un'abitudine nell'app per vederla qui"
+                    },
+                    "stats": {
+                        "current_streak": "Serie Attuale",
+                        "longest_streak": "Serie Più Lunga",
+                        "completed": "Completati",
+                        "total_days": "Giorni Totali",
+                        "days": "giorni"
+                    },
+                    "pro_restriction": {
+                        "upgrade_pro": "Passa a PRO"
+                    }
                 }
             },
             "probability_score": "Punteggio Formazione",

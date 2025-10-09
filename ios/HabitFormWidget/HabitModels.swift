@@ -9,6 +9,210 @@ import Foundation
 import SwiftUI
 import WidgetKit
 
+// MARK: - Widget Localization Helper
+struct WidgetLocalization {
+    static func getLocalizedString(for key: String) -> String {
+        // Get the current language from the system
+        let language = Locale.current.language.languageCode?.identifier ?? "en"
+
+        // Default English strings
+        let defaultStrings: [String: String] = [
+            "widget.small.title": "Habit Tracker",
+            "widget.small.description": "Track your daily habits with streak counter",
+            "widget.medium.title": "7-Day Habit View",
+            "widget.medium.description": "View your habit progress over the last 7 days",
+            "widget.large.title": "Habit Heatmap",
+            "widget.large.description":
+                "GitHub-style heatmap showing your habit completion over time",
+            "widget.grid.title": "60-Day Habit Grid",
+            "widget.grid.description":
+                "View your habit progress over the last 60 days in a compact grid",
+            "widget.empty.no_habits": "No Habits",
+            "widget.empty.create_hint": "Create a habit in the app to see it here",
+            "widget.stats.current_streak": "Current Streak",
+            "widget.stats.longest_streak": "Longest Streak",
+            "widget.stats.completed": "Completed",
+            "widget.stats.total_days": "Total Days",
+            "widget.stats.days": "days",
+            "widget.pro.upgrade": "Upgrade PRO",
+        ]
+
+        // Language-specific strings
+        let localizedStrings: [String: [String: String]] = [
+            "tr": [
+                "widget.small.title": "Alışkanlık Takipçisi",
+                "widget.small.description": "Seri sayacı ile günlük alışkanlıklarınızı takip edin",
+                "widget.medium.title": "7 Günlük Alışkanlık Görünümü",
+                "widget.medium.description": "Son 7 günlük alışkanlık ilerlemenizi görüntüleyin",
+                "widget.large.title": "Alışkanlık Isı Haritası",
+                "widget.large.description":
+                    "Zaman içindeki alışkanlık tamamlama durumunuzu GitHub tarzı ısı haritası ile görün",
+                "widget.grid.title": "60 Günlük Alışkanlık Izgarası",
+                "widget.grid.description":
+                    "Son 60 günlük alışkanlık ilerlemenizi kompakt bir ızgarada görüntüleyin",
+                "widget.empty.no_habits": "Alışkanlık Yok",
+                "widget.empty.create_hint":
+                    "Burada görmek için uygulamada bir alışkanlık oluşturun",
+                "widget.stats.current_streak": "Mevcut Seri",
+                "widget.stats.longest_streak": "En Uzun Seri",
+                "widget.stats.completed": "Tamamlanan",
+                "widget.stats.total_days": "Toplam Gün",
+                "widget.stats.days": "gün",
+                "widget.pro.upgrade": "PRO'ya Yükselt",
+            ],
+            "es": [
+                "widget.small.title": "Rastreador de Hábitos",
+                "widget.small.description": "Rastrea tus hábitos diarios con contador de rachas",
+                "widget.medium.title": "Vista de Hábitos de 7 Días",
+                "widget.medium.description": "Ve tu progreso de hábitos durante los últimos 7 días",
+                "widget.large.title": "Mapa de Calor de Hábitos",
+                "widget.large.description":
+                    "Mapa de calor estilo GitHub que muestra tu finalización de hábitos a lo largo del tiempo",
+                "widget.grid.title": "Cuadrícula de Hábitos de 60 Días",
+                "widget.grid.description":
+                    "Ve tu progreso de hábitos durante los últimos 60 días en una cuadrícula compacta",
+                "widget.empty.no_habits": "Sin Hábitos",
+                "widget.empty.create_hint": "Crea un hábito en la aplicación para verlo aquí",
+                "widget.stats.current_streak": "Racha Actual",
+                "widget.stats.longest_streak": "Racha Más Larga",
+                "widget.stats.completed": "Completados",
+                "widget.stats.total_days": "Días Totales",
+                "widget.stats.days": "días",
+                "widget.pro.upgrade": "Actualizar a PRO",
+            ],
+            "fr": [
+                "widget.small.title": "Suivi d'Habitudes",
+                "widget.small.description":
+                    "Suivez vos habitudes quotidiennes avec compteur de séries",
+                "widget.medium.title": "Vue d'Habitudes 7 Jours",
+                "widget.medium.description":
+                    "Voir vos progrès d'habitudes au cours des 7 derniers jours",
+                "widget.large.title": "Carte de Chaleur d'Habitudes",
+                "widget.large.description":
+                    "Carte de chaleur style GitHub montrant votre accomplissement d'habitudes dans le temps",
+                "widget.grid.title": "Grille d'Habitudes 60 Jours",
+                "widget.grid.description":
+                    "Voir vos progrès d'habitudes au cours des 60 derniers jours dans une grille compacte",
+                "widget.empty.no_habits": "Aucune Habitude",
+                "widget.empty.create_hint":
+                    "Créez une habitude dans l'application pour la voir ici",
+                "widget.stats.current_streak": "Série Actuelle",
+                "widget.stats.longest_streak": "Série la Plus Longue",
+                "widget.stats.completed": "Terminés",
+                "widget.stats.total_days": "Jours Totaux",
+                "widget.stats.days": "jours",
+                "widget.pro.upgrade": "Passer à PRO",
+            ],
+            "it": [
+                "widget.small.title": "Tracciatore Abitudini",
+                "widget.small.description":
+                    "Traccia le tue abitudini quotidiane con contatore di serie",
+                "widget.medium.title": "Vista Abitudini 7 Giorni",
+                "widget.medium.description":
+                    "Visualizza i tuoi progressi delle abitudini negli ultimi 7 giorni",
+                "widget.large.title": "Mappa Termica Abitudini",
+                "widget.large.description":
+                    "Mappa termica stile GitHub che mostra il completamento delle tue abitudini nel tempo",
+                "widget.grid.title": "Griglia Abitudini 60 Giorni",
+                "widget.grid.description":
+                    "Visualizza i tuoi progressi delle abitudini negli ultimi 60 giorni in una griglia compatta",
+                "widget.empty.no_habits": "Nessuna Abitudine",
+                "widget.empty.create_hint": "Crea un'abitudine nell'app per vederla qui",
+                "widget.stats.current_streak": "Serie Attuale",
+                "widget.stats.longest_streak": "Serie Più Lunga",
+                "widget.stats.completed": "Completati",
+                "widget.stats.total_days": "Giorni Totali",
+                "widget.stats.days": "giorni",
+                "widget.pro.upgrade": "Passa a PRO",
+            ],
+            "ja": [
+                "widget.small.title": "習慣トラッカー",
+                "widget.small.description": "連続カウンターで日々の習慣を追跡",
+                "widget.medium.title": "7日間習慣ビュー",
+                "widget.medium.description": "過去7日間の習慣進捗を表示",
+                "widget.large.title": "習慣ヒートマップ",
+                "widget.large.description": "GitHubスタイルのヒートマップで時間経過に伴う習慣完了を表示",
+                "widget.grid.title": "60日間習慣グリッド",
+                "widget.grid.description": "過去60日間の習慣進捗をコンパクトなグリッドで表示",
+                "widget.empty.no_habits": "習慣なし",
+                "widget.empty.create_hint": "ここに表示するにはアプリで習慣を作成してください",
+                "widget.stats.current_streak": "現在の連続",
+                "widget.stats.longest_streak": "最長連続",
+                "widget.stats.completed": "完了",
+                "widget.stats.total_days": "総日数",
+                "widget.stats.days": "日",
+                "widget.pro.upgrade": "PROにアップグレード",
+            ],
+            "zh": [
+                "widget.small.title": "习惯追踪器",
+                "widget.small.description": "使用连续计数追踪你的日常习惯",
+                "widget.medium.title": "7天习惯视图",
+                "widget.medium.description": "查看过去7天的习惯进度",
+                "widget.large.title": "习惯热力图",
+                "widget.large.description": "GitHub风格的热力图显示你随时间的习惯完成情况",
+                "widget.grid.title": "60天习惯网格",
+                "widget.grid.description": "在紧凑网格中查看过去60天的习惯进度",
+                "widget.empty.no_habits": "无习惯",
+                "widget.empty.create_hint": "在应用中创建习惯以在此处查看",
+                "widget.stats.current_streak": "当前连续",
+                "widget.stats.longest_streak": "最长连续",
+                "widget.stats.completed": "已完成",
+                "widget.stats.total_days": "总天数",
+                "widget.stats.days": "天",
+                "widget.pro.upgrade": "升级到PRO",
+            ],
+            "ar": [
+                "widget.small.title": "متتبع العادات",
+                "widget.small.description": "تتبع عاداتك اليومية مع عداد السلسلة",
+                "widget.medium.title": "عرض العادات لـ 7 أيام",
+                "widget.medium.description": "عرض تقدم عاداتك خلال آخر 7 أيام",
+                "widget.large.title": "خريطة حرارية للعادات",
+                "widget.large.description":
+                    "خريطة حرارية بأسلوب GitHub تُظهر إكمال عاداتك عبر الوقت",
+                "widget.grid.title": "شبكة العادات لـ 60 يوماً",
+                "widget.grid.description": "عرض تقدم عاداتك خلال آخر 60 يوماً في شبكة مدمجة",
+                "widget.empty.no_habits": "لا توجد عادات",
+                "widget.empty.create_hint": "أنشئ عادة في التطبيق لرؤيتها هنا",
+                "widget.stats.current_streak": "السلسلة الحالية",
+                "widget.stats.longest_streak": "أطول سلسلة",
+                "widget.stats.completed": "مكتمل",
+                "widget.stats.total_days": "إجمالي الأيام",
+                "widget.stats.days": "أيام",
+                "widget.pro.upgrade": "ترقية إلى PRO",
+            ],
+            "fi": [
+                "widget.small.title": "Tapaseuranta",
+                "widget.small.description": "Seuraa päivittäisiä tapojasi putken laskurilla",
+                "widget.medium.title": "7 Päivän Tapojenäkymä",
+                "widget.medium.description": "Katso tapojesi edistystä viimeisten 7 päivän ajalta",
+                "widget.large.title": "Tapojen Lämpökartta",
+                "widget.large.description":
+                    "GitHub-tyylinen lämpökartta, joka näyttää tapojesi suorittamisen ajan myötä",
+                "widget.grid.title": "60 Päivän Tapojen Ruudukko",
+                "widget.grid.description":
+                    "Katso tapojesi edistystä viimeisten 60 päivän ajalta kompaktissa ruudukossa",
+                "widget.empty.no_habits": "Ei tapoja",
+                "widget.empty.create_hint": "Luo tapa sovelluksessa nähdäksesi sen täällä",
+                "widget.stats.current_streak": "Nykyinen putki",
+                "widget.stats.longest_streak": "Pisin putki",
+                "widget.stats.completed": "Valmiit",
+                "widget.stats.total_days": "Yhteensä päiviä",
+                "widget.stats.days": "päivää",
+                "widget.pro.upgrade": "Päivitä PRO:ksi",
+            ],
+        ]
+
+        // Return localized string or default
+        if let languageStrings = localizedStrings[language],
+            let localizedString = languageStrings[key]
+        {
+            return localizedString
+        }
+
+        return defaultStrings[key] ?? key
+    }
+}
+
 // MARK: - Habit Models
 struct Habit: Codable, Identifiable {
     let id: String
@@ -29,6 +233,9 @@ struct Habit: Codable, Identifiable {
     let flutterCurrentStreak: Int?
     let flutterCompletedDays: Int?
     let flutterTotalDays: Int?
+
+    // Pro membership status
+    let isProMember: Bool?
 
     var isCompletedToday: Bool {
         // Use normalized date for consistency
@@ -371,7 +578,8 @@ class HabitDataManager {
                     flutterLongestStreak: habit.flutterLongestStreak,
                     flutterCurrentStreak: habit.flutterCurrentStreak,
                     flutterCompletedDays: habit.flutterCompletedDays,
-                    flutterTotalDays: habit.flutterTotalDays
+                    flutterTotalDays: habit.flutterTotalDays,
+                    isProMember: habit.isProMember
                 )
 
                 habits[index] = updatedHabit
@@ -468,7 +676,8 @@ class HabitDataManager {
                     flutterLongestStreak: habit.flutterLongestStreak,
                     flutterCurrentStreak: habit.flutterCurrentStreak,
                     flutterCompletedDays: habit.flutterCompletedDays,
-                    flutterTotalDays: habit.flutterTotalDays
+                    flutterTotalDays: habit.flutterTotalDays,
+                    isProMember: habit.isProMember
                 )
 
                 habits[index] = updatedHabit

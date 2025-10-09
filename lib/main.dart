@@ -90,6 +90,14 @@ class _MyAppState extends ConsumerState<MyApp> {
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    // Set provider container for WidgetSyncService
+    WidgetSyncService().setProviderContainer(ProviderScope.containerOf(context));
+  }
+
+  @override
   Widget build(BuildContext context) {
     final themeMode = ref.watch(themeProvider);
     // EasyLocalization drives locale; no custom provider to avoid conflicts

@@ -128,6 +128,37 @@
                     "sub_features_0": "Özel Tasarımlar",
                     "sub_features_1": "İlerleme Paylaşımı",
                     "sub_features_2": "Başarı Görselleri"
+                },
+                "home_widget": {
+                    "title": "Ana Ekran Widget'ı",
+                    "description": "Uygulamayı açmadan alışkanlıklarınızı takip edin. Ana ekranınızdan günlük hedeflerinizi saniyeler içinde tamamlayın.",
+                    "sub_features_0": "Anında Erişim",
+                    "sub_features_1": "Günlük Zaman Tasarrufu",
+                    "sub_features_2": "Asla Unutma",
+                    "widget_config": {
+                        "small_title": "Alışkanlık Takipçisi",
+                        "small_description": "Seri sayacı ile günlük alışkanlıklarınızı takip edin",
+                        "medium_title": "7 Günlük Alışkanlık Görünümü",
+                        "medium_description": "Son 7 günlük alışkanlık ilerlemenizi görüntüleyin",
+                        "large_title": "Alışkanlık Isı Haritası",
+                        "large_description": "Zaman içindeki alışkanlık tamamlama durumunuzu GitHub tarzı ısı haritası ile görün",
+                        "grid_title": "60 Günlük Alışkanlık Izgarası",
+                        "grid_description": "Son 60 günlük alışkanlık ilerlemenizi kompakt bir ızgarada görüntüleyin"
+                    },
+                    "empty_state": {
+                        "no_habits": "Alışkanlık Yok",
+                        "create_habit_hint": "Burada görmek için uygulamada bir alışkanlık oluşturun"
+                    },
+                    "stats": {
+                        "current_streak": "Mevcut Seri",
+                        "longest_streak": "En Uzun Seri",
+                        "completed": "Tamamlanan",
+                        "total_days": "Toplam Gün",
+                        "days": "gün"
+                    },
+                    "pro_restriction": {
+                        "upgrade_pro": "PRO'ya Yükselt"
+                    }
                 }
             },
             "probability_score": "Oluşum Skoru",

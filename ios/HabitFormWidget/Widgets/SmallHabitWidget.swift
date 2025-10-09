@@ -17,11 +17,31 @@ struct SmallHabitWidget: Widget {
         AppIntentConfiguration(
             kind: kind, intent: HabitConfigurationIntent.self, provider: SmallHabitProvider()
         ) { entry in
-            SmallHabitWidgetEntryView(entry: entry)
+            if let isProMember = entry.habit.isProMember, !isProMember {
+                // Pro restriction view with full blur background
+                ZStack {
+                    Rectangle()
+                        .fill(.ultraThinMaterial)
+                        .containerBackground(.fill.tertiary, for: .widget)
+
+                    VStack(spacing: 4) {
+                        Image(systemName: "lock.fill")
+                            .font(.system(size: 16, weight: .medium))
+                            .foregroundColor(.primary)
+
+                        Text(WidgetLocalization.getLocalizedString(for: "widget.pro.upgrade"))
+                            .font(.system(size: 12, weight: .bold))
+                            .foregroundColor(.primary)
+                    }
+                }
                 .containerBackground(.fill.tertiary, for: .widget)
+            } else {
+                SmallHabitWidgetEntryView(entry: entry)
+                    .containerBackground(.fill.tertiary, for: .widget)
+            }
         }
-        .configurationDisplayName("Habit Tracker")
-        .description("Track your daily habits with streak counter")
+        .configurationDisplayName(WidgetLocalization.getLocalizedString(for: "widget.small.title"))
+        .description(WidgetLocalization.getLocalizedString(for: "widget.small.description"))
         .supportedFamilies([.systemSmall])
     }
 }
@@ -33,8 +53,9 @@ struct SmallHabitProvider: AppIntentTimelineProvider {
             date: Date(),
             habit: Habit(
                 id: "empty",
-                habitName: "No Habits",
-                habitDescription: "Create a habit in the app to see it here",
+                habitName: WidgetLocalization.getLocalizedString(for: "widget.empty.no_habits"),
+                habitDescription: WidgetLocalization.getLocalizedString(
+                    for: "widget.empty.create_hint"),
                 emoji: "📝",
                 dailyTarget: 1,
                 colorCode: 0x999999,
@@ -47,7 +68,8 @@ struct SmallHabitProvider: AppIntentTimelineProvider {
                 flutterLongestStreak: 0,
                 flutterCurrentStreak: 0,
                 flutterCompletedDays: 0,
-                flutterTotalDays: 0
+                flutterTotalDays: 0,
+                isProMember: false
             )
         )
     }
@@ -139,94 +161,95 @@ struct SmallHabitWidgetEntryView: View {
     }
 
     var body: some View {
-        VStack(spacing: 0) {
-            // Top section with emoji and streak
-            HStack {
-                // Emoji circle
-                ZStack {
-                    Circle()
-                        .fill(habitColor.opacity(0.12))
-                        .overlay(
-                            Circle()
-                                .stroke(habitColor.opacity(0.25), lineWidth: 1)
-                        )
-                        .frame(width: 36, height: 36)
-
-                    Text(entry.habit.emoji ?? "🎯")
-                        .font(.system(size: 24))
-                }
-
-                Spacer()
-
-                // Streak pill
-                HStack(spacing: 4) {
-                    Image(systemName: "flame.fill")
-                        .font(.system(size: 18))
-                        .foregroundColor(habitColor)
-
-                    Text("\(entry.habit.currentStreak)")
-                        .font(.system(size: 18, weight: .bold, design: .rounded))
-                        
-                }
-                .padding(.horizontal, 10)
-                .padding(.vertical, 6)
-                .frame(height: 36)
-                .background(
-                    Capsule()
-                        .fill(habitColor.opacity(0.18))
-                        .overlay(
-                            Capsule()
-                                .stroke(habitColor.opacity(0.25), lineWidth: 1)
-                        )
-                )
-            }
-
-            Spacer()
-
-            // Habit name and completion button side by side
-            HStack {
-                // Habit name
-                Text(entry.habit.habitName)
-                    .font(.system(size: 14, weight: .bold, design: .rounded))
-                    .foregroundColor(.primary)
-                    .lineLimit(4)
-                    .multilineTextAlignment(.leading)
-
-                Spacer()
-
-                // Completion button
-                Button(intent: CompleteHabitIntent(habitId: entry.habit.id)) {
+        ZStack {
+            VStack(spacing: 0) {
+                // Top section with emoji and streak
+                HStack {
+                    // Emoji circle
                     ZStack {
-                        if completionRatio >= 1.0 {
-                            // Completed state
-                            Circle()
-                                .fill(habitColor)
-                                .frame(width: 28, height: 28)
-                                .shadow(color: habitColor.opacity(0.3), radius: 4, x: 0, y: 2)
+                        Circle()
+                            .fill(habitColor.opacity(0.12))
+                            .overlay(
+                                Circle()
+                                    .stroke(habitColor.opacity(0.25), lineWidth: 1)
+                            )
+                            .frame(width: 36, height: 36)
 
-                            Image(systemName: "checkmark")
-                                .font(.system(size: 14, weight: .bold))
-                                .foregroundColor(.white)
-                        } else {
-                            // Incomplete state
-                            Circle()
-                                .fill(habitColor.opacity(0.12 + 0.88 * completionRatio))
-                                .overlay(
-                                    Circle()
-                                        .stroke(habitColor.opacity(0.6), lineWidth: 2)
-                                )
-                                .frame(width: 28, height: 28)
+                        Text(entry.habit.emoji ?? "🎯")
+                            .font(.system(size: 24))
+                    }
 
-                            Image(systemName: "circle")
-                                .font(.system(size: 14))
-                                .foregroundColor(.clear)
+                    Spacer()
+
+                    // Streak pill
+                    HStack(spacing: 4) {
+                        Image(systemName: "flame.fill")
+                            .font(.system(size: 18))
+                            .foregroundColor(habitColor)
+
+                        Text("\(entry.habit.currentStreak)")
+                            .font(.system(size: 18, weight: .bold, design: .rounded))
+
+                    }
+                    .padding(.horizontal, 10)
+                    .padding(.vertical, 6)
+                    .frame(height: 36)
+                    .background(
+                        Capsule()
+                            .fill(habitColor.opacity(0.18))
+                            .overlay(
+                                Capsule()
+                                    .stroke(habitColor.opacity(0.25), lineWidth: 1)
+                            )
+                    )
+                }
+
+                Spacer()
+
+                // Habit name and completion button side by side
+                HStack {
+                    // Habit name
+                    Text(entry.habit.habitName)
+                        .font(.system(size: 14, weight: .bold, design: .rounded))
+                        .foregroundColor(.primary)
+                        .lineLimit(4)
+                        .multilineTextAlignment(.leading)
+
+                    Spacer()
+
+                    // Completion button
+                    Button(intent: CompleteHabitIntent(habitId: entry.habit.id)) {
+                        ZStack {
+                            if completionRatio >= 1.0 {
+                                // Completed state
+                                Circle()
+                                    .fill(habitColor)
+                                    .frame(width: 28, height: 28)
+                                    .shadow(color: habitColor.opacity(0.3), radius: 4, x: 0, y: 2)
+
+                                Image(systemName: "checkmark")
+                                    .font(.system(size: 14, weight: .bold))
+                                    .foregroundColor(.white)
+                            } else {
+                                // Incomplete state
+                                Circle()
+                                    .fill(habitColor.opacity(0.12 + 0.88 * completionRatio))
+                                    .overlay(
+                                        Circle()
+                                            .stroke(habitColor.opacity(0.6), lineWidth: 2)
+                                    )
+                                    .frame(width: 28, height: 28)
+
+                                Image(systemName: "circle")
+                                    .font(.system(size: 14))
+                                    .foregroundColor(.clear)
+                            }
                         }
                     }
+                    .buttonStyle(PlainButtonStyle())
                 }
-                .buttonStyle(PlainButtonStyle())
             }
         }
-
     }
 }
 
@@ -251,7 +274,8 @@ struct SmallHabitWidgetEntryView: View {
             flutterLongestStreak: 0,
             flutterCurrentStreak: 0,
             flutterCompletedDays: 0,
-            flutterTotalDays: 0
+            flutterTotalDays: 0,
+            isProMember: true
         )
     )
 }

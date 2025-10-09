@@ -1,7 +1,11 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../core/constants/debug_constants.dart';
 import '../core/helpers/logger/logger.dart';
+import '../features/purchase/providers/purchase_provider.dart';
 import '../models/completion_entry/completion_entry.dart';
 import '../models/habit/habit_model.dart';
 import 'habit_service/habit_service_interface.dart';
@@ -23,11 +27,19 @@ class WidgetSyncService {
   List<Habit>? _pendingHabits;
   DateTime? _lastWidgetUpdate;
 
+  // Provider container for accessing purchase provider
+  ProviderContainer? _providerContainer;
+
   // Stream controller for widget updates
   final StreamController<Map<String, dynamic>> _widgetUpdateController = StreamController<Map<String, dynamic>>.broadcast();
 
   /// Stream of widget updates
   Stream<Map<String, dynamic>> get widgetUpdates => _widgetUpdateController.stream;
+
+  /// Set provider container for accessing purchase provider
+  void setProviderContainer(ProviderContainer container) {
+    _providerContainer = container;
+  }
 
   /// Initialize the sync service
   Future<void> initialize() async {
@@ -139,10 +151,28 @@ class WidgetSyncService {
       return;
     }
 
+    // Get Pro membership status from purchase provider
+    bool isProMember = false;
+    if (_providerContainer != null) {
+      try {
+        final purchaseState = _providerContainer!.read(purchaseProvider);
+        isProMember = purchaseState.valueOrNull?.isSubscriptionActive ?? false;
+        LogHelper.shared.debugPrint('🔓 Pro membership status from purchase provider: $isProMember');
+      } catch (e) {
+        LogHelper.shared.debugPrint('⚠️ Could not get Pro status from purchase provider, falling back to debug mode: $e');
+        // Fallback to debug mode
+        isProMember = KDebug.purchaseDebugMode;
+      }
+    } else {
+      LogHelper.shared.debugPrint('⚠️ No provider container available, falling back to debug mode');
+      // Fallback to debug mode
+      isProMember = KDebug.purchaseDebugMode;
+    }
+
     try {
       // Update widget data using the method channel service
       final methodChannelStart = DateTime.now();
-      await _methodChannelService.updateWidgetData(habits);
+      await _methodChannelService.updateWidgetData(habits, isProMember: isProMember);
       final methodChannelEnd = DateTime.now();
       LogHelper.shared.debugPrint('📡 [PERF] Method channel update completed in ${methodChannelEnd.difference(methodChannelStart).inMilliseconds}ms');
 
@@ -151,7 +181,7 @@ class WidgetSyncService {
       final widgetUpdateEnd = DateTime.now();
       LogHelper.shared.debugPrint('✅ [PERF] Widget data update total time: ${widgetUpdateEnd.difference(widgetUpdateStart).inMilliseconds}ms');
 
-      LogHelper.shared.debugPrint('✅ Updated widget data with ${habits.length} habits');
+      LogHelper.shared.debugPrint('✅ Updated widget data with ${habits.length} habits, isPro: $isProMember');
       for (final habit in habits) {
         LogHelper.shared.debugPrint('  - ${habit.habitName} (${habit.id})');
       }
@@ -180,7 +210,7 @@ class WidgetSyncService {
       final habits = await _habitService.getAllHabits();
       await updateWidgetData(habits);
 
-        LogHelper.shared.debugPrint('Handled widget habit completion for $habitId on $date');
+      LogHelper.shared.debugPrint('Handled widget habit completion for $habitId on $date');
     } catch (e) {
       LogHelper.shared.debugPrint('Error handling widget habit completion: $e');
     }
@@ -224,6 +254,23 @@ class WidgetSyncService {
       LogHelper.shared.debugPrint('✅ Initial widget data sync completed with ${habits.length} habits');
     } catch (e) {
       LogHelper.shared.debugPrint('❌ Error during initial widget data sync: $e');
+    }
+  }
+
+  /// Force widget update with current Pro status (for debugging)
+  Future<void> forceWidgetUpdate() async {
+    try {
+      LogHelper.shared.debugPrint('🔄 Force updating widgets...');
+
+      final habits = await _habitService.getAllHabits();
+
+      LogHelper.shared.debugPrint('📊 Updating widgets with ${habits.length} habits');
+
+      await updateWidgetData(habits);
+
+      LogHelper.shared.debugPrint('✅ Widget update completed');
+    } catch (e) {
+      LogHelper.shared.debugPrint('❌ Error force updating widgets: $e');
     }
   }
 

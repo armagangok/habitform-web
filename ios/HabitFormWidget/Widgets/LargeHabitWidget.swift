@@ -17,11 +17,31 @@ struct LargeHabitWidget: Widget {
         AppIntentConfiguration(
             kind: kind, intent: HabitConfigurationIntent.self, provider: LargeHabitProvider()
         ) { entry in
-            LargeHabitWidgetEntryView(entry: entry)
+            if let isProMember = entry.habit.isProMember, !isProMember {
+                // Pro restriction view with full blur background
+                ZStack {
+                    Rectangle()
+                        .fill(.ultraThinMaterial)
+                        .containerBackground(.fill.tertiary, for: .widget)
+
+                    VStack(spacing: 8) {
+                        Image(systemName: "lock.fill")
+                            .font(.system(size: 20, weight: .medium))
+                            .foregroundColor(.primary)
+
+                        Text(WidgetLocalization.getLocalizedString(for: "widget.pro.upgrade"))
+                            .font(.system(size: 16, weight: .bold))
+                            .foregroundColor(.primary)
+                    }
+                }
                 .containerBackground(.fill.tertiary, for: .widget)
+            } else {
+                LargeHabitWidgetEntryView(entry: entry)
+                    .containerBackground(.fill.tertiary, for: .widget)
+            }
         }
-        .configurationDisplayName("Habit Heatmap")
-        .description("GitHub-style heatmap showing your habit completion over time")
+        .configurationDisplayName(WidgetLocalization.getLocalizedString(for: "widget.large.title"))
+        .description(WidgetLocalization.getLocalizedString(for: "widget.large.description"))
         .supportedFamilies([.systemLarge])
     }
 }
@@ -32,8 +52,9 @@ struct LargeHabitProvider: AppIntentTimelineProvider {
             date: Date(),
             habit: Habit(
                 id: "empty",
-                habitName: "No Habits",
-                habitDescription: "Create a habit in the app to see it here",
+                habitName: WidgetLocalization.getLocalizedString(for: "widget.empty.no_habits"),
+                habitDescription: WidgetLocalization.getLocalizedString(
+                    for: "widget.empty.create_hint"),
                 emoji: "",
                 dailyTarget: 1,
                 colorCode: 0x999999,
@@ -46,7 +67,8 @@ struct LargeHabitProvider: AppIntentTimelineProvider {
                 flutterLongestStreak: 0,
                 flutterCurrentStreak: 0,
                 flutterCompletedDays: 0,
-                flutterTotalDays: 0
+                flutterTotalDays: 0,
+                isProMember: false
             ),
             heatmapData: [:]
         )
@@ -233,154 +255,271 @@ struct LargeHabitWidgetEntryView: View {
     }
 
     var body: some View {
-        VStack(spacing: 5) {
-            // Header with habit name and emoji
-            HStack {
-                // Habit name on the left
-                Text(entry.habit.habitName)
-                    .font(.system(size: 18, weight: .bold))
-                    .foregroundColor(.primary)
-                    .lineLimit(2)
-                    .multilineTextAlignment(.leading)
+        ZStack {
+            VStack(spacing: 5) {
+                // Header with habit name and emoji
+                HStack {
+                    // Habit name on the left
+                    Text(entry.habit.habitName)
+                        .font(.system(size: 18, weight: .bold))
+                        .foregroundColor(.primary)
+                        .lineLimit(2)
+                        .multilineTextAlignment(.leading)
+
+                    Spacer()
+
+                    // Emoji circle on the right
+                    ZStack {
+                        Circle()
+                            .fill(habitColor.opacity(0.12))
+                            .overlay(
+                                Circle()
+                                    .stroke(habitColor.opacity(0.25), lineWidth: 1)
+                            )
+                            .frame(width: 32, height: 32)
+
+                        Text(entry.habit.emoji ?? "🎯")
+                            .font(.system(size: 17))
+                    }
+                    // Complete button aligned with Small widget styling
+                    Button(intent: CompleteHabitIntent(habitId: entry.habit.id)) {
+                        ZStack {
+                            if completionRatio >= 1.0 {
+                                // Completed state (filled circle with checkmark)
+                                Circle()
+                                    .fill(habitColor)
+                                    .frame(width: 28, height: 28)
+                                    .shadow(color: habitColor.opacity(0.3), radius: 4, x: 0, y: 2)
+
+                                Image(systemName: "checkmark")
+                                    .font(.system(size: 14, weight: .bold))
+                                    .foregroundColor(.white)
+                            } else {
+                                // Incomplete state (outlined circle, progressive fill)
+                                Circle()
+                                    .fill(habitColor.opacity(0.12 + 0.88 * completionRatio))
+                                    .overlay(
+                                        Circle()
+                                            .stroke(habitColor.opacity(0.6), lineWidth: 2)
+                                    )
+                                    .frame(width: 28, height: 28)
+
+                                Image(systemName: "circle")
+                                    .font(.system(size: 14))
+                                    .foregroundColor(.clear)
+                            }
+                        }
+                    }
+                    .buttonStyle(PlainButtonStyle())
+                }
+                .padding(.bottom, 20)
+
+                // Overview stats grid (2x2 layout exactly like in app)
+                VStack(spacing: 12) {
+                    // First row
+                    HStack(spacing: 12) {
+                        OverviewStatCard(
+                            title: WidgetLocalization.getLocalizedString(
+                                for: "widget.stats.current_streak"),
+                            value: entry.habit.currentStreakFromFlutter,
+                            unit: WidgetLocalization.getLocalizedString(for: "widget.stats.days"),
+                            icon: "flame.fill",
+                            color: Color.orange
+                        )
+
+                        OverviewStatCard(
+                            title: WidgetLocalization.getLocalizedString(
+                                for: "widget.stats.longest_streak"),
+                            value: entry.habit.longestStreak,
+                            unit: WidgetLocalization.getLocalizedString(for: "widget.stats.days"),
+                            icon: "trophy.fill",
+                            color: Color.red
+                        )
+                    }
+
+                    // Second row
+                    HStack(spacing: 12) {
+                        OverviewStatCard(
+                            title: WidgetLocalization.getLocalizedString(
+                                for: "widget.stats.completed"),
+                            value: entry.habit.completedDaysFromFlutter,
+                            unit: WidgetLocalization.getLocalizedString(for: "widget.stats.days"),
+                            icon: "checkmark.circle.fill",
+                            color: Color.green
+                        )
+
+                        OverviewStatCard(
+                            title: WidgetLocalization.getLocalizedString(
+                                for: "widget.stats.total_days"),
+                            value: entry.habit.totalDaysFromFlutter,
+                            unit: WidgetLocalization.getLocalizedString(for: "widget.stats.days"),
+                            icon: "calendar",
+                            color: Color.blue
+                        )
+                    }
+                }.padding(.horizontal, 10)
 
                 Spacer()
 
-                // Emoji circle on the right
-                ZStack {
-                    Circle()
-                        .fill(habitColor.opacity(0.12))
-                        .overlay(
-                            Circle()
-                                .stroke(habitColor.opacity(0.25), lineWidth: 1)
-                        )
-                        .frame(width: 32, height: 32)
-
-                    Text(entry.habit.emoji ?? "🎯")
-                        .font(.system(size: 17))
-                }
-                // Complete button aligned with Small widget styling
-                Button(intent: CompleteHabitIntent(habitId: entry.habit.id)) {
-                    ZStack {
-                        if completionRatio >= 1.0 {
-                            // Completed state (filled circle with checkmark)
-                            Circle()
-                                .fill(habitColor)
-                                .frame(width: 28, height: 28)
-                                .shadow(color: habitColor.opacity(0.3), radius: 4, x: 0, y: 2)
-
-                            Image(systemName: "checkmark")
-                                .font(.system(size: 14, weight: .bold))
-                                .foregroundColor(.white)
-                        } else {
-                            // Incomplete state (outlined circle, progressive fill)
-                            Circle()
-                                .fill(habitColor.opacity(0.12 + 0.88 * completionRatio))
-                                .overlay(
-                                    Circle()
-                                        .stroke(habitColor.opacity(0.6), lineWidth: 2)
-                                )
-                                .frame(width: 28, height: 28)
-
-                            Image(systemName: "circle")
-                                .font(.system(size: 14))
-                                .foregroundColor(.clear)
-                        }
-                    }
-                }
-                .buttonStyle(PlainButtonStyle())
-            }
-            .padding(.bottom, 20)
-
-            // Overview stats grid (2x2 layout exactly like in app)
-            VStack(spacing: 12) {
-                // First row
+                // Heatmap - 3 months view (like habit_data_widget.dart)
                 HStack(spacing: 12) {
-                    OverviewStatCard(
-                        title: "Current Streak",
-                        value: entry.habit.currentStreakFromFlutter,
-                        unit: "days",
-                        icon: "flame.fill",
-                        color: Color.orange
-                    )
+                    // First Month
+                    VStack(spacing: 4) {
+                        Text(monthName(for: 0))
+                            .font(.system(size: 12, weight: .medium))
+                            .foregroundColor(.secondary)
 
-                    OverviewStatCard(
-                        title: "Longest Streak",
-                        value: entry.habit.longestStreak,
-                        unit: "days",
-                        icon: "trophy.fill",
-                        color: Color.red
-                    )
-                }
+                        HStack(spacing: 2) {
+                            ForEach(0..<getMonthWeeks(monthIndex: 0), id: \.self) { week in
+                                VStack(spacing: 2) {
+                                    ForEach(0..<7, id: \.self) { day in
+                                        let date = getDateForGrid(
+                                            monthIndex: 0, week: week, day: day)
+                                        if let date = date, isDateInMonth(date, monthIndex: 0) {
+                                            let dateKey = DateFormatter.habitDateKey.string(
+                                                from: date)
+                                            let completion = entry.habit.completions[dateKey]
+                                            let isToday = Calendar.current.isDate(
+                                                date, inSameDayAs: Date())
 
-                // Second row
-                HStack(spacing: 12) {
-                    OverviewStatCard(
-                        title: "Completed",
-                        value: entry.habit.completedDaysFromFlutter,
-                        unit: "days",
-                        icon: "checkmark.circle.fill",
-                        color: Color.green
-                    )
+                                            // Calculate completion ratio for multi-completion support
+                                            let count = completion?.count ?? 0
+                                            let target = entry.habit.dailyTarget
+                                            let completionRatio =
+                                                target > 0
+                                                ? min(Double(count) / Double(target), 1.0) : 0.0
+                                            let isCompleted = completion?.isCompleted ?? false
 
-                    OverviewStatCard(
-                        title: "Total Days",
-                        value: entry.habit.totalDaysFromFlutter,
-                        unit: "days",
-                        icon: "calendar",
-                        color: Color.blue
-                    )
-                }
-            }.padding(.horizontal, 10)
+                                            Rectangle()
+                                                .fill(
+                                                    isCompleted
+                                                        ? habitColor.opacity(0.8)  // Fully completed - solid color
+                                                        : habitColor.opacity(
+                                                            0.2 + 0.6 * completionRatio)  // Progressive color intensity
+                                                )
+                                                .frame(width: 14, height: 14)
+                                                .cornerRadius(3.5)
+                                                .overlay(
+                                                    RoundedRectangle(cornerRadius: 3.5)
+                                                        .stroke(
+                                                            isToday
+                                                                ? (Color.primary.opacity(0.8))
+                                                                : Color.clear, lineWidth: 1)
+                                                )
+                                        } else {
+                                            Rectangle()
+                                                .fill(Color.clear)
+                                                .frame(width: 14, height: 14)
+                                        }
+                                    }
+                                }
+                            }
+                        }
 
-            Spacer()
+                    }
 
-            // Heatmap - 3 months view (like habit_data_widget.dart)
-            HStack(spacing: 12) {
-                // First Month
-                VStack(spacing: 4) {
-                    Text(monthName(for: 0))
-                        .font(.system(size: 12, weight: .medium))
-                        .foregroundColor(.secondary)
+                    // Second Month
+                    VStack(spacing: 4) {
+                        Text(monthName(for: 1))
+                            .font(.system(size: 12, weight: .medium))
+                            .foregroundColor(.secondary)
 
-                    HStack(spacing: 2) {
-                        ForEach(0..<getMonthWeeks(monthIndex: 0), id: \.self) { week in
-                            VStack(spacing: 2) {
-                                ForEach(0..<7, id: \.self) { day in
-                                    let date = getDateForGrid(monthIndex: 0, week: week, day: day)
-                                    if let date = date, isDateInMonth(date, monthIndex: 0) {
-                                        let dateKey = DateFormatter.habitDateKey.string(from: date)
-                                        let completion = entry.habit.completions[dateKey]
-                                        let isToday = Calendar.current.isDate(
-                                            date, inSameDayAs: Date())
+                        HStack(spacing: 2) {
+                            ForEach(0..<getMonthWeeks(monthIndex: 1), id: \.self) { week in
+                                VStack(spacing: 2) {
+                                    ForEach(0..<7, id: \.self) { day in
+                                        let date = getDateForGrid(
+                                            monthIndex: 1, week: week, day: day)
+                                        if let date = date, isDateInMonth(date, monthIndex: 1) {
+                                            let dateKey = DateFormatter.habitDateKey.string(
+                                                from: date)
+                                            let completion = entry.habit.completions[dateKey]
+                                            let isToday = Calendar.current.isDate(
+                                                date, inSameDayAs: Date())
 
-                                        // Calculate completion ratio for multi-completion support
-                                        let count = completion?.count ?? 0
-                                        let target = entry.habit.dailyTarget
-                                        let completionRatio =
-                                            target > 0
-                                            ? min(Double(count) / Double(target), 1.0) : 0.0
-                                        let isCompleted = completion?.isCompleted ?? false
+                                            // Calculate completion ratio for multi-completion support
+                                            let count = completion?.count ?? 0
+                                            let target = entry.habit.dailyTarget
+                                            let completionRatio =
+                                                target > 0
+                                                ? min(Double(count) / Double(target), 1.0) : 0.0
+                                            let isCompleted = completion?.isCompleted ?? false
 
-                                        Rectangle()
-                                            .fill(
-                                                isCompleted
-                                                    ? habitColor.opacity(0.8)  // Fully completed - solid color
-                                                    : habitColor.opacity(
-                                                        0.2 + 0.6 * completionRatio)  // Progressive color intensity
-                                            )
-                                            .frame(width: 14, height: 14)
-                                            .cornerRadius(3.5)
-                                            .overlay(
-                                                RoundedRectangle(cornerRadius: 3.5)
-                                                    .stroke(
-                                                        isToday
-                                                            ? (Color.primary.opacity(0.8))
-                                                            : Color.clear, lineWidth: 1)
-                                            )
-                                    } else {
-                                        Rectangle()
-                                            .fill(Color.clear)
-                                            .frame(width: 14, height: 14)
+                                            Rectangle()
+                                                .fill(
+                                                    isCompleted
+                                                        ? habitColor.opacity(0.8)  // Fully completed - solid color
+                                                        : habitColor.opacity(
+                                                            0.2 + 0.6 * completionRatio)  // Progressive color intensity
+                                                )
+                                                .frame(width: 14, height: 14)
+                                                .cornerRadius(3.5)
+                                                .overlay(
+                                                    RoundedRectangle(cornerRadius: 3.5)
+                                                        .stroke(
+                                                            isToday
+                                                                ? (Color.primary.opacity(0.8))
+                                                                : Color.clear, lineWidth: 1)
+                                                )
+                                        } else {
+                                            Rectangle()
+                                                .fill(Color.clear)
+                                                .frame(width: 14, height: 14)
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    // Third Month(Current Month)
+                    VStack(spacing: 4) {
+                        Text(monthName(for: 2))
+                            .font(.system(size: 12, weight: .medium))
+                            .foregroundColor(.secondary)
+
+                        HStack(spacing: 2) {
+                            ForEach(0..<getMonthWeeks(monthIndex: 2), id: \.self) { week in
+                                VStack(spacing: 2) {
+                                    ForEach(0..<7, id: \.self) { day in
+                                        let date = getDateForGrid(
+                                            monthIndex: 2, week: week, day: day)
+                                        if let date = date, isDateInMonth(date, monthIndex: 2) {
+                                            let dateKey = DateFormatter.habitDateKey.string(
+                                                from: date)
+                                            let completion = entry.habit.completions[dateKey]
+                                            let isToday = Calendar.current.isDate(
+                                                date, inSameDayAs: Date())
+
+                                            // Calculate completion ratio for multi-completion support
+                                            let count = completion?.count ?? 0
+                                            let target = entry.habit.dailyTarget
+                                            let completionRatio =
+                                                target > 0
+                                                ? min(Double(count) / Double(target), 1.0) : 0.0
+                                            let isCompleted = completion?.isCompleted ?? false
+
+                                            Rectangle()
+                                                .fill(
+                                                    isCompleted
+                                                        ? habitColor.opacity(0.8)  // Fully completed - solid color
+                                                        : habitColor.opacity(
+                                                            0.2 + 0.6 * completionRatio)  // Progressive color intensity
+                                                )
+                                                .frame(width: 14, height: 14)
+                                                .cornerRadius(3.5)
+                                                .overlay(
+                                                    RoundedRectangle(cornerRadius: 3.5)
+                                                        .stroke(
+                                                            isToday
+                                                                ? (Color.primary.opacity(0.8))
+                                                                : Color.clear, lineWidth: 1)
+                                                )
+                                        } else {
+                                            Rectangle()
+                                                .fill(Color.clear)
+                                                .frame(width: 14, height: 14)
+                                        }
                                     }
                                 }
                             }
@@ -388,148 +527,44 @@ struct LargeHabitWidgetEntryView: View {
                     }
 
                 }
-
-                // Second Month
-                VStack(spacing: 4) {
-                    Text(monthName(for: 1))
-                        .font(.system(size: 12, weight: .medium))
-                        .foregroundColor(.secondary)
-
-                    HStack(spacing: 2) {
-                        ForEach(0..<getMonthWeeks(monthIndex: 1), id: \.self) { week in
-                            VStack(spacing: 2) {
-                                ForEach(0..<7, id: \.self) { day in
-                                    let date = getDateForGrid(monthIndex: 1, week: week, day: day)
-                                    if let date = date, isDateInMonth(date, monthIndex: 1) {
-                                        let dateKey = DateFormatter.habitDateKey.string(from: date)
-                                        let completion = entry.habit.completions[dateKey]
-                                        let isToday = Calendar.current.isDate(
-                                            date, inSameDayAs: Date())
-
-                                        // Calculate completion ratio for multi-completion support
-                                        let count = completion?.count ?? 0
-                                        let target = entry.habit.dailyTarget
-                                        let completionRatio =
-                                            target > 0
-                                            ? min(Double(count) / Double(target), 1.0) : 0.0
-                                        let isCompleted = completion?.isCompleted ?? false
-
-                                        Rectangle()
-                                            .fill(
-                                                isCompleted
-                                                    ? habitColor.opacity(0.8)  // Fully completed - solid color
-                                                    : habitColor.opacity(
-                                                        0.2 + 0.6 * completionRatio)  // Progressive color intensity
-                                            )
-                                            .frame(width: 14, height: 14)
-                                            .cornerRadius(3.5)
-                                            .overlay(
-                                                RoundedRectangle(cornerRadius: 3.5)
-                                                    .stroke(
-                                                        isToday
-                                                            ? (Color.primary.opacity(0.8))
-                                                            : Color.clear, lineWidth: 1)
-                                            )
-                                    } else {
-                                        Rectangle()
-                                            .fill(Color.clear)
-                                            .frame(width: 14, height: 14)
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-
-                // Third Month(Current Month)
-                VStack(spacing: 4) {
-                    Text(monthName(for: 2))
-                        .font(.system(size: 12, weight: .medium))
-                        .foregroundColor(.secondary)
-
-                    HStack(spacing: 2) {
-                        ForEach(0..<getMonthWeeks(monthIndex: 2), id: \.self) { week in
-                            VStack(spacing: 2) {
-                                ForEach(0..<7, id: \.self) { day in
-                                    let date = getDateForGrid(monthIndex: 2, week: week, day: day)
-                                    if let date = date, isDateInMonth(date, monthIndex: 2) {
-                                        let dateKey = DateFormatter.habitDateKey.string(from: date)
-                                        let completion = entry.habit.completions[dateKey]
-                                        let isToday = Calendar.current.isDate(
-                                            date, inSameDayAs: Date())
-
-                                        // Calculate completion ratio for multi-completion support
-                                        let count = completion?.count ?? 0
-                                        let target = entry.habit.dailyTarget
-                                        let completionRatio =
-                                            target > 0
-                                            ? min(Double(count) / Double(target), 1.0) : 0.0
-                                        let isCompleted = completion?.isCompleted ?? false
-
-                                        Rectangle()
-                                            .fill(
-                                                isCompleted
-                                                    ? habitColor.opacity(0.8)  // Fully completed - solid color
-                                                    : habitColor.opacity(
-                                                        0.2 + 0.6 * completionRatio)  // Progressive color intensity
-                                            )
-                                            .frame(width: 14, height: 14)
-                                            .cornerRadius(3.5)
-                                            .overlay(
-                                                RoundedRectangle(cornerRadius: 3.5)
-                                                    .stroke(
-                                                        isToday
-                                                            ? (Color.primary.opacity(0.8))
-                                                            : Color.clear, lineWidth: 1)
-                                            )
-                                    } else {
-                                        Rectangle()
-                                            .fill(Color.clear)
-                                            .frame(width: 14, height: 14)
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-
             }
         }
 
     }
-}
 
-private func heatmapColor(for isCompleted: Bool, isToday: Bool) -> Color {
-    if isToday {
-        return isCompleted ? Color.green : Color.blue.opacity(0.3)
-    } else {
-        return isCompleted ? Color.green.opacity(0.6) : Color.gray.opacity(0.3)
+    private func heatmapColor(for isCompleted: Bool, isToday: Bool) -> Color {
+        if isToday {
+            return isCompleted ? Color.green : Color.blue.opacity(0.3)
+        } else {
+            return isCompleted ? Color.green.opacity(0.6) : Color.gray.opacity(0.3)
+        }
     }
-}
 
-#Preview(as: .systemLarge) {
-    LargeHabitWidget()
-} timeline: {
-    LargeHabitEntry(
-        date: .now,
-        habit: Habit(
-            id: "preview",
-            habitName: "Meditation",
-            habitDescription: "Daily mindfulness practice",
-            emoji: "🧘‍♀️",
-            dailyTarget: 1,
-            colorCode: 0x9B59B6,
-            completions: [:],
-            archiveDate: nil,
-            status: .active,
-            categoryIds: [],
-            difficulty: .moderate,
-            flutterProbabilityScore: 0.0,
-            flutterLongestStreak: 0,
-            flutterCurrentStreak: 0,
-            flutterCompletedDays: 0,
-            flutterTotalDays: 0
-        ),
-        heatmapData: [:]
-    )
+    #Preview(as: .systemLarge) {
+        LargeHabitWidget()
+    } timeline: {
+        LargeHabitEntry(
+            date: .now,
+            habit: Habit(
+                id: "preview",
+                habitName: "Meditation",
+                habitDescription: "Daily mindfulness practice",
+                emoji: "🧘‍♀️",
+                dailyTarget: 1,
+                colorCode: 0x9B59B6,
+                completions: [:],
+                archiveDate: nil,
+                status: .active,
+                categoryIds: [],
+                difficulty: .moderate,
+                flutterProbabilityScore: 0.0,
+                flutterLongestStreak: 0,
+                flutterCurrentStreak: 0,
+                flutterCompletedDays: 0,
+                flutterTotalDays: 0,
+                isProMember: true
+            ),
+            heatmapData: [:]
+        )
+    }
 }

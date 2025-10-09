@@ -128,6 +128,37 @@
                     "sub_features_0": "Designs personnalisés",
                     "sub_features_1": "Partage de progrès",
                     "sub_features_2": "Images de réussite"
+                },
+                "home_widget": {
+                    "title": "Widget d'Accueil",
+                    "description": "Suivez vos habitudes sans ouvrir l'application. Accomplissez vos objectifs quotidiens directement depuis l'écran d'accueil de votre iPhone en quelques secondes.",
+                    "sub_features_0": "Accès Instantané",
+                    "sub_features_1": "Gagnez du Temps Quotidien",
+                    "sub_features_2": "N'Oubliez Jamais",
+                    "widget_config": {
+                        "small_title": "Suivi d'Habitudes",
+                        "small_description": "Suivez vos habitudes quotidiennes avec compteur de séries",
+                        "medium_title": "Vue d'Habitudes 7 Jours",
+                        "medium_description": "Voir vos progrès d'habitudes au cours des 7 derniers jours",
+                        "large_title": "Carte de Chaleur d'Habitudes",
+                        "large_description": "Carte de chaleur style GitHub montrant votre accomplissement d'habitudes dans le temps",
+                        "grid_title": "Grille d'Habitudes 60 Jours",
+                        "grid_description": "Voir vos progrès d'habitudes au cours des 60 derniers jours dans une grille compacte"
+                    },
+                    "empty_state": {
+                        "no_habits": "Aucune Habitude",
+                        "create_habit_hint": "Créez une habitude dans l'application pour la voir ici"
+                    },
+                    "stats": {
+                        "current_streak": "Série Actuelle",
+                        "longest_streak": "Série la Plus Longue",
+                        "completed": "Terminés",
+                        "total_days": "Jours Totaux",
+                        "days": "jours"
+                    },
+                    "pro_restriction": {
+                        "upgrade_pro": "Passer à PRO"
+                    }
                 }
             },
             "probability_score": "Score de formation",

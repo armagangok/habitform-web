@@ -17,11 +17,31 @@ struct MediumHabitWidget: Widget {
         AppIntentConfiguration(
             kind: kind, intent: HabitConfigurationIntent.self, provider: MediumHabitProvider()
         ) { entry in
-            MediumHabitWidgetEntryView(entry: entry)
+            if let isProMember = entry.habit.isProMember, !isProMember {
+                // Pro restriction view with full blur background
+                ZStack {
+                    Rectangle()
+                        .fill(.ultraThinMaterial)
+                        .containerBackground(.fill.tertiary, for: .widget)
+
+                    VStack(spacing: 6) {
+                        Image(systemName: "lock.fill")
+                            .font(.system(size: 18, weight: .medium))
+                            .foregroundColor(.primary)
+
+                        Text(WidgetLocalization.getLocalizedString(for: "widget.pro.upgrade"))
+                            .font(.system(size: 14, weight: .bold))
+                            .foregroundColor(.primary)
+                    }
+                }
                 .containerBackground(.fill.tertiary, for: .widget)
+            } else {
+                MediumHabitWidgetEntryView(entry: entry)
+                    .containerBackground(.fill.tertiary, for: .widget)
+            }
         }
-        .configurationDisplayName("7-Day Habit View")
-        .description("View your habit progress over the last 7 days")
+        .configurationDisplayName(WidgetLocalization.getLocalizedString(for: "widget.medium.title"))
+        .description(WidgetLocalization.getLocalizedString(for: "widget.medium.description"))
         .supportedFamilies([.systemMedium])
     }
 }
@@ -32,8 +52,9 @@ struct MediumHabitProvider: AppIntentTimelineProvider {
             date: Date(),
             habit: Habit(
                 id: "empty",
-                habitName: "No Habits",
-                habitDescription: "Create a habit in the app to see it here",
+                habitName: WidgetLocalization.getLocalizedString(for: "widget.empty.no_habits"),
+                habitDescription: WidgetLocalization.getLocalizedString(
+                    for: "widget.empty.create_hint"),
                 emoji: "📝",
                 dailyTarget: 1,
                 colorCode: 0x999999,
@@ -46,7 +67,8 @@ struct MediumHabitProvider: AppIntentTimelineProvider {
                 flutterLongestStreak: 0,
                 flutterCurrentStreak: 0,
                 flutterCompletedDays: 0,
-                flutterTotalDays: 0
+                flutterTotalDays: 0,
+                isProMember: false
             ),
             weekData: [:]
         )
@@ -157,97 +179,100 @@ struct MediumHabitWidgetEntryView: View {
     }
 
     var body: some View {
-        VStack(spacing: 12) {
-            // Header with habit info
-            HStack {
-                // Left side: Emoji + Habit name
-                HStack(spacing: 8) {
-                    // Emoji circle
-                    ZStack {
-                        Circle()
-                            .fill(habitColor.opacity(0.12))
-                            .overlay(
-                                Circle()
-                                    .stroke(habitColor.opacity(0.25), lineWidth: 1)
-                            )
-                            .frame(width: 36, height: 36)
+        ZStack {
+            VStack(spacing: 12) {
+                // Header with habit info
+                HStack {
+                    // Left side: Emoji + Habit name
+                    HStack(spacing: 8) {
+                        // Emoji circle
+                        ZStack {
+                            Circle()
+                                .fill(habitColor.opacity(0.12))
+                                .overlay(
+                                    Circle()
+                                        .stroke(habitColor.opacity(0.25), lineWidth: 1)
+                                )
+                                .frame(width: 36, height: 36)
 
-                        Text(entry.habit.emoji ?? "🎯")
-                            .font(.system(size: 24)).padding(.all, 2.5)
+                            Text(entry.habit.emoji ?? "🎯")
+                                .font(.system(size: 24)).padding(.all, 2.5)
+                        }
+
+                        Text(entry.habit.habitName)
+                            .font(.system(size: 16, weight: .bold))
+                            .foregroundColor(.primary)
+                            .lineLimit(2)
+                            .multilineTextAlignment(.leading)
                     }
 
-                    Text(entry.habit.habitName)
-                        .font(.system(size: 16, weight: .bold))
-                        .foregroundColor(.primary)
-                        .lineLimit(2)
-                        .multilineTextAlignment(.leading)
+                    Spacer()
+
+                    // Right side: Current streak
+                    HStack(spacing: 4) {
+                        Image(systemName: "flame.fill")
+                            .foregroundColor(habitColor)
+                            .font(.system(size: 16))
+                        Text("\(entry.habit.currentStreak)")
+                            .font(.system(size: 16, weight: .medium))
+                            .foregroundColor(.primary)
+                    }
+                    .padding(.horizontal, 10)
+                    .padding(.vertical, 4)
+                    .background(
+                        RoundedRectangle(cornerRadius: 90)
+                            .fill(habitColor.opacity(0.12))
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 90)
+                                    .stroke(habitColor.opacity(0.25), lineWidth: 1)
+                            )
+                    )
                 }
 
                 Spacer()
 
-                // Right side: Current streak
-                HStack(spacing: 4) {
-                    Image(systemName: "flame.fill")
-                        .foregroundColor(habitColor)
-                        .font(.system(size: 16))
-                    Text("\(entry.habit.currentStreak)")
-                        .font(.system(size: 16, weight: .medium))
-                        .foregroundColor(.primary)
-                }
-                .padding(.horizontal, 10)
-                .padding(.vertical, 4)
-                .background(
-                    RoundedRectangle(cornerRadius: 90)
-                        .fill(habitColor.opacity(0.12))
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 90)
-                                .stroke(habitColor.opacity(0.25), lineWidth: 1)
-                        )
-                )
-            }
+                // 7-day progress view - clickable buttons
+                HStack(spacing: 8) {
+                    ForEach(Array(sortedWeekData.enumerated()), id: \.offset) { index, item in
+                        let (date, isCompleted) = item
+                        let isToday = Calendar.current.isDate(date, inSameDayAs: Date())
 
-            Spacer()
+                        Button(
+                            intent: CompleteHabitForDateIntent(habitId: entry.habit.id, date: date)
+                        ) {
+                            VStack(spacing: 6) {
+                                // Day indicator
+                                Text(dayAbbreviation(for: date))
+                                    .font(.system(size: 11, weight: .medium))
+                                    .foregroundColor(isToday ? habitColor : .secondary)
 
-            // 7-day progress view - clickable buttons
-            HStack(spacing: 8) {
-                ForEach(Array(sortedWeekData.enumerated()), id: \.offset) { index, item in
-                    let (date, isCompleted) = item
-                    let isToday = Calendar.current.isDate(date, inSameDayAs: Date())
+                                // Completion indicator - larger and more prominent
+                                ZStack {
+                                    Circle()
+                                        .fill(isCompleted ? habitColor : habitColor.opacity(0.2))
+                                        .frame(width: 34, height: 34)
+                                        .overlay(
+                                            Circle()
+                                                .stroke(
+                                                    isToday
+                                                        ? habitColor
+                                                        : (isCompleted
+                                                            ? habitColor : habitColor.opacity(0.4)),
+                                                    lineWidth: isToday ? 3 : 2)
+                                        )
 
-                    Button(intent: CompleteHabitForDateIntent(habitId: entry.habit.id, date: date))
-                    {
-                        VStack(spacing: 6) {
-                            // Day indicator
-                            Text(dayAbbreviation(for: date))
-                                .font(.system(size: 11, weight: .medium))
-                                .foregroundColor(isToday ? habitColor : .secondary)
-
-                            // Completion indicator - larger and more prominent
-                            ZStack {
-                                Circle()
-                                    .fill(isCompleted ? habitColor : habitColor.opacity(0.2))
-                                    .frame(width: 34, height: 34)
-                                    .overlay(
-                                        Circle()
-                                            .stroke(
-                                                isToday
-                                                    ? habitColor
-                                                    : (isCompleted
-                                                        ? habitColor : habitColor.opacity(0.4)),
-                                                lineWidth: isToday ? 3 : 2)
-                                    )
-
-                                if isCompleted {
-                                    Image(systemName: "checkmark")
-                                        .font(.system(size: 14, weight: .bold))
-                                        .foregroundColor(.white)
+                                    if isCompleted {
+                                        Image(systemName: "checkmark")
+                                            .font(.system(size: 14, weight: .bold))
+                                            .foregroundColor(.white)
+                                    }
                                 }
                             }
                         }
+                        .buttonStyle(PlainButtonStyle())
                     }
-                    .buttonStyle(PlainButtonStyle())
+                    .frame(maxWidth: .infinity)
                 }
-                .frame(maxWidth: .infinity)
             }
         }
 
@@ -258,31 +283,33 @@ struct MediumHabitWidgetEntryView: View {
         formatter.dateFormat = "E"
         return formatter.string(from: date)
     }
-}
 
-#Preview(as: .systemMedium) {
-    MediumHabitWidget()
-} timeline: {
-    MediumHabitEntry(
-        date: .now,
-        habit: Habit(
-            id: "preview",
-            habitName: "Exercise",
-            habitDescription: "Daily workout",
-            emoji: "🏃‍♂️",
-            dailyTarget: 1,
-            colorCode: 0x50C878,
-            completions: [:],
-            archiveDate: nil,
-            status: .active,
-            categoryIds: [],
-            difficulty: .moderate,
-            flutterProbabilityScore: 0.0,
-            flutterLongestStreak: 0,
-            flutterCurrentStreak: 0,
-            flutterCompletedDays: 0,
-            flutterTotalDays: 0
-        ),
-        weekData: [:]
-    )
+    #Preview(as: .systemMedium) {
+        MediumHabitWidget()
+    } timeline: {
+        MediumHabitEntry(
+            date: .now,
+            habit: Habit(
+                id: "preview",
+                habitName: "Exercise",
+                habitDescription: "Daily workout",
+                emoji: "🏃‍♂️",
+                dailyTarget: 1,
+                colorCode: 0x50C878,
+                completions: [:],
+                archiveDate: nil,
+                status: .active,
+                categoryIds: [],
+                difficulty: .moderate,
+                flutterProbabilityScore: 0.0,
+                flutterLongestStreak: 0,
+                flutterCurrentStreak: 0,
+                flutterCompletedDays: 0,
+                flutterTotalDays: 0,
+                isProMember: true
+            ),
+            weekData: [:]
+        )
+    }
+
 }

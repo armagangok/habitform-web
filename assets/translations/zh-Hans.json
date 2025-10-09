@@ -127,6 +127,37 @@
                     "sub_features_0": "自定义设计",
                     "sub_features_1": "进度分享",
                     "sub_features_2": "成就图片"
+                },
+                "home_widget": {
+                    "title": "主屏幕小部件",
+                    "description": "无需打开应用即可追踪习惯。在几秒钟内直接从iPhone主屏幕完成你的日常目标。",
+                    "sub_features_0": "即时访问",
+                    "sub_features_1": "每日节省时间",
+                    "sub_features_2": "永不忘记",
+                    "widget_config": {
+                        "small_title": "习惯追踪器",
+                        "small_description": "使用连续计数追踪你的日常习惯",
+                        "medium_title": "7天习惯视图",
+                        "medium_description": "查看过去7天的习惯进度",
+                        "large_title": "习惯热力图",
+                        "large_description": "GitHub风格的热力图显示你随时间的习惯完成情况",
+                        "grid_title": "60天习惯网格",
+                        "grid_description": "在紧凑网格中查看过去60天的习惯进度"
+                    },
+                    "empty_state": {
+                        "no_habits": "无习惯",
+                        "create_habit_hint": "在应用中创建习惯以在此处查看"
+                    },
+                    "stats": {
+                        "current_streak": "当前连续",
+                        "longest_streak": "最长连续",
+                        "completed": "已完成",
+                        "total_days": "总天数",
+                        "days": "天"
+                    },
+                    "pro_restriction": {
+                        "upgrade_pro": "升级到PRO"
+                    }
                 }
             },
             "probability_score": "养成分数",
