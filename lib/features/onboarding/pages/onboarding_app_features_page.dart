@@ -44,7 +44,7 @@ class _OnboardingAppFeaturesPageState extends State<OnboardingAppFeaturesPage> w
   int _currentFeature = 0;
   bool _isTransitioning = false;
 
-  final bool _showIntro = true;
+  bool _showIntro = true;
 
   List<AppFeature> get _appFeatures => [
         AppFeature(
@@ -292,16 +292,26 @@ class _OnboardingAppFeaturesPageState extends State<OnboardingAppFeaturesPage> w
     });
   }
 
+  // Transition from the intro hero to the features carousel
+  Future<void> _showFeatures() async {
+    if (!_showIntro) return;
+    await _introTransitionController.forward();
+    if (!mounted) return;
+    setState(() {
+      _showIntro = false;
+    });
+    _fadeController.forward();
+    _slideController.forward();
+    _progressController.forward();
+  }
+
   void _completeOnboarding() {
-    // Call the onContinue callback to navigate to the next page
+    // Proceed to the next step (rating) after features are done
     if (widget.onContinue != null) {
       widget.onContinue!();
     } else {
-      // Navigate to rating page directly
       if (mounted) {
-        navigator.navigateAndClear(
-          path: KRoute.onboardingRating,
-        );
+        navigator.navigateAndClear(path: KRoute.onboardingRating);
       }
     }
   }
@@ -538,7 +548,7 @@ class _OnboardingAppFeaturesPageState extends State<OnboardingAppFeaturesPage> w
                                 child: ScaleTransition(
                                   scale: _buttonAnimation,
                                   child: CupertinoButton(
-                                    onPressed: _completeOnboarding,
+                                    onPressed: _showFeatures,
                                     child: Container(
                                       padding: EdgeInsets.symmetric(
                                         horizontal: context.width(0.08),
