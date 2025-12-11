@@ -7,7 +7,6 @@ class KRoute {
 
   static const onboardingPaywall = '/onboardingPaywall';
   static const onboardingWelcome = '/onboardingWelcome';
-  static const onboardingInformation = '/onboardingInformation';
   static const onboardingAppFeatures = '/onboardingAppFeatures';
   static const onboardingRating = '/onboardingRating';
 

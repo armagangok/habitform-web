@@ -58,11 +58,11 @@
         "pages": {
             "small_steps": {
                 "title": "Hayatınızı küçük bir adımla değiştirin.",
-                "description": "HabitRise ile yeni alışkanlıklar geliştirmek, küçük, yönetilebilir adımlarla başladığınızda daha kolay ve sürdürülebilir hale gelir."
+                "description": "HabitForm ile yeni alışkanlıklar geliştirmek, küçük, yönetilebilir adımlarla başladığınızda daha kolay ve sürdürülebilir hale gelir."
             },
             "welcome": {
                 "welcome_to": "Hoş geldiniz",
-                "app_name": "HabitRise",
+                "app_name": "HabitForm",
                 "build_dream_life": "Hayalinizdeki hayatı inşa edin",
                 "try_tapping": "Alışkanlık kartına dokunmayı deneyin",
                 "just_like_that": "İşte bu kadar!",
@@ -80,11 +80,11 @@
             },
             "routine": {
                 "title": "Rutin ve tekrar, alışkanlıkların kök salmasına yardımcı olur.",
-                "description": "HabitRise ile tutarlı bir rutin oluşturmak ve eylemleri tekrarlamak, alışkanlıkların kalıcı olmasının anahtarıdır."
+                "description": "HabitForm ile tutarlı bir rutin oluşturmak ve eylemleri tekrarlamak, alışkanlıkların kalıcı olmasının anahtarıdır."
             },
             "patience": {
                 "title": "Sabır ve tutarlılık, alışkanlıkların meyve vermesine yardımcı olur.",
-                "description": "Bir alışkanlık edinmek zaman alır; HabitRise ile sürecin tadını çıkarmak anahtardır."
+                "description": "Bir alışkanlık edinmek zaman alır; HabitForm ile sürecin tadını çıkarmak anahtardır."
             },
             "bad_habits": {
                 "title": "Kötü alışkanlıkları kırmak kolaydır. Onları iyi olanlarla değiştirin.",
@@ -97,8 +97,9 @@
             }
         },
         "app_features": {
-            "title": "HabitRise Size Yardımcı Olur...",
+            "title": "HabitForm Size Yardımcı Olur...",
             "subtitle": "Akıllı takip ve kişiselleştirilmiş içgörülerle kalıcı alışkanlıklar oluşturun",
+            "continue": "Devam Et",
             "features": {
                 "smart_tracking": {
                     "title": "Akıllı Alışkanlık Takibi",
@@ -114,7 +115,7 @@
                     "sub_features_1": "Alışkanlık Ayrıştırma",
                     "sub_features_2": "İç İçe Takip"
                 },
-                "formation_rate": {
+                "probability_rate": {
                     "title": "Alışkanlık Oluşum Oranı",
                     "description": "Alışkanlık oluşum ilerlemenizi akıllı içgörülerle takip edin. Alışkanlıklarınızın kalıcı hale gelmesine ne kadar yakın olduğunuzu görün.",
                     "sub_features_0": "Başarı Tahmini",
@@ -127,9 +128,40 @@
                     "sub_features_0": "Özel Tasarımlar",
                     "sub_features_1": "İlerleme Paylaşımı",
                     "sub_features_2": "Başarı Görselleri"
+                },
+                "home_widget": {
+                    "title": "Ana Ekran Widget'ı",
+                    "description": "Uygulamayı açmadan alışkanlıklarınızı takip edin. Ana ekranınızdan günlük hedeflerinizi saniyeler içinde tamamlayın.",
+                    "sub_features_0": "Anında Erişim",
+                    "sub_features_1": "Günlük Zaman Tasarrufu",
+                    "sub_features_2": "Asla Unutma",
+                    "widget_config": {
+                        "small_title": "Alışkanlık Takipçisi",
+                        "small_description": "Seri sayacı ile günlük alışkanlıklarınızı takip edin",
+                        "medium_title": "7 Günlük Alışkanlık Görünümü",
+                        "medium_description": "Son 7 günlük alışkanlık ilerlemenizi görüntüleyin",
+                        "large_title": "Alışkanlık Isı Haritası",
+                        "large_description": "Zaman içindeki alışkanlık tamamlama durumunuzu GitHub tarzı ısı haritası ile görün",
+                        "grid_title": "60 Günlük Alışkanlık Izgarası",
+                        "grid_description": "Son 60 günlük alışkanlık ilerlemenizi kompakt bir ızgarada görüntüleyin"
+                    },
+                    "empty_state": {
+                        "no_habits": "Alışkanlık Yok",
+                        "create_habit_hint": "Burada görmek için uygulamada bir alışkanlık oluşturun"
+                    },
+                    "stats": {
+                        "current_streak": "Mevcut Seri",
+                        "longest_streak": "En Uzun Seri",
+                        "completed": "Tamamlanan",
+                        "total_days": "Toplam Gün",
+                        "days": "gün"
+                    },
+                    "pro_restriction": {
+                        "upgrade_pro": "PRO'ya Yükselt"
+                    }
                 }
             },
-            "formation_score": "Oluşum Skoru",
+            "probability_score": "Oluşum Skoru",
             "previous": "Önceki",
             "next": "Sonraki",
             "start": "Başla"
@@ -154,7 +186,7 @@
                 },
                 "track_progress": {
                     "title": "İlerlemenizi Takip Edin",
-                    "description": "Motive kalmak için alışkanlık gelişiminizi izleyin. HabitRise, günlükleri veya basit işaretlemeleri kullanın. Serinizin büyümesini görmek ivme ve sorumluluk yaratır."
+                    "description": "Motive kalmak için alışkanlık gelişiminizi izleyin. HabitForm, günlükleri veya basit işaretlemeleri kullanın. Serinizin büyümesini görmek ivme ve sorumluluk yaratır."
                 }
             },
             "previous": "Önceki",
@@ -162,15 +194,15 @@
             "get_started": "Başla"
         },
         "rating": {
-            "title": "HabitRise benzersiz özelliklerini\nyeni keşfettiniz",
+            "title": "HabitForm benzersiz özelliklerini\nyeni keşfettiniz",
             "description": "Daha iyi alışkanlıklar edinmeye ihtiyacı olan daha fazla kişiye ulaşmamıza yardımcı olmak için uygulamamızı değerlendirir misiniz?",
             "thank_you": "Teşekkür Ederiz!",
-            "feedback_message": "Geri bildiriminiz, HabitRise geliştirmemize ve daha iyi alışkanlıklar edinmeye ihtiyacı olan daha fazla kişiye ulaşmamıza yardımcı olur.",
-            "rate_title": "HabitRise Değerlendir",
-            "rate_message": "HabitRise değerlendirmeye gösterdiğiniz ilgi için teşekkür ederiz! Bizi App Store veya Google Play Store'da değerlendirebilirsiniz.",
+            "feedback_message": "Geri bildiriminiz, HabitForm geliştirmemize ve daha iyi alışkanlıklar edinmeye ihtiyacı olan daha fazla kişiye ulaşmamıza yardımcı olur.",
+            "rate_title": "HabitForm Değerlendir",
+            "rate_message": "HabitForm değerlendirmeye gösterdiğiniz ilgi için teşekkür ederiz! Bizi App Store veya Google Play Store'da değerlendirebilirsiniz.",
             "continue": "Devam Et",
             "maybe_later": "Belki Daha Sonra",
-            "rate_button": "HabitRise Değerlendir"
+            "rate_button": "HabitForm Değerlendir"
         },
         "achievement": {
             "first_habit_message": "Harika iş! İlk alışkanlığınızı başlangıçta tamamladınız!"
@@ -201,7 +233,7 @@
         "achievement_consistency_champion": "Tutarlılık Şampiyonu",
         "achievement_weekend_warrior": "Hafta Sonu Savaşçısı",
         "achievement_weekly_checkin": "Haftalık Kontrol",
-        "achievement_formation_journey": "Oluşum Yolculuğu",
+        "achievement_probability_journey": "Oluşum Yolculuğu",
         "milestones": "Dönüm Noktaları",
         "milestone_one_week_warrior": "Bir Hafta Savaşçısı",
         "milestone_monthly_master": "Aylık Usta",
@@ -211,12 +243,12 @@
         "milestone_half_year_hero": "Yarım Yıl Kahramanı",
         "milestone_one_year_legend": "Bir Yıl Efsanesi",
         "progress": "İlerleme",
-        "formation": "Oluşum",
-        "achievement_formation_threshold": "Oluşum eşiğine ulaşıldı!",
+        "formation": "Probability",
+        "achievement_probability_threshold": "Oluşum eşiğine ulaşıldı!",
         "achievement_consistency_description": "En iyi serinizin %{{percentage}}'si kadar performans gösteriyorsunuz!",
         "achievement_weekend_description": "Hafta sonları bile harika bir tutarlılık sergiliyorsunuz!",
         "achievement_weekly_description": "Bu hafta {{days}} gün kaçırdınız. Yarın yeni bir başlangıç!",
-        "achievement_formation_description": "Bu alışkanlığı oluşturmanın %{{percentage}}'sindesiniz. Sinir yolları güçleniyor!",
+        "achievement_probability_description": "Bu alışkanlığı oluşturmanın %{{percentage}}'sindesiniz. Sinir yolları güçleniyor!",
         "quote_aristotle": "Mükemmellik tek bir eylem değil, bir alışkanlıktır. Arada sırada yaptığınız şey değil; sürekli yaptığınız şeysiniz.",
         "quote_aristotle_author": "Aristoteles",
         "quote_collier": "Başarı, her gün tekrarlanan küçük çabaların toplamıdır.",
@@ -254,9 +286,9 @@
         "achievement_perfectionist_description": "%{{rate}} başarı oranı!",
         "heatmap_stats_description": "Geçen yıl {{days}} gün tamamlandı",
         "last_7_days": "Son 7 Gün",
-        "formation_info_title": "Oluşum Skoru",
-        "formation_info_description": "Oluşum Skoru, alışkanlığınızın mevcut tamamlama oranınıza göre otomatik hale gelme olasılığını gösterir. Daha yüksek skorlar, alışkanlığınızın kalıcı olma olasılığının daha yüksek olduğu anlamına gelir.",
-        "formation_info_details": "Bu skor, tutarlılık kalıplarınız ve tamamlama oranınız kullanılarak hesaplanır. Araştırmalar, bir alışkanlığın otomatik hale gelmesi için ortalama 66 günlük düzenli pratik gerektiğini göstermektedir."
+        "probability_info_title": "Oluşum Skoru",
+        "probability_info_description": "Oluşum Skoru, alışkanlığınızın mevcut tamamlama oranınıza göre otomatik hale gelme olasılığını gösterir. Daha yüksek skorlar, alışkanlığınızın kalıcı olma olasılığının daha yüksek olduğu anlamına gelir.",
+        "probability_info_details": "Bu skor, tutarlılık kalıplarınız ve tamamlama oranınız kullanılarak hesaplanır. Araştırmalar, bir alışkanlığın otomatik hale gelmesi için ortalama 66 günlük düzenli pratik gerektiğini göstermektedir."
     },
     "habit": {
         "add_habit": "Alışkanlık Ekle",
@@ -380,7 +412,11 @@
         "no_habits_imported": "Hiç alışkanlık içe aktarılmadı",
         "rc_id": "Rc Kimliği",
         "app_name_habit": "Habit",
-        "app_name_rise": "Rise"
+        "app_name_rise": "Form",
+        "review_request": {
+            "title": "HabitForm'ı sevdiniz mi?",
+            "subtitle": "Alışkanlık geliştirmeye ihtiyacı olan daha fazla kişiye ulaşmamıza yardımcı olmak için HabitForm'a bir değerlendirme bırakın"
+        }
     },
     "subscription": {
         "subscribe_to": "Abone Ol",
@@ -435,7 +471,7 @@
         "share_text": "Metin Paylaş"
     },
     "paywall": {
-        "title": "HabitRise Pro",
+        "title": "HabitForm Pro",
         "headline": "Tekrar tekrar yaptığımız şeye\ndönüşüyoruz.",
         "choose_plan": "Planınızı Seçin",
         "what_you_get": "Neler Alırsınız",
@@ -455,14 +491,14 @@
         "social_success_rate": "Başarı Oranı",
         "what_users_saying": "Kullanıcılarımız Ne Diyor",
         "testimonial_1_name": "Sarah M.",
-        "testimonial_1_comment": "HabitRise Pro günlük rutinimi tamamen değiştirdi. Sadece 2 ayda 5 yeni alışkanlık edindim!",
-        "testimonial_1_user_type": "HabitRise Pro Kullanıcısı",
+        "testimonial_1_comment": "HabitForm Pro günlük rutinimi tamamen değiştirdi. Sadece 2 ayda 5 yeni alışkanlık edindim!",
+        "testimonial_1_user_type": "HabitForm Pro Kullanıcısı",
         "testimonial_2_name": "Mike C.",
         "testimonial_2_comment": "İstatistikler ve içgörüler inanılmaz. Her gün nasıl ilerlediğimi tam olarak görebiliyorum.",
-        "testimonial_2_user_type": "HabitRise Pro Kullanıcısı",
+        "testimonial_2_user_type": "HabitForm Pro Kullanıcısı",
         "testimonial_3_name": "Emma J.",
         "testimonial_3_comment": "Sonunda hedeflerime bağlı kalmama gerçekten yardımcı olan bir uygulama. Hatırlatıcılar mükemmel zamanlanmış.",
-        "testimonial_3_user_type": "HabitRise Pro Kullanıcısı"
+        "testimonial_3_user_type": "HabitForm Pro Kullanıcısı"
     },
     "days": {
         "monday": "Pazartesi",
@@ -542,6 +578,7 @@
     },
     "membership_info": {
         "title": "Üyelik Bilgileri",
+        "description": "Abonelik bilgilerinizi görmek için dokunun",
         "state": "Durum",
         "active": "Aktif",
         "inactive": "Pasif",
@@ -559,14 +596,14 @@
         "overview": "Genel Bakış",
         "no_data_for_habit": "Henüz istatistik verisi yok",
         "start_tracking_habit": "Bu alışkanlığı takip etmeye başla",
-        "habit_formation": "Alışkanlık Oluşumu",
+        "habit_formation": "Habit Probability",
         "completed": "Tamamlandı",
         "total_days": "Toplam Gün",
         "longest_streak": "En Uzun Seri",
         "current_streak": "Mevcut Seri",
-        "about_formation": "Alışkanlık Oluşumu Hakkında",
+        "about_formation": "About Habit Probability",
         "formation_info": "Yukarıdaki yüzde, alışkanlığınızın mevcut tutarlılığınıza göre otomatik hale gelme olasılığını gösterir. Daha yüksek yüzdeler, alışkanlığınızın kalıcı olma olasılığının daha yüksek olduğu anlamına gelir. Araştırmalara göre, bir alışkanlığın otomatik hale gelmesi için ortalama 66 günlük düzenli pratik gerekir.",
-        "formation_status": {
+        "probability_status": {
             "early": "Henüz erken aşamalardasınız. Anlamlı oluşum ilerlemesi görmek için alışkanlığınızı tutarlı bir şekilde takip etmeye devam edin.",
             "excellent": "Olağanüstü ilerleme! %{{percentage}} tamamlama oranıyla alışkanlığınızın otomatik hale gelme olasılığı çok yüksek.",
             "very_good": "Harika tutarlılık! %{{percentage}} tamamlama oranıyla alışkanlık oluşumunuz yolunda.",
@@ -574,7 +611,7 @@
             "improving": "İlerleme kaydediyorsunuz. Alışkanlık oluşumunu daha olası hale getirmek için tamamlama oranınızı artırmaya çalışın.",
             "needs_work": "Tutarlılık üzerinde çalışmaya devam edin. Düzenli tamamlama, bu alışkanlığın otomatik hale gelmesine yardımcı olacaktır."
         },
-        "formation_time": {
+        "probability_time": {
             "not_enough_data": "Oluşum ilerlemesini görmek için alışkanlığınızı takip etmeye devam edin.",
             "completed_successful": "Tebrikler! Alışkanlığınız büyük olasılıkla yerleşmiş ve otomatiktir.",
             "completed_good": "Harika iş! Oluşum dönemini %{{percentage}} tamamlama oranıyla tamamladınız. Alışkanlığınız muhtemelen yerleşmiş durumda.",
@@ -585,11 +622,11 @@
             "demo_data_message": "Bu demo verisidir, gerçek verileri açmak için yükseltin",
             "upgrade_button": "Yükselt"
         },
-        "formation_score": "Oluşum Skoru",
+        "probability_score": "Oluşum Skoru",
         "score_breakdown": "Skor Dağılımı",
         "progress_status": "İlerleme Durumu",
-        "estimated_formation_time": "Tahmini Oluşum Süresi",
-        "about_formation_title": "Oluşum Hakkında",
+        "estimated_probability_time": "Estimated Probability Time",
+        "about_formation_title": "About Probability",
         "legend_below_60": "%60 Altı",
         "legend_needs_work": "Çalışma Gerekiyor",
         "legend_60_75": "%60-75",
@@ -619,7 +656,7 @@
     "share_templates": {
         "streak_days": "{days} günlük seri",
         "progress_percent": "%{percent} ilerleme",
-        "app_name": "HabitRise",
+        "app_name": "HabitForm",
         "current_streak": "Mevcut Seri",
         "best_streak": "En İyi Seri",
         "completed": "Tamamlandı",
@@ -631,7 +668,7 @@
         "this_month": "Bu ay:"
     },
     "csv_service": {
-        "export_subject": "HabitRise Dışa Aktarma",
+        "export_subject": "HabitForm Dışa Aktarma",
         "select_csv_file": "CSV Dosyası Seç",
         "could_not_read_file": "Dosya okunamadı",
         "please_select_csv_file": "Lütfen bir CSV dosyası seçin",
@@ -642,8 +679,8 @@
     },
     "permissions": {
         "permission_required": "İzin Gerekli",
-        "storage_permission_message": "HabitRise, alışkanlık verilerinizi içe ve dışa aktarmak için depolama iznine ihtiyaç duyar.",
-        "storage_permission_settings_message": "HabitRise, alışkanlık verilerinizi içe ve dışa aktarmak için depolama iznine ihtiyaç duyar. Lütfen cihaz ayarlarınızdan etkinleştirin.",
+        "storage_permission_message": "HabitForm, alışkanlık verilerinizi içe ve dışa aktarmak için depolama iznine ihtiyaç duyar.",
+        "storage_permission_settings_message": "HabitForm, alışkanlık verilerinizi içe ve dışa aktarmak için depolama iznine ihtiyaç duyar. Lütfen cihaz ayarlarınızdan etkinleştirin.",
         "cancel": "İptal",
         "try_again": "Tekrar Dene",
         "settings": "Ayarlar"
@@ -654,7 +691,7 @@
     },
     "purchase_dialog": {
         "pro_required_title": "Bu özelliği açmak için Pro'ya ihtiyacınız var",
-        "pro_required_message": "Bu ve diğer birçok Pro özelliğine erişmek için HabitRise Pro'yu açın!"
+        "pro_required_message": "Bu ve diğer birçok Pro özelliğine erişmek için HabitForm Pro'yu açın!"
     },
     "habit_category": {
         "title": "Alışkanlık Kategorisi",
@@ -692,6 +729,7 @@
         "good": "İyi",
         "keep_going_status": "Devam Et",
         "progress": "İlerleme",
+        "habit_probability": "Alışkanlık Olasılığı",
         "continue": "Devam Et",
         "habit_fully_formed": "Alışkanlık Tamamen Oluştu! 🎉",
         "almost_there": "Neredeyse Bitti! 🔥",
@@ -707,5 +745,18 @@
         "good_work": "İyi iş! Bu {difficulty} alışkanlık toplam {total} gün gerektiriyor. {remaining} gün kaldı! 📈",
         "keep_going_message": "Devam edin! Tutarlılık anahtardır. Bu {difficulty} alışkanlık için {remaining} gün daha gerekiyor! 🌱",
         "formation_takes_days": "Bu alışkanlık oluşması için {total} günlük tutarlı pratik gerektirir"
+    },
+    "languages": {
+        "english": "İngilizce",
+        "turkish": "Türkçe",
+        "chinese": "Çince",
+        "spanish": "İspanyolca",
+        "hindi": "Hintçe",
+        "arabic": "Arapça",
+        "finnish": "Fince",
+        "portuguese": "Portekizce",
+        "russian": "Rusça",
+        "japanese": "Japonca",
+        "italian": "İtalyanca"
     }
 }

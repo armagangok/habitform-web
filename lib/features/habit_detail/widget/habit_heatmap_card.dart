@@ -1,7 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:habitrise/features/habit_detail/widget/habit_calendar_widget.dart';
+import 'package:habitform/features/habit_detail/widget/habit_calendar_widget.dart';
 
 import '/core/core.dart';
 import '/features/purchase/providers/purchase_provider.dart';

@@ -33,6 +33,7 @@ class HiveHelper {
       Hive.openBox<UserDefaults>(HiveBoxes.userDefaultsBox),
       Hive.openBox<String?>(HiveBoxes.habitRiseDefaults),
       Hive.openBox<String?>(HiveBoxes.themeBox),
+      Hive.openBox<String?>(HiveBoxes.localeBox),
     ]);
     LogHelper.shared.debugPrint('Hive initialization completed successfully');
   }
@@ -40,21 +41,73 @@ class HiveHelper {
   void _registerAdapters() {
     try {
       Hive.registerAdapter(HabitStatusAdapter());
-      Hive.registerAdapter(HabitDifficultyAdapter());
-      Hive.registerAdapter(HabitCategoryAdapter());
-      Hive.registerAdapter(HabitAdapter());
-      Hive.registerAdapter(ReminderModelAdapter());
-      Hive.registerAdapter(MultipleReminderModelAdapter());
-      Hive.registerAdapter(DaysAdapter());
-      Hive.registerAdapter(AppDefaultsAdapter());
-      Hive.registerAdapter(CompletionEntryAdapter());
-      Hive.registerAdapter(UserDefaultsAdapter());
 
       LogHelper.shared.debugPrint('All Hive adapters registered successfully');
     } catch (e, stack) {
-      LogHelper.shared.debugPrint('Error registering Hive adapters: $e');
-      LogHelper.shared.debugPrint('Stack trace: $stack');
-      rethrow;
+      LogHelper.shared.debugPrint('Error registering Hive adapters: $e\n $stack');
+    }
+
+    try {
+      Hive.registerAdapter(HabitDifficultyAdapter());
+      LogHelper.shared.debugPrint('HabitDifficultyAdapter registered successfully');
+    } catch (e, s) {
+      LogHelper.shared.debugPrint('Error registering HabitDifficultyAdapter: $e\n $s');
+    }
+
+    try {
+      Hive.registerAdapter(HabitCategoryAdapter());
+      LogHelper.shared.debugPrint('HabitCategoryAdapter registered successfully');
+    } catch (e, s) {
+      LogHelper.shared.debugPrint('Error registering HabitCategoryAdapter: $e\n $s');
+    }
+
+    try {
+      Hive.registerAdapter(HabitAdapter());
+      LogHelper.shared.debugPrint('HabitAdapter registered successfully');
+    } catch (e, s) {
+      LogHelper.shared.debugPrint('Error registering HabitAdapter: $e\n $s');
+    }
+
+    try {
+      Hive.registerAdapter(ReminderModelAdapter());
+      LogHelper.shared.debugPrint('ReminderModelAdapter registered successfully');
+    } catch (e, s) {
+      LogHelper.shared.debugPrint('Error registering ReminderModelAdapter: $e\n $s');
+    }
+
+    try {
+      Hive.registerAdapter(MultipleReminderModelAdapter());
+      LogHelper.shared.debugPrint('MultipleReminderModelAdapter registered successfully');
+    } catch (e, s) {
+      LogHelper.shared.debugPrint('Error registering MultipleReminderModelAdapter: $e\n $s');
+    }
+
+    try {
+      Hive.registerAdapter(DaysAdapter());
+      LogHelper.shared.debugPrint('DaysAdapter registered successfully');
+    } catch (e, s) {
+      LogHelper.shared.debugPrint('Error registering DaysAdapter: $e\n $s');
+    }
+
+    try {
+      Hive.registerAdapter(AppDefaultsAdapter());
+      LogHelper.shared.debugPrint('AppDefaultsAdapter registered successfully');
+    } catch (e, s) {
+      LogHelper.shared.debugPrint('Error registering AppDefaultsAdapter: $e\n $s');
+    }
+
+    try {
+      Hive.registerAdapter(CompletionEntryAdapter());
+      LogHelper.shared.debugPrint('CompletionEntryAdapter registered successfully');
+    } catch (e, s) {
+      LogHelper.shared.debugPrint('Error registering CompletionEntryAdapter: $e\n $s');
+    }
+
+    try {
+      Hive.registerAdapter(UserDefaultsAdapter());
+      LogHelper.shared.debugPrint('UserDefaultsAdapter registered successfully');
+    } catch (e, s) {
+      LogHelper.shared.debugPrint('Error registering UserDefaultsAdapter: $e\n $s');
     }
   }
 
@@ -164,7 +217,6 @@ class HiveHelper {
     } catch (e, stack) {
       LogHelper.shared.debugPrint('Error flushing box $boxName: $e');
       LogHelper.shared.debugPrint('Stack trace: $stack');
-      rethrow;
     }
   }
 }

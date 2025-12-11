@@ -1,10 +1,11 @@
 import 'dart:math';
+import 'dart:ui' as ui;
 
 import '../../../core/core.dart';
 
 /// Onboarding - App Features page
 ///
-/// This page showcases how HabitRise will help users build habits,
+/// This page showcases how HabitForm will help users build habits,
 /// including sub-habits functionality and habit formation rate visualization.
 class OnboardingAppFeaturesPage extends StatefulWidget {
   const OnboardingAppFeaturesPage({super.key, this.onContinue});
@@ -21,66 +22,66 @@ class _OnboardingAppFeaturesPageState extends State<OnboardingAppFeaturesPage> w
   late final AnimationController _scaleController;
   late final AnimationController _progressController;
   late final AnimationController _pulseController;
-  late final AnimationController _habitFormationController;
+  late final AnimationController _habitProbabilityController;
   late final AnimationController _introTransitionController;
+  late final AnimationController _titleController;
+  late final AnimationController _descriptionController;
+  late final AnimationController _buttonController;
 
   late final Animation<double> _fadeAnimation;
   late final Animation<Offset> _slideAnimation;
   late final Animation<double> _scaleAnimation;
-  late final Animation<double> _progressAnimation;
+
   late final Animation<double> _pulseAnimation;
-  late final Animation<double> _habitFormationAnimation;
+
   late final Animation<double> _introTransitionAnimation;
+  late final Animation<double> _titleAnimation;
+  late final Animation<Offset> _titleSlideAnimation;
+  late final Animation<double> _descriptionAnimation;
+  late final Animation<Offset> _descriptionSlideAnimation;
+  late final Animation<double> _buttonAnimation;
 
   int _currentFeature = 0;
   bool _isTransitioning = false;
-  double _habitFormationRate = 0.0;
+
   bool _showIntro = true;
 
   List<AppFeature> get _appFeatures => [
         AppFeature(
-          title: LocaleKeys.onboarding_app_features_features_smart_tracking_title.tr(),
-          description: LocaleKeys.onboarding_app_features_features_smart_tracking_description.tr(),
-          icon: CupertinoIcons.chart_bar_alt_fill,
-          color: const Color(0xFF1DB954),
-          subFeatures: [
-            LocaleKeys.onboarding_app_features_features_smart_tracking_sub_features_0.tr(),
-            LocaleKeys.onboarding_app_features_features_smart_tracking_sub_features_1.tr(),
-            LocaleKeys.onboarding_app_features_features_smart_tracking_sub_features_2.tr(),
-          ],
-        ),
-        AppFeature(
-          title: LocaleKeys.onboarding_app_features_features_sub_habits_title.tr(),
-          description: LocaleKeys.onboarding_app_features_features_sub_habits_description.tr(),
-          icon: CupertinoIcons.layers_fill,
-          color: const Color(0xFF0C6CF2),
-          subFeatures: [
-            LocaleKeys.onboarding_app_features_features_sub_habits_sub_features_0.tr(),
-            LocaleKeys.onboarding_app_features_features_sub_habits_sub_features_1.tr(),
-            LocaleKeys.onboarding_app_features_features_sub_habits_sub_features_2.tr(),
-          ],
-        ),
-        AppFeature(
-          title: LocaleKeys.onboarding_app_features_features_formation_rate_title.tr(),
-          description: LocaleKeys.onboarding_app_features_features_formation_rate_description.tr(),
+          title: "Habit Probability",
+          description: "See exactly how likely you are to succeed with each habit. Get personalized insights that help you stay motivated and build lasting habits.",
           icon: CupertinoIcons.chart_bar_square,
-          color: const Color(0xFF9B59B6),
-          subFeatures: [
-            LocaleKeys.onboarding_app_features_features_formation_rate_sub_features_0.tr(),
-            LocaleKeys.onboarding_app_features_features_formation_rate_sub_features_1.tr(),
-            LocaleKeys.onboarding_app_features_features_formation_rate_sub_features_2.tr(),
-          ],
+          color: context.cupertinoTheme.primaryColor,
         ),
         AppFeature(
-          title: LocaleKeys.onboarding_app_features_features_share_habits_title.tr(),
-          description: LocaleKeys.onboarding_app_features_features_share_habits_description.tr(),
+          title: "Home Widget",
+          description: "Track your habits without opening the app. Complete your daily goals directly from your phone home screen in seconds.",
+          icon: CupertinoIcons.square_grid_2x2_fill,
+          color: context.cupertinoTheme.primaryColor,
+        ),
+        AppFeature(
+          title: "Goal Setting",
+          description: "Science‑based planning that adapts to difficulty: easier habits form faster, harder ones take longer—keeping goals realistic.",
+          icon: CupertinoIcons.checkmark_circle_fill,
+          color: context.cupertinoTheme.primaryColor,
+        ),
+        AppFeature(
+          title: "Customizable",
+          description: "Make HabitForm truly yours. Choose colors, themes, and layouts that match your personality and keep you engaged.",
+          icon: CupertinoIcons.paintbrush_fill,
+          color: context.cupertinoTheme.primaryColor,
+        ),
+        AppFeature(
+          title: "Data Management",
+          description: "Export your habits data to CSV files for backup or transfer to another device.",
+          icon: CupertinoIcons.doc_text_fill,
+          color: context.cupertinoTheme.primaryColor,
+        ),
+        AppFeature(
+          title: "Share Habits",
+          description: "Celebrate your wins with friends and family. Share beautiful progress visuals that inspire others and keep you accountable.",
           icon: CupertinoIcons.share,
-          color: Colors.deepOrangeAccent,
-          subFeatures: [
-            LocaleKeys.onboarding_app_features_features_share_habits_sub_features_0.tr(),
-            LocaleKeys.onboarding_app_features_features_share_habits_sub_features_1.tr(),
-            LocaleKeys.onboarding_app_features_features_share_habits_sub_features_2.tr(),
-          ],
+          color: context.cupertinoTheme.primaryColor,
         ),
       ];
 
@@ -89,22 +90,11 @@ class _OnboardingAppFeaturesPageState extends State<OnboardingAppFeaturesPage> w
     super.initState();
     _initializeAnimations();
     _startInitialAnimation();
-    _simulateHabitFormationRate();
     _startIntroTimer();
   }
 
   void _startIntroTimer() {
-    Future.delayed(const Duration(seconds: 5), () {
-      if (mounted) {
-        _introTransitionController.forward().then((_) {
-          if (mounted) {
-            setState(() {
-              _showIntro = false;
-            });
-          }
-        });
-      }
-    });
+    // Removed automatic transition - now controlled by continue button
   }
 
   void _initializeAnimations() {
@@ -133,7 +123,7 @@ class _OnboardingAppFeaturesPageState extends State<OnboardingAppFeaturesPage> w
       duration: const Duration(milliseconds: 2000),
     )..repeat(reverse: true);
 
-    _habitFormationController = AnimationController(
+    _habitProbabilityController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 2000),
     );
@@ -141,6 +131,21 @@ class _OnboardingAppFeaturesPageState extends State<OnboardingAppFeaturesPage> w
     _introTransitionController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 800),
+    );
+
+    _titleController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 800),
+    );
+
+    _descriptionController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 800),
+    );
+
+    _buttonController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 600),
     );
 
     _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
@@ -156,40 +161,56 @@ class _OnboardingAppFeaturesPageState extends State<OnboardingAppFeaturesPage> w
       CurvedAnimation(parent: _scaleController, curve: Curves.elasticOut),
     );
 
-    _progressAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(parent: _progressController, curve: Curves.easeOutCubic),
-    );
-
     _pulseAnimation = Tween<double>(begin: 0.8, end: 1.2).animate(
       CurvedAnimation(parent: _pulseController, curve: Curves.easeInOut),
-    );
-
-    _habitFormationAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(parent: _habitFormationController, curve: Curves.easeOutCubic),
     );
 
     _introTransitionAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
       CurvedAnimation(parent: _introTransitionController, curve: Curves.easeOutCubic),
     );
+
+    _titleAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _titleController, curve: Curves.easeOutCubic),
+    );
+
+    _titleSlideAnimation = Tween<Offset>(
+      begin: const Offset(0, 0.3),
+      end: Offset.zero,
+    ).animate(CurvedAnimation(parent: _titleController, curve: Curves.easeOutCubic));
+
+    _descriptionAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _descriptionController, curve: Curves.easeOutCubic),
+    );
+
+    _descriptionSlideAnimation = Tween<Offset>(
+      begin: const Offset(0, 0.3),
+      end: Offset.zero,
+    ).animate(CurvedAnimation(parent: _descriptionController, curve: Curves.easeOutCubic));
+
+    _buttonAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _buttonController, curve: Curves.easeOutBack),
+    );
   }
 
   void _startInitialAnimation() async {
+    // Start with logo animation
     await Future.delayed(const Duration(milliseconds: 300));
     _fadeController.forward();
     _slideController.forward();
     _scaleController.forward();
-    _progressController.forward();
-    _habitFormationController.forward();
-  }
+    _habitProbabilityController.forward();
 
-  void _simulateHabitFormationRate() async {
-    // Simulate habit formation rate calculation
-    await Future.delayed(const Duration(milliseconds: 1000));
-    if (mounted) {
-      setState(() {
-        _habitFormationRate = 0.73; // 73% habit formation rate
-      });
-    }
+    // Start title animation after logo
+    await Future.delayed(const Duration(milliseconds: 500));
+    _titleController.forward();
+
+    // Start description animation after title
+    await Future.delayed(const Duration(milliseconds: 600));
+    _descriptionController.forward();
+
+    // Show continue button after 2 seconds
+    await Future.delayed(const Duration(milliseconds: 2000));
+    _buttonController.forward();
   }
 
   @override
@@ -199,8 +220,11 @@ class _OnboardingAppFeaturesPageState extends State<OnboardingAppFeaturesPage> w
     _scaleController.dispose();
     _progressController.dispose();
     _pulseController.dispose();
-    _habitFormationController.dispose();
+    _habitProbabilityController.dispose();
     _introTransitionController.dispose();
+    _titleController.dispose();
+    _descriptionController.dispose();
+    _buttonController.dispose();
     super.dispose();
   }
 
@@ -268,10 +292,27 @@ class _OnboardingAppFeaturesPageState extends State<OnboardingAppFeaturesPage> w
     });
   }
 
+  // Transition from the intro hero to the features carousel
+  Future<void> _showFeatures() async {
+    if (!_showIntro) return;
+    await _introTransitionController.forward();
+    if (!mounted) return;
+    setState(() {
+      _showIntro = false;
+    });
+    _fadeController.forward();
+    _slideController.forward();
+    _progressController.forward();
+  }
+
   void _completeOnboarding() {
-    // Navigate to rating page instead of completing onboarding
-    if (mounted) {
-      Navigator.of(context).pushNamed('/onboardingRating');
+    // Proceed to the next step (rating) after features are done
+    if (widget.onContinue != null) {
+      widget.onContinue!();
+    } else {
+      if (mounted) {
+        navigator.navigateAndClear(path: KRoute.onboardingRating);
+      }
     }
   }
 
@@ -300,6 +341,36 @@ class _OnboardingAppFeaturesPageState extends State<OnboardingAppFeaturesPage> w
               },
             ),
           ),
+          // Top blur overlay to prevent glow bleeding under header
+          Positioned(
+            top: 0,
+            left: 0,
+            right: 0,
+            height: context.height(0.13),
+            child: IgnorePointer(
+              child: ClipRRect(
+                // Subtle rounding so it blends with design
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(context.width(0.04)),
+                  bottomRight: Radius.circular(context.width(0.04)),
+                ),
+                child: BackdropFilter(
+                  filter: ui.ImageFilter.blur(sigmaX: 14, sigmaY: 14),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).colorScheme.surface.withValues(alpha: 0.18),
+                      border: Border(
+                        bottom: BorderSide(
+                          color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.06),
+                          width: 1,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
           // Main content
           SafeArea(
             child: Padding(
@@ -317,11 +388,6 @@ class _OnboardingAppFeaturesPageState extends State<OnboardingAppFeaturesPage> w
                       child: Column(
                         children: [
                           _buildMainContent(context, theme),
-                          // Habit Formation Rate Widget (only for feature 2)
-                          if (_currentFeature == 2) ...[
-                            SizedBox(height: context.height(0.03)),
-                            _buildHabitFormationRate(context, theme),
-                          ],
                         ],
                       ),
                     ),
@@ -338,86 +404,208 @@ class _OnboardingAppFeaturesPageState extends State<OnboardingAppFeaturesPage> w
   }
 
   Widget _buildIntroScreen(BuildContext context, ThemeData theme) {
+    final String logoAsset = Assets.app.appLogoDark.path;
     return CupertinoPageScaffold(
-      child: AnimatedBuilder(
-        animation: _introTransitionAnimation,
-        builder: (context, child) {
-          return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: Opacity(
-              opacity: 1.0 - _introTransitionAnimation.value,
-              child: Transform.scale(
-                scale: 1.0 - (_introTransitionAnimation.value * 0.1),
-                child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      // Animated icon
-                      AnimatedBuilder(
-                        animation: _pulseAnimation,
-                        builder: (context, child) {
-                          return Transform.scale(
-                            scale: _pulseAnimation.value,
-                            child: Container(
-                              width: context.width(0.25),
-                              height: context.width(0.25),
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                gradient: RadialGradient(
-                                  colors: [
-                                    const Color(0xFF1DB954).withValues(alpha: 0.2),
-                                    const Color(0xFF1DB954).withValues(alpha: 0.1),
-                                  ],
-                                ),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: const Color(0xFF1DB954).withValues(alpha: 0.3),
-                                    blurRadius: 20,
-                                    spreadRadius: 5,
-                                  ),
-                                ],
-                              ),
-                              child: Center(
-                                child: Icon(
-                                  CupertinoIcons.heart_fill,
-                                  size: context.width(0.12),
-                                  color: const Color(0xFF1DB954),
-                                ),
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                      SizedBox(height: context.height(0.06)),
-                      // Title
-                      FittedBox(
-                        child: Text(
-                          LocaleKeys.onboarding_app_features_title.tr(),
-                          style: context.headlineLarge.copyWith(
-                            fontSize: 30,
-                            fontWeight: FontWeight.w700,
-                            color: theme.colorScheme.onSurface,
-                          ),
-                          maxLines: 1,
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                      SizedBox(height: context.height(0.02)),
-                      // Subtitle
-                      Text(
-                        LocaleKeys.onboarding_app_features_subtitle.tr(),
-                        style: context.bodyLarge.copyWith(
-                          color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
-                  ),
-                ),
+      child: Stack(
+        children: [
+          // Background gradient
+          Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  theme.colorScheme.surface,
+                  theme.colorScheme.surface.withValues(alpha: 0.1),
+                  theme.colorScheme.surface,
+                ],
               ),
             ),
-          );
-        },
+          ),
+          // Floating particles
+          Positioned.fill(
+            child: CustomPaint(
+              painter: _IntroParticlePainter(),
+            ),
+          ),
+          // Main content
+          AnimatedBuilder(
+            animation: _introTransitionAnimation,
+            builder: (context, child) {
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: Opacity(
+                  opacity: 1.0 - _introTransitionAnimation.value,
+                  child: Transform.scale(
+                    scale: 1.0 - (_introTransitionAnimation.value * 0.1),
+                    child: Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          // Animated logo with enhanced effects
+                          AnimatedBuilder(
+                            animation: Listenable.merge([_fadeAnimation, _slideAnimation, _scaleAnimation, _pulseAnimation]),
+                            builder: (context, child) {
+                              return FadeTransition(
+                                opacity: _fadeAnimation,
+                                child: SlideTransition(
+                                  position: _slideAnimation,
+                                  child: ScaleTransition(
+                                    scale: _scaleAnimation,
+                                    child: Transform.scale(
+                                      scale: _pulseAnimation.value,
+                                      child: Container(
+                                        padding: EdgeInsets.all(context.width(0.04)),
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          gradient: RadialGradient(
+                                            colors: [
+                                              theme.colorScheme.primary.withValues(alpha: 0.1),
+                                              Colors.transparent,
+                                            ],
+                                          ),
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color: theme.colorScheme.primary.withValues(alpha: 0.2),
+                                              blurRadius: 30,
+                                              spreadRadius: 5,
+                                            ),
+                                          ],
+                                        ),
+                                        child: ClipRRect(
+                                          borderRadius: BorderRadius.circular(12),
+                                          child: Image.asset(
+                                            logoAsset,
+                                            height: context.width(0.2),
+                                            fit: BoxFit.contain,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                          SizedBox(height: context.height(0.06)),
+                          // Title with sequential animation
+                          AnimatedBuilder(
+                            animation: Listenable.merge([_titleAnimation, _titleSlideAnimation]),
+                            builder: (context, child) {
+                              return FadeTransition(
+                                opacity: _titleAnimation,
+                                child: SlideTransition(
+                                  position: _titleSlideAnimation,
+                                  child: FittedBox(
+                                    child: Text(
+                                      LocaleKeys.onboarding_app_features_title.tr(),
+                                      style: context.headlineLarge.copyWith(
+                                        fontSize: 32,
+                                        fontWeight: FontWeight.w800,
+                                        color: theme.colorScheme.onSurface,
+                                        letterSpacing: 0.5,
+                                      ),
+                                      maxLines: 2,
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                          SizedBox(height: context.height(0.03)),
+                          // Description with sequential animation
+                          AnimatedBuilder(
+                            animation: Listenable.merge([_descriptionAnimation, _descriptionSlideAnimation]),
+                            builder: (context, child) {
+                              return FadeTransition(
+                                opacity: _descriptionAnimation,
+                                child: SlideTransition(
+                                  position: _descriptionSlideAnimation,
+                                  child: Padding(
+                                    padding: EdgeInsets.symmetric(horizontal: context.width(0.1)),
+                                    child: Text(
+                                      LocaleKeys.onboarding_app_features_subtitle.tr(),
+                                      style: context.bodyLarge.copyWith(
+                                        color: theme.colorScheme.onSurface.withValues(alpha: 0.8),
+                                        height: 1.5,
+                                        fontSize: 16,
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                          SizedBox(height: context.height(0.06)),
+                          // Continue button with animation
+                          AnimatedBuilder(
+                            animation: _buttonAnimation,
+                            builder: (context, child) {
+                              return FadeTransition(
+                                opacity: _buttonAnimation,
+                                child: ScaleTransition(
+                                  scale: _buttonAnimation,
+                                  child: CupertinoButton(
+                                    onPressed: _showFeatures,
+                                    child: Container(
+                                      padding: EdgeInsets.symmetric(
+                                        horizontal: context.width(0.08),
+                                        vertical: context.height(0.02),
+                                      ),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(context.width(0.08)),
+                                        gradient: LinearGradient(
+                                          begin: Alignment.topLeft,
+                                          end: Alignment.bottomRight,
+                                          colors: [
+                                            theme.colorScheme.primary,
+                                            theme.colorScheme.primary.withValues(alpha: 0.8),
+                                          ],
+                                        ),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: theme.colorScheme.primary.withValues(alpha: 0.4),
+                                            blurRadius: 15,
+                                            spreadRadius: 3,
+                                          ),
+                                        ],
+                                      ),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Text(
+                                            LocaleKeys.onboarding_continue_button.tr(),
+                                            style: context.bodyMedium.copyWith(
+                                              fontWeight: FontWeight.w700,
+                                              color: Colors.white,
+                                              fontSize: 16,
+                                            ),
+                                          ),
+                                          SizedBox(width: context.width(0.02)),
+                                          Icon(
+                                            CupertinoIcons.arrow_right_circle_fill,
+                                            color: Colors.white,
+                                            size: context.width(0.05),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              );
+            },
+          ),
+        ],
       ),
     );
   }
@@ -425,41 +613,33 @@ class _OnboardingAppFeaturesPageState extends State<OnboardingAppFeaturesPage> w
   Widget _buildHeader(BuildContext context, ThemeData theme) {
     return Column(
       children: [
-        // Progress indicator
-        AnimatedBuilder(
-          animation: _progressAnimation,
-          builder: (context, child) {
-            return Container(
+        // Page indicators (moved from bottom)
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: List.generate(_appFeatures.length, (index) {
+            final isActive = index == _currentFeature;
+            final isPast = index < _currentFeature;
+
+            return AnimatedContainer(
+              duration: const Duration(milliseconds: 300),
+              margin: EdgeInsets.symmetric(horizontal: context.width(0.01)),
+              width: isActive ? context.width(0.06) : context.width(0.012),
               height: context.height(0.006),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(context.height(0.003)),
-                color: Colors.transparent,
-              ),
-              child: FractionallySizedBox(
-                alignment: Alignment.centerLeft,
-                widthFactor: _progressAnimation.value * ((_currentFeature + 1) / _appFeatures.length),
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(context.height(0.003)),
-                    gradient: LinearGradient(
-                      colors: [
-                        _appFeatures[_currentFeature].color,
-                        _appFeatures[_currentFeature].color.withValues(alpha: 0.7),
-                      ],
-                    ),
-                  ),
-                ),
+                color: isActive || isPast ? _appFeatures[_currentFeature].color : theme.colorScheme.onSurface.withValues(alpha: 0.2),
+                boxShadow: isActive
+                    ? [
+                        BoxShadow(
+                          color: _appFeatures[_currentFeature].color.withValues(alpha: 0.4),
+                          blurRadius: 8,
+                          spreadRadius: 2,
+                        ),
+                      ]
+                    : null,
               ),
             );
-          },
-        ),
-        SizedBox(height: context.height(0.02)),
-        // Step counter
-        Text(
-          '${_currentFeature + 1} of ${_appFeatures.length}',
-          style: context.bodyMedium.copyWith(
-            color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
-          ),
+          }),
         ),
       ],
     );
@@ -479,34 +659,37 @@ class _OnboardingAppFeaturesPageState extends State<OnboardingAppFeaturesPage> w
               scale: _scaleAnimation,
               child: Column(
                 children: [
-                  // Icon with animated background
-                  _buildAnimatedIcon(context, currentFeature),
-                  SizedBox(height: context.height(0.04)),
-                  // Title
+                  SizedBox(height: context.height(0.03)),
                   Text(
                     currentFeature.title,
                     style: context.headlineMedium.copyWith(
-                      fontWeight: FontWeight.w600,
+                      fontWeight: FontWeight.w700,
                       color: theme.colorScheme.onSurface,
+                      fontSize: 28,
                     ),
                     textAlign: TextAlign.center,
                   ),
-                  SizedBox(height: context.height(0.02)),
+                  SizedBox(height: context.height(0.04)),
+                  // Icon with animated background
+                  _buildAnimatedImage(context, currentFeature),
+                  SizedBox(height: context.height(0.03)),
+
+                  // Title
+
                   // Description
                   Padding(
                     padding: context.symmetricPadding(horizontal: 0.02),
                     child: Text(
                       currentFeature.description,
                       style: context.bodyLarge.copyWith(
-                        height: 1.5,
+                        height: 1.6,
                         color: theme.colorScheme.onSurface.withValues(alpha: 0.8),
+                        fontSize: 16,
                       ),
                       textAlign: TextAlign.center,
                     ),
                   ),
                   SizedBox(height: context.height(0.03)),
-                  // Sub-features
-                  _buildSubFeatures(context, currentFeature, theme),
                 ],
               ),
             ),
@@ -516,65 +699,26 @@ class _OnboardingAppFeaturesPageState extends State<OnboardingAppFeaturesPage> w
     );
   }
 
-  Widget _buildSubFeatures(BuildContext context, AppFeature feature, ThemeData theme) {
-    return Wrap(
-      spacing: context.width(0.02),
-      runSpacing: context.height(0.01),
-      alignment: WrapAlignment.center,
-      children: feature.subFeatures.map((subFeature) {
-        return Container(
-          padding: context.symmetricPadding(horizontal: 0.03, vertical: 0.01),
-          decoration: BoxDecoration(
-            color: feature.color.withValues(alpha: 0.1),
-            borderRadius: BorderRadius.circular(context.width(0.08)),
-            border: Border.all(
-              color: feature.color.withValues(alpha: 0.3),
-              width: 1,
-            ),
-          ),
-          child: Text(
-            subFeature,
-            style: context.bodySmall.copyWith(
-              color: feature.color.withValues(alpha: 1),
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-        );
-      }).toList(),
-    );
-  }
-
-  Widget _buildAnimatedIcon(BuildContext context, AppFeature feature) {
+  Widget _buildAnimatedImage(BuildContext context, AppFeature feature) {
+    final String? screenshotPath = _screenshotForFeature(feature);
     return AnimatedBuilder(
       animation: Listenable.merge([_scaleController, _pulseController]),
       builder: (context, child) {
         return Transform.scale(
-          scale: _pulseAnimation.value,
-          child: Container(
-            width: context.width(0.25),
-            height: context.width(0.25),
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              gradient: RadialGradient(
-                colors: [
-                  feature.color.withValues(alpha: 0.2),
-                  feature.color.withValues(alpha: 0.1),
-                ],
-              ),
-              boxShadow: [
-                BoxShadow(
-                  color: feature.color.withValues(alpha: 0.3),
-                  blurRadius: 20,
-                  spreadRadius: 5,
-                ),
-              ],
-            ),
-            child: Center(
-              child: Icon(
-                feature.icon,
-                size: context.width(0.12),
-                color: feature.color,
-              ),
+          scale: 1.05 + (_pulseAnimation.value - 0.8) * 0.2,
+          child: SizedBox(
+            height: context.height(0.45),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(context.width(0.04)),
+              child: screenshotPath != null
+                  ? Image.asset(
+                      screenshotPath,
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) {
+                        return _fallbackIcon(context, feature);
+                      },
+                    )
+                  : _fallbackIcon(context, feature),
             ),
           ),
         );
@@ -582,142 +726,173 @@ class _OnboardingAppFeaturesPageState extends State<OnboardingAppFeaturesPage> w
     );
   }
 
-  Widget _buildHabitFormationRate(BuildContext context, ThemeData theme) {
-    final habitColor = const Color(0xFF9B59B6);
+  String? _screenshotForFeature(AppFeature feature) {
+    final title = feature.title.toLowerCase();
+    if (title.contains('habit probability')) {
+      return 'assets/screenshots/habit_probability.png';
+    }
+    if (title.contains('home widget')) {
+      return 'assets/screenshots/home_widget.png';
+    }
+    if (title.contains('goal')) {
+      return 'assets/screenshots/difficulty_goal.png';
+    }
+    if (title.contains('custom')) {
+      return 'assets/screenshots/customize.png';
+    }
+    if (title.contains('data management') || title.contains('export') || title.contains('import')) {
+      return 'assets/screenshots/export_import.png';
+    }
+    if (title.contains('share')) {
+      return 'assets/screenshots/share.png';
+    }
+    // No screenshots available for other features
+    return null;
+  }
 
-    return AnimatedBuilder(
-      animation: _habitFormationAnimation,
-      builder: (context, child) {
-        final animatedScore = _habitFormationAnimation.value * _habitFormationRate * 100;
-        return Container(
-          padding: context.padding(0.04),
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [
-                habitColor.withValues(alpha: 0.1),
-                habitColor.withValues(alpha: 0.05),
-              ],
-            ),
-            borderRadius: BorderRadius.circular(context.width(0.06)),
-            border: Border.all(
-              color: habitColor.withValues(alpha: 0.3),
-              width: 1,
-            ),
-          ),
-          child: Column(
-            children: [
-              Text(
-                LocaleKeys.onboarding_app_features_formation_score.tr(),
-                style: context.bodyMedium.copyWith(
-                  color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-              SizedBox(height: context.height(0.01)),
-              Text(
-                '${animatedScore.round()}',
-                style: context.displaySmall.copyWith(
-                  fontWeight: FontWeight.w800,
-                  color: habitColor,
-                  fontFeatures: [FontFeature.tabularFigures()],
-                ),
-              ),
-            ],
-          ),
-        );
-      },
+  Widget _fallbackIcon(BuildContext context, AppFeature feature) {
+    return Container(
+      color: feature.color.withValues(alpha: 0.06),
+      child: Center(
+        child: Icon(
+          feature.icon,
+          size: context.width(0.14),
+          color: feature.color,
+        ),
+      ),
     );
   }
 
   Widget _buildNavigationButtons(BuildContext context, ThemeData theme) {
-    return Row(
+    return Column(
       children: [
-        // Previous button
-        if (_currentFeature > 0)
-          Expanded(
-            child: CupertinoButton(
-              onPressed: _isTransitioning ? null : _previousFeature,
-              child: Container(
-                height: context.height(0.055),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(context.width(0.08)),
-                  border: Border.all(
-                    color: theme.colorScheme.onSurface.withValues(alpha: 0.2),
-                  ),
-                ),
-                child: Center(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        CupertinoIcons.chevron_left,
-                        size: context.width(0.05),
-                        color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
-                      ),
-                      SizedBox(width: context.width(0.02)),
-                      Text(
-                        LocaleKeys.onboarding_app_features_previous.tr(),
-                        style: context.bodyMedium.copyWith(
-                          color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
+        // Navigation buttons (indicators moved to header)
+        Row(
+          children: [
+            // Previous button
+            if (_currentFeature > 0)
+              Expanded(
+                child: AnimatedBuilder(
+                  animation: _fadeAnimation,
+                  builder: (context, child) {
+                    return Transform.scale(
+                      scale: _fadeAnimation.value * 0.05 + 0.95,
+                      child: CupertinoButton(
+                        onPressed: _isTransitioning ? null : _previousFeature,
+                        child: Container(
+                          height: context.height(0.055),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(context.width(0.08)),
+                            border: Border.all(
+                              color: theme.colorScheme.onSurface.withValues(alpha: 0.2),
+                              width: 1.5,
+                            ),
+                            color: theme.colorScheme.surface,
+                            boxShadow: [
+                              BoxShadow(
+                                color: theme.colorScheme.onSurface.withValues(alpha: 0.1),
+                                blurRadius: 8,
+                                spreadRadius: 1,
+                              ),
+                            ],
+                          ),
+                          child: Center(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  CupertinoIcons.chevron_left,
+                                  size: context.width(0.05),
+                                  color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
+                                ),
+                                SizedBox(width: context.width(0.02)),
+                                Text(
+                                  LocaleKeys.onboarding_app_features_previous.tr(),
+                                  style: context.bodyMedium.copyWith(
+                                    color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
                         ),
                       ),
-                    ],
-                  ),
+                    );
+                  },
                 ),
               ),
-            ),
-          ),
-        if (_currentFeature > 0) SizedBox(width: context.width(0.0025)),
-        // Next/Complete button
-        Expanded(
-          flex: _currentFeature > 0 ? 1 : 2,
-          child: CupertinoButton(
-            onPressed: _isTransitioning ? null : (_currentFeature < _appFeatures.length - 1 ? _nextFeature : _completeOnboarding),
-            child: Container(
-              height: context.height(0.055),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(context.width(0.08)),
-                gradient: LinearGradient(
-                  colors: [
-                    _appFeatures[_currentFeature].color,
-                    _appFeatures[_currentFeature].color.withValues(alpha: 0.8),
-                  ],
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: _appFeatures[_currentFeature].color.withValues(alpha: 0.3),
-                    blurRadius: 10,
-                    spreadRadius: 2,
-                  ),
-                ],
-              ),
-              child: Center(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    FittedBox(
-                      child: Text(
-                        _currentFeature < _appFeatures.length - 1 ? LocaleKeys.onboarding_app_features_next.tr() : LocaleKeys.onboarding_app_features_start.tr(),
-                        style: context.bodyMedium.copyWith(
-                          fontWeight: FontWeight.w600,
-                          color: Colors.white,
+            if (_currentFeature > 0) SizedBox(width: context.width(0.03)),
+
+            // Next/Complete button
+            Expanded(
+              flex: _currentFeature > 0 ? 1 : 2,
+              child: AnimatedBuilder(
+                animation: Listenable.merge([_fadeAnimation, _pulseController]),
+                builder: (context, child) {
+                  return Transform.scale(
+                    scale: _fadeAnimation.value * 0.05 + 0.95,
+                    child: CupertinoButton(
+                      onPressed: _isTransitioning ? null : (_currentFeature < _appFeatures.length - 1 ? _nextFeature : _completeOnboarding),
+                      child: Container(
+                        height: context.height(0.055),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(context.width(0.08)),
+                          gradient: LinearGradient(
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                            colors: [
+                              _appFeatures[_currentFeature].color,
+                              _appFeatures[_currentFeature].color.withValues(alpha: 0.8),
+                              _appFeatures[_currentFeature].color.withValues(alpha: 0.9),
+                            ],
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: _appFeatures[_currentFeature].color.withValues(alpha: 0.4),
+                              blurRadius: 15,
+                              spreadRadius: 3,
+                            ),
+                            BoxShadow(
+                              color: _appFeatures[_currentFeature].color.withValues(alpha: 0.2),
+                              blurRadius: 8,
+                              spreadRadius: 1,
+                            ),
+                          ],
                         ),
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
+                        child: Center(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              FittedBox(
+                                child: Text(
+                                  _currentFeature < _appFeatures.length - 1 ? LocaleKeys.onboarding_app_features_next.tr() : LocaleKeys.onboarding_app_features_start.tr(),
+                                  style: context.bodyMedium.copyWith(
+                                    fontWeight: FontWeight.w700,
+                                    color: Colors.white,
+                                    fontSize: 16,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 1,
+                                ),
+                              ),
+                              SizedBox(width: context.width(0.02)),
+                              Icon(
+                                _currentFeature < _appFeatures.length - 1 ? CupertinoIcons.chevron_right : CupertinoIcons.rocket_fill,
+                                size: context.width(0.05),
+                                color: Colors.white,
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
                     ),
-                    SizedBox(width: context.width(0.02)),
-                    Icon(
-                      _currentFeature < _appFeatures.length - 1 ? CupertinoIcons.chevron_right : CupertinoIcons.rocket_fill,
-                      size: context.width(0.05),
-                      color: Colors.white,
-                    ),
-                  ],
-                ),
+                  );
+                },
               ),
             ),
-          ),
+          ],
         ),
       ],
     );
@@ -729,14 +904,12 @@ class AppFeature {
   final String description;
   final IconData icon;
   final Color color;
-  final List<String> subFeatures;
 
   const AppFeature({
     required this.title,
     required this.description,
     required this.icon,
     required this.color,
-    required this.subFeatures,
   });
 }
 
@@ -766,3 +939,27 @@ class _ParticlePainter extends CustomPainter {
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
 }
+
+class _IntroParticlePainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = Colors.blue.withValues(alpha: 0.05)
+      ..style = PaintingStyle.fill;
+
+    final random = Random(123); // Different seed for intro
+
+    for (int i = 0; i < 20; i++) {
+      final x = random.nextDouble() * size.width;
+      final y = random.nextDouble() * size.height;
+      final radius = random.nextDouble() * 4 + 1;
+
+      canvas.drawCircle(Offset(x, y), radius, paint);
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+}
+
+// Removed old circular painter; screenshots now represent features

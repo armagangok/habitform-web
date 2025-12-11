@@ -1,11 +1,10 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:habitform/models/habit/habit_extension.dart';
 
 import '/core/core.dart';
-import '/features/habit_formation/provider/habit_formation_provider.dart';
-import '/models/completion_entry/completion_extension.dart';
-import '/models/habit/habit_difficulty.dart';
 import '/models/models.dart';
-import '../../habit_formation/provider/habit_formation_state.dart';
+import '../../habit_probability/provider/habit_probability_provider.dart';
+import '../../habit_probability/provider/habit_probability_state.dart';
 
 class HabitInsightsCard extends ConsumerWidget {
   final Habit habit;
@@ -17,7 +16,7 @@ class HabitInsightsCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final formationState = ref.watch(formationProvider);
+    final formationState = ref.watch(probabilityProvider);
 
     // Get habit statistic from formation provider
     HabitStatistic? habitStatistic;
@@ -74,8 +73,8 @@ class HabitInsightsCard extends ConsumerWidget {
   }
 
   HabitInsights _generateInsights(HabitStatistic? habitStatistic) {
-    final currentStreak = habit.completions.calculateCurrentStreak();
-    final longestStreak = habit.completions.calculateLongestStreak();
+    final currentStreak = habit.calculateCurrentStreak();
+    final longestStreak = habit.calculateLongestStreak();
     final completionRate = habitStatistic?.progressPercentage ?? _calculateCompletionRate();
 
     final achievements = <Achievement>[];
@@ -105,7 +104,7 @@ class HabitInsightsCard extends ConsumerWidget {
     if (longestStreak >= 66) {
       achievements.add(Achievement(
         title: LocaleKeys.habit_detail_achievement_habit_hero.tr(),
-        description: LocaleKeys.habit_detail_achievement_formation_threshold.tr(),
+        description: LocaleKeys.habit_detail_achievement_probability_threshold.tr(),
         icon: FontAwesomeIcons.crown,
         color: Colors.purple,
         isNew: longestStreak == 66,
@@ -147,11 +146,11 @@ class HabitInsightsCard extends ConsumerWidget {
       ));
     }
 
-    final formationProgress = habitStatistic?.formationProbability ?? _getFormationProgress();
-    if (formationProgress >= 50 && formationProgress < 100) {
+    final probabilityProgress = habitStatistic?.probabilityScore ?? habit.calculateHabitProbability();
+    if (probabilityProgress >= 50 && probabilityProgress < 100) {
       insights.add(InsightItem(
-        title: LocaleKeys.habit_detail_achievement_formation_journey.tr(),
-        description: LocaleKeys.habit_detail_achievement_formation_description.tr().replaceAll('{{percentage}}', formationProgress.toStringAsFixed(0)),
+        title: LocaleKeys.habit_detail_achievement_probability_journey.tr(),
+        description: LocaleKeys.habit_detail_achievement_probability_description.tr().replaceAll('{{percentage}}', probabilityProgress.toStringAsFixed(0)),
         type: InsightType.informational,
       ));
     }
@@ -164,7 +163,7 @@ class HabitInsightsCard extends ConsumerWidget {
 
   double _calculateCompletionRate() {
     if (habit.completions.isEmpty) return 0.0;
-    return habit.completions.calculateWeightedProgressPercentageFromFirstCompletion(habit.dailyTarget);
+    return habit.calculateWeightedProgressPercentageFromFirstCompletion();
   }
 
   bool _isWeekendWarrior() {
@@ -191,19 +190,13 @@ class HabitInsightsCard extends ConsumerWidget {
     int missedDays = 0;
     for (int i = 0; i < today.weekday; i++) {
       final date = DateUtils.dateOnly(startOfWeek.add(Duration(days: i)));
-      final isCompleted = habit.completions.isDateCompleted(date);
+      final isCompleted = habit.isDateCompleted(date);
       if (!isCompleted) {
         missedDays++;
       }
     }
 
     return missedDays;
-  }
-
-  double _getFormationProgress() {
-    // Fallback calculation when provider data is not available
-    final estimatedFormationDays = habit.difficulty.estimatedFormationDays;
-    return habit.completions.calculateFormationProgress(estimatedFormationDays, habit.dailyTarget) * 100.0;
   }
 }
 
@@ -484,7 +477,7 @@ class _MotivationCard extends StatelessWidget {
   }
 
   MotivationalQuote _getMotivationalQuote() {
-    final currentStreak = habit.completions.calculateCurrentStreak();
+    final currentStreak = habit.calculateCurrentStreak();
     final completionRate = _calculateCompletionRate();
 
     if (currentStreak >= 30) {
@@ -512,7 +505,7 @@ class _MotivationCard extends StatelessWidget {
 
   double _calculateCompletionRate() {
     if (habit.completions.isEmpty) return 0.0;
-    return habit.completions.calculateProgressPercentageFromFirstCompletion();
+    return habit.calculateProgressPercentageFromFirstCompletion();
   }
 }
 

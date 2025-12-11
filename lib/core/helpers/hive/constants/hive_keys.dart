@@ -5,4 +5,5 @@ final class HiveKeys {
   static const String themeKey = "themeKeyHabitRise";
   static const String userDefaultsKey = 'userDefaultsKeyHabitRise';
   static const String habitRiseDefaultsKeys = 'habitRiseDefaultsKeys';
+  static const String localeKey = 'localeKeyHabitForm';
 }

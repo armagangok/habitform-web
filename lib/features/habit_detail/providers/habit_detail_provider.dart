@@ -4,8 +4,10 @@ import '../../../core/core.dart';
 import '../../../models/completion_entry/completion_entry.dart';
 import '../../../models/habit/habit_model.dart';
 import '../../../services/habit_service/habit_service_interface.dart';
-import '../../habit_formation/provider/habit_formation_provider.dart';
+import '../../../services/widget_sync_service.dart';
+import '../../habit_probability/provider/habit_probability_provider.dart';
 import '../../home/provider/home_provider.dart';
+import 'habit_statistics_provider.dart';
 
 final habitDetailProvider = AutoDisposeNotifierProvider<HabitDetailNotifier, Habit?>(() {
   return HabitDetailNotifier();
@@ -15,7 +17,11 @@ class HabitDetailNotifier extends AutoDisposeNotifier<Habit?> {
   @override
   Habit? build() => null;
 
-  Future<void> initHabit(Habit habit) async => state = habit;
+  Future<void> initHabit(Habit habit) async {
+    state = habit;
+    // Invalidate cached statistics when habit changes
+    ref.read(habitStatisticsProvider.notifier).forceRecalculate(habit);
+  }
 
   Future<void> updateHabit(Habit habit) async {
     try {
@@ -27,47 +33,118 @@ class HabitDetailNotifier extends AutoDisposeNotifier<Habit?> {
   }
 
   Future<void> markHabitAsComplete(String habitId, CompletionEntry completion) async {
+    final startTime = DateTime.now();
     try {
-      LogHelper.shared.debugPrint("Marking habit $habitId as ${completion.isCompleted ? 'completed' : 'not completed'} for date ${completion.date}");
+      LogHelper.shared.debugPrint("🚀 [PERF] Starting markHabitAsComplete at ${startTime.millisecondsSinceEpoch}");
 
-      // Önce habit service ile güncelleme yap
-      await habitService.updateHabitCompletionStatus(habitId, completion);
-      LogHelper.shared.debugPrint("Habit service updated successfully");
-
-      // Yerel state'i güncelle, eğer bu habit şu anda açıksa
+      // Optimistic update: Update local state first for immediate UI response
       if (state != null && state!.id == habitId) {
-        LogHelper.shared.debugPrint("Updating local state for the habit");
+        final optimisticStart = DateTime.now();
+        final currentHabit = state!;
+        final updatedCompletions = Map<String, CompletionEntry>.from(currentHabit.completions);
 
-        // Güncel habit'i db'den al
-        final updatedHabit = await habitService.getHabit(habitId);
-
-        if (updatedHabit != null) {
-          LogHelper.shared.debugPrint("Updated habit found, updating state");
-
-          // State'i güncelle
-          state = updatedHabit;
-
-          // Home provider'ı da güncelle
-          await ref.read(homeProvider.notifier).refreshHabits();
-
-          // Formation provider'ı da güncelle
-          await ref.read(formationProvider.notifier).refreshFormationStatistics();
-          LogHelper.shared.debugPrint("State, home provider, and formation provider updated successfully");
-        } else {
-          LogHelper.shared.errorPrint("Could not find the updated habit");
+        // Find existing entry for the same date
+        String? existingKey;
+        CompletionEntry? existingEntry;
+        for (var entry in updatedCompletions.entries) {
+          if (entry.value.date.normalized.isSameDayWith(completion.date.normalized)) {
+            existingKey = entry.key;
+            existingEntry = entry.value;
+            break;
+          }
         }
-      } else {
-        LogHelper.shared.debugPrint("Current habit is not being viewed, only updating home provider");
-        // Sadece home provider'ı güncelle
-        await ref.read(homeProvider.notifier).refreshHabits();
 
-        // Formation provider'ı da güncelle
-        await ref.read(formationProvider.notifier).refreshFormationStatistics();
+        // Calculate new count
+        int currentCount = existingEntry?.count ?? 0;
+        int target = currentHabit.dailyTarget <= 0 ? 1 : currentHabit.dailyTarget;
+        int newCount;
+        if (completion.isCompleted) {
+          newCount = (currentCount + 1) > target ? target : (currentCount + 1);
+        } else {
+          newCount = (currentCount - 1) < 0 ? 0 : (currentCount - 1);
+        }
+
+        // Remove old entry and add updated one
+        if (existingKey != null) {
+          updatedCompletions.remove(existingKey);
+        }
+
+        final updatedEntry = CompletionEntry(
+          id: completion.id,
+          date: completion.date.normalized,
+          isCompleted: newCount >= target,
+          count: newCount,
+        );
+        updatedCompletions[updatedEntry.id] = updatedEntry;
+
+        // Update local state immediately
+        final updatedHabit = currentHabit.copyWith(completions: updatedCompletions);
+        state = updatedHabit;
+
+        // Invalidate cached statistics since habit data changed
+        ref.read(habitStatisticsProvider.notifier).forceRecalculate(updatedHabit);
+
+        final optimisticEnd = DateTime.now();
+        LogHelper.shared.debugPrint("⚡ [PERF] Optimistic update completed in ${optimisticEnd.difference(optimisticStart).inMilliseconds}ms");
       }
+
+      // Update habit service in background
+      final serviceStart = DateTime.now();
+      await habitService.updateHabitCompletionStatus(habitId, completion);
+      final serviceEnd = DateTime.now();
+      LogHelper.shared.debugPrint("💾 [PERF] Habit service update completed in ${serviceEnd.difference(serviceStart).inMilliseconds}ms");
+
+      // Update other providers asynchronously without blocking UI
+      _updateProvidersAsync(habitId);
+
+      final totalTime = DateTime.now().difference(startTime);
+      LogHelper.shared.debugPrint("✅ [PERF] markHabitAsComplete total time: ${totalTime.inMilliseconds}ms");
     } catch (e, s) {
       LogHelper.shared.errorPrint("Error marking habit as complete: $e\n$s");
+      // Revert optimistic update on error
+      if (state != null && state!.id == habitId) {
+        final revertedHabit = await habitService.getHabit(habitId);
+        if (revertedHabit != null) {
+          state = revertedHabit;
+        }
+      }
       rethrow;
     }
+  }
+
+  /// Update providers asynchronously without blocking the UI
+  void _updateProvidersAsync(String habitId) {
+    // Use Future.microtask to ensure this runs after the current frame
+    Future.microtask(() async {
+      final asyncStart = DateTime.now();
+      try {
+        LogHelper.shared.debugPrint("🔄 [PERF] Starting background provider updates");
+
+        // Update home provider
+        final homeStart = DateTime.now();
+        await ref.read(homeProvider.notifier).refreshHabits();
+        final homeEnd = DateTime.now();
+        LogHelper.shared.debugPrint("🏠 [PERF] Home provider updated in ${homeEnd.difference(homeStart).inMilliseconds}ms");
+
+        // Update formation provider
+        final formationStart = DateTime.now();
+        await ref.read(probabilityProvider.notifier).refreshFormationStatistics();
+        final formationEnd = DateTime.now();
+        LogHelper.shared.debugPrint("📊 [PERF] Formation provider updated in ${formationEnd.difference(formationStart).inMilliseconds}ms");
+
+        // Update widget data (debounced in WidgetSyncService)
+        final widgetStart = DateTime.now();
+        final allHabits = await habitService.getAllHabits();
+        await WidgetSyncService().updateWidgetData(allHabits);
+        final widgetEnd = DateTime.now();
+        LogHelper.shared.debugPrint("📱 [PERF] Widget data updated in ${widgetEnd.difference(widgetStart).inMilliseconds}ms");
+
+        final asyncEnd = DateTime.now();
+        LogHelper.shared.debugPrint("✅ [PERF] Background providers updated successfully in ${asyncEnd.difference(asyncStart).inMilliseconds}ms");
+      } catch (e) {
+        LogHelper.shared.errorPrint("Error updating background providers: $e");
+      }
+    });
   }
 
   /// Belirli bir tarihteki tamamlama kaydını tamamen siler
@@ -111,7 +188,7 @@ class HabitDetailNotifier extends AutoDisposeNotifier<Habit?> {
         await ref.read(homeProvider.notifier).refreshHabits();
 
         // Formation provider'ı da güncelle
-        await ref.read(formationProvider.notifier).refreshFormationStatistics();
+        await ref.read(probabilityProvider.notifier).refreshFormationStatistics();
         LogHelper.shared.debugPrint("Successfully removed completion and updated state");
       } else {
         LogHelper.shared.debugPrint("No completion found for the specified date");

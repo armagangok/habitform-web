@@ -1,7 +1,6 @@
-import 'package:habitrise/features/onboarding/pages/onboarding_app_features_page.dart';
-import 'package:habitrise/features/onboarding/pages/onboarding_information_page.dart';
-import 'package:habitrise/features/onboarding/pages/onboarding_rating_page.dart';
-import 'package:habitrise/features/onboarding/pages/onboarding_welcome_page.dart';
+import 'package:habitform/features/onboarding/pages/onboarding_app_features_page.dart';
+import 'package:habitform/features/onboarding/pages/onboarding_rating_page.dart';
+import 'package:habitform/features/onboarding/pages/onboarding_welcome_page.dart';
 
 import '/features/archived_habits/pages/archived_habits_page.dart';
 import '/features/export_import_data/data_export_import_page.dart';
@@ -39,16 +38,11 @@ final class NavigationRoute {
       case KRoute.onboardingWelcome:
         return _getRoute(page: const OnboardingWelcomePage(), settings: args);
 
-      case KRoute.onboardingInformation:
-        return _getRoute(page: const OnboardingInformationPage(), settings: args);
-
       case KRoute.onboardingAppFeatures:
         return _getRoute(page: const OnboardingAppFeaturesPage(), settings: args);
 
       case KRoute.onboardingRating:
         return _getRoute(page: const OnboardingRatingPage(), settings: args);
-
-
 
       case KRoute.habitCategoryPage:
         return _getRoute(page: const HabitCategoryPage(), settings: args);

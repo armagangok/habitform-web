@@ -1,11 +1,11 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '/core/core.dart';
-import '/models/completion_entry/completion_extension.dart';
+import '/models/habit/habit_extension.dart';
 import '/models/models.dart';
 import '../../../habit_detail/page/habit_detail.dart';
 import '../../../habit_detail/providers/habit_detail_provider.dart';
-import '../../components/achievement_dialog.dart';
+import '../../components/habit_probability_dialog.dart';
 import '../../provider/home_provider.dart';
 
 class HabitWidget extends ConsumerStatefulWidget {
@@ -48,7 +48,7 @@ class _HabitWidgetState extends ConsumerState<HabitWidget> with SingleTickerProv
   }
 
   double _getProgressPercentage(Habit habit) {
-    return habit.completions.calculateWeightedProgressPercentageFromFirstCompletion(habit.dailyTarget);
+    return habit.calculateWeightedProgressPercentageFromFirstCompletion();
   }
 
   Future<void> _showAchievementIfEarned({required Habit previousHabit, required Habit updatedHabit}) async {
@@ -65,7 +65,7 @@ class _HabitWidgetState extends ConsumerState<HabitWidget> with SingleTickerProv
     await showCupertinoDialog(
       context: context,
       barrierDismissible: true,
-      builder: (_) => AchievementDialog(
+      builder: (_) => HabitProbabilityDialog(
         habit: updatedHabit,
         pointsGained: 10,
         previousScore: previousScore.round(),
@@ -132,7 +132,7 @@ class _HabitWidgetState extends ConsumerState<HabitWidget> with SingleTickerProv
             ),
             orElse: () => widget.habit,
           );
-      final beforeCount = beforeHabit.completions.getCountForDate(today);
+      final beforeCount = beforeHabit.getCountForDate(today);
       final beforeTarget = beforeHabit.dailyTarget <= 0 ? 1 : beforeHabit.dailyTarget;
       final beforeFull = beforeCount >= beforeTarget;
 
@@ -154,7 +154,7 @@ class _HabitWidgetState extends ConsumerState<HabitWidget> with SingleTickerProv
               orElse: () => widget.habit,
             );
         if (!mounted) return;
-        final afterCount = afterHabit.completions.getCountForDate(today);
+        final afterCount = afterHabit.getCountForDate(today);
         final target = afterHabit.dailyTarget <= 0 ? 1 : afterHabit.dailyTarget;
         final afterFull = afterCount >= target;
         if (!beforeFull && afterFull) {
@@ -193,7 +193,7 @@ class _HabitWidgetState extends ConsumerState<HabitWidget> with SingleTickerProv
 
     final habitName = currentHabit.habitName;
     final today = DateTime.now();
-    final count = currentHabit.completions.getCountForDate(today);
+    final count = currentHabit.getCountForDate(today);
     final ratio = currentHabit.dailyTarget > 0 ? (count / currentHabit.dailyTarget).clamp(0.0, 1.0) : 0.0;
     // Update decreasing mode based on current ratio
     if (ratio >= 1.0) {
@@ -203,7 +203,7 @@ class _HabitWidgetState extends ConsumerState<HabitWidget> with SingleTickerProv
     }
     final habitColor = Color(currentHabit.colorCode);
     final emoji = currentHabit.emoji ?? '🎯';
-    final streak = currentHabit.completions.calculateCurrentStreak();
+    final streak = currentHabit.calculateCurrentStreak();
 
     return CustomButton(
       onPressed: _openHabitDetail,

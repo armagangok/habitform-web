@@ -1,65 +1,64 @@
-// import '/core/core.dart';
-// import '../../settings/widgets/setting_item.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-// class LanguageFeature extends StatelessWidget {
-//   const LanguageFeature({
-//     super.key,
-//   });
+import '/core/core.dart';
+import '../../settings/widgets/setting_item.dart';
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return CupertinoListTile(
-//       title: Text(LocaleKeys.settings_language.tr()),
-//       onTap: () {
-//         showCupertinoModalPopup(
-//           context: context,
-//           builder: (context) {
-//             return CupertinoActionSheet(
-//               title: Text(LocaleKeys.settings_language.tr()),
-//               actions: [
-//                 _buildLanguageAction(context, 'en', 'US', "🇬🇧", LocaleKeys.languages_english.tr()),
-//                 _buildLanguageAction(context, 'tr', 'TR', "🇹🇷", LocaleKeys.languages_turkish.tr()),
-//                 _buildLanguageAction(context, 'zh', 'CN', "🇨🇳", LocaleKeys.languages_chinese.tr()),
-//                 _buildLanguageAction(context, 'es', 'ES', "🇪🇸", LocaleKeys.languages_spanish.tr()),
-//                 _buildLanguageAction(context, 'hi', 'IN', "🇮🇳", LocaleKeys.languages_hindi.tr()),
-//                 _buildLanguageAction(context, 'ar', 'SA', "🇸🇦", LocaleKeys.languages_arabic.tr()),
-//                 _buildLanguageAction(context, 'bn', 'BD', "🇧🇩", LocaleKeys.languages_bengali.tr()),
-//                 _buildLanguageAction(context, 'pt', 'BR', "🇧🇷", LocaleKeys.languages_portuguese.tr()),
-//                 _buildLanguageAction(context, 'ru', 'RU', "🇷🇺", LocaleKeys.languages_russian.tr()),
-//                 _buildLanguageAction(context, 'ja', 'JP', "🇯🇵", LocaleKeys.languages_japanese.tr()),
-//                 _buildLanguageAction(context, 'id', 'ID', "🇮🇩", LocaleKeys.languages_indonesian.tr()),
-//               ],
-//               cancelButton: CupertinoActionSheetAction(
-//                 isDestructiveAction: true,
-//                 onPressed: navigator.pop,
-//                 child: Text(LocaleKeys.common_ok.tr()),
-//               ),
-//             );
-//           },
-//         );
-//       },
-//       leading: const SettingLeadingWidget(
-//         iconData: CupertinoIcons.globe,
-//         cardColor: CupertinoColors.systemBlue,
-//       ),
-//       trailing: CupertinoListTileChevron(),
-//     );
-//   }
+class LanguageFeature extends ConsumerWidget {
+  const LanguageFeature({
+    super.key,
+  });
 
-//   Widget _buildLanguageAction(BuildContext context, String languageCode, String countryCode, String flag, String languageName) {
-//     return CupertinoActionSheetAction(
-//       isDefaultAction: context.locale.languageCode == languageCode,
-//       onPressed: () {
-//         context.setLocale(Locale(languageCode, countryCode));
-//       },
-//       child: Row(
-//         mainAxisAlignment: MainAxisAlignment.center,
-//         children: [
-//           Text("$flag "),
-//           Text(languageName),
-//           Text(" $flag"),
-//         ],
-//       ),
-//     );
-//   }
-// }
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return CupertinoListTile(
+      title: Text(LocaleKeys.settings_language.tr()),
+      onTap: () {
+        showCupertinoModalPopup(
+          context: context,
+          builder: (context) {
+            return CupertinoActionSheet(
+              title: Text(LocaleKeys.settings_language.tr()),
+              actions: [
+                _buildLanguageAction(context, 'en', 'US', "🇬🇧", LocaleKeys.languages_english.tr()),
+                _buildLanguageAction(context, 'tr', 'TR', "🇹🇷", LocaleKeys.languages_turkish.tr()),
+                _buildLanguageAction(context, 'zh', 'Hans', "🇨🇳", LocaleKeys.languages_chinese.tr()),
+                _buildLanguageAction(context, 'es', 'ES', "🇪🇸", LocaleKeys.languages_spanish.tr()),
+                _buildLanguageAction(context, 'it', 'IT', "🇮🇹", LocaleKeys.languages_italian.tr()),
+                _buildLanguageAction(context, 'ar', 'SA', "🇸🇦", LocaleKeys.languages_arabic.tr()),
+                _buildLanguageAction(context, 'fi', 'FI', "🇫🇮", LocaleKeys.languages_finnish.tr()),
+                _buildLanguageAction(context, 'ja', 'JP', "🇯🇵", LocaleKeys.languages_japanese.tr()),
+              ],
+              cancelButton: CupertinoActionSheetAction(
+                isDestructiveAction: true,
+                onPressed: navigator.pop,
+                child: Text(LocaleKeys.common_ok.tr()),
+              ),
+            );
+          },
+        );
+      },
+      leading: const SettingLeadingWidget(
+        iconData: CupertinoIcons.globe,
+        cardColor: CupertinoColors.systemBlue,
+      ),
+      trailing: CupertinoListTileChevron(),
+    );
+  }
+
+  Widget _buildLanguageAction(BuildContext context, String languageCode, String countryCode, String flag, String languageName) {
+    return CupertinoActionSheetAction(
+      isDefaultAction: context.locale.languageCode == languageCode,
+      onPressed: () {
+        context.setLocale(Locale(languageCode, countryCode));
+      },
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text("$flag "),
+          Text(languageName),
+          Text(" $flag"),
+        ],
+      ),
+    );
+  }
+}

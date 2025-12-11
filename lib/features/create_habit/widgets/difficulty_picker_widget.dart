@@ -130,7 +130,7 @@ class DifficultyPickerWidget extends ConsumerWidget {
                     ),
                   ),
                   child: Text(
-                    '${diff.estimatedFormationDays}d',
+                    '${diff.estimatedProbabilityDays}d',
                     style: context.labelMedium.copyWith(
                       color: color,
                       fontWeight: FontWeight.w700,

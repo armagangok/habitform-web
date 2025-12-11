@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:habitrise/core/core.dart';
+import 'package:habitform/core/core.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 import '../../../models/completion_entry/completion_entry.dart';

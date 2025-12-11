@@ -86,6 +86,7 @@ final class NotificationHelper {
         priority: Priority.high,
         enableVibration: true,
         icon: 'ic_launcher',
+        largeIcon: const DrawableResourceAndroidBitmap('ic_launcher'),
       );
 
       final NotificationDetails notificationDetails = NotificationDetails(

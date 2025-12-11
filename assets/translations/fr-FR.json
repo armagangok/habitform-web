@@ -58,11 +58,11 @@
         "pages": {
             "small_steps": {
                 "title": "Changez votre vie avec un petit pas.",
-                "description": "Développer de nouvelles habitudes devient plus facile et plus durable quand vous commencez par de petits pas gérables avec HabitRise."
+                "description": "Développer de nouvelles habitudes devient plus facile et plus durable quand vous commencez par de petits pas gérables avec HabitForm."
             },
             "welcome": {
                 "welcome_to": "Bienvenue dans",
-                "app_name": "HabitRise",
+                "app_name": "HabitForm",
                 "build_dream_life": "Construisez votre vie de rêve",
                 "try_tapping": "Essayez d'appuyer sur la carte d'habitude",
                 "just_like_that": "Comme ça !",
@@ -80,11 +80,11 @@
             },
             "routine": {
                 "title": "La routine et la répétition aident les habitudes à prendre racine.",
-                "description": "Établir une routine cohérente et répéter les actions sont la clé pour faire tenir les habitudes avec HabitRise."
+                "description": "Établir une routine cohérente et répéter les actions sont la clé pour faire tenir les habitudes avec HabitForm."
             },
             "patience": {
                 "title": "La patience et la constance aident les habitudes à porter leurs fruits.",
-                "description": "Former une habitude prend du temps ; apprécier le processus est la clé avec HabitRise."
+                "description": "Former une habitude prend du temps ; apprécier le processus est la clé avec HabitForm."
             },
             "bad_habits": {
                 "title": "Briser les mauvaises habitudes est facile. Remplacez-les par de bonnes.",
@@ -97,8 +97,9 @@
             }
         },
         "app_features": {
-            "title": "HabitRise vous aide à...",
+            "title": "HabitForm vous aide à...",
             "subtitle": "Construire des habitudes durables avec un suivi intelligent et des insights personnalisés",
+            "continue": "Continuer",
             "features": {
                 "smart_tracking": {
                     "title": "Suivi intelligent des habitudes",
@@ -114,11 +115,11 @@
                     "sub_features_1": "Décomposition des habitudes",
                     "sub_features_2": "Suivi imbriqué"
                 },
-                "formation_rate": {
-                    "title": "Taux de formation des habitudes",
-                    "description": "Suivez vos progrès de formation d'habitudes avec des insights intelligents. Voyez à quel point vous êtes proche de faire tenir vos habitudes de façon permanente.",
+                "probability_rate": {
+                    "title": "Taux de probabilité des habitudes",
+                    "description": "Suivez vos progrès de probabilité d'habitudes avec des insights intelligents. Voyez à quel point vous êtes proche de faire tenir vos habitudes de façon permanente.",
                     "sub_features_0": "Prédiction de succès",
-                    "sub_features_1": "Suivi de formation",
+                    "sub_features_1": "Suivi de probabilité",
                     "sub_features_2": "Analyses de progrès"
                 },
                 "share_habits": {
@@ -127,9 +128,40 @@
                     "sub_features_0": "Designs personnalisés",
                     "sub_features_1": "Partage de progrès",
                     "sub_features_2": "Images de réussite"
+                },
+                "home_widget": {
+                    "title": "Widget d'Accueil",
+                    "description": "Suivez vos habitudes sans ouvrir l'application. Accomplissez vos objectifs quotidiens directement depuis l'écran d'accueil de votre iPhone en quelques secondes.",
+                    "sub_features_0": "Accès Instantané",
+                    "sub_features_1": "Gagnez du Temps Quotidien",
+                    "sub_features_2": "N'Oubliez Jamais",
+                    "widget_config": {
+                        "small_title": "Suivi d'Habitudes",
+                        "small_description": "Suivez vos habitudes quotidiennes avec compteur de séries",
+                        "medium_title": "Vue d'Habitudes 7 Jours",
+                        "medium_description": "Voir vos progrès d'habitudes au cours des 7 derniers jours",
+                        "large_title": "Carte de Chaleur d'Habitudes",
+                        "large_description": "Carte de chaleur style GitHub montrant votre accomplissement d'habitudes dans le temps",
+                        "grid_title": "Grille d'Habitudes 60 Jours",
+                        "grid_description": "Voir vos progrès d'habitudes au cours des 60 derniers jours dans une grille compacte"
+                    },
+                    "empty_state": {
+                        "no_habits": "Aucune Habitude",
+                        "create_habit_hint": "Créez une habitude dans l'application pour la voir ici"
+                    },
+                    "stats": {
+                        "current_streak": "Série Actuelle",
+                        "longest_streak": "Série la Plus Longue",
+                        "completed": "Terminés",
+                        "total_days": "Jours Totaux",
+                        "days": "jours"
+                    },
+                    "pro_restriction": {
+                        "upgrade_pro": "Passer à PRO"
+                    }
                 }
             },
-            "formation_score": "Score de formation",
+            "probability_score": "Score de formation",
             "previous": "Précédent",
             "next": "Suivant",
             "start": "Commencer"
@@ -154,7 +186,7 @@
                 },
                 "track_progress": {
                     "title": "Suivez vos progrès",
-                    "description": "Surveillez le développement de vos habitudes pour rester motivé. Utilisez HabitRise, des journaux, ou de simples coches. Voir votre série grandir crée de l'élan et de la responsabilité."
+                    "description": "Surveillez le développement de vos habitudes pour rester motivé. Utilisez HabitForm, des journaux, ou de simples coches. Voir votre série grandir crée de l'élan et de la responsabilité."
                 }
             },
             "previous": "Précédent",
@@ -162,15 +194,15 @@
             "get_started": "Commencer"
         },
         "rating": {
-            "title": "Vous venez de découvrir\nles fonctionnalités uniques d'HabitRise",
+            "title": "Vous venez de découvrir\nles fonctionnalités uniques d'HabitForm",
             "description": "Pour nous aider à atteindre plus de personnes qui ont besoin d'aide pour construire de meilleures habitudes, pourriez-vous donner un avis sur notre application ?",
             "thank_you": "Merci !",
-            "feedback_message": "Vos commentaires nous aident à améliorer HabitRise et à atteindre plus de personnes qui ont besoin d'aide pour construire de meilleures habitudes.",
-            "rate_title": "Évaluer HabitRise",
-            "rate_message": "Merci pour votre intérêt à évaluer HabitRise ! Vous pouvez nous évaluer sur l'App Store ou Google Play Store.",
+            "feedback_message": "Vos commentaires nous aident à améliorer HabitForm et à atteindre plus de personnes qui ont besoin d'aide pour construire de meilleures habitudes.",
+            "rate_title": "Évaluer HabitForm",
+            "rate_message": "Merci pour votre intérêt à évaluer HabitForm ! Vous pouvez nous évaluer sur l'App Store ou Google Play Store.",
             "continue": "Continuer",
             "maybe_later": "Peut-être plus tard",
-            "rate_button": "Évaluer HabitRise"
+            "rate_button": "Évaluer HabitForm"
         },
         "achievement": {
             "first_habit_message": "Excellent travail ! Vous avez terminé votre première habitude dans l'intégration !"
@@ -201,7 +233,7 @@
         "achievement_consistency_champion": "Champion de constance",
         "achievement_weekend_warrior": "Guerrier du week-end",
         "achievement_weekly_checkin": "Point hebdomadaire",
-        "achievement_formation_journey": "Voyage de formation",
+        "achievement_probability_journey": "Voyage de formation",
         "milestones": "Étapes importantes",
         "milestone_one_week_warrior": "Guerrier d'une semaine",
         "milestone_monthly_master": "Maître mensuel",
@@ -211,12 +243,12 @@
         "milestone_half_year_hero": "Héros du semestre",
         "milestone_one_year_legend": "Légende d'un an",
         "progress": "Progrès",
-        "formation": "Formation",
-        "achievement_formation_threshold": "Seuil de formation atteint !",
+        "formation": "Probability",
+        "achievement_probability_threshold": "Seuil de formation atteint !",
         "achievement_consistency_description": "Vous performez à {{percentage}}% de votre meilleure série !",
         "achievement_weekend_description": "Vous maintenez une excellente constance même le week-end !",
         "achievement_weekly_description": "Vous avez manqué {{days}} jours cette semaine. Demain est un nouveau départ !",
-        "achievement_formation_description": "Vous êtes à {{percentage}}% de la construction de cette habitude. Les voies neuronales se renforcent !",
+        "achievement_probability_description": "Vous êtes à {{percentage}}% de la construction de cette habitude. Les voies neuronales se renforcent !",
         "quote_aristotle": "L'excellence n'est pas un acte unique, mais une habitude. Vous n'êtes pas ce que vous faites de temps en temps ; vous êtes ce que vous faites de manière constante.",
         "quote_aristotle_author": "Aristote",
         "quote_collier": "Le succès est la somme de petits efforts, répétés jour après jour.",
@@ -254,9 +286,9 @@
         "achievement_perfectionist_description": "Taux de réussite de {{rate}}% !",
         "heatmap_stats_description": "{{days}} jours terminés l'année dernière",
         "last_7_days": "7 derniers jours",
-        "formation_info_title": "Score de formation",
-        "formation_info_description": "Le Score de formation montre la probabilité que votre habitude devienne automatique basée sur votre taux de completion actuel. Des scores plus élevés signifient que votre habitude est plus susceptible de tenir de façon permanente.",
-        "formation_info_details": "Ce score est calculé en utilisant vos modèles de constance et votre taux de completion. La recherche montre qu'il faut en moyenne 66 jours de pratique régulière pour qu'une habitude devienne automatique."
+        "probability_info_title": "Score de formation",
+        "probability_info_description": "Le Score de formation montre la probabilité que votre habitude devienne automatique basée sur votre taux de completion actuel. Des scores plus élevés signifient que votre habitude est plus susceptible de tenir de façon permanente.",
+        "probability_info_details": "Ce score est calculé en utilisant vos modèles de constance et votre taux de completion. La recherche montre qu'il faut en moyenne 66 jours de pratique régulière pour qu'une habitude devienne automatique."
     },
     "habit": {
         "add_habit": "Ajouter une habitude",
@@ -380,7 +412,11 @@
         "no_habits_imported": "Aucune habitude n'a été importée",
         "rc_id": "ID Rc",
         "app_name_habit": "Habit",
-        "app_name_rise": "Rise"
+        "app_name_rise": "Form",
+        "review_request": {
+            "title": "Vous aimez HabitForm ?",
+            "subtitle": "Pour nous aider à atteindre plus de personnes qui ont besoin d'aide pour construire des habitudes, laissez un avis sur HabitForm"
+        }
     },
     "subscription": {
         "subscribe_to": "S'abonner à",
@@ -435,7 +471,7 @@
         "share_text": "Partager le texte"
     },
     "paywall": {
-        "title": "HabitRise Pro",
+        "title": "HabitForm Pro",
         "headline": "Nous devenons\nce que nous faisons de manière répétée.",
         "choose_plan": "Choisissez votre plan",
         "what_you_get": "Ce que vous obtenez",
@@ -455,14 +491,14 @@
         "social_success_rate": "Taux de succès",
         "what_users_saying": "Ce que disent nos utilisateurs",
         "testimonial_1_name": "Sarah M.",
-        "testimonial_1_comment": "HabitRise Pro a complètement transformé ma routine quotidienne. J'ai développé 5 nouvelles habitudes en seulement 2 mois !",
-        "testimonial_1_user_type": "Utilisateur HabitRise Pro",
+        "testimonial_1_comment": "HabitForm Pro a complètement transformé ma routine quotidienne. J'ai développé 5 nouvelles habitudes en seulement 2 mois !",
+        "testimonial_1_user_type": "Utilisateur HabitForm Pro",
         "testimonial_2_name": "Mike C.",
         "testimonial_2_comment": "Les statistiques et les insights sont incroyables. Je peux voir exactement comment je progresse chaque jour.",
-        "testimonial_2_user_type": "Utilisateur HabitRise Pro",
+        "testimonial_2_user_type": "Utilisateur HabitForm Pro",
         "testimonial_3_name": "Emma J.",
         "testimonial_3_comment": "Enfin, une app qui m'aide vraiment à tenir mes objectifs. Les rappels sont parfaitement chronométrés.",
-        "testimonial_3_user_type": "Utilisateur HabitRise Pro"
+        "testimonial_3_user_type": "Utilisateur HabitForm Pro"
     },
     "days": {
         "monday": "Lundi",
@@ -542,6 +578,7 @@
     },
     "membership_info": {
         "title": "Informations d'adhésion",
+        "description": "Appuyez pour voir vos informations d'adhésion",
         "state": "Statut",
         "active": "Actif",
         "inactive": "Inactif",
@@ -559,14 +596,14 @@
         "overview": "Aperçu",
         "no_data_for_habit": "Pas encore de données statistiques",
         "start_tracking_habit": "Commencer à suivre cette habitude",
-        "habit_formation": "Formation des habitudes",
+        "habit_formation": "Habit Probability",
         "completed": "Terminé",
         "total_days": "Total des jours",
         "longest_streak": "Série la plus longue",
         "current_streak": "Série actuelle",
-        "about_formation": "À propos de la formation des habitudes",
+        "about_formation": "About Habit Probability",
         "formation_info": "Le pourcentage ci-dessus montre la probabilité que votre habitude devienne automatique basée sur votre constance actuelle. Des pourcentages plus élevés signifient que votre habitude est plus susceptible de tenir. Selon la recherche, il faut en moyenne 66 jours de pratique régulière pour qu'une habitude devienne automatique.",
-        "formation_status": {
+        "probability_status": {
             "early": "Vous êtes encore dans les premiers stades. Continuez à suivre votre habitude de manière constante pour voir des progrès de formation significatifs.",
             "excellent": "Progrès exceptionnel ! Avec un taux de completion de {percentage}%, votre habitude est très susceptible de devenir automatique.",
             "very_good": "Excellente constance ! Avec un taux de completion de {percentage}%, votre formation d'habitude est sur la bonne voie.",
@@ -574,7 +611,7 @@
             "improving": "Vous faites des progrès. Essayez d'augmenter votre taux de completion pour rendre la formation d'habitude plus probable.",
             "needs_work": "Continuez à travailler sur la constance. Une completion régulière aidera cette habitude à devenir automatique."
         },
-        "formation_time": {
+        "probability_time": {
             "not_enough_data": "Continuez à suivre votre habitude pour voir les progrès de formation.",
             "completed_successful": "Félicitations ! Votre habitude est très probablement établie et automatique.",
             "completed_good": "Excellent travail ! Vous avez terminé la période de formation avec un taux de completion de {percentage}%. Votre habitude est probablement établie.",
@@ -585,11 +622,11 @@
             "demo_data_message": "Ce sont des données de démonstration, mettez à niveau pour débloquer les vraies données",
             "upgrade_button": "Mettre à niveau"
         },
-        "formation_score": "Score de formation",
+        "probability_score": "Score de formation",
         "score_breakdown": "Détail du score",
         "progress_status": "Statut des progrès",
-        "estimated_formation_time": "Temps de formation estimé",
-        "about_formation_title": "À propos de la formation",
+        "estimated_probability_time": "Estimated Probability Time",
+        "about_formation_title": "About Probability",
         "legend_below_60": "En dessous de 60%",
         "legend_needs_work": "Nécessite du travail",
         "legend_60_75": "60-75%",
@@ -619,7 +656,7 @@
     "share_templates": {
         "streak_days": "Série de {days}j",
         "progress_percent": "{percent}% de progrès",
-        "app_name": "HabitRise",
+        "app_name": "HabitForm",
         "current_streak": "Série actuelle",
         "best_streak": "Meilleure série",
         "completed": "Terminé",
@@ -631,7 +668,7 @@
         "this_month": "Ce mois-ci :"
     },
     "csv_service": {
-        "export_subject": "Export HabitRise",
+        "export_subject": "Export HabitForm",
         "select_csv_file": "Sélectionner un fichier CSV",
         "could_not_read_file": "Impossible de lire le fichier",
         "please_select_csv_file": "Veuillez sélectionner un fichier CSV",
@@ -642,8 +679,8 @@
     },
     "permissions": {
         "permission_required": "Permission requise",
-        "storage_permission_message": "HabitRise a besoin de la permission de stockage pour importer et exporter vos données d'habitudes.",
-        "storage_permission_settings_message": "HabitRise a besoin de la permission de stockage pour importer et exporter vos données d'habitudes. Veuillez l'activer dans les paramètres de votre appareil.",
+        "storage_permission_message": "HabitForm a besoin de la permission de stockage pour importer et exporter vos données d'habitudes.",
+        "storage_permission_settings_message": "HabitForm a besoin de la permission de stockage pour importer et exporter vos données d'habitudes. Veuillez l'activer dans les paramètres de votre appareil.",
         "cancel": "Annuler",
         "try_again": "Réessayer",
         "settings": "Paramètres"
@@ -654,7 +691,7 @@
     },
     "purchase_dialog": {
         "pro_required_title": "Vous avez besoin de la version pro pour débloquer cette fonctionnalité",
-        "pro_required_message": "Débloquez HabitRise Pro pour accéder à cette fonctionnalité et à de nombreuses autres fonctionnalités pro !"
+        "pro_required_message": "Débloquez HabitForm Pro pour accéder à cette fonctionnalité et à de nombreuses autres fonctionnalités pro !"
     },
     "habit_category": {
         "title": "Catégorie d'habitude",
@@ -692,6 +729,7 @@
         "good": "Bien",
         "keep_going_status": "Continuez",
         "progress": "Progrès",
+        "habit_probability": "Probabilité d'habitude",
         "continue": "Continuer",
         "habit_fully_formed": "Habitude Entièrement Formée! 🎉",
         "almost_there": "Presque Arrivé! 🔥",
@@ -707,5 +745,18 @@
         "good_work": "Bon travail! Cette habitude {difficulty} nécessite {total} jours au total. {remaining} jours restants! 📈",
         "keep_going_message": "Continuez! La constance est la clé. Cette habitude {difficulty} a besoin de {remaining} jours de plus! 🌱",
         "formation_takes_days": "Cette habitude nécessite {total} jours de pratique constante pour se former"
+    },
+    "languages": {
+        "english": "Anglais",
+        "turkish": "Turc",
+        "chinese": "Chinois",
+        "spanish": "Espagnol",
+        "hindi": "Hindi",
+        "arabic": "Arabe",
+        "finnish": "Finnois",
+        "portuguese": "Portugais",
+        "russian": "Russe",
+        "japanese": "Japonais",
+        "italian": "Italien"
     }
 }

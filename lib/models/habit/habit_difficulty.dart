@@ -57,7 +57,7 @@ extension HabitDifficultyExtension on HabitDifficulty {
 
   /// Returns the estimated formation time in days based on scientific research
   /// Based on Lally et al. (2009) study and complexity factors
-  int get estimatedFormationDays {
+  int get estimatedProbabilityDays {
     switch (this) {
       case HabitDifficulty.veryEasy:
         return 18; // Simple habits form faster

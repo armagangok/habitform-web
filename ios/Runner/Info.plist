@@ -14,7 +14,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>HabitRise</string>
+	<string>HabitForm</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -22,7 +22,7 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>HabitRise</string>
+	<string>HabitForm</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>We need access to your photo library to save habit screenshots and select CSV files for import/export.</string>
 	<key>CFBundlePackageType</key>

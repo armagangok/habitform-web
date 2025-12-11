@@ -16,9 +16,9 @@ class SettingLeadingWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return CupertinoCard(
       color: cardColor,
-      borderRadius: BorderRadius.circular(6),
+      borderRadius: BorderRadius.circular(5),
       child: Padding(
-        padding: EdgeInsets.all(padding ?? 2.5),
+        padding: EdgeInsets.all(padding ?? 2),
         child: Icon(
           iconData,
           color: Colors.white.withValues(alpha: .9),

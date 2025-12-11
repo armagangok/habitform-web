@@ -15,7 +15,10 @@ class ThemeModeFeature extends ConsumerWidget {
         cardColor: Colors.deepOrange,
       ),
       trailing: CupertinoListTileChevron(),
-      title: Text(LocaleKeys.settings_theme.tr()),
+      title: Text(
+        LocaleKeys.settings_theme.tr(),
+        maxLines: 344,
+      ),
       onTap: () {
         showCupertinoModalPopup(
           context: context,

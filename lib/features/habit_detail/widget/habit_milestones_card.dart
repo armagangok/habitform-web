@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '/core/core.dart';
-import '/models/completion_entry/completion_extension.dart';
+import '/models/habit/habit_extension.dart';
 import '/models/models.dart';
 
 class HabitMilestonesCard extends ConsumerWidget {
@@ -16,7 +16,7 @@ class HabitMilestonesCard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final milestones = _getMilestones();
     // Use weighted completed days to drive milestone achievements/highlight (rounded)
-    final totalCompletedDays = habit.completions.calculateWeightedFormationScore(habit.dailyTarget).round();
+    final totalCompletedDays = habit.calculateWeightedFormationScore().round();
     final currentMilestone = _getCurrentMilestone(totalCompletedDays, milestones);
 
     return CupertinoListSection.insetGrouped(
