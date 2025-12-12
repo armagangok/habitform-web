@@ -1,5 +1,3 @@
-import 'dart:math' as math;
-
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -172,18 +170,6 @@ class _CircularHabitWidgetState extends ConsumerState<CircularHabitWidget> with 
                 child: Stack(
                   alignment: Alignment.center,
                   children: [
-                    // Progress ring
-                    if (!isCompleted)
-                      CustomPaint(
-                        size: Size(size - 10, size - 10),
-                        painter: _CircularProgressPainter(
-                          progress: ratio,
-                          color: habitColor,
-                          backgroundColor: habitColor.withValues(alpha: 0.15),
-                          strokeWidth: 4,
-                        ),
-                      ),
-
                     // Emoji
                     Text(
                       emoji,
@@ -296,54 +282,5 @@ class _CircularHabitWidgetState extends ConsumerState<CircularHabitWidget> with 
         ),
       ),
     );
-  }
-}
-
-/// Custom painter for circular progress
-class _CircularProgressPainter extends CustomPainter {
-  final double progress;
-  final Color color;
-  final Color backgroundColor;
-  final double strokeWidth;
-
-  _CircularProgressPainter({
-    required this.progress,
-    required this.color,
-    required this.backgroundColor,
-    required this.strokeWidth,
-  });
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final center = Offset(size.width / 2, size.height / 2);
-    final radius = (size.width - strokeWidth) / 2;
-
-    // Background circle
-    final bgPaint = Paint()
-      ..color = backgroundColor
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = strokeWidth;
-    canvas.drawCircle(center, radius, bgPaint);
-
-    // Progress arc
-    final progressPaint = Paint()
-      ..color = color
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = strokeWidth
-      ..strokeCap = StrokeCap.round;
-
-    final sweepAngle = 2 * math.pi * progress;
-    canvas.drawArc(
-      Rect.fromCircle(center: center, radius: radius),
-      -math.pi / 2,
-      sweepAngle,
-      false,
-      progressPaint,
-    );
-  }
-
-  @override
-  bool shouldRepaint(covariant _CircularProgressPainter oldDelegate) {
-    return oldDelegate.progress != progress || oldDelegate.color != color;
   }
 }
