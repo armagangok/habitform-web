@@ -115,7 +115,7 @@ class _OnboardingWelcomePageState extends State<OnboardingWelcomePage> with Tick
                         emoji: '🏃',
                         title: LocaleKeys.onboarding_pages_welcome_habit_examples_running.tr(),
                         badgeValue: 12,
-                        initial: Offset(-context.width(0.025), context.height(0.09)), // top-left with responsive positioning
+                        initial: Offset(-context.width(0.15), context.height(0.09)), // top-left, adjusted for larger size
                         initialRotation: -0.30,
                         isLeftSide: true,
                         tier: 1, // dock lower-left when stacked
@@ -129,7 +129,7 @@ class _OnboardingWelcomePageState extends State<OnboardingWelcomePage> with Tick
                         emoji: '📚',
                         title: LocaleKeys.onboarding_pages_welcome_habit_examples_read_book.tr(),
                         badgeValue: 21,
-                        initial: Offset(size.width - context.width(0.5) + context.width(0.025), context.height(0.1)), // top-right with responsive positioning
+                        initial: Offset(size.width - context.width(0.65) + context.width(0.15), context.height(0.1)), // top-right, adjusted for larger size
                         initialRotation: 0.4,
                         isLeftSide: false,
                         tier: 0,
@@ -143,7 +143,7 @@ class _OnboardingWelcomePageState extends State<OnboardingWelcomePage> with Tick
                         emoji: '🧘‍♂️',
                         title: LocaleKeys.onboarding_pages_welcome_habit_examples_meditate.tr(),
                         badgeValue: 8,
-                        initial: Offset(-context.width(0.025), size.height - context.height(0.36)), // bottom-left with responsive positioning
+                        initial: Offset(-context.width(0.15), size.height - context.height(0.36)), // bottom-left, adjusted for larger size
                         initialRotation: -0.2,
                         isLeftSide: true,
                         tier: 0, // dock upper-left when stacked
@@ -157,7 +157,7 @@ class _OnboardingWelcomePageState extends State<OnboardingWelcomePage> with Tick
                         emoji: '💧',
                         title: LocaleKeys.onboarding_pages_welcome_habit_examples_drink_water.tr(),
                         badgeValue: 30,
-                        initial: Offset(size.width - context.width(0.5) + context.width(0.025), size.height - context.height(0.36)), // bottom-right with responsive positioning
+                        initial: Offset(size.width - context.width(0.65) + context.width(0.15), size.height - context.height(0.36)), // bottom-right, adjusted for larger size
                         initialRotation: 0.2,
                         isLeftSide: false,
                         tier: 1,
@@ -625,34 +625,34 @@ class _OnboardingWelcomePageState extends State<OnboardingWelcomePage> with Tick
 
   // Responsive docked positions for each card
   Map<String, double> _getDockedPosition(int index, Size screenSize, BuildContext context) {
-    final double cardWidth = context.width(0.5);
+    final double cardWidth = context.width(0.65); // Updated to match new card size
 
     switch (index) {
       case 0: // Running card (left side, lower tier)
         return {
-          'x': -context.width(0.025), // Left side with responsive margin
-          'y': screenSize.height - context.height(0.21), // Bottom area
+          'x': -context.width(0.15), // More to the left to compensate for larger size
+          'y': screenSize.height - context.height(0.25), // Adjusted for larger card
           'rotation': 0.5, // Slight left rotation
           'scale': 0.9, // Slightly smaller
         };
       case 1: // Read Book card (right side, upper tier)
         return {
-          'x': screenSize.width - cardWidth + context.width(0.025), // Right side with responsive margin - taşacak
-          'y': screenSize.height - context.height(0.22), // Bottom area, slightly higher
+          'x': screenSize.width - cardWidth + context.width(0.15), // Right side adjusted for larger size
+          'y': screenSize.height - context.height(0.26), // Bottom area, slightly higher
           'rotation': -0.35, // Slight right rotation
           'scale': 0.92, // Slightly smaller
         };
       case 2: // Meditate card (left side, upper tier)
         return {
-          'x': -context.width(0.025), // Left side with responsive margin
-          'y': screenSize.height - context.height(0.1), // Bottom area, higher than running
+          'x': -context.width(0.15), // More to the left to compensate for larger size
+          'y': screenSize.height - context.height(0.12), // Higher position, adjusted for larger card
           'rotation': 0.15, // Very slight left rotation
           'scale': 0.88, // Smaller
         };
       case 3: // Drink Water card (right side, lower tier)
         return {
-          'x': screenSize.width - cardWidth + context.width(0.025), // Right side with responsive margin - taşacak
-          'y': screenSize.height - context.height(0.1), // Bottom area, lower than read book
+          'x': screenSize.width - cardWidth + context.width(0.15), // Right side adjusted for larger size
+          'y': screenSize.height - context.height(0.12), // Higher position, adjusted for larger card
           'rotation': -0.15, // Very slight right rotation
           'scale': 0.85, // Smallest
         };
