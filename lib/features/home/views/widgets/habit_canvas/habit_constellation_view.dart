@@ -121,8 +121,9 @@ class _HabitConstellationViewState extends ConsumerState<HabitConstellationView>
     final habitsCenterX = (minX + maxX) / 2;
     final habitsCenterY = (minY + maxY) / 2;
 
-    // Use saved scale or default to 1.0
-    final scale = canvasState.scale > 0 ? canvasState.scale : 1.0;
+    // Use current visible scale (from controller) or fallback to saved/default
+    final currentScale = _transformationController.value.getMaxScaleOnAxis();
+    final scale = currentScale > 0 ? currentScale : (canvasState.scale > 0 ? canvasState.scale : 1.0);
 
     // Calculate offset to center habits on screen
     // Screen position = canvas position * scale + offset
@@ -185,8 +186,9 @@ class _HabitConstellationViewState extends ConsumerState<HabitConstellationView>
     final habitsCenterX = (minX + maxX) / 2;
     final habitsCenterY = (minY + maxY) / 2;
 
-    // Use saved scale or default to 1.0
-    final scale = canvasState.scale > 0 ? canvasState.scale : 1.0;
+    // Use current visible scale (from controller) or fallback to saved/default
+    final currentScale = _transformationController.value.getMaxScaleOnAxis();
+    final scale = currentScale > 0 ? currentScale : (canvasState.scale > 0 ? canvasState.scale : 1.0);
 
     // Calculate offset to center habits on screen
     final offsetX = (screenSize.width / 2) - (habitsCenterX * scale);
@@ -203,7 +205,7 @@ class _HabitConstellationViewState extends ConsumerState<HabitConstellationView>
 
   /// Animates the transformation controller to a target matrix
   void _animateToMatrix(Matrix4 targetMatrix) {
-    final currentMatrix = _transformationController.value;
+    final currentMatrix = _transformationController.value.clone();
     final currentScale = currentMatrix.getMaxScaleOnAxis();
     final currentTranslationVec = currentMatrix.getTranslation();
     final currentTranslation = Offset(currentTranslationVec.x, currentTranslationVec.y);
@@ -222,17 +224,75 @@ class _HabitConstellationViewState extends ConsumerState<HabitConstellationView>
       return;
     }
 
+    // Screen center as focal point - keep this point stable during animation
+    final screenCenter = Offset(
+      MediaQuery.of(context).size.width / 2,
+      MediaQuery.of(context).size.height / 2,
+    );
+
+    // Convert screen center to scene coordinates using current matrix
+    // This keeps the focal point stable during animation
+    final inverted = Matrix4.identity()..setFrom(currentMatrix);
+    if (inverted.invert() == 0.0) {
+      // Non-invertible matrix, fallback to simple interpolation
+      final scaleDelta = targetScale - currentScale;
+      final translationDelta = targetTranslation - currentTranslation;
+
+      _zoomAnimationController.reset();
+      _zoomAnimationController.addListener(() {
+        final progress = Curves.easeInOutCubic.transform(_zoomAnimationController.value);
+        final animatedScale = currentScale + (scaleDelta * progress);
+        final animatedTranslation = currentTranslation + (translationDelta * progress);
+
+        final animatedMatrix = Matrix4.identity()
+          ..translateByDouble(animatedTranslation.dx, animatedTranslation.dy, 0.0, 1.0)
+          ..scaleByDouble(animatedScale, animatedScale, 1.0, 1.0);
+
+        _transformationController.value = animatedMatrix;
+      });
+
+      _zoomAnimationController.addStatusListener((status) {
+        if (status == AnimationStatus.completed) {
+          final translation = targetMatrix.getTranslation();
+          ref.read(habitCanvasProvider.notifier).updateScale(targetScale);
+          ref.read(habitCanvasProvider.notifier).updateOffset(translation.x, translation.y);
+        }
+      });
+
+      _zoomAnimationController.forward();
+      return;
+    }
+
+    // Get the scene point that's currently at screen center
+    final scenePoint = MatrixUtils.transformPoint(inverted, screenCenter);
+
+    // Calculate what the target scene point should be (habits center)
+    // We need to find what scene point should be at screen center in target matrix
+    final targetInverted = Matrix4.identity()..setFrom(targetMatrix);
+    Offset targetScenePoint;
+    if (targetInverted.invert() != 0.0) {
+      targetScenePoint = MatrixUtils.transformPoint(targetInverted, screenCenter);
+    } else {
+      // If target matrix is not invertible, use current scene point
+      targetScenePoint = scenePoint;
+    }
+
     final scaleDelta = targetScale - currentScale;
-    final translationDelta = targetTranslation - currentTranslation;
+    final scenePointDelta = targetScenePoint - scenePoint;
 
     _zoomAnimationController.reset();
     _zoomAnimationController.addListener(() {
       final progress = Curves.easeInOutCubic.transform(_zoomAnimationController.value);
       final animatedScale = currentScale + (scaleDelta * progress);
-      final animatedTranslation = currentTranslation + (translationDelta * progress);
+      final animatedScenePoint = scenePoint + (scenePointDelta * progress);
+
+      // Maintain focal point: screenCenter = animatedScenePoint * animatedScale + translation
+      // So: translation = screenCenter - animatedScenePoint * animatedScale
+      final offsetX = screenCenter.dx - (animatedScenePoint.dx * animatedScale);
+      final offsetY = screenCenter.dy - (animatedScenePoint.dy * animatedScale);
 
       final animatedMatrix = Matrix4.identity()
-        ..translateByDouble(animatedTranslation.dx, animatedTranslation.dy, 0.0, 1.0)
+        ..translateByDouble(offsetX, offsetY, 0.0, 1.0)
         ..scaleByDouble(animatedScale, animatedScale, 1.0, 1.0);
 
       _transformationController.value = animatedMatrix;
@@ -241,8 +301,10 @@ class _HabitConstellationViewState extends ConsumerState<HabitConstellationView>
     _zoomAnimationController.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
         // Save final state after animation completes
-        final translation = targetMatrix.getTranslation();
-        ref.read(habitCanvasProvider.notifier).updateScale(targetScale);
+        final finalMatrix = _transformationController.value;
+        final finalScale = finalMatrix.getMaxScaleOnAxis();
+        final translation = finalMatrix.getTranslation();
+        ref.read(habitCanvasProvider.notifier).updateScale(finalScale);
         ref.read(habitCanvasProvider.notifier).updateOffset(translation.x, translation.y);
       }
     });
@@ -677,29 +739,37 @@ class _HabitConstellationViewState extends ConsumerState<HabitConstellationView>
 
   void _animateScale(double targetScale) {
     final clampedScale = targetScale.clamp(0.3, 3.0);
-    final currentMatrix = _transformationController.value;
+    final currentMatrix = _transformationController.value.clone();
     final currentScale = currentMatrix.getMaxScaleOnAxis();
 
     if ((clampedScale - currentScale).abs() < 0.01) return; // Already at target
 
-    final startScale = currentScale;
-    final scaleDelta = clampedScale - startScale;
-
-    final center = Offset(
+    // Screen center as focal point
+    final screenCenter = Offset(
       MediaQuery.of(context).size.width / 2,
       MediaQuery.of(context).size.height / 2,
     );
+
+    // Convert screen center to scene coordinates to keep it stable during scaling
+    final inverted = Matrix4.identity()..setFrom(currentMatrix);
+    if (inverted.invert() == 0.0) return; // Non-invertible matrix, skip
+    final sceneCenter = MatrixUtils.transformPoint(inverted, screenCenter);
+
+    final startScale = currentScale;
+    final scaleDelta = clampedScale - startScale;
 
     _zoomAnimationController.reset();
     _zoomAnimationController.addListener(() {
       final progress = Curves.easeInOutCubic.transform(_zoomAnimationController.value);
       final animatedScale = startScale + (scaleDelta * progress);
-      final scaleFactor = animatedScale / startScale;
 
-      final animatedMatrix = currentMatrix.clone()
-        ..translateByDouble(center.dx, center.dy, 0.0, 1.0)
-        ..scaleByDouble(scaleFactor, scaleFactor, 1.0, 1.0)
-        ..translateByDouble(-center.dx, -center.dy, 0.0, 1.0);
+      // Maintain focal point: screenCenter = sceneCenter * scale + translation
+      final offsetX = screenCenter.dx - (sceneCenter.dx * animatedScale);
+      final offsetY = screenCenter.dy - (sceneCenter.dy * animatedScale);
+
+      final animatedMatrix = Matrix4.identity()
+        ..translateByDouble(offsetX, offsetY, 0.0, 1.0)
+        ..scaleByDouble(animatedScale, animatedScale, 1.0, 1.0);
 
       _transformationController.value = animatedMatrix;
     });
@@ -707,9 +777,10 @@ class _HabitConstellationViewState extends ConsumerState<HabitConstellationView>
     _zoomAnimationController.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
         // Save final state after animation completes
-        ref.read(habitCanvasProvider.notifier).updateScale(clampedScale);
         final finalMatrix = _transformationController.value;
+        final finalScale = finalMatrix.getMaxScaleOnAxis();
         final translation = finalMatrix.getTranslation();
+        ref.read(habitCanvasProvider.notifier).updateScale(finalScale);
         ref.read(habitCanvasProvider.notifier).updateOffset(translation.x, translation.y);
       }
     });
