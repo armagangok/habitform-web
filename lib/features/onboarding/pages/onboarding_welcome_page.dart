@@ -115,7 +115,7 @@ class _OnboardingWelcomePageState extends State<OnboardingWelcomePage> with Tick
                         emoji: '🏃',
                         title: LocaleKeys.onboarding_pages_welcome_habit_examples_running.tr(),
                         badgeValue: 12,
-                        initial: Offset(-context.width(0.15), context.height(0.09)), // top-left, adjusted for larger size
+                        initial: Offset(-context.width(0.125), context.height(0.1)), // top-left, adjusted for larger size
                         initialRotation: -0.30,
                         isLeftSide: true,
                         tier: 1, // dock lower-left when stacked
@@ -129,7 +129,7 @@ class _OnboardingWelcomePageState extends State<OnboardingWelcomePage> with Tick
                         emoji: '📚',
                         title: LocaleKeys.onboarding_pages_welcome_habit_examples_read_book.tr(),
                         badgeValue: 21,
-                        initial: Offset(size.width - context.width(0.65) + context.width(0.15), context.height(0.1)), // top-right, adjusted for larger size
+                        initial: Offset(size.width - context.width(0.725) + context.width(0.15), context.height(0.1)), // top-right, adjusted for larger size
                         initialRotation: 0.4,
                         isLeftSide: false,
                         tier: 0,
@@ -157,7 +157,7 @@ class _OnboardingWelcomePageState extends State<OnboardingWelcomePage> with Tick
                         emoji: '💧',
                         title: LocaleKeys.onboarding_pages_welcome_habit_examples_drink_water.tr(),
                         badgeValue: 30,
-                        initial: Offset(size.width - context.width(0.65) + context.width(0.15), size.height - context.height(0.36)), // bottom-right, adjusted for larger size
+                        initial: Offset(size.width - context.width(0.725) + context.width(0.15), size.height - context.height(0.36)), // bottom-right, adjusted for larger size
                         initialRotation: 0.2,
                         isLeftSide: false,
                         tier: 1,
@@ -295,7 +295,7 @@ class _OnboardingWelcomePageState extends State<OnboardingWelcomePage> with Tick
                   // Center-step instruction (below the card area)
                   if (_currentStep == OnboardingStep.exerciseCardInCenter && !_isCenterCardCompleted)
                     Positioned(
-                      top: context.dynamicHeight / 2 + context.height(0.12), // Position below the center card (card height/2 + 15 padding)
+                      top: context.dynamicHeight / 2 + context.height(0.035), // Position below the center card (card height/2 + 15 padding)
                       left: 0,
                       right: 0,
                       child: AnimatedOpacity(
@@ -318,7 +318,7 @@ class _OnboardingWelcomePageState extends State<OnboardingWelcomePage> with Tick
                   // "Just like that!" text above the card
                   if (_showMotivationalMessage)
                     Positioned(
-                      top: MediaQuery.of(context).size.height / 2 - context.height(0.25), // Position well above the center card
+                      top: MediaQuery.of(context).size.height / 2 - context.height(0.3), // Position well above the center card
                       left: 0,
                       right: 0,
                       child: AnimatedOpacity(
@@ -377,7 +377,7 @@ class _OnboardingWelcomePageState extends State<OnboardingWelcomePage> with Tick
                   // Congratulations messages below the card
                   if (_showMotivationalMessage)
                     Positioned(
-                      top: (MediaQuery.of(context).size.height + context.width(0.5)) / 2, // Position below the center card (card bottom + padding)
+                      top: (MediaQuery.of(context).size.height + context.width(0.2)) / 2, // Position below the center card (card bottom + padding)
                       left: 0,
                       right: 0,
                       child: AnimatedOpacity(
@@ -630,15 +630,15 @@ class _OnboardingWelcomePageState extends State<OnboardingWelcomePage> with Tick
     switch (index) {
       case 0: // Running card (left side, lower tier)
         return {
-          'x': -context.width(0.15), // More to the left to compensate for larger size
-          'y': screenSize.height - context.height(0.25), // Adjusted for larger card
+          'x': -context.width(0.1), // More to the left to compensate for larger size
+          'y': screenSize.height - context.height(0.265), // Adjusted for larger card
           'rotation': 0.5, // Slight left rotation
           'scale': 0.9, // Slightly smaller
         };
       case 1: // Read Book card (right side, upper tier)
         return {
-          'x': screenSize.width - cardWidth + context.width(0.15), // Right side adjusted for larger size
-          'y': screenSize.height - context.height(0.26), // Bottom area, slightly higher
+          'x': screenSize.width - cardWidth + context.width(0.1), // Right side adjusted for larger size
+          'y': screenSize.height - context.height(0.25), // Bottom area, slightly higher
           'rotation': -0.35, // Slight right rotation
           'scale': 0.92, // Slightly smaller
         };
@@ -756,9 +756,11 @@ class _OnboardingWelcomePageState extends State<OnboardingWelcomePage> with Tick
                                 }
                               : {},
                         ),
-                        showName: true,
+                        showName: false, // Hide habit name in onboarding
                         isCompleted: _isCenterCardCompleted,
                         onTap: _onCenterCardTap,
+                        showCompleteButton: true, // Show complete button
+                        enableCompleteButton: false, // But make it non-tappable
                       ),
                     ),
                   ),
@@ -786,21 +788,23 @@ class _OnboardingWelcomePageState extends State<OnboardingWelcomePage> with Tick
           child: SizedBox(
             width: cardSize.width,
             height: cardSize.height,
-            child: Center(
-              child: CircularHabitPreviewWidget(
-                habit: Habit(
-                  id: 'onboarding_$index',
-                  habitName: title,
-                  emoji: emoji,
-                  colorCode: accent.value,
-                  difficulty: HabitDifficulty.moderate,
-                  dailyTarget: 1,
-                  completions: {},
-                ),
-                showName: true,
-                isCompleted: false,
+          child: Center(
+            child: CircularHabitPreviewWidget(
+              habit: Habit(
+                id: 'onboarding_$index',
+                habitName: title,
+                emoji: emoji,
+                colorCode: accent.value,
+                difficulty: HabitDifficulty.moderate,
+                dailyTarget: 1,
+                completions: {},
               ),
+              showName: false, // Hide habit name in onboarding
+              isCompleted: false,
+              showCompleteButton: true, // Show complete button
+              enableCompleteButton: false, // But make it non-tappable
             ),
+          ),
           ),
         ),
       ),

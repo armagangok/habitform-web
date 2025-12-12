@@ -11,6 +11,8 @@ class CircularHabitPreviewWidget extends StatefulWidget {
   final bool showName;
   final bool isCompleted;
   final VoidCallback? onTap;
+  final bool showCompleteButton; // Show complete button even in preview mode
+  final bool enableCompleteButton; // Enable/disable complete button interaction
 
   const CircularHabitPreviewWidget({
     super.key,
@@ -18,6 +20,8 @@ class CircularHabitPreviewWidget extends StatefulWidget {
     this.showName = true,
     this.isCompleted = false,
     this.onTap,
+    this.showCompleteButton = false,
+    this.enableCompleteButton = true,
   });
 
   @override
@@ -82,20 +86,22 @@ class _CircularHabitPreviewWidgetState extends State<CircularHabitPreviewWidget>
   Widget build(BuildContext context) {
     // Use CircularHabitWidget with useProvider=false to avoid provider dependency
     // Scale up for better visibility in preview (onboarding, etc.)
-    final double scale = 1.75; // 30% larger for preview
+    final double scale = 1.95; // 30% larger for preview
     return GestureDetector(
       onTap: widget.onTap ?? _handleTap,
       behavior: HitTestBehavior.opaque,
       child: Transform.scale(
         scale: scale,
-        child: CircularHabitWidget(
-          habit: _currentHabit,
-          showName: widget.showName,
-          isSelected: false,
-          isDragging: false,
-          isConnecting: false,
-          useProvider: false, // Don't use provider for preview
-        ),
+      child: CircularHabitWidget(
+        habit: _currentHabit,
+        showName: widget.showName,
+        isSelected: false,
+        isDragging: false,
+        isConnecting: false,
+        useProvider: false, // Don't use provider for preview
+        showCompleteButton: widget.showCompleteButton,
+        enableCompleteButton: widget.enableCompleteButton,
+      ),
       ),
     );
   }
