@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '/core/core.dart';
 import '/models/habit/habit_extension.dart';
 import '/models/habit/habit_model.dart';
+import '../../../components/habit_probability_dialog.dart';
 import '../../../provider/home_provider.dart';
 
 /// Circular habit item for the constellation view
@@ -58,7 +59,7 @@ class _CircularHabitWidgetState extends ConsumerState<CircularHabitWidget> with 
 
     final today = DateTime.now();
     final homeNotifier = ref.read(homeProvider.notifier);
-    final currentHabit = ref.read(homeProvider).maybeWhen(
+    final beforeHabit = ref.read(homeProvider).maybeWhen(
           data: (homeState) => homeState.habits.firstWhere(
             (h) => h.id == widget.habit.id,
             orElse: () => widget.habit,
@@ -66,17 +67,69 @@ class _CircularHabitWidgetState extends ConsumerState<CircularHabitWidget> with 
           orElse: () => widget.habit,
         );
 
-    final count = currentHabit.getCountForDate(today);
-    final target = currentHabit.dailyTarget <= 0 ? 1 : currentHabit.dailyTarget;
-    final isCompleted = count >= target;
+    final beforeCount = beforeHabit.getCountForDate(today);
+    final beforeTarget = beforeHabit.dailyTarget <= 0 ? 1 : beforeHabit.dailyTarget;
+    final beforeFull = beforeCount >= beforeTarget;
 
     await homeNotifier.adjustHabitCompletion(
       widget.habit.id,
       today,
-      increment: !isCompleted,
+      increment: !beforeFull,
     );
 
+    await Future<void>.delayed(const Duration(milliseconds: 50));
+    if (!mounted) return;
+
+    try {
+      final afterHabit = ref.read(homeProvider).maybeWhen(
+            data: (homeState) => homeState.habits.firstWhere(
+              (h) => h.id == widget.habit.id,
+              orElse: () => widget.habit,
+            ),
+            orElse: () => widget.habit,
+          );
+      if (!mounted) return;
+      final afterCount = afterHabit.getCountForDate(today);
+      final afterTarget = afterHabit.dailyTarget <= 0 ? 1 : afterHabit.dailyTarget;
+      final afterFull = afterCount >= afterTarget;
+
+      // Show achievement dialog when habit is newly completed
+      if (!beforeFull && afterFull) {
+        await _showAchievementIfEarned(previousHabit: beforeHabit, updatedHabit: afterHabit);
+      }
+    } catch (e) {
+      LogHelper.shared.debugPrint('Achievement dialog error: $e');
+    }
+
     widget.onComplete?.call();
+  }
+
+  double _getProgressPercentage(Habit habit) {
+    return habit.calculateWeightedProgressPercentageFromFirstCompletion();
+  }
+
+  Future<void> _showAchievementIfEarned({required Habit previousHabit, required Habit updatedHabit}) async {
+    if (!mounted) return;
+
+    final previousScore = _getProgressPercentage(previousHabit);
+    final newScore = _getProgressPercentage(updatedHabit);
+
+    if (!mounted) return;
+
+    await Future.delayed(const Duration(milliseconds: 500));
+    if (!mounted) return;
+
+    await showCupertinoDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (_) => HabitProbabilityDialog(
+        habit: updatedHabit,
+        pointsGained: 10,
+        previousScore: previousScore.round(),
+        newScore: newScore.round(),
+        message: 'Nice! You completed today. Keep the streak going! 🔥',
+      ),
+    );
   }
 
   @override
@@ -117,168 +170,169 @@ class _CircularHabitWidgetState extends ConsumerState<CircularHabitWidget> with 
         final dragScale = widget.isDragging ? 1.15 : 1.0;
         return Transform.scale(scale: scale * dragScale, child: child);
       },
-      child: AnimatedOpacity(
-        duration: const Duration(milliseconds: 200),
-        opacity: widget.isDragging ? 0.9 : 1.0,
-        child: SizedBox(
-          width: size + 20,
-          height: size + 60,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              // Main circular item
-              AnimatedContainer(
-                duration: const Duration(milliseconds: 200),
-                width: size,
-                height: size,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: isDark ? CupertinoColors.systemGrey6.darkColor : Colors.white,
-                  border: Border.all(
-                    color: widget.isSelected || widget.isDragging
-                        ? habitColor
-                        : widget.isConnecting
-                            ? habitColor
-                            : isCompleted
-                                ? habitColor
-                                : habitColor.withValues(alpha: 0.4),
-                    width: widget.isSelected || widget.isDragging ? 3.5 : 2.5,
-                  ),
-                  boxShadow: [
-                    if (widget.isDragging) ...[
-                      BoxShadow(
-                        color: habitColor.withValues(alpha: 0.4),
-                        blurRadius: 20,
-                        spreadRadius: 4,
-                      ),
-                    ] else if (isCompleted) ...[
-                      BoxShadow(
-                        color: habitColor.withValues(alpha: 0.25),
-                        blurRadius: 16,
-                        spreadRadius: 2,
-                      ),
-                    ] else ...[
-                      BoxShadow(
-                        color: Colors.black.withValues(alpha: isDark ? 0.4 : 0.12),
-                        blurRadius: 10,
-                        spreadRadius: 0,
-                        offset: const Offset(0, 4),
-                      ),
-                    ],
-                  ],
+      child: SizedBox(
+        width: size + 20,
+        height: size + 60,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // Main circular item
+            AnimatedContainer(
+              duration: const Duration(milliseconds: 350),
+              width: size,
+              height: size,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: isDark ? CupertinoColors.systemGrey6.darkColor : Colors.white,
+                border: Border.all(
+                  color: widget.isSelected || widget.isDragging
+                      ? habitColor
+                      : widget.isConnecting
+                          ? habitColor
+                          : isCompleted
+                              ? habitColor
+                              : habitColor.withValues(alpha: 0.7),
+                  width: widget.isSelected || widget.isDragging ? 3.5 : 2.5,
                 ),
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    // Emoji
-                    Text(
-                      emoji,
-                      style: TextStyle(fontSize: isCompleted ? 38 : 34),
+                boxShadow: [
+                  if (widget.isDragging) ...[
+                    BoxShadow(
+                      color: habitColor.withValues(alpha: 0.4),
+                      blurRadius: 20,
+                      spreadRadius: 4,
                     ),
+                  ] else if (isCompleted) ...[
+                    BoxShadow(
+                      color: habitColor.withValues(alpha: 0.25),
+                      blurRadius: 16,
+                      spreadRadius: 2,
+                    ),
+                  ] else ...[
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: isDark ? 0.4 : 0.12),
+                      blurRadius: 10,
+                      spreadRadius: 0,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
+                ],
+              ),
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  // Emoji
+                  Text(
+                    emoji,
+                    style: TextStyle(
+                      fontSize: 38,
+                      fontFeatures: [
+                        FontFeature.tabularFigures(),
+                      ],
+                    ),
+                  ),
 
-                    // Streak badge (top right)
-                    if (streak > 0)
-                      Positioned(
-                        top: 0,
-                        right: 0,
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
-                          decoration: BoxDecoration(
-                            color: habitColor,
-                            borderRadius: BorderRadius.circular(12),
-                            boxShadow: [
-                              BoxShadow(
-                                color: habitColor.withValues(alpha: 0.5),
-                                blurRadius: 6,
-                                offset: const Offset(0, 2),
-                              ),
-                            ],
+                  // Streak badge (top right)
+                  // if (streak > 0)
+                  Positioned(
+                    top: 0,
+                    right: 0,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+                      decoration: BoxDecoration(
+                        color: habitColor,
+                        borderRadius: BorderRadius.circular(12),
+                        boxShadow: [
+                          BoxShadow(
+                            color: habitColor.withValues(alpha: 0.25),
+                            blurRadius: 6,
+                            offset: const Offset(0, 2),
                           ),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              const Icon(
-                                CupertinoIcons.flame_fill,
-                                size: 11,
-                                color: Colors.white,
-                              ),
-                              const SizedBox(width: 2),
-                              Text(
-                                '$streak',
-                                style: const TextStyle(
-                                  fontSize: 11,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
+                        ],
                       ),
-
-                    // Complete button (bottom right)
-                    Positioned(
-                      bottom: 0,
-                      right: 0,
-                      child: GestureDetector(
-                        behavior: HitTestBehavior.opaque,
-                        onTap: _toggleCompletion,
-                        child: AnimatedContainer(
-                          duration: const Duration(milliseconds: 250),
-                          width: 28,
-                          height: 28,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: isCompleted ? habitColor : Colors.transparent,
-                            border: Border.all(
-                              color: habitColor,
-                              width: 2.5,
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            CupertinoIcons.flame_fill,
+                            size: 12,
+                            color: habitColor.colorRegardingToBrightness,
+                          ),
+                          const SizedBox(width: 2),
+                          Text(
+                            '$streak',
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                              color: habitColor.colorRegardingToBrightness,
                             ),
-                            boxShadow: isCompleted
-                                ? [
-                                    BoxShadow(
-                                      color: habitColor.withValues(alpha: 0.5),
-                                      blurRadius: 8,
-                                      spreadRadius: 1,
-                                    ),
-                                  ]
-                                : null,
                           ),
-                          child: Icon(
-                            isCompleted ? CupertinoIcons.checkmark : CupertinoIcons.plus,
-                            size: 16,
-                            color: isCompleted ? Colors.white : habitColor,
+                        ],
+                      ),
+                    ),
+                  ),
+
+                  // Complete button (bottom right)
+                  Positioned(
+                    bottom: 0,
+                    right: 0,
+                    child: GestureDetector(
+                      behavior: HitTestBehavior.opaque,
+                      onTap: _toggleCompletion,
+                      child: AnimatedContainer(
+                        duration: const Duration(milliseconds: 350),
+                        width: 28,
+                        height: 28,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: habitColor,
+                          border: Border.all(
+                            color: habitColor,
+                            width: 2.5,
                           ),
+                          boxShadow: isCompleted
+                              ? [
+                                  BoxShadow(
+                                    color: habitColor.withValues(alpha: 0.25),
+                                    blurRadius: 8,
+                                    spreadRadius: 1,
+                                  ),
+                                ]
+                              : null,
+                        ),
+                        child: Icon(
+                          isCompleted ? CupertinoIcons.checkmark : CupertinoIcons.plus,
+                          size: 17,
+                          color: habitColor.colorRegardingToBrightness,
                         ),
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
+            ),
 
-              const SizedBox(height: 8),
+            const SizedBox(height: 8),
 
-              // Habit name (with animation support)
-              AnimatedOpacity(
-                duration: const Duration(milliseconds: 300),
-                opacity: widget.showName ?? true ? 1.0 : 0.0,
-                child: SizedBox(
-                  width: size + 20,
-                  child: Text(
-                    currentHabit.habitName,
-                    textAlign: TextAlign.center,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: context.labelSmall.copyWith(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 11,
-                      color: isDark ? Colors.white70 : Colors.black87,
-                    ),
+            // Habit name (with animation support)
+            AnimatedOpacity(
+              duration: const Duration(milliseconds: 350),
+              opacity: widget.showName ?? true ? 1.0 : 0.0,
+              child: SizedBox(
+                width: size + 20,
+                child: Text(
+                  currentHabit.habitName,
+                  textAlign: TextAlign.center,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: context.labelSmall.copyWith(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 11,
+                    color: isDark ? Colors.white70 : Colors.black87,
                   ),
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
