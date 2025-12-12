@@ -4,7 +4,7 @@ import '../../../../core/core.dart';
 import '../../../../models/habit/habit_model.dart';
 import '../../../habit_color/color_picker_widget.dart';
 import '../../../habit_color/provider/habit_color_provider.dart';
-import '../../../home/views/widgets/habit_widget.dart';
+import '../../../home/views/widgets/habit_canvas/circular_habit_preview_widget.dart';
 import '../../models/create_habit_state.dart';
 import '../../provider/create_habit_provider.dart';
 import 'base_step_widget.dart';
@@ -94,8 +94,8 @@ class _ColorStepState extends ConsumerState<ColorStep> {
                 const SizedBox(height: 12),
                 SizedBox(
                   height: 180,
-                  child: AbsorbPointer(
-                    child: HabitWidget(
+                  child: Center(
+                    child: CircularHabitPreviewWidget(
                       habit: Habit(
                         id: '1',
                         habitName: habitName.isEmpty ? LocaleKeys.create_habit_preview_your_habit.tr() : habitName,
@@ -103,6 +103,7 @@ class _ColorStepState extends ConsumerState<ColorStep> {
                         emoji: selectedIcon ?? '',
                         colorCode: selectedColor ?? context.primaryContrastingColor.value,
                       ),
+                      showName: true,
                     ),
                   ),
                 ),

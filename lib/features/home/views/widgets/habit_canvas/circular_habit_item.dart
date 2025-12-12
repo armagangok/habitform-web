@@ -15,6 +15,7 @@ class CircularHabitWidget extends ConsumerStatefulWidget {
   final bool isConnecting;
   final VoidCallback? onComplete;
   final bool? showName;
+  final bool useProvider; // If false, uses widget.habit directly without provider
 
   const CircularHabitWidget({
     super.key,
@@ -24,6 +25,7 @@ class CircularHabitWidget extends ConsumerStatefulWidget {
     this.isConnecting = false,
     this.onComplete,
     this.showName,
+    this.useProvider = true, // Default to true for backward compatibility
   });
 
   @override
@@ -134,13 +136,16 @@ class _CircularHabitWidgetState extends ConsumerState<CircularHabitWidget> with 
 
   @override
   Widget build(BuildContext context) {
-    final currentHabit = ref.watch(homeProvider).maybeWhen(
-          data: (homeState) => homeState.habits.firstWhere(
-            (h) => h.id == widget.habit.id,
-            orElse: () => widget.habit,
-          ),
-          orElse: () => widget.habit,
-        );
+    // Use provider if enabled, otherwise use widget.habit directly
+    final currentHabit = widget.useProvider
+        ? ref.watch(homeProvider).maybeWhen(
+              data: (homeState) => homeState.habits.firstWhere(
+                (h) => h.id == widget.habit.id,
+                orElse: () => widget.habit,
+              ),
+              orElse: () => widget.habit,
+            )
+        : widget.habit;
 
     final today = DateTime.now();
     final count = currentHabit.getCountForDate(today);
@@ -271,42 +276,43 @@ class _CircularHabitWidgetState extends ConsumerState<CircularHabitWidget> with 
                     ),
                   ),
 
-                  // Complete button (bottom right)
-                  Positioned(
-                    bottom: 0,
-                    right: 0,
-                    child: GestureDetector(
-                      behavior: HitTestBehavior.opaque,
-                      onTap: _toggleCompletion,
-                      child: AnimatedContainer(
-                        duration: const Duration(milliseconds: 350),
-                        width: 28,
-                        height: 28,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: habitColor,
-                          border: Border.all(
+                  // Complete button (bottom right) - only show if interactive
+                  if (widget.useProvider)
+                    Positioned(
+                      bottom: 0,
+                      right: 0,
+                      child: GestureDetector(
+                        behavior: HitTestBehavior.opaque,
+                        onTap: _toggleCompletion,
+                        child: AnimatedContainer(
+                          duration: const Duration(milliseconds: 350),
+                          width: 28,
+                          height: 28,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
                             color: habitColor,
-                            width: 2.5,
+                            border: Border.all(
+                              color: habitColor,
+                              width: 2.5,
+                            ),
+                            boxShadow: isCompleted
+                                ? [
+                                    BoxShadow(
+                                      color: habitColor.withValues(alpha: 0.25),
+                                      blurRadius: 8,
+                                      spreadRadius: 1,
+                                    ),
+                                  ]
+                                : null,
                           ),
-                          boxShadow: isCompleted
-                              ? [
-                                  BoxShadow(
-                                    color: habitColor.withValues(alpha: 0.25),
-                                    blurRadius: 8,
-                                    spreadRadius: 1,
-                                  ),
-                                ]
-                              : null,
-                        ),
-                        child: Icon(
-                          isCompleted ? CupertinoIcons.checkmark : CupertinoIcons.plus,
-                          size: 17,
-                          color: habitColor.colorRegardingToBrightness,
+                          child: Icon(
+                            isCompleted ? CupertinoIcons.checkmark : CupertinoIcons.plus,
+                            size: 17,
+                            color: habitColor.colorRegardingToBrightness,
+                          ),
                         ),
                       ),
                     ),
-                  ),
                 ],
               ),
             ),

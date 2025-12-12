@@ -66,17 +66,17 @@ class ConnectionPainter extends CustomPainter {
     // Main line paint
     final linePaint = Paint()
       ..shader = gradient
-      ..strokeWidth = 3
+      ..strokeWidth = 1.5
       ..style = PaintingStyle.stroke
       ..strokeCap = StrokeCap.round;
 
     // Glow paint
     final glowPaint = Paint()
       ..shader = gradient
-      ..strokeWidth = 8
+      ..strokeWidth = 1.5
       ..style = PaintingStyle.stroke
       ..strokeCap = StrokeCap.round
-      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 10);
+      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 2);
 
     // Calculate control points for curved line
     final midX = (start.dx + end.dx) / 2;
