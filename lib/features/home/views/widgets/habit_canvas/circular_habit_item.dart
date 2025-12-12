@@ -13,6 +13,7 @@ class CircularHabitWidget extends ConsumerStatefulWidget {
   final bool isSelected;
   final bool isDragging;
   final bool isConnecting;
+  
   final VoidCallback? onComplete;
   final bool? showName;
   final bool useProvider; // If false, uses widget.habit directly without provider

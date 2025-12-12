@@ -8,6 +8,7 @@ import '../../../models/completion_entry/completion_entry.dart';
 import '../../../models/habit/habit_difficulty.dart';
 import '../../../models/habit/habit_model.dart';
 import '../../home/components/habit_probability_dialog.dart';
+import '../../home/views/widgets/habit_canvas/circular_habit_preview_widget.dart';
 import '../enum/onboarding_step_enum.dart';
 
 /// Onboarding - Welcome page
@@ -732,15 +733,34 @@ class _OnboardingWelcomePageState extends State<OnboardingWelcomePage> with Tick
                 angle: rotation,
                 child: Transform.scale(
                   scale: scale,
-                  child: _HabitCard(
-                    size: cardSize,
-                    background: color,
-                    accent: accent,
-                    emoji: emoji,
-                    title: title,
-                    badgeValue: _runningStreak, // Use dynamic streak value
-                    isCompleted: _isCenterCardCompleted,
-                    onTap: _onCenterCardTap, // Pass onTap to card
+                  child: SizedBox(
+                    width: cardSize.width,
+                    height: cardSize.height,
+                    child: Center(
+                      child: CircularHabitPreviewWidget(
+                        habit: Habit(
+                          id: 'onboarding_$index',
+                          habitName: title,
+                          emoji: emoji,
+                          colorCode: accent.value,
+                          difficulty: HabitDifficulty.moderate,
+                          dailyTarget: 1,
+                          completions: _isCenterCardCompleted
+                              ? {
+                                  DateTime.now().toIso8601String(): CompletionEntry(
+                                    id: DateTime.now().toIso8601String(),
+                                    date: DateTime.now(),
+                                    count: 1,
+                                    isCompleted: true,
+                                  ),
+                                }
+                              : {},
+                        ),
+                        showName: true,
+                        isCompleted: _isCenterCardCompleted,
+                        onTap: _onCenterCardTap,
+                      ),
+                    ),
                   ),
                 ),
               ),
@@ -763,14 +783,24 @@ class _OnboardingWelcomePageState extends State<OnboardingWelcomePage> with Tick
         angle: rotation,
         child: Transform.scale(
           scale: scale,
-          child: _HabitCard(
-            size: cardSize,
-            background: color,
-            accent: accent,
-            emoji: emoji,
-            title: title,
-            badgeValue: badgeValue,
-            isCompleted: false,
+          child: SizedBox(
+            width: cardSize.width,
+            height: cardSize.height,
+            child: Center(
+              child: CircularHabitPreviewWidget(
+                habit: Habit(
+                  id: 'onboarding_$index',
+                  habitName: title,
+                  emoji: emoji,
+                  colorCode: accent.value,
+                  difficulty: HabitDifficulty.moderate,
+                  dailyTarget: 1,
+                  completions: {},
+                ),
+                showName: true,
+                isCompleted: false,
+              ),
+            ),
           ),
         ),
       ),
@@ -830,125 +860,6 @@ class _BottomCtaButton extends StatelessWidget {
                     size: iconSize,
                     color: theme.colorScheme.onSurface.withValues(alpha: 0.92),
                   ),
-                ),
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _HabitCard extends StatelessWidget {
-  const _HabitCard({
-    required this.size,
-    required this.background,
-    required this.accent,
-    required this.emoji,
-    required this.title,
-    required this.badgeValue,
-    this.isCompleted = false,
-    this.onTap,
-  });
-
-  final Size size;
-  final Color background;
-  final Color accent;
-  final String emoji;
-  final String title;
-  final int badgeValue;
-  final bool isCompleted;
-  final VoidCallback? onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final Color habitColor = accent;
-
-    // Responsive sizing for card elements
-    final double emojiSize = context.width(0.15); // 35% of card width
-    final double iconSize = context.width(0.05); // 14% of card width
-    final double completionIconSize = context.width(0.14); // 14% of card width
-    final double borderRadius = context.width(0.08); // 10% of card width
-    final double borderWidth = context.width(0.01); // 1% of card width
-
-    return GestureDetector(
-      behavior: HitTestBehavior.opaque,
-      onTap: onTap,
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(borderRadius),
-        child: CupertinoButton(
-          onPressed: onTap,
-          padding: EdgeInsets.zero,
-          child: CustomBlurWidget(
-            child: Container(
-              width: size.width,
-              height: size.height,
-              decoration: BoxDecoration(
-                color: habitColor.withValues(alpha: 0.10),
-                borderRadius: BorderRadius.circular(borderRadius),
-                border: Border.all(color: habitColor.withValues(alpha: 0.35), width: borderWidth),
-              ),
-              child: Padding(
-                padding: context.padding(0.03), // 8% of screen width as padding
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    // Top row: emoji + streak
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
-                          width: emojiSize,
-                          height: emojiSize,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: habitColor.withValues(alpha: 0.12),
-                            border: Border.all(color: habitColor.withValues(alpha: 0.25)),
-                          ),
-                          child: Center(child: Text(emoji, style: TextStyle(fontSize: emojiSize * 0.5))),
-                        ),
-                        Container(
-                          padding: context.symmetricPadding(horizontal: 0.02, vertical: 0.01), // Responsive padding
-                          decoration: BoxDecoration(
-                            color: habitColor.withValues(alpha: 0.18),
-                            borderRadius: BorderRadius.circular(context.width(0.12)), // 12% of card width
-                            border: Border.all(color: habitColor.withValues(alpha: 0.25)),
-                          ),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Icon(CupertinoIcons.flame_fill, size: iconSize, color: habitColor),
-                              SizedBox(width: context.width(0.03)), // 3% of screen width
-                              Text('$badgeValue', style: context.bodyMedium.copyWith(fontWeight: FontWeight.w700, color: habitColor)),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                    // Bottom row: name + completion icon
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(
-                          child: Text(
-                            title,
-                            maxLines: null,
-                            style: context.titleLarge.copyWith(fontWeight: FontWeight.w700),
-                          ),
-                        ),
-                        AnimatedSwitcher(
-                          duration: const Duration(milliseconds: 300),
-                          child: Icon(
-                            isCompleted ? CupertinoIcons.checkmark_circle_fill : CupertinoIcons.circle,
-                            key: ValueKey<bool>(isCompleted),
-                            color: habitColor,
-                            size: completionIconSize,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
                 ),
               ),
             ),
