@@ -682,7 +682,7 @@ class _OnboardingWelcomePageState extends State<OnboardingWelcomePage> with Tick
   }) {
     final double value = _cardsAnim.value; // 0 → scattered, 1 → stacked bottom
     // Responsive card size based on screen width (maintains aspect ratio)
-    final double cardWidth = context.width(0.5); // 50% of screen width
+    final double cardWidth = context.width(0.65); // 65% of screen width (increased from 50%)
     final double cardHeight = cardWidth; // Square aspect ratio
     final Size cardSize = Size(cardWidth, cardHeight);
 

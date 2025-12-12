@@ -81,16 +81,21 @@ class _CircularHabitPreviewWidgetState extends State<CircularHabitPreviewWidget>
   @override
   Widget build(BuildContext context) {
     // Use CircularHabitWidget with useProvider=false to avoid provider dependency
+    // Scale up for better visibility in preview (onboarding, etc.)
+    final double scale = 1.3; // 30% larger for preview
     return GestureDetector(
       onTap: widget.onTap ?? _handleTap,
       behavior: HitTestBehavior.opaque,
-      child: CircularHabitWidget(
-        habit: _currentHabit,
-        showName: widget.showName,
-        isSelected: false,
-        isDragging: false,
-        isConnecting: false,
-        useProvider: false, // Don't use provider for preview
+      child: Transform.scale(
+        scale: scale,
+        child: CircularHabitWidget(
+          habit: _currentHabit,
+          showName: widget.showName,
+          isSelected: false,
+          isDragging: false,
+          isConnecting: false,
+          useProvider: false, // Don't use provider for preview
+        ),
       ),
     );
   }
