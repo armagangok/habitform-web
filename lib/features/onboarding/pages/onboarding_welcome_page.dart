@@ -130,7 +130,7 @@ class _OnboardingWelcomePageState extends State<OnboardingWelcomePage> with Tick
                         title: LocaleKeys.onboarding_pages_welcome_habit_examples_read_book.tr(),
                         badgeValue: 21,
                         initial: Offset(size.width - context.width(0.725) + context.width(0.15), context.height(0.1)), // top-right, adjusted for larger size
-                        initialRotation: 0.4,
+                        initialRotation: 0.2,
                         isLeftSide: false,
                         tier: 0,
                       ),
