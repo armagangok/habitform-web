@@ -142,6 +142,114 @@ class _HabitConstellationViewState extends ConsumerState<HabitConstellationView>
     ref.read(habitCanvasProvider.notifier).updateOffset(translation.x, translation.y);
   }
 
+  /// Centers the view on habits with smooth animation
+  void _centerViewOnHabitsAnimated() {
+    final canvasState = ref.read(habitCanvasProvider);
+    final screenSize = MediaQuery.of(context).size;
+
+    if (canvasState.positions.isEmpty || widget.habits.isEmpty) {
+      // No habits, just center on canvas center
+      final centerOffsetX = -(canvasWidth - screenSize.width) / 2;
+      final centerOffsetY = -(canvasHeight - screenSize.height) / 2;
+      final targetMatrix = Matrix4.identity()..translateByDouble(centerOffsetX, centerOffsetY, 0.0, 1.0);
+      _animateToMatrix(targetMatrix);
+      return;
+    }
+
+    // Calculate the bounding box of all habits
+    double minX = double.infinity;
+    double maxX = double.negativeInfinity;
+    double minY = double.infinity;
+    double maxY = double.negativeInfinity;
+
+    for (final habit in widget.habits) {
+      final position = canvasState.positions[habit.id];
+      if (position != null) {
+        minX = minX < position.x ? minX : position.x;
+        maxX = maxX > position.x ? maxX : position.x;
+        minY = minY < position.y ? minY : position.y;
+        maxY = maxY > position.y ? maxY : position.y;
+      }
+    }
+
+    if (minX == double.infinity) {
+      // No valid positions found, center on canvas
+      final centerOffsetX = -(canvasWidth - screenSize.width) / 2;
+      final centerOffsetY = -(canvasHeight - screenSize.height) / 2;
+      final targetMatrix = Matrix4.identity()..translateByDouble(centerOffsetX, centerOffsetY, 0.0, 1.0);
+      _animateToMatrix(targetMatrix);
+      return;
+    }
+
+    // Calculate center of all habits
+    final habitsCenterX = (minX + maxX) / 2;
+    final habitsCenterY = (minY + maxY) / 2;
+
+    // Use saved scale or default to 1.0
+    final scale = canvasState.scale > 0 ? canvasState.scale : 1.0;
+
+    // Calculate offset to center habits on screen
+    final offsetX = (screenSize.width / 2) - (habitsCenterX * scale);
+    final offsetY = (screenSize.height / 2) - (habitsCenterY * scale);
+
+    // Create target matrix
+    final targetMatrix = Matrix4.identity()
+      ..translateByDouble(offsetX, offsetY, 0.0, 1.0)
+      ..scaleByDouble(scale, scale, 1.0, 1.0);
+
+    // Animate to target
+    _animateToMatrix(targetMatrix);
+  }
+
+  /// Animates the transformation controller to a target matrix
+  void _animateToMatrix(Matrix4 targetMatrix) {
+    final currentMatrix = _transformationController.value;
+    final currentScale = currentMatrix.getMaxScaleOnAxis();
+    final currentTranslationVec = currentMatrix.getTranslation();
+    final currentTranslation = Offset(currentTranslationVec.x, currentTranslationVec.y);
+
+    final targetScale = targetMatrix.getMaxScaleOnAxis();
+    final targetTranslationVec = targetMatrix.getTranslation();
+    final targetTranslation = Offset(targetTranslationVec.x, targetTranslationVec.y);
+
+    // Check if already at target
+    if ((currentScale - targetScale).abs() < 0.01 && (currentTranslation.dx - targetTranslation.dx).abs() < 1.0 && (currentTranslation.dy - targetTranslation.dy).abs() < 1.0) {
+      // Already at target, just set it
+      _transformationController.value = targetMatrix;
+      final translation = targetMatrix.getTranslation();
+      ref.read(habitCanvasProvider.notifier).updateScale(targetScale);
+      ref.read(habitCanvasProvider.notifier).updateOffset(translation.x, translation.y);
+      return;
+    }
+
+    final scaleDelta = targetScale - currentScale;
+    final translationDelta = targetTranslation - currentTranslation;
+
+    _zoomAnimationController.reset();
+    _zoomAnimationController.addListener(() {
+      final progress = Curves.easeInOutCubic.transform(_zoomAnimationController.value);
+      final animatedScale = currentScale + (scaleDelta * progress);
+      final animatedTranslation = currentTranslation + (translationDelta * progress);
+
+      final animatedMatrix = Matrix4.identity()
+        ..translateByDouble(animatedTranslation.dx, animatedTranslation.dy, 0.0, 1.0)
+        ..scaleByDouble(animatedScale, animatedScale, 1.0, 1.0);
+
+      _transformationController.value = animatedMatrix;
+    });
+
+    _zoomAnimationController.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        // Save final state after animation completes
+        final translation = targetMatrix.getTranslation();
+        ref.read(habitCanvasProvider.notifier).updateScale(targetScale);
+        ref.read(habitCanvasProvider.notifier).updateOffset(translation.x, translation.y);
+      }
+    });
+
+    _zoomAnimationController.forward();
+  }
+
   @override
   void didUpdateWidget(HabitConstellationView oldWidget) {
     super.didUpdateWidget(oldWidget);
@@ -478,19 +586,10 @@ class _HabitConstellationViewState extends ConsumerState<HabitConstellationView>
               ),
               const SizedBox(height: 10),
               _buildControlButton(
-                icon: CupertinoIcons.arrow_counterclockwise,
-                onTap: () async {
+                icon: CupertinoIcons.compass,
+                onTap: () {
                   HapticFeedback.mediumImpact();
-                  ref.read(habitCanvasProvider.notifier).resetLayout(
-                        widget.habits,
-                        canvasWidth,
-                        canvasHeight,
-                      );
-
-                  if (!mounted) return;
-
-                  // Center the view on habits with scale 1.0
-                  _centerViewOnHabits();
+                  _centerViewOnHabitsAnimated();
                 },
                 isDark: isDark,
               ),
