@@ -36,6 +36,12 @@ class _HabitConstellationViewState extends ConsumerState<HabitConstellationView>
   String? _selectedHabitForConnection;
   bool _isConnectingMode = false;
 
+  // Habit name visibility state
+  bool _showHabitNames = true;
+
+  // Tap detection for empty area taps
+  bool _isPanning = false;
+
   bool _isInitialized = false;
 
   // Debounce timer for saving pan/zoom state
@@ -354,6 +360,13 @@ class _HabitConstellationViewState extends ConsumerState<HabitConstellationView>
   void _onInteractionEnd(ScaleEndDetails details) {
     if (_draggingHabitId != null) return; // Don't save transform while dragging
 
+    // Reset panning flag after a short delay to allow tap detection
+    Future.delayed(const Duration(milliseconds: 100), () {
+      if (mounted) {
+        _isPanning = false;
+      }
+    });
+
     // Save immediately on interaction end
     _saveStateTimer?.cancel();
     final matrix = _transformationController.value;
@@ -366,6 +379,11 @@ class _HabitConstellationViewState extends ConsumerState<HabitConstellationView>
 
   void _onInteractionUpdate(ScaleUpdateDetails details) {
     if (_draggingHabitId != null) return;
+
+    // Track if we're panning (movement detected)
+    if (!_isPanning && (details.pointerCount > 0 || details.scale != 1.0)) {
+      _isPanning = true;
+    }
 
     // InteractiveViewer handles pan and scale automatically
     // We just need to save the state with debounce
@@ -502,6 +520,30 @@ class _HabitConstellationViewState extends ConsumerState<HabitConstellationView>
                   ),
                 ),
 
+                // Tap detector for empty areas (positioned before habit items so they're on top)
+                // This catches taps that don't hit habit items
+                Positioned.fill(
+                  child: IgnorePointer(
+                    ignoring: _isPanning,
+                    child: GestureDetector(
+                      behavior: HitTestBehavior.translucent,
+                      onTapDown: (_) {
+                        _isPanning = false; // Reset panning flag on tap down
+                      },
+                      onTap: () {
+                        // Only toggle if not panning and not in special modes
+                        if (!_isPanning && _draggingHabitId == null && !_isConnectingMode) {
+                          HapticFeedback.lightImpact();
+                          setState(() {
+                            _showHabitNames = !_showHabitNames;
+                          });
+                        }
+                      },
+                      child: Container(color: Colors.transparent),
+                    ),
+                  ),
+                ),
+
                 // Habit items
                 ...widget.habits.map((habit) {
                   final position = canvasState.positions[habit.id];
@@ -550,6 +592,7 @@ class _HabitConstellationViewState extends ConsumerState<HabitConstellationView>
                           isSelected: isSelectedForConnection,
                           isDragging: isDragging,
                           isConnecting: _isConnectingMode,
+                          showName: _showHabitNames,
                         ),
                       ),
                     ),
@@ -700,7 +743,7 @@ class _HabitConstellationViewState extends ConsumerState<HabitConstellationView>
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Text(
-                _draggingHabitId != null ? 'Release to place' : 'Long press to move • Tap for details • Double tap to complete',
+                _draggingHabitId != null ? 'Release to place' : 'Long press to move • Tap for details',
                 style: TextStyle(
                   color: isDark ? Colors.black : Colors.white,
                   fontSize: 11,

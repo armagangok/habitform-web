@@ -15,6 +15,7 @@ class CircularHabitWidget extends ConsumerStatefulWidget {
   final bool isDragging;
   final bool isConnecting;
   final VoidCallback? onComplete;
+  final bool? showName;
 
   const CircularHabitWidget({
     super.key,
@@ -23,6 +24,7 @@ class CircularHabitWidget extends ConsumerStatefulWidget {
     this.isDragging = false,
     this.isConnecting = false,
     this.onComplete,
+    this.showName,
   });
 
   @override
@@ -227,59 +229,65 @@ class _CircularHabitWidgetState extends ConsumerState<CircularHabitWidget> with 
                           ),
                         ),
                       ),
+
+                    // Complete button (bottom right)
+                    Positioned(
+                      bottom: 0,
+                      right: 0,
+                      child: GestureDetector(
+                        behavior: HitTestBehavior.opaque,
+                        onTap: _toggleCompletion,
+                        child: AnimatedContainer(
+                          duration: const Duration(milliseconds: 250),
+                          width: 28,
+                          height: 28,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: isCompleted ? habitColor : Colors.transparent,
+                            border: Border.all(
+                              color: habitColor,
+                              width: 2.5,
+                            ),
+                            boxShadow: isCompleted
+                                ? [
+                                    BoxShadow(
+                                      color: habitColor.withValues(alpha: 0.5),
+                                      blurRadius: 8,
+                                      spreadRadius: 1,
+                                    ),
+                                  ]
+                                : null,
+                          ),
+                          child: Icon(
+                            isCompleted ? CupertinoIcons.checkmark : CupertinoIcons.plus,
+                            size: 16,
+                            color: isCompleted ? Colors.white : habitColor,
+                          ),
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),
 
               const SizedBox(height: 8),
 
-              // Habit name
-              SizedBox(
-                width: size + 20,
-                child: Text(
-                  currentHabit.habitName,
-                  textAlign: TextAlign.center,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: context.labelSmall.copyWith(
-                    fontWeight: FontWeight.w600,
-                    fontSize: 11,
-                    color: isDark ? Colors.white70 : Colors.black87,
-                  ),
-                ),
-              ),
-
-              const SizedBox(height: 6),
-
-              // Completion button - always visible
-              GestureDetector(
-                behavior: HitTestBehavior.opaque,
-                onTap: _toggleCompletion,
-                child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 250),
-                  width: 32,
-                  height: 32,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: isCompleted ? habitColor : Colors.transparent,
-                    border: Border.all(
-                      color: habitColor,
-                      width: 2.5,
+              // Habit name (with animation support)
+              AnimatedOpacity(
+                duration: const Duration(milliseconds: 300),
+                opacity: widget.showName ?? true ? 1.0 : 0.0,
+                child: SizedBox(
+                  width: size + 20,
+                  child: Text(
+                    currentHabit.habitName,
+                    textAlign: TextAlign.center,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: context.labelSmall.copyWith(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 11,
+                      color: isDark ? Colors.white70 : Colors.black87,
                     ),
-                    boxShadow: isCompleted
-                        ? [
-                            BoxShadow(
-                              color: habitColor.withValues(alpha: 0.5),
-                              blurRadius: 8,
-                              spreadRadius: 1,
-                            ),
-                          ]
-                        : null,
-                  ),
-                  child: Icon(
-                    isCompleted ? CupertinoIcons.checkmark : CupertinoIcons.plus,
-                    size: 18,
-                    color: isCompleted ? Colors.white : habitColor,
                   ),
                 ),
               ),
