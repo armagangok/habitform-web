@@ -70,7 +70,15 @@ class _HabitDetailPageState extends ConsumerState<HabitDetailPage> {
     final currentHabit = ref.watch(habitDetailProvider);
 
     if (currentHabit == null) {
-      return const SizedBox.shrink();
+      return CupertinoPageScaffold(
+        navigationBar: SheetHeader(
+          title: 'No habit found',
+          closeButtonPosition: CloseButtonPosition.left,
+        ),
+        child: Center(
+          child: Text('No habit found'),
+        ),
+      );
     }
 
     // Removed debug print to avoid extra console noise during scroll

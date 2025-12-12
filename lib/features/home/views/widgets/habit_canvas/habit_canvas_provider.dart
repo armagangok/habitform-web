@@ -1,0 +1,152 @@
+import 'dart:math' as math;
+
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '/models/habit/habit_model.dart';
+import 'habit_canvas_model.dart';
+
+/// Provider for the canvas state
+final habitCanvasProvider = StateNotifierProvider<HabitCanvasNotifier, HabitCanvasState>((ref) {
+  return HabitCanvasNotifier();
+});
+
+/// Notifier for managing habit canvas state
+class HabitCanvasNotifier extends StateNotifier<HabitCanvasState> {
+  HabitCanvasNotifier() : super(const HabitCanvasState()) {
+    _loadStateFuture = _loadState();
+  }
+
+  late final Future<void> _loadStateFuture;
+  bool _isLoaded = false;
+
+  Future<void> _loadState() async {
+    final loadedState = await HabitCanvasStorage.load();
+    state = loadedState;
+    _isLoaded = true;
+  }
+
+  /// Wait for initial state to be loaded
+  Future<void> ensureLoaded() async {
+    if (!_isLoaded) {
+      await _loadStateFuture;
+    }
+  }
+
+  Future<void> _saveState() async {
+    await HabitCanvasStorage.save(state);
+  }
+
+  /// Initialize positions for habits that don't have positions yet
+  Future<void> initializePositions(List<Habit> habits, double canvasWidth, double canvasHeight) async {
+    // Ensure state is loaded before initializing
+    await ensureLoaded();
+
+    final updatedPositions = Map<String, HabitPosition>.from(state.positions);
+    bool hasChanges = false;
+
+    // Remove positions for habits that no longer exist
+    final habitIds = habits.map((h) => h.id).toSet();
+    updatedPositions.removeWhere((key, _) => !habitIds.contains(key));
+
+    // Add positions for new habits
+    final random = math.Random();
+    final centerX = canvasWidth / 2;
+    final centerY = canvasHeight / 2;
+
+    for (final habit in habits) {
+      if (!updatedPositions.containsKey(habit.id)) {
+        // Place new habits in a circular pattern around center
+        final existingCount = updatedPositions.length;
+        final angle = (existingCount * 2 * math.pi / math.max(habits.length, 1)) + random.nextDouble() * 0.5;
+        final radius = 100.0 + random.nextDouble() * 150;
+
+        updatedPositions[habit.id] = HabitPosition(
+          habitId: habit.id,
+          x: centerX + math.cos(angle) * radius,
+          y: centerY + math.sin(angle) * radius,
+        );
+        hasChanges = true;
+      }
+    }
+
+    if (hasChanges || updatedPositions.length != state.positions.length) {
+      state = state.copyWith(positions: updatedPositions);
+      _saveState();
+    }
+  }
+
+  /// Update position of a single habit
+  void updatePosition(String habitId, double x, double y) {
+    final updatedPositions = Map<String, HabitPosition>.from(state.positions);
+    updatedPositions[habitId] = HabitPosition(habitId: habitId, x: x, y: y);
+    state = state.copyWith(positions: updatedPositions);
+    _saveState();
+  }
+
+  /// Add a connection between two habits
+  void addConnection(String fromHabitId, String toHabitId) {
+    if (fromHabitId == toHabitId) return;
+
+    final connection = HabitConnection(fromHabitId: fromHabitId, toHabitId: toHabitId);
+    final updatedConnections = Set<HabitConnection>.from(state.connections);
+
+    // Check if connection already exists (in either direction)
+    final exists = updatedConnections.any((c) => (c.fromHabitId == fromHabitId && c.toHabitId == toHabitId) || (c.fromHabitId == toHabitId && c.toHabitId == fromHabitId));
+
+    if (!exists) {
+      updatedConnections.add(connection);
+      state = state.copyWith(connections: updatedConnections);
+      _saveState();
+    }
+  }
+
+  /// Remove a connection between two habits
+  void removeConnection(String fromHabitId, String toHabitId) {
+    final updatedConnections = Set<HabitConnection>.from(state.connections);
+    updatedConnections.removeWhere((c) => (c.fromHabitId == fromHabitId && c.toHabitId == toHabitId) || (c.fromHabitId == toHabitId && c.toHabitId == fromHabitId));
+    state = state.copyWith(connections: updatedConnections);
+    _saveState();
+  }
+
+  /// Toggle connection between two habits
+  void toggleConnection(String fromHabitId, String toHabitId) {
+    if (fromHabitId == toHabitId) return;
+
+    final exists = state.connections.any((c) => (c.fromHabitId == fromHabitId && c.toHabitId == toHabitId) || (c.fromHabitId == toHabitId && c.toHabitId == fromHabitId));
+
+    if (exists) {
+      removeConnection(fromHabitId, toHabitId);
+    } else {
+      addConnection(fromHabitId, toHabitId);
+    }
+  }
+
+  /// Update canvas scale
+  void updateScale(double scale) {
+    state = state.copyWith(scale: scale.clamp(0.5, 2.5));
+    _saveState();
+  }
+
+  /// Update canvas offset
+  void updateOffset(double offsetX, double offsetY) {
+    state = state.copyWith(offsetX: offsetX, offsetY: offsetY);
+    _saveState();
+  }
+
+  /// Reset all positions to default layout
+  Future<void> resetLayout(List<Habit> habits, double canvasWidth, double canvasHeight) async {
+    state = state.copyWith(
+      positions: {},
+      scale: 1.0,
+      offsetX: 0.0,
+      offsetY: 0.0,
+    );
+    await initializePositions(habits, canvasWidth, canvasHeight);
+  }
+
+  /// Clear all connections
+  void clearConnections() {
+    state = state.copyWith(connections: {});
+    _saveState();
+  }
+}
