@@ -286,11 +286,11 @@ class _CircularHabitWidgetState extends ConsumerState<CircularHabitWidget> with 
                     Positioned(
                       bottom: 0,
                       right: 0,
-                      child: GestureDetector(
-                        behavior: HitTestBehavior.opaque,
-                        onTap: widget.enableCompleteButton ? _toggleCompletion : null,
-                        child: Opacity(
-                          opacity: widget.enableCompleteButton ? 1.0 : 0.6, // Dimmed when disabled
+                      child: IgnorePointer(
+                        ignoring: !widget.enableCompleteButton,
+                        child: GestureDetector(
+                          behavior: HitTestBehavior.opaque,
+                          onTap: _toggleCompletion,
                           child: AnimatedContainer(
                             duration: const Duration(milliseconds: 350),
                             width: 28,

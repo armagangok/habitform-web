@@ -788,23 +788,23 @@ class _OnboardingWelcomePageState extends State<OnboardingWelcomePage> with Tick
           child: SizedBox(
             width: cardSize.width,
             height: cardSize.height,
-          child: Center(
-            child: CircularHabitPreviewWidget(
-              habit: Habit(
-                id: 'onboarding_$index',
-                habitName: title,
-                emoji: emoji,
-                colorCode: accent.value,
-                difficulty: HabitDifficulty.moderate,
-                dailyTarget: 1,
-                completions: {},
+            child: Center(
+              child: CircularHabitPreviewWidget(
+                habit: Habit(
+                  id: 'onboarding_$index',
+                  habitName: title,
+                  emoji: emoji,
+                  colorCode: accent.value,
+                  difficulty: HabitDifficulty.moderate,
+                  dailyTarget: 1,
+                  completions: {},
+                ),
+                showName: false, // Hide habit name in onboarding
+                isCompleted: false,
+                showCompleteButton: true, // Show complete button
+                enableCompleteButton: false, // But make it non-tappable
               ),
-              showName: false, // Hide habit name in onboarding
-              isCompleted: false,
-              showCompleteButton: true, // Show complete button
-              enableCompleteButton: false, // But make it non-tappable
             ),
-          ),
           ),
         ),
       ),
