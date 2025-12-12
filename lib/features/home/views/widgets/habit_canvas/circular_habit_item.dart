@@ -14,8 +14,6 @@ class CircularHabitWidget extends ConsumerStatefulWidget {
   final bool isSelected;
   final bool isDragging;
   final bool isConnecting;
-  final VoidCallback? onTap;
-  final void Function(Offset globalPosition)? onLongPressStart;
   final VoidCallback? onComplete;
 
   const CircularHabitWidget({
@@ -24,8 +22,6 @@ class CircularHabitWidget extends ConsumerStatefulWidget {
     this.isSelected = false,
     this.isDragging = false,
     this.isConnecting = false,
-    this.onTap,
-    this.onLongPressStart,
     this.onComplete,
   });
 
@@ -114,185 +110,180 @@ class _CircularHabitWidgetState extends ConsumerState<CircularHabitWidget> with 
     const double size = 90.0;
     final isDark = CupertinoTheme.of(context).brightness == Brightness.dark;
 
-    return GestureDetector(
-      behavior: HitTestBehavior.translucent,
-      onTap: widget.onTap,
-      onLongPressStart: (details) => widget.onLongPressStart?.call(details.globalPosition),
-      child: AnimatedBuilder(
-        animation: _pulseAnimation,
-        builder: (context, child) {
-          final scale = isCompleted ? 1.0 : _pulseAnimation.value;
-          final dragScale = widget.isDragging ? 1.15 : 1.0;
-          return Transform.scale(scale: scale * dragScale, child: child);
-        },
-        child: AnimatedOpacity(
-          duration: const Duration(milliseconds: 200),
-          opacity: widget.isDragging ? 0.9 : 1.0,
-          child: SizedBox(
-            width: size + 20,
-            height: size + 60,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                // Main circular item
-                AnimatedContainer(
-                  duration: const Duration(milliseconds: 200),
-                  width: size,
-                  height: size,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: isDark ? CupertinoColors.systemGrey6.darkColor : Colors.white,
-                    border: Border.all(
-                      color: widget.isSelected || widget.isDragging
-                          ? habitColor
-                          : widget.isConnecting
-                              ? habitColor
-                              : isCompleted
-                                  ? habitColor
-                                  : habitColor.withValues(alpha: 0.4),
-                      width: widget.isSelected || widget.isDragging ? 3.5 : 2.5,
-                    ),
-                    boxShadow: [
-                      if (widget.isDragging) ...[
-                        BoxShadow(
-                          color: habitColor.withValues(alpha: 0.4),
-                          blurRadius: 20,
-                          spreadRadius: 4,
-                        ),
-                      ] else if (isCompleted) ...[
-                        BoxShadow(
-                          color: habitColor.withValues(alpha: 0.25),
-                          blurRadius: 16,
-                          spreadRadius: 2,
-                        ),
-                      ] else ...[
-                        BoxShadow(
-                          color: Colors.black.withValues(alpha: isDark ? 0.4 : 0.12),
-                          blurRadius: 10,
-                          spreadRadius: 0,
-                          offset: const Offset(0, 4),
-                        ),
-                      ],
-                    ],
+    return AnimatedBuilder(
+      animation: _pulseAnimation,
+      builder: (context, child) {
+        final scale = isCompleted ? 1.0 : _pulseAnimation.value;
+        final dragScale = widget.isDragging ? 1.15 : 1.0;
+        return Transform.scale(scale: scale * dragScale, child: child);
+      },
+      child: AnimatedOpacity(
+        duration: const Duration(milliseconds: 200),
+        opacity: widget.isDragging ? 0.9 : 1.0,
+        child: SizedBox(
+          width: size + 20,
+          height: size + 60,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // Main circular item
+              AnimatedContainer(
+                duration: const Duration(milliseconds: 200),
+                width: size,
+                height: size,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: isDark ? CupertinoColors.systemGrey6.darkColor : Colors.white,
+                  border: Border.all(
+                    color: widget.isSelected || widget.isDragging
+                        ? habitColor
+                        : widget.isConnecting
+                            ? habitColor
+                            : isCompleted
+                                ? habitColor
+                                : habitColor.withValues(alpha: 0.4),
+                    width: widget.isSelected || widget.isDragging ? 3.5 : 2.5,
                   ),
-                  child: Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      // Progress ring
-                      if (!isCompleted)
-                        CustomPaint(
-                          size: Size(size - 10, size - 10),
-                          painter: _CircularProgressPainter(
-                            progress: ratio,
+                  boxShadow: [
+                    if (widget.isDragging) ...[
+                      BoxShadow(
+                        color: habitColor.withValues(alpha: 0.4),
+                        blurRadius: 20,
+                        spreadRadius: 4,
+                      ),
+                    ] else if (isCompleted) ...[
+                      BoxShadow(
+                        color: habitColor.withValues(alpha: 0.25),
+                        blurRadius: 16,
+                        spreadRadius: 2,
+                      ),
+                    ] else ...[
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: isDark ? 0.4 : 0.12),
+                        blurRadius: 10,
+                        spreadRadius: 0,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
+                  ],
+                ),
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    // Progress ring
+                    if (!isCompleted)
+                      CustomPaint(
+                        size: Size(size - 10, size - 10),
+                        painter: _CircularProgressPainter(
+                          progress: ratio,
+                          color: habitColor,
+                          backgroundColor: habitColor.withValues(alpha: 0.15),
+                          strokeWidth: 4,
+                        ),
+                      ),
+
+                    // Emoji
+                    Text(
+                      emoji,
+                      style: TextStyle(fontSize: isCompleted ? 38 : 34),
+                    ),
+
+                    // Streak badge (top right)
+                    if (streak > 0)
+                      Positioned(
+                        top: 0,
+                        right: 0,
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+                          decoration: BoxDecoration(
                             color: habitColor,
-                            backgroundColor: habitColor.withValues(alpha: 0.15),
-                            strokeWidth: 4,
-                          ),
-                        ),
-
-                      // Emoji
-                      Text(
-                        emoji,
-                        style: TextStyle(fontSize: isCompleted ? 38 : 34),
-                      ),
-
-                      // Streak badge (top right)
-                      if (streak > 0)
-                        Positioned(
-                          top: 0,
-                          right: 0,
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
-                            decoration: BoxDecoration(
-                              color: habitColor,
-                              borderRadius: BorderRadius.circular(12),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: habitColor.withValues(alpha: 0.5),
-                                  blurRadius: 6,
-                                  offset: const Offset(0, 2),
-                                ),
-                              ],
-                            ),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                const Icon(
-                                  CupertinoIcons.flame_fill,
-                                  size: 11,
-                                  color: Colors.white,
-                                ),
-                                const SizedBox(width: 2),
-                                Text(
-                                  '$streak',
-                                  style: const TextStyle(
-                                    fontSize: 11,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                    ],
-                  ),
-                ),
-
-                const SizedBox(height: 8),
-
-                // Habit name
-                SizedBox(
-                  width: size + 20,
-                  child: Text(
-                    currentHabit.habitName,
-                    textAlign: TextAlign.center,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: context.labelSmall.copyWith(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 11,
-                      color: isDark ? Colors.white70 : Colors.black87,
-                    ),
-                  ),
-                ),
-
-                const SizedBox(height: 6),
-
-                // Completion button - always visible
-                GestureDetector(
-                  behavior: HitTestBehavior.opaque,
-                  onTap: _toggleCompletion,
-                  child: AnimatedContainer(
-                    duration: const Duration(milliseconds: 250),
-                    width: 32,
-                    height: 32,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: isCompleted ? habitColor : Colors.transparent,
-                      border: Border.all(
-                        color: habitColor,
-                        width: 2.5,
-                      ),
-                      boxShadow: isCompleted
-                          ? [
+                            borderRadius: BorderRadius.circular(12),
+                            boxShadow: [
                               BoxShadow(
                                 color: habitColor.withValues(alpha: 0.5),
-                                blurRadius: 8,
-                                spreadRadius: 1,
+                                blurRadius: 6,
+                                offset: const Offset(0, 2),
                               ),
-                            ]
-                          : null,
-                    ),
-                    child: Icon(
-                      isCompleted ? CupertinoIcons.checkmark : CupertinoIcons.plus,
-                      size: 18,
-                      color: isCompleted ? Colors.white : habitColor,
-                    ),
+                            ],
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const Icon(
+                                CupertinoIcons.flame_fill,
+                                size: 11,
+                                color: Colors.white,
+                              ),
+                              const SizedBox(width: 2),
+                              Text(
+                                '$streak',
+                                style: const TextStyle(
+                                  fontSize: 11,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+
+              const SizedBox(height: 8),
+
+              // Habit name
+              SizedBox(
+                width: size + 20,
+                child: Text(
+                  currentHabit.habitName,
+                  textAlign: TextAlign.center,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: context.labelSmall.copyWith(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 11,
+                    color: isDark ? Colors.white70 : Colors.black87,
                   ),
                 ),
-              ],
-            ),
+              ),
+
+              const SizedBox(height: 6),
+
+              // Completion button - always visible
+              GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onTap: _toggleCompletion,
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 250),
+                  width: 32,
+                  height: 32,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: isCompleted ? habitColor : Colors.transparent,
+                    border: Border.all(
+                      color: habitColor,
+                      width: 2.5,
+                    ),
+                    boxShadow: isCompleted
+                        ? [
+                            BoxShadow(
+                              color: habitColor.withValues(alpha: 0.5),
+                              blurRadius: 8,
+                              spreadRadius: 1,
+                            ),
+                          ]
+                        : null,
+                  ),
+                  child: Icon(
+                    isCompleted ? CupertinoIcons.checkmark : CupertinoIcons.plus,
+                    size: 18,
+                    color: isCompleted ? Colors.white : habitColor,
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
       ),

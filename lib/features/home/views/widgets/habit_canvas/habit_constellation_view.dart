@@ -516,29 +516,40 @@ class _HabitConstellationViewState extends ConsumerState<HabitConstellationView>
                     child: RepaintBoundary(
                       child: GestureDetector(
                         behavior: HitTestBehavior.translucent,
+                        onTap: () async {
+                          // Don't handle tap if we're in dragging mode
+                          if (_draggingHabitId != null) return;
+
+                          if (_isConnectingMode) {
+                            _onHabitTapForConnection(habit.id);
+                          } else {
+                            await ref.watch(habitDetailProvider.notifier).initHabit(habit);
+                            if (!context.mounted) return;
+                            // Use rootNavigator context to ensure sheet appears on top
+                            showCupertinoSheet(
+                              enableDrag: false,
+                              context: context,
+                              builder: (contextFromSheet) => HabitDetailPage(),
+                            );
+                          }
+                        },
                         onLongPressStart: (details) {
                           _startDragging(habit.id, details.globalPosition);
+                        },
+                        onLongPressMoveUpdate: (details) {
+                          if (_draggingHabitId == habit.id) {
+                            _updateDragPosition(details.globalPosition);
+                          }
+                        },
+                        onLongPressEnd: (_) {
+                          // Don't end dragging on long press end, let overlay handle it
+                          // This allows dragging to continue even after finger is lifted
                         },
                         child: CircularHabitWidget(
                           habit: habit,
                           isSelected: isSelectedForConnection,
                           isDragging: isDragging,
                           isConnecting: _isConnectingMode,
-                          onTap: () async {
-                            if (_isConnectingMode) {
-                              _onHabitTapForConnection(habit.id);
-                            } else {
-                              await ref.watch(habitDetailProvider.notifier).initHabit(habit);
-                              if (!context.mounted) return;
-                              // Use rootNavigator context to ensure sheet appears on top
-                              showCupertinoSheet(
-                                enableDrag: false,
-                                context: context,
-                                builder: (contextFromSheet) => HabitDetailPage(),
-                              );
-                            }
-                          },
-                          onLongPressStart: (pos) => _startDragging(habit.id, pos),
                         ),
                       ),
                     ),
@@ -550,6 +561,7 @@ class _HabitConstellationViewState extends ConsumerState<HabitConstellationView>
         ),
 
         // Dragging overlay - captures all gestures during drag
+        // This allows dragging even after finger is lifted and placed again
         if (_draggingHabitId != null)
           Positioned.fill(
             child: GestureDetector(
@@ -559,6 +571,10 @@ class _HabitConstellationViewState extends ConsumerState<HabitConstellationView>
               },
               onPanEnd: (_) => _endDragging(),
               onPanCancel: _endDragging,
+              onTap: () {
+                // End dragging on tap
+                _endDragging();
+              },
             ),
           ),
 
