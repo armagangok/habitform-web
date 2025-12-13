@@ -291,37 +291,40 @@ class _CircularHabitWidgetState extends ConsumerState<CircularHabitWidget> with 
                   Positioned(
                     top: 0,
                     right: 0,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
-                      decoration: BoxDecoration(
-                        color: habitColor,
-                        borderRadius: BorderRadius.circular(12),
-                        boxShadow: [
-                          BoxShadow(
-                            color: habitColor.withValues(alpha: 0.25),
-                            blurRadius: 6,
-                            offset: const Offset(0, 2),
+                    child: CustomBlurWidget(
+                      borderRadius: BorderRadius.circular(12),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: habitColor.withValues(alpha: 0.7),
+                            width: 1,
                           ),
-                        ],
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(
-                            CupertinoIcons.flame_fill,
-                            size: 13,
-                            color: habitColor.colorRegardingToBrightness,
-                          ),
-                          const SizedBox(width: 2),
-                          Text(
-                            '$streak',
-                            style: TextStyle(
-                              fontSize: 13,
-                              fontWeight: FontWeight.bold,
+                          color: habitColor.withValues(alpha: 0.1),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(
+                              CupertinoIcons.flame_fill,
+                              size: 14,
                               color: habitColor.colorRegardingToBrightness,
                             ),
-                          ),
-                        ],
+                            const SizedBox(width: 2),
+                            Text(
+                              '$streak',
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                                fontFeatures: [
+                                  FontFeature.tabularFigures(),
+                                ],
+                                color: habitColor.colorRegardingToBrightness,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
