@@ -4,10 +4,11 @@ import 'dart:io';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../core/constants/debug_constants.dart';
-import '../core/helpers/logger/logger.dart';
+import '../core/core.dart';
 import '../features/purchase/providers/purchase_provider.dart';
 import '../models/completion_entry/completion_entry.dart';
 import '../models/habit/habit_model.dart';
+import '../models/user_defaults/user_defaults.dart';
 import 'habit_service/habit_service_interface.dart';
 import 'habit_service/local_habit_service.dart';
 import 'widget_method_channel_service.dart';
@@ -21,7 +22,6 @@ class WidgetSyncService {
   final WidgetMethodChannelService _methodChannelService = WidgetMethodChannelService();
   final HabitService _habitService = LocalHabitService.instance;
 
-  Timer? _syncTimer;
   Timer? _debounceTimer;
   bool _isInitialized = false;
   List<Habit>? _pendingHabits;
@@ -39,6 +39,10 @@ class WidgetSyncService {
   /// Set provider container for accessing purchase provider
   void setProviderContainer(ProviderContainer container) {
     _providerContainer = container;
+    LogHelper.shared.debugPrint('🔧 WidgetSyncService: Provider container set');
+
+    // Trigger initial sync now that we have the provider container
+    _forceInitialWidgetSync();
   }
 
   /// Initialize the sync service
@@ -53,33 +57,18 @@ class WidgetSyncService {
 
     LogHelper.shared.debugPrint('🚀 WidgetSyncService initialized successfully');
 
-    // Start periodic sync to check for widget updates
-    _startPeriodicSync();
-
-    // Check for any pending updates immediately
-    await checkForWidgetUpdates();
-
-    // Force initial widget data sync
-    await _forceInitialWidgetSync();
-  }
-
-  /// Start periodic sync timer
-  void _startPeriodicSync() {
-    _syncTimer?.cancel();
-    _syncTimer = Timer.periodic(const Duration(seconds: 5), (timer) {
-      checkForWidgetUpdates();
-    });
+    // Don't force initial sync here - wait for provider container to be set
+    // Initial sync will be triggered in setProviderContainer()
   }
 
   /// Stop the sync service
   void dispose() {
-    _syncTimer?.cancel();
     _debounceTimer?.cancel();
     _widgetUpdateController.close();
     _isInitialized = false;
   }
 
-  /// Check for completion updates from widgets
+  /// Check for completion updates from widgets (called when needed, not periodically)
   Future<void> checkForWidgetUpdates() async {
     try {
       final updates = await _methodChannelService.checkForCompletionUpdates();
@@ -159,14 +148,14 @@ class WidgetSyncService {
         isProMember = purchaseState.valueOrNull?.isSubscriptionActive ?? false;
         LogHelper.shared.debugPrint('🔓 Pro membership status from purchase provider: $isProMember');
       } catch (e) {
-        LogHelper.shared.debugPrint('⚠️ Could not get Pro status from purchase provider, falling back to debug mode: $e');
-        // Fallback to debug mode
-        isProMember = KDebug.purchaseDebugMode;
+        LogHelper.shared.debugPrint('⚠️ Could not get Pro status from purchase provider, trying UserDefaults fallback: $e');
+        // Fallback to UserDefaults
+        isProMember = await _getProStatusFromUserDefaults();
       }
     } else {
-      LogHelper.shared.debugPrint('⚠️ No provider container available, falling back to debug mode');
-      // Fallback to debug mode
-      isProMember = KDebug.purchaseDebugMode;
+      LogHelper.shared.debugPrint('⚠️ No provider container available, trying UserDefaults fallback');
+      // Fallback to UserDefaults
+      isProMember = await _getProStatusFromUserDefaults();
     }
 
     try {
@@ -257,6 +246,28 @@ class WidgetSyncService {
     }
   }
 
+  /// Get Pro status from UserDefaults as fallback when provider container is not available
+  Future<bool> _getProStatusFromUserDefaults() async {
+    try {
+      final userDefaults = HiveHelper.shared.getData<UserDefaults>(
+        HiveBoxes.userDefaultsBox,
+        HiveKeys.userDefaultsKey,
+      );
+
+      if (userDefaults != null) {
+        final isPro = userDefaults.isPro;
+        LogHelper.shared.debugPrint('🔓 Pro membership status from UserDefaults: $isPro');
+        return isPro;
+      } else {
+        LogHelper.shared.debugPrint('⚠️ UserDefaults not found, falling back to debug mode');
+        return KDebug.purchaseDebugMode;
+      }
+    } catch (e) {
+      LogHelper.shared.debugPrint('⚠️ Error reading UserDefaults, falling back to debug mode: $e');
+      return KDebug.purchaseDebugMode;
+    }
+  }
+
   /// Force widget update with current Pro status (for debugging)
   Future<void> forceWidgetUpdate() async {
     try {
@@ -281,12 +292,5 @@ class WidgetSyncService {
       'completion': completion,
       'timestamp': DateTime.now().toIso8601String(),
     });
-  }
-}
-
-/// Extension to convert DateTime to ISO8601 date string
-extension DateTimeExtension on DateTime {
-  String toIso8601DateString() {
-    return '${year.toString().padLeft(4, '0')}-${month.toString().padLeft(2, '0')}-${day.toString().padLeft(2, '0')}';
   }
 }
