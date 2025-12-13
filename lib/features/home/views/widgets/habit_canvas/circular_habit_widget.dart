@@ -2,6 +2,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '/core/core.dart';
+import '/features/reminder/models/reminder/reminder_model.dart';
 import '/models/habit/habit_extension.dart';
 import '/models/habit/habit_model.dart';
 import '../../../components/habit_probability_dialog.dart';
@@ -115,6 +116,23 @@ class _CircularHabitWidgetState extends ConsumerState<CircularHabitWidget> with 
     return habit.calculateWeightedProgressPercentageFromFirstCompletion();
   }
 
+  String _getReminderTimeText(ReminderModel reminder) {
+    if (reminder.hasMultipleReminders) {
+      final times = reminder.multipleReminders!.sortedReminderTimes;
+      if (times.isEmpty) return '';
+      if (times.length == 1) {
+        return times.first.toHHMM();
+      } else {
+        // Show first 2 times, or all if 2 or less
+        final displayTimes = times.take(2).map((time) => time.toHHMM()).join(', ');
+        return times.length > 2 ? '$displayTimes...' : displayTimes;
+      }
+    } else if (reminder.hasSingleReminder) {
+      return reminder.reminderTime!.toHHMM();
+    }
+    return '';
+  }
+
   Future<void> _showAchievementIfEarned({required Habit previousHabit, required Habit updatedHabit}) async {
     if (!mounted) return;
 
@@ -182,10 +200,32 @@ class _CircularHabitWidgetState extends ConsumerState<CircularHabitWidget> with 
       },
       child: SizedBox(
         width: size + 20,
-        height: size + 60,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
+            // Reminder time (top, if exists)
+            if (currentHabit.reminderModel != null && currentHabit.reminderModel!.hasAnyReminders) ...[
+              AnimatedOpacity(
+                duration: const Duration(milliseconds: 350),
+                opacity: widget.showName ?? true ? 1.0 : 0.0,
+                child: SizedBox(
+                  width: size + 20,
+                  child: Text(
+                    _getReminderTimeText(currentHabit.reminderModel!),
+                    textAlign: TextAlign.center,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: context.labelSmall.copyWith(
+                      fontWeight: FontWeight.w500,
+                      fontSize: 14,
+                      color: isDark ? Colors.white60 : Colors.black54,
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 3),
+            ],
+
             // Main circular item
             AnimatedContainer(
               duration: const Duration(milliseconds: 350),
@@ -264,14 +304,14 @@ class _CircularHabitWidgetState extends ConsumerState<CircularHabitWidget> with 
                         children: [
                           Icon(
                             CupertinoIcons.flame_fill,
-                            size: 12,
+                            size: 13,
                             color: habitColor.colorRegardingToBrightness,
                           ),
                           const SizedBox(width: 2),
                           Text(
                             '$streak',
                             style: TextStyle(
-                              fontSize: 12,
+                              fontSize: 13,
                               fontWeight: FontWeight.bold,
                               color: habitColor.colorRegardingToBrightness,
                             ),
@@ -316,7 +356,7 @@ class _CircularHabitWidgetState extends ConsumerState<CircularHabitWidget> with 
                               child: Icon(
                                 isCompleted ? CupertinoIcons.checkmark : CupertinoIcons.plus,
                                 size: 17,
-                                color: isCompleted 
+                                color: isCompleted
                                     ? Colors.white // Always white when completed (background is habitColor)
                                     : habitColor, // Use habitColor when not completed (background is light)
                               ),
@@ -335,17 +375,26 @@ class _CircularHabitWidgetState extends ConsumerState<CircularHabitWidget> with 
             AnimatedOpacity(
               duration: const Duration(milliseconds: 350),
               opacity: widget.showName ?? true ? 1.0 : 0.0,
-              child: SizedBox(
-                width: size + 20,
-                child: Text(
-                  currentHabit.habitName,
-                  textAlign: TextAlign.center,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: context.labelSmall.copyWith(
-                    fontWeight: FontWeight.w600,
-                    fontSize: 11,
-                    color: isDark ? Colors.white70 : Colors.black87,
+              child: CustomBlurWidget(
+                borderRadius: BorderRadius.circular(100),
+                child: ColoredBox(
+                  color: habitColor.withValues(alpha: 0.195),
+                  child: SizedBox(
+                    width: size + 20,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                      child: Text(
+                        currentHabit.habitName,
+                        textAlign: TextAlign.center,
+                        maxLines: null,
+                        overflow: TextOverflow.ellipsis,
+                        style: context.labelSmall.copyWith(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 13,
+                          color: isDark ? Colors.white.withValues(alpha: 0.8) : Colors.black.withValues(alpha: 0.87),
+                        ),
+                      ),
+                    ),
                   ),
                 ),
               ),

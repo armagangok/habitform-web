@@ -736,18 +736,22 @@ class _HabitConstellationViewState extends ConsumerState<HabitConstellationView>
           left: 0,
           right: 0,
           child: Center(
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              decoration: BoxDecoration(
-                color: (isDark ? Colors.white : Colors.black).withValues(alpha: 0.6),
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Text(
-                _draggingHabitId != null ? 'Release to place' : 'Long press to move • Tap for details',
-                style: TextStyle(
-                  color: isDark ? Colors.black : Colors.white,
-                  fontSize: 11,
-                  fontWeight: FontWeight.w500,
+            child: AnimatedOpacity(
+              opacity: (_showHabitNames && _draggingHabitId == null) ? 1.0 : 0.0,
+              duration: const Duration(milliseconds: 300),
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                decoration: BoxDecoration(
+                  color: (isDark ? Colors.white : Colors.black).withValues(alpha: 0.6),
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Text(
+                  _draggingHabitId != null ? 'Release to place' : 'Long press to move • Tap for details',
+                  style: TextStyle(
+                    color: isDark ? Colors.black : Colors.white,
+                    fontSize: 11,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
               ),
             ),
