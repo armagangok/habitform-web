@@ -305,7 +305,7 @@ class _CircularHabitWidgetState extends ConsumerState<CircularHabitWidget> with 
                             Icon(
                               CupertinoIcons.flame_fill,
                               size: 14,
-                              color: habitColor.colorRegardingToBrightness,
+                              color: context.theme.primaryContrastingColor.withValues(alpha: 0.9),
                             ),
                             const SizedBox(width: 2),
                             Text(
@@ -316,7 +316,7 @@ class _CircularHabitWidgetState extends ConsumerState<CircularHabitWidget> with 
                                 fontFeatures: [
                                   FontFeature.tabularFigures(),
                                 ],
-                                color: habitColor.colorRegardingToBrightness,
+                                color: context.theme.primaryContrastingColor.withValues(alpha: 0.9),
                               ),
                             ),
                           ],
