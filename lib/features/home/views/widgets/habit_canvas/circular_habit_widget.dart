@@ -204,7 +204,6 @@ class _CircularHabitWidgetState extends ConsumerState<CircularHabitWidget> with 
         return Transform.scale(scale: scale * dragScale, child: child);
       },
       child: SizedBox(
-        width: size + 20,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -213,29 +212,26 @@ class _CircularHabitWidgetState extends ConsumerState<CircularHabitWidget> with 
               AnimatedOpacity(
                 duration: const Duration(milliseconds: 350),
                 opacity: widget.showName ?? true ? 1.0 : 0.0,
-                child: SizedBox(
-                  width: size + 20,
-                  child: Text(
-                    _getReminderTimeText(currentHabit.reminderModel!),
-                    textAlign: TextAlign.center,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: context.labelSmall.copyWith(
-                      fontWeight: FontWeight.w500,
-                      fontSize: 14,
-                      color: isDark ? Colors.white60 : Colors.black54,
-                    ),
+                child: Text(
+                  _getReminderTimeText(currentHabit.reminderModel!),
+                  textAlign: TextAlign.center,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: context.labelSmall.copyWith(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 14,
+                    color: isDark ? Colors.white60 : Colors.black54,
                   ),
                 ),
               ),
-              const SizedBox(height: 3),
+              const SizedBox(height: 2.5),
             ],
 
             // Main circular item
             AnimatedContainer(
               duration: const Duration(milliseconds: 350),
-              width: size,
-              height: size,
+              width: size + 10,
+              height: size + 10,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 color: isDark ? CupertinoColors.systemGrey6.darkColor : Colors.white,
@@ -279,7 +275,7 @@ class _CircularHabitWidgetState extends ConsumerState<CircularHabitWidget> with 
                   Text(
                     emoji,
                     style: TextStyle(
-                      fontSize: 38,
+                      fontSize: 42,
                       fontFeatures: [
                         FontFeature.tabularFigures(),
                       ],
@@ -342,8 +338,8 @@ class _CircularHabitWidgetState extends ConsumerState<CircularHabitWidget> with 
                             borderRadius: BorderRadius.circular(100),
                             child: AnimatedContainer(
                               duration: const Duration(milliseconds: 350),
-                              width: 28,
-                              height: 28,
+                              width: 30,
+                              height: 30,
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
                                 color: habitColor.withValues(alpha: isCompleted ? 1.0 : 0.1),
@@ -364,7 +360,7 @@ class _CircularHabitWidgetState extends ConsumerState<CircularHabitWidget> with 
                               child: Center(
                                 child: FaIcon(
                                   isCompleted ? FontAwesomeIcons.check : FontAwesomeIcons.plus,
-                                  size: 16,
+                                  size: 17,
                                   color: isCompleted
                                       ? Colors.white // Always white when completed (background is habitColor)
                                       : habitColor, // Use habitColor when not completed (background is light)
