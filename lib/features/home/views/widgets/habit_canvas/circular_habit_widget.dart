@@ -38,28 +38,7 @@ class CircularHabitWidget extends ConsumerStatefulWidget {
   ConsumerState<CircularHabitWidget> createState() => _CircularHabitWidgetState();
 }
 
-class _CircularHabitWidgetState extends ConsumerState<CircularHabitWidget> with SingleTickerProviderStateMixin {
-  late final AnimationController _pulseController;
-  late final Animation<double> _pulseAnimation;
-
-  @override
-  void initState() {
-    super.initState();
-    _pulseController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 1500),
-    );
-    _pulseAnimation = Tween<double>(begin: 1.0, end: 1.08).animate(
-      CurvedAnimation(parent: _pulseController, curve: Curves.easeInOut),
-    );
-  }
-
-  @override
-  void dispose() {
-    _pulseController.dispose();
-    super.dispose();
-  }
-
+class _CircularHabitWidgetState extends ConsumerState<CircularHabitWidget> {
   Future<void> _toggleCompletion() async {
     if (!mounted) return;
 
@@ -185,24 +164,12 @@ class _CircularHabitWidgetState extends ConsumerState<CircularHabitWidget> with 
     final emoji = currentHabit.emoji ?? '🎯';
     final streak = currentHabit.calculateCurrentStreak();
 
-    // Handle pulse animation
-    if (isCompleted && !_pulseController.isAnimating) {
-      _pulseController.repeat(reverse: true);
-    } else if (!isCompleted && _pulseController.isAnimating) {
-      _pulseController.stop();
-      _pulseController.reset();
-    }
-
     const double size = 90.0;
     final isDark = CupertinoTheme.of(context).brightness == Brightness.dark;
+    final dragScale = widget.isDragging ? 1.15 : 1.0;
 
-    return AnimatedBuilder(
-      animation: _pulseAnimation,
-      builder: (context, child) {
-        final scale = isCompleted ? 1.0 : _pulseAnimation.value;
-        final dragScale = widget.isDragging ? 1.15 : 1.0;
-        return Transform.scale(scale: scale * dragScale, child: child);
-      },
+    return Transform.scale(
+      scale: dragScale,
       child: SizedBox(
         child: Column(
           mainAxisSize: MainAxisSize.min,

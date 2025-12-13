@@ -51,6 +51,10 @@ class _HabitConstellationViewState extends ConsumerState<HabitConstellationView>
   // Animation controller for smooth zoom
   late final AnimationController _zoomAnimationController;
 
+  // Store animation listeners to properly dispose them
+  VoidCallback? _currentAnimationListener;
+  void Function(AnimationStatus)? _currentStatusListener;
+
   // Canvas virtual size
   static const double canvasWidth = 2000.0;
   static const double canvasHeight = 2000.0;
@@ -88,10 +92,11 @@ class _HabitConstellationViewState extends ConsumerState<HabitConstellationView>
 
   /// Centers the view on habits, ensuring they're visible on screen
   void _centerViewOnHabits() {
-    final canvasState = ref.read(habitCanvasProvider);
+    final positions = ref.read(habitCanvasProvider.select((state) => state.positions));
+    final scale = ref.read(habitCanvasProvider.select((state) => state.scale));
     final screenSize = MediaQuery.of(context).size;
 
-    if (canvasState.positions.isEmpty || widget.habits.isEmpty) {
+    if (positions.isEmpty || widget.habits.isEmpty) {
       // No habits, just center on canvas center
       final centerOffsetX = -(canvasWidth - screenSize.width) / 2;
       final centerOffsetY = -(canvasHeight - screenSize.height) / 2;
@@ -106,7 +111,7 @@ class _HabitConstellationViewState extends ConsumerState<HabitConstellationView>
     double maxY = double.negativeInfinity;
 
     for (final habit in widget.habits) {
-      final position = canvasState.positions[habit.id];
+      final position = positions[habit.id];
       if (position != null) {
         minX = minX < position.x ? minX : position.x;
         maxX = maxX > position.x ? maxX : position.x;
@@ -129,32 +134,33 @@ class _HabitConstellationViewState extends ConsumerState<HabitConstellationView>
 
     // Use current visible scale (from controller) or fallback to saved/default
     final currentScale = _transformationController.value.getMaxScaleOnAxis();
-    final scale = currentScale > 0 ? currentScale : (canvasState.scale > 0 ? canvasState.scale : 1.0);
+    final finalScale = currentScale > 0 ? currentScale : (scale > 0 ? scale : 1.0);
 
     // Calculate offset to center habits on screen
     // Screen position = canvas position * scale + offset
     // We want: screenCenter = habitsCenter * scale + offset
     // So: offset = screenCenter - habitsCenter * scale
-    final offsetX = (screenSize.width / 2) - (habitsCenterX * scale);
-    final offsetY = (screenSize.height / 2) - (habitsCenterY * scale);
+    final offsetX = (screenSize.width / 2) - (habitsCenterX * finalScale);
+    final offsetY = (screenSize.height / 2) - (habitsCenterY * finalScale);
 
     // Apply the transformation: first scale, then translate
     _transformationController.value = Matrix4.identity()
       ..translateByDouble(offsetX, offsetY, 0.0, 1.0)
-      ..scaleByDouble(scale, scale, 1.0, 1.0);
+      ..scaleByDouble(finalScale, finalScale, 1.0, 1.0);
 
     // Save this state
     final translation = _transformationController.value.getTranslation();
-    ref.read(habitCanvasProvider.notifier).updateScale(scale);
+    ref.read(habitCanvasProvider.notifier).updateScale(finalScale);
     ref.read(habitCanvasProvider.notifier).updateOffset(translation.x, translation.y);
   }
 
   /// Centers the view on habits with smooth animation
   void _centerViewOnHabitsAnimated() {
-    final canvasState = ref.read(habitCanvasProvider);
+    final positions = ref.read(habitCanvasProvider.select((state) => state.positions));
+    final scale = ref.read(habitCanvasProvider.select((state) => state.scale));
     final screenSize = MediaQuery.of(context).size;
 
-    if (canvasState.positions.isEmpty || widget.habits.isEmpty) {
+    if (positions.isEmpty || widget.habits.isEmpty) {
       // No habits, just center on canvas center
       final centerOffsetX = -(canvasWidth - screenSize.width) / 2;
       final centerOffsetY = -(canvasHeight - screenSize.height) / 2;
@@ -170,7 +176,7 @@ class _HabitConstellationViewState extends ConsumerState<HabitConstellationView>
     double maxY = double.negativeInfinity;
 
     for (final habit in widget.habits) {
-      final position = canvasState.positions[habit.id];
+      final position = positions[habit.id];
       if (position != null) {
         minX = minX < position.x ? minX : position.x;
         maxX = maxX > position.x ? maxX : position.x;
@@ -194,16 +200,16 @@ class _HabitConstellationViewState extends ConsumerState<HabitConstellationView>
 
     // Use current visible scale (from controller) or fallback to saved/default
     final currentScale = _transformationController.value.getMaxScaleOnAxis();
-    final scale = currentScale > 0 ? currentScale : (canvasState.scale > 0 ? canvasState.scale : 1.0);
+    final finalScale = currentScale > 0 ? currentScale : (scale > 0 ? scale : 1.0);
 
     // Calculate offset to center habits on screen
-    final offsetX = (screenSize.width / 2) - (habitsCenterX * scale);
-    final offsetY = (screenSize.height / 2) - (habitsCenterY * scale);
+    final offsetX = (screenSize.width / 2) - (habitsCenterX * finalScale);
+    final offsetY = (screenSize.height / 2) - (habitsCenterY * finalScale);
 
     // Create target matrix
     final targetMatrix = Matrix4.identity()
       ..translateByDouble(offsetX, offsetY, 0.0, 1.0)
-      ..scaleByDouble(scale, scale, 1.0, 1.0);
+      ..scaleByDouble(finalScale, finalScale, 1.0, 1.0);
 
     // Animate to target
     _animateToMatrix(targetMatrix);
@@ -244,8 +250,13 @@ class _HabitConstellationViewState extends ConsumerState<HabitConstellationView>
       final scaleDelta = targetScale - currentScale;
       final translationDelta = targetTranslation - currentTranslation;
 
+      // Remove existing listeners before adding new ones
+      _removeAnimationListeners();
+
       _zoomAnimationController.reset();
-      _zoomAnimationController.addListener(() {
+
+      // Create and store listener
+      _currentAnimationListener = () {
         final progress = Curves.easeInOutCubic.transform(_zoomAnimationController.value);
         final animatedScale = currentScale + (scaleDelta * progress);
         final animatedTranslation = currentTranslation + (translationDelta * progress);
@@ -255,15 +266,20 @@ class _HabitConstellationViewState extends ConsumerState<HabitConstellationView>
           ..scaleByDouble(animatedScale, animatedScale, 1.0, 1.0);
 
         _transformationController.value = animatedMatrix;
-      });
+      };
+      _zoomAnimationController.addListener(_currentAnimationListener!);
 
-      _zoomAnimationController.addStatusListener((status) {
+      // Create and store status listener
+      _currentStatusListener = (status) {
         if (status == AnimationStatus.completed) {
           final translation = targetMatrix.getTranslation();
           ref.read(habitCanvasProvider.notifier).updateScale(targetScale);
           ref.read(habitCanvasProvider.notifier).updateOffset(translation.x, translation.y);
+          // Clean up listeners after animation completes
+          _removeAnimationListeners();
         }
-      });
+      };
+      _zoomAnimationController.addStatusListener(_currentStatusListener!);
 
       _zoomAnimationController.forward();
       return;
@@ -286,8 +302,13 @@ class _HabitConstellationViewState extends ConsumerState<HabitConstellationView>
     final scaleDelta = targetScale - currentScale;
     final scenePointDelta = targetScenePoint - scenePoint;
 
+    // Remove existing listeners before adding new ones
+    _removeAnimationListeners();
+
     _zoomAnimationController.reset();
-    _zoomAnimationController.addListener(() {
+
+    // Create and store listener
+    _currentAnimationListener = () {
       final progress = Curves.easeInOutCubic.transform(_zoomAnimationController.value);
       final animatedScale = currentScale + (scaleDelta * progress);
       final animatedScenePoint = scenePoint + (scenePointDelta * progress);
@@ -302,9 +323,11 @@ class _HabitConstellationViewState extends ConsumerState<HabitConstellationView>
         ..scaleByDouble(animatedScale, animatedScale, 1.0, 1.0);
 
       _transformationController.value = animatedMatrix;
-    });
+    };
+    _zoomAnimationController.addListener(_currentAnimationListener!);
 
-    _zoomAnimationController.addStatusListener((status) {
+    // Create and store status listener
+    _currentStatusListener = (status) {
       if (status == AnimationStatus.completed) {
         // Save final state after animation completes
         final finalMatrix = _transformationController.value;
@@ -312,8 +335,11 @@ class _HabitConstellationViewState extends ConsumerState<HabitConstellationView>
         final translation = finalMatrix.getTranslation();
         ref.read(habitCanvasProvider.notifier).updateScale(finalScale);
         ref.read(habitCanvasProvider.notifier).updateOffset(translation.x, translation.y);
+        // Clean up listeners after animation completes
+        _removeAnimationListeners();
       }
-    });
+    };
+    _zoomAnimationController.addStatusListener(_currentStatusListener!);
 
     _zoomAnimationController.forward();
   }
@@ -337,9 +363,30 @@ class _HabitConstellationViewState extends ConsumerState<HabitConstellationView>
   @override
   void dispose() {
     _saveStateTimer?.cancel();
+    // Remove animation listeners before disposing
+    if (_currentAnimationListener != null) {
+      _zoomAnimationController.removeListener(_currentAnimationListener!);
+      _currentAnimationListener = null;
+    }
+    if (_currentStatusListener != null) {
+      _zoomAnimationController.removeStatusListener(_currentStatusListener!);
+      _currentStatusListener = null;
+    }
     _zoomAnimationController.dispose();
     _transformationController.dispose();
     super.dispose();
+  }
+
+  /// Remove existing animation listeners before adding new ones
+  void _removeAnimationListeners() {
+    if (_currentAnimationListener != null) {
+      _zoomAnimationController.removeListener(_currentAnimationListener!);
+      _currentAnimationListener = null;
+    }
+    if (_currentStatusListener != null) {
+      _zoomAnimationController.removeStatusListener(_currentStatusListener!);
+      _currentStatusListener = null;
+    }
   }
 
   // Save pan and zoom state with debounce
@@ -394,8 +441,8 @@ class _HabitConstellationViewState extends ConsumerState<HabitConstellationView>
   void _startDragging(String habitId, Offset globalPosition) {
     HapticFeedback.heavyImpact();
 
-    final canvasState = ref.read(habitCanvasProvider);
-    final position = canvasState.positions[habitId];
+    final positions = ref.read(habitCanvasProvider.select((state) => state.positions));
+    final position = positions[habitId];
     if (position == null) return;
 
     setState(() {
@@ -476,7 +523,9 @@ class _HabitConstellationViewState extends ConsumerState<HabitConstellationView>
 
   @override
   Widget build(BuildContext context) {
-    final canvasState = ref.watch(habitCanvasProvider);
+    // Optimize: Only watch specific parts of canvas state instead of entire state
+    final positions = ref.watch(habitCanvasProvider.select((state) => state.positions));
+    final connections = ref.watch(habitCanvasProvider.select((state) => state.connections));
     final isDark = CupertinoTheme.of(context).brightness == Brightness.dark;
 
     return Stack(
@@ -512,8 +561,8 @@ class _HabitConstellationViewState extends ConsumerState<HabitConstellationView>
                   child: CustomPaint(
                     size: const Size(canvasWidth, canvasHeight),
                     painter: ConnectionPainter(
-                      connections: canvasState.connections,
-                      positions: canvasState.positions,
+                      connections: connections,
+                      positions: positions,
                       habits: widget.habits,
                       isDark: isDark,
                     ),
@@ -546,7 +595,7 @@ class _HabitConstellationViewState extends ConsumerState<HabitConstellationView>
 
                 // Habit items
                 ...widget.habits.map((habit) {
-                  final position = canvasState.positions[habit.id];
+                  final position = positions[habit.id];
                   if (position == null) return const SizedBox.shrink();
 
                   final isDragging = _draggingHabitId == habit.id;
@@ -823,8 +872,13 @@ class _HabitConstellationViewState extends ConsumerState<HabitConstellationView>
     final startScale = currentScale;
     final scaleDelta = clampedScale - startScale;
 
+    // Remove existing listeners before adding new ones
+    _removeAnimationListeners();
+
     _zoomAnimationController.reset();
-    _zoomAnimationController.addListener(() {
+
+    // Create and store listener
+    _currentAnimationListener = () {
       final progress = Curves.easeInOutCubic.transform(_zoomAnimationController.value);
       final animatedScale = startScale + (scaleDelta * progress);
 
@@ -837,9 +891,11 @@ class _HabitConstellationViewState extends ConsumerState<HabitConstellationView>
         ..scaleByDouble(animatedScale, animatedScale, 1.0, 1.0);
 
       _transformationController.value = animatedMatrix;
-    });
+    };
+    _zoomAnimationController.addListener(_currentAnimationListener!);
 
-    _zoomAnimationController.addStatusListener((status) {
+    // Create and store status listener
+    _currentStatusListener = (status) {
       if (status == AnimationStatus.completed) {
         // Save final state after animation completes
         final finalMatrix = _transformationController.value;
@@ -847,8 +903,11 @@ class _HabitConstellationViewState extends ConsumerState<HabitConstellationView>
         final translation = finalMatrix.getTranslation();
         ref.read(habitCanvasProvider.notifier).updateScale(finalScale);
         ref.read(habitCanvasProvider.notifier).updateOffset(translation.x, translation.y);
+        // Clean up listeners after animation completes
+        _removeAnimationListeners();
       }
-    });
+    };
+    _zoomAnimationController.addStatusListener(_currentStatusListener!);
 
     _zoomAnimationController.forward();
   }
@@ -863,8 +922,8 @@ class _GridPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = isDark ? Colors.white.withValues(alpha: 0.04) : Colors.black.withValues(alpha: 0.04)
-      ..strokeWidth = 1;
+      ..color = isDark ? Colors.white.withValues(alpha: 0.15) : Colors.black.withValues(alpha: 0.15)
+      ..strokeWidth = 0.5;
 
     const spacing = 50.0;
 
