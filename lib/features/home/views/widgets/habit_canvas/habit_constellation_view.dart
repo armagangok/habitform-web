@@ -922,7 +922,7 @@ class _GridPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = isDark ? Colors.white.withValues(alpha: 0.15) : Colors.black.withValues(alpha: 0.15)
+      ..color = isDark ? Colors.white.withValues(alpha: 0.175) : Colors.black.withValues(alpha: 0.175)
       ..strokeWidth = 0.5;
 
     const spacing = 50.0;
