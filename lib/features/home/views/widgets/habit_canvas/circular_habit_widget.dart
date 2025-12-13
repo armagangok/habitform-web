@@ -316,7 +316,9 @@ class _CircularHabitWidgetState extends ConsumerState<CircularHabitWidget> with 
                               child: Icon(
                                 isCompleted ? CupertinoIcons.checkmark : CupertinoIcons.plus,
                                 size: 17,
-                                color: habitColor.colorRegardingToBrightness,
+                                color: isCompleted 
+                                    ? Colors.white // Always white when completed (background is habitColor)
+                                    : habitColor, // Use habitColor when not completed (background is light)
                               ),
                             ),
                           ),
