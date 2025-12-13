@@ -127,6 +127,33 @@ class ConnectionPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant ConnectionPainter oldDelegate) {
-    return oldDelegate.connections != connections || oldDelegate.positions != positions || oldDelegate.isDark != isDark;
+    // Optimized: Check reference equality first (fast path)
+    if (oldDelegate.connections == connections && oldDelegate.positions == positions && oldDelegate.isDark == isDark) {
+      return false;
+    }
+
+    // If references differ, check if content actually changed
+    // For connections: compare size first, then check if any connection is different
+    if (oldDelegate.connections.length != connections.length) return true;
+    if (oldDelegate.positions.length != positions.length) return true;
+    if (oldDelegate.isDark != isDark) return true;
+
+    // Check if any connection was added/removed (quick check)
+    final oldConnectionSet = oldDelegate.connections.map((c) => '${c.fromHabitId}_${c.toHabitId}').toSet();
+    final newConnectionSet = connections.map((c) => '${c.fromHabitId}_${c.toHabitId}').toSet();
+    if (oldConnectionSet != newConnectionSet) return true;
+
+    // Check if any position changed (only check positions that are used in connections)
+    for (final connection in connections) {
+      final oldFromPos = oldDelegate.positions[connection.fromHabitId];
+      final newFromPos = positions[connection.fromHabitId];
+      if (oldFromPos?.x != newFromPos?.x || oldFromPos?.y != newFromPos?.y) return true;
+
+      final oldToPos = oldDelegate.positions[connection.toHabitId];
+      final newToPos = positions[connection.toHabitId];
+      if (oldToPos?.x != newToPos?.x || oldToPos?.y != newToPos?.y) return true;
+    }
+
+    return false;
   }
 }

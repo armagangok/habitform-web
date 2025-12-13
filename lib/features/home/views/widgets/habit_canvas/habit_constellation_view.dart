@@ -553,6 +553,7 @@ class _HabitConstellationViewState extends ConsumerState<HabitConstellationView>
                   final isSelectedForConnection = _selectedHabitForConnection == habit.id;
 
                   return Positioned(
+                    key: ValueKey('habit_${habit.id}'),
                     left: position.x - 55,
                     top: position.y - 70,
                     child: RepaintBoundary(
@@ -588,6 +589,7 @@ class _HabitConstellationViewState extends ConsumerState<HabitConstellationView>
                           // This allows dragging to continue even after finger is lifted
                         },
                         child: CircularHabitWidget(
+                          key: ValueKey('${habit.id}_${isDragging}_${isSelectedForConnection}_${_isConnectingMode}_$_showHabitNames'),
                           habit: habit,
                           isSelected: isSelectedForConnection,
                           isDragging: isDragging,

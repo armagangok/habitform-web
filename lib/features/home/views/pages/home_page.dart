@@ -40,11 +40,11 @@ class HomePage extends ConsumerWidget {
                   return HabitConstellationView(habits: filteredHabits);
                 });
               },
-              loading: () => _loadingWidget(context),
+              loading: () => _loadingWidget(),
               error: (error, stack) {
                 LogHelper.shared.errorPrint('Error: $error');
                 LogHelper.shared.errorPrint('Stack: $stack');
-                return _errorWidget(context);
+                return _errorWidget();
               },
             ),
 
@@ -217,31 +217,35 @@ class HomePage extends ConsumerWidget {
     );
   }
 
-  Widget _errorWidget(BuildContext context) {
+  Widget _errorWidget() {
     return Center(
-      child: Text(
-        LocaleKeys.errors_something_went_wrong.tr(),
-        style: context.bodyMedium,
-        textAlign: TextAlign.center,
-      ),
+      child: Builder(builder: (context) {
+        return Text(
+          LocaleKeys.errors_something_went_wrong.tr(),
+          style: context.bodyMedium,
+          textAlign: TextAlign.center,
+        );
+      }),
     );
   }
 
-  Widget _loadingWidget(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const CupertinoActivityIndicator(),
-          const SizedBox(height: 10),
-          Text(
-            LocaleKeys.common_loading_habits.tr(),
-            style: context.bodyMedium,
-            textAlign: TextAlign.center,
-          ),
-        ],
-      ),
-    );
+  Widget _loadingWidget() {
+    return Builder(builder: (context) {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const CupertinoActivityIndicator(),
+            const SizedBox(height: 10),
+            Text(
+              LocaleKeys.common_loading_habits.tr(),
+              style: context.bodyMedium,
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
+      );
+    });
   }
 
   Future<void> _handlePaywallAction(BuildContext context) async {

@@ -160,14 +160,19 @@ class _CircularHabitWidgetState extends ConsumerState<CircularHabitWidget> with 
   @override
   Widget build(BuildContext context) {
     // Use provider if enabled, otherwise use widget.habit directly
+    // Optimized: Only watch the specific habit instead of entire homeProvider
     final currentHabit = widget.useProvider
-        ? ref.watch(homeProvider).maybeWhen(
-              data: (homeState) => homeState.habits.firstWhere(
-                (h) => h.id == widget.habit.id,
+        ? ref.watch(
+            homeProvider.select(
+              (state) => state.maybeWhen(
+                data: (homeState) => homeState.habits.firstWhere(
+                  (h) => h.id == widget.habit.id,
+                  orElse: () => widget.habit,
+                ),
                 orElse: () => widget.habit,
               ),
-              orElse: () => widget.habit,
-            )
+            ),
+          )
         : widget.habit;
 
     final today = DateTime.now();

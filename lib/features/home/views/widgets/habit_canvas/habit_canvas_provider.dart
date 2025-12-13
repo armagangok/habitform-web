@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math' as math;
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -19,6 +20,10 @@ class HabitCanvasNotifier extends StateNotifier<HabitCanvasState> {
   late final Future<void> _loadStateFuture;
   bool _isLoaded = false;
 
+  // Debounce timer for position updates to avoid excessive disk I/O
+  Timer? _saveStateTimer;
+  static const Duration _saveDebounceDuration = Duration(milliseconds: 300);
+
   Future<void> _loadState() async {
     final loadedState = await HabitCanvasStorage.load();
     state = loadedState;
@@ -32,8 +37,16 @@ class HabitCanvasNotifier extends StateNotifier<HabitCanvasState> {
     }
   }
 
-  Future<void> _saveState() async {
-    await HabitCanvasStorage.save(state);
+  Future<void> _saveState({bool immediate = false}) async {
+    if (immediate) {
+      _saveStateTimer?.cancel();
+      await HabitCanvasStorage.save(state);
+    } else {
+      _saveStateTimer?.cancel();
+      _saveStateTimer = Timer(_saveDebounceDuration, () async {
+        await HabitCanvasStorage.save(state);
+      });
+    }
   }
 
   /// Initialize positions for habits that don't have positions yet
@@ -71,16 +84,17 @@ class HabitCanvasNotifier extends StateNotifier<HabitCanvasState> {
 
     if (hasChanges || updatedPositions.length != state.positions.length) {
       state = state.copyWith(positions: updatedPositions);
-      _saveState();
+      _saveState(immediate: true); // Immediate save for initialization
     }
   }
 
   /// Update position of a single habit
+  /// Uses debounced save to avoid excessive disk I/O during dragging
   void updatePosition(String habitId, double x, double y) {
     final updatedPositions = Map<String, HabitPosition>.from(state.positions);
     updatedPositions[habitId] = HabitPosition(habitId: habitId, x: x, y: y);
     state = state.copyWith(positions: updatedPositions);
-    _saveState();
+    _saveState(); // Debounced save
   }
 
   /// Add a connection between two habits
@@ -96,7 +110,7 @@ class HabitCanvasNotifier extends StateNotifier<HabitCanvasState> {
     if (!exists) {
       updatedConnections.add(connection);
       state = state.copyWith(connections: updatedConnections);
-      _saveState();
+      _saveState(immediate: true); // Immediate save for user actions
     }
   }
 
@@ -105,7 +119,7 @@ class HabitCanvasNotifier extends StateNotifier<HabitCanvasState> {
     final updatedConnections = Set<HabitConnection>.from(state.connections);
     updatedConnections.removeWhere((c) => (c.fromHabitId == fromHabitId && c.toHabitId == toHabitId) || (c.fromHabitId == toHabitId && c.toHabitId == fromHabitId));
     state = state.copyWith(connections: updatedConnections);
-    _saveState();
+    _saveState(immediate: true); // Immediate save for user actions
   }
 
   /// Toggle connection between two habits
@@ -124,13 +138,13 @@ class HabitCanvasNotifier extends StateNotifier<HabitCanvasState> {
   /// Update canvas scale
   void updateScale(double scale) {
     state = state.copyWith(scale: scale.clamp(0.5, 2.5));
-    _saveState();
+    _saveState(); // Debounced save for smooth zoom/pan
   }
 
   /// Update canvas offset
   void updateOffset(double offsetX, double offsetY) {
     state = state.copyWith(offsetX: offsetX, offsetY: offsetY);
-    _saveState();
+    _saveState(); // Debounced save for smooth zoom/pan
   }
 
   /// Reset all positions to default layout
@@ -147,6 +161,6 @@ class HabitCanvasNotifier extends StateNotifier<HabitCanvasState> {
   /// Clear all connections
   void clearConnections() {
     state = state.copyWith(connections: {});
-    _saveState();
+    _saveState(immediate: true); // Immediate save for user actions
   }
 }
