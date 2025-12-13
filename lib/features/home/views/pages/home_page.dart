@@ -1,3 +1,4 @@
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '/core/core.dart';
@@ -18,37 +19,44 @@ class HomePage extends ConsumerWidget {
     final homeStateAsyncValue = ref.watch(homeProvider);
     final isDark = CupertinoTheme.of(context).brightness == Brightness.dark;
 
-    return CupertinoPageScaffold(
-      backgroundColor: isDark ? CupertinoColors.black : CupertinoColors.systemGrey6,
-      child: Stack(
-        children: [
-          // Constellation view (full screen)
-          homeStateAsyncValue.when(
-            data: (homeState) {
-              return Consumer(builder: (context, ref, _) {
-                final filteredHabits = ref.watch(filteredHabitsProvider);
-                if (filteredHabits.isEmpty) {
-                  return _noHabitsWidget(ref, context);
-                }
-                return HabitConstellationView(habits: filteredHabits);
-              });
-            },
-            loading: () => _loadingWidget(context),
-            error: (error, stack) {
-              LogHelper.shared.errorPrint('Error: $error');
-              LogHelper.shared.errorPrint('Stack: $stack');
-              return _errorWidget(context);
-            },
-          ),
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: isDark ? Brightness.light : Brightness.dark,
+        statusBarBrightness: isDark ? Brightness.dark : Brightness.light,
+      ),
+      child: CupertinoPageScaffold(
+        backgroundColor: isDark ? CupertinoColors.black : CupertinoColors.systemGrey6,
+        child: Stack(
+          children: [
+            // Constellation view (full screen)
+            homeStateAsyncValue.when(
+              data: (homeState) {
+                return Consumer(builder: (context, ref, _) {
+                  final filteredHabits = ref.watch(filteredHabitsProvider);
+                  if (filteredHabits.isEmpty) {
+                    return _noHabitsWidget(ref, context);
+                  }
+                  return HabitConstellationView(habits: filteredHabits);
+                });
+              },
+              loading: () => _loadingWidget(context),
+              error: (error, stack) {
+                LogHelper.shared.errorPrint('Error: $error');
+                LogHelper.shared.errorPrint('Stack: $stack');
+                return _errorWidget(context);
+              },
+            ),
 
-          // Floating navigation bar
-          Positioned(
-            top: 0,
-            left: 0,
-            right: 0,
-            child: _buildFloatingNavBar(ref, context, isDark),
-          ),
-        ],
+            // Floating navigation bar
+            Positioned(
+              top: 0,
+              left: 0,
+              right: 0,
+              child: _buildFloatingNavBar(ref, context, isDark),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -67,17 +75,17 @@ class HomePage extends ConsumerWidget {
         child: Row(
           children: [
             // Settings button
-            _buildNavButton(
-              context: context,
-              icon: FontAwesomeIcons.gear,
-              isDark: isDark,
-              onTap: () {
+            CircularActionButton(
+              onPressed: () {
                 showCupertinoSheet(
                   enableDrag: false,
                   context: context,
                   builder: (contextFromSheet) => const SettingsPage(),
                 );
               },
+              icon: FontAwesomeIcons.gear,
+              size: 40,
+              iconSize: 18,
             ),
 
             const Spacer(),
@@ -123,39 +131,35 @@ class HomePage extends ConsumerWidget {
                     child: const CupertinoActivityIndicator(),
                   )
                 else if (!isSubActive)
-                  _buildNavButton(
-                    context: context,
+                  CircularActionButton(
+                    onPressed: () => _handlePaywallAction(context),
                     icon: FontAwesomeIcons.crown,
-                    isDark: isDark,
                     iconColor: Colors.amber,
-                    onTap: () => _handlePaywallAction(context),
+                    size: 40,
+                    iconSize: 18,
                   ),
 
                 const SizedBox(width: 8),
 
                 // Statistics button
-                _buildNavButton(
-                  context: context,
-                  icon: FontAwesomeIcons.chartLine,
-                  isDark: isDark,
-                  onTap: () {
+                CircularActionButton(
+                  onPressed: () {
                     showCupertinoSheet(
                       enableDrag: false,
                       context: context,
                       builder: (contextFromSheet) => const HabitProbabilityPage(),
                     );
                   },
+                  icon: FontAwesomeIcons.chartLine,
+                  size: 40,
+                  iconSize: 18,
                 ),
 
                 const SizedBox(width: 8),
 
                 // Add habit button
-                _buildNavButton(
-                  context: context,
-                  icon: CupertinoIcons.plus,
-                  isDark: isDark,
-                  isPrimary: true,
-                  onTap: () async {
+                CircularActionButton(
+                  onPressed: () async {
                     final homeState = ref.read(homeProvider).value;
                     if (homeState != null) {
                       final canCreate = await ref.watch(createHabitProvider.notifier).canCreateHabit(
@@ -172,47 +176,15 @@ class HomePage extends ConsumerWidget {
                       }
                     }
                   },
+                  icon: CupertinoIcons.plus,
+                  backgroundColor: context.primary,
+                  iconColor: Colors.white,
+                  size: 40,
+                  iconSize: 18,
                 ),
               ],
             ),
           ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildNavButton({
-    required BuildContext context,
-    required IconData icon,
-    required bool isDark,
-    Color? iconColor,
-    bool isPrimary = false,
-    required VoidCallback onTap,
-  }) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        width: 40,
-        height: 40,
-        decoration: BoxDecoration(
-          color: isPrimary
-              ? context.primary
-              : isDark
-                  ? CupertinoColors.systemGrey6.darkColor.withValues(alpha: 0.8)
-                  : Colors.white.withValues(alpha: 0.9),
-          shape: BoxShape.circle,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.1),
-              blurRadius: 8,
-              offset: const Offset(0, 2),
-            ),
-          ],
-        ),
-        child: Icon(
-          icon,
-          size: 18,
-          color: isPrimary ? Colors.white : iconColor ?? (isDark ? Colors.white70 : Colors.black87),
         ),
       ),
     );
