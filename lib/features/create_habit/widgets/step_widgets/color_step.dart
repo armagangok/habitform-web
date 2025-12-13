@@ -37,6 +37,7 @@ class _ColorStepState extends ConsumerState<ColorStep> {
 
   @override
   Widget build(BuildContext context) {
+    // Watch state to rebuild when color changes
     final state = ref.watch(createHabitProvider);
     final selectedIcon = state.emoji;
     final selectedColor = state.colorCode;
@@ -44,7 +45,7 @@ class _ColorStepState extends ConsumerState<ColorStep> {
     // Get habit name from controller
     final habitName = state.habitNameController.text;
     final habitDescription = state.habitDescriptionController.text;
-    final canProceed = ref.watch(createHabitProvider.notifier).isCurrentStepValid();
+    final canProceed = ref.read(createHabitProvider.notifier).isCurrentStepValid();
 
     // Watch color provider to prevent auto-disposal
     ref.watch(colorProvider);
@@ -93,17 +94,21 @@ class _ColorStepState extends ConsumerState<ColorStep> {
                 ),
                 const SizedBox(height: 12),
                 SizedBox(
-                  height: 180,
+                  height: 200, // Increased height to prevent text overlap
                   child: Center(
                     child: CircularHabitPreviewWidget(
+                      key: ValueKey('preview_${selectedColor}_${selectedIcon}_$habitName'), // Key to force rebuild on color/emoji/name change
                       habit: Habit(
-                        id: '1',
+                        id: 'preview_habit',
                         habitName: habitName.isEmpty ? LocaleKeys.create_habit_preview_your_habit.tr() : habitName,
                         habitDescription: habitDescription.isEmpty ? '' : habitDescription,
                         emoji: selectedIcon ?? '',
                         colorCode: selectedColor ?? context.primaryContrastingColor.value,
                       ),
                       showName: true,
+                      scale: 1.2, // Smaller scale for create habit to prevent text overlap
+                      showCompleteButton: true, // Show complete button in preview
+                      enableCompleteButton: false, // But make it non-tappable
                     ),
                   ),
                 ),

@@ -7,7 +7,7 @@ import '/core/core.dart';
 import '/models/habit/habit_model.dart';
 import '../../../../habit_detail/page/habit_detail.dart';
 import '../../../../habit_detail/providers/habit_detail_provider.dart';
-import 'circular_habit_item.dart';
+import 'circular_habit_widget.dart';
 import 'connection_painter.dart';
 import 'habit_canvas_provider.dart';
 

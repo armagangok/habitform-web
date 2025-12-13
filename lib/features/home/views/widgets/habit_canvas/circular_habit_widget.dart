@@ -288,34 +288,36 @@ class _CircularHabitWidgetState extends ConsumerState<CircularHabitWidget> with 
                       right: 0,
                       child: IgnorePointer(
                         ignoring: !widget.enableCompleteButton,
-                        child: GestureDetector(
-                          behavior: HitTestBehavior.opaque,
-                          onTap: _toggleCompletion,
-                          child: AnimatedContainer(
-                            duration: const Duration(milliseconds: 350),
-                            width: 28,
-                            height: 28,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: habitColor,
-                              border: Border.all(
-                                color: habitColor,
-                                width: 2.5,
+                        child: CustomButton(
+                          onPressed: _toggleCompletion,
+                          child: CustomBlurWidget(
+                            borderRadius: BorderRadius.circular(100),
+                            child: AnimatedContainer(
+                              duration: const Duration(milliseconds: 350),
+                              width: 28,
+                              height: 28,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: habitColor.withValues(alpha: isCompleted ? 1.0 : 0.1),
+                                border: Border.all(
+                                  color: habitColor,
+                                  width: 1,
+                                ),
+                                boxShadow: isCompleted
+                                    ? [
+                                        BoxShadow(
+                                          color: habitColor.withValues(alpha: 0.25),
+                                          blurRadius: 8,
+                                          spreadRadius: 1,
+                                        ),
+                                      ]
+                                    : null,
                               ),
-                              boxShadow: isCompleted
-                                  ? [
-                                      BoxShadow(
-                                        color: habitColor.withValues(alpha: 0.25),
-                                        blurRadius: 8,
-                                        spreadRadius: 1,
-                                      ),
-                                    ]
-                                  : null,
-                            ),
-                            child: Icon(
-                              isCompleted ? CupertinoIcons.checkmark : CupertinoIcons.plus,
-                              size: 17,
-                              color: habitColor.colorRegardingToBrightness,
+                              child: Icon(
+                                isCompleted ? CupertinoIcons.checkmark : CupertinoIcons.plus,
+                                size: 17,
+                                color: habitColor.colorRegardingToBrightness,
+                              ),
                             ),
                           ),
                         ),

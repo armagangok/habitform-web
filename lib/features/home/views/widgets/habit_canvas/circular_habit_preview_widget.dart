@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '/models/completion_entry/completion_entry.dart';
 import '/models/habit/habit_model.dart';
-import 'circular_habit_item.dart';
+import 'circular_habit_widget.dart';
 
 /// Preview version of CircularHabitWidget for onboarding and habit creation
 /// This widget doesn't require provider but can be interactive for demo purposes
@@ -13,6 +13,7 @@ class CircularHabitPreviewWidget extends StatefulWidget {
   final VoidCallback? onTap;
   final bool showCompleteButton; // Show complete button even in preview mode
   final bool enableCompleteButton; // Enable/disable complete button interaction
+  final double? scale; // Optional scale override (default: 1.95 for onboarding, 1.0 for create habit)
 
   const CircularHabitPreviewWidget({
     super.key,
@@ -22,6 +23,7 @@ class CircularHabitPreviewWidget extends StatefulWidget {
     this.onTap,
     this.showCompleteButton = false,
     this.enableCompleteButton = true,
+    this.scale,
   });
 
   @override
@@ -43,7 +45,16 @@ class _CircularHabitPreviewWidgetState extends State<CircularHabitPreviewWidget>
   @override
   void didUpdateWidget(CircularHabitPreviewWidget oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.isCompleted != widget.isCompleted || oldWidget.habit != widget.habit) {
+    final habitChanged = oldWidget.habit.colorCode != widget.habit.colorCode ||
+        oldWidget.habit.emoji != widget.habit.emoji ||
+        oldWidget.habit.habitName != widget.habit.habitName;
+    
+    if (habitChanged) {
+      // Update habit when color, emoji, or name changes
+      _currentHabit = widget.habit;
+    }
+    
+    if (oldWidget.isCompleted != widget.isCompleted) {
       _isCompleted = widget.isCompleted;
       _updateHabitCompletion();
     }
@@ -86,22 +97,23 @@ class _CircularHabitPreviewWidgetState extends State<CircularHabitPreviewWidget>
   Widget build(BuildContext context) {
     // Use CircularHabitWidget with useProvider=false to avoid provider dependency
     // Scale up for better visibility in preview (onboarding, etc.)
-    final double scale = 1.95; // 30% larger for preview
+    // Default scale is 1.95 for onboarding, but can be overridden (e.g., 1.0 for create habit)
+    final double scale = widget.scale ?? 1.95;
     return GestureDetector(
       onTap: widget.onTap ?? _handleTap,
       behavior: HitTestBehavior.opaque,
       child: Transform.scale(
         scale: scale,
-      child: CircularHabitWidget(
-        habit: _currentHabit,
-        showName: widget.showName,
-        isSelected: false,
-        isDragging: false,
-        isConnecting: false,
-        useProvider: false, // Don't use provider for preview
-        showCompleteButton: widget.showCompleteButton,
-        enableCompleteButton: widget.enableCompleteButton,
-      ),
+        child: CircularHabitWidget(
+          habit: _currentHabit,
+          showName: widget.showName,
+          isSelected: false,
+          isDragging: false,
+          isConnecting: false,
+          useProvider: false, // Don't use provider for preview
+          showCompleteButton: widget.showCompleteButton,
+          enableCompleteButton: widget.enableCompleteButton,
+        ),
       ),
     );
   }
