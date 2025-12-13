@@ -353,12 +353,14 @@ class _CircularHabitWidgetState extends ConsumerState<CircularHabitWidget> with 
                                       ]
                                     : null,
                               ),
-                              child: Icon(
-                                isCompleted ? CupertinoIcons.checkmark : CupertinoIcons.plus,
-                                size: 17,
-                                color: isCompleted
-                                    ? Colors.white // Always white when completed (background is habitColor)
-                                    : habitColor, // Use habitColor when not completed (background is light)
+                              child: Center(
+                                child: FaIcon(
+                                  isCompleted ? FontAwesomeIcons.check : FontAwesomeIcons.plus,
+                                  size: 16,
+                                  color: isCompleted
+                                      ? Colors.white // Always white when completed (background is habitColor)
+                                      : habitColor, // Use habitColor when not completed (background is light)
+                                ),
                               ),
                             ),
                           ),
@@ -376,23 +378,23 @@ class _CircularHabitWidgetState extends ConsumerState<CircularHabitWidget> with 
               duration: const Duration(milliseconds: 350),
               opacity: widget.showName ?? true ? 1.0 : 0.0,
               child: CustomBlurWidget(
-                borderRadius: BorderRadius.circular(100),
+                borderRadius: BorderRadius.circular(12),
                 child: ColoredBox(
                   color: habitColor.withValues(alpha: 0.195),
-                  child: SizedBox(
-                    width: size + 20,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-                      child: Text(
-                        currentHabit.habitName,
-                        textAlign: TextAlign.center,
-                        maxLines: null,
-                        overflow: TextOverflow.ellipsis,
-                        style: context.labelSmall.copyWith(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 13,
-                          color: isDark ? Colors.white.withValues(alpha: 0.8) : Colors.black.withValues(alpha: 0.87),
-                        ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 5,
+                    ),
+                    child: Text(
+                      currentHabit.habitName,
+                      textAlign: TextAlign.center,
+                      maxLines: 5,
+                      overflow: TextOverflow.ellipsis,
+                      style: context.labelSmall.copyWith(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 13,
+                        color: isDark ? Colors.white.withValues(alpha: 0.8) : Colors.black.withValues(alpha: 0.8),
                       ),
                     ),
                   ),
