@@ -41,12 +41,16 @@ class CircularHabitWidget extends ConsumerStatefulWidget {
 }
 
 class _CircularHabitWidgetState extends ConsumerState<CircularHabitWidget> {
+  // Track decreasing mode for multi-completion support (similar to Last 7 Days)
+  final Map<String, bool> _decreasingModeByDateKey = {};
+
   Future<void> _toggleCompletion() async {
     if (!mounted) return;
 
     HapticFeedback.mediumImpact();
 
-    final today = DateTime.now();
+    final today = DateUtils.dateOnly(DateTime.now());
+    final dateKey = '${today.year}-${today.month}-${today.day}';
     final homeNotifier = ref.read(homeProvider.notifier);
     final beforeHabit = ref.read(homeProvider).maybeWhen(
           data: (homeState) => homeState.habits.firstWhere(
@@ -58,12 +62,24 @@ class _CircularHabitWidgetState extends ConsumerState<CircularHabitWidget> {
 
     final beforeCount = beforeHabit.getCountForDate(today);
     final beforeTarget = beforeHabit.dailyTarget <= 0 ? 1 : beforeHabit.dailyTarget;
+    final beforeRatio = (beforeCount / beforeTarget).clamp(0.0, 1.0);
+
+    // Determine current mode (similar to Last 7 Days widget)
+    bool isDecreasing = _decreasingModeByDateKey[dateKey] ?? false;
+    if (beforeRatio >= 1.0) {
+      isDecreasing = true;
+    } else if (beforeRatio == 0.0) {
+      isDecreasing = false;
+    }
+
+    // Choose direction: when decreasing, continue until 0; when increasing, continue until full
+    final shouldIncrement = !isDecreasing;
     final beforeFull = beforeCount >= beforeTarget;
 
     await homeNotifier.adjustHabitCompletion(
       widget.habit.id,
       today,
-      increment: !beforeFull,
+      increment: shouldIncrement,
     );
 
     await Future<void>.delayed(const Duration(milliseconds: 50));
@@ -81,6 +97,14 @@ class _CircularHabitWidgetState extends ConsumerState<CircularHabitWidget> {
       final afterCount = afterHabit.getCountForDate(today);
       final afterTarget = afterHabit.dailyTarget <= 0 ? 1 : afterHabit.dailyTarget;
       final afterFull = afterCount >= afterTarget;
+      final afterRatio = (afterCount / afterTarget).clamp(0.0, 1.0);
+
+      // Update decreasing mode after action based on new ratio (similar to Last 7 Days)
+      if (afterRatio >= 1.0) {
+        _decreasingModeByDateKey[dateKey] = true;
+      } else if (afterRatio == 0.0) {
+        _decreasingModeByDateKey[dateKey] = false;
+      }
 
       // Show reward rating dialog when habit is newly completed
       // User must rate how they felt, then we show probability dialog
@@ -389,7 +413,8 @@ class _CircularHabitWidgetState extends ConsumerState<CircularHabitWidget> {
                               height: 30,
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
-                                color: habitColor.withValues(alpha: isCompleted ? 1.0 : 0.1),
+                                // Progressive alpha based on completion ratio (similar to Last 7 Days)
+                                color: habitColor.withValues(alpha: (0.1 + (0.9 * ratio)).clamp(0.1, 1.0)),
                                 border: Border.all(
                                   color: habitColor,
                                   width: 1,
