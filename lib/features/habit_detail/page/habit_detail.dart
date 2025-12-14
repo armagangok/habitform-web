@@ -241,8 +241,8 @@ class _HabitDetailPageState extends ConsumerState<HabitDetailPage> {
 
   Container _habitEmoji(BuildContext context, Habit habit) {
     return Container(
-      width: 80,
-      height: 80,
+      width: 96,
+      height: 96,
       decoration: BoxDecoration(
         color: context.cupertinoTheme.scaffoldBackgroundColor,
         shape: BoxShape.circle,
@@ -262,7 +262,7 @@ class _HabitDetailPageState extends ConsumerState<HabitDetailPage> {
       child: Center(
         child: Text(
           habit.emoji ?? "🎯",
-          style: const TextStyle(fontSize: 32),
+          style: const TextStyle(fontSize: 48),
         ),
       ),
     );

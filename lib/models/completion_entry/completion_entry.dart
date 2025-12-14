@@ -17,11 +17,18 @@ class CompletionEntry extends HiveObject {
   @HiveField(3, defaultValue: 1)
   final int count;
 
+  // Reward rating (α) for this specific completion
+  // Represents how enjoyable/rewarding this completion felt (0.5-2.0)
+  // null means user hasn't rated this completion yet
+  @HiveField(4)
+  final double? rewardRating;
+
   CompletionEntry({
     required this.id,
     required this.date,
     required this.isCompleted,
     this.count = 1,
+    this.rewardRating,
   });
 
   CompletionEntry copyWith({
@@ -29,12 +36,14 @@ class CompletionEntry extends HiveObject {
     DateTime? date,
     bool? isCompleted,
     int? count,
+    double? rewardRating,
   }) {
     return CompletionEntry(
       id: id ?? this.id,
       date: date ?? this.date,
       isCompleted: isCompleted ?? this.isCompleted,
       count: count ?? this.count,
+      rewardRating: rewardRating ?? this.rewardRating,
     );
   }
 }

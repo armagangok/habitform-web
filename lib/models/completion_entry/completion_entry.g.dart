@@ -21,13 +21,14 @@ class CompletionEntryAdapter extends TypeAdapter<CompletionEntry> {
       date: fields[1] as DateTime,
       isCompleted: fields[2] as bool,
       count: fields[3] == null ? 1 : fields[3] as int,
+      rewardRating: fields[4] as double?,
     );
   }
 
   @override
   void write(BinaryWriter writer, CompletionEntry obj) {
     writer
-      ..writeByte(4)
+      ..writeByte(5)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -35,7 +36,9 @@ class CompletionEntryAdapter extends TypeAdapter<CompletionEntry> {
       ..writeByte(2)
       ..write(obj.isCompleted)
       ..writeByte(3)
-      ..write(obj.count);
+      ..write(obj.count)
+      ..writeByte(4)
+      ..write(obj.rewardRating);
   }
 
   @override

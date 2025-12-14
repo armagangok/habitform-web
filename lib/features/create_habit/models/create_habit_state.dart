@@ -108,6 +108,7 @@ class CreateHabitState {
   final CreateHabitStep currentStep;
   final HabitDifficulty difficulty;
   final int dailyTarget;
+  final double rewardFactor; // Emotional reward factor (α), range: 0.5-2.0, default: 1.0
 
   CreateHabitState({
     this.habitName,
@@ -122,6 +123,7 @@ class CreateHabitState {
     this.currentStep = CreateHabitStep.habitName,
     this.difficulty = HabitDifficulty.moderate,
     this.dailyTarget = 1,
+    this.rewardFactor = 1.0,
   })  : habitNameController = habitNameController ?? TextEditingController(),
         habitDescriptionController = habitDescriptionController ?? TextEditingController();
 
@@ -138,6 +140,7 @@ class CreateHabitState {
     CreateHabitStep? currentStep,
     HabitDifficulty? difficulty,
     int? dailyTarget,
+    double? rewardFactor,
   }) {
     return CreateHabitState(
       habitName: title ?? habitName,
@@ -152,6 +155,7 @@ class CreateHabitState {
       currentStep: currentStep ?? this.currentStep,
       difficulty: difficulty ?? this.difficulty,
       dailyTarget: dailyTarget ?? this.dailyTarget,
+      rewardFactor: rewardFactor ?? this.rewardFactor,
     );
   }
 }

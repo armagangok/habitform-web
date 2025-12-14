@@ -1,17 +1,26 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:habitform/core/extension/extensions.dart';
 
-import '/features/translation/constants/locale_keys.g.dart';
+import '/core/core.dart';
 import '/models/habit/habit_difficulty.dart';
+import '/models/habit/habit_extension.dart';
+import '/models/habit/habit_model.dart';
+import '../../../../features/home/provider/home_provider.dart';
 import '../../provider/habit_probability_provider.dart';
 import '../../provider/selected_habit_index_provider.dart';
 
-class FormationInsightsWidget extends ConsumerWidget {
+class FormationInsightsWidget extends ConsumerStatefulWidget {
   const FormationInsightsWidget({super.key});
+
+  @override
+  ConsumerState<FormationInsightsWidget> createState() => _FormationInsightsWidgetState();
+}
+
+class _FormationInsightsWidgetState extends ConsumerState<FormationInsightsWidget> {
+  int _selectedYear = DateTime.now().year;
+
+  // Cache for historical probability data to avoid recalculating when switching habits
+  final Map<String, Map<DateTime, double>> _historicalDataCache = {};
 
   // Alışkanlık oturma durumunu hesapla - difficulty-aware
   String _getHabitProbabilityStatus(double completionRate, int completedDays, HabitDifficulty difficulty, double probabilityScore) {
@@ -70,7 +79,7 @@ class FormationInsightsWidget extends ConsumerWidget {
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final state = ref.watch(probabilityProvider);
     final selectedHabitIndex = ref.watch(selectedHabitIndexProvider);
 
@@ -82,7 +91,6 @@ class FormationInsightsWidget extends ConsumerWidget {
         if (data.totalCompletedDays == 0) {
           return CupertinoListSection.insetGrouped(
             backgroundColor: Colors.transparent,
-
             header: Text(LocaleKeys.statistics_habit_formation.tr()),
             children: [
               CupertinoListTile(
@@ -148,6 +156,17 @@ class FormationInsightsWidget extends ConsumerWidget {
           return const SizedBox.shrink();
         }
 
+        // Get the actual habit to calculate historical data
+        final habitId = data.habitStatistics.values.elementAt(selectedHabitIndex).habitId;
+        final habits = ref.watch(homeProvider).maybeWhen(
+              data: (homeState) => homeState.habits,
+              orElse: () => <Habit>[],
+            );
+        final selectedHabit = habits.firstWhere(
+          (h) => h.id == habitId,
+          orElse: () => throw StateError('Habit not found'),
+        );
+
         return Column(
           children: [
             // Score Section - Formation Probability Chart
@@ -157,6 +176,11 @@ class FormationInsightsWidget extends ConsumerWidget {
               data.habitStatistics.values.elementAt(selectedHabitIndex).difficulty ?? HabitDifficulty.moderate,
               data.habitStatistics.values.elementAt(selectedHabitIndex).probabilityScore,
             ),
+
+            const SizedBox(height: 20),
+
+            // Historical Probability Line Chart (Last Year)
+            _buildHistoricalProbabilityChart(context, selectedHabit),
 
             const SizedBox(height: 20),
 
@@ -530,6 +554,333 @@ class FormationInsightsWidget extends ConsumerWidget {
           ),
         ),
       ],
+    );
+  }
+
+  // Historical Probability Line Chart Section
+  Widget _buildHistoricalProbabilityChart(BuildContext context, Habit habit) {
+    // Use cache key: habitId_year
+    final cacheKey = '${habit.id}_$_selectedYear';
+
+    // Check cache first
+    Map<DateTime, double> historicalData;
+    if (_historicalDataCache.containsKey(cacheKey)) {
+      historicalData = _historicalDataCache[cacheKey]!;
+    } else {
+      // Calculate and cache
+      final calculationStart = DateTime.now();
+      historicalData = habit.calculateHistoricalProbabilityForYear(_selectedYear);
+      final calculationEnd = DateTime.now();
+      LogHelper.shared.debugPrint("📊 [PERF] Historical probability calculated in ${calculationEnd.difference(calculationStart).inMilliseconds}ms for habit ${habit.habitName} year $_selectedYear");
+
+      _historicalDataCache[cacheKey] = historicalData;
+
+      // Limit cache size to prevent memory issues (keep last 10 calculations)
+      if (_historicalDataCache.length > 10) {
+        final oldestKey = _historicalDataCache.keys.first;
+        _historicalDataCache.remove(oldestKey);
+      }
+    }
+    final today = DateTime.now();
+    final isCurrentYear = _selectedYear == today.year;
+    final currentMonth = today.month;
+    final currentDay = today.day;
+    final daysInCurrentMonth = DateTime(today.year, today.month + 1, 0).day;
+    // Current month is complete if we're on the last day of the month
+    final isCurrentMonthComplete = isCurrentYear && currentDay == daysInCurrentMonth;
+
+    // Create all 12 months for the selected year
+    final List<MapEntry<DateTime, double?>> allMonths = [];
+    for (int month = 1; month <= 12; month++) {
+      final monthDate = DateTime(_selectedYear, month, 1);
+
+      // Skip future months if current year
+      if (isCurrentYear && monthDate.isAfter(today)) {
+        continue;
+      }
+
+      // Get probability for this month if available
+      final probability = historicalData[monthDate];
+      allMonths.add(MapEntry(monthDate, probability));
+    }
+
+    if (allMonths.isEmpty) {
+      return const SizedBox.shrink();
+    }
+
+    // Prepare data for fl_chart - always 12 months
+    final List<FlSpot> spots = [];
+    final List<FlSpot> dashedSpots = [];
+
+    int currentMonthIndex = -1;
+    for (int i = 0; i < allMonths.length; i++) {
+      final entry = allMonths[i];
+      final probability = entry.value ?? 0.0;
+      final spot = FlSpot(i.toDouble(), probability);
+      spots.add(spot);
+
+      // Track current month index
+      if (isCurrentYear && entry.key.month == currentMonth) {
+        currentMonthIndex = i;
+      }
+    }
+
+    // If current month is complete, add dashed line to next month (or end of chart if no next month)
+    if (isCurrentMonthComplete && currentMonthIndex >= 0) {
+      final currentProbability = allMonths[currentMonthIndex].value ?? 0.0;
+      if (currentMonthIndex < allMonths.length - 1) {
+        // There's a next month in the data
+        final nextMonthEntry = allMonths[currentMonthIndex + 1];
+        final nextMonthProbability = nextMonthEntry.value ?? currentProbability;
+        // Add dashed line from current month to next month
+        dashedSpots.add(FlSpot(currentMonthIndex.toDouble(), currentProbability));
+        dashedSpots.add(FlSpot((currentMonthIndex + 1).toDouble(), nextMonthProbability));
+      } else {
+        // No next month, extend dashed line to the end of chart
+        final nextMonthIndex = currentMonthIndex + 1;
+        dashedSpots.add(FlSpot(currentMonthIndex.toDouble(), currentProbability));
+        dashedSpots.add(FlSpot(nextMonthIndex.toDouble(), currentProbability));
+      }
+    }
+
+    if (spots.length < 2) {
+      return const SizedBox.shrink();
+    }
+
+    // Get color based on current probability
+    final currentProbability = habit.calculateHabitProbability();
+    final chartColor = _getProbabilityColor(currentProbability);
+
+    // Get available years (from first completion to current year)
+    final firstCompletionDate = habit.getFirstCompletionDate();
+    final availableYears = <int>[];
+    if (firstCompletionDate != null) {
+      final startYear = firstCompletionDate.year;
+      final endYear = today.year;
+      for (int year = startYear; year <= endYear; year++) {
+        availableYears.add(year);
+      }
+    } else {
+      availableYears.add(today.year);
+    }
+
+    return CupertinoListSection.insetGrouped(
+      backgroundColor: Colors.transparent,
+      header: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text('Probability Over Time'),
+          // Year selector
+          CupertinoButton(
+            padding: EdgeInsets.zero,
+            onPressed: () => _showYearPicker(context, availableYears),
+            minimumSize: Size(0, 0),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  '$_selectedYear',
+                  style: context.titleSmall.copyWith(
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                const SizedBox(width: 4),
+                Icon(
+                  CupertinoIcons.chevron_down,
+                  size: 16,
+                  color: context.hintColor,
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Container(
+            height: 200,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(16),
+              color: Theme.of(context).scaffoldBackgroundColor,
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: LineChart(
+                LineChartData(
+                  gridData: FlGridData(
+                    show: true,
+                    drawVerticalLine: false,
+                    horizontalInterval: 25,
+                    getDrawingHorizontalLine: (value) {
+                      return FlLine(
+                        color: Theme.of(context).dividerColor.withValues(alpha: 0.2),
+                        strokeWidth: 1,
+                      );
+                    },
+                  ),
+                  titlesData: FlTitlesData(
+                    show: true,
+                    rightTitles: const AxisTitles(
+                      sideTitles: SideTitles(showTitles: false),
+                    ),
+                    topTitles: const AxisTitles(
+                      sideTitles: SideTitles(showTitles: false),
+                    ),
+                    bottomTitles: AxisTitles(
+                      sideTitles: SideTitles(
+                        showTitles: true,
+                        reservedSize: 30,
+                        interval: allMonths.length > 12 ? (allMonths.length / 6).ceil().toDouble() : 1,
+                        getTitlesWidget: (value, meta) {
+                          final index = value.toInt();
+                          if (index >= 0 && index < allMonths.length) {
+                            final date = allMonths[index].key;
+                            return Padding(
+                              padding: const EdgeInsets.only(top: 8.0),
+                              child: Text(
+                                DateFormat('MMM').format(date),
+                                style: context.bodySmall.copyWith(
+                                  fontSize: 10,
+                                  color: context.hintColor,
+                                ),
+                              ),
+                            );
+                          }
+                          return const Text('');
+                        },
+                      ),
+                    ),
+                    leftTitles: AxisTitles(
+                      sideTitles: SideTitles(
+                        showTitles: true,
+                        reservedSize: 40,
+                        interval: 25,
+                        getTitlesWidget: (value, meta) {
+                          return Text(
+                            '${value.toInt()}%',
+                            style: context.bodySmall.copyWith(
+                              fontSize: 10,
+                              color: context.hintColor,
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                  borderData: FlBorderData(
+                    show: true,
+                    border: Border.all(
+                      color: Theme.of(context).dividerColor.withValues(alpha: 0.3),
+                      width: 1,
+                    ),
+                  ),
+                  minX: 0,
+                  maxX: (allMonths.length - 1).toDouble(),
+                  minY: 0,
+                  maxY: 100,
+                  lineBarsData: [
+                    // Main line (solid)
+                    LineChartBarData(
+                      spots: spots,
+                      isCurved: true,
+                      color: chartColor,
+                      barWidth: 3,
+                      isStrokeCapRound: true,
+                      dotData: const FlDotData(show: false),
+                      belowBarData: BarAreaData(
+                        show: true,
+                        color: chartColor.withValues(alpha: 0.1),
+                      ),
+                    ),
+                    // Dashed line for current month continuation (if complete)
+                    if (dashedSpots.isNotEmpty)
+                      LineChartBarData(
+                        spots: dashedSpots,
+                        isCurved: true,
+                        color: chartColor.withValues(alpha: 0.5),
+                        barWidth: 2,
+                        isStrokeCapRound: true,
+                        dashArray: [5, 5],
+                        dotData: const FlDotData(show: false),
+                        belowBarData: BarAreaData(show: false),
+                      ),
+                  ],
+                  lineTouchData: LineTouchData(
+                    touchTooltipData: LineTouchTooltipData(
+                      tooltipPadding: const EdgeInsets.all(8),
+                      tooltipMargin: 8,
+                      getTooltipItems: (List<LineBarSpot> touchedBarSpots) {
+                        return touchedBarSpots
+                            .map((barSpot) {
+                              final index = barSpot.x.toInt();
+                              if (index >= 0 && index < allMonths.length) {
+                                final date = allMonths[index].key;
+                                final probability = allMonths[index].value ?? 0.0;
+                                return LineTooltipItem(
+                                  '${DateFormat('MMM yyyy').format(date)}\n${probability.toStringAsFixed(1)}%',
+                                  context.bodyMedium.copyWith(
+                                    color: chartColor,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                );
+                              }
+                              return null;
+                            })
+                            .whereType<LineTooltipItem>()
+                            .toList();
+                      },
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Color _getProbabilityColor(double probability) {
+    if (probability >= 90) {
+      return const Color(0xFF4CAF50); // Green
+    } else if (probability >= 75) {
+      return const Color(0xFF8BC34A); // Light Green
+    } else if (probability >= 60) {
+      return const Color(0xFFFFC107); // Amber
+    } else {
+      return const Color(0xFFF44336); // Red
+    }
+  }
+
+  void _showYearPicker(BuildContext context, List<int> availableYears) {
+    showCupertinoModalPopup(
+      context: context,
+      builder: (context) => CupertinoActionSheet(
+        title: Text('Select Year'),
+        actions: availableYears.reversed.map((year) {
+          return CupertinoActionSheetAction(
+            onPressed: () {
+              setState(() {
+                _selectedYear = year;
+              });
+              Navigator.of(context).pop();
+            },
+            child: Text(
+              year.toString(),
+              style: TextStyle(
+                fontWeight: _selectedYear == year ? FontWeight.bold : FontWeight.normal,
+                color: _selectedYear == year ? context.primary : null,
+              ),
+            ),
+          );
+        }).toList(),
+        cancelButton: CupertinoActionSheetAction(
+          isDestructiveAction: false,
+          onPressed: () => Navigator.of(context).pop(),
+          child: Text('Cancel'),
+        ),
+      ),
     );
   }
 }

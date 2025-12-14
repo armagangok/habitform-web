@@ -752,7 +752,28 @@ class _HabitConstellationViewState extends ConsumerState<HabitConstellationView>
                 onTap: () {
                   HapticFeedback.lightImpact();
                   final currentScale = _transformationController.value.getMaxScaleOnAxis();
-                  _animateScale(currentScale / 1.3);
+
+                  // Match the minScale from InteractiveViewer (0.3)
+                  const minScale = 0.3;
+
+                  // If already at or very close to minimum scale, do nothing
+                  // Use a more generous tolerance (0.32) to account for:
+                  // - Floating point precision issues
+                  // - InteractiveViewer's internal constraints that may keep scale slightly above 0.3
+                  // This ensures we stop at the same effective limit as pinch gestures
+                  if (currentScale <= minScale + 0.02) {
+                    return;
+                  }
+
+                  final targetScale = currentScale / 1.3;
+
+                  // If the target scale would go below minimum, go directly to minimum
+                  // This ensures we can reach the exact limit like pinch gesture does
+                  if (targetScale <= minScale) {
+                    _animateScale(minScale);
+                  } else {
+                    _animateScale(targetScale);
+                  }
                 },
                 isDark: isDark,
               ),
@@ -856,7 +877,11 @@ class _HabitConstellationViewState extends ConsumerState<HabitConstellationView>
     final currentMatrix = _transformationController.value.clone();
     final currentScale = currentMatrix.getMaxScaleOnAxis();
 
-    if ((clampedScale - currentScale).abs() < 0.01) return; // Already at target
+    // Skip only if already exactly at target (with small tolerance)
+    // But always allow animation when targeting minimum scale to ensure we reach it
+    if (clampedScale != 0.3 && (clampedScale - currentScale).abs() < 0.001) {
+      return; // Already at target (except when targeting minimum scale)
+    }
 
     // Screen center as focal point
     final screenCenter = Offset(
@@ -880,7 +905,7 @@ class _HabitConstellationViewState extends ConsumerState<HabitConstellationView>
     // Create and store listener
     _currentAnimationListener = () {
       final progress = Curves.easeInOutCubic.transform(_zoomAnimationController.value);
-      final animatedScale = startScale + (scaleDelta * progress);
+      final animatedScale = (startScale + (scaleDelta * progress)).clamp(0.3, 3.0);
 
       // Maintain focal point: screenCenter = sceneCenter * scale + translation
       final offsetX = screenCenter.dx - (sceneCenter.dx * animatedScale);
@@ -899,8 +924,48 @@ class _HabitConstellationViewState extends ConsumerState<HabitConstellationView>
       if (status == AnimationStatus.completed) {
         // Save final state after animation completes
         final finalMatrix = _transformationController.value;
-        final finalScale = finalMatrix.getMaxScaleOnAxis();
-        final translation = finalMatrix.getTranslation();
+        var finalScale = finalMatrix.getMaxScaleOnAxis();
+
+        // If target was minimum scale, ensure we reached it
+        // Check with tolerance to catch cases where InteractiveViewer prevents exact 0.3
+        if (clampedScale == 0.3 && finalScale > 0.3) {
+          // Force to minimum scale if we didn't reach it
+          // This handles cases where InteractiveViewer's constraints prevent reaching exactly 0.3
+          final screenCenter = Offset(
+            MediaQuery.of(context).size.width / 2,
+            MediaQuery.of(context).size.height / 2,
+          );
+          final inverted = Matrix4.identity()..setFrom(finalMatrix);
+          if (inverted.invert() != 0.0) {
+            final sceneCenter = MatrixUtils.transformPoint(inverted, screenCenter);
+            final offsetX = screenCenter.dx - (sceneCenter.dx * 0.3);
+            final offsetY = screenCenter.dy - (sceneCenter.dy * 0.3);
+            final correctedMatrix = Matrix4.identity()
+              ..translateByDouble(offsetX, offsetY, 0.0, 1.0)
+              ..scaleByDouble(0.3, 0.3, 1.0, 1.0);
+            _transformationController.value = correctedMatrix;
+            finalScale = 0.3;
+
+            // Verify after a frame to ensure InteractiveViewer didn't change it back
+            WidgetsBinding.instance.addPostFrameCallback(
+              (_) {
+                if (mounted) {
+                  final verifyMatrix = _transformationController.value;
+                  final verifyScale = verifyMatrix.getMaxScaleOnAxis();
+                  if (verifyScale > 0.3 && clampedScale == 0.3) {
+                    // Force again if InteractiveViewer changed it
+                    _transformationController.value = correctedMatrix;
+                    ref.read(habitCanvasProvider.notifier).updateScale(0.3);
+                    final verifyTranslation = correctedMatrix.getTranslation();
+                    ref.read(habitCanvasProvider.notifier).updateOffset(verifyTranslation.x, verifyTranslation.y);
+                  }
+                }
+              },
+            );
+          }
+        }
+
+        final translation = _transformationController.value.getTranslation();
         ref.read(habitCanvasProvider.notifier).updateScale(finalScale);
         ref.read(habitCanvasProvider.notifier).updateOffset(translation.x, translation.y);
         // Clean up listeners after animation completes

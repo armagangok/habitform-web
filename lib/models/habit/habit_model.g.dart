@@ -35,13 +35,14 @@ class HabitAdapter extends TypeAdapter<Habit> {
       difficulty: fields[12] == null
           ? HabitDifficulty.moderate
           : fields[12] as HabitDifficulty,
+      rewardFactor: fields[13] == null ? 1.0 : fields[13] as double,
     );
   }
 
   @override
   void write(BinaryWriter writer, Habit obj) {
     writer
-      ..writeByte(12)
+      ..writeByte(13)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -65,7 +66,9 @@ class HabitAdapter extends TypeAdapter<Habit> {
       ..writeByte(11)
       ..write(obj.categoryIds)
       ..writeByte(12)
-      ..write(obj.difficulty);
+      ..write(obj.difficulty)
+      ..writeByte(13)
+      ..write(obj.rewardFactor);
   }
 
   @override

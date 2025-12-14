@@ -20,6 +20,7 @@ class EditHabitNotifier extends AutoDisposeNotifier<Habit?> {
   final habitDescriptionController = TextEditingController();
 
   HabitDifficulty _selectedDifficulty = HabitDifficulty.moderate;
+  double _selectedRewardFactor = 1.0;
 
   @override
   Habit? build() => null;
@@ -28,6 +29,7 @@ class EditHabitNotifier extends AutoDisposeNotifier<Habit?> {
     habitNameController.text = habit.habitName;
     habitDescriptionController.text = habit.habitDescription ?? '';
     _selectedDifficulty = habit.difficulty;
+    _selectedRewardFactor = habit.rewardFactor;
 
     final reminder = habit.reminderModel;
 
@@ -53,11 +55,22 @@ class EditHabitNotifier extends AutoDisposeNotifier<Habit?> {
   }
 
   HabitDifficulty get selectedDifficulty => _selectedDifficulty;
+  double get selectedRewardFactor => _selectedRewardFactor;
 
   void updateDailyTarget(int target) {
     final clamped = target < 1 ? 1 : (target > 24 ? 24 : target);
     if (state != null) {
       state = state?.copyWith(dailyTarget: clamped);
+    }
+  }
+
+  void updateRewardFactor(double rewardFactor) {
+    // Clamp reward factor to valid range: 0.5 (low reward) to 2.0 (high reward)
+    final clamped = rewardFactor.clamp(0.5, 2.0);
+    _selectedRewardFactor = clamped;
+    // Update the state to trigger UI rebuild
+    if (state != null) {
+      state = state?.copyWith(rewardFactor: clamped);
     }
   }
 
@@ -93,6 +106,7 @@ class EditHabitNotifier extends AutoDisposeNotifier<Habit?> {
       reminderModel: reminderModel,
       categoryIds: categoryIds,
       difficulty: _selectedDifficulty,
+      rewardFactor: _selectedRewardFactor,
     );
 
     if (updatedHabit != null) {

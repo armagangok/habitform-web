@@ -1,3 +1,4 @@
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:habitform/features/habit_emoji/emoji_picker_button.dart';
 
@@ -141,6 +142,9 @@ class EditHabitPage extends ConsumerWidget {
                       },
                     ),
 
+                    // Reward Factor Selection
+                    _buildRewardFactorSection(context, ref, editHabitNotifier),
+
                     // Daily target selector (edit)
                     Consumer(
                       builder: (context, ref, child) {
@@ -208,6 +212,122 @@ class EditHabitPage extends ConsumerWidget {
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildRewardFactorSection(
+    BuildContext context,
+    WidgetRef ref,
+    EditHabitNotifier notifier,
+  ) {
+    final rewardFactor = notifier.selectedRewardFactor;
+
+    return CupertinoListSection.insetGrouped(
+      header: Text('How enjoyable is this habit?'),
+      footer: Text(
+        'More enjoyable habits form faster. This affects how quickly your habit probability increases.',
+        style: context.bodyMedium.copyWith(
+          color: context.bodyMedium.color?.withValues(alpha: 0.7),
+        ),
+      ),
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          child: Row(
+            children: [
+              Expanded(
+                child: _buildRewardOption(
+                  context,
+                  notifier,
+                  emoji: '😞',
+                  label: 'Low',
+                  value: 0.5,
+                  isSelected: rewardFactor == 0.5,
+                ),
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: _buildRewardOption(
+                  context,
+                  notifier,
+                  emoji: '😐',
+                  label: 'Normal',
+                  value: 1.0,
+                  isSelected: rewardFactor == 1.0,
+                ),
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: _buildRewardOption(
+                  context,
+                  notifier,
+                  emoji: '😊',
+                  label: 'High',
+                  value: 1.5,
+                  isSelected: rewardFactor == 1.5,
+                ),
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: _buildRewardOption(
+                  context,
+                  notifier,
+                  emoji: '😄',
+                  label: 'Very High',
+                  value: 2.0,
+                  isSelected: rewardFactor == 2.0,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildRewardOption(
+    BuildContext context,
+    EditHabitNotifier notifier, {
+    required String emoji,
+    required String label,
+    required double value,
+    required bool isSelected,
+  }) {
+    return CupertinoButton(
+      padding: EdgeInsets.zero,
+      onPressed: () {
+        notifier.updateRewardFactor(value);
+        HapticFeedback.lightImpact();
+      },
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: isSelected ? context.primary : context.primaryContrastingColor.withValues(alpha: 0.2),
+            width: isSelected ? 2 : 1,
+          ),
+          color: isSelected ? context.primary.withValues(alpha: 0.1) : Colors.transparent,
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              emoji,
+              style: const TextStyle(fontSize: 20),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              label,
+              style: context.labelSmall.copyWith(
+                fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
+                color: isSelected ? context.primary : null,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ],
         ),
       ),
     );
