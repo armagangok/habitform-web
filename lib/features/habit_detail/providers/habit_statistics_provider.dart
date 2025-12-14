@@ -10,7 +10,7 @@ import '../../../models/habit/habit_model.dart';
 class HabitStatistics {
   final int currentStreak;
   final int longestStreak;
-  final double formationProgress;
+
   final double completionRate;
   final int thisMonthCompleted;
   final int thisMonthTotal;
@@ -21,7 +21,6 @@ class HabitStatistics {
   const HabitStatistics({
     required this.currentStreak,
     required this.longestStreak,
-    required this.formationProgress,
     required this.completionRate,
     required this.thisMonthCompleted,
     required this.thisMonthTotal,
@@ -72,8 +71,8 @@ class HabitStatisticsNotifier extends AutoDisposeNotifier<HabitStatistics?> {
           // Setting state is safe even if provider is disposed - it just won't update anything
           try {
             state = statistics;
-          } catch (_) {
-            // Provider was disposed, ignore
+          } catch (e) {
+            LogHelper.shared.errorPrint("Error in async statistics calculation: $e");
           }
         });
       } catch (e) {
@@ -82,8 +81,8 @@ class HabitStatisticsNotifier extends AutoDisposeNotifier<HabitStatistics?> {
         try {
           final statistics = _HabitStatisticsCalculator.calculate(habit);
           state = statistics;
-        } catch (_) {
-          // Provider was disposed, ignore
+        } catch (e) {
+          LogHelper.shared.errorPrint("Error in fallback statistics calculation: $e");
         }
       }
     });
@@ -97,7 +96,6 @@ class _HabitStatisticsCalculator {
       return HabitStatistics(
         currentStreak: 0,
         longestStreak: 0,
-        formationProgress: 0.0,
         completionRate: 0.0,
         thisMonthCompleted: 0,
         thisMonthTotal: 0,
@@ -110,9 +108,6 @@ class _HabitStatisticsCalculator {
     // Calculate streaks (these are expensive operations)
     final currentStreak = habit.calculateCurrentStreak();
     final longestStreak = habit.calculateLongestStreak();
-
-    // Calculate formation progress
-    final formationProgress = habit.calculateHabitProbability();
 
     // Calculate completion rate
     final completionRate = habit.calculateWeightedProgressPercentageFromFirstCompletion();
@@ -135,7 +130,6 @@ class _HabitStatisticsCalculator {
     return HabitStatistics(
       currentStreak: currentStreak,
       longestStreak: longestStreak,
-      formationProgress: formationProgress,
       completionRate: completionRate,
       thisMonthCompleted: thisMonthCompletions.length,
       thisMonthTotal: daysInMonth,

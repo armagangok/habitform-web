@@ -447,6 +447,7 @@ extension HabitUtils on Habit {
 
   /// Optimized version that uses pre-sorted completion data
   /// This avoids iterating through all completions for each date calculation
+  /// Uses a rolling window approach (90 days) to reflect recent performance rather than cumulative
   double _calculateProbabilityUpToDateOptimized(
     DateTime targetDate,
     List<_CompletionData> sortedCompletions,
@@ -455,13 +456,20 @@ extension HabitUtils on Habit {
     if (sortedCompletions.isEmpty) return 0.0;
 
     final target = DateUtils.dateOnly(targetDate);
+    // Use a 90-day rolling window to reflect recent performance
+    // This ensures probability decreases when user has low completion rates in recent months
+    final windowStart = target.subtract(const Duration(days: 90));
+
     int successfulRepetitions = 0;
     double totalRewardRating = 0.0;
     int ratedCompletions = 0;
 
-    // Since completions are pre-sorted, we can stop early when we pass the target date
+    // Since completions are pre-sorted, iterate and only count those within the rolling window
     for (final completion in sortedCompletions) {
-      if (completion.date.isAfter(target)) break; // Stop early since sorted
+      // Skip completions before the window
+      if (completion.date.isBefore(windowStart)) continue;
+      // Stop if we've passed the target date
+      if (completion.date.isAfter(target)) break;
 
       successfulRepetitions++;
       totalRewardRating += completion.rewardRating;
@@ -474,6 +482,7 @@ extension HabitUtils on Habit {
     final double averageRewardFactor = (totalRewardRating / ratedCompletions).clamp(0.1, 2.0);
 
     // Apply the exponential formula: P(t) = 1 - exp(-α · R(t) / D)
+    // Using recent repetitions (rolling window) instead of cumulative
     final double probability = 1.0 - _exp(-averageRewardFactor * successfulRepetitions / difficultyCoefficient);
 
     // Convert to percentage
