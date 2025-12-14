@@ -100,6 +100,26 @@
             "title": "HabitForm 帮助你...",
             "subtitle": "通过智能追踪和个性化洞察建立持久的习惯",
             "features": {
+                "habit_map": {
+                    "title": "习惯地图",
+                    "description": "可视化您的习惯网络，了解习惯如何连接。构建相关习惯链，理解使您的日常更强大的关系。"
+                },
+                "habit_probability": {
+                    "title": "习惯概率",
+                    "description": "准确了解您在每个习惯上成功的可能性。获得个性化洞察，帮助您保持动力并建立持久的习惯。"
+                },
+                "goal_setting": {
+                    "title": "目标设定",
+                    "description": "基于科学的规划，适应难度：简单的习惯形成更快，困难的习惯需要更长时间—保持目标现实。"
+                },
+                "customizable": {
+                    "title": "可定制",
+                    "description": "让 HabitForm 真正属于您。选择与您的个性匹配并让您保持参与的颜色、主题和布局。"
+                },
+                "data_management": {
+                    "title": "数据管理",
+                    "description": "将您的习惯数据导出到 CSV 文件以进行备份或传输到另一台设备。"
+                },
                 "smart_tracking": {
                     "title": "智能习惯追踪",
                     "description": "通过智能提醒和进度可视化追踪你的习惯。看着你的连续天数增长，庆祝每一个里程碑。",
@@ -160,7 +180,7 @@
                     }
                 }
             },
-            "probability_score": "养成分数",
+            "formation_probability": "形成概率",
             "previous": "上一页",
             "next": "下一页",
             "start": "开始"
@@ -205,6 +225,15 @@
         },
         "achievement": {
             "first_habit_message": "太棒了！你在引导中完成了第一个习惯！"
+        },
+        "reward_rating": {
+            "title": "您感觉如何？",
+            "description": "评价这次完成的感觉有多愉快。这有助于我们更好地了解您的习惯形成。",
+            "low": "低",
+            "normal": "正常",
+            "high": "高",
+            "very_high": "非常高",
+            "continue": "继续"
         }
     },
     "habit_detail": {
@@ -285,9 +314,9 @@
         "achievement_perfectionist_description": "{{rate}}% 成功率！",
         "heatmap_stats_description": "去年完成了 {{days}} 天",
         "last_7_days": "最近7天",
-        "probability_info_title": "养成分数",
-        "probability_info_description": "养成分数显示基于你当前完成率，你的习惯变得自动化的可能性。分数越高意味着你的习惯越可能永久坚持。",
-        "probability_info_details": "这个分数是根据你的一致性模式和完成率计算的。研究表明，习惯平均需要66天的规律练习才能变得自动化。"
+        "formation_probability_title": "形成概率",
+        "formation_probability_description": "形成概率显示基于你当前完成率，你的习惯变得自动化的可能性。概率越高意味着你的习惯越可能永久坚持。",
+        "formation_probability_details": "这个概率是根据你的一致性模式和完成率计算的。研究表明，习惯平均需要66天的规律练习才能变得自动化。"
     },
     "habit": {
         "add_habit": "添加习惯",
@@ -621,7 +650,8 @@
             "demo_data_message": "这是演示数据，升级以解锁真实数据",
             "upgrade_button": "升级"
         },
-        "probability_score": "概率分数",
+        "formation_probability": "形成概率",
+        "probability_over_time": "随时间变化的概率",
         "score_breakdown": "分数分解",
         "progress_status": "进度状态",
         "estimated_probability_time": "估计概率时间",

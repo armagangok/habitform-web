@@ -100,6 +100,26 @@
             "title": "HabitForm Ti Aiuta A ...",
             "subtitle": "Costruisci abitudini durature con monitoraggio intelligente e approfondimenti personalizzati",
             "features": {
+                "habit_map": {
+                    "title": "Mappa delle Abitudini",
+                    "description": "Visualizza la tua rete di abitudini e vedi come le abitudini si collegano. Costruisci catene di abitudini correlate e comprendi le relazioni che rafforzano la tua routine."
+                },
+                "habit_probability": {
+                    "title": "Probabilità Abitudine",
+                    "description": "Vedi esattamente quanto è probabile che tu abbia successo con ogni abitudine. Ottieni approfondimenti personalizzati che ti aiutano a rimanere motivato e costruire abitudini durature."
+                },
+                "goal_setting": {
+                    "title": "Impostazione Obiettivi",
+                    "description": "Pianificazione basata sulla scienza che si adatta alla difficoltà: le abitudini più facili si formano più velocemente, quelle più difficili richiedono più tempo—mantenendo gli obiettivi realistici."
+                },
+                "customizable": {
+                    "title": "Personalizzabile",
+                    "description": "Rendi HabitForm veramente tuo. Scegli colori, temi e layout che corrispondono alla tua personalità e ti tengono coinvolto."
+                },
+                "data_management": {
+                    "title": "Gestione Dati",
+                    "description": "Esporta i dati delle tue abitudini in file CSV per backup o trasferimento su un altro dispositivo."
+                },
                 "smart_tracking": {
                     "title": "Monitoraggio Abitudini Intelligente",
                     "description": "Tieni traccia delle tue abitudini con promemoria intelligenti e visualizzazione dei progressi. Guarda le tue serie crescere e celebra ogni traguardo.",
@@ -160,7 +180,7 @@
                     }
                 }
             },
-            "probability_score": "Punteggio Formazione",
+            "formation_probability": "Probabilità di Formazione",
             "previous": "Precedente",
             "next": "Prossimo",
             "start": "Inizia"
@@ -205,6 +225,15 @@
         },
         "achievement": {
             "first_habit_message": "Ottimo lavoro! Hai completato la tua prima abitudine nell'onboarding!"
+        },
+        "reward_rating": {
+            "title": "Come ti sei sentito?",
+            "description": "Valuta quanto è stato piacevole questo completamento. Questo ci aiuta a capire meglio la formazione delle tue abitudini.",
+            "low": "Basso",
+            "normal": "Normale",
+            "high": "Alto",
+            "very_high": "Molto Alto",
+            "continue": "Continua"
         }
     },
     "habit_detail": {
@@ -285,9 +314,9 @@
         "achievement_perfectionist_description": "Tasso di successo del {{rate}}%!",
         "heatmap_stats_description": "{{days}} giorni completati nell'ultimo anno",
         "last_7_days": "Ultimi 7 Giorni",
-        "probability_info_title": "Punteggio Formazione",
-        "probability_info_description": "Il Punteggio di Formazione mostra quanto è probabile che la tua abitudine diventi automatica in base al tuo attuale tasso di completamento. Punteggi più alti significano che è più probabile che la tua abitudine resti permanentemente.",
-        "probability_info_details": "Questo punteggio è calcolato utilizzando i tuoi modelli di costanza e tasso di completamento. La ricerca mostra che occorrono in media 66 giorni di pratica regolare affinché un'abitudine diventi automatica."
+        "formation_probability_title": "Probabilità di Formazione",
+        "formation_probability_description": "La Probabilità di Formazione mostra quanto è probabile che la tua abitudine diventi automatica in base al tuo attuale tasso di completamento. Probabilità più alte significano che è più probabile che la tua abitudine resti permanentemente.",
+        "formation_probability_details": "Questa probabilità è calcolata utilizzando i tuoi modelli di costanza e tasso di completamento. La ricerca mostra che occorrono in media 66 giorni di pratica regolare affinché un'abitudine diventi automatica."
     },
     "habit": {
         "add_habit": "Aggiungi Abitudine",
@@ -621,7 +650,8 @@
             "demo_data_message": "Questi sono dati dimostrativi, effettua l'upgrade per sbloccare i dati reali",
             "upgrade_button": "Effettua l'Upgrade"
         },
-        "probability_score": "Punteggio Probabilità",
+        "formation_probability": "Probabilità di Formazione",
+        "probability_over_time": "Probabilità nel Tempo",
         "score_breakdown": "Dettaglio Punteggio",
         "progress_status": "Stato Progressi",
         "estimated_probability_time": "Tempo Stimato di Probabilità",

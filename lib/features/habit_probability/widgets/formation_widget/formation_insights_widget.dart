@@ -5,9 +5,16 @@ import '/core/core.dart';
 import '/models/habit/habit_difficulty.dart';
 import '/models/habit/habit_extension.dart';
 import '/models/habit/habit_model.dart';
+import '/services/habit_service/mock_habit_service.dart';
 import '../../../../features/home/provider/home_provider.dart';
 import '../../provider/habit_probability_provider.dart';
 import '../../provider/selected_habit_index_provider.dart';
+
+// Mock habit service provider
+final mockHabitsProvider = FutureProvider<List<Habit>>((ref) async {
+  final mockService = MockHabitService();
+  return await mockService.getHabits();
+});
 
 class FormationInsightsWidget extends ConsumerStatefulWidget {
   const FormationInsightsWidget({super.key});
@@ -158,14 +165,32 @@ class _FormationInsightsWidgetState extends ConsumerState<FormationInsightsWidge
 
         // Get the actual habit to calculate historical data
         final habitId = data.habitStatistics.values.elementAt(selectedHabitIndex).habitId;
-        final habits = ref.watch(homeProvider).maybeWhen(
-              data: (homeState) => homeState.habits,
-              orElse: () => <Habit>[],
-            );
-        final selectedHabit = habits.firstWhere(
-          (h) => h.id == habitId,
-          orElse: () => throw StateError('Habit not found'),
-        );
+        final isMockData = data.isMockData;
+
+        Habit? selectedHabit;
+
+        if (isMockData) {
+          // For mock data, get habits from mock service
+          final mockHabitsAsync = ref.watch(mockHabitsProvider);
+          selectedHabit = mockHabitsAsync.value?.where((h) => h.id == habitId || h.habitName == data.habitStatistics.values.elementAt(selectedHabitIndex).habitName).firstOrNull;
+
+          // If still loading, show loading indicator
+          if (mockHabitsAsync.isLoading) {
+            return const Center(child: CircularProgressIndicator());
+          }
+        } else {
+          // For real data, get habits from home provider
+          final habits = ref.watch(homeProvider).maybeWhen(
+                data: (homeState) => homeState.habits,
+                orElse: () => <Habit>[],
+              );
+          selectedHabit = habits.where((h) => h.id == habitId).firstOrNull;
+        }
+
+        // If habit not found, return empty widget
+        if (selectedHabit == null) {
+          return const SizedBox.shrink();
+        }
 
         return Column(
           children: [
@@ -208,7 +233,7 @@ class _FormationInsightsWidgetState extends ConsumerState<FormationInsightsWidge
   Widget _buildScoreSection(BuildContext context, double progressPercentage, HabitDifficulty difficulty, double probabilityScore) {
     return CupertinoListSection.insetGrouped(
       backgroundColor: Colors.transparent,
-      header: Text(LocaleKeys.statistics_probability_score.tr()),
+      header: Text(LocaleKeys.statistics_formation_probability.tr()),
       children: [
         Padding(
           padding: const EdgeInsets.all(16.0),
@@ -669,7 +694,7 @@ class _FormationInsightsWidgetState extends ConsumerState<FormationInsightsWidge
       header: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text('Probability Over Time'),
+          Text(LocaleKeys.statistics_probability_over_time.tr()),
           // Year selector
           CupertinoButton(
             padding: EdgeInsets.zero,

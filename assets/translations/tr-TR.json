@@ -101,6 +101,26 @@
             "subtitle": "Akıllı takip ve kişiselleştirilmiş içgörülerle kalıcı alışkanlıklar oluşturun",
             "continue": "Devam Et",
             "features": {
+                "habit_map": {
+                    "title": "Alışkanlık Haritası",
+                    "description": "Alışkanlık ağınızı görselleştirin ve alışkanlıkların nasıl bağlandığını görün. İlgili alışkanlıklardan zincirler oluşturun ve rutininizi güçlendiren ilişkileri anlayın."
+                },
+                "habit_probability": {
+                    "title": "Alışkanlık Olasılığı",
+                    "description": "Her alışkanlıkla ne kadar başarılı olacağınızı tam olarak görün. Sizi motive tutan ve kalıcı alışkanlıklar oluşturmanıza yardımcı olan kişiselleştirilmiş içgörüler edinin."
+                },
+                "goal_setting": {
+                    "title": "Hedef Belirleme",
+                    "description": "Zorluğa göre uyarlanan bilim tabanlı planlama: kolay alışkanlıklar daha hızlı, zor olanlar daha uzun sürer—hedefleri gerçekçi tutar."
+                },
+                "customizable": {
+                    "title": "Özelleştirilebilir",
+                    "description": "HabitForm'u gerçekten sizin yapın. Kişiliğinize uyan ve sizi meşgul tutan renkler, temalar ve düzenler seçin."
+                },
+                "data_management": {
+                    "title": "Veri Yönetimi",
+                    "description": "Alışkanlık verilerinizi yedeklemek veya başka bir cihaza aktarmak için CSV dosyalarına aktarın."
+                },
                 "smart_tracking": {
                     "title": "Akıllı Alışkanlık Takibi",
                     "description": "Alışkanlıklarınızı akıllı hatırlatıcılar ve ilerleme görselleştirmesi ile takip edin. Serilerinizin büyümesini görün ve her dönüm noktasını kutlayın.",
@@ -161,7 +181,7 @@
                     }
                 }
             },
-            "probability_score": "Oluşum Skoru",
+            "formation_probability": "Oluşum Olasılığı",
             "previous": "Önceki",
             "next": "Sonraki",
             "start": "Başla"
@@ -206,6 +226,15 @@
         },
         "achievement": {
             "first_habit_message": "Harika iş! İlk alışkanlığınızı başlangıçta tamamladınız!"
+        },
+        "reward_rating": {
+            "title": "Nasıl hissettiniz?",
+            "description": "Bu tamamlamanın ne kadar keyifli hissettirdiğini değerlendirin. Bu, alışkanlık oluşumunuzu daha iyi anlamamıza yardımcı olur.",
+            "low": "Düşük",
+            "normal": "Normal",
+            "high": "Yüksek",
+            "very_high": "Çok Yüksek",
+            "continue": "Devam Et"
         }
     },
     "habit_detail": {
@@ -286,9 +315,9 @@
         "achievement_perfectionist_description": "%{{rate}} başarı oranı!",
         "heatmap_stats_description": "Geçen yıl {{days}} gün tamamlandı",
         "last_7_days": "Son 7 Gün",
-        "probability_info_title": "Oluşum Skoru",
-        "probability_info_description": "Oluşum Skoru, alışkanlığınızın mevcut tamamlama oranınıza göre otomatik hale gelme olasılığını gösterir. Daha yüksek skorlar, alışkanlığınızın kalıcı olma olasılığının daha yüksek olduğu anlamına gelir.",
-        "probability_info_details": "Bu skor, tutarlılık kalıplarınız ve tamamlama oranınız kullanılarak hesaplanır. Araştırmalar, bir alışkanlığın otomatik hale gelmesi için ortalama 66 günlük düzenli pratik gerektiğini göstermektedir."
+        "formation_probability_title": "Oluşum Olasılığı",
+        "formation_probability_description": "Oluşum Olasılığı, alışkanlığınızın mevcut tamamlama oranınıza göre otomatik hale gelme olasılığını gösterir. Daha yüksek olasılıklar, alışkanlığınızın kalıcı olma olasılığının daha yüksek olduğu anlamına gelir.",
+        "formation_probability_details": "Bu olasılık, tutarlılık kalıplarınız ve tamamlama oranınız kullanılarak hesaplanır. Araştırmalar, bir alışkanlığın otomatik hale gelmesi için ortalama 66 günlük düzenli pratik gerektiğini göstermektedir."
     },
     "habit": {
         "add_habit": "Alışkanlık Ekle",
@@ -622,7 +651,8 @@
             "demo_data_message": "Bu demo verisidir, gerçek verileri açmak için yükseltin",
             "upgrade_button": "Yükselt"
         },
-        "probability_score": "Oluşum Skoru",
+        "formation_probability": "Oluşum Olasılığı",
+        "probability_over_time": "Zaman İçinde Olasılık",
         "score_breakdown": "Skor Dağılımı",
         "progress_status": "İlerleme Durumu",
         "estimated_probability_time": "Estimated Probability Time",

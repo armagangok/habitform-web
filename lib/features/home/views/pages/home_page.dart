@@ -1,5 +1,6 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lottie/lottie.dart';
 
 import '/core/core.dart';
 import '../../../create_habit/create_habit_page.dart';
@@ -195,22 +196,28 @@ class HomePage extends ConsumerWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(
-            CupertinoIcons.circle_grid_hex,
-            size: 80,
-            color: CupertinoColors.systemGrey,
+          Lottie.asset(
+            Assets.animations.astronout,
+            height: context.height(0.25),
           ),
-          const SizedBox(height: 24),
           Text(
             LocaleKeys.habit_no_habit_found.tr(),
             style: context.titleLarge.copyWith(fontWeight: FontWeight.w500),
             textAlign: TextAlign.center,
           ),
-          const SizedBox(height: 16),
-          Text(
-            'Tap + to create your first habit',
-            style: context.bodyMedium.copyWith(color: CupertinoColors.systemGrey),
-            textAlign: TextAlign.center,
+          const SizedBox(height: 20),
+          CupertinoButton.filled(
+            borderRadius: BorderRadius.circular(100),
+            onPressed: () {
+              _openCreateHabitPage(context);
+            },
+            child: Text(
+              LocaleKeys.create_habit_create_habit.tr(),
+              style: context.titleLarge.copyWith(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
           ),
         ],
       ),

@@ -66,6 +66,10 @@ class $AssetsScreenshotsGen {
   AssetGenImage get exportImport =>
       const AssetGenImage('assets/screenshots/export_import.png');
 
+  /// File path: assets/screenshots/habit_map.png
+  AssetGenImage get habitMap =>
+      const AssetGenImage('assets/screenshots/habit_map.png');
+
   /// File path: assets/screenshots/habit_probability.png
   AssetGenImage get habitProbability =>
       const AssetGenImage('assets/screenshots/habit_probability.png');
@@ -83,6 +87,7 @@ class $AssetsScreenshotsGen {
         customize,
         difficultyGoal,
         exportImport,
+        habitMap,
         habitProbability,
         homeWidget,
         share

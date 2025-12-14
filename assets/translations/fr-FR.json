@@ -101,6 +101,26 @@
             "subtitle": "Construire des habitudes durables avec un suivi intelligent et des insights personnalisés",
             "continue": "Continuer",
             "features": {
+                "habit_map": {
+                    "title": "Carte des Habitudes",
+                    "description": "Visualisez votre réseau d'habitudes et voyez comment les habitudes se connectent. Construisez des chaînes d'habitudes liées et comprenez les relations qui renforcent votre routine."
+                },
+                "habit_probability": {
+                    "title": "Probabilité d'Habitude",
+                    "description": "Voyez exactement vos chances de réussir avec chaque habitude. Obtenez des insights personnalisés qui vous aident à rester motivé et à construire des habitudes durables."
+                },
+                "goal_setting": {
+                    "title": "Fixation d'Objectifs",
+                    "description": "Planification basée sur la science qui s'adapte à la difficulté : les habitudes plus faciles se forment plus rapidement, les plus difficiles prennent plus de temps—gardant les objectifs réalistes."
+                },
+                "customizable": {
+                    "title": "Personnalisable",
+                    "description": "Rendez HabitForm vraiment vôtre. Choisissez des couleurs, des thèmes et des mises en page qui correspondent à votre personnalité et vous gardent engagé."
+                },
+                "data_management": {
+                    "title": "Gestion des Données",
+                    "description": "Exportez vos données d'habitudes vers des fichiers CSV pour sauvegarde ou transfert vers un autre appareil."
+                },
                 "smart_tracking": {
                     "title": "Suivi intelligent des habitudes",
                     "description": "Suivez vos habitudes avec des rappels intelligents et une visualisation des progrès. Voyez vos séries grandir et célébrez chaque étape.",
@@ -161,7 +181,7 @@
                     }
                 }
             },
-            "probability_score": "Score de formation",
+            "formation_probability": "Probabilité de Formation",
             "previous": "Précédent",
             "next": "Suivant",
             "start": "Commencer"
@@ -206,6 +226,15 @@
         },
         "achievement": {
             "first_habit_message": "Excellent travail ! Vous avez terminé votre première habitude dans l'intégration !"
+        },
+        "reward_rating": {
+            "title": "Comment vous êtes-vous senti ?",
+            "description": "Évaluez à quel point cette réalisation était agréable. Cela nous aide à mieux comprendre la formation de vos habitudes.",
+            "low": "Faible",
+            "normal": "Normal",
+            "high": "Élevé",
+            "very_high": "Très Élevé",
+            "continue": "Continuer"
         }
     },
     "habit_detail": {
@@ -286,9 +315,9 @@
         "achievement_perfectionist_description": "Taux de réussite de {{rate}}% !",
         "heatmap_stats_description": "{{days}} jours terminés l'année dernière",
         "last_7_days": "7 derniers jours",
-        "probability_info_title": "Score de formation",
-        "probability_info_description": "Le Score de formation montre la probabilité que votre habitude devienne automatique basée sur votre taux de completion actuel. Des scores plus élevés signifient que votre habitude est plus susceptible de tenir de façon permanente.",
-        "probability_info_details": "Ce score est calculé en utilisant vos modèles de constance et votre taux de completion. La recherche montre qu'il faut en moyenne 66 jours de pratique régulière pour qu'une habitude devienne automatique."
+        "formation_probability_title": "Probabilité de Formation",
+        "formation_probability_description": "La Probabilité de Formation montre la probabilité que votre habitude devienne automatique basée sur votre taux de completion actuel. Des probabilités plus élevées signifient que votre habitude est plus susceptible de tenir de façon permanente.",
+        "formation_probability_details": "Cette probabilité est calculée en utilisant vos modèles de constance et votre taux de completion. La recherche montre qu'il faut en moyenne 66 jours de pratique régulière pour qu'une habitude devienne automatique."
     },
     "habit": {
         "add_habit": "Ajouter une habitude",
@@ -622,7 +651,8 @@
             "demo_data_message": "Ce sont des données de démonstration, mettez à niveau pour débloquer les vraies données",
             "upgrade_button": "Mettre à niveau"
         },
-        "probability_score": "Score de formation",
+        "formation_probability": "Probabilité de Formation",
+        "probability_over_time": "Probabilité au Fil du Temps",
         "score_breakdown": "Détail du score",
         "progress_status": "Statut des progrès",
         "estimated_probability_time": "Estimated Probability Time",

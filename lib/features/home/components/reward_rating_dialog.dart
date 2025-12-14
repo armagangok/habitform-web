@@ -25,7 +25,7 @@ class _RewardRatingDialogState extends State<RewardRatingDialog> {
   Widget build(BuildContext context) {
     return CupertinoAlertDialog(
       title: Text(
-        'How did you feel?',
+        'onboarding.reward_rating.title'.tr(),
         style: context.titleLarge.copyWith(
           fontWeight: FontWeight.bold,
         ),
@@ -35,7 +35,7 @@ class _RewardRatingDialogState extends State<RewardRatingDialog> {
         children: [
           const SizedBox(height: 16),
           Text(
-            'Rate how enjoyable this completion felt. This helps us understand your habit formation better.',
+            'onboarding.reward_rating.description'.tr(),
             style: context.bodyMedium.copyWith(
               color: context.bodyMedium.color?.withValues(alpha: 0.7),
             ),
@@ -49,25 +49,25 @@ class _RewardRatingDialogState extends State<RewardRatingDialog> {
               _buildRatingOption(
                 context,
                 emoji: '😞',
-                label: 'Low',
+                label: 'onboarding.reward_rating.low'.tr(),
                 value: 0.5,
               ),
               _buildRatingOption(
                 context,
                 emoji: '😐',
-                label: 'Normal',
+                label: 'onboarding.reward_rating.normal'.tr(),
                 value: 1.0,
               ),
               _buildRatingOption(
                 context,
                 emoji: '😊',
-                label: 'High',
+                label: 'onboarding.reward_rating.high'.tr(),
                 value: 1.5,
               ),
               _buildRatingOption(
                 context,
                 emoji: '😄',
-                label: 'Very High',
+                label: 'onboarding.reward_rating.very_high'.tr(),
                 value: 2.0,
               ),
             ],
@@ -85,7 +85,7 @@ class _RewardRatingDialogState extends State<RewardRatingDialog> {
                 }
               : null,
           child: Text(
-            'Continue',
+            'onboarding.reward_rating.continue'.tr(),
             style: TextStyle(
               color: _selectedRating != null ? context.primary : CupertinoColors.placeholderText,
               fontWeight: FontWeight.w600,

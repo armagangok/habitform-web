@@ -100,6 +100,26 @@
             "title": "HabitFormがあなたをサポート...",
             "subtitle": "スマートトラッキングとパーソナライズされたインサイトで持続的な習慣を構築",
             "features": {
+                "habit_map": {
+                    "title": "習慣マップ",
+                    "description": "習慣ネットワークを視覚化し、習慣がどのように接続されているかを確認します。関連する習慣のチェーンを構築し、ルーティンを強化する関係を理解します。"
+                },
+                "habit_probability": {
+                    "title": "習慣確率",
+                    "description": "各習慣でどれだけ成功する可能性があるかを正確に確認します。モチベーションを維持し、持続的な習慣を構築するのに役立つパーソナライズされたインサイトを取得します。"
+                },
+                "goal_setting": {
+                    "title": "目標設定",
+                    "description": "難易度に適応する科学に基づいた計画：簡単な習慣はより速く形成され、難しい習慣はより長くかかります—目標を現実的に保ちます。"
+                },
+                "customizable": {
+                    "title": "カスタマイズ可能",
+                    "description": "HabitFormを本当にあなたのものにしてください。あなたの個性に合い、あなたを引き付ける色、テーマ、レイアウトを選択してください。"
+                },
+                "data_management": {
+                    "title": "データ管理",
+                    "description": "習慣データをCSVファイルにエクスポートして、バックアップまたは別のデバイスに転送します。"
+                },
                 "smart_tracking": {
                     "title": "スマート習慣トラッキング",
                     "description": "インテリジェントなリマインダーと進捗の可視化で習慣を追跡。ストリークの成長を見て、すべてのマイルストーンを祝いましょう。",
@@ -160,7 +180,7 @@
                     }
                 }
             },
-            "probability_score": "形成スコア",
+            "formation_probability": "形成確率",
             "previous": "前へ",
             "next": "次へ",
             "start": "スタート"
@@ -205,6 +225,15 @@
         },
         "achievement": {
             "first_habit_message": "素晴らしい！オンボーディングで最初の習慣を完了しました！"
+        },
+        "reward_rating": {
+            "title": "どのように感じましたか？",
+            "description": "この完了がどれほど楽しかったかを評価してください。これにより、習慣形成をよりよく理解できます。",
+            "low": "低い",
+            "normal": "普通",
+            "high": "高い",
+            "very_high": "非常に高い",
+            "continue": "続ける"
         }
     },
     "habit_detail": {
@@ -285,9 +314,9 @@
         "achievement_perfectionist_description": "{{rate}}%成功率！",
         "heatmap_stats_description": "過去1年で{{days}}日完了",
         "last_7_days": "過去7日間",
-        "probability_info_title": "形成スコア",
-        "probability_info_description": "形成スコアは、現在の完了率に基づいて習慣が自動的になる可能性を示します。スコアが高いほど、習慣が永続的に定着する可能性が高くなります。",
-        "probability_info_details": "このスコアは一貫性パターンと完了率を使用して計算されます。研究によると、習慣が自動的になるまで平均66日間の定期的な練習が必要です。"
+        "formation_probability_title": "形成確率",
+        "formation_probability_description": "形成確率は、現在の完了率に基づいて習慣が自動的になる可能性を示します。確率が高いほど、習慣が永続的に定着する可能性が高くなります。",
+        "formation_probability_details": "この確率は一貫性パターンと完了率を使用して計算されます。研究によると、習慣が自動的になるまで平均66日間の定期的な練習が必要です。"
     },
     "habit": {
         "add_habit": "習慣を追加",
@@ -621,7 +650,8 @@
             "demo_data_message": "これはデモデータです。実際のデータをアンロックするにはアップグレードしてください",
             "upgrade_button": "アップグレード"
         },
-        "probability_score": "確率スコア",
+        "formation_probability": "形成確率",
+        "probability_over_time": "時間経過による確率",
         "score_breakdown": "スコア内訳",
         "progress_status": "進捗ステータス",
         "estimated_probability_time": "推定確率時間",
