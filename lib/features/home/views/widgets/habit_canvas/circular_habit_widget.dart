@@ -74,7 +74,6 @@ class _CircularHabitWidgetState extends ConsumerState<CircularHabitWidget> {
 
     // Choose direction: when decreasing, continue until 0; when increasing, continue until full
     final shouldIncrement = !isDecreasing;
-    final beforeFull = beforeCount >= beforeTarget;
 
     await homeNotifier.adjustHabitCompletion(
       widget.habit.id,
@@ -96,7 +95,6 @@ class _CircularHabitWidgetState extends ConsumerState<CircularHabitWidget> {
       if (!mounted) return;
       final afterCount = afterHabit.getCountForDate(today);
       final afterTarget = afterHabit.dailyTarget <= 0 ? 1 : afterHabit.dailyTarget;
-      final afterFull = afterCount >= afterTarget;
       final afterRatio = (afterCount / afterTarget).clamp(0.0, 1.0);
 
       // Update decreasing mode after action based on new ratio (similar to Last 7 Days)
@@ -106,9 +104,9 @@ class _CircularHabitWidgetState extends ConsumerState<CircularHabitWidget> {
         _decreasingModeByDateKey[dateKey] = false;
       }
 
-      // Show reward rating dialog when habit is newly completed
-      // User must rate how they felt, then we show probability dialog
-      if (!beforeFull && afterFull) {
+      // Show reward rating dialog for each increment in multi-completion mode
+      // This allows users to rate each completion separately, which affects probability calculation
+      if (shouldIncrement && afterCount > beforeCount) {
         await _showRewardRatingDialog(updatedHabit: afterHabit, previousHabit: beforeHabit);
       }
     } catch (e) {
@@ -204,10 +202,19 @@ class _CircularHabitWidgetState extends ConsumerState<CircularHabitWidget> {
       await Future.delayed(const Duration(milliseconds: 300));
       if (!mounted) return;
 
+      // Get the latest habit state after refresh to ensure reward rating is included
+      final latestHabit = ref.read(homeProvider).maybeWhen(
+            data: (homeState) => homeState.habits.firstWhere(
+              (h) => h.id == updatedHabit.id,
+              orElse: () => habitWithRating,
+            ),
+            orElse: () => habitWithRating,
+          );
+
       // Show probability dialog after rating is saved
       await _showAchievementIfEarned(
         previousHabit: previousHabit,
-        updatedHabit: habitWithRating,
+        updatedHabit: latestHabit,
       );
     } else {
       // If entry not found, just show probability dialog

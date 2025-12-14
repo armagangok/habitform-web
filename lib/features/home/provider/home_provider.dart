@@ -200,6 +200,7 @@ class HomeNotifier extends AsyncNotifier<HomeState> {
       date: normalizedDate,
       isCompleted: newCount > 0,
       count: newCount,
+      rewardRating: existingEntry?.rewardRating, // Preserve reward rating when updating count
     );
     updatedCompletions[dateKey] = updatedEntry;
 

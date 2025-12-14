@@ -8,6 +8,7 @@ import 'package:habitform/models/habit/habit_extension.dart';
 import '/core/core.dart';
 import '/models/completion_entry/completion_entry.dart';
 import '/models/models.dart';
+import '../../home/components/reward_rating_dialog.dart';
 import '../providers/habit_detail_provider.dart';
 import '../providers/habit_statistics_provider.dart';
 
@@ -324,6 +325,7 @@ class _WeeklyProgressChartState extends ConsumerState<_WeeklyProgressChart> {
     final weeklyData = habitStats?.weeklyData;
     final today = DateUtils.dateOnly(DateTime.now());
     final targetDate = today.subtract(Duration(days: 6 - index));
+    final dateKey = '${targetDate.year}-${targetDate.month}-${targetDate.day}';
     final currentRatio = weeklyData != null && weeklyData.length > index ? weeklyData[index] : currentHabit.getCompletionRatioForDate(targetDate);
 
     // Haptic feedback
@@ -334,8 +336,12 @@ class _WeeklyProgressChartState extends ConsumerState<_WeeklyProgressChart> {
       return;
     }
 
+    // Get before count for reward rating dialog
+    final beforeCount = currentHabit.getCountForDate(targetDate);
+    final previousHabit = currentHabit;
+
     final completionEntry = CompletionEntry(
-      id: '${targetDate.year}-${targetDate.month}-${targetDate.day}',
+      id: dateKey,
       date: targetDate,
       // true -> increment count, false -> decrement count
       isCompleted: increment ? (currentRatio < 1.0) : false,
@@ -344,9 +350,85 @@ class _WeeklyProgressChartState extends ConsumerState<_WeeklyProgressChart> {
     try {
       // Use the provider which will update both local state and home provider
       await ref.read(habitDetailProvider.notifier).markHabitAsComplete(currentHabit.id, completionEntry);
+
+      // Show reward rating dialog for each increment in multi-completion mode
+      if (increment) {
+        // Get updated habit after completion
+        await Future.delayed(const Duration(milliseconds: 100));
+        if (!mounted) return;
+
+        final updatedHabit = ref.read(habitDetailProvider);
+        if (updatedHabit != null) {
+          final afterCount = updatedHabit.getCountForDate(targetDate);
+
+          // Show reward rating dialog if count increased
+          if (afterCount > beforeCount) {
+            await _showRewardRatingDialog(
+              context: context,
+              updatedHabit: updatedHabit,
+              previousHabit: previousHabit,
+              targetDate: targetDate,
+              dateKey: dateKey,
+            );
+          }
+        }
+      }
     } catch (e, s) {
       // Handle error - could show a snackbar or dialog
       LogHelper.shared.errorPrint('Error updating completion: $e\nStacktrace:$s');
+    }
+  }
+
+  Future<void> _showRewardRatingDialog({
+    required BuildContext context,
+    required Habit updatedHabit,
+    required Habit previousHabit,
+    required DateTime targetDate,
+    required String dateKey,
+  }) async {
+    if (!mounted) return;
+
+    await Future.delayed(const Duration(milliseconds: 500));
+    if (!mounted) return;
+
+    // Show reward rating dialog (mandatory - user must select)
+    // Dialog returns the selected rating when closed
+    double? rewardRating;
+    try {
+      rewardRating = await showCupertinoDialog<double>(
+        context: context,
+        barrierDismissible: false, // User must select a rating
+        builder: (dialogContext) => RewardRatingDialog(
+          habit: updatedHabit,
+        ),
+      );
+    } catch (e) {
+      LogHelper.shared.errorPrint('Error showing reward rating dialog: $e');
+      return;
+    }
+
+    if (!mounted || rewardRating == null) return;
+
+    // Small delay to ensure dialog is fully closed before proceeding
+    await Future.delayed(const Duration(milliseconds: 200));
+    if (!mounted) return;
+
+    // Get current completion entry
+    final currentHabit = ref.read(habitDetailProvider);
+    if (currentHabit == null) return;
+
+    final existingEntry = currentHabit.completions[dateKey];
+    if (existingEntry != null) {
+      // Update completion entry with reward rating
+      final updatedEntry = existingEntry.copyWith(rewardRating: rewardRating);
+      final updatedCompletions = Map<String, CompletionEntry>.from(currentHabit.completions);
+      updatedCompletions[dateKey] = updatedEntry;
+
+      // Update habit locally
+      final habitWithRating = currentHabit.copyWith(completions: updatedCompletions);
+
+      // Save to service via habit detail provider
+      await ref.read(habitDetailProvider.notifier).updateHabit(habitWithRating);
     }
   }
 
