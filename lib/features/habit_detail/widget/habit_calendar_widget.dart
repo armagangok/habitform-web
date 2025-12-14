@@ -132,18 +132,33 @@ class _HabitCalendarCompletionSheetState extends ConsumerState<HabitCalendarComp
     // Use latest habit state from provider
     final latestHabit = ref.read(habitDetailProvider) ?? widget.habit;
 
-    // Existing entry & counts from latest state
-    CompletionEntry? existingEntry;
-    for (var entry in latestHabit.completions.values) {
-      if (entry.date.normalized.isSameDayWith(selectedDateTime)) {
-        existingEntry = entry;
-        break;
+    // Optimized lookup: try direct key lookup first (O(1) instead of O(n))
+    final normalizedDate = selectedDateTime.normalized;
+    final dateKey = normalizedDate.toIso8601DateString;
+    CompletionEntry? existingEntry = latestHabit.completions[dateKey];
+
+    // Verify the entry matches the date (in case of key collision)
+    if (existingEntry != null && !existingEntry.date.normalized.isSameDayWith(normalizedDate)) {
+      // Try alternative key format
+      final altKey = '${normalizedDate.year}-${normalizedDate.month}-${normalizedDate.day}';
+      existingEntry = latestHabit.completions[altKey];
+      if (existingEntry != null && !existingEntry.date.normalized.isSameDayWith(normalizedDate)) {
+        existingEntry = null;
       }
     }
+
+    // Fallback to linear search only if direct lookup fails (should be rare)
+    if (existingEntry == null) {
+      for (var entry in latestHabit.completions.values) {
+        if (entry.date.normalized.isSameDayWith(normalizedDate)) {
+          existingEntry = entry;
+          break;
+        }
+      }
+    }
+
     final target = latestHabit.dailyTarget <= 0 ? 1 : latestHabit.dailyTarget;
     final currentCount = existingEntry?.count ?? 0;
-
-    final dateKey = selectedDateTime.toIso8601DateString;
     bool isDecreasing = _decreasingModeByDateKey[dateKey] ?? (currentCount >= target);
 
     int nextCount;
@@ -211,14 +226,31 @@ class _HabitCalendarCompletionSheetState extends ConsumerState<HabitCalendarComp
     // Use latest habit state from provider
     final latestHabit = ref.read(habitDetailProvider) ?? widget.habit;
 
-    // Existing entry & counts from latest state
-    CompletionEntry? existingEntry;
-    for (var entry in latestHabit.completions.values) {
-      if (entry.date.normalized.isSameDayWith(selectedDateTime)) {
-        existingEntry = entry;
-        break;
+    // Optimized lookup: try direct key lookup first (O(1) instead of O(n))
+    final normalizedDate = selectedDateTime.normalized;
+    final dateKey = normalizedDate.toIso8601DateString;
+    CompletionEntry? existingEntry = latestHabit.completions[dateKey];
+
+    // Verify the entry matches the date (in case of key collision)
+    if (existingEntry != null && !existingEntry.date.normalized.isSameDayWith(normalizedDate)) {
+      // Try alternative key format
+      final altKey = '${normalizedDate.year}-${normalizedDate.month}-${normalizedDate.day}';
+      existingEntry = latestHabit.completions[altKey];
+      if (existingEntry != null && !existingEntry.date.normalized.isSameDayWith(normalizedDate)) {
+        existingEntry = null;
       }
     }
+
+    // Fallback to linear search only if direct lookup fails (should be rare)
+    if (existingEntry == null) {
+      for (var entry in latestHabit.completions.values) {
+        if (entry.date.normalized.isSameDayWith(normalizedDate)) {
+          existingEntry = entry;
+          break;
+        }
+      }
+    }
+
     final target = latestHabit.dailyTarget <= 0 ? 1 : latestHabit.dailyTarget;
     final currentCount = existingEntry?.count ?? 0;
     final nextCount = (currentCount - 1) < 0 ? 0 : (currentCount - 1);

@@ -32,76 +32,32 @@ class HabitProgressCard extends ConsumerWidget {
           ),
           const SizedBox(width: 8),
           Text(
-            LocaleKeys.habit_detail_progress.tr(),
+            LocaleKeys.habit_detail_last_7_days.tr(),
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
               color: context.titleLarge.color,
             ),
           ),
-          const Spacer(),
-          CircularActionButton(
-            iconSize: 24,
-            onPressed: () => _showFormationInfoDialog(context),
-            icon: CupertinoIcons.info,
-          ),
+          // const Spacer(),
+          // CircularActionButton(
+          //   iconSize: 24,
+          //   onPressed: () => _showFormationInfoDialog(context),
+          //   icon: CupertinoIcons.info,
+          // ),
         ],
       ),
       children: [
         CupertinoListTile(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
           title: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Main Progress Circle and Stats
-              Center(
-                child: Consumer(
-                  builder: (context, ref, child) {
-                    final currentHabit = ref.watch(habitDetailProvider);
-                    final habitStats = ref.watch(habitStatisticsProvider);
-
-                    // Calculate statistics if not cached or invalid (using Future.microtask to avoid build-time modification)
-                    if (habitStats == null || !habitStats.isValid) {
-                      Future.microtask(() {
-                        ref.read(habitStatisticsProvider.notifier).calculateStatistics(currentHabit ?? habit);
-                      });
-                    }
-
-                    final formationProgress = habitStats?.formationProgress ?? 0.0;
-                    return _CircularProgress(
-                      progress: formationProgress / 100,
-                      color: Color(habit.colorCode),
-                      centerChild: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            "${formationProgress.clamp(0, 99).toStringAsFixed(0)}%",
-                            style: TextStyle(
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold,
-                              color: context.titleLarge.color,
-                            ),
-                          ),
-                          Text(
-                            LocaleKeys.habit_detail_formation.tr(),
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: context.bodyMedium.color?.withValues(alpha: 0.7),
-                            ),
-                          ),
-                        ],
-                      ),
-                    );
-                  },
-                ),
-              ),
-
-              const SizedBox(height: 12),
 
               // Weekly Progress Chart
-              _WeeklyProgressChart(),
 
-              const SizedBox(height: 8),
+              _WeeklyProgressChart(),
             ],
           ),
         ),
@@ -109,50 +65,50 @@ class HabitProgressCard extends ConsumerWidget {
     );
   }
 
-  void _showFormationInfoDialog(BuildContext context) {
-    showCupertinoDialog(
-      context: context,
-      builder: (context) => CupertinoAlertDialog(
-        title: Text(
-          LocaleKeys.habit_detail_probability_info_title.tr(),
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-            color: context.titleLarge.color,
-          ),
-        ),
-        content: Padding(
-          padding: const EdgeInsets.only(top: 16),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                LocaleKeys.habit_detail_probability_info_description.tr(),
-                style: TextStyle(
-                  fontSize: 16,
-                  color: context.bodyMedium.color,
-                  height: 1.1,
-                ),
-              ),
-            ],
-          ),
-        ),
-        actions: [
-          CupertinoDialogAction(
-            onPressed: () => Navigator.of(context).pop(),
-            child: Text(
-              LocaleKeys.common_ok.tr(),
-              style: TextStyle(
-                color: Color(habit.colorCode),
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+  // void _showFormationInfoDialog(BuildContext context) {
+  //   showCupertinoDialog(
+  //     context: context,
+  //     builder: (context) => CupertinoAlertDialog(
+  //       title: Text(
+  //         LocaleKeys.habit_detail_probability_info_title.tr(),
+  //         style: TextStyle(
+  //           fontSize: 18,
+  //           fontWeight: FontWeight.bold,
+  //           color: context.titleLarge.color,
+  //         ),
+  //       ),
+  //       content: Padding(
+  //         padding: const EdgeInsets.only(top: 16),
+  //         child: Column(
+  //           mainAxisSize: MainAxisSize.min,
+  //           crossAxisAlignment: CrossAxisAlignment.start,
+  //           children: [
+  //             Text(
+  //               LocaleKeys.habit_detail_probability_info_description.tr(),
+  //               style: TextStyle(
+  //                 fontSize: 16,
+  //                 color: context.bodyMedium.color,
+  //                 height: 1.1,
+  //               ),
+  //             ),
+  //           ],
+  //         ),
+  //       ),
+  //       actions: [
+  //         CupertinoDialogAction(
+  //           onPressed: () => Navigator.of(context).pop(),
+  //           child: Text(
+  //             LocaleKeys.common_ok.tr(),
+  //             style: TextStyle(
+  //               color: Color(habit.colorCode),
+  //               fontWeight: FontWeight.w600,
+  //             ),
+  //           ),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 }
 
 class _CircularProgress extends StatefulWidget {
@@ -283,20 +239,49 @@ class _WeeklyProgressChartState extends ConsumerState<_WeeklyProgressChart> {
     if (habit == null) return const SizedBox.shrink();
 
     final habitStats = ref.watch(habitStatisticsProvider);
-    final weeklyData = habitStats?.weeklyData ?? _getWeeklyData(habit);
+    // Use cached weekly data from statistics provider to avoid duplicate calculation
+    // If not available yet, trigger calculation and show loading state
+    final weeklyData = habitStats?.weeklyData;
+
+    // Trigger statistics calculation if not already calculated
+    if (weeklyData == null) {
+      // Use Future.microtask to avoid build-time modification
+      Future.microtask(() {
+        ref.read(habitStatisticsProvider.notifier).calculateStatistics(habit);
+      });
+      // Return loading state while calculating
+      return CupertinoListSection.insetGrouped(
+        header: Row(
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            Icon(
+              FontAwesomeIcons.chartPie,
+              size: 20,
+              color: Color(habit.colorCode),
+            ),
+            const SizedBox(width: 8),
+            Text(
+              LocaleKeys.habit_detail_last_7_days.tr(),
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: context.titleLarge.color,
+              ),
+            ),
+          ],
+        ),
+        children: [
+          const CupertinoListTile(
+            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 40),
+            title: Center(child: CupertinoActivityIndicator()),
+          ),
+        ],
+      );
+    }
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          LocaleKeys.habit_detail_last_7_days.tr(),
-          style: TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.bold,
-            color: context.titleLarge.color,
-          ),
-        ),
-        const SizedBox(height: 12),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: List.generate(7, (index) {
@@ -334,14 +319,15 @@ class _WeeklyProgressChartState extends ConsumerState<_WeeklyProgressChart> {
     final currentHabit = ref.read(habitDetailProvider);
     if (currentHabit == null) return;
 
-    final currentRatio = _getWeeklyData(currentHabit)[index];
+    // Get ratio from cached statistics or calculate directly using extension method
+    final habitStats = ref.read(habitStatisticsProvider);
+    final weeklyData = habitStats?.weeklyData;
+    final today = DateUtils.dateOnly(DateTime.now());
+    final targetDate = today.subtract(Duration(days: 6 - index));
+    final currentRatio = weeklyData != null && weeklyData.length > index ? weeklyData[index] : currentHabit.getCompletionRatioForDate(targetDate);
 
     // Haptic feedback
     HapticFeedback.lightImpact();
-
-    // Update completion status using the provider
-    final today = DateUtils.dateOnly(DateTime.now());
-    final targetDate = today.subtract(Duration(days: 6 - index));
 
     // Guard: Do not allow marking future dates
     if (targetDate.isAfter(today)) {
@@ -368,7 +354,11 @@ class _WeeklyProgressChartState extends ConsumerState<_WeeklyProgressChart> {
     final today = DateUtils.dateOnly(DateTime.now());
     final targetDate = today.subtract(Duration(days: 6 - index));
     final dateKey = '${targetDate.year}-${targetDate.month}-${targetDate.day}';
-    final ratio = _getWeeklyData(habit)[index];
+
+    // Get ratio from cached statistics or calculate directly
+    final habitStats = ref.read(habitStatisticsProvider);
+    final weeklyData = habitStats?.weeklyData;
+    final ratio = weeklyData != null && weeklyData.length > index ? weeklyData[index] : habit.getCompletionRatioForDate(targetDate);
 
     // Determine current mode
     bool isDecreasing = _decreasingModeByDateKey[dateKey] ?? false;
@@ -392,19 +382,6 @@ class _WeeklyProgressChartState extends ConsumerState<_WeeklyProgressChart> {
       _decreasingModeByDateKey[dateKey] = false;
     }
     if (mounted) setState(() {});
-  }
-
-  List<double> _getWeeklyData(Habit habit) {
-    final today = DateUtils.dateOnly(DateTime.now());
-    final weeklyData = <double>[];
-
-    for (int i = 6; i >= 0; i--) {
-      final date = today.subtract(Duration(days: i));
-      final ratio = habit.getCompletionRatioForDate(date);
-      weeklyData.add(ratio);
-    }
-
-    return weeklyData;
   }
 }
 
