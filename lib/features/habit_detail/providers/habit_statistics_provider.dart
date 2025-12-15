@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:habitform/models/habit/habit_extension.dart';
 
@@ -8,7 +10,7 @@ import '../../../models/habit/habit_model.dart';
 class HabitStatistics {
   final int currentStreak;
   final int longestStreak;
-  final double formationProgress;
+
   final double completionRate;
   final int thisMonthCompleted;
   final int thisMonthTotal;
@@ -19,7 +21,6 @@ class HabitStatistics {
   const HabitStatistics({
     required this.currentStreak,
     required this.longestStreak,
-    required this.formationProgress,
     required this.completionRate,
     required this.thisMonthCompleted,
     required this.thisMonthTotal,
@@ -42,28 +43,59 @@ class HabitStatisticsNotifier extends AutoDisposeNotifier<HabitStatistics?> {
   HabitStatistics? build() => null;
 
   /// Calculate and cache statistics for the current habit
+  /// Returns immediately if cached statistics are valid
   void calculateStatistics(Habit habit) {
     // Check if we already have valid cached statistics
     if (state != null && state!.isValid) {
       return;
     }
 
-    final statistics = _calculateStatistics(habit);
-    state = statistics;
+    // Calculate asynchronously to avoid blocking UI
+    _calculateStatisticsAsync(habit);
   }
 
-  /// Force recalculation of statistics
+  /// Force recalculation of statistics (async to avoid blocking UI)
   void forceRecalculate(Habit habit) {
-    final statistics = _calculateStatistics(habit);
-    state = statistics;
+    _calculateStatisticsAsync(habit);
   }
 
-  HabitStatistics _calculateStatistics(Habit habit) {
+  /// Calculate statistics asynchronously to avoid blocking UI
+  void _calculateStatisticsAsync(Habit habit) {
+    // Use Future.microtask to defer calculation to next event loop
+    // This allows the UI to render first while statistics calculate in background
+    Future.microtask(() {
+      try {
+        final statistics = _HabitStatisticsCalculator.calculate(habit);
+        // Use a small delay to ensure UI has rendered
+        Future.delayed(const Duration(milliseconds: 16), () {
+          // Setting state is safe even if provider is disposed - it just won't update anything
+          try {
+            state = statistics;
+          } catch (e) {
+            LogHelper.shared.errorPrint("Error in async statistics calculation: $e");
+          }
+        });
+      } catch (e) {
+        LogHelper.shared.errorPrint("Error in async statistics calculation: $e");
+        // Fallback: calculate synchronously if async fails
+        try {
+          final statistics = _HabitStatisticsCalculator.calculate(habit);
+          state = statistics;
+        } catch (e) {
+          LogHelper.shared.errorPrint("Error in fallback statistics calculation: $e");
+        }
+      }
+    });
+  }
+}
+
+/// Helper class for statistics calculation (can be used in isolates)
+class _HabitStatisticsCalculator {
+  static HabitStatistics calculate(Habit habit) {
     if (habit.completions.isEmpty) {
       return HabitStatistics(
         currentStreak: 0,
         longestStreak: 0,
-        formationProgress: 0.0,
         completionRate: 0.0,
         thisMonthCompleted: 0,
         thisMonthTotal: 0,
@@ -76,9 +108,6 @@ class HabitStatisticsNotifier extends AutoDisposeNotifier<HabitStatistics?> {
     // Calculate streaks (these are expensive operations)
     final currentStreak = habit.calculateCurrentStreak();
     final longestStreak = habit.calculateLongestStreak();
-
-    // Calculate formation progress
-    final formationProgress = habit.calculateHabitProbability();
 
     // Calculate completion rate
     final completionRate = habit.calculateWeightedProgressPercentageFromFirstCompletion();
@@ -101,7 +130,6 @@ class HabitStatisticsNotifier extends AutoDisposeNotifier<HabitStatistics?> {
     return HabitStatistics(
       currentStreak: currentStreak,
       longestStreak: longestStreak,
-      formationProgress: formationProgress,
       completionRate: completionRate,
       thisMonthCompleted: thisMonthCompletions.length,
       thisMonthTotal: daysInMonth,

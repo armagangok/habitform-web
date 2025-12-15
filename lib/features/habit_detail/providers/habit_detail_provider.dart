@@ -19,7 +19,8 @@ class HabitDetailNotifier extends AutoDisposeNotifier<Habit?> {
 
   Future<void> initHabit(Habit habit) async {
     state = habit;
-    // Invalidate cached statistics when habit changes
+    // Trigger async statistics calculation (non-blocking)
+    // This allows the UI to render immediately while statistics calculate in background
     ref.read(habitStatisticsProvider.notifier).forceRecalculate(habit);
   }
 
@@ -43,14 +44,30 @@ class HabitDetailNotifier extends AutoDisposeNotifier<Habit?> {
         final currentHabit = state!;
         final updatedCompletions = Map<String, CompletionEntry>.from(currentHabit.completions);
 
-        // Find existing entry for the same date
+        // Optimized lookup: try direct key lookup first (O(1) instead of O(n))
+        final normalizedDate = completion.date.normalized;
+        final dateKey = normalizedDate.toIso8601DateString;
         String? existingKey;
-        CompletionEntry? existingEntry;
-        for (var entry in updatedCompletions.entries) {
-          if (entry.value.date.normalized.isSameDayWith(completion.date.normalized)) {
-            existingKey = entry.key;
-            existingEntry = entry.value;
-            break;
+        CompletionEntry? existingEntry = updatedCompletions[dateKey];
+
+        if (existingEntry != null && existingEntry.date.normalized.isSameDayWith(normalizedDate)) {
+          existingKey = dateKey;
+        } else {
+          // Try alternative key format
+          final altKey = '${normalizedDate.year}-${normalizedDate.month}-${normalizedDate.day}';
+          existingEntry = updatedCompletions[altKey];
+          if (existingEntry != null && existingEntry.date.normalized.isSameDayWith(normalizedDate)) {
+            existingKey = altKey;
+          } else {
+            existingEntry = null;
+            // Fallback to linear search only if direct lookup fails (should be rare)
+            for (var entry in updatedCompletions.entries) {
+              if (entry.value.date.normalized.isSameDayWith(normalizedDate)) {
+                existingKey = entry.key;
+                existingEntry = entry.value;
+                break;
+              }
+            }
           }
         }
 
@@ -81,7 +98,8 @@ class HabitDetailNotifier extends AutoDisposeNotifier<Habit?> {
         final updatedHabit = currentHabit.copyWith(completions: updatedCompletions);
         state = updatedHabit;
 
-        // Invalidate cached statistics since habit data changed
+        // Trigger async statistics recalculation (non-blocking)
+        // This allows UI to remain responsive while statistics update in background
         ref.read(habitStatisticsProvider.notifier).forceRecalculate(updatedHabit);
 
         final optimisticEnd = DateTime.now();

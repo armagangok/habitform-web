@@ -48,38 +48,44 @@ class _OnboardingAppFeaturesPageState extends State<OnboardingAppFeaturesPage> w
 
   List<AppFeature> get _appFeatures => [
         AppFeature(
-          title: "Habit Probability",
-          description: "See exactly how likely you are to succeed with each habit. Get personalized insights that help you stay motivated and build lasting habits.",
+          title: 'onboarding.app_features.features.habit_map.title'.tr(),
+          description: 'onboarding.app_features.features.habit_map.description'.tr(),
+          icon: CupertinoIcons.map_fill,
+          color: context.cupertinoTheme.primaryColor,
+        ),
+        AppFeature(
+          title: 'onboarding.app_features.features.habit_probability.title'.tr(),
+          description: 'onboarding.app_features.features.habit_probability.description'.tr(),
           icon: CupertinoIcons.chart_bar_square,
           color: context.cupertinoTheme.primaryColor,
         ),
         AppFeature(
-          title: "Home Widget",
-          description: "Track your habits without opening the app. Complete your daily goals directly from your phone home screen in seconds.",
+          title: 'onboarding.app_features.features.home_widget.title'.tr(),
+          description: 'onboarding.app_features.features.home_widget.description'.tr(),
           icon: CupertinoIcons.square_grid_2x2_fill,
           color: context.cupertinoTheme.primaryColor,
         ),
         AppFeature(
-          title: "Goal Setting",
-          description: "Science‑based planning that adapts to difficulty: easier habits form faster, harder ones take longer—keeping goals realistic.",
+          title: 'onboarding.app_features.features.goal_setting.title'.tr(),
+          description: 'onboarding.app_features.features.goal_setting.description'.tr(),
           icon: CupertinoIcons.checkmark_circle_fill,
           color: context.cupertinoTheme.primaryColor,
         ),
         AppFeature(
-          title: "Customizable",
-          description: "Make HabitForm truly yours. Choose colors, themes, and layouts that match your personality and keep you engaged.",
+          title: 'onboarding.app_features.features.customizable.title'.tr(),
+          description: 'onboarding.app_features.features.customizable.description'.tr(),
           icon: CupertinoIcons.paintbrush_fill,
           color: context.cupertinoTheme.primaryColor,
         ),
         AppFeature(
-          title: "Data Management",
-          description: "Export your habits data to CSV files for backup or transfer to another device.",
+          title: 'onboarding.app_features.features.data_management.title'.tr(),
+          description: 'onboarding.app_features.features.data_management.description'.tr(),
           icon: CupertinoIcons.doc_text_fill,
           color: context.cupertinoTheme.primaryColor,
         ),
         AppFeature(
-          title: "Share Habits",
-          description: "Celebrate your wins with friends and family. Share beautiful progress visuals that inspire others and keep you accountable.",
+          title: 'onboarding.app_features.features.share_habits.title'.tr(),
+          description: 'onboarding.app_features.features.share_habits.description'.tr(),
           icon: CupertinoIcons.share,
           color: context.cupertinoTheme.primaryColor,
         ),
@@ -728,6 +734,9 @@ class _OnboardingAppFeaturesPageState extends State<OnboardingAppFeaturesPage> w
 
   String? _screenshotForFeature(AppFeature feature) {
     final title = feature.title.toLowerCase();
+    if (title.contains('habit map') || title.contains('map')) {
+      return 'assets/screenshots/habit_map.png';
+    }
     if (title.contains('habit probability')) {
       return 'assets/screenshots/habit_probability.png';
     }

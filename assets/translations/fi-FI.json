@@ -100,6 +100,26 @@
             "title": "HabitForm auttaa sinua ...",
             "subtitle": "Rakenna kestäviä tapoja älykkäällä seurannalla ja henkilökohtaisilla oivalluksilla",
             "features": {
+                "habit_map": {
+                    "title": "Tottumuskartta",
+                    "description": "Visualisoi tapojesi verkosto ja katso miten tavat liittyvät toisiinsa. Rakenna liittyvien tapojen ketjuja ja ymmärrä suhteet, jotka vahvistavat rutiinisi."
+                },
+                "habit_probability": {
+                    "title": "Tavan todennäköisyys",
+                    "description": "Näe tarkalleen kuinka todennäköistä onnistumisesi on jokaisen tavan kanssa. Hanki henkilökohtaisia oivalluksia, jotka auttavat sinua pysymään motivoituneena ja rakentamaan kestäviä tapoja."
+                },
+                "goal_setting": {
+                    "title": "Tavoitteiden Asettaminen",
+                    "description": "Tieteeseen perustuva suunnittelu, joka mukautuu vaikeuteen: helpommat tavat muodostuvat nopeammin, vaikeammat vievät kauemmin—pitäen tavoitteet realistisina."
+                },
+                "customizable": {
+                    "title": "Mukautettava",
+                    "description": "Tee HabitFormista todella sinun. Valitse värit, teemat ja asettelut, jotka vastaavat persoonallisuuttasi ja pitävät sinut kiinnostuneena."
+                },
+                "data_management": {
+                    "title": "Tietojen Hallinta",
+                    "description": "Vie tapojesi tiedot CSV-tiedostoihin varmuuskopiointia tai toiseen laitteeseen siirtoa varten."
+                },
                 "smart_tracking": {
                     "title": "Älykäs tapojen seuranta",
                     "description": "Seuraa tapojasi älykkäillä muistutuksilla ja edistymisen visualisoinnilla. Näe putkesi kasvavan ja juhli jokaista etappia.",
@@ -160,7 +180,7 @@
                     }
                 }
             },
-            "probability_score": "Muodostumispisteet",
+            "formation_probability": "Muodostumistodennäköisyys",
             "previous": "Edellinen",
             "next": "Seuraava",
             "start": "Aloita"
@@ -205,6 +225,15 @@
         },
         "achievement": {
             "first_habit_message": "Hienoa! Suoritit ensimmäisen tapasi käyttöönotossa!"
+        },
+        "reward_rating": {
+            "title": "Miltä tuntui?",
+            "description": "Arvioi kuinka miellyttävä tämä suoritus tuntui. Tämä auttaa meitä ymmärtämään tapojesi muodostumista paremmin.",
+            "low": "Matala",
+            "normal": "Normaali",
+            "high": "Korkea",
+            "very_high": "Erittäin Korkea",
+            "continue": "Jatka"
         }
     },
     "habit_detail": {
@@ -285,9 +314,9 @@
         "achievement_perfectionist_description": "{{rate}}% onnistumisprosentti!",
         "heatmap_stats_description": "{{days}} päivää suoritettu viimeisen vuoden aikana",
         "last_7_days": "Viimeiset 7 päivää",
-        "probability_info_title": "Muodostumispisteet",
-        "probability_info_description": "Muodostumispisteet näyttävät, kuinka todennäköisesti tapasi muuttuu automaattiseksi nykyisen suoritusasteesi perusteella. Korkeammat pisteet tarkoittavat, että tapasi on todennäköisemmin pysyvä.",
-        "probability_info_details": "Tämä piste lasketaan johdonmukaisuutesi ja suoritusasteesi perusteella. Tutkimusten mukaan keskimäärin 66 päivää säännöllistä harjoittelua tarvitaan, jotta tavasta tulee automaattinen."
+        "formation_probability_title": "Muodostumistodennäköisyys",
+        "formation_probability_description": "Muodostumistodennäköisyys näyttää, kuinka todennäköisesti tapasi muuttuu automaattiseksi nykyisen suoritusasteesi perusteella. Korkeammat todennäköisyydet tarkoittavat, että tapasi on todennäköisemmin pysyvä.",
+        "formation_probability_details": "Tämä todennäköisyys lasketaan johdonmukaisuutesi ja suoritusasteesi perusteella. Tutkimusten mukaan keskimäärin 66 päivää säännöllistä harjoittelua tarvitaan, jotta tavasta tulee automaattinen."
     },
     "habit": {
         "add_habit": "Lisää tapa",
@@ -621,7 +650,8 @@
             "demo_data_message": "Tämä on demodata, päivitä avataksesi oikean datan",
             "upgrade_button": "Päivitä"
         },
-        "probability_score": "Todennäköisyyspisteet",
+        "formation_probability": "Muodostumistodennäköisyys",
+        "probability_over_time": "Todennäköisyys Ajan Myötä",
         "score_breakdown": "Pisteiden erittely",
         "progress_status": "Edistystila",
         "estimated_probability_time": "Arvioitu todennäköisyysaika",

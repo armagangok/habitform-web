@@ -46,6 +46,13 @@ class Habit extends HiveObject {
   @HiveField(12, defaultValue: HabitDifficulty.moderate)
   final HabitDifficulty difficulty;
 
+  // Reward factor (α) representing emotional reinforcement
+  // Higher values (1.0-2.0) mean more enjoyable/rewarding habits form faster
+  // Lower values (0.5-1.0) mean less enjoyable habits form slower
+  // Default: 1.0 (normal reward)
+  @HiveField(13, defaultValue: 1.0)
+  final double rewardFactor;
+
   Habit({
     required this.id,
     required this.habitName,
@@ -59,6 +66,7 @@ class Habit extends HiveObject {
     this.status = HabitStatus.active,
     this.categoryIds = const [],
     this.difficulty = HabitDifficulty.moderate,
+    this.rewardFactor = 1.0,
   });
 
   Habit copyWith({
@@ -74,6 +82,7 @@ class Habit extends HiveObject {
     HabitStatus? status,
     List<String>? categoryIds,
     HabitDifficulty? difficulty,
+    double? rewardFactor,
   }) {
     return Habit(
       id: id ?? this.id,
@@ -88,8 +97,7 @@ class Habit extends HiveObject {
       status: status ?? this.status,
       categoryIds: categoryIds ?? this.categoryIds,
       difficulty: difficulty ?? this.difficulty,
+      rewardFactor: rewardFactor ?? this.rewardFactor,
     );
   }
-
-  
 }

@@ -18,6 +18,9 @@ class WidgetMethodChannelService {
   List<Habit>? _cachedHabits;
   DateTime? _lastCacheUpdate;
 
+  // Cache for App Group container path (doesn't change during app lifetime)
+  String? _cachedAppGroupContainerPath;
+
   static final WidgetMethodChannelService _instance = WidgetMethodChannelService._internal();
   factory WidgetMethodChannelService() => _instance;
   WidgetMethodChannelService._internal() {
@@ -178,15 +181,21 @@ class WidgetMethodChannelService {
     // For now, it's a placeholder
   }
 
-  /// Get App Group container path
+  /// Get App Group container path (cached to avoid repeated method channel calls)
   Future<String?> _getAppGroupContainerPath() async {
+    // Return cached path if available (it doesn't change during app lifetime)
+    if (_cachedAppGroupContainerPath != null) {
+      return _cachedAppGroupContainerPath;
+    }
+
     try {
       if (Platform.isIOS) {
         // Use Method Channel to get the correct App Group container path from iOS
         final result = await _channel.invokeMethod('getAppGroupContainerPath');
         if (result != null) {
-          LogHelper.shared.debugPrint('📁 Method Channel App Group container path from iOS: $result');
-          return result as String;
+          _cachedAppGroupContainerPath = result as String;
+          LogHelper.shared.debugPrint('📁 Method Channel App Group container path from iOS: $_cachedAppGroupContainerPath');
+          return _cachedAppGroupContainerPath;
         } else {
           LogHelper.shared.debugPrint('❌ iOS returned null for App Group container path');
           return null;

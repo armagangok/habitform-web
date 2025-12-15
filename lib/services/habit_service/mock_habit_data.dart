@@ -97,10 +97,10 @@ class MockHabitData {
     // 6. Healthy eating habit
     Habit(
       id: "habit-vegetables-1",
-      habitName: "Healthy Dinner",
-      habitDescription: "Include at least one serving of vegetables",
-      emoji: "🥗",
-      colorCode: Colors.green.value,
+      habitName: "Healthy Breakfast",
+      habitDescription: "Start your day with a nutritious breakfast including protein and fruits",
+      emoji: "🍳",
+      colorCode: Colors.red.value,
       reminderModel: ReminderModel(
         id: 1006,
         reminderTime: DateTime(2023, 1, 1, 12, 30),

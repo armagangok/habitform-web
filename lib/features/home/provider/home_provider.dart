@@ -4,13 +4,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '/core/core.dart';
 import '/features/habit_category/provider/habit_category_provider.dart';
-import '../../habit_probability/provider/habit_probability_provider.dart';
+import '/features/purchase/providers/purchase_provider.dart';
 import '/features/reminder/service/reminder_service.dart';
 import '/models/completion_entry/completion_entry.dart';
 import '/models/habit/habit_model.dart';
 import '/services/app_lifecycle_service.dart';
 import '/services/habit_service/habit_service_interface.dart';
 import '/services/widget_sync_service.dart';
+import '../../habit_probability/provider/habit_probability_provider.dart';
 import 'home_state.dart';
 
 /// Provider for filtered habits based on selected categories
@@ -50,6 +51,18 @@ class HomeNotifier extends AsyncNotifier<HomeState> {
 
     // Listen for widget updates
     _setupWidgetUpdateListener();
+
+    // Listen to purchase state changes to update widget when Pro status changes
+    ref.listen(purchaseProvider, (previous, next) async {
+      if (previous?.value?.isSubscriptionActive != next.value?.isSubscriptionActive) {
+        // Pro status changed, update widget with current habits
+        final currentState = state;
+        if (currentState is AsyncData<HomeState>) {
+          LogHelper.shared.debugPrint('🔓 Pro status changed, updating widget...');
+          await WidgetSyncService().updateWidgetData(currentState.value.habits);
+        }
+      }
+    });
 
     return initialState;
   }
@@ -187,6 +200,7 @@ class HomeNotifier extends AsyncNotifier<HomeState> {
       date: normalizedDate,
       isCompleted: newCount > 0,
       count: newCount,
+      rewardRating: existingEntry?.rewardRating, // Preserve reward rating when updating count
     );
     updatedCompletions[dateKey] = updatedEntry;
 

@@ -101,6 +101,10 @@
             "subtitle": "Our most advanced features for our most dedicated users",
             "continue": "Continue",
             "features": {
+                "habit_map": {
+                    "title": "Habit Map",
+                    "description": "Visualize your habit network and see how habits connect. Build chains of related habits and understand the relationships that make your routine stronger."
+                },
                 "habit_probability": {
                     "title": "Habit Probability",
                     "description": "See exactly how likely you are to succeed with each habit. Get personalized insights that help you stay motivated and build lasting habits.",
@@ -141,7 +145,7 @@
                 },
                 "goal_setting": {
                     "title": "Goal Setting",
-                    "description": "Break down big dreams into achievable daily actions. Set meaningful goals that actually work and keep you moving forward.",
+                    "description": "Science‑based planning that adapts to difficulty: easier habits form faster, harder ones take longer—keeping goals realistic.",
                     "sub_features_0": "Clear Daily Actions",
                     "sub_features_1": "Achieve Big Dreams",
                     "sub_features_2": "Stay Focused"
@@ -152,6 +156,10 @@
                     "sub_features_0": "Personal Themes",
                     "sub_features_1": "Your Style",
                     "sub_features_2": "Better Experience"
+                },
+                "data_management": {
+                    "title": "Data Management",
+                    "description": "Export your habits data to CSV files for backup or transfer to another device."
                 },
                 "habit_archive": {
                     "title": "Habit Archive",
@@ -168,7 +176,7 @@
                     "sub_features_2": "Celebrate Wins"
                 }
             },
-            "formation_score": "Probability Score",
+            "formation_score": "Formation Probability",
             "previous": "Previous",
             "next": "Next",
             "start": "Start"
@@ -213,6 +221,15 @@
         },
         "achievement": {
             "first_habit_message": "Great job! You completed your first habit in the onboarding!"
+        },
+        "reward_rating": {
+            "title": "How did you feel?",
+            "description": "Rate how enjoyable this completion felt. This helps us understand your habit formation better.",
+            "low": "Low",
+            "normal": "Normal",
+            "high": "High",
+            "very_high": "Very High",
+            "continue": "Continue"
         }
     },
     "habit_detail": {
@@ -293,9 +310,9 @@
         "achievement_perfectionist_description": "{{rate}}% success rate!",
         "heatmap_stats_description": "{{days}} days completed in the last year",
         "last_7_days": "Last 7 Days",
-        "probability_info_title": "Probability Score",
-        "probability_info_description": "The Probability Score shows how likely your habit is to become automatic based on your current completion rate. Higher scores mean your habit is more likely to stick permanently.",
-        "probability_info_details": "This score is calculated using your consistency patterns and completion rate. Research shows it takes an average of 66 days of regular practice for a habit to become automatic."
+        "formation_probability_title": "Formation Probability",
+        "formation_probability_description": "The Formation Probability shows how likely your habit is to become automatic based on your current completion rate. Higher probabilities mean your habit is more likely to stick permanently.",
+        "formation_probability_details": "This probability is calculated using your consistency patterns and completion rate. Research shows it takes an average of 66 days of regular practice for a habit to become automatic."
     },
     "habit": {
         "add_habit": "Add Habit",
@@ -629,7 +646,8 @@
             "demo_data_message": "This is demo data, upgrade to unlock real data",
             "upgrade_button": "Upgrade"
         },
-        "probability_score": "Probability Score",
+        "formation_probability": "Formation Probability",
+        "probability_over_time": "Probability Over Time",
         "score_breakdown": "Score Breakdown",
         "progress_status": "Progress Status",
         "estimated_probability_time": "Estimated Probability Time",

@@ -70,7 +70,15 @@ class _HabitDetailPageState extends ConsumerState<HabitDetailPage> {
     final currentHabit = ref.watch(habitDetailProvider);
 
     if (currentHabit == null) {
-      return const SizedBox.shrink();
+      return CupertinoPageScaffold(
+        navigationBar: SheetHeader(
+          title: 'No habit found',
+          closeButtonPosition: CloseButtonPosition.left,
+        ),
+        child: Center(
+          child: Text('No habit found'),
+        ),
+      );
     }
 
     // Removed debug print to avoid extra console noise during scroll
@@ -233,8 +241,8 @@ class _HabitDetailPageState extends ConsumerState<HabitDetailPage> {
 
   Container _habitEmoji(BuildContext context, Habit habit) {
     return Container(
-      width: 80,
-      height: 80,
+      width: 96,
+      height: 96,
       decoration: BoxDecoration(
         color: context.cupertinoTheme.scaffoldBackgroundColor,
         shape: BoxShape.circle,
@@ -254,7 +262,7 @@ class _HabitDetailPageState extends ConsumerState<HabitDetailPage> {
       child: Center(
         child: Text(
           habit.emoji ?? "🎯",
-          style: const TextStyle(fontSize: 32),
+          style: const TextStyle(fontSize: 48),
         ),
       ),
     );

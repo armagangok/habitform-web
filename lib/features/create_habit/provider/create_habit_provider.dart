@@ -90,6 +90,12 @@ class CreateHabitNotifier extends AutoDisposeNotifier<CreateHabitState> {
     state = state.copyWith(dailyTarget: clamped);
   }
 
+  void updateRewardFactor(double rewardFactor) {
+    // Clamp reward factor to valid range: 0.5 (low reward) to 2.0 (high reward)
+    final clamped = rewardFactor.clamp(0.5, 2.0);
+    state = state.copyWith(rewardFactor: clamped);
+  }
+
   void updateReminder(ReminderModel? reminder) {
     state = state.copyWith(reminder: reminder);
 
@@ -141,6 +147,7 @@ class CreateHabitNotifier extends AutoDisposeNotifier<CreateHabitState> {
         dailyTarget: state.dailyTarget,
         categoryIds: categoryIds,
         difficulty: state.difficulty,
+        rewardFactor: state.rewardFactor,
       );
 
       await ref.watch(homeProvider.notifier).createHabit(habit);

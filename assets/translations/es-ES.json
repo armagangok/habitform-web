@@ -101,6 +101,26 @@
             "subtitle": "Construir hábitos duraderos con seguimiento inteligente e ideas personalizadas",
             "continue": "Continuar",
             "features": {
+                "habit_map": {
+                    "title": "Mapa de Hábitos",
+                    "description": "Visualiza tu red de hábitos y ve cómo se conectan los hábitos. Construye cadenas de hábitos relacionados y entiende las relaciones que fortalecen tu rutina."
+                },
+                "habit_probability": {
+                    "title": "Probabilidad del Hábito",
+                    "description": "Ve exactamente qué tan probable es que tengas éxito con cada hábito. Obtén insights personalizados que te ayuden a mantenerte motivado y construir hábitos duraderos."
+                },
+                "goal_setting": {
+                    "title": "Establecimiento de Metas",
+                    "description": "Planificación basada en la ciencia que se adapta a la dificultad: los hábitos más fáciles se forman más rápido, los más difíciles tardan más—manteniendo las metas realistas."
+                },
+                "customizable": {
+                    "title": "Personalizable",
+                    "description": "Haz que HabitForm sea verdaderamente tuyo. Elige colores, temas y diseños que coincidan con tu personalidad y te mantengan comprometido."
+                },
+                "data_management": {
+                    "title": "Gestión de Datos",
+                    "description": "Exporta los datos de tus hábitos a archivos CSV para respaldo o transferencia a otro dispositivo."
+                },
                 "smart_tracking": {
                     "title": "Seguimiento inteligente de hábitos",
                     "description": "Rastrea tus hábitos con recordatorios inteligentes y visualización de progreso. Ve cómo crecen tus rachas y celebra cada hito.",
@@ -161,7 +181,7 @@
                     }
                 }
             },
-            "probability_score": "Puntaje de formación",
+            "formation_probability": "Probabilidad de Formación",
             "previous": "Anterior",
             "next": "Siguiente",
             "start": "Comenzar"
@@ -206,6 +226,15 @@
         },
         "achievement": {
             "first_habit_message": "¡Excelente trabajo! ¡Completaste tu primer hábito en la introducción!"
+        },
+        "reward_rating": {
+            "title": "¿Cómo te sentiste?",
+            "description": "Califica qué tan agradable se sintió esta realización. Esto nos ayuda a entender mejor la formación de tus hábitos.",
+            "low": "Bajo",
+            "normal": "Normal",
+            "high": "Alto",
+            "very_high": "Muy Alto",
+            "continue": "Continuar"
         }
     },
     "habit_detail": {
@@ -286,9 +315,9 @@
         "achievement_perfectionist_description": "¡{{rate}}% de tasa de éxito!",
         "heatmap_stats_description": "{{days}} días completados en el último año",
         "last_7_days": "Últimos 7 días",
-        "probability_info_title": "Puntaje de formación",
-        "probability_info_description": "El Puntaje de Formación muestra qué tan probable es que tu hábito se vuelva automático según tu tasa de finalización actual. Un puntaje más alto significa que es más probable que tu hábito se mantenga permanentemente.",
-        "probability_info_details": "Este puntaje se calcula usando tus patrones de consistencia y tasa de finalización. La investigación muestra que se necesitan en promedio 66 días de práctica regular para que un hábito se vuelva automático."
+        "formation_probability_title": "Probabilidad de Formación",
+        "formation_probability_description": "La Probabilidad de Formación muestra qué tan probable es que tu hábito se vuelva automático según tu tasa de finalización actual. Una probabilidad más alta significa que es más probable que tu hábito se mantenga permanentemente.",
+        "formation_probability_details": "Esta probabilidad se calcula usando tus patrones de consistencia y tasa de finalización. La investigación muestra que se necesitan en promedio 66 días de práctica regular para que un hábito se vuelva automático."
     },
     "habit": {
         "add_habit": "Agregar hábito",
@@ -622,7 +651,8 @@
             "demo_data_message": "Estos son datos de demostración, actualiza para desbloquear datos reales",
             "upgrade_button": "Actualizar"
         },
-        "probability_score": "Puntaje de Probabilidad",
+        "formation_probability": "Probabilidad de Formación",
+        "probability_over_time": "Probabilidad a lo Largo del Tiempo",
         "score_breakdown": "Desglose del puntaje",
         "progress_status": "Estado del progreso",
         "estimated_probability_time": "Tiempo Estimado de Probabilidad",

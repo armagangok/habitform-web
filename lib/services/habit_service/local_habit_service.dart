@@ -155,12 +155,14 @@ class LocalHabitService extends HabitService {
     }
 
     // Write back entry reflecting the new count and derived isCompleted
+    // Preserve existing rewardRating if it exists
     final updatedEntry = CompletionEntry(
       id: completion.id,
       date: completion.date.normalized,
       // Only mark day completed when full target reached (affects streaks)
       isCompleted: newCount >= target,
       count: newCount,
+      rewardRating: existingEntry?.rewardRating, // Preserve reward rating when updating count
     );
     updatedCompletions[updatedEntry.id] = updatedEntry;
 

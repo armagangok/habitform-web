@@ -8,6 +8,7 @@ import '../../../models/completion_entry/completion_entry.dart';
 import '../../../models/habit/habit_difficulty.dart';
 import '../../../models/habit/habit_model.dart';
 import '../../home/components/habit_probability_dialog.dart';
+import '../../home/views/widgets/habit_canvas/circular_habit_preview_widget.dart';
 import '../enum/onboarding_step_enum.dart';
 
 /// Onboarding - Welcome page
@@ -114,7 +115,7 @@ class _OnboardingWelcomePageState extends State<OnboardingWelcomePage> with Tick
                         emoji: '🏃',
                         title: LocaleKeys.onboarding_pages_welcome_habit_examples_running.tr(),
                         badgeValue: 12,
-                        initial: Offset(-context.width(0.025), context.height(0.09)), // top-left with responsive positioning
+                        initial: Offset(-context.width(0.125), context.height(0.1)), // top-left, adjusted for larger size
                         initialRotation: -0.30,
                         isLeftSide: true,
                         tier: 1, // dock lower-left when stacked
@@ -128,8 +129,8 @@ class _OnboardingWelcomePageState extends State<OnboardingWelcomePage> with Tick
                         emoji: '📚',
                         title: LocaleKeys.onboarding_pages_welcome_habit_examples_read_book.tr(),
                         badgeValue: 21,
-                        initial: Offset(size.width - context.width(0.5) + context.width(0.025), context.height(0.1)), // top-right with responsive positioning
-                        initialRotation: 0.4,
+                        initial: Offset(size.width - context.width(0.725) + context.width(0.15), context.height(0.1)), // top-right, adjusted for larger size
+                        initialRotation: 0.2,
                         isLeftSide: false,
                         tier: 0,
                       ),
@@ -142,7 +143,7 @@ class _OnboardingWelcomePageState extends State<OnboardingWelcomePage> with Tick
                         emoji: '🧘‍♂️',
                         title: LocaleKeys.onboarding_pages_welcome_habit_examples_meditate.tr(),
                         badgeValue: 8,
-                        initial: Offset(-context.width(0.025), size.height - context.height(0.36)), // bottom-left with responsive positioning
+                        initial: Offset(-context.width(0.15), size.height - context.height(0.36)), // bottom-left, adjusted for larger size
                         initialRotation: -0.2,
                         isLeftSide: true,
                         tier: 0, // dock upper-left when stacked
@@ -156,7 +157,7 @@ class _OnboardingWelcomePageState extends State<OnboardingWelcomePage> with Tick
                         emoji: '💧',
                         title: LocaleKeys.onboarding_pages_welcome_habit_examples_drink_water.tr(),
                         badgeValue: 30,
-                        initial: Offset(size.width - context.width(0.5) + context.width(0.025), size.height - context.height(0.36)), // bottom-right with responsive positioning
+                        initial: Offset(size.width - context.width(0.725) + context.width(0.15), size.height - context.height(0.36)), // bottom-right, adjusted for larger size
                         initialRotation: 0.2,
                         isLeftSide: false,
                         tier: 1,
@@ -294,7 +295,7 @@ class _OnboardingWelcomePageState extends State<OnboardingWelcomePage> with Tick
                   // Center-step instruction (below the card area)
                   if (_currentStep == OnboardingStep.exerciseCardInCenter && !_isCenterCardCompleted)
                     Positioned(
-                      top: context.dynamicHeight / 2 + context.height(0.12), // Position below the center card (card height/2 + 15 padding)
+                      top: context.dynamicHeight / 2 + context.height(0.035), // Position below the center card (card height/2 + 15 padding)
                       left: 0,
                       right: 0,
                       child: AnimatedOpacity(
@@ -317,7 +318,7 @@ class _OnboardingWelcomePageState extends State<OnboardingWelcomePage> with Tick
                   // "Just like that!" text above the card
                   if (_showMotivationalMessage)
                     Positioned(
-                      top: MediaQuery.of(context).size.height / 2 - context.height(0.25), // Position well above the center card
+                      top: MediaQuery.of(context).size.height / 2 - context.height(0.3), // Position well above the center card
                       left: 0,
                       right: 0,
                       child: AnimatedOpacity(
@@ -376,7 +377,7 @@ class _OnboardingWelcomePageState extends State<OnboardingWelcomePage> with Tick
                   // Congratulations messages below the card
                   if (_showMotivationalMessage)
                     Positioned(
-                      top: (MediaQuery.of(context).size.height + context.width(0.5)) / 2, // Position below the center card (card bottom + padding)
+                      top: (MediaQuery.of(context).size.height + context.width(0.2)) / 2, // Position below the center card (card bottom + padding)
                       left: 0,
                       right: 0,
                       child: AnimatedOpacity(
@@ -624,34 +625,34 @@ class _OnboardingWelcomePageState extends State<OnboardingWelcomePage> with Tick
 
   // Responsive docked positions for each card
   Map<String, double> _getDockedPosition(int index, Size screenSize, BuildContext context) {
-    final double cardWidth = context.width(0.5);
+    final double cardWidth = context.width(0.65); // Updated to match new card size
 
     switch (index) {
       case 0: // Running card (left side, lower tier)
         return {
-          'x': -context.width(0.025), // Left side with responsive margin
-          'y': screenSize.height - context.height(0.21), // Bottom area
+          'x': -context.width(0.1), // More to the left to compensate for larger size
+          'y': screenSize.height - context.height(0.265), // Adjusted for larger card
           'rotation': 0.5, // Slight left rotation
           'scale': 0.9, // Slightly smaller
         };
       case 1: // Read Book card (right side, upper tier)
         return {
-          'x': screenSize.width - cardWidth + context.width(0.025), // Right side with responsive margin - taşacak
-          'y': screenSize.height - context.height(0.22), // Bottom area, slightly higher
+          'x': screenSize.width - cardWidth + context.width(0.1), // Right side adjusted for larger size
+          'y': screenSize.height - context.height(0.25), // Bottom area, slightly higher
           'rotation': -0.35, // Slight right rotation
           'scale': 0.92, // Slightly smaller
         };
       case 2: // Meditate card (left side, upper tier)
         return {
-          'x': -context.width(0.025), // Left side with responsive margin
-          'y': screenSize.height - context.height(0.1), // Bottom area, higher than running
+          'x': -context.width(0.15), // More to the left to compensate for larger size
+          'y': screenSize.height - context.height(0.12), // Higher position, adjusted for larger card
           'rotation': 0.15, // Very slight left rotation
           'scale': 0.88, // Smaller
         };
       case 3: // Drink Water card (right side, lower tier)
         return {
-          'x': screenSize.width - cardWidth + context.width(0.025), // Right side with responsive margin - taşacak
-          'y': screenSize.height - context.height(0.1), // Bottom area, lower than read book
+          'x': screenSize.width - cardWidth + context.width(0.15), // Right side adjusted for larger size
+          'y': screenSize.height - context.height(0.12), // Higher position, adjusted for larger card
           'rotation': -0.15, // Very slight right rotation
           'scale': 0.85, // Smallest
         };
@@ -681,7 +682,7 @@ class _OnboardingWelcomePageState extends State<OnboardingWelcomePage> with Tick
   }) {
     final double value = _cardsAnim.value; // 0 → scattered, 1 → stacked bottom
     // Responsive card size based on screen width (maintains aspect ratio)
-    final double cardWidth = context.width(0.5); // 50% of screen width
+    final double cardWidth = context.width(0.65); // 65% of screen width (increased from 50%)
     final double cardHeight = cardWidth; // Square aspect ratio
     final Size cardSize = Size(cardWidth, cardHeight);
 
@@ -732,15 +733,36 @@ class _OnboardingWelcomePageState extends State<OnboardingWelcomePage> with Tick
                 angle: rotation,
                 child: Transform.scale(
                   scale: scale,
-                  child: _HabitCard(
-                    size: cardSize,
-                    background: color,
-                    accent: accent,
-                    emoji: emoji,
-                    title: title,
-                    badgeValue: _runningStreak, // Use dynamic streak value
-                    isCompleted: _isCenterCardCompleted,
-                    onTap: _onCenterCardTap, // Pass onTap to card
+                  child: SizedBox(
+                    width: cardSize.width,
+                    height: cardSize.height,
+                    child: Center(
+                      child: CircularHabitPreviewWidget(
+                        habit: Habit(
+                          id: 'onboarding_$index',
+                          habitName: title,
+                          emoji: emoji,
+                          colorCode: accent.value,
+                          difficulty: HabitDifficulty.moderate,
+                          dailyTarget: 1,
+                          completions: _isCenterCardCompleted
+                              ? {
+                                  DateTime.now().toIso8601String(): CompletionEntry(
+                                    id: DateTime.now().toIso8601String(),
+                                    date: DateTime.now(),
+                                    count: 1,
+                                    isCompleted: true,
+                                  ),
+                                }
+                              : {},
+                        ),
+                        showName: false, // Hide habit name in onboarding
+                        isCompleted: _isCenterCardCompleted,
+                        onTap: _onCenterCardTap,
+                        showCompleteButton: true, // Show complete button
+                        enableCompleteButton: false, // But make it non-tappable
+                      ),
+                    ),
                   ),
                 ),
               ),
@@ -763,14 +785,26 @@ class _OnboardingWelcomePageState extends State<OnboardingWelcomePage> with Tick
         angle: rotation,
         child: Transform.scale(
           scale: scale,
-          child: _HabitCard(
-            size: cardSize,
-            background: color,
-            accent: accent,
-            emoji: emoji,
-            title: title,
-            badgeValue: badgeValue,
-            isCompleted: false,
+          child: SizedBox(
+            width: cardSize.width,
+            height: cardSize.height,
+            child: Center(
+              child: CircularHabitPreviewWidget(
+                habit: Habit(
+                  id: 'onboarding_$index',
+                  habitName: title,
+                  emoji: emoji,
+                  colorCode: accent.value,
+                  difficulty: HabitDifficulty.moderate,
+                  dailyTarget: 1,
+                  completions: {},
+                ),
+                showName: false, // Hide habit name in onboarding
+                isCompleted: false,
+                showCompleteButton: true, // Show complete button
+                enableCompleteButton: false, // But make it non-tappable
+              ),
+            ),
           ),
         ),
       ),
@@ -830,125 +864,6 @@ class _BottomCtaButton extends StatelessWidget {
                     size: iconSize,
                     color: theme.colorScheme.onSurface.withValues(alpha: 0.92),
                   ),
-                ),
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _HabitCard extends StatelessWidget {
-  const _HabitCard({
-    required this.size,
-    required this.background,
-    required this.accent,
-    required this.emoji,
-    required this.title,
-    required this.badgeValue,
-    this.isCompleted = false,
-    this.onTap,
-  });
-
-  final Size size;
-  final Color background;
-  final Color accent;
-  final String emoji;
-  final String title;
-  final int badgeValue;
-  final bool isCompleted;
-  final VoidCallback? onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final Color habitColor = accent;
-
-    // Responsive sizing for card elements
-    final double emojiSize = context.width(0.15); // 35% of card width
-    final double iconSize = context.width(0.05); // 14% of card width
-    final double completionIconSize = context.width(0.14); // 14% of card width
-    final double borderRadius = context.width(0.08); // 10% of card width
-    final double borderWidth = context.width(0.01); // 1% of card width
-
-    return GestureDetector(
-      behavior: HitTestBehavior.opaque,
-      onTap: onTap,
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(borderRadius),
-        child: CupertinoButton(
-          onPressed: onTap,
-          padding: EdgeInsets.zero,
-          child: CustomBlurWidget(
-            child: Container(
-              width: size.width,
-              height: size.height,
-              decoration: BoxDecoration(
-                color: habitColor.withValues(alpha: 0.10),
-                borderRadius: BorderRadius.circular(borderRadius),
-                border: Border.all(color: habitColor.withValues(alpha: 0.35), width: borderWidth),
-              ),
-              child: Padding(
-                padding: context.padding(0.03), // 8% of screen width as padding
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    // Top row: emoji + streak
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
-                          width: emojiSize,
-                          height: emojiSize,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: habitColor.withValues(alpha: 0.12),
-                            border: Border.all(color: habitColor.withValues(alpha: 0.25)),
-                          ),
-                          child: Center(child: Text(emoji, style: TextStyle(fontSize: emojiSize * 0.5))),
-                        ),
-                        Container(
-                          padding: context.symmetricPadding(horizontal: 0.02, vertical: 0.01), // Responsive padding
-                          decoration: BoxDecoration(
-                            color: habitColor.withValues(alpha: 0.18),
-                            borderRadius: BorderRadius.circular(context.width(0.12)), // 12% of card width
-                            border: Border.all(color: habitColor.withValues(alpha: 0.25)),
-                          ),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Icon(CupertinoIcons.flame_fill, size: iconSize, color: habitColor),
-                              SizedBox(width: context.width(0.03)), // 3% of screen width
-                              Text('$badgeValue', style: context.bodyMedium.copyWith(fontWeight: FontWeight.w700, color: habitColor)),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                    // Bottom row: name + completion icon
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(
-                          child: Text(
-                            title,
-                            maxLines: null,
-                            style: context.titleLarge.copyWith(fontWeight: FontWeight.w700),
-                          ),
-                        ),
-                        AnimatedSwitcher(
-                          duration: const Duration(milliseconds: 300),
-                          child: Icon(
-                            isCompleted ? CupertinoIcons.checkmark_circle_fill : CupertinoIcons.circle,
-                            key: ValueKey<bool>(isCompleted),
-                            color: habitColor,
-                            size: completionIconSize,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
                 ),
               ),
             ),
