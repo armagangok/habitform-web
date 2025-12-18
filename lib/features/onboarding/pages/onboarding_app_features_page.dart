@@ -589,12 +589,6 @@ class _OnboardingAppFeaturesPageState extends State<OnboardingAppFeaturesPage> w
                                               fontSize: 16,
                                             ),
                                           ),
-                                          SizedBox(width: context.width(0.02)),
-                                          Icon(
-                                            CupertinoIcons.arrow_right_circle_fill,
-                                            color: Colors.white,
-                                            size: context.width(0.05),
-                                          ),
                                         ],
                                       ),
                                     ),
@@ -811,7 +805,7 @@ class _OnboardingAppFeaturesPageState extends State<OnboardingAppFeaturesPage> w
                               children: [
                                 Icon(
                                   CupertinoIcons.chevron_left,
-                                  size: context.width(0.05),
+                                  size: context.isTablet ? 28 : null,
                                   color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
                                 ),
                                 SizedBox(width: context.width(0.02)),
@@ -889,7 +883,7 @@ class _OnboardingAppFeaturesPageState extends State<OnboardingAppFeaturesPage> w
                               SizedBox(width: context.width(0.02)),
                               Icon(
                                 _currentFeature < _appFeatures.length - 1 ? CupertinoIcons.chevron_right : CupertinoIcons.rocket_fill,
-                                size: context.width(0.05),
+                                size: context.isTablet ? 28 : null,
                                 color: Colors.white,
                               ),
                             ],

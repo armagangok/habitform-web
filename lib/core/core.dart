@@ -17,6 +17,7 @@ export './extension/color_extension.dart';
 export './extension/datetime_extension.dart';
 export './extension/extensions.dart';
 export './helpers/helpers.dart';
+export './helpers/responsive_helper.dart';
 export './navigation/navigation.dart';
 export './providers/locale_provider.dart';
 export './services/translation_service.dart';
