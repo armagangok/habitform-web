@@ -12,6 +12,8 @@ extension EasyContext on BuildContext {
 
   bool get isPortrait => MediaQuery.of(this).orientation == Orientation.portrait;
   bool get isLandscape => MediaQuery.of(this).orientation == Orientation.landscape;
+  // Deprecated: Use ResponsiveContext.isTabletPortrait or ResponsiveContext.isTabletLandscape instead
+  // Kept for backward compatibility
   bool get isTablet => MediaQuery.of(this).size.width > 600;
 
   bool get isTabletOrLandscape => isTablet || isLandscape;
@@ -103,25 +105,58 @@ extension EasyText on BuildContext {
   CupertinoTextThemeData get cupertinoTextTheme => CupertinoTheme.of(this).textTheme;
   CupertinoThemeData get cupertinoTheme => CupertinoTheme.of(this);
 
-  TextStyle get titleSmall => cupertinoTextTheme.textStyle.copyWith(fontSize: 13, fontWeight: FontWeight.w600);
-  TextStyle get titleMedium => cupertinoTextTheme.textStyle.copyWith(fontSize: 15, fontWeight: FontWeight.w600);
+  TextStyle get titleSmall => cupertinoTextTheme.textStyle.copyWith(
+        fontSize: isTablet ? 13 : 11,
+        fontWeight: FontWeight.w600,
+      );
+  TextStyle get titleMedium => cupertinoTextTheme.textStyle.copyWith(
+        fontSize: isTablet ? 15 : 13,
+        fontWeight: FontWeight.w600,
+      );
   TextStyle get titleLarge => cupertinoTextTheme.navTitleTextStyle;
 
-  TextStyle get labelSmall => cupertinoTextTheme.textStyle.copyWith(fontSize: 11);
-  TextStyle get labelMedium => cupertinoTextTheme.textStyle.copyWith(fontSize: 13);
-  TextStyle get labelLarge => cupertinoTextTheme.textStyle.copyWith(fontSize: 15);
+  TextStyle get labelSmall => cupertinoTextTheme.textStyle.copyWith(
+        fontSize: isTablet ? 11 : 9,
+      );
+  TextStyle get labelMedium => cupertinoTextTheme.textStyle.copyWith(
+        fontSize: isTablet ? 13 : 11,
+      );
+  TextStyle get labelLarge => cupertinoTextTheme.textStyle.copyWith(
+        fontSize: isTablet ? 15 : 13,
+      );
 
-  TextStyle get bodyLarge => cupertinoTextTheme.textStyle.copyWith(fontSize: 17);
-  TextStyle get bodyMedium => cupertinoTextTheme.textStyle.copyWith(fontSize: 15);
-  TextStyle get bodySmall => cupertinoTextTheme.textStyle.copyWith(fontSize: 13);
+  TextStyle get bodyLarge => cupertinoTextTheme.textStyle.copyWith(
+        fontSize: isTablet ? 17 : 15,
+      );
+  TextStyle get bodyMedium => cupertinoTextTheme.textStyle.copyWith(
+        fontSize: isTablet ? 15 : 13,
+      );
+  TextStyle get bodySmall => cupertinoTextTheme.textStyle.copyWith(
+        fontSize: isTablet ? 13 : 11,
+      );
 
   TextStyle get headlineLarge => cupertinoTextTheme.navLargeTitleTextStyle;
-  TextStyle get headlineMedium => cupertinoTextTheme.textStyle.copyWith(fontSize: 24, fontWeight: FontWeight.w600);
-  TextStyle get headlineSmall => cupertinoTextTheme.textStyle.copyWith(fontSize: 17, fontWeight: FontWeight.w600);
+  TextStyle get headlineMedium => cupertinoTextTheme.textStyle.copyWith(
+        fontSize: isTablet ? 24 : 20,
+        fontWeight: FontWeight.w600,
+      );
+  TextStyle get headlineSmall => cupertinoTextTheme.textStyle.copyWith(
+        fontSize: isTablet ? 17 : 15,
+        fontWeight: FontWeight.w600,
+      );
 
-  TextStyle get displayLarge => cupertinoTextTheme.textStyle.copyWith(fontSize: 34, fontWeight: FontWeight.bold);
-  TextStyle get displayMedium => cupertinoTextTheme.textStyle.copyWith(fontSize: 28, fontWeight: FontWeight.bold);
-  TextStyle get displaySmall => cupertinoTextTheme.textStyle.copyWith(fontSize: 22, fontWeight: FontWeight.bold);
+  TextStyle get displayLarge => cupertinoTextTheme.textStyle.copyWith(
+        fontSize: isTablet ? 34 : 30,
+        fontWeight: FontWeight.bold,
+      );
+  TextStyle get displayMedium => cupertinoTextTheme.textStyle.copyWith(
+        fontSize: isTablet ? 28 : 24,
+        fontWeight: FontWeight.bold,
+      );
+  TextStyle get displaySmall => cupertinoTextTheme.textStyle.copyWith(
+        fontSize: isTablet ? 22 : 18,
+        fontWeight: FontWeight.bold,
+      );
 
   String? get fontFamily => cupertinoTextTheme.textStyle.fontFamily;
 }

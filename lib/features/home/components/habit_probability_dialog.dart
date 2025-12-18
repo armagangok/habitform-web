@@ -136,106 +136,126 @@ class _HabitProbabilityDialogState extends State<HabitProbabilityDialog> with Ti
     final cupertinoTheme = CupertinoTheme.of(context);
     final habitColor = Color(widget.habit.colorCode);
 
-    return CustomBlurWidget(
-      child: Stack(
-        children: [
-          // Main dialog with liquid glass effect
-          AnimatedBuilder(
-            animation: Listenable.merge([_fadeAnimation, _slideAnimation, _scaleAnimation]),
-            builder: (context, child) {
-              return FadeTransition(
+    return Stack(
+      children: [
+        // Main dialog with liquid glass effect
+        AnimatedBuilder(
+          animation: Listenable.merge([_fadeAnimation, _slideAnimation, _scaleAnimation]),
+          builder: (context, child) {
+            return FadeTransition(
                 opacity: _fadeAnimation,
                 child: SlideTransition(
-                  position: _slideAnimation,
-                  child: ScaleTransition(
-                    scale: _scaleAnimation,
-                    child: Center(
-                      child: CupertinoPopupSurface(
-                        child: ConstrainedBox(
-                          constraints: BoxConstraints(
-                            maxHeight: context.height(0.85),
-                            maxWidth: context.width(0.9),
-                          ),
-                          child: Padding(
-                            padding: context.padding(0.04),
-                            child: SingleChildScrollView(
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  // Achievement Emoji with premium effects
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        LocaleKeys.achievement_dialog_habit_probability.tr(),
-                                        style: context.titleMedium.copyWith(
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: 20,
+                    position: _slideAnimation,
+                    child: ScaleTransition(
+                      scale: _scaleAnimation,
+                      child: Center(
+                        child: CupertinoPopupSurface(
+                          child: Builder(
+                            builder: (context) {
+                              final screenWidth = MediaQuery.of(context).size.width;
+                              final isTablet = ResponsiveHelper.isTablet(screenWidth) || ResponsiveHelper.isTabletLandscape(screenWidth) || ResponsiveHelper.isDesktop(screenWidth);
+
+                              // For tablets, use max content width; for phones, use screen width
+                              final maxWidth = isTablet ? ResponsiveHelper.getMaxContentWidth(screenWidth) : context.width(0.9);
+
+                              return ConstrainedBox(
+                                constraints: BoxConstraints(
+                                  maxHeight: context.height(0.85),
+                                  maxWidth: maxWidth,
+                                ),
+                                child: Padding(
+                                  padding: context.padding(isTablet ? 0.06 : 0.04),
+                                  child: SingleChildScrollView(
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        // Achievement Emoji with premium effects
+                                        Builder(
+                                          builder: (context) {
+                                            final screenWidth = MediaQuery.of(context).size.width;
+                                            final isTablet = ResponsiveHelper.isTablet(screenWidth) || ResponsiveHelper.isTabletLandscape(screenWidth) || ResponsiveHelper.isDesktop(screenWidth);
+
+                                            return Row(
+                                              mainAxisAlignment: MainAxisAlignment.center,
+                                              children: [
+                                                Text(
+                                                  LocaleKeys.achievement_dialog_habit_probability.tr(),
+                                                  style: context.titleMedium.copyWith(
+                                                    fontWeight: FontWeight.w500,
+                                                    fontSize: isTablet ? 24 : 20,
+                                                  ),
+                                                  textAlign: TextAlign.center,
+                                                ),
+                                              ],
+                                            );
+                                          },
                                         ),
-                                        textAlign: TextAlign.center,
-                                      ),
-                                    ],
+                                        SizedBox(height: context.height(0.01)),
+
+                                        _buildAnimatedEmoji(context, habitColor),
+
+                                        SizedBox(height: context.height(0.01)),
+
+                                        // Score display with premium styling
+                                        _buildScoreDisplay(context, cupertinoTheme, habitColor),
+                                        SizedBox(height: context.height(0.01)),
+
+                                        // Progress section
+                                        _buildProgressSection(context, cupertinoTheme, habitColor),
+                                        SizedBox(height: context.height(0.01)),
+
+                                        // Continue button with premium styling
+                                        _buildPremiumButton(context, habitColor),
+                                      ],
+                                    ),
                                   ),
-                                  SizedBox(height: context.height(0.01)),
-
-                                  _buildAnimatedEmoji(context, habitColor),
-
-                                  SizedBox(height: context.height(0.01)),
-
-                                  // Score display with premium styling
-                                  _buildScoreDisplay(context, cupertinoTheme, habitColor),
-                                  SizedBox(height: context.height(0.01)),
-
-                                  // Progress section
-                                  _buildProgressSection(context, cupertinoTheme, habitColor),
-                                  SizedBox(height: context.height(0.01)),
-
-                                  // Continue button with premium styling
-                                  _buildPremiumButton(context, habitColor),
-                                ],
-                              ),
-                            ),
+                                ),
+                              );
+                            },
                           ),
                         ),
                       ),
-                    ),
-                  ),
-                ),
-              );
-            },
+                    )));
+          },
+        ),
+
+        Align(
+          alignment: const Alignment(0, -0.3),
+          child: ConfettiWidget(
+            confettiController: _confettiController,
+            blastDirectionality: BlastDirectionality.explosive,
+            emissionFrequency: 0.05,
+            numberOfParticles: 15,
+            minBlastForce: 10,
+            maxBlastForce: 25,
+            gravity: 0.3,
+            particleDrag: 0.1,
+            shouldLoop: false,
+            colors: [
+              habitColor,
+              habitColor.withValues(alpha: 0.8),
+              habitColor.withValues(alpha: 0.6),
+              const Color(0xFFFFD700),
+              const Color(0xFFFF6B6B),
+              const Color(0xFF4ECDC4),
+              const Color.fromARGB(255, 112, 205, 78),
+            ],
+            createParticlePath: _drawStar,
           ),
-          // Confetti overlay - positioned on top of dialog content
-          Align(
-            alignment: const Alignment(0, -0.3),
-            child: ConfettiWidget(
-              confettiController: _confettiController,
-              blastDirectionality: BlastDirectionality.explosive,
-              emissionFrequency: 0.05,
-              numberOfParticles: 15,
-              minBlastForce: 10,
-              maxBlastForce: 25,
-              gravity: 0.3,
-              particleDrag: 0.1,
-              shouldLoop: false,
-              colors: [
-                habitColor,
-                habitColor.withValues(alpha: 0.8),
-                habitColor.withValues(alpha: 0.6),
-                const Color(0xFFFFD700),
-                const Color(0xFFFF6B6B),
-                const Color(0xFF4ECDC4),
-                const Color.fromARGB(255, 112, 205, 78),
-              ],
-              createParticlePath: _drawStar,
-            ),
-          ),
-        ],
-      ),
+        ),
+
+        // Confetti overlay - positioned on top of dialog content
+      ],
     );
   }
 
   Widget _buildAnimatedEmoji(BuildContext context, Color habitColor) {
-    final size = context.width(0.28);
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isTablet = ResponsiveHelper.isTablet(screenWidth) || ResponsiveHelper.isTabletLandscape(screenWidth) || ResponsiveHelper.isDesktop(screenWidth);
+
+    // For tablets, use smaller relative size but maintain minimum size
+    final size = isTablet ? (ResponsiveHelper.getMaxContentWidth(screenWidth) * 0.20).clamp(120.0, 160.0) : context.width(0.28);
+
     return AnimatedBuilder(
       animation: Listenable.merge([
         _pulseAnimation,
@@ -307,9 +327,18 @@ class _HabitProbabilityDialogState extends State<HabitProbabilityDialog> with Ti
                   ],
                 ),
                 child: Center(
-                  child: Text(
-                    widget.habit.emoji ?? '✨',
-                    style: TextStyle(fontSize: context.width(0.12)),
+                  child: Builder(
+                    builder: (context) {
+                      final screenWidth = MediaQuery.of(context).size.width;
+                      final isTablet = ResponsiveHelper.isTablet(screenWidth) || ResponsiveHelper.isTabletLandscape(screenWidth) || ResponsiveHelper.isDesktop(screenWidth);
+
+                      final emojiSize = isTablet ? (ResponsiveHelper.getMaxContentWidth(screenWidth) * 0.08).clamp(48.0, 64.0) : context.width(0.12);
+
+                      return Text(
+                        widget.habit.emoji ?? '✨',
+                        style: TextStyle(fontSize: emojiSize),
+                      );
+                    },
                   ),
                 ),
               ),
@@ -340,7 +369,12 @@ class _HabitProbabilityDialogState extends State<HabitProbabilityDialog> with Ti
     CupertinoThemeData theme,
   ) {
     return Builder(builder: (context) {
-      final diameter = context.width(0.5);
+      final screenWidth = MediaQuery.of(context).size.width;
+      final isTablet = ResponsiveHelper.isTablet(screenWidth) || ResponsiveHelper.isTabletLandscape(screenWidth) || ResponsiveHelper.isDesktop(screenWidth);
+
+      // For tablets, use smaller relative size but maintain minimum size
+      final diameter = isTablet ? (ResponsiveHelper.getMaxContentWidth(screenWidth) * 0.35).clamp(180.0, 240.0) : context.width(0.5);
+
       return SizedBox(
         height: diameter,
         width: diameter,
@@ -363,12 +397,17 @@ class _HabitProbabilityDialogState extends State<HabitProbabilityDialog> with Ti
                 AnimatedBuilder(
                   animation: _scoreAnimation,
                   builder: (context, child) {
+                    final screenWidth = MediaQuery.of(context).size.width;
+                    final isTablet = ResponsiveHelper.isTablet(screenWidth) || ResponsiveHelper.isTabletLandscape(screenWidth) || ResponsiveHelper.isDesktop(screenWidth);
+
+                    final fontSize = isTablet ? 52.0 : 44.0;
+
                     return Text(
                       '${animatedScore.round()}',
                       style: context.displayLarge.copyWith(
                         fontWeight: FontWeight.w800,
                         color: scoreColor,
-                        fontSize: 44,
+                        fontSize: fontSize,
                         fontFeatures: [
                           FontFeature.tabularFigures(),
                         ],

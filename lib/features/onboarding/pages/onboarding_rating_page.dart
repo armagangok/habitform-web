@@ -384,7 +384,7 @@ class _OnboardingRatingPageState extends ConsumerState<OnboardingRatingPage> wit
                         children: [
                           Icon(
                             CupertinoIcons.star_fill,
-                            size: context.width(0.05),
+                            size: context.isTablet ? 28 : null,
                             color: Colors.white,
                           ),
                           SizedBox(width: context.width(0.02)),

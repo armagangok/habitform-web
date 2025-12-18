@@ -29,7 +29,23 @@ class MockHabitData {
       difficulty: HabitDifficulty.moderate,
     ),
 
-    // 2. Morning Stretch habit (yeni)
+    // 2. Drinking water habit (right after waking up)
+    Habit(
+      id: "habit-water-1",
+      habitName: "Stay Hydrated",
+      habitDescription: "Drink a glass of water after waking up and stay hydrated throughout the day",
+      emoji: "💧",
+      colorCode: Colors.blue.value,
+      reminderModel: ReminderModel(
+        id: 1004,
+        reminderTime: DateTime(2023, 1, 1, 6, 05),
+        days: [Days.mon, Days.tue, Days.wed, Days.thu, Days.fri, Days.sat, Days.sun],
+      ),
+      completions: _generateRandomCompletions("habit-water-1"),
+      status: HabitStatus.active,
+    ),
+
+    // 3. Morning Stretch habit (yeni)
     Habit(
       id: "habit-stretch-1",
       habitName: "Morning Stretch",
@@ -38,7 +54,7 @@ class MockHabitData {
       colorCode: Colors.pink.shade300.value,
       reminderModel: ReminderModel(
         id: 1002,
-        reminderTime: DateTime(2023, 1, 1, 6, 05),
+        reminderTime: DateTime(2023, 1, 1, 6, 15),
         days: [Days.mon, Days.tue, Days.wed, Days.thu, Days.fri, Days.sat, Days.sun],
       ),
       completions: _generateRandomCompletions("habit-stretch-1"),
@@ -46,7 +62,7 @@ class MockHabitData {
       difficulty: HabitDifficulty.easy,
     ),
 
-    // 3. Healthy breakfast habit
+    // 4. Healthy breakfast habit
     Habit(
       id: "habit-breakfast-1",
       habitName: "Healthy Breakfast",
@@ -55,26 +71,10 @@ class MockHabitData {
       colorCode: Colors.greenAccent.shade400.value,
       reminderModel: ReminderModel(
         id: 1003,
-        reminderTime: DateTime(2023, 1, 1, 7, 0),
+        reminderTime: DateTime(2023, 1, 1, 7, 15),
         days: [Days.mon, Days.tue, Days.wed, Days.thu, Days.fri, Days.sat, Days.sun],
       ),
       completions: _generateRandomCompletions("habit-breakfast-1"),
-      status: HabitStatus.active,
-    ),
-
-    // 4. Drinking water habit
-    Habit(
-      id: "habit-water-1",
-      habitName: "Stay Hydrated",
-      habitDescription: "Stay hydrated by drinking at least 2 liters of water throughout the day",
-      emoji: "💧",
-      colorCode: Colors.blue.value,
-      reminderModel: ReminderModel(
-        id: 1004,
-        reminderTime: DateTime(2023, 1, 1, 9, 0),
-        days: [Days.mon, Days.tue, Days.wed, Days.thu, Days.fri, Days.sat, Days.sun],
-      ),
-      completions: _generateRandomCompletions("habit-water-1"),
       status: HabitStatus.active,
     ),
 
@@ -87,19 +87,19 @@ class MockHabitData {
       colorCode: Colors.purple.shade300.value,
       reminderModel: ReminderModel(
         id: 1005,
-        reminderTime: DateTime(2023, 1, 1, 9, 30),
+        reminderTime: DateTime(2023, 1, 1, 8, 30),
         days: [Days.mon, Days.tue, Days.wed, Days.thu, Days.fri, Days.sat, Days.sun],
       ),
       completions: _generateRandomCompletions("habit-vitamins-1"),
       status: HabitStatus.active,
     ),
 
-    // 6. Healthy eating habit
+    // 6. Healthy lunch / veggies habit (fixed: previously duplicated breakfast)
     Habit(
       id: "habit-vegetables-1",
-      habitName: "Healthy Breakfast",
-      habitDescription: "Start your day with a nutritious breakfast including protein and fruits",
-      emoji: "🍳",
+      habitName: "Eat Vegetables",
+      habitDescription: "Add vegetables to at least one meal today (salad, veggies, or a balanced plate)",
+      emoji: "🥗",
       colorCode: Colors.red.value,
       reminderModel: ReminderModel(
         id: 1006,
@@ -135,7 +135,7 @@ class MockHabitData {
       colorCode: Colors.lightGreen.shade400.value,
       reminderModel: ReminderModel(
         id: 1008,
-        reminderTime: DateTime(2023, 1, 1, 17, 30),
+        reminderTime: DateTime(2023, 1, 1, 18, 00),
         days: [Days.mon, Days.tue, Days.wed, Days.thu, Days.fri, Days.sat, Days.sun],
       ),
       completions: _generateRandomCompletions("habit-walk-1"),
@@ -151,7 +151,7 @@ class MockHabitData {
       colorCode: Colors.redAccent.shade200.value,
       reminderModel: ReminderModel(
         id: 1009,
-        reminderTime: DateTime(2023, 1, 1, 19, 0),
+        reminderTime: DateTime(2023, 1, 1, 19, 30),
         days: [Days.mon, Days.tue, Days.wed, Days.thu, Days.fri],
       ),
       completions: _generateRandomCompletions("habit-learning-1"),
@@ -167,7 +167,7 @@ class MockHabitData {
       colorCode: Colors.amber.shade400.value,
       reminderModel: ReminderModel(
         id: 1010,
-        reminderTime: DateTime(2023, 1, 1, 20, 30),
+        reminderTime: DateTime(2023, 1, 1, 21, 00),
         days: [Days.mon, Days.tue, Days.wed, Days.thu, Days.fri, Days.sat, Days.sun],
       ),
       completions: _generateRandomCompletions("habit-reading-1"),
@@ -183,7 +183,7 @@ class MockHabitData {
       colorCode: Colors.deepPurple.shade400.value,
       reminderModel: ReminderModel(
         id: 1011,
-        reminderTime: DateTime(2023, 1, 1, 20, 45),
+        reminderTime: DateTime(2023, 1, 1, 21, 30),
         days: [Days.mon, Days.tue, Days.wed, Days.thu, Days.fri, Days.sat, Days.sun],
       ),
       completions: _generateRandomCompletions("habit-meditation-1"),
@@ -199,7 +199,7 @@ class MockHabitData {
       colorCode: Colors.orange.value,
       reminderModel: ReminderModel(
         id: 1012,
-        reminderTime: DateTime(2023, 1, 1, 21, 0),
+        reminderTime: DateTime(2023, 1, 1, 22, 00),
         days: [Days.mon, Days.tue, Days.wed, Days.thu, Days.fri, Days.sat, Days.sun],
       ),
       completions: _generateRandomCompletions("habit-gratitude-1"),
@@ -215,7 +215,7 @@ class MockHabitData {
       colorCode: Colors.blueGrey.shade400.value,
       reminderModel: ReminderModel(
         id: 1013,
-        reminderTime: DateTime(2023, 1, 1, 21, 15),
+        reminderTime: DateTime(2023, 1, 1, 22, 30),
         days: [Days.mon, Days.tue, Days.wed, Days.thu, Days.fri, Days.sat, Days.sun],
       ),
       completions: _generateRandomCompletions("habit-phoneoff-1"),
@@ -231,7 +231,7 @@ class MockHabitData {
       colorCode: Colors.blueAccent.value,
       reminderModel: ReminderModel(
         id: 1014,
-        reminderTime: DateTime(2023, 1, 1, 21, 30),
+        reminderTime: DateTime(2023, 1, 1, 22, 15),
         days: [Days.mon, Days.tue, Days.wed, Days.thu, Days.fri, Days.sat, Days.sun],
       ),
       completions: _generateRandomCompletions("habit-journal-1"),
@@ -248,7 +248,7 @@ class MockHabitData {
       colorCode: Colors.cyan.shade300.value,
       reminderModel: ReminderModel(
         id: 1015,
-        reminderTime: DateTime(2023, 1, 1, 22, 0),
+        reminderTime: DateTime(2023, 1, 1, 23, 00),
         days: [Days.mon, Days.tue, Days.wed, Days.thu, Days.fri, Days.sat, Days.sun],
       ),
       completions: _generateRandomCompletions("habit-teeth-1"),
