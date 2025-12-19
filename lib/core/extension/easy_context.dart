@@ -106,33 +106,33 @@ extension EasyText on BuildContext {
   CupertinoThemeData get cupertinoTheme => CupertinoTheme.of(this);
 
   TextStyle get titleSmall => cupertinoTextTheme.textStyle.copyWith(
-        fontSize: isTablet ? 13 : 11,
+        fontSize: isTablet ? 18 : 17,
         fontWeight: FontWeight.w600,
       );
   TextStyle get titleMedium => cupertinoTextTheme.textStyle.copyWith(
-        fontSize: isTablet ? 15 : 13,
+        fontSize: isTablet ? 16 : 15,
         fontWeight: FontWeight.w600,
       );
   TextStyle get titleLarge => cupertinoTextTheme.navTitleTextStyle;
 
   TextStyle get labelSmall => cupertinoTextTheme.textStyle.copyWith(
-        fontSize: isTablet ? 11 : 9,
+        fontSize: isTablet ? 16 : 15,
       );
   TextStyle get labelMedium => cupertinoTextTheme.textStyle.copyWith(
-        fontSize: isTablet ? 13 : 11,
+        fontSize: isTablet ? 15 : 14,
       );
   TextStyle get labelLarge => cupertinoTextTheme.textStyle.copyWith(
-        fontSize: isTablet ? 15 : 13,
+        fontSize: isTablet ? 14 : 13,
       );
 
   TextStyle get bodyLarge => cupertinoTextTheme.textStyle.copyWith(
-        fontSize: isTablet ? 17 : 15,
+        fontSize: isTablet ? 19 : 17,
       );
   TextStyle get bodyMedium => cupertinoTextTheme.textStyle.copyWith(
-        fontSize: isTablet ? 15 : 13,
+        fontSize: isTablet ? 17 : 15,
       );
   TextStyle get bodySmall => cupertinoTextTheme.textStyle.copyWith(
-        fontSize: isTablet ? 13 : 11,
+        fontSize: isTablet ? 15 : 13,
       );
 
   TextStyle get headlineLarge => cupertinoTextTheme.navLargeTitleTextStyle;
