@@ -361,7 +361,10 @@
             "description": "リマインダーは任意ですが、強く推奨されます。習慣を完了する時間を知らせることで一貫性を保つのに役立ちます。",
             "daily_target_header": "1日の目標",
             "daily_target_footer": "この習慣を1日に何回完了したいですか？",
-            "completions_per_day": "完了/日"
+            "completions_per_day": "完了/日",
+            "completion_time_title": "完了時間",
+            "completion_time_description": "通常この習慣を完了する時間を設定します。これはメインページに表示され、リマインダーとは別です。",
+            "completion_time_select": "完了時間を選択"
         },
         "difficulty": {
             "title": "難易度",

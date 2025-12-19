@@ -319,6 +319,9 @@ abstract class  LocaleKeys {
   static const create_habit_reminder_daily_target_header = 'create_habit.reminder.daily_target_header';
   static const create_habit_reminder_daily_target_footer = 'create_habit.reminder.daily_target_footer';
   static const create_habit_reminder_completions_per_day = 'create_habit.reminder.completions_per_day';
+  static const create_habit_reminder_completion_time_title = 'create_habit.reminder.completion_time_title';
+  static const create_habit_reminder_completion_time_description = 'create_habit.reminder.completion_time_description';
+  static const create_habit_reminder_completion_time_select = 'create_habit.reminder.completion_time_select';
   static const create_habit_reminder = 'create_habit.reminder';
   static const create_habit_difficulty_title = 'create_habit.difficulty.title';
   static const create_habit_difficulty_question = 'create_habit.difficulty.question';

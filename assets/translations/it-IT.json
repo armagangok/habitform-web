@@ -361,7 +361,10 @@
             "description": "I promemoria sono opzionali ma altamente consigliati. Ti aiutano a restare coerente notificandoti quando è il momento di completare la tua abitudine.",
             "daily_target_header": "Obiettivo giornaliero per giorno",
             "daily_target_footer": "Quante volte vuoi completare questa abitudine ogni giorno?",
-            "completions_per_day": "Completamenti/giorno"
+            "completions_per_day": "Completamenti/giorno",
+            "completion_time_title": "Orario di completamento",
+            "completion_time_description": "Imposta un orario in cui completi generalmente questa abitudine. Verrà visualizzato nella pagina principale ed è separato dai promemoria.",
+            "completion_time_select": "Seleziona orario di completamento"
         },
         "difficulty": {
             "title": "Difficoltà",

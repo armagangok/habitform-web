@@ -362,7 +362,10 @@
             "description": "Los recordatorios son opcionales pero muy recomendados. Te ayudan a mantenerte consistente notificándote cuando es hora de completar tu hábito.",
             "daily_target_header": "Objetivo diario por día",
             "daily_target_footer": "¿Cuántas veces quieres completar este hábito cada día?",
-            "completions_per_day": "Finalizaciones/día"
+            "completions_per_day": "Finalizaciones/día",
+            "completion_time_title": "Hora de finalización",
+            "completion_time_description": "Establece una hora en la que normalmente completas este hábito. Se mostrará en la página principal y es independiente de los recordatorios.",
+            "completion_time_select": "Seleccionar hora de finalización"
         },
         "difficulty": {
             "title": "Dificultad",

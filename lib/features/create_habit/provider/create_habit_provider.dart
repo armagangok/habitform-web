@@ -105,6 +105,15 @@ class CreateHabitNotifier extends AutoDisposeNotifier<CreateHabitState> {
     }
   }
 
+  void updateCompletionTime(DateTime? completionTime) {
+    if (completionTime == null) {
+      // Use clearCompletionTime flag to explicitly set to null
+      state = state.copyWith(clearCompletionTime: true);
+    } else {
+      state = state.copyWith(completionTime: completionTime);
+    }
+  }
+
   void updateCategories(List<String> categoryIds) {
     state = state.copyWith(categoryIds: categoryIds);
 
@@ -148,6 +157,7 @@ class CreateHabitNotifier extends AutoDisposeNotifier<CreateHabitState> {
         categoryIds: categoryIds,
         difficulty: state.difficulty,
         rewardFactor: state.rewardFactor,
+        completionTime: state.completionTime,
       );
 
       await ref.watch(homeProvider.notifier).createHabit(habit);

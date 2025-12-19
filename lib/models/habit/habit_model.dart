@@ -53,6 +53,11 @@ class Habit extends HiveObject {
   @HiveField(13, defaultValue: 1.0)
   final double rewardFactor;
 
+  // Completion time - the time when the user typically completes this habit
+  // This is separate from reminders - it's just for display purposes
+  @HiveField(14)
+  final DateTime? completionTime;
+
   Habit({
     required this.id,
     required this.habitName,
@@ -67,6 +72,7 @@ class Habit extends HiveObject {
     this.categoryIds = const [],
     this.difficulty = HabitDifficulty.moderate,
     this.rewardFactor = 1.0,
+    this.completionTime,
   });
 
   Habit copyWith({
@@ -83,6 +89,7 @@ class Habit extends HiveObject {
     List<String>? categoryIds,
     HabitDifficulty? difficulty,
     double? rewardFactor,
+    DateTime? completionTime,
   }) {
     return Habit(
       id: id ?? this.id,
@@ -98,6 +105,7 @@ class Habit extends HiveObject {
       categoryIds: categoryIds ?? this.categoryIds,
       difficulty: difficulty ?? this.difficulty,
       rewardFactor: rewardFactor ?? this.rewardFactor,
+      completionTime: completionTime ?? this.completionTime,
     );
   }
 }

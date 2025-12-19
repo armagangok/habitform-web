@@ -361,7 +361,10 @@
             "description": "提醒是可选的，但强烈推荐。它们通过在你完成习惯的时间通知你来帮助你保持一致性。",
             "daily_target_header": "每天的目标",
             "daily_target_footer": "你每天想完成这个习惯多少次？",
-            "completions_per_day": "完成次数/天"
+            "completions_per_day": "完成次数/天",
+            "completion_time_title": "完成时间",
+            "completion_time_description": "设置你通常完成这个习惯的时间。这将显示在主页面，与提醒是分开的。",
+            "completion_time_select": "选择完成时间"
         },
         "difficulty": {
             "title": "难度",

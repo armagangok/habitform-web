@@ -362,7 +362,10 @@
             "description": "Hatırlatıcılar isteğe bağlıdır ancak şiddetle tavsiye edilir. Alışkanlığınızı tamamlama zamanı geldiğinde sizi bilgilendirerek tutarlı kalmanıza yardımcı olurlar.",
             "daily_target_header": "Günlük hedef",
             "daily_target_footer": "Bu alışkanlığı her gün kaç kez tamamlamak istersiniz?",
-            "completions_per_day": "Tamamlama/gün"
+            "completions_per_day": "Tamamlama/gün",
+            "completion_time_title": "Tamamlama Zamanı",
+            "completion_time_description": "Bu alışkanlığı genellikle hangi saatte tamamladığınızı belirleyin. Bu zaman ana sayfada gösterilecek ve hatırlatıcılardan ayrıdır.",
+            "completion_time_select": "Tamamlama zamanı seç"
         },
         "difficulty": {
             "title": "Zorluk",
