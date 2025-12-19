@@ -88,7 +88,7 @@ class _HabitCategoryPageState extends ConsumerState<HabitCategoryPage> {
                       },
                       child: Text(
                         LocaleKeys.common_done.tr(),
-                        style: context.titleMedium.copyWith(
+                        style: context.titleLarge.copyWith(
                           fontWeight: FontWeight.w600,
                           color: Colors.white,
                         ),

@@ -32,7 +32,7 @@ class DescriptionStep extends ConsumerWidget {
               children: [
                 Text(
                   LocaleKeys.create_habit_description_title.tr(),
-                  style: context.headlineSmall.copyWith(
+                  style: context.titleLarge.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
                 ),
