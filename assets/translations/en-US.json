@@ -314,6 +314,10 @@
         "formation_probability_description": "The Formation Probability shows how likely your habit is to become automatic based on your current completion rate. Higher probabilities mean your habit is more likely to stick permanently.",
         "formation_probability_details": "This probability is calculated using your consistency patterns and completion rate. Research shows it takes an average of 66 days of regular practice for a habit to become automatic."
     },
+    "home": {
+        "long_press_to_move": "Long press to move • Tap for details",
+        "release_to_place": "Release to place"
+    },
     "habit": {
         "add_habit": "Add Habit",
         "edit_habit": "Edit Habit",

@@ -774,58 +774,61 @@ class _HabitConstellationViewState extends ConsumerState<HabitConstellationView>
         Positioned(
           right: 16,
           bottom: MediaQuery.of(context).padding.bottom + 100,
-          child: Column(
-            children: [
-              _buildControlButton(
-                icon: CupertinoIcons.plus,
-                onTap: () {
-                  HapticFeedback.lightImpact();
-                  final currentScale = _transformationController.value.getMaxScaleOnAxis();
-                  _animateScale(currentScale * 1.3);
-                },
-                isDark: isDark,
+          child: IgnorePointer(
+            ignoring: !(_showHabitNames && _draggingHabitId == null),
+            child: AnimatedOpacity(
+              opacity: (_showHabitNames && _draggingHabitId == null) ? 1.0 : 0.0,
+              duration: const Duration(milliseconds: 300),
+              child: Column(
+                children: [
+                  _buildControlButton(
+                    icon: CupertinoIcons.plus,
+                    onTap: () {
+                      HapticFeedback.lightImpact();
+                      final currentScale = _transformationController.value.getMaxScaleOnAxis();
+                      _animateScale(currentScale * 1.3);
+                    },
+                    isDark: isDark,
+                  ),
+                  const SizedBox(height: 10),
+                  _buildControlButton(
+                    icon: CupertinoIcons.minus,
+                    onTap: () {
+                      HapticFeedback.lightImpact();
+                      final currentScale = _transformationController.value.getMaxScaleOnAxis();
+
+                      // Match the minScale from InteractiveViewer (0.3)
+                      const minScale = 0.3;
+
+                      // If already at or very close to minimum scale, do nothing
+                      if (currentScale <= minScale + 0.01) {
+                        return;
+                      }
+
+                      // Calculate target scale (zoom out by factor of 1.3)
+                      var targetScale = currentScale / 1.3;
+
+                      // Clamp to minimum scale
+                      if (targetScale < minScale) {
+                        targetScale = minScale;
+                      }
+
+                      _animateScale(targetScale);
+                    },
+                    isDark: isDark,
+                  ),
+                  const SizedBox(height: 10),
+                  _buildControlButton(
+                    icon: CupertinoIcons.compass,
+                    onTap: () {
+                      HapticFeedback.mediumImpact();
+                      _centerViewOnHabitsAnimated();
+                    },
+                    isDark: isDark,
+                  ),
+                ],
               ),
-              const SizedBox(height: 10),
-              _buildControlButton(
-                icon: CupertinoIcons.minus,
-                onTap: () {
-                  HapticFeedback.lightImpact();
-                  final currentScale = _transformationController.value.getMaxScaleOnAxis();
-
-                  // Match the minScale from InteractiveViewer (0.3)
-                  const minScale = 0.3;
-
-                  // If already at or very close to minimum scale, do nothing
-                  // Use a more generous tolerance (0.32) to account for:
-                  // - Floating point precision issues
-                  // - InteractiveViewer's internal constraints that may keep scale slightly above 0.3
-                  // This ensures we stop at the same effective limit as pinch gestures
-                  if (currentScale <= minScale + 0.02) {
-                    return;
-                  }
-
-                  final targetScale = currentScale / 1.3;
-
-                  // If the target scale would go below minimum, go directly to minimum
-                  // This ensures we can reach the exact limit like pinch gesture does
-                  if (targetScale <= minScale) {
-                    _animateScale(minScale);
-                  } else {
-                    _animateScale(targetScale);
-                  }
-                },
-                isDark: isDark,
-              ),
-              const SizedBox(height: 10),
-              _buildControlButton(
-                icon: CupertinoIcons.compass,
-                onTap: () {
-                  HapticFeedback.mediumImpact();
-                  _centerViewOnHabitsAnimated();
-                },
-                isDark: isDark,
-              ),
-            ],
+            ),
           ),
         ),
 
@@ -833,11 +836,18 @@ class _HabitConstellationViewState extends ConsumerState<HabitConstellationView>
         Positioned(
           left: 16,
           bottom: MediaQuery.of(context).padding.bottom + 100,
-          child: _buildControlButton(
-            icon: _isConnectingMode ? CupertinoIcons.link_circle_fill : CupertinoIcons.link,
-            onTap: _toggleConnectingMode,
-            isDark: isDark,
-            isActive: _isConnectingMode,
+          child: IgnorePointer(
+            ignoring: !(_showHabitNames && _draggingHabitId == null),
+            child: AnimatedOpacity(
+              opacity: (_showHabitNames && _draggingHabitId == null) ? 1.0 : 0.0,
+              duration: const Duration(milliseconds: 300),
+              child: _buildControlButton(
+                icon: _isConnectingMode ? CupertinoIcons.link_circle_fill : CupertinoIcons.link,
+                onTap: _toggleConnectingMode,
+                isDark: isDark,
+                isActive: _isConnectingMode,
+              ),
+            ),
           ),
         ),
 
@@ -857,7 +867,7 @@ class _HabitConstellationViewState extends ConsumerState<HabitConstellationView>
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Text(
-                  _draggingHabitId != null ? 'Release to place' : 'Long press to move • Tap for details',
+                  _draggingHabitId != null ? LocaleKeys.home_release_to_place.tr() : LocaleKeys.home_long_press_to_move.tr(),
                   style: TextStyle(
                     color: isDark ? Colors.black : Colors.white,
                     fontSize: 11,
@@ -916,10 +926,9 @@ class _HabitConstellationViewState extends ConsumerState<HabitConstellationView>
     final currentMatrix = _transformationController.value.clone();
     final currentScale = currentMatrix.getMaxScaleOnAxis();
 
-    // Skip only if already exactly at target (with small tolerance)
-    // But always allow animation when targeting minimum scale to ensure we reach it
-    if (clampedScale != 0.3 && (clampedScale - currentScale).abs() < 0.001) {
-      return; // Already at target (except when targeting minimum scale)
+    // Skip if already at target (with small tolerance)
+    if ((clampedScale - currentScale).abs() < 0.001) {
+      return;
     }
 
     // Screen center as focal point
@@ -963,48 +972,9 @@ class _HabitConstellationViewState extends ConsumerState<HabitConstellationView>
       if (status == AnimationStatus.completed) {
         // Save final state after animation completes
         final finalMatrix = _transformationController.value;
-        var finalScale = finalMatrix.getMaxScaleOnAxis();
+        final finalScale = finalMatrix.getMaxScaleOnAxis();
 
-        // If target was minimum scale, ensure we reached it
-        // Check with tolerance to catch cases where InteractiveViewer prevents exact 0.3
-        if (clampedScale == 0.3 && finalScale > 0.3) {
-          // Force to minimum scale if we didn't reach it
-          // This handles cases where InteractiveViewer's constraints prevent reaching exactly 0.3
-          final screenCenter = Offset(
-            MediaQuery.of(context).size.width / 2,
-            MediaQuery.of(context).size.height / 2,
-          );
-          final inverted = Matrix4.identity()..setFrom(finalMatrix);
-          if (inverted.invert() != 0.0) {
-            final sceneCenter = MatrixUtils.transformPoint(inverted, screenCenter);
-            final offsetX = screenCenter.dx - (sceneCenter.dx * 0.3);
-            final offsetY = screenCenter.dy - (sceneCenter.dy * 0.3);
-            final correctedMatrix = Matrix4.identity()
-              ..translateByDouble(offsetX, offsetY, 0.0, 1.0)
-              ..scaleByDouble(0.3, 0.3, 1.0, 1.0);
-            _transformationController.value = correctedMatrix;
-            finalScale = 0.3;
-
-            // Verify after a frame to ensure InteractiveViewer didn't change it back
-            WidgetsBinding.instance.addPostFrameCallback(
-              (_) {
-                if (mounted) {
-                  final verifyMatrix = _transformationController.value;
-                  final verifyScale = verifyMatrix.getMaxScaleOnAxis();
-                  if (verifyScale > 0.3 && clampedScale == 0.3) {
-                    // Force again if InteractiveViewer changed it
-                    _transformationController.value = correctedMatrix;
-                    ref.read(habitCanvasProvider.notifier).updateScale(0.3);
-                    final verifyTranslation = correctedMatrix.getTranslation();
-                    ref.read(habitCanvasProvider.notifier).updateOffset(verifyTranslation.x, verifyTranslation.y);
-                  }
-                }
-              },
-            );
-          }
-        }
-
-        final translation = _transformationController.value.getTranslation();
+        final translation = finalMatrix.getTranslation();
         ref.read(habitCanvasProvider.notifier).updateScale(finalScale);
         ref.read(habitCanvasProvider.notifier).updateOffset(translation.x, translation.y);
         // Clean up listeners after animation completes

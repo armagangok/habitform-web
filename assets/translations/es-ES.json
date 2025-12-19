@@ -319,6 +319,10 @@
         "formation_probability_description": "La Probabilidad de Formación muestra qué tan probable es que tu hábito se vuelva automático según tu tasa de finalización actual. Una probabilidad más alta significa que es más probable que tu hábito se mantenga permanentemente.",
         "formation_probability_details": "Esta probabilidad se calcula usando tus patrones de consistencia y tasa de finalización. La investigación muestra que se necesitan en promedio 66 días de práctica regular para que un hábito se vuelva automático."
     },
+    "home": {
+        "long_press_to_move": "Mantén presionado para mover • Toca para ver detalles",
+        "release_to_place": "Suelta para colocar"
+    },
     "habit": {
         "add_habit": "Agregar hábito",
         "edit_habit": "Editar hábito",

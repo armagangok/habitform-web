@@ -318,6 +318,10 @@
         "formation_probability_description": "形成確率は、現在の完了率に基づいて習慣が自動的になる可能性を示します。確率が高いほど、習慣が永続的に定着する可能性が高くなります。",
         "formation_probability_details": "この確率は一貫性パターンと完了率を使用して計算されます。研究によると、習慣が自動的になるまで平均66日間の定期的な練習が必要です。"
     },
+    "home": {
+        "long_press_to_move": "長押しして移動 • タップで詳細を表示",
+        "release_to_place": "離して配置"
+    },
     "habit": {
         "add_habit": "習慣を追加",
         "edit_habit": "習慣を編集",

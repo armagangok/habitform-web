@@ -283,6 +283,9 @@ abstract class  LocaleKeys {
   static const habit_detail_formation_probability_description = 'habit_detail.formation_probability_description';
   static const habit_detail_formation_probability_details = 'habit_detail.formation_probability_details';
   static const habit_detail = 'habit_detail';
+  static const home_long_press_to_move = 'home.long_press_to_move';
+  static const home_release_to_place = 'home.release_to_place';
+  static const home = 'home';
   static const habit_add_habit = 'habit.add_habit';
   static const habit_edit_habit = 'habit.edit_habit';
   static const habit_habit_name = 'habit.habit_name';

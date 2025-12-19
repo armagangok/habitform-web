@@ -319,6 +319,10 @@
         "formation_probability_description": "La Probabilité de Formation montre la probabilité que votre habitude devienne automatique basée sur votre taux de completion actuel. Des probabilités plus élevées signifient que votre habitude est plus susceptible de tenir de façon permanente.",
         "formation_probability_details": "Cette probabilité est calculée en utilisant vos modèles de constance et votre taux de completion. La recherche montre qu'il faut en moyenne 66 jours de pratique régulière pour qu'une habitude devienne automatique."
     },
+    "home": {
+        "long_press_to_move": "Maintenez appuyé pour déplacer • Appuyez pour les détails",
+        "release_to_place": "Relâchez pour placer"
+    },
     "habit": {
         "add_habit": "Ajouter une habitude",
         "edit_habit": "Modifier l'habitude",

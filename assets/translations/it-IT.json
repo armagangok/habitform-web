@@ -318,6 +318,10 @@
         "formation_probability_description": "La Probabilità di Formazione mostra quanto è probabile che la tua abitudine diventi automatica in base al tuo attuale tasso di completamento. Probabilità più alte significano che è più probabile che la tua abitudine resti permanentemente.",
         "formation_probability_details": "Questa probabilità è calcolata utilizzando i tuoi modelli di costanza e tasso di completamento. La ricerca mostra che occorrono in media 66 giorni di pratica regolare affinché un'abitudine diventi automatica."
     },
+    "home": {
+        "long_press_to_move": "Tieni premuto per spostare • Tocca per i dettagli",
+        "release_to_place": "Rilascia per posizionare"
+    },
     "habit": {
         "add_habit": "Aggiungi Abitudine",
         "edit_habit": "Modifica Abitudine",

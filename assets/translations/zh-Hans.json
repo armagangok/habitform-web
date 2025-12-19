@@ -318,6 +318,10 @@
         "formation_probability_description": "形成概率显示基于你当前完成率，你的习惯变得自动化的可能性。概率越高意味着你的习惯越可能永久坚持。",
         "formation_probability_details": "这个概率是根据你的一致性模式和完成率计算的。研究表明，习惯平均需要66天的规律练习才能变得自动化。"
     },
+    "home": {
+        "long_press_to_move": "长按并拖动以移动 • 点击查看详情",
+        "release_to_place": "松开以放置"
+    },
     "habit": {
         "add_habit": "添加习惯",
         "edit_habit": "编辑习惯",

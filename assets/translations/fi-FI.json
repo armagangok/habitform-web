@@ -318,6 +318,10 @@
         "formation_probability_description": "Muodostumistodennäköisyys näyttää, kuinka todennäköisesti tapasi muuttuu automaattiseksi nykyisen suoritusasteesi perusteella. Korkeammat todennäköisyydet tarkoittavat, että tapasi on todennäköisemmin pysyvä.",
         "formation_probability_details": "Tämä todennäköisyys lasketaan johdonmukaisuutesi ja suoritusasteesi perusteella. Tutkimusten mukaan keskimäärin 66 päivää säännöllistä harjoittelua tarvitaan, jotta tavasta tulee automaattinen."
     },
+    "home": {
+        "long_press_to_move": "Pidä painettuna siirtääksesi • Napauta nähdäksesi yksityiskohdat",
+        "release_to_place": "Päästä irti sijoittaaksesi"
+    },
     "habit": {
         "add_habit": "Lisää tapa",
         "edit_habit": "Muokkaa tapaa",
