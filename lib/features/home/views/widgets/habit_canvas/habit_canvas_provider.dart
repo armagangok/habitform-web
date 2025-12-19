@@ -3,6 +3,7 @@ import 'dart:math' as math;
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '/core/core.dart';
 import '/models/habit/habit_model.dart';
 import 'habit_canvas_model.dart';
 
@@ -150,7 +151,7 @@ class HabitCanvasNotifier extends StateNotifier<HabitCanvasState> {
   /// Update canvas scale and offset immediately (for interaction end)
   /// Also saves the raw matrix values for precise restoration
   void updateTransformImmediate(double scale, double offsetX, double offsetY, {List<double>? matrixValues}) {
-    print('🟡 [CanvasProvider] updateTransformImmediate called - scale: $scale, offsetX: $offsetX, offsetY: $offsetY, hasMatrix: ${matrixValues != null}');
+    LogHelper.shared.debugPrint('🟡 [CanvasProvider] updateTransformImmediate called - scale: $scale, offsetX: $offsetX, offsetY: $offsetY, hasMatrix: ${matrixValues != null}');
     state = state.copyWith(
       scale: scale.clamp(0.3, 3.0),
       offsetX: offsetX,

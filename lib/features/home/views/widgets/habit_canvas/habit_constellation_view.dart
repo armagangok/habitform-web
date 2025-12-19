@@ -75,7 +75,7 @@ class _HabitConstellationViewState extends ConsumerState<HabitConstellationView>
   Future<void> _initializeCanvas() async {
     if (_isInitialized) return;
 
-    print('🔷 [ConstellationView] _initializeCanvas started');
+    LogHelper.shared.debugPrint('🔷 [ConstellationView] _initializeCanvas started');
 
     // Initialize habit positions (this waits for state to be loaded first)
     await ref.read(habitCanvasProvider.notifier).initializePositions(
@@ -91,15 +91,15 @@ class _HabitConstellationViewState extends ConsumerState<HabitConstellationView>
     final hasUserTransform = canvasState.hasUserTransform;
     final matrixValues = canvasState.matrixValues;
 
-    print('🔷 [ConstellationView] hasUserTransform: $hasUserTransform, matrixValues: ${matrixValues?.length ?? 0} values');
+    LogHelper.shared.debugPrint('🔷 [ConstellationView] hasUserTransform: $hasUserTransform, matrixValues: ${matrixValues?.length ?? 0} values');
 
     if (hasUserTransform && matrixValues != null && matrixValues.length == 16) {
       // Restore saved transform state using raw matrix values
-      print('🔷 [ConstellationView] Restoring saved transform from matrix values');
+      LogHelper.shared.debugPrint('🔷 [ConstellationView] Restoring saved transform from matrix values');
       _restoreSavedTransform(matrixValues);
     } else {
       // First time or reset - center view on habits
-      print('🔷 [ConstellationView] Centering view on habits (no saved transform)');
+      LogHelper.shared.debugPrint('🔷 [ConstellationView] Centering view on habits (no saved transform)');
       _centerViewOnHabits();
     }
 
@@ -108,9 +108,9 @@ class _HabitConstellationViewState extends ConsumerState<HabitConstellationView>
 
   /// Restores the saved transform state from raw matrix values
   void _restoreSavedTransform(List<double> matrixValues) {
-    print('🔷 [ConstellationView] _restoreSavedTransform with ${matrixValues.length} matrix values');
+    LogHelper.shared.debugPrint('🔷 [ConstellationView] _restoreSavedTransform with ${matrixValues.length} matrix values');
     final matrix = Matrix4.fromList(matrixValues);
-    print('🔷 [ConstellationView] Restored scale: ${matrix.getMaxScaleOnAxis()}, translation: ${matrix.getTranslation()}');
+    LogHelper.shared.debugPrint('🔷 [ConstellationView] Restored scale: ${matrix.getMaxScaleOnAxis()}, translation: ${matrix.getTranslation()}');
     _transformationController.value = matrix;
   }
 
@@ -428,9 +428,9 @@ class _HabitConstellationViewState extends ConsumerState<HabitConstellationView>
   }
 
   void _onInteractionEnd(ScaleEndDetails details) {
-    print('🟠 [ConstellationView] _onInteractionEnd called');
+    LogHelper.shared.debugPrint('🟠 [ConstellationView] _onInteractionEnd called');
     if (_draggingHabitId != null) {
-      print('🟠 [ConstellationView] Skipping - dragging habit');
+      LogHelper.shared.debugPrint('🟠 [ConstellationView] Skipping - dragging habit');
       return; // Don't save transform while dragging
     }
 
@@ -445,12 +445,12 @@ class _HabitConstellationViewState extends ConsumerState<HabitConstellationView>
     _saveStateTimer?.cancel();
     final matrix = _transformationController.value;
     final scale = matrix.getMaxScaleOnAxis();
-    print('🟠 [ConstellationView] Current scale from matrix: $scale');
+    LogHelper.shared.debugPrint('🟠 [ConstellationView] Current scale from matrix: $scale');
     final translation = matrix.getTranslation();
 
     // Save raw matrix values for precise restoration
     final matrixValues = matrix.storage.toList();
-    print('🟠 [ConstellationView] Saving matrix values: ${matrixValues.length} values');
+    LogHelper.shared.debugPrint('🟠 [ConstellationView] Saving matrix values: ${matrixValues.length} values');
 
     // Use immediate save to ensure state is persisted even if app closes
     ref.read(habitCanvasProvider.notifier).updateTransformImmediate(

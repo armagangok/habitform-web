@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '/core/core.dart';
+
 /// Position data for a habit on the canvas
 class HabitPosition {
   final String habitId;
@@ -137,15 +139,15 @@ class HabitCanvasStorage {
     try {
       final prefs = await SharedPreferences.getInstance();
       final jsonString = prefs.getString(_key);
-      print('🔵 [CanvasStorage] Loading state, jsonString exists: ${jsonString != null}');
+      LogHelper.shared.debugPrint('🔵 [CanvasStorage] Loading state, jsonString exists: ${jsonString != null}');
       if (jsonString == null) return const HabitCanvasState();
 
       final json = jsonDecode(jsonString) as Map<String, dynamic>;
       final loadedState = HabitCanvasState.fromJson(json);
-      print('🔵 [CanvasStorage] Loaded scale: ${loadedState.scale}, offsetX: ${loadedState.offsetX}, offsetY: ${loadedState.offsetY}');
+      LogHelper.shared.debugPrint('🔵 [CanvasStorage] Loaded scale: ${loadedState.scale}, offsetX: ${loadedState.offsetX}, offsetY: ${loadedState.offsetY}');
       return loadedState;
     } catch (e) {
-      print('🔴 [CanvasStorage] Load error: $e');
+      LogHelper.shared.debugPrint('🔴 [CanvasStorage] Load error: $e');
       return const HabitCanvasState();
     }
   }
@@ -154,11 +156,11 @@ class HabitCanvasStorage {
     try {
       final prefs = await SharedPreferences.getInstance();
       final jsonString = jsonEncode(state.toJson());
-      print('🟢 [CanvasStorage] Saving scale: ${state.scale}, offsetX: ${state.offsetX}, offsetY: ${state.offsetY}');
+      LogHelper.shared.debugPrint('🟢 [CanvasStorage] Saving scale: ${state.scale}, offsetX: ${state.offsetX}, offsetY: ${state.offsetY}');
       await prefs.setString(_key, jsonString);
-      print('🟢 [CanvasStorage] Save completed');
+      LogHelper.shared.debugPrint('🟢 [CanvasStorage] Save completed');
     } catch (e) {
-      print('🔴 [CanvasStorage] Save error: $e');
+      LogHelper.shared.debugPrint('🔴 [CanvasStorage] Save error: $e');
     }
   }
 }
