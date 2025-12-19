@@ -23,9 +23,8 @@ class TrailingActionButton extends StatelessWidget {
       child: child ??
           Text(
             title ?? "",
-            style: context.titleMedium.copyWith(
+            style: context.titleLarge.copyWith(
               fontWeight: FontWeight.w500,
-              
             ),
           ),
     );

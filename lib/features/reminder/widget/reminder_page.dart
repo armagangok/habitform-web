@@ -19,6 +19,7 @@ class ReminderPage extends ConsumerWidget {
         title: LocaleKeys.habit_reminder.tr(),
         trailing: TrailingActionButton(
           title: LocaleKeys.common_done.tr(),
+          
           onPressed: () {
             navigator.pop();
           },

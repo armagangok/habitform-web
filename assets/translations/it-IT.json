@@ -318,6 +318,10 @@
         "formation_probability_description": "La Probabilità di Formazione mostra quanto è probabile che la tua abitudine diventi automatica in base al tuo attuale tasso di completamento. Probabilità più alte significano che è più probabile che la tua abitudine resti permanentemente.",
         "formation_probability_details": "Questa probabilità è calcolata utilizzando i tuoi modelli di costanza e tasso di completamento. La ricerca mostra che occorrono in media 66 giorni di pratica regolare affinché un'abitudine diventi automatica."
     },
+    "home": {
+        "long_press_to_move": "Tieni premuto per spostare • Tocca per i dettagli",
+        "release_to_place": "Rilascia per posizionare"
+    },
     "habit": {
         "add_habit": "Aggiungi Abitudine",
         "edit_habit": "Modifica Abitudine",
@@ -361,7 +365,10 @@
             "description": "I promemoria sono opzionali ma altamente consigliati. Ti aiutano a restare coerente notificandoti quando è il momento di completare la tua abitudine.",
             "daily_target_header": "Obiettivo giornaliero per giorno",
             "daily_target_footer": "Quante volte vuoi completare questa abitudine ogni giorno?",
-            "completions_per_day": "Completamenti/giorno"
+            "completions_per_day": "Completamenti/giorno",
+            "completion_time_title": "Orario di completamento",
+            "completion_time_description": "Imposta un orario in cui completi generalmente questa abitudine. Verrà visualizzato nella pagina principale ed è separato dai promemoria.",
+            "completion_time_select": "Seleziona orario di completamento"
         },
         "difficulty": {
             "title": "Difficoltà",

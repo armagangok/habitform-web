@@ -319,6 +319,10 @@
         "formation_probability_description": "Oluşum Olasılığı, alışkanlığınızın mevcut tamamlama oranınıza göre otomatik hale gelme olasılığını gösterir. Daha yüksek olasılıklar, alışkanlığınızın kalıcı olma olasılığının daha yüksek olduğu anlamına gelir.",
         "formation_probability_details": "Bu olasılık, tutarlılık kalıplarınız ve tamamlama oranınız kullanılarak hesaplanır. Araştırmalar, bir alışkanlığın otomatik hale gelmesi için ortalama 66 günlük düzenli pratik gerektiğini göstermektedir."
     },
+    "home": {
+        "long_press_to_move": "Basılı tutarak hareket ettir • Detaylar için dokun",
+        "release_to_place": "Yerleştirmek için bırak"
+    },
     "habit": {
         "add_habit": "Alışkanlık Ekle",
         "edit_habit": "Alışkanlığı Düzenle",
@@ -362,7 +366,10 @@
             "description": "Hatırlatıcılar isteğe bağlıdır ancak şiddetle tavsiye edilir. Alışkanlığınızı tamamlama zamanı geldiğinde sizi bilgilendirerek tutarlı kalmanıza yardımcı olurlar.",
             "daily_target_header": "Günlük hedef",
             "daily_target_footer": "Bu alışkanlığı her gün kaç kez tamamlamak istersiniz?",
-            "completions_per_day": "Tamamlama/gün"
+            "completions_per_day": "Tamamlama/gün",
+            "completion_time_title": "Tamamlama Zamanı",
+            "completion_time_description": "Bu alışkanlığı genellikle hangi saatte tamamladığınızı belirleyin. Bu zaman ana sayfada gösterilecek ve hatırlatıcılardan ayrıdır.",
+            "completion_time_select": "Tamamlama zamanı seç"
         },
         "difficulty": {
             "title": "Zorluk",

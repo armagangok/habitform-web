@@ -109,6 +109,7 @@ class CreateHabitState {
   final HabitDifficulty difficulty;
   final int dailyTarget;
   final double rewardFactor; // Emotional reward factor (α), range: 0.5-2.0, default: 1.0
+  final DateTime? completionTime; // Completion time (separate from reminder)
 
   CreateHabitState({
     this.habitName,
@@ -124,6 +125,7 @@ class CreateHabitState {
     this.difficulty = HabitDifficulty.moderate,
     this.dailyTarget = 1,
     this.rewardFactor = 1.0,
+    this.completionTime,
   })  : habitNameController = habitNameController ?? TextEditingController(),
         habitDescriptionController = habitDescriptionController ?? TextEditingController();
 
@@ -141,6 +143,8 @@ class CreateHabitState {
     HabitDifficulty? difficulty,
     int? dailyTarget,
     double? rewardFactor,
+    DateTime? completionTime,
+    bool clearCompletionTime = false,
   }) {
     return CreateHabitState(
       habitName: title ?? habitName,
@@ -156,6 +160,7 @@ class CreateHabitState {
       difficulty: difficulty ?? this.difficulty,
       dailyTarget: dailyTarget ?? this.dailyTarget,
       rewardFactor: rewardFactor ?? this.rewardFactor,
+      completionTime: clearCompletionTime ? null : (completionTime ?? this.completionTime),
     );
   }
 }

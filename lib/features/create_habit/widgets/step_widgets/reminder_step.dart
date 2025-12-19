@@ -5,6 +5,7 @@ import '../../../reminder/widget/reminder_selection_widget.dart';
 import '../../models/create_habit_state.dart';
 import '../../provider/create_habit_provider.dart';
 import 'base_step_widget.dart';
+import 'completion_time_widget.dart';
 
 class ReminderStep extends ConsumerStatefulWidget {
   const ReminderStep({super.key});
@@ -31,7 +32,7 @@ class _ReminderStepState extends ConsumerState<ReminderStep> {
         children: [
           // Step title and description
           Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.symmetric(horizontal: 16.0) + EdgeInsets.only(top: 16.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -61,6 +62,18 @@ class _ReminderStepState extends ConsumerState<ReminderStep> {
                 onReminderChanged: (reminder) {
                   ref.read(createHabitProvider.notifier).updateReminder(reminder);
                 },
+              );
+            },
+          ),
+
+          const SizedBox(height: 16),
+
+          // Completion time widget (separate from reminder)
+          Consumer(
+            builder: (context, ref, child) {
+              final createHabitState = ref.watch(createHabitProvider);
+              return CompletionTimeWidget(
+                initialTime: createHabitState.completionTime,
               );
             },
           ),

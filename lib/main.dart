@@ -18,6 +18,7 @@ import 'features/home/provider/home_provider.dart';
 import 'features/home/views/pages/home_page.dart';
 import 'features/onboarding/pages/onboarding_welcome_page.dart';
 import 'features/purchase/providers/purchase_provider.dart';
+import 'services/habit_service/local_habit_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -46,6 +47,9 @@ void main() async {
 
   await TimeZoneHelper.initializeTimeZone();
   await AppDefaultsService().initializeAppDefaults();
+
+  // Migrate existing habits: copy reminderTime to completionTime if available
+  await LocalHabitService.instance.migrateCompletionTimeFromReminders();
 
   // Initialize app lifecycle service for smart notifications
   AppLifecycleService.shared.initialize();

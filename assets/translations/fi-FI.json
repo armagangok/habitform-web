@@ -318,6 +318,10 @@
         "formation_probability_description": "Muodostumistodennäköisyys näyttää, kuinka todennäköisesti tapasi muuttuu automaattiseksi nykyisen suoritusasteesi perusteella. Korkeammat todennäköisyydet tarkoittavat, että tapasi on todennäköisemmin pysyvä.",
         "formation_probability_details": "Tämä todennäköisyys lasketaan johdonmukaisuutesi ja suoritusasteesi perusteella. Tutkimusten mukaan keskimäärin 66 päivää säännöllistä harjoittelua tarvitaan, jotta tavasta tulee automaattinen."
     },
+    "home": {
+        "long_press_to_move": "Pidä painettuna siirtääksesi • Napauta nähdäksesi yksityiskohdat",
+        "release_to_place": "Päästä irti sijoittaaksesi"
+    },
     "habit": {
         "add_habit": "Lisää tapa",
         "edit_habit": "Muokkaa tapaa",
@@ -361,7 +365,10 @@
             "description": "Muistutukset ovat vapaaehtoisia, mutta erittäin suositeltavia. Ne auttavat pysymään johdonmukaisena muistuttamalla, milloin on aika suorittaa tapasi.",
             "daily_target_header": "Päivittäinen tavoite per päivä",
             "daily_target_footer": "Kuinka monta kertaa haluat suorittaa tämän tavan päivässä?",
-            "completions_per_day": "Suoritukset/päivä"
+            "completions_per_day": "Suoritukset/päivä",
+            "completion_time_title": "Suoritusaika",
+            "completion_time_description": "Aseta aika, jolloin yleensä suoritat tämän tavan. Tämä näytetään pääsivulla ja on erillinen muistutuksista.",
+            "completion_time_select": "Valitse suoritusaika"
         },
         "difficulty": {
             "title": "Vaikeus",

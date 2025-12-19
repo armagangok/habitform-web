@@ -288,4 +288,63 @@ class LocalHabitService extends HabitService {
       LogHelper.shared.debugPrint('Error exporting habits for widget: $e');
     }
   }
+
+  /// Migrates existing habits to set completionTime from reminderTime if available
+  /// This ensures backward compatibility for users who already have habits with reminders
+  Future<void> migrateCompletionTimeFromReminders() async {
+    try {
+      LogHelper.shared.debugPrint('🔄 Starting completionTime migration...');
+      
+      // Get all habits (active and archived)
+      final allHabits = await getAllHabits();
+      int migratedCount = 0;
+      
+      for (final habit in allHabits) {
+        // Skip if habit already has completionTime
+        if (habit.completionTime != null) {
+          continue;
+        }
+        
+        // Check if habit has reminderModel with a time
+        if (habit.reminderModel != null) {
+          DateTime? timeToMigrate;
+          
+          // Try to get time from single reminder
+          if (habit.reminderModel!.hasSingleReminder && habit.reminderModel!.reminderTime != null) {
+            timeToMigrate = habit.reminderModel!.reminderTime;
+          }
+          // Or get first time from multiple reminders
+          else if (habit.reminderModel!.hasMultipleReminders) {
+            final times = habit.reminderModel!.allReminderTimes;
+            if (times.isNotEmpty) {
+              timeToMigrate = times.first;
+            }
+          }
+          
+          // If we found a time to migrate, update the habit
+          if (timeToMigrate != null) {
+            final updatedHabit = habit.copyWith(completionTime: timeToMigrate);
+            
+            // Save based on habit status
+            if (habit.status == HabitStatus.active) {
+              await _hiveHelper.putData<Habit>(HiveBoxes.habitBox, habit.id, updatedHabit);
+            } else {
+              await _hiveHelper.putData<Habit>(HiveBoxes.archivedHabitBox, habit.id, updatedHabit);
+            }
+            
+            migratedCount++;
+            LogHelper.shared.debugPrint('✅ Migrated completionTime for habit: ${habit.habitName} (${timeToMigrate.toHHMM()})');
+          }
+        }
+      }
+      
+      LogHelper.shared.debugPrint('✅ CompletionTime migration completed. Migrated $migratedCount habit(s).');
+      
+      // Export updated habits to widget
+      await _exportHabitsForWidget();
+    } catch (e, stackTrace) {
+      LogHelper.shared.errorPrint('❌ Error during completionTime migration: $e');
+      LogHelper.shared.errorPrint('Stack trace: $stackTrace');
+    }
+  }
 }

@@ -319,6 +319,10 @@
         "formation_probability_description": "La Probabilité de Formation montre la probabilité que votre habitude devienne automatique basée sur votre taux de completion actuel. Des probabilités plus élevées signifient que votre habitude est plus susceptible de tenir de façon permanente.",
         "formation_probability_details": "Cette probabilité est calculée en utilisant vos modèles de constance et votre taux de completion. La recherche montre qu'il faut en moyenne 66 jours de pratique régulière pour qu'une habitude devienne automatique."
     },
+    "home": {
+        "long_press_to_move": "Maintenez appuyé pour déplacer • Appuyez pour les détails",
+        "release_to_place": "Relâchez pour placer"
+    },
     "habit": {
         "add_habit": "Ajouter une habitude",
         "edit_habit": "Modifier l'habitude",
@@ -362,7 +366,10 @@
             "description": "Les rappels sont optionnels mais fortement recommandés. Ils vous aident à rester constant en vous notifiant quand il est temps de terminer votre habitude.",
             "daily_target_header": "Objectif quotidien par jour",
             "daily_target_footer": "Combien de fois voulez-vous terminer cette habitude chaque jour ?",
-            "completions_per_day": "Complétions/jour"
+            "completions_per_day": "Complétions/jour",
+            "completion_time_title": "Heure d'achèvement",
+            "completion_time_description": "Définissez une heure à laquelle vous terminez généralement cette habitude. Elle sera affichée sur la page principale et est séparée des rappels.",
+            "completion_time_select": "Sélectionner l'heure d'achèvement"
         },
         "difficulty": {
             "title": "Difficulté",

@@ -3,6 +3,7 @@ import 'package:habitform/features/habit_emoji/emoji_picker_button.dart';
 
 import '/core/core.dart';
 import '/models/models.dart';
+import '../create_habit/widgets/step_widgets/completion_time_widget.dart';
 import '../habit_category/widget/category_picker_button.dart';
 import '../habit_color/color_picker_widget.dart';
 import '../habit_color/provider/habit_color_provider.dart';
@@ -180,6 +181,19 @@ class EditHabitPage extends ConsumerWidget {
                               ],
                             ),
                           ],
+                        );
+                      },
+                    ),
+
+                    // Completion Time
+                    Consumer(
+                      builder: (context, ref, child) {
+                        final editHabitState = ref.watch(editHabitProvider);
+                        return CompletionTimeWidget(
+                          initialTime: editHabitState?.completionTime,
+                          onCompletionTimeChanged: (completionTime) {
+                            ref.read(editHabitProvider.notifier).updateCompletionTime(completionTime);
+                          },
                         );
                       },
                     ),

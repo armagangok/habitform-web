@@ -318,6 +318,10 @@
         "formation_probability_description": "形成確率は、現在の完了率に基づいて習慣が自動的になる可能性を示します。確率が高いほど、習慣が永続的に定着する可能性が高くなります。",
         "formation_probability_details": "この確率は一貫性パターンと完了率を使用して計算されます。研究によると、習慣が自動的になるまで平均66日間の定期的な練習が必要です。"
     },
+    "home": {
+        "long_press_to_move": "長押しして移動 • タップで詳細を表示",
+        "release_to_place": "離して配置"
+    },
     "habit": {
         "add_habit": "習慣を追加",
         "edit_habit": "習慣を編集",
@@ -361,7 +365,10 @@
             "description": "リマインダーは任意ですが、強く推奨されます。習慣を完了する時間を知らせることで一貫性を保つのに役立ちます。",
             "daily_target_header": "1日の目標",
             "daily_target_footer": "この習慣を1日に何回完了したいですか？",
-            "completions_per_day": "完了/日"
+            "completions_per_day": "完了/日",
+            "completion_time_title": "完了時間",
+            "completion_time_description": "通常この習慣を完了する時間を設定します。これはメインページに表示され、リマインダーとは別です。",
+            "completion_time_select": "完了時間を選択"
         },
         "difficulty": {
             "title": "難易度",

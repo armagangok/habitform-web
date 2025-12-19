@@ -116,6 +116,26 @@ class CodegenLoader extends AssetLoader{
       "title": "HabitForm Ti Aiuta A ...",
       "subtitle": "Costruisci abitudini durature con monitoraggio intelligente e approfondimenti personalizzati",
       "features": {
+        "habit_map": {
+          "title": "Mappa delle Abitudini",
+          "description": "Visualizza la tua rete di abitudini e vedi come le abitudini si collegano. Costruisci catene di abitudini correlate e comprendi le relazioni che rafforzano la tua routine."
+        },
+        "habit_probability": {
+          "title": "Probabilità Abitudine",
+          "description": "Vedi esattamente quanto è probabile che tu abbia successo con ogni abitudine. Ottieni approfondimenti personalizzati che ti aiutano a rimanere motivato e costruire abitudini durature."
+        },
+        "goal_setting": {
+          "title": "Impostazione Obiettivi",
+          "description": "Pianificazione basata sulla scienza che si adatta alla difficoltà: le abitudini più facili si formano più velocemente, quelle più difficili richiedono più tempo—mantenendo gli obiettivi realistici."
+        },
+        "customizable": {
+          "title": "Personalizzabile",
+          "description": "Rendi HabitForm veramente tuo. Scegli colori, temi e layout che corrispondono alla tua personalità e ti tengono coinvolto."
+        },
+        "data_management": {
+          "title": "Gestione Dati",
+          "description": "Esporta i dati delle tue abitudini in file CSV per backup o trasferimento su un altro dispositivo."
+        },
         "smart_tracking": {
           "title": "Monitoraggio Abitudini Intelligente",
           "description": "Tieni traccia delle tue abitudini con promemoria intelligenti e visualizzazione dei progressi. Guarda le tue serie crescere e celebra ogni traguardo.",
@@ -143,9 +163,40 @@ class CodegenLoader extends AssetLoader{
           "sub_features_0": "Design Personalizzati",
           "sub_features_1": "Condivisione Progressi",
           "sub_features_2": "Immagini Successi"
+        },
+        "home_widget": {
+          "title": "Widget Home",
+          "description": "Traccia le tue abitudini senza aprire l'app. Completa i tuoi obiettivi quotidiani direttamente dalla schermata home del tuo iPhone in pochi secondi.",
+          "sub_features_0": "Accesso Istantaneo",
+          "sub_features_1": "Risparmia Tempo Quotidiano",
+          "sub_features_2": "Non Dimenticare Mai",
+          "widget_config": {
+            "small_title": "Tracciatore Abitudini",
+            "small_description": "Traccia le tue abitudini quotidiane con contatore di serie",
+            "medium_title": "Vista Abitudini 7 Giorni",
+            "medium_description": "Visualizza i tuoi progressi delle abitudini negli ultimi 7 giorni",
+            "large_title": "Mappa Termica Abitudini",
+            "large_description": "Mappa termica stile GitHub che mostra il completamento delle tue abitudini nel tempo",
+            "grid_title": "Griglia Abitudini 60 Giorni",
+            "grid_description": "Visualizza i tuoi progressi delle abitudini negli ultimi 60 giorni in una griglia compatta"
+          },
+          "empty_state": {
+            "no_habits": "Nessuna Abitudine",
+            "create_habit_hint": "Crea un'abitudine nell'app per vederla qui"
+          },
+          "stats": {
+            "current_streak": "Serie Attuale",
+            "longest_streak": "Serie Più Lunga",
+            "completed": "Completati",
+            "total_days": "Giorni Totali",
+            "days": "giorni"
+          },
+          "pro_restriction": {
+            "upgrade_pro": "Passa a PRO"
+          }
         }
       },
-      "probability_score": "Punteggio Formazione",
+      "formation_probability": "Probabilità di Formazione",
       "previous": "Precedente",
       "next": "Prossimo",
       "start": "Inizia"
@@ -190,6 +241,15 @@ class CodegenLoader extends AssetLoader{
     },
     "achievement": {
       "first_habit_message": "Ottimo lavoro! Hai completato la tua prima abitudine nell'onboarding!"
+    },
+    "reward_rating": {
+      "title": "Come ti sei sentito?",
+      "description": "Valuta quanto è stato piacevole questo completamento. Questo ci aiuta a capire meglio la formazione delle tue abitudini.",
+      "low": "Basso",
+      "normal": "Normale",
+      "high": "Alto",
+      "very_high": "Molto Alto",
+      "continue": "Continua"
     }
   },
   "habit_detail": {
@@ -270,9 +330,13 @@ class CodegenLoader extends AssetLoader{
     "achievement_perfectionist_description": "Tasso di successo del {{rate}}%!",
     "heatmap_stats_description": "{{days}} giorni completati nell'ultimo anno",
     "last_7_days": "Ultimi 7 Giorni",
-    "probability_info_title": "Punteggio Formazione",
-    "probability_info_description": "Il Punteggio di Formazione mostra quanto è probabile che la tua abitudine diventi automatica in base al tuo attuale tasso di completamento. Punteggi più alti significano che è più probabile che la tua abitudine resti permanentemente.",
-    "probability_info_details": "Questo punteggio è calcolato utilizzando i tuoi modelli di costanza e tasso di completamento. La ricerca mostra che occorrono in media 66 giorni di pratica regolare affinché un'abitudine diventi automatica."
+    "formation_probability_title": "Probabilità di Formazione",
+    "formation_probability_description": "La Probabilità di Formazione mostra quanto è probabile che la tua abitudine diventi automatica in base al tuo attuale tasso di completamento. Probabilità più alte significano che è più probabile che la tua abitudine resti permanentemente.",
+    "formation_probability_details": "Questa probabilità è calcolata utilizzando i tuoi modelli di costanza e tasso di completamento. La ricerca mostra che occorrono in media 66 giorni di pratica regolare affinché un'abitudine diventi automatica."
+  },
+  "home": {
+    "long_press_to_move": "Tieni premuto per spostare • Tocca per i dettagli",
+    "release_to_place": "Rilascia per posizionare"
   },
   "habit": {
     "add_habit": "Aggiungi Abitudine",
@@ -317,7 +381,10 @@ class CodegenLoader extends AssetLoader{
       "description": "I promemoria sono opzionali ma altamente consigliati. Ti aiutano a restare coerente notificandoti quando è il momento di completare la tua abitudine.",
       "daily_target_header": "Obiettivo giornaliero per giorno",
       "daily_target_footer": "Quante volte vuoi completare questa abitudine ogni giorno?",
-      "completions_per_day": "Completamenti/giorno"
+      "completions_per_day": "Completamenti/giorno",
+      "completion_time_title": "Orario di completamento",
+      "completion_time_description": "Imposta un orario in cui completi generalmente questa abitudine. Verrà visualizzato nella pagina principale ed è separato dai promemoria.",
+      "completion_time_select": "Seleziona orario di completamento"
     },
     "difficulty": {
       "title": "Difficoltà",
@@ -606,7 +673,8 @@ class CodegenLoader extends AssetLoader{
       "demo_data_message": "Questi sono dati dimostrativi, effettua l'upgrade per sbloccare i dati reali",
       "upgrade_button": "Effettua l'Upgrade"
     },
-    "probability_score": "Punteggio Probabilità",
+    "formation_probability": "Probabilità di Formazione",
+    "probability_over_time": "Probabilità nel Tempo",
     "score_breakdown": "Dettaglio Punteggio",
     "progress_status": "Stato Progressi",
     "estimated_probability_time": "Tempo Stimato di Probabilità",
@@ -847,6 +915,26 @@ static const Map<String,dynamic> _es_ES = {
       "subtitle": "Construir hábitos duraderos con seguimiento inteligente e ideas personalizadas",
       "continue": "Continuar",
       "features": {
+        "habit_map": {
+          "title": "Mapa de Hábitos",
+          "description": "Visualiza tu red de hábitos y ve cómo se conectan los hábitos. Construye cadenas de hábitos relacionados y entiende las relaciones que fortalecen tu rutina."
+        },
+        "habit_probability": {
+          "title": "Probabilidad del Hábito",
+          "description": "Ve exactamente qué tan probable es que tengas éxito con cada hábito. Obtén insights personalizados que te ayuden a mantenerte motivado y construir hábitos duraderos."
+        },
+        "goal_setting": {
+          "title": "Establecimiento de Metas",
+          "description": "Planificación basada en la ciencia que se adapta a la dificultad: los hábitos más fáciles se forman más rápido, los más difíciles tardan más—manteniendo las metas realistas."
+        },
+        "customizable": {
+          "title": "Personalizable",
+          "description": "Haz que HabitForm sea verdaderamente tuyo. Elige colores, temas y diseños que coincidan con tu personalidad y te mantengan comprometido."
+        },
+        "data_management": {
+          "title": "Gestión de Datos",
+          "description": "Exporta los datos de tus hábitos a archivos CSV para respaldo o transferencia a otro dispositivo."
+        },
         "smart_tracking": {
           "title": "Seguimiento inteligente de hábitos",
           "description": "Rastrea tus hábitos con recordatorios inteligentes y visualización de progreso. Ve cómo crecen tus rachas y celebra cada hito.",
@@ -874,9 +962,40 @@ static const Map<String,dynamic> _es_ES = {
           "sub_features_0": "Diseños personalizados",
           "sub_features_1": "Compartir progreso",
           "sub_features_2": "Imágenes de logros"
+        },
+        "home_widget": {
+          "title": "Widget de Inicio",
+          "description": "Rastrea tus hábitos sin abrir la aplicación. Completa tus objetivos diarios directamente desde la pantalla de inicio de tu iPhone en segundos.",
+          "sub_features_0": "Acceso Instantáneo",
+          "sub_features_1": "Ahorra Tiempo Diario",
+          "sub_features_2": "Nunca Olvides",
+          "widget_config": {
+            "small_title": "Rastreador de Hábitos",
+            "small_description": "Rastrea tus hábitos diarios con contador de rachas",
+            "medium_title": "Vista de Hábitos de 7 Días",
+            "medium_description": "Ve tu progreso de hábitos durante los últimos 7 días",
+            "large_title": "Mapa de Calor de Hábitos",
+            "large_description": "Mapa de calor estilo GitHub que muestra tu finalización de hábitos a lo largo del tiempo",
+            "grid_title": "Cuadrícula de Hábitos de 60 Días",
+            "grid_description": "Ve tu progreso de hábitos durante los últimos 60 días en una cuadrícula compacta"
+          },
+          "empty_state": {
+            "no_habits": "Sin Hábitos",
+            "create_habit_hint": "Crea un hábito en la aplicación para verlo aquí"
+          },
+          "stats": {
+            "current_streak": "Racha Actual",
+            "longest_streak": "Racha Más Larga",
+            "completed": "Completados",
+            "total_days": "Días Totales",
+            "days": "días"
+          },
+          "pro_restriction": {
+            "upgrade_pro": "Actualizar a PRO"
+          }
         }
       },
-      "probability_score": "Puntaje de formación",
+      "formation_probability": "Probabilidad de Formación",
       "previous": "Anterior",
       "next": "Siguiente",
       "start": "Comenzar"
@@ -921,6 +1040,15 @@ static const Map<String,dynamic> _es_ES = {
     },
     "achievement": {
       "first_habit_message": "¡Excelente trabajo! ¡Completaste tu primer hábito en la introducción!"
+    },
+    "reward_rating": {
+      "title": "¿Cómo te sentiste?",
+      "description": "Califica qué tan agradable se sintió esta realización. Esto nos ayuda a entender mejor la formación de tus hábitos.",
+      "low": "Bajo",
+      "normal": "Normal",
+      "high": "Alto",
+      "very_high": "Muy Alto",
+      "continue": "Continuar"
     }
   },
   "habit_detail": {
@@ -1001,9 +1129,13 @@ static const Map<String,dynamic> _es_ES = {
     "achievement_perfectionist_description": "¡{{rate}}% de tasa de éxito!",
     "heatmap_stats_description": "{{days}} días completados en el último año",
     "last_7_days": "Últimos 7 días",
-    "probability_info_title": "Puntaje de formación",
-    "probability_info_description": "El Puntaje de Formación muestra qué tan probable es que tu hábito se vuelva automático según tu tasa de finalización actual. Un puntaje más alto significa que es más probable que tu hábito se mantenga permanentemente.",
-    "probability_info_details": "Este puntaje se calcula usando tus patrones de consistencia y tasa de finalización. La investigación muestra que se necesitan en promedio 66 días de práctica regular para que un hábito se vuelva automático."
+    "formation_probability_title": "Probabilidad de Formación",
+    "formation_probability_description": "La Probabilidad de Formación muestra qué tan probable es que tu hábito se vuelva automático según tu tasa de finalización actual. Una probabilidad más alta significa que es más probable que tu hábito se mantenga permanentemente.",
+    "formation_probability_details": "Esta probabilidad se calcula usando tus patrones de consistencia y tasa de finalización. La investigación muestra que se necesitan en promedio 66 días de práctica regular para que un hábito se vuelva automático."
+  },
+  "home": {
+    "long_press_to_move": "Mantén presionado para mover • Toca para detalles",
+    "release_to_place": "Suelta para colocar"
   },
   "habit": {
     "add_habit": "Agregar hábito",
@@ -1048,7 +1180,10 @@ static const Map<String,dynamic> _es_ES = {
       "description": "Los recordatorios son opcionales pero muy recomendados. Te ayudan a mantenerte consistente notificándote cuando es hora de completar tu hábito.",
       "daily_target_header": "Objetivo diario por día",
       "daily_target_footer": "¿Cuántas veces quieres completar este hábito cada día?",
-      "completions_per_day": "Finalizaciones/día"
+      "completions_per_day": "Finalizaciones/día",
+      "completion_time_title": "Hora de finalización",
+      "completion_time_description": "Establece una hora en la que normalmente completas este hábito. Se mostrará en la página principal y es independiente de los recordatorios.",
+      "completion_time_select": "Seleccionar hora de finalización"
     },
     "difficulty": {
       "title": "Dificultad",
@@ -1337,7 +1472,8 @@ static const Map<String,dynamic> _es_ES = {
       "demo_data_message": "Estos son datos de demostración, actualiza para desbloquear datos reales",
       "upgrade_button": "Actualizar"
     },
-    "probability_score": "Puntaje de Probabilidad",
+    "formation_probability": "Probabilidad de Formación",
+    "probability_over_time": "Probabilidad a lo Largo del Tiempo",
     "score_breakdown": "Desglose del puntaje",
     "progress_status": "Estado del progreso",
     "estimated_probability_time": "Tiempo Estimado de Probabilidad",
@@ -1577,6 +1713,26 @@ static const Map<String,dynamic> _ja_JP = {
       "title": "HabitFormがあなたをサポート...",
       "subtitle": "スマートトラッキングとパーソナライズされたインサイトで持続的な習慣を構築",
       "features": {
+        "habit_map": {
+          "title": "習慣マップ",
+          "description": "習慣ネットワークを視覚化し、習慣がどのように接続されているかを確認します。関連する習慣のチェーンを構築し、ルーティンを強化する関係を理解します。"
+        },
+        "habit_probability": {
+          "title": "習慣確率",
+          "description": "各習慣でどれだけ成功する可能性があるかを正確に確認します。モチベーションを維持し、持続的な習慣を構築するのに役立つパーソナライズされたインサイトを取得します。"
+        },
+        "goal_setting": {
+          "title": "目標設定",
+          "description": "難易度に適応する科学に基づいた計画：簡単な習慣はより速く形成され、難しい習慣はより長くかかります—目標を現実的に保ちます。"
+        },
+        "customizable": {
+          "title": "カスタマイズ可能",
+          "description": "HabitFormを本当にあなたのものにしてください。あなたの個性に合い、あなたを引き付ける色、テーマ、レイアウトを選択してください。"
+        },
+        "data_management": {
+          "title": "データ管理",
+          "description": "習慣データをCSVファイルにエクスポートして、バックアップまたは別のデバイスに転送します。"
+        },
         "smart_tracking": {
           "title": "スマート習慣トラッキング",
           "description": "インテリジェントなリマインダーと進捗の可視化で習慣を追跡。ストリークの成長を見て、すべてのマイルストーンを祝いましょう。",
@@ -1604,9 +1760,40 @@ static const Map<String,dynamic> _ja_JP = {
           "sub_features_0": "カスタムデザイン",
           "sub_features_1": "進捗共有",
           "sub_features_2": "成果画像"
+        },
+        "home_widget": {
+          "title": "ホームウィジェット",
+          "description": "アプリを開かずに習慣を追跡。iPhoneのホーム画面から直接、数秒で日々の目標を達成。",
+          "sub_features_0": "即座にアクセス",
+          "sub_features_1": "毎日時間節約",
+          "sub_features_2": "忘れることなし",
+          "widget_config": {
+            "small_title": "習慣トラッカー",
+            "small_description": "連続カウンターで日々の習慣を追跡",
+            "medium_title": "7日間習慣ビュー",
+            "medium_description": "過去7日間の習慣進捗を表示",
+            "large_title": "習慣ヒートマップ",
+            "large_description": "GitHubスタイルのヒートマップで時間経過に伴う習慣完了を表示",
+            "grid_title": "60日間習慣グリッド",
+            "grid_description": "過去60日間の習慣進捗をコンパクトなグリッドで表示"
+          },
+          "empty_state": {
+            "no_habits": "習慣なし",
+            "create_habit_hint": "ここに表示するにはアプリで習慣を作成してください"
+          },
+          "stats": {
+            "current_streak": "現在の連続",
+            "longest_streak": "最長連続",
+            "completed": "完了",
+            "total_days": "総日数",
+            "days": "日"
+          },
+          "pro_restriction": {
+            "upgrade_pro": "PROにアップグレード"
+          }
         }
       },
-      "probability_score": "形成スコア",
+      "formation_probability": "形成確率",
       "previous": "前へ",
       "next": "次へ",
       "start": "スタート"
@@ -1651,6 +1838,15 @@ static const Map<String,dynamic> _ja_JP = {
     },
     "achievement": {
       "first_habit_message": "素晴らしい！オンボーディングで最初の習慣を完了しました！"
+    },
+    "reward_rating": {
+      "title": "どのように感じましたか？",
+      "description": "この完了がどれほど楽しかったかを評価してください。これにより、習慣形成をよりよく理解できます。",
+      "low": "低い",
+      "normal": "普通",
+      "high": "高い",
+      "very_high": "非常に高い",
+      "continue": "続ける"
     }
   },
   "habit_detail": {
@@ -1731,9 +1927,13 @@ static const Map<String,dynamic> _ja_JP = {
     "achievement_perfectionist_description": "{{rate}}%成功率！",
     "heatmap_stats_description": "過去1年で{{days}}日完了",
     "last_7_days": "過去7日間",
-    "probability_info_title": "形成スコア",
-    "probability_info_description": "形成スコアは、現在の完了率に基づいて習慣が自動的になる可能性を示します。スコアが高いほど、習慣が永続的に定着する可能性が高くなります。",
-    "probability_info_details": "このスコアは一貫性パターンと完了率を使用して計算されます。研究によると、習慣が自動的になるまで平均66日間の定期的な練習が必要です。"
+    "formation_probability_title": "形成確率",
+    "formation_probability_description": "形成確率は、現在の完了率に基づいて習慣が自動的になる可能性を示します。確率が高いほど、習慣が永続的に定着する可能性が高くなります。",
+    "formation_probability_details": "この確率は一貫性パターンと完了率を使用して計算されます。研究によると、習慣が自動的になるまで平均66日間の定期的な練習が必要です。"
+  },
+  "home": {
+    "long_press_to_move": "長押しして移動 • タップで詳細",
+    "release_to_place": "離して配置"
   },
   "habit": {
     "add_habit": "習慣を追加",
@@ -1778,7 +1978,10 @@ static const Map<String,dynamic> _ja_JP = {
       "description": "リマインダーは任意ですが、強く推奨されます。習慣を完了する時間を知らせることで一貫性を保つのに役立ちます。",
       "daily_target_header": "1日の目標",
       "daily_target_footer": "この習慣を1日に何回完了したいですか？",
-      "completions_per_day": "完了/日"
+      "completions_per_day": "完了/日",
+      "completion_time_title": "完了時間",
+      "completion_time_description": "通常この習慣を完了する時間を設定します。これはメインページに表示され、リマインダーとは別です。",
+      "completion_time_select": "完了時間を選択"
     },
     "difficulty": {
       "title": "難易度",
@@ -2067,7 +2270,8 @@ static const Map<String,dynamic> _ja_JP = {
       "demo_data_message": "これはデモデータです。実際のデータをアンロックするにはアップグレードしてください",
       "upgrade_button": "アップグレード"
     },
-    "probability_score": "確率スコア",
+    "formation_probability": "形成確率",
+    "probability_over_time": "時間経過による確率",
     "score_breakdown": "スコア内訳",
     "progress_status": "進捗ステータス",
     "estimated_probability_time": "推定確率時間",
@@ -2309,6 +2513,26 @@ static const Map<String,dynamic> _tr_TR = {
       "subtitle": "Akıllı takip ve kişiselleştirilmiş içgörülerle kalıcı alışkanlıklar oluşturun",
       "continue": "Devam Et",
       "features": {
+        "habit_map": {
+          "title": "Alışkanlık Haritası",
+          "description": "Alışkanlık ağınızı görselleştirin ve alışkanlıkların nasıl bağlandığını görün. İlgili alışkanlıklardan zincirler oluşturun ve rutininizi güçlendiren ilişkileri anlayın."
+        },
+        "habit_probability": {
+          "title": "Alışkanlık Olasılığı",
+          "description": "Her alışkanlıkla ne kadar başarılı olacağınızı tam olarak görün. Sizi motive tutan ve kalıcı alışkanlıklar oluşturmanıza yardımcı olan kişiselleştirilmiş içgörüler edinin."
+        },
+        "goal_setting": {
+          "title": "Hedef Belirleme",
+          "description": "Zorluğa göre uyarlanan bilim tabanlı planlama: kolay alışkanlıklar daha hızlı, zor olanlar daha uzun sürer—hedefleri gerçekçi tutar."
+        },
+        "customizable": {
+          "title": "Özelleştirilebilir",
+          "description": "HabitForm'u gerçekten sizin yapın. Kişiliğinize uyan ve sizi meşgul tutan renkler, temalar ve düzenler seçin."
+        },
+        "data_management": {
+          "title": "Veri Yönetimi",
+          "description": "Alışkanlık verilerinizi yedeklemek veya başka bir cihaza aktarmak için CSV dosyalarına aktarın."
+        },
         "smart_tracking": {
           "title": "Akıllı Alışkanlık Takibi",
           "description": "Alışkanlıklarınızı akıllı hatırlatıcılar ve ilerleme görselleştirmesi ile takip edin. Serilerinizin büyümesini görün ve her dönüm noktasını kutlayın.",
@@ -2336,9 +2560,40 @@ static const Map<String,dynamic> _tr_TR = {
           "sub_features_0": "Özel Tasarımlar",
           "sub_features_1": "İlerleme Paylaşımı",
           "sub_features_2": "Başarı Görselleri"
+        },
+        "home_widget": {
+          "title": "Ana Ekran Widget'ı",
+          "description": "Uygulamayı açmadan alışkanlıklarınızı takip edin. Ana ekranınızdan günlük hedeflerinizi saniyeler içinde tamamlayın.",
+          "sub_features_0": "Anında Erişim",
+          "sub_features_1": "Günlük Zaman Tasarrufu",
+          "sub_features_2": "Asla Unutma",
+          "widget_config": {
+            "small_title": "Alışkanlık Takipçisi",
+            "small_description": "Seri sayacı ile günlük alışkanlıklarınızı takip edin",
+            "medium_title": "7 Günlük Alışkanlık Görünümü",
+            "medium_description": "Son 7 günlük alışkanlık ilerlemenizi görüntüleyin",
+            "large_title": "Alışkanlık Isı Haritası",
+            "large_description": "Zaman içindeki alışkanlık tamamlama durumunuzu GitHub tarzı ısı haritası ile görün",
+            "grid_title": "60 Günlük Alışkanlık Izgarası",
+            "grid_description": "Son 60 günlük alışkanlık ilerlemenizi kompakt bir ızgarada görüntüleyin"
+          },
+          "empty_state": {
+            "no_habits": "Alışkanlık Yok",
+            "create_habit_hint": "Burada görmek için uygulamada bir alışkanlık oluşturun"
+          },
+          "stats": {
+            "current_streak": "Mevcut Seri",
+            "longest_streak": "En Uzun Seri",
+            "completed": "Tamamlanan",
+            "total_days": "Toplam Gün",
+            "days": "gün"
+          },
+          "pro_restriction": {
+            "upgrade_pro": "PRO'ya Yükselt"
+          }
         }
       },
-      "probability_score": "Oluşum Skoru",
+      "formation_probability": "Oluşum Olasılığı",
       "previous": "Önceki",
       "next": "Sonraki",
       "start": "Başla"
@@ -2383,6 +2638,15 @@ static const Map<String,dynamic> _tr_TR = {
     },
     "achievement": {
       "first_habit_message": "Harika iş! İlk alışkanlığınızı başlangıçta tamamladınız!"
+    },
+    "reward_rating": {
+      "title": "Nasıl hissettiniz?",
+      "description": "Bu tamamlamanın ne kadar keyifli hissettirdiğini değerlendirin. Bu, alışkanlık oluşumunuzu daha iyi anlamamıza yardımcı olur.",
+      "low": "Düşük",
+      "normal": "Normal",
+      "high": "Yüksek",
+      "very_high": "Çok Yüksek",
+      "continue": "Devam Et"
     }
   },
   "habit_detail": {
@@ -2463,9 +2727,13 @@ static const Map<String,dynamic> _tr_TR = {
     "achievement_perfectionist_description": "%{{rate}} başarı oranı!",
     "heatmap_stats_description": "Geçen yıl {{days}} gün tamamlandı",
     "last_7_days": "Son 7 Gün",
-    "probability_info_title": "Oluşum Skoru",
-    "probability_info_description": "Oluşum Skoru, alışkanlığınızın mevcut tamamlama oranınıza göre otomatik hale gelme olasılığını gösterir. Daha yüksek skorlar, alışkanlığınızın kalıcı olma olasılığının daha yüksek olduğu anlamına gelir.",
-    "probability_info_details": "Bu skor, tutarlılık kalıplarınız ve tamamlama oranınız kullanılarak hesaplanır. Araştırmalar, bir alışkanlığın otomatik hale gelmesi için ortalama 66 günlük düzenli pratik gerektiğini göstermektedir."
+    "formation_probability_title": "Oluşum Olasılığı",
+    "formation_probability_description": "Oluşum Olasılığı, alışkanlığınızın mevcut tamamlama oranınıza göre otomatik hale gelme olasılığını gösterir. Daha yüksek olasılıklar, alışkanlığınızın kalıcı olma olasılığının daha yüksek olduğu anlamına gelir.",
+    "formation_probability_details": "Bu olasılık, tutarlılık kalıplarınız ve tamamlama oranınız kullanılarak hesaplanır. Araştırmalar, bir alışkanlığın otomatik hale gelmesi için ortalama 66 günlük düzenli pratik gerektiğini göstermektedir."
+  },
+  "home": {
+    "long_press_to_move": "Uzun basarak hareket ettir • Detaylar için dokun",
+    "release_to_place": "Yerleştirmek için bırak"
   },
   "habit": {
     "add_habit": "Alışkanlık Ekle",
@@ -2510,7 +2778,10 @@ static const Map<String,dynamic> _tr_TR = {
       "description": "Hatırlatıcılar isteğe bağlıdır ancak şiddetle tavsiye edilir. Alışkanlığınızı tamamlama zamanı geldiğinde sizi bilgilendirerek tutarlı kalmanıza yardımcı olurlar.",
       "daily_target_header": "Günlük hedef",
       "daily_target_footer": "Bu alışkanlığı her gün kaç kez tamamlamak istersiniz?",
-      "completions_per_day": "Tamamlama/gün"
+      "completions_per_day": "Tamamlama/gün",
+      "completion_time_title": "Tamamlama Zamanı",
+      "completion_time_description": "Bu alışkanlığı genellikle hangi saatte tamamladığınızı belirleyin. Bu zaman ana sayfada gösterilecek ve hatırlatıcılardan ayrıdır.",
+      "completion_time_select": "Tamamlama zamanı seç"
     },
     "difficulty": {
       "title": "Zorluk",
@@ -2799,7 +3070,8 @@ static const Map<String,dynamic> _tr_TR = {
       "demo_data_message": "Bu demo verisidir, gerçek verileri açmak için yükseltin",
       "upgrade_button": "Yükselt"
     },
-    "probability_score": "Oluşum Skoru",
+    "formation_probability": "Oluşum Olasılığı",
+    "probability_over_time": "Zaman İçinde Olasılık",
     "score_breakdown": "Skor Dağılımı",
     "progress_status": "İlerleme Durumu",
     "estimated_probability_time": "Estimated Probability Time",
@@ -3039,6 +3311,26 @@ static const Map<String,dynamic> _ar_SA = {
       "title": "HabitForm يساعدك على ...",
       "subtitle": "ابنِ عادات دائمة بتتبع ذكي ورؤى مخصصة",
       "features": {
+        "habit_map": {
+          "title": "خريطة العادات",
+          "description": "تصور شبكة عاداتك وشاهد كيف تتصل العادات. أنشئ سلاسل من العادات ذات الصلة وافهم العلاقات التي تقوي روتينك."
+        },
+        "habit_probability": {
+          "title": "احتمالية العادة",
+          "description": "شاهد بالضبط مدى احتمالية نجاحك مع كل عادة. احصل على رؤى مخصصة تساعدك على البقاء متحفزًا وبناء عادات دائمة."
+        },
+        "goal_setting": {
+          "title": "تحديد الأهداف",
+          "description": "تخطيط قائم على العلم يتكيف مع الصعوبة: العادات الأسهل تتشكل بشكل أسرع، والأصعب تستغرق وقتًا أطول—مع الحفاظ على الأهداف واقعية."
+        },
+        "customizable": {
+          "title": "قابل للتخصيص",
+          "description": "اجعل HabitForm ملكك حقًا. اختر الألوان والسمات والتخطيطات التي تطابق شخصيتك وتجعلك منخرطًا."
+        },
+        "data_management": {
+          "title": "إدارة البيانات",
+          "description": "صدّر بيانات عاداتك إلى ملفات CSV للنسخ الاحتياطي أو النقل إلى جهاز آخر."
+        },
         "smart_tracking": {
           "title": "تتبع عادات ذكي",
           "description": "تتبّع عاداتك بتذكيرات ذكية وتمثيل بصري للتقدم. شاهد سلاسل إنجازاتك تنمو واحتفل بكل محطة.",
@@ -3066,9 +3358,40 @@ static const Map<String,dynamic> _ar_SA = {
           "sub_features_0": "تصاميم مخصصة",
           "sub_features_1": "مشاركة التقدم",
           "sub_features_2": "صور الإنجازات"
+        },
+        "home_widget": {
+          "title": "ودجت الشاشة الرئيسية",
+          "description": "تتبع عاداتك دون فتح التطبيق. أكمل أهدافك اليومية مباشرة من شاشة آيفون الرئيسية في ثوانٍ.",
+          "sub_features_0": "وصول فوري",
+          "sub_features_1": "وفر الوقت يومياً",
+          "sub_features_2": "لا تنس أبداً",
+          "widget_config": {
+            "small_title": "متتبع العادات",
+            "small_description": "تتبع عاداتك اليومية مع عداد السلسلة",
+            "medium_title": "عرض العادات لـ 7 أيام",
+            "medium_description": "عرض تقدم عاداتك خلال آخر 7 أيام",
+            "large_title": "خريطة حرارية للعادات",
+            "large_description": "خريطة حرارية بأسلوب GitHub تُظهر إكمال عاداتك عبر الوقت",
+            "grid_title": "شبكة العادات لـ 60 يوماً",
+            "grid_description": "عرض تقدم عاداتك خلال آخر 60 يوماً في شبكة مدمجة"
+          },
+          "empty_state": {
+            "no_habits": "لا توجد عادات",
+            "create_habit_hint": "أنشئ عادة في التطبيق لرؤيتها هنا"
+          },
+          "stats": {
+            "current_streak": "السلسلة الحالية",
+            "longest_streak": "أطول سلسلة",
+            "completed": "مكتمل",
+            "total_days": "إجمالي الأيام",
+            "days": "أيام"
+          },
+          "pro_restriction": {
+            "upgrade_pro": "ترقية إلى PRO"
+          }
         }
       },
-      "probability_score": "درجة التشكّل",
+      "formation_probability": "احتمالية التشكّل",
       "previous": "السابق",
       "next": "التالي",
       "start": "ابدأ"
@@ -3113,6 +3436,15 @@ static const Map<String,dynamic> _ar_SA = {
     },
     "achievement": {
       "first_habit_message": "عمل رائع! لقد أكملت أول عادة لك في مرحلة البدء!"
+    },
+    "reward_rating": {
+      "title": "كيف شعرت؟",
+      "description": "قيم مدى متعة هذا الإنجاز. يساعدنا هذا على فهم تكوين عاداتك بشكل أفضل.",
+      "low": "منخفض",
+      "normal": "عادي",
+      "high": "عالي",
+      "very_high": "عالي جداً",
+      "continue": "متابعة"
     }
   },
   "habit_detail": {
@@ -3193,9 +3525,13 @@ static const Map<String,dynamic> _ar_SA = {
     "achievement_perfectionist_description": "معدل نجاح {{rate}}%!",
     "heatmap_stats_description": "تم إكمال {{days}} يومًا خلال السنة الماضية",
     "last_7_days": "آخر 7 أيام",
-    "probability_info_title": "درجة التشكّل",
-    "probability_info_description": "تُظهر درجة التشكّل مدى احتمالية أن تصبح عادتك تلقائية بناءً على معدل الإكمال الحالي. كلما زادت الدرجة زادت إمكانية ترسخ العادة بشكل دائم.",
-    "probability_info_details": "تُحتسب هذه الدرجة باستخدام أنماط الاتساق ومعدل الإكمال. تُظهر الأبحاث أن الأمر يستغرق في المتوسط 66 يومًا من الممارسة المنتظمة لتصبح العادة تلقائية."
+    "formation_probability_title": "احتمالية التشكّل",
+    "formation_probability_description": "تُظهر احتمالية التشكّل مدى احتمالية أن تصبح عادتك تلقائية بناءً على معدل الإكمال الحالي. كلما زادت الاحتمالية زادت إمكانية ترسخ العادة بشكل دائم.",
+    "formation_probability_details": "تُحتسب هذه الاحتمالية باستخدام أنماط الاتساق ومعدل الإكمال. تُظهر الأبحاث أن الأمر يستغرق في المتوسط 66 يومًا من الممارسة المنتظمة لتصبح العادة تلقائية."
+  },
+  "home": {
+    "long_press_to_move": "اضغط مطولاً للتحريك • اضغط للتفاصيل",
+    "release_to_place": "اترك لوضع"
   },
   "habit": {
     "add_habit": "إضافة عادة",
@@ -3240,7 +3576,10 @@ static const Map<String,dynamic> _ar_SA = {
       "description": "التذكيرات اختيارية لكنها موصى بها بشدة. فهي تساعدك على الاستمرارية عبر تنبيهك عندما يحين وقت إكمال العادة.",
       "daily_target_header": "الهدف اليومي",
       "daily_target_footer": "كم مرة تريد إكمال هذه العادة يوميًا؟",
-      "completions_per_day": "مرات/يوم"
+      "completions_per_day": "مرات/يوم",
+      "completion_time_title": "وقت الإكمال",
+      "completion_time_description": "حدد وقتًا تكمل فيه هذه العادة عادةً. سيتم عرضه على الصفحة الرئيسية وهو منفصل عن التذكيرات.",
+      "completion_time_select": "اختر وقت الإكمال"
     },
     "difficulty": {
       "title": "الصعوبة",
@@ -3529,7 +3868,8 @@ static const Map<String,dynamic> _ar_SA = {
       "demo_data_message": "هذه بيانات تجريبية. قم بالترقية لفتح البيانات الحقيقية",
       "upgrade_button": "ترقية"
     },
-    "probability_score": "درجة التشكّل",
+    "formation_probability": "احتمالية التشكّل",
+    "probability_over_time": "الاحتمالية مع مرور الوقت",
     "score_breakdown": "تفصيل الدرجات",
     "progress_status": "حالة التقدم",
     "estimated_probability_time": "Estimated Probability Time",
@@ -3769,6 +4109,26 @@ static const Map<String,dynamic> _zh_Hans = {
       "title": "HabitForm 帮助你...",
       "subtitle": "通过智能追踪和个性化洞察建立持久的习惯",
       "features": {
+        "habit_map": {
+          "title": "习惯地图",
+          "description": "可视化您的习惯网络，了解习惯如何连接。构建相关习惯链，理解使您的日常更强大的关系。"
+        },
+        "habit_probability": {
+          "title": "习惯概率",
+          "description": "准确了解您在每个习惯上成功的可能性。获得个性化洞察，帮助您保持动力并建立持久的习惯。"
+        },
+        "goal_setting": {
+          "title": "目标设定",
+          "description": "基于科学的规划，适应难度：简单的习惯形成更快，困难的习惯需要更长时间—保持目标现实。"
+        },
+        "customizable": {
+          "title": "可定制",
+          "description": "让 HabitForm 真正属于您。选择与您的个性匹配并让您保持参与的颜色、主题和布局。"
+        },
+        "data_management": {
+          "title": "数据管理",
+          "description": "将您的习惯数据导出到 CSV 文件以进行备份或传输到另一台设备。"
+        },
         "smart_tracking": {
           "title": "智能习惯追踪",
           "description": "通过智能提醒和进度可视化追踪你的习惯。看着你的连续天数增长，庆祝每一个里程碑。",
@@ -3796,9 +4156,40 @@ static const Map<String,dynamic> _zh_Hans = {
           "sub_features_0": "自定义设计",
           "sub_features_1": "进度分享",
           "sub_features_2": "成就图片"
+        },
+        "home_widget": {
+          "title": "主屏幕小部件",
+          "description": "无需打开应用即可追踪习惯。在几秒钟内直接从iPhone主屏幕完成你的日常目标。",
+          "sub_features_0": "即时访问",
+          "sub_features_1": "每日节省时间",
+          "sub_features_2": "永不忘记",
+          "widget_config": {
+            "small_title": "习惯追踪器",
+            "small_description": "使用连续计数追踪你的日常习惯",
+            "medium_title": "7天习惯视图",
+            "medium_description": "查看过去7天的习惯进度",
+            "large_title": "习惯热力图",
+            "large_description": "GitHub风格的热力图显示你随时间的习惯完成情况",
+            "grid_title": "60天习惯网格",
+            "grid_description": "在紧凑网格中查看过去60天的习惯进度"
+          },
+          "empty_state": {
+            "no_habits": "无习惯",
+            "create_habit_hint": "在应用中创建习惯以在此处查看"
+          },
+          "stats": {
+            "current_streak": "当前连续",
+            "longest_streak": "最长连续",
+            "completed": "已完成",
+            "total_days": "总天数",
+            "days": "天"
+          },
+          "pro_restriction": {
+            "upgrade_pro": "升级到PRO"
+          }
         }
       },
-      "probability_score": "养成分数",
+      "formation_probability": "形成概率",
       "previous": "上一页",
       "next": "下一页",
       "start": "开始"
@@ -3843,6 +4234,15 @@ static const Map<String,dynamic> _zh_Hans = {
     },
     "achievement": {
       "first_habit_message": "太棒了！你在引导中完成了第一个习惯！"
+    },
+    "reward_rating": {
+      "title": "您感觉如何？",
+      "description": "评价这次完成的感觉有多愉快。这有助于我们更好地了解您的习惯形成。",
+      "low": "低",
+      "normal": "正常",
+      "high": "高",
+      "very_high": "非常高",
+      "continue": "继续"
     }
   },
   "habit_detail": {
@@ -3923,9 +4323,13 @@ static const Map<String,dynamic> _zh_Hans = {
     "achievement_perfectionist_description": "{{rate}}% 成功率！",
     "heatmap_stats_description": "去年完成了 {{days}} 天",
     "last_7_days": "最近7天",
-    "probability_info_title": "养成分数",
-    "probability_info_description": "养成分数显示基于你当前完成率，你的习惯变得自动化的可能性。分数越高意味着你的习惯越可能永久坚持。",
-    "probability_info_details": "这个分数是根据你的一致性模式和完成率计算的。研究表明，习惯平均需要66天的规律练习才能变得自动化。"
+    "formation_probability_title": "形成概率",
+    "formation_probability_description": "形成概率显示基于你当前完成率，你的习惯变得自动化的可能性。概率越高意味着你的习惯越可能永久坚持。",
+    "formation_probability_details": "这个概率是根据你的一致性模式和完成率计算的。研究表明，习惯平均需要66天的规律练习才能变得自动化。"
+  },
+  "home": {
+    "long_press_to_move": "长按移动 • 点击查看详情",
+    "release_to_place": "释放以放置"
   },
   "habit": {
     "add_habit": "添加习惯",
@@ -3970,7 +4374,10 @@ static const Map<String,dynamic> _zh_Hans = {
       "description": "提醒是可选的，但强烈推荐。它们通过在你完成习惯的时间通知你来帮助你保持一致性。",
       "daily_target_header": "每天的目标",
       "daily_target_footer": "你每天想完成这个习惯多少次？",
-      "completions_per_day": "完成次数/天"
+      "completions_per_day": "完成次数/天",
+      "completion_time_title": "完成时间",
+      "completion_time_description": "设置你通常完成这个习惯的时间。这将显示在主页面，与提醒是分开的。",
+      "completion_time_select": "选择完成时间"
     },
     "difficulty": {
       "title": "难度",
@@ -4259,7 +4666,8 @@ static const Map<String,dynamic> _zh_Hans = {
       "demo_data_message": "这是演示数据，升级以解锁真实数据",
       "upgrade_button": "升级"
     },
-    "probability_score": "概率分数",
+    "formation_probability": "形成概率",
+    "probability_over_time": "随时间变化的概率",
     "score_breakdown": "分数分解",
     "progress_status": "进度状态",
     "estimated_probability_time": "估计概率时间",
@@ -4500,6 +4908,26 @@ static const Map<String,dynamic> _fr_FR = {
       "subtitle": "Construire des habitudes durables avec un suivi intelligent et des insights personnalisés",
       "continue": "Continuer",
       "features": {
+        "habit_map": {
+          "title": "Carte des Habitudes",
+          "description": "Visualisez votre réseau d'habitudes et voyez comment les habitudes se connectent. Construisez des chaînes d'habitudes liées et comprenez les relations qui renforcent votre routine."
+        },
+        "habit_probability": {
+          "title": "Probabilité d'Habitude",
+          "description": "Voyez exactement vos chances de réussir avec chaque habitude. Obtenez des insights personnalisés qui vous aident à rester motivé et à construire des habitudes durables."
+        },
+        "goal_setting": {
+          "title": "Fixation d'Objectifs",
+          "description": "Planification basée sur la science qui s'adapte à la difficulté : les habitudes plus faciles se forment plus rapidement, les plus difficiles prennent plus de temps—gardant les objectifs réalistes."
+        },
+        "customizable": {
+          "title": "Personnalisable",
+          "description": "Rendez HabitForm vraiment vôtre. Choisissez des couleurs, des thèmes et des mises en page qui correspondent à votre personnalité et vous gardent engagé."
+        },
+        "data_management": {
+          "title": "Gestion des Données",
+          "description": "Exportez vos données d'habitudes vers des fichiers CSV pour sauvegarde ou transfert vers un autre appareil."
+        },
         "smart_tracking": {
           "title": "Suivi intelligent des habitudes",
           "description": "Suivez vos habitudes avec des rappels intelligents et une visualisation des progrès. Voyez vos séries grandir et célébrez chaque étape.",
@@ -4527,9 +4955,40 @@ static const Map<String,dynamic> _fr_FR = {
           "sub_features_0": "Designs personnalisés",
           "sub_features_1": "Partage de progrès",
           "sub_features_2": "Images de réussite"
+        },
+        "home_widget": {
+          "title": "Widget d'Accueil",
+          "description": "Suivez vos habitudes sans ouvrir l'application. Accomplissez vos objectifs quotidiens directement depuis l'écran d'accueil de votre iPhone en quelques secondes.",
+          "sub_features_0": "Accès Instantané",
+          "sub_features_1": "Gagnez du Temps Quotidien",
+          "sub_features_2": "N'Oubliez Jamais",
+          "widget_config": {
+            "small_title": "Suivi d'Habitudes",
+            "small_description": "Suivez vos habitudes quotidiennes avec compteur de séries",
+            "medium_title": "Vue d'Habitudes 7 Jours",
+            "medium_description": "Voir vos progrès d'habitudes au cours des 7 derniers jours",
+            "large_title": "Carte de Chaleur d'Habitudes",
+            "large_description": "Carte de chaleur style GitHub montrant votre accomplissement d'habitudes dans le temps",
+            "grid_title": "Grille d'Habitudes 60 Jours",
+            "grid_description": "Voir vos progrès d'habitudes au cours des 60 derniers jours dans une grille compacte"
+          },
+          "empty_state": {
+            "no_habits": "Aucune Habitude",
+            "create_habit_hint": "Créez une habitude dans l'application pour la voir ici"
+          },
+          "stats": {
+            "current_streak": "Série Actuelle",
+            "longest_streak": "Série la Plus Longue",
+            "completed": "Terminés",
+            "total_days": "Jours Totaux",
+            "days": "jours"
+          },
+          "pro_restriction": {
+            "upgrade_pro": "Passer à PRO"
+          }
         }
       },
-      "probability_score": "Score de formation",
+      "formation_probability": "Probabilité de Formation",
       "previous": "Précédent",
       "next": "Suivant",
       "start": "Commencer"
@@ -4574,6 +5033,15 @@ static const Map<String,dynamic> _fr_FR = {
     },
     "achievement": {
       "first_habit_message": "Excellent travail ! Vous avez terminé votre première habitude dans l'intégration !"
+    },
+    "reward_rating": {
+      "title": "Comment vous êtes-vous senti ?",
+      "description": "Évaluez à quel point cette réalisation était agréable. Cela nous aide à mieux comprendre la formation de vos habitudes.",
+      "low": "Faible",
+      "normal": "Normal",
+      "high": "Élevé",
+      "very_high": "Très Élevé",
+      "continue": "Continuer"
     }
   },
   "habit_detail": {
@@ -4654,9 +5122,13 @@ static const Map<String,dynamic> _fr_FR = {
     "achievement_perfectionist_description": "Taux de réussite de {{rate}}% !",
     "heatmap_stats_description": "{{days}} jours terminés l'année dernière",
     "last_7_days": "7 derniers jours",
-    "probability_info_title": "Score de formation",
-    "probability_info_description": "Le Score de formation montre la probabilité que votre habitude devienne automatique basée sur votre taux de completion actuel. Des scores plus élevés signifient que votre habitude est plus susceptible de tenir de façon permanente.",
-    "probability_info_details": "Ce score est calculé en utilisant vos modèles de constance et votre taux de completion. La recherche montre qu'il faut en moyenne 66 jours de pratique régulière pour qu'une habitude devienne automatique."
+    "formation_probability_title": "Probabilité de Formation",
+    "formation_probability_description": "La Probabilité de Formation montre la probabilité que votre habitude devienne automatique basée sur votre taux de completion actuel. Des probabilités plus élevées signifient que votre habitude est plus susceptible de tenir de façon permanente.",
+    "formation_probability_details": "Cette probabilité est calculée en utilisant vos modèles de constance et votre taux de completion. La recherche montre qu'il faut en moyenne 66 jours de pratique régulière pour qu'une habitude devienne automatique."
+  },
+  "home": {
+    "long_press_to_move": "Maintenir appuyé pour déplacer • Appuyer pour les détails",
+    "release_to_place": "Relâcher pour placer"
   },
   "habit": {
     "add_habit": "Ajouter une habitude",
@@ -4701,7 +5173,10 @@ static const Map<String,dynamic> _fr_FR = {
       "description": "Les rappels sont optionnels mais fortement recommandés. Ils vous aident à rester constant en vous notifiant quand il est temps de terminer votre habitude.",
       "daily_target_header": "Objectif quotidien par jour",
       "daily_target_footer": "Combien de fois voulez-vous terminer cette habitude chaque jour ?",
-      "completions_per_day": "Complétions/jour"
+      "completions_per_day": "Complétions/jour",
+      "completion_time_title": "Heure d'achèvement",
+      "completion_time_description": "Définissez une heure à laquelle vous terminez généralement cette habitude. Elle sera affichée sur la page principale et est séparée des rappels.",
+      "completion_time_select": "Sélectionner l'heure d'achèvement"
     },
     "difficulty": {
       "title": "Difficulté",
@@ -4990,7 +5465,8 @@ static const Map<String,dynamic> _fr_FR = {
       "demo_data_message": "Ce sont des données de démonstration, mettez à niveau pour débloquer les vraies données",
       "upgrade_button": "Mettre à niveau"
     },
-    "probability_score": "Score de formation",
+    "formation_probability": "Probabilité de Formation",
+    "probability_over_time": "Probabilité au Fil du Temps",
     "score_breakdown": "Détail du score",
     "progress_status": "Statut des progrès",
     "estimated_probability_time": "Estimated Probability Time",
@@ -5231,6 +5707,10 @@ static const Map<String,dynamic> _en_US = {
       "subtitle": "Our most advanced features for our most dedicated users",
       "continue": "Continue",
       "features": {
+        "habit_map": {
+          "title": "Habit Map",
+          "description": "Visualize your habit network and see how habits connect. Build chains of related habits and understand the relationships that make your routine stronger."
+        },
         "habit_probability": {
           "title": "Habit Probability",
           "description": "See exactly how likely you are to succeed with each habit. Get personalized insights that help you stay motivated and build lasting habits.",
@@ -5243,11 +5723,35 @@ static const Map<String,dynamic> _en_US = {
           "description": "Track your habits without opening the app. Complete your daily goals directly from your iPhone home screen in seconds.",
           "sub_features_0": "Instant Access",
           "sub_features_1": "Save Time Daily",
-          "sub_features_2": "Never Forget Again"
+          "sub_features_2": "Never Forget Again",
+          "widget_config": {
+            "small_title": "Habit Tracker",
+            "small_description": "Track your daily habits with streak counter",
+            "medium_title": "7-Day Habit View",
+            "medium_description": "View your habit progress over the last 7 days",
+            "large_title": "Habit Heatmap",
+            "large_description": "GitHub-style heatmap showing your habit completion over time",
+            "grid_title": "60-Day Habit Grid",
+            "grid_description": "View your habit progress over the last 60 days in a compact grid"
+          },
+          "empty_state": {
+            "no_habits": "No Habits",
+            "create_habit_hint": "Create a habit in the app to see it here"
+          },
+          "stats": {
+            "current_streak": "Current Streak",
+            "longest_streak": "Longest Streak",
+            "completed": "Completed",
+            "total_days": "Total Days",
+            "days": "days"
+          },
+          "pro_restriction": {
+            "upgrade_pro": "Upgrade PRO"
+          }
         },
         "goal_setting": {
           "title": "Goal Setting",
-          "description": "Break down big dreams into achievable daily actions. Set meaningful goals that actually work and keep you moving forward.",
+          "description": "Science‑based planning that adapts to difficulty: easier habits form faster, harder ones take longer—keeping goals realistic.",
           "sub_features_0": "Clear Daily Actions",
           "sub_features_1": "Achieve Big Dreams",
           "sub_features_2": "Stay Focused"
@@ -5258,6 +5762,10 @@ static const Map<String,dynamic> _en_US = {
           "sub_features_0": "Personal Themes",
           "sub_features_1": "Your Style",
           "sub_features_2": "Better Experience"
+        },
+        "data_management": {
+          "title": "Data Management",
+          "description": "Export your habits data to CSV files for backup or transfer to another device."
         },
         "habit_archive": {
           "title": "Habit Archive",
@@ -5274,7 +5782,7 @@ static const Map<String,dynamic> _en_US = {
           "sub_features_2": "Celebrate Wins"
         }
       },
-      "formation_score": "Probability Score",
+      "formation_score": "Formation Probability",
       "previous": "Previous",
       "next": "Next",
       "start": "Start"
@@ -5319,6 +5827,15 @@ static const Map<String,dynamic> _en_US = {
     },
     "achievement": {
       "first_habit_message": "Great job! You completed your first habit in the onboarding!"
+    },
+    "reward_rating": {
+      "title": "How did you feel?",
+      "description": "Rate how enjoyable this completion felt. This helps us understand your habit formation better.",
+      "low": "Low",
+      "normal": "Normal",
+      "high": "High",
+      "very_high": "Very High",
+      "continue": "Continue"
     }
   },
   "habit_detail": {
@@ -5399,9 +5916,13 @@ static const Map<String,dynamic> _en_US = {
     "achievement_perfectionist_description": "{{rate}}% success rate!",
     "heatmap_stats_description": "{{days}} days completed in the last year",
     "last_7_days": "Last 7 Days",
-    "probability_info_title": "Probability Score",
-    "probability_info_description": "The Probability Score shows how likely your habit is to become automatic based on your current completion rate. Higher scores mean your habit is more likely to stick permanently.",
-    "probability_info_details": "This score is calculated using your consistency patterns and completion rate. Research shows it takes an average of 66 days of regular practice for a habit to become automatic."
+    "formation_probability_title": "Formation Probability",
+    "formation_probability_description": "The Formation Probability shows how likely your habit is to become automatic based on your current completion rate. Higher probabilities mean your habit is more likely to stick permanently.",
+    "formation_probability_details": "This probability is calculated using your consistency patterns and completion rate. Research shows it takes an average of 66 days of regular practice for a habit to become automatic."
+  },
+  "home": {
+    "long_press_to_move": "Long press to move • Tap for details",
+    "release_to_place": "Release to place"
   },
   "habit": {
     "add_habit": "Add Habit",
@@ -5446,12 +5967,15 @@ static const Map<String,dynamic> _en_US = {
       "description": "Reminders are optional but highly recommended. They help you stay consistent by notifying you when it's time to complete your habit.",
       "daily_target_header": "Daily target per day",
       "daily_target_footer": "How many times do you want to complete this habit each day?",
-      "completions_per_day": "Completions/day"
+      "completions_per_day": "Completions/day",
+      "completion_time_title": "Completion Time",
+      "completion_time_description": "Set a time when you typically complete this habit. This will be displayed on the main page and is separate from reminders.",
+      "completion_time_select": "Select completion time"
     },
     "difficulty": {
       "title": "Difficulty",
-      "question": "How difficult is this habit to build?",
-      "info": "Choose how challenging this habit feels. We use this to estimate probability time and personalize insights.",
+      "question": "How challenging does this habit feel? We’ll tailor the estimated formation time based on your choice.",
+      "info": "We use a research‑based model to estimate how long it takes for this habit to become automatic. Easier habits get shorter timelines, while more challenging habits require longer ones. Your consistency can accelerate the timeline.",
       "very_easy": "Very Easy",
       "easy": "Easy",
       "moderate": "Moderate",
@@ -5735,7 +6259,8 @@ static const Map<String,dynamic> _en_US = {
       "demo_data_message": "This is demo data, upgrade to unlock real data",
       "upgrade_button": "Upgrade"
     },
-    "formation_score": "Probability Score",
+    "formation_probability": "Formation Probability",
+    "probability_over_time": "Probability Over Time",
     "score_breakdown": "Score Breakdown",
     "progress_status": "Progress Status",
     "estimated_probability_time": "Estimated Probability Time",
@@ -5975,6 +6500,26 @@ static const Map<String,dynamic> _fi_FI = {
       "title": "HabitForm auttaa sinua ...",
       "subtitle": "Rakenna kestäviä tapoja älykkäällä seurannalla ja henkilökohtaisilla oivalluksilla",
       "features": {
+        "habit_map": {
+          "title": "Tottumuskartta",
+          "description": "Visualisoi tapojesi verkosto ja katso miten tavat liittyvät toisiinsa. Rakenna liittyvien tapojen ketjuja ja ymmärrä suhteet, jotka vahvistavat rutiinisi."
+        },
+        "habit_probability": {
+          "title": "Tavan todennäköisyys",
+          "description": "Näe tarkalleen kuinka todennäköistä onnistumisesi on jokaisen tavan kanssa. Hanki henkilökohtaisia oivalluksia, jotka auttavat sinua pysymään motivoituneena ja rakentamaan kestäviä tapoja."
+        },
+        "goal_setting": {
+          "title": "Tavoitteiden Asettaminen",
+          "description": "Tieteeseen perustuva suunnittelu, joka mukautuu vaikeuteen: helpommat tavat muodostuvat nopeammin, vaikeammat vievät kauemmin—pitäen tavoitteet realistisina."
+        },
+        "customizable": {
+          "title": "Mukautettava",
+          "description": "Tee HabitFormista todella sinun. Valitse värit, teemat ja asettelut, jotka vastaavat persoonallisuuttasi ja pitävät sinut kiinnostuneena."
+        },
+        "data_management": {
+          "title": "Tietojen Hallinta",
+          "description": "Vie tapojesi tiedot CSV-tiedostoihin varmuuskopiointia tai toiseen laitteeseen siirtoa varten."
+        },
         "smart_tracking": {
           "title": "Älykäs tapojen seuranta",
           "description": "Seuraa tapojasi älykkäillä muistutuksilla ja edistymisen visualisoinnilla. Näe putkesi kasvavan ja juhli jokaista etappia.",
@@ -6002,9 +6547,40 @@ static const Map<String,dynamic> _fi_FI = {
           "sub_features_0": "Mukautetut designit",
           "sub_features_1": "Edistyksen jakaminen",
           "sub_features_2": "Saavutuskuvat"
+        },
+        "home_widget": {
+          "title": "Kotivalikko Widget",
+          "description": "Seuraa tapoja avaamatta sovellusta. Suorita päivittäiset tavoitteesi suoraan iPhonen kotivalikosta sekunneissa.",
+          "sub_features_0": "Välitön pääsy",
+          "sub_features_1": "Säästä aikaa päivittäin",
+          "sub_features_2": "Älä koskaan unohda",
+          "widget_config": {
+            "small_title": "Tapaseuranta",
+            "small_description": "Seuraa päivittäisiä tapojasi putken laskurilla",
+            "medium_title": "7 Päivän Tapojenäkymä",
+            "medium_description": "Katso tapojesi edistystä viimeisten 7 päivän ajalta",
+            "large_title": "Tapojen Lämpökartta",
+            "large_description": "GitHub-tyylinen lämpökartta, joka näyttää tapojesi suorittamisen ajan myötä",
+            "grid_title": "60 Päivän Tapojen Ruudukko",
+            "grid_description": "Katso tapojesi edistystä viimeisten 60 päivän ajalta kompaktissa ruudukossa"
+          },
+          "empty_state": {
+            "no_habits": "Ei tapoja",
+            "create_habit_hint": "Luo tapa sovelluksessa nähdäksesi sen täällä"
+          },
+          "stats": {
+            "current_streak": "Nykyinen putki",
+            "longest_streak": "Pisin putki",
+            "completed": "Valmiit",
+            "total_days": "Yhteensä päiviä",
+            "days": "päivää"
+          },
+          "pro_restriction": {
+            "upgrade_pro": "Päivitä PRO:ksi"
+          }
         }
       },
-      "probability_score": "Muodostumispisteet",
+      "formation_probability": "Muodostumistodennäköisyys",
       "previous": "Edellinen",
       "next": "Seuraava",
       "start": "Aloita"
@@ -6049,6 +6625,15 @@ static const Map<String,dynamic> _fi_FI = {
     },
     "achievement": {
       "first_habit_message": "Hienoa! Suoritit ensimmäisen tapasi käyttöönotossa!"
+    },
+    "reward_rating": {
+      "title": "Miltä tuntui?",
+      "description": "Arvioi kuinka miellyttävä tämä suoritus tuntui. Tämä auttaa meitä ymmärtämään tapojesi muodostumista paremmin.",
+      "low": "Matala",
+      "normal": "Normaali",
+      "high": "Korkea",
+      "very_high": "Erittäin Korkea",
+      "continue": "Jatka"
     }
   },
   "habit_detail": {
@@ -6129,9 +6714,13 @@ static const Map<String,dynamic> _fi_FI = {
     "achievement_perfectionist_description": "{{rate}}% onnistumisprosentti!",
     "heatmap_stats_description": "{{days}} päivää suoritettu viimeisen vuoden aikana",
     "last_7_days": "Viimeiset 7 päivää",
-    "probability_info_title": "Muodostumispisteet",
-    "probability_info_description": "Muodostumispisteet näyttävät, kuinka todennäköisesti tapasi muuttuu automaattiseksi nykyisen suoritusasteesi perusteella. Korkeammat pisteet tarkoittavat, että tapasi on todennäköisemmin pysyvä.",
-    "probability_info_details": "Tämä piste lasketaan johdonmukaisuutesi ja suoritusasteesi perusteella. Tutkimusten mukaan keskimäärin 66 päivää säännöllistä harjoittelua tarvitaan, jotta tavasta tulee automaattinen."
+    "formation_probability_title": "Muodostumistodennäköisyys",
+    "formation_probability_description": "Muodostumistodennäköisyys näyttää, kuinka todennäköisesti tapasi muuttuu automaattiseksi nykyisen suoritusasteesi perusteella. Korkeammat todennäköisyydet tarkoittavat, että tapasi on todennäköisemmin pysyvä.",
+    "formation_probability_details": "Tämä todennäköisyys lasketaan johdonmukaisuutesi ja suoritusasteesi perusteella. Tutkimusten mukaan keskimäärin 66 päivää säännöllistä harjoittelua tarvitaan, jotta tavasta tulee automaattinen."
+  },
+  "home": {
+    "long_press_to_move": "Pidä painettuna siirtääksesi • Napauta yksityiskohtia varten",
+    "release_to_place": "Päästä irti sijoittaaksesi"
   },
   "habit": {
     "add_habit": "Lisää tapa",
@@ -6176,7 +6765,10 @@ static const Map<String,dynamic> _fi_FI = {
       "description": "Muistutukset ovat vapaaehtoisia, mutta erittäin suositeltavia. Ne auttavat pysymään johdonmukaisena muistuttamalla, milloin on aika suorittaa tapasi.",
       "daily_target_header": "Päivittäinen tavoite per päivä",
       "daily_target_footer": "Kuinka monta kertaa haluat suorittaa tämän tavan päivässä?",
-      "completions_per_day": "Suoritukset/päivä"
+      "completions_per_day": "Suoritukset/päivä",
+      "completion_time_title": "Suoritusaika",
+      "completion_time_description": "Aseta aika, jolloin yleensä suoritat tämän tavan. Tämä näytetään pääsivulla ja on erillinen muistutuksista.",
+      "completion_time_select": "Valitse suoritusaika"
     },
     "difficulty": {
       "title": "Vaikeus",
@@ -6465,7 +7057,8 @@ static const Map<String,dynamic> _fi_FI = {
       "demo_data_message": "Tämä on demodata, päivitä avataksesi oikean datan",
       "upgrade_button": "Päivitä"
     },
-    "probability_score": "Todennäköisyyspisteet",
+    "formation_probability": "Muodostumistodennäköisyys",
+    "probability_over_time": "Todennäköisyys Ajan Myötä",
     "score_breakdown": "Pisteiden erittely",
     "progress_status": "Edistystila",
     "estimated_probability_time": "Arvioitu todennäköisyysaika",

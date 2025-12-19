@@ -2,7 +2,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '/core/core.dart';
-import '/features/reminder/models/reminder/reminder_model.dart';
 import '/models/completion_entry/completion_entry.dart';
 import '/models/habit/habit_extension.dart';
 import '/models/habit/habit_model.dart';
@@ -118,23 +117,6 @@ class _CircularHabitWidgetState extends ConsumerState<CircularHabitWidget> {
 
   double _getProgressPercentage(Habit habit) {
     return habit.calculateWeightedProgressPercentageFromFirstCompletion();
-  }
-
-  String _getReminderTimeText(ReminderModel reminder) {
-    if (reminder.hasMultipleReminders) {
-      final times = reminder.multipleReminders!.sortedReminderTimes;
-      if (times.isEmpty) return '';
-      if (times.length == 1) {
-        return times.first.toHHMM();
-      } else {
-        // Show first 2 times, or all if 2 or less
-        final displayTimes = times.take(2).map((time) => time.toHHMM()).join(', ');
-        return times.length > 2 ? '$displayTimes...' : displayTimes;
-      }
-    } else if (reminder.hasSingleReminder) {
-      return reminder.reminderTime!.toHHMM();
-    }
-    return '';
   }
 
   /// Show reward rating dialog first, then update completion and show probability dialog
@@ -285,13 +267,13 @@ class _CircularHabitWidgetState extends ConsumerState<CircularHabitWidget> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            // Reminder time (top, if exists)
-            if (currentHabit.reminderModel != null && currentHabit.reminderModel!.hasAnyReminders) ...[
+            // Completion time (top, if exists) - displayed on main page
+            if (currentHabit.completionTime != null) ...[
               AnimatedOpacity(
                 duration: const Duration(milliseconds: 350),
                 opacity: widget.showName ?? true ? 1.0 : 0.0,
                 child: Text(
-                  _getReminderTimeText(currentHabit.reminderModel!),
+                  currentHabit.completionTime!.toHHMM(),
                   textAlign: TextAlign.center,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,

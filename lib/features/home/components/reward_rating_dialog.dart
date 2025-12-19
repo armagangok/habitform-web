@@ -46,29 +46,36 @@ class _RewardRatingDialogState extends State<RewardRatingDialog> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              _buildRatingOption(
-                context,
-                emoji: '😞',
-                label: 'onboarding.reward_rating.low'.tr(),
-                value: 0.5,
+              Expanded(
+                child: _buildRatingOption(
+                  context,
+                  emoji: '😞',
+                  value: 0.5,
+                ),
               ),
-              _buildRatingOption(
-                context,
-                emoji: '😐',
-                label: 'onboarding.reward_rating.normal'.tr(),
-                value: 1.0,
+              const SizedBox(width: 8),
+              Expanded(
+                child: _buildRatingOption(
+                  context,
+                  emoji: '😐',
+                  value: 1.0,
+                ),
               ),
-              _buildRatingOption(
-                context,
-                emoji: '😊',
-                label: 'onboarding.reward_rating.high'.tr(),
-                value: 1.5,
+              const SizedBox(width: 8),
+              Expanded(
+                child: _buildRatingOption(
+                  context,
+                  emoji: '😊',
+                  value: 1.5,
+                ),
               ),
-              _buildRatingOption(
-                context,
-                emoji: '😄',
-                label: 'onboarding.reward_rating.very_high'.tr(),
-                value: 2.0,
+              const SizedBox(width: 8),
+              Expanded(
+                child: _buildRatingOption(
+                  context,
+                  emoji: '🤩',
+                  value: 2.0,
+                ),
               ),
             ],
           ),
@@ -99,7 +106,6 @@ class _RewardRatingDialogState extends State<RewardRatingDialog> {
   Widget _buildRatingOption(
     BuildContext context, {
     required String emoji,
-    required String label,
     required double value,
   }) {
     final isSelected = _selectedRating == value;
@@ -112,31 +118,20 @@ class _RewardRatingDialogState extends State<RewardRatingDialog> {
         });
       },
       child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
+        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 4),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
             color: isSelected ? context.primary : context.primaryContrastingColor.withValues(alpha: 0.2),
-            width: isSelected ? 2 : 1,
+            width: 2,
           ),
           color: isSelected ? context.primary.withValues(alpha: 0.1) : Colors.transparent,
         ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              emoji,
-              style: const TextStyle(fontSize: 28),
-            ),
-            const SizedBox(height: 4),
-            Text(
-              label,
-              style: context.labelSmall.copyWith(
-                fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
-                color: isSelected ? context.primary : null,
-              ),
-            ),
-          ],
+        child: Center(
+          child: Text(
+            emoji,
+            style: const TextStyle(fontSize: 28),
+          ),
         ),
       ),
     );

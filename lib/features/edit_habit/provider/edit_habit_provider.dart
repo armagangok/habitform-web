@@ -74,6 +74,29 @@ class EditHabitNotifier extends AutoDisposeNotifier<Habit?> {
     }
   }
 
+  void updateCompletionTime(DateTime? completionTime) {
+    if (state != null) {
+      // Create a new Habit with the updated completionTime
+      // Since Habit.copyWith uses ?? operator, we need to explicitly handle null case
+      state = Habit(
+        id: state!.id,
+        habitName: state!.habitName,
+        habitDescription: state!.habitDescription,
+        emoji: state!.emoji,
+        reminderModel: state!.reminderModel,
+        completions: state!.completions,
+        dailyTarget: state!.dailyTarget,
+        colorCode: state!.colorCode,
+        archiveDate: state!.archiveDate,
+        status: state!.status,
+        categoryIds: state!.categoryIds,
+        difficulty: state!.difficulty,
+        rewardFactor: state!.rewardFactor,
+        completionTime: completionTime, // Direct assignment allows null
+      );
+    }
+  }
+
   void updateHabit() async {
     final habitName = habitNameController.text;
 
@@ -107,6 +130,7 @@ class EditHabitNotifier extends AutoDisposeNotifier<Habit?> {
       categoryIds: categoryIds,
       difficulty: _selectedDifficulty,
       rewardFactor: _selectedRewardFactor,
+      completionTime: state?.completionTime, // completionTime is updated via updateCompletionTime method
     );
 
     if (updatedHabit != null) {

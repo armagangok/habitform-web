@@ -77,7 +77,7 @@ class _HabitNameStepState extends ConsumerState<HabitNameStep> {
               children: [
                 Text(
                   LocaleKeys.create_habit_habit_name_title.tr(),
-                  style: context.headlineSmall.copyWith(
+                  style: context.titleLarge.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
                 ),
