@@ -137,7 +137,7 @@ class HabitCanvasNotifier extends StateNotifier<HabitCanvasState> {
 
   /// Update canvas scale
   void updateScale(double scale) {
-    state = state.copyWith(scale: scale.clamp(0.5, 2.5));
+    state = state.copyWith(scale: scale.clamp(0.3, 3.0));
     _saveState(); // Debounced save for smooth zoom/pan
   }
 
@@ -147,13 +147,30 @@ class HabitCanvasNotifier extends StateNotifier<HabitCanvasState> {
     _saveState(); // Debounced save for smooth zoom/pan
   }
 
+  /// Update canvas scale and offset immediately (for interaction end)
+  /// Also saves the raw matrix values for precise restoration
+  void updateTransformImmediate(double scale, double offsetX, double offsetY, {List<double>? matrixValues}) {
+    print('🟡 [CanvasProvider] updateTransformImmediate called - scale: $scale, offsetX: $offsetX, offsetY: $offsetY, hasMatrix: ${matrixValues != null}');
+    state = state.copyWith(
+      scale: scale.clamp(0.3, 3.0),
+      offsetX: offsetX,
+      offsetY: offsetY,
+      matrixValues: matrixValues,
+    );
+    // Use unawaited to ensure save happens without blocking, but still executes
+    unawaited(_saveState(immediate: true)); // Immediate save for interaction end
+  }
+
   /// Reset all positions to default layout
   Future<void> resetLayout(List<Habit> habits, double canvasWidth, double canvasHeight) async {
-    state = state.copyWith(
-      positions: {},
+    // Create a fresh state to clear matrixValues
+    state = HabitCanvasState(
+      positions: const {},
+      connections: state.connections, // Keep connections
       scale: 1.0,
       offsetX: 0.0,
       offsetY: 0.0,
+      matrixValues: null, // Clear saved matrix
     );
     await initializePositions(habits, canvasWidth, canvasHeight);
   }

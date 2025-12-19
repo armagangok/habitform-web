@@ -47,6 +47,7 @@ class _HabitConstellationViewState extends ConsumerState<HabitConstellationView>
   // Debounce timer for saving pan/zoom state
   Timer? _saveStateTimer;
   static const Duration _saveDebounceDuration = Duration(milliseconds: 500);
+  static const Duration _zoomDebounceDuration = Duration(milliseconds: 200); // Shorter debounce for zoom/pinch
 
   // Animation controller for smooth zoom
   late final AnimationController _zoomAnimationController;
@@ -74,6 +75,8 @@ class _HabitConstellationViewState extends ConsumerState<HabitConstellationView>
   Future<void> _initializeCanvas() async {
     if (_isInitialized) return;
 
+    print('🔷 [ConstellationView] _initializeCanvas started');
+
     // Initialize habit positions (this waits for state to be loaded first)
     await ref.read(habitCanvasProvider.notifier).initializePositions(
           widget.habits,
@@ -83,11 +86,32 @@ class _HabitConstellationViewState extends ConsumerState<HabitConstellationView>
 
     if (!mounted) return;
 
-    // Always center the view on habits for consistent behavior
-    // This ensures habits are always visible when app opens
-    _centerViewOnHabits();
+    // Check if user has a saved transform (matrix values)
+    final canvasState = ref.read(habitCanvasProvider);
+    final hasUserTransform = canvasState.hasUserTransform;
+    final matrixValues = canvasState.matrixValues;
+
+    print('🔷 [ConstellationView] hasUserTransform: $hasUserTransform, matrixValues: ${matrixValues?.length ?? 0} values');
+
+    if (hasUserTransform && matrixValues != null && matrixValues.length == 16) {
+      // Restore saved transform state using raw matrix values
+      print('🔷 [ConstellationView] Restoring saved transform from matrix values');
+      _restoreSavedTransform(matrixValues);
+    } else {
+      // First time or reset - center view on habits
+      print('🔷 [ConstellationView] Centering view on habits (no saved transform)');
+      _centerViewOnHabits();
+    }
 
     _isInitialized = true;
+  }
+
+  /// Restores the saved transform state from raw matrix values
+  void _restoreSavedTransform(List<double> matrixValues) {
+    print('🔷 [ConstellationView] _restoreSavedTransform with ${matrixValues.length} matrix values');
+    final matrix = Matrix4.fromList(matrixValues);
+    print('🔷 [ConstellationView] Restored scale: ${matrix.getMaxScaleOnAxis()}, translation: ${matrix.getTranslation()}');
+    _transformationController.value = matrix;
   }
 
   /// Centers the view on habits, ensuring they're visible on screen
@@ -148,10 +172,8 @@ class _HabitConstellationViewState extends ConsumerState<HabitConstellationView>
       ..translateByDouble(offsetX, offsetY, 0.0, 1.0)
       ..scaleByDouble(finalScale, finalScale, 1.0, 1.0);
 
-    // Save this state
-    final translation = _transformationController.value.getTranslation();
-    ref.read(habitCanvasProvider.notifier).updateScale(finalScale);
-    ref.read(habitCanvasProvider.notifier).updateOffset(translation.x, translation.y);
+    // Don't save this state - it's auto-calculated centering, not user interaction
+    // User's zoom/pan state will be saved in _onInteractionEnd
   }
 
   /// Centers the view on habits with smooth animation
@@ -390,11 +412,12 @@ class _HabitConstellationViewState extends ConsumerState<HabitConstellationView>
   }
 
   // Save pan and zoom state with debounce
-  void _saveTransformState() {
+  void _saveTransformState({bool isZoom = false}) {
     if (_draggingHabitId != null) return; // Don't save while dragging habit
 
     _saveStateTimer?.cancel();
-    _saveStateTimer = Timer(_saveDebounceDuration, () {
+    final debounceDuration = isZoom ? _zoomDebounceDuration : _saveDebounceDuration;
+    _saveStateTimer = Timer(debounceDuration, () {
       final matrix = _transformationController.value;
       final scale = matrix.getMaxScaleOnAxis();
       final translation = matrix.getTranslation();
@@ -405,7 +428,11 @@ class _HabitConstellationViewState extends ConsumerState<HabitConstellationView>
   }
 
   void _onInteractionEnd(ScaleEndDetails details) {
-    if (_draggingHabitId != null) return; // Don't save transform while dragging
+    print('🟠 [ConstellationView] _onInteractionEnd called');
+    if (_draggingHabitId != null) {
+      print('🟠 [ConstellationView] Skipping - dragging habit');
+      return; // Don't save transform while dragging
+    }
 
     // Reset panning flag after a short delay to allow tap detection
     Future.delayed(const Duration(milliseconds: 100), () {
@@ -414,14 +441,24 @@ class _HabitConstellationViewState extends ConsumerState<HabitConstellationView>
       }
     });
 
-    // Save immediately on interaction end
+    // Save immediately on interaction end to ensure state is persisted
     _saveStateTimer?.cancel();
     final matrix = _transformationController.value;
     final scale = matrix.getMaxScaleOnAxis();
+    print('🟠 [ConstellationView] Current scale from matrix: $scale');
     final translation = matrix.getTranslation();
 
-    ref.read(habitCanvasProvider.notifier).updateScale(scale);
-    ref.read(habitCanvasProvider.notifier).updateOffset(translation.x, translation.y);
+    // Save raw matrix values for precise restoration
+    final matrixValues = matrix.storage.toList();
+    print('🟠 [ConstellationView] Saving matrix values: ${matrixValues.length} values');
+
+    // Use immediate save to ensure state is persisted even if app closes
+    ref.read(habitCanvasProvider.notifier).updateTransformImmediate(
+          scale,
+          translation.x,
+          translation.y,
+          matrixValues: matrixValues,
+        );
   }
 
   void _onInteractionUpdate(ScaleUpdateDetails details) {
@@ -433,8 +470,10 @@ class _HabitConstellationViewState extends ConsumerState<HabitConstellationView>
     }
 
     // InteractiveViewer handles pan and scale automatically
-    // We just need to save the state with debounce
-    _saveTransformState();
+    // Save state with appropriate debounce based on interaction type
+    // Zoom/pinch operations use shorter debounce for more frequent caching
+    final isZoom = details.scale != 1.0;
+    _saveTransformState(isZoom: isZoom);
   }
 
   // Start dragging a habit (called on long press)

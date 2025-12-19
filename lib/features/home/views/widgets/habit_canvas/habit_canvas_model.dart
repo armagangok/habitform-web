@@ -71,6 +71,8 @@ class HabitCanvasState {
   final double scale;
   final double offsetX;
   final double offsetY;
+  /// Raw matrix values for precise restoration (16 values)
+  final List<double>? matrixValues;
 
   const HabitCanvasState({
     this.positions = const {},
@@ -78,7 +80,11 @@ class HabitCanvasState {
     this.scale = 1.0,
     this.offsetX = 0.0,
     this.offsetY = 0.0,
+    this.matrixValues,
   });
+
+  /// Check if user has a custom transform (zoomed or panned)
+  bool get hasUserTransform => matrixValues != null && matrixValues!.isNotEmpty;
 
   HabitCanvasState copyWith({
     Map<String, HabitPosition>? positions,
@@ -86,6 +92,7 @@ class HabitCanvasState {
     double? scale,
     double? offsetX,
     double? offsetY,
+    List<double>? matrixValues,
   }) {
     return HabitCanvasState(
       positions: positions ?? this.positions,
@@ -93,6 +100,7 @@ class HabitCanvasState {
       scale: scale ?? this.scale,
       offsetX: offsetX ?? this.offsetX,
       offsetY: offsetY ?? this.offsetY,
+      matrixValues: matrixValues ?? this.matrixValues,
     );
   }
 
@@ -102,11 +110,13 @@ class HabitCanvasState {
         'scale': scale,
         'offsetX': offsetX,
         'offsetY': offsetY,
+        'matrixValues': matrixValues,
       };
 
   factory HabitCanvasState.fromJson(Map<String, dynamic> json) {
     final positionsList = (json['positions'] as List?)?.map((p) => HabitPosition.fromJson(p as Map<String, dynamic>)).toList() ?? [];
     final connectionsList = (json['connections'] as List?)?.map((c) => HabitConnection.fromJson(c as Map<String, dynamic>)).toSet() ?? {};
+    final matrixList = (json['matrixValues'] as List?)?.map((v) => (v as num).toDouble()).toList();
 
     return HabitCanvasState(
       positions: {for (var p in positionsList) p.habitId: p},
@@ -114,6 +124,7 @@ class HabitCanvasState {
       scale: (json['scale'] as num?)?.toDouble() ?? 1.0,
       offsetX: (json['offsetX'] as num?)?.toDouble() ?? 0.0,
       offsetY: (json['offsetY'] as num?)?.toDouble() ?? 0.0,
+      matrixValues: matrixList,
     );
   }
 }
@@ -126,11 +137,15 @@ class HabitCanvasStorage {
     try {
       final prefs = await SharedPreferences.getInstance();
       final jsonString = prefs.getString(_key);
+      print('🔵 [CanvasStorage] Loading state, jsonString exists: ${jsonString != null}');
       if (jsonString == null) return const HabitCanvasState();
 
       final json = jsonDecode(jsonString) as Map<String, dynamic>;
-      return HabitCanvasState.fromJson(json);
+      final loadedState = HabitCanvasState.fromJson(json);
+      print('🔵 [CanvasStorage] Loaded scale: ${loadedState.scale}, offsetX: ${loadedState.offsetX}, offsetY: ${loadedState.offsetY}');
+      return loadedState;
     } catch (e) {
+      print('🔴 [CanvasStorage] Load error: $e');
       return const HabitCanvasState();
     }
   }
@@ -139,9 +154,11 @@ class HabitCanvasStorage {
     try {
       final prefs = await SharedPreferences.getInstance();
       final jsonString = jsonEncode(state.toJson());
+      print('🟢 [CanvasStorage] Saving scale: ${state.scale}, offsetX: ${state.offsetX}, offsetY: ${state.offsetY}');
       await prefs.setString(_key, jsonString);
+      print('🟢 [CanvasStorage] Save completed');
     } catch (e) {
-      // Silently fail
+      print('🔴 [CanvasStorage] Save error: $e');
     }
   }
 }
