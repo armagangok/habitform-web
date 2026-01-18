@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:math';
 import 'dart:ui' as ui;
 
@@ -46,57 +47,66 @@ class _OnboardingAppFeaturesPageState extends State<OnboardingAppFeaturesPage> w
 
   bool _showIntro = true;
 
-  List<AppFeature> get _appFeatures => [
-        AppFeature(
-          identifier: 'habit_map',
-          title: 'onboarding.app_features.features.habit_map.title'.tr(),
-          description: 'onboarding.app_features.features.habit_map.description'.tr(),
-          icon: CupertinoIcons.map_fill,
-          color: context.cupertinoTheme.primaryColor,
-        ),
-        AppFeature(
-          identifier: 'habit_probability',
-          title: 'onboarding.app_features.features.habit_probability.title'.tr(),
-          description: 'onboarding.app_features.features.habit_probability.description'.tr(),
-          icon: CupertinoIcons.chart_bar_square,
-          color: context.cupertinoTheme.primaryColor,
-        ),
-        AppFeature(
-          identifier: 'home_widget',
-          title: 'onboarding.app_features.features.home_widget.title'.tr(),
-          description: 'onboarding.app_features.features.home_widget.description'.tr(),
-          icon: CupertinoIcons.square_grid_2x2_fill,
-          color: context.cupertinoTheme.primaryColor,
-        ),
-        AppFeature(
-          identifier: 'goal_setting',
-          title: 'onboarding.app_features.features.goal_setting.title'.tr(),
-          description: 'onboarding.app_features.features.goal_setting.description'.tr(),
-          icon: CupertinoIcons.checkmark_circle_fill,
-          color: context.cupertinoTheme.primaryColor,
-        ),
-        AppFeature(
-          identifier: 'customizable',
-          title: 'onboarding.app_features.features.customizable.title'.tr(),
-          description: 'onboarding.app_features.features.customizable.description'.tr(),
-          icon: CupertinoIcons.paintbrush_fill,
-          color: context.cupertinoTheme.primaryColor,
-        ),
-        AppFeature(
-          identifier: 'data_management',
-          title: 'onboarding.app_features.features.data_management.title'.tr(),
-          description: 'onboarding.app_features.features.data_management.description'.tr(),
-          icon: CupertinoIcons.doc_text_fill,
-          color: context.cupertinoTheme.primaryColor,
-        ),
-        AppFeature(
-          identifier: 'share_habits',
-          title: 'onboarding.app_features.features.share_habits.title'.tr(),
-          description: 'onboarding.app_features.features.share_habits.description'.tr(),
-          icon: CupertinoIcons.share,
-          color: context.cupertinoTheme.primaryColor,
-        ),
-      ];
+  List<AppFeature> get _appFeatures {
+    final features = [
+      AppFeature(
+        identifier: 'habit_map',
+        title: 'onboarding.app_features.features.habit_map.title'.tr(),
+        description: 'onboarding.app_features.features.habit_map.description'.tr(),
+        icon: CupertinoIcons.map_fill,
+        color: context.cupertinoTheme.primaryColor,
+      ),
+      AppFeature(
+        identifier: 'habit_probability',
+        title: 'onboarding.app_features.features.habit_probability.title'.tr(),
+        description: 'onboarding.app_features.features.habit_probability.description'.tr(),
+        icon: CupertinoIcons.chart_bar_square,
+        color: context.cupertinoTheme.primaryColor,
+      ),
+      AppFeature(
+        identifier: 'home_widget',
+        title: 'onboarding.app_features.features.home_widget.title'.tr(),
+        description: 'onboarding.app_features.features.home_widget.description'.tr(),
+        icon: CupertinoIcons.square_grid_2x2_fill,
+        color: context.cupertinoTheme.primaryColor,
+      ),
+      AppFeature(
+        identifier: 'goal_setting',
+        title: 'onboarding.app_features.features.goal_setting.title'.tr(),
+        description: 'onboarding.app_features.features.goal_setting.description'.tr(),
+        icon: CupertinoIcons.checkmark_circle_fill,
+        color: context.cupertinoTheme.primaryColor,
+      ),
+      AppFeature(
+        identifier: 'customizable',
+        title: 'onboarding.app_features.features.customizable.title'.tr(),
+        description: 'onboarding.app_features.features.customizable.description'.tr(),
+        icon: CupertinoIcons.paintbrush_fill,
+        color: context.cupertinoTheme.primaryColor,
+      ),
+      AppFeature(
+        identifier: 'data_management',
+        title: 'onboarding.app_features.features.data_management.title'.tr(),
+        description: 'onboarding.app_features.features.data_management.description'.tr(),
+        icon: CupertinoIcons.doc_text_fill,
+        color: context.cupertinoTheme.primaryColor,
+      ),
+      AppFeature(
+        identifier: 'share_habits',
+        title: 'onboarding.app_features.features.share_habits.title'.tr(),
+        description: 'onboarding.app_features.features.share_habits.description'.tr(),
+        icon: CupertinoIcons.share,
+        color: context.cupertinoTheme.primaryColor,
+      ),
+    ];
+
+    // Android'de home_widget özelliğini filtrele
+    if (Platform.isAndroid) {
+      return features.where((feature) => feature.identifier != 'home_widget').toList();
+    }
+
+    return features;
+  }
 
   @override
   void initState() {

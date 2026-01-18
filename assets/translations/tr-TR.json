@@ -58,12 +58,12 @@
         "pages": {
             "small_steps": {
                 "title": "Hayatınızı küçük bir adımla değiştirin.",
-                "description": "HabitForm ile yeni alışkanlıklar geliştirmek, küçük, yönetilebilir adımlarla başladığınızda daha kolay ve sürdürülebilir hale gelir."
+                "description": "HabitForm ile yeni alışkanlıklar edinmek; küçük, uygulanabilir adımlarla başladığınızda çok daha kolay ve sürdürülebilir olur."
             },
             "welcome": {
                 "welcome_to": "Hoş geldiniz",
                 "app_name": "HabitForm",
-                "build_dream_life": "Hayalinizdeki hayatı inşa edin",
+                "build_dream_life": "Hayalinizdeki hayatı kurun",
                 "try_tapping": "Alışkanlık kartına dokunmayı deneyin",
                 "just_like_that": "İşte bu kadar!",
                 "change_life": "Hayatınızı değiştirin",
@@ -79,47 +79,63 @@
                 }
             },
             "routine": {
-                "title": "Rutin ve tekrar, alışkanlıkların kök salmasına yardımcı olur.",
-                "description": "HabitForm ile tutarlı bir rutin oluşturmak ve eylemleri tekrarlamak, alışkanlıkların kalıcı olmasının anahtarıdır."
+                "title": "Rutin ve tekrar, alışkanlıkların kök salmasını sağlar.",
+                "description": "Düzenli bir rutin oluşturmak ve eylemleri tekrar etmek, HabitForm ile alışkanlıkları kalıcı hale getirmenin anahtarıdır."
             },
             "patience": {
-                "title": "Sabır ve tutarlılık, alışkanlıkların meyve vermesine yardımcı olur.",
-                "description": "Bir alışkanlık edinmek zaman alır; HabitForm ile sürecin tadını çıkarmak anahtardır."
+                "title": "Sabır ve istikrar, alışkanlıkların meyve vermesini sağlar.",
+                "description": "Bir alışkanlığın oturması zaman alır; HabitForm ile sürecin keyfini çıkarmak en önemli parçadır."
             },
             "bad_habits": {
-                "title": "Kötü alışkanlıkları kırmak kolaydır. Onları iyi olanlarla değiştirin.",
-                "description": "Olumsuz alışkanlıklardan kurtulmak, onları aktif olarak olumlu ve sağlıklı alternatiflerle değiştirdiğinizde çok daha kolaydır."
+                "title": "Kötü alışkanlıklardan kurtulmak zor değil. Yerine iyilerini koyun.",
+                "description": "Olumsuz alışkanlıkları bırakmanın en kolay yolu, onları olumlu ve sağlıklı alternatiflerle değiştirmektir."
             },
             "become_person": {
-                "title": "Olmak İstediğiniz Kişi Olun",
-                "aristotleHabitQuote": "Biz, sürekli yaptıklarımızız. Bu nedenle mükemmellik bir eylem değil, bir alışkanlıktır.",
+                "title": "Olmak İstediğiniz Kişiye Dönüşün",
+                "aristotleHabitQuote": "Biz, tekrar tekrar yaptığımız şeyiz. Bu yüzden mükemmellik bir eylem değil, bir alışkanlıktır.",
                 "aristotle": "Aristoteles"
             }
         },
         "app_features": {
-            "title": "HabitForm Size Yardımcı Olur...",
-            "subtitle": "Akıllı takip ve kişiselleştirilmiş içgörülerle kalıcı alışkanlıklar oluşturun",
-            "continue": "Devam Et",
+            "title": "HabitForm'un Benzersiz Özellikleri",
+            "subtitle": "En adanmış kullanıcılarımız için en gelişmiş özellikler",
+            "continue": "Devam",
             "features": {
                 "habit_map": {
                     "title": "Alışkanlık Haritası",
-                    "description": "Alışkanlık ağınızı görselleştirin ve alışkanlıkların nasıl bağlandığını görün. İlgili alışkanlıklardan zincirler oluşturun ve rutininizi güçlendiren ilişkileri anlayın."
+                    "description": "Alışkanlık ağınızı görselleştirin ve alışkanlıkların nasıl bağlandığını görün. Birbirini destekleyen alışkanlık zincirleri kurun ve rutininizi güçlendiren ilişkileri keşfedin."
                 },
                 "habit_probability": {
                     "title": "Alışkanlık Olasılığı",
-                    "description": "Her alışkanlıkla ne kadar başarılı olacağınızı tam olarak görün. Sizi motive tutan ve kalıcı alışkanlıklar oluşturmanıza yardımcı olan kişiselleştirilmiş içgörüler edinin."
+                    "description": "Her alışkanlıkta başarı ihtimalinizi net bir şekilde görün. Motive kalmanıza ve kalıcı alışkanlıklar oluşturmanıza yardımcı olacak kişiselleştirilmiş içgörüler edinin.",
+                    "sub_features_0": "Başarı İhtimalinizi Görün",
+                    "sub_features_1": "Her Gün Motive Kalın",
+                    "sub_features_2": "Özgüveninizi Artırın"
                 },
                 "goal_setting": {
                     "title": "Hedef Belirleme",
-                    "description": "Zorluğa göre uyarlanan bilim tabanlı planlama: kolay alışkanlıklar daha hızlı, zor olanlar daha uzun sürer—hedefleri gerçekçi tutar."
+                    "description": "Zorluğa uyarlanan bilim temelli planlama: kolay alışkanlıklar daha hızlı oluşur, zor olanlar daha uzun sürer. \nHedefleri gerçekçi tutar.",
+                    "sub_features_0": "Net Günlük Adımlar",
+                    "sub_features_1": "Büyük Hayallere Ulaşın",
+                    "sub_features_2": "Odakta Kalın"
                 },
                 "customizable": {
                     "title": "Özelleştirilebilir",
-                    "description": "HabitForm'u gerçekten sizin yapın. Kişiliğinize uyan ve sizi meşgul tutan renkler, temalar ve düzenler seçin."
+                    "description": "HabitForm'u gerçekten size uygun hale getirin. Tarzınızı yansıtan renkleri, temaları ve düzenleri seçin; motivasyonunuzu canlı tutun.",
+                    "sub_features_0": "Kişisel Temalar",
+                    "sub_features_1": "Tarzınız",
+                    "sub_features_2": "Daha İyi Deneyim"
                 },
                 "data_management": {
                     "title": "Veri Yönetimi",
-                    "description": "Alışkanlık verilerinizi yedeklemek veya başka bir cihaza aktarmak için CSV dosyalarına aktarın."
+                    "description": "Yedekleme almak veya başka bir cihaza aktarmak için alışkanlık verilerinizi CSV dosyası olarak dışa aktarın."
+                },
+                "habit_archive": {
+                    "title": "Alışkanlık Arşivi",
+                    "description": "İlerleme geçmişinizi güvenle saklayın ve düzenli tutun. Geçmiş başarılarınıza göz atın ve hazır olduğunuzda alışkanlıkları yeniden başlatın.",
+                    "sub_features_0": "İlerlemenizi Kaybetmeyin",
+                    "sub_features_1": "Yolculuğunuzu Takip Edin",
+                    "sub_features_2": "İstediğiniz Zaman Yeniden Başlatın"
                 },
                 "smart_tracking": {
                     "title": "Akıllı Alışkanlık Takibi",
@@ -144,20 +160,20 @@
                 },
                 "share_habits": {
                     "title": "Alışkanlıkları Paylaş",
-                    "description": "Alışkanlık ilerlemenizi güzel, özelleştirilebilir görsellerle paylaşın. Başarılarınızı sergilemek için farklı tasarımlar arasından seçim yapın.",
-                    "sub_features_0": "Özel Tasarımlar",
-                    "sub_features_1": "İlerleme Paylaşımı",
-                    "sub_features_2": "Başarı Görselleri"
+                    "description": "Başarılarınızı arkadaşlarınız ve ailenizle kutlayın. Başkalarına ilham veren ve sizi sorumlu tutan güzel ilerleme görsellerini paylaşın.",
+                    "sub_features_0": "Başkalarına İlham Verin",
+                    "sub_features_1": "Hesap Verebilir Kalın",
+                    "sub_features_2": "Başarıları Kutlayın"
                 },
                 "home_widget": {
                     "title": "Ana Ekran Widget'ı",
-                    "description": "Uygulamayı açmadan alışkanlıklarınızı takip edin. Ana ekranınızdan günlük hedeflerinizi saniyeler içinde tamamlayın.",
+                    "description": "Uygulamayı açmadan alışkanlıklarınızı takip edin. Günlük hedeflerinizi iPhone ana ekranınızdan saniyeler içinde tamamlayın.",
                     "sub_features_0": "Anında Erişim",
                     "sub_features_1": "Günlük Zaman Tasarrufu",
-                    "sub_features_2": "Asla Unutma",
+                    "sub_features_2": "Bir Daha Unutmayın",
                     "widget_config": {
                         "small_title": "Alışkanlık Takipçisi",
-                        "small_description": "Seri sayacı ile günlük alışkanlıklarınızı takip edin",
+                        "small_description": "Seri sayacıyla günlük alışkanlıklarınızı takip edin",
                         "medium_title": "7 Günlük Alışkanlık Görünümü",
                         "medium_description": "Son 7 günlük alışkanlık ilerlemenizi görüntüleyin",
                         "large_title": "Alışkanlık Isı Haritası",
@@ -182,6 +198,7 @@
                 }
             },
             "formation_probability": "Oluşum Olasılığı",
+            "formation_score": "Oluşum Olasılığı",
             "previous": "Önceki",
             "next": "Sonraki",
             "start": "Başla"
@@ -189,52 +206,52 @@
         "information": {
             "tips": {
                 "start_small": {
-                    "title": "Küçük Başla ve Spesifik Ol",
-                    "description": "Günlük rutininize kolayca dahil edilebilecek yönetilebilir eylemlerle başlayın. \"Daha fazla egzersiz yap\" yerine \"her sabah 5 şınav çek\" gibi."
+                    "title": "Küçük Başlayın ve Net Olun",
+                    "description": "Günlük rutininize kolayca ekleyebileceğiniz küçük adımlarla başlayın. \"Daha çok spor\" yerine \"her sabah 5 şınav\" gibi somut bir hedef belirleyin."
                 },
                 "make_obvious": {
-                    "title": "Açık Hale Getir",
-                    "description": "İyi alışkanlıkları belirgin hale getirmek için çevrenizi tasarlayın. Koşu ayakkabılarınızı kapının yanına koyun, masanızda bir su şişesi bulundurun veya görsel hatırlatıcılar ayarlayın."
+                    "title": "Görünür Kılın",
+                    "description": "İyi alışkanlıkları görünür hale getirmek için çevrenizi düzenleyin. Koşu ayakkabınızı kapının yanına koyun, masanızda bir su şişesi bulundurun ya da görsel hatırlatıcılar kullanın."
                 },
                 "stack_habits": {
-                    "title": "Alışkanlıklarını Birleştir",
-                    "description": "Yeni alışkanlıkları mevcut olanlarla ilişkilendirin. Dişlerimi fırçaladıktan sonra 2 dakika meditasyon yapacağım. Bu, alışkanlıkların kalıcı olmasını sağlayan güçlü bir ilişki yaratır."
+                    "title": "Alışkanlıkları Zincirleyin",
+                    "description": "Yeni alışkanlıkları mevcut alışkanlıklarınıza bağlayın. \"Dişlerimi fırçaladıktan sonra 2 dakika meditasyon yapacağım.\" gibi. Bu, alışkanlığın tutunmasını sağlayan güçlü bir bağ kurar."
                 },
                 "make_satisfying": {
-                    "title": "Tatmin Edici Hale Getir",
-                    "description": "Alışkanlığınızı tamamladıktan hemen sonra kendinizi ödüllendirin. Bu bir kutuyu işaretlemek, en sevdiğiniz şarkıyı dinlemek veya küçük başarıları kutlamak olabilir."
+                    "title": "Tatmin Edici Hale Getirin",
+                    "description": "Alışkanlığınızı tamamlar tamamlamaz küçük bir ödül ekleyin. Bir kutucuğu işaretlemek, sevdiğiniz bir şarkıyı açmak ya da küçük bir başarıyı kutlamak bile işe yarar."
                 },
                 "track_progress": {
                     "title": "İlerlemenizi Takip Edin",
-                    "description": "Motive kalmak için alışkanlık gelişiminizi izleyin. HabitForm, günlükleri veya basit işaretlemeleri kullanın. Serinizin büyümesini görmek ivme ve sorumluluk yaratır."
+                    "description": "Motive kalmak için ilerlemenizi görünür kılın. HabitForm'u, bir günlük tutmayı veya basit işaretlemeleri kullanın. Serinizin büyüdüğünü görmek hem ivme hem de hesap verebilirlik sağlar."
                 }
             },
             "previous": "Önceki",
             "next": "Sonraki",
-            "get_started": "Başla"
+            "get_started": "Başlayalım"
         },
         "rating": {
-            "title": "HabitForm benzersiz özelliklerini\nyeni keşfettiniz",
+            "title": "Az önce HabitForm'un\nbenzersiz özelliklerini keşfettiniz",
             "description": "Daha iyi alışkanlıklar edinmeye ihtiyacı olan daha fazla kişiye ulaşmamıza yardımcı olmak için uygulamamızı değerlendirir misiniz?",
-            "thank_you": "Teşekkür Ederiz!",
-            "feedback_message": "Geri bildiriminiz, HabitForm geliştirmemize ve daha iyi alışkanlıklar edinmeye ihtiyacı olan daha fazla kişiye ulaşmamıza yardımcı olur.",
-            "rate_title": "HabitForm Değerlendir",
-            "rate_message": "HabitForm değerlendirmeye gösterdiğiniz ilgi için teşekkür ederiz! Bizi App Store veya Google Play Store'da değerlendirebilirsiniz.",
-            "continue": "Devam Et",
-            "maybe_later": "Belki Daha Sonra",
-            "rate_button": "HabitForm Değerlendir"
+            "thank_you": "Teşekkürler!",
+            "feedback_message": "Geri bildiriminiz, HabitForm'u geliştirmemize ve daha iyi alışkanlıklar edinmek isteyen daha fazla kişiye ulaşmamıza yardımcı olur.",
+            "rate_title": "HabitForm'u Değerlendirin",
+            "rate_message": "İlginiz için teşekkürler! Bizi App Store veya Google Play Store üzerinden değerlendirebilirsiniz.",
+            "continue": "Devam",
+            "maybe_later": "Belki Sonra",
+            "rate_button": "HabitForm'u Değerlendirin"
         },
         "achievement": {
-            "first_habit_message": "Harika iş! İlk alışkanlığınızı başlangıçta tamamladınız!"
+            "first_habit_message": "Harika iş! Onboarding sırasında ilk alışkanlığınızı tamamladınız!"
         },
         "reward_rating": {
             "title": "Nasıl hissettiniz?",
-            "description": "Bu tamamlamanın ne kadar keyifli hissettirdiğini değerlendirin. Bu, alışkanlık oluşumunuzu daha iyi anlamamıza yardımcı olur.",
+            "description": "Bu tamamlamanın size ne kadar iyi hissettirdiğini puanlayın. Bu, alışkanlık oluşumunuzu daha iyi anlamamıza yardımcı olur.",
             "low": "Düşük",
-            "normal": "Normal",
+            "normal": "Orta",
             "high": "Yüksek",
             "very_high": "Çok Yüksek",
-            "continue": "Devam Et"
+            "continue": "Devam"
         }
     },
     "habit_detail": {
@@ -382,7 +399,7 @@
             "very_difficult": "Çok Zor",
             "very_easy_description": "Minimum çaba ve zaman gerektiren basit alışkanlıklar (örn. su içmek, vitamin almak)",
             "easy_description": "Düşük fiziksel veya zihinsel çaba gerektiren basit alışkanlıklar (örn. yatak yapmak, diş fırçalamak)",
-            "moderate_description": "Orta düzeyde çaba ve planlama gerektiren alışkanlıklar (örn. okuma, hafif egzersiz)",
+            "moderate_description": "Orta düzeyde çaba ve planlama gerektiren; orta zorlukta hissettiren alışkanlıklar (örn. okuma, hafif egzersiz)",
             "difficult_description": "Önemli çaba ve bağlılık gerektiren zorlu alışkanlıklar (örn. yoğun antrenmanlar, yeni beceriler öğrenme)",
             "very_difficult_description": "Yüksek çaba, zaman ve zihinsel güç gerektiren çok zorlu alışkanlıklar (örn. büyük yaşam tarzı değişiklikleri)"
         },
@@ -779,8 +796,8 @@
         "congratulations_fully_formed": "Tebrikler! Alışkanlığınız tamamen oluştu! 🎉",
         "outstanding_progress": "Olağanüstü! Bu alışkanlığı tamamen oluşturmaya {days} gün kaldı! 🎉",
         "great_progress": "Harika ilerleme! Güçlü sinir yolları oluşturuyorsunuz. {days} gün kaldı! 💪",
-        "good_work": "İyi iş! Bu {difficulty} alışkanlık toplam {total} gün gerektiriyor. {remaining} gün kaldı! 📈",
-        "keep_going_message": "Devam edin! Tutarlılık anahtardır. Bu {difficulty} alışkanlık için {remaining} gün daha gerekiyor! 🌱",
+        "good_work": "İyi iş! Bu alışkanlık size {difficulty} zorlukta hissettiriyor. Toplam {total} gün gerekiyor; {remaining} gün kaldı! 📈",
+        "keep_going_message": "Devam edin! Tutarlılık anahtardır. Bu alışkanlık için {difficulty} zorluk seviyesinde {remaining} gün daha gerekiyor! 🌱",
         "formation_takes_days": "Bu alışkanlık oluşması için {total} günlük tutarlı pratik gerektirir"
     },
     "languages": {
