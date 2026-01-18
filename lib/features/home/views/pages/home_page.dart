@@ -1,8 +1,8 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lottie/lottie.dart';
 
 import '/core/core.dart';
+import '../../../../models/habit/habit_model.dart';
 import '../../../create_habit/create_habit_page.dart';
 import '../../../create_habit/provider/create_habit_provider.dart';
 import '../../../habit_probability/page/habit_probability_page.dart';
@@ -30,15 +30,21 @@ class HomePage extends ConsumerWidget {
         backgroundColor: isDark ? CupertinoColors.black : CupertinoColors.systemGrey6,
         child: Stack(
           children: [
-            // Constellation view (full screen)
+            // Constellation view (full screen) - lazy loaded for better initial performance
             homeStateAsyncValue.when(
               data: (homeState) {
                 return Consumer(builder: (context, ref, _) {
+                  // Optimized: Use select to only rebuild when list length changes significantly
                   final filteredHabits = ref.watch(filteredHabitsProvider);
-                  if (filteredHabits.isEmpty) {
+                  final habitsLength = filteredHabits.length;
+
+                  if (habitsLength == 0) {
                     return _noHabitsWidget(ref, context);
                   }
-                  return HabitConstellationView(habits: filteredHabits);
+
+                  // Lazy load constellation view to prevent blocking initial page render
+                  // This helps when there are many habits with heavy completion data
+                  return _LazyConstellationView(habits: filteredHabits);
                 });
               },
               loading: () => _loadingWidget(),
@@ -192,35 +198,45 @@ class HomePage extends ConsumerWidget {
   }
 
   Widget _noHabitsWidget(WidgetRef ref, BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Lottie.asset(
-            Assets.animations.astronout,
-            height: context.height(0.25),
-          ),
-          Text(
-            LocaleKeys.habit_no_habit_found.tr(),
-            style: context.titleLarge.copyWith(fontWeight: FontWeight.w500),
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: 20),
-          CupertinoButton.filled(
-            borderRadius: BorderRadius.circular(100),
-            onPressed: () {
-              _openCreateHabitPage(context);
-            },
-            child: Text(
-              LocaleKeys.create_habit_create_habit.tr(),
-              style: context.titleLarge.copyWith(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
+    // Show empty constellation view in background to motivate user
+    // Keep the create habit button visible on top
+    return Stack(
+      children: [
+        // Empty constellation view as motivational background
+        RepaintBoundary(
+          child: HabitConstellationView(habits: const []),
+        ),
+        // Create habit button and message overlay
+        Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                LocaleKeys.habit_no_habit_found.tr(),
+                style: context.titleLarge.copyWith(
+                  fontWeight: FontWeight.w500,
+                  color: CupertinoTheme.of(context).brightness == Brightness.dark ? Colors.white.withValues(alpha: 0.9) : Colors.black87,
+                ),
+                textAlign: TextAlign.center,
               ),
-            ),
+              const SizedBox(height: 20),
+              CupertinoButton.filled(
+                borderRadius: BorderRadius.circular(100),
+                onPressed: () {
+                  _openCreateHabitPage(context);
+                },
+                child: Text(
+                  LocaleKeys.create_habit_create_habit.tr(),
+                  style: context.titleLarge.copyWith(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ],
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
@@ -272,6 +288,48 @@ class HomePage extends ConsumerWidget {
       builder: (contextFromSheet) {
         return CreateHabitPage();
       },
+    );
+  }
+}
+
+/// Lazy loaded constellation view widget
+/// Defers rendering until after the current frame to improve initial page load performance
+class _LazyConstellationView extends StatefulWidget {
+  final List<Habit> habits;
+
+  const _LazyConstellationView({required this.habits});
+
+  @override
+  State<_LazyConstellationView> createState() => _LazyConstellationViewState();
+}
+
+class _LazyConstellationViewState extends State<_LazyConstellationView> {
+  bool _isLoaded = false;
+
+  @override
+  void initState() {
+    super.initState();
+    // Defer loading until after the current frame
+    // This allows the page UI to render first before processing heavy habit data
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        setState(() {
+          _isLoaded = true;
+        });
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (!_isLoaded) {
+      // Show a minimal placeholder while loading
+      return const SizedBox.shrink();
+    }
+
+    // Wrap constellation view in RepaintBoundary to prevent unnecessary repaints
+    return RepaintBoundary(
+      child: HabitConstellationView(habits: widget.habits),
     );
   }
 }

@@ -465,15 +465,21 @@ class _HabitConstellationViewState extends ConsumerState<HabitConstellationView>
     if (_draggingHabitId != null) return;
 
     // Track if we're panning (movement detected)
-    if (!_isPanning && (details.pointerCount > 0 || details.scale != 1.0)) {
+    // Only update state if it actually changes to avoid unnecessary rebuilds
+    final isPanningNow = details.pointerCount > 0 || details.scale != 1.0;
+    if (!_isPanning && isPanningNow) {
       _isPanning = true;
     }
 
     // InteractiveViewer handles pan and scale automatically
     // Save state with appropriate debounce based on interaction type
     // Zoom/pinch operations use shorter debounce for more frequent caching
-    final isZoom = details.scale != 1.0;
-    _saveTransformState(isZoom: isZoom);
+    // Only save if there's actual movement or scale change (avoid work on idle frames)
+    final hasMovement = details.scale != 1.0 || details.focalPointDelta != Offset.zero;
+    if (hasMovement) {
+      final isZoom = details.scale != 1.0;
+      _saveTransformState(isZoom: isZoom);
+    }
   }
 
   // Start dragging a habit (called on long press)
@@ -589,13 +595,15 @@ class _HabitConstellationViewState extends ConsumerState<HabitConstellationView>
             child: Stack(
               clipBehavior: Clip.none,
               children: [
-                // Grid background
-                CustomPaint(
-                  size: const Size(canvasWidth, canvasHeight),
-                  painter: _GridPainter(isDark: isDark),
+                // Grid background - wrapped in RepaintBoundary since it's static
+                RepaintBoundary(
+                  child: CustomPaint(
+                    size: const Size(canvasWidth, canvasHeight),
+                    painter: _GridPainter(isDark: isDark),
+                  ),
                 ),
 
-                // Connection lines
+                // Connection lines - already in RepaintBoundary, stays cached
                 RepaintBoundary(
                   child: CustomPaint(
                     size: const Size(canvasWidth, canvasHeight),
@@ -647,16 +655,19 @@ class _HabitConstellationViewState extends ConsumerState<HabitConstellationView>
                     child: RepaintBoundary(
                       child: GestureDetector(
                         behavior: HitTestBehavior.translucent,
-                        onTap: () async {
+                        onTap: () {
                           // Don't handle tap if we're in dragging mode
                           if (_draggingHabitId != null) return;
 
                           if (_isConnectingMode) {
                             _onHabitTapForConnection(habit.id);
                           } else {
-                            await ref.watch(habitDetailProvider.notifier).initHabit(habit);
-                            if (!context.mounted) return;
-                            // Use rootNavigator context to ensure sheet appears on top
+                            // Keep provider alive by watching it BEFORE calling initHabit
+                            // This prevents disposal before HabitDetailPage can watch it
+                            final _ = ref.watch(habitDetailProvider);
+                            // Set state immediately (synchronous) - sheet will have state ready
+                            ref.read(habitDetailProvider.notifier).initHabit(habit);
+                            // Show sheet - HabitDetailPage will also watch, keeping provider alive
                             showCupertinoSheet(
                               enableDrag: false,
                               context: context,

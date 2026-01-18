@@ -17,11 +17,16 @@ class HabitDetailNotifier extends AutoDisposeNotifier<Habit?> {
   @override
   Habit? build() => null;
 
-  Future<void> initHabit(Habit habit) async {
-    state = habit;
-    // Trigger async statistics calculation (non-blocking)
-    // This allows the UI to render immediately while statistics calculate in background
-    ref.read(habitStatisticsProvider.notifier).forceRecalculate(habit);
+  void initHabit(Habit habit) {
+    // Defer state setting with longer delay for heavy habit data (3-4 months of data)
+    // This allows sheet animation to start smoothly before processing heavy data
+    // Longer delay prevents blocking UI thread with large completion datasets
+    Future.delayed(const Duration(milliseconds: 200), () {
+      state = habit;
+    });
+    // // Trigger async statistics calculation (non-blocking)
+    // // This allows the UI to render immediately while statistics calculate in background
+    // ref.read(habitStatisticsProvider.notifier).forceRecalculate(habit);
   }
 
   Future<void> updateHabit(Habit habit) async {

@@ -29,15 +29,18 @@ class SettingsPage extends ConsumerWidget {
           children: [
             Column(
               children: [
-                paywallState.when(
-                  data: (state) => state.isSubscriptionActive ? const MembershipInfoButton() : const SubscribeButton(),
-                  error: (error, stack) => SizedBox.shrink(),
-                  loading: () => CupertinoListSection.insetGrouped(
-                    children: [
-                      CupertinoListTile(
-                        title: CupertinoActivityIndicator(),
-                      )
-                    ],
+                // Wrap paywall section in RepaintBoundary to prevent unnecessary repaints
+                RepaintBoundary(
+                  child: paywallState.when(
+                    data: (state) => state.isSubscriptionActive ? const MembershipInfoButton() : const SubscribeButton(),
+                    error: (error, stack) => SizedBox.shrink(),
+                    loading: () => CupertinoListSection.insetGrouped(
+                      children: [
+                        CupertinoListTile(
+                          title: CupertinoActivityIndicator(),
+                        )
+                      ],
+                    ),
                   ),
                 ),
                 const ReviewRequestSection(),

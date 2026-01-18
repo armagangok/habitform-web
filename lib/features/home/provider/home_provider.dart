@@ -15,21 +15,23 @@ import '../../habit_probability/provider/habit_probability_provider.dart';
 import 'home_state.dart';
 
 /// Provider for filtered habits based on selected categories
+/// Optimized with memoization: Riverpod automatically caches results when dependencies don't change
 final filteredHabitsProvider = Provider<List<Habit>>((ref) {
   final homeState = ref.watch(homeProvider);
   final selectedCategories = ref.watch(selectedCategoriesProvider);
 
+  final habits = homeState.value?.habits ?? [];
+  
   // Return all habits if no categories are selected
   if (selectedCategories.isEmpty) {
-    return homeState.value?.habits ?? [];
+    return habits;
   }
 
   // Filter habits based on selected categories
-  final filteredHabits = homeState.value?.habits.where((habit) {
+  final filteredHabits = habits.where((habit) {
         // Check if the habit has any of the selected categories
         return habit.categoryIds.any((categoryId) => selectedCategories.contains(categoryId));
-      }).toList() ??
-      [];
+      }).toList();
 
   return filteredHabits;
 });

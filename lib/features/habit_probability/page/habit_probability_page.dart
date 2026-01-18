@@ -48,13 +48,19 @@ class HabitProbabilityPage extends ConsumerWidget {
                             return Column(
                               spacing: 10,
                               children: [
-                                HabitSelector(
-                                  habitStats: state.habitStatistics.values.toList(),
-                                  onHabitSelected: (index) {
-                                    ref.read(selectedHabitIndexProvider.notifier).state = index;
-                                  },
+                                // Wrap habit selector in RepaintBoundary
+                                RepaintBoundary(
+                                  child: HabitSelector(
+                                    habitStats: state.habitStatistics.values.toList(),
+                                    onHabitSelected: (index) {
+                                      ref.read(selectedHabitIndexProvider.notifier).state = index;
+                                    },
+                                  ),
                                 ),
-                                const FormationInsightsWidget(),
+                                // Wrap formation insights widget in RepaintBoundary (contains charts)
+                                RepaintBoundary(
+                                  child: const FormationInsightsWidget(),
+                                ),
                                 const SizedBox(height: 100), // Extra space for watermark
                               ],
                             );

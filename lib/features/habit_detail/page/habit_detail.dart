@@ -43,6 +43,7 @@ class _HabitDetailPageState extends ConsumerState<HabitDetailPage> {
     final double maxScroll = (_expandedHeight - kToolbarHeight).clamp(0.0, double.infinity);
     if (maxScroll <= 0) return;
     final double newFraction = (_scrollController.offset / maxScroll).clamp(0.0, 1.0);
+    // Only update if the change is significant (reduces unnecessary ValueNotifier updates)
     if ((newFraction - _collapseFraction.value).abs() > 0.02) {
       _collapseFraction.value = newFraction;
     }
@@ -70,13 +71,14 @@ class _HabitDetailPageState extends ConsumerState<HabitDetailPage> {
     final currentHabit = ref.watch(habitDetailProvider);
 
     if (currentHabit == null) {
+      // Show loading state while habit data is being loaded
       return CupertinoPageScaffold(
         navigationBar: SheetHeader(
-          title: 'No habit found',
+          title: '',
           closeButtonPosition: CloseButtonPosition.left,
         ),
-        child: Center(
-          child: Text('No habit found'),
+        child: const Center(
+          child: CupertinoActivityIndicator(),
         ),
       );
     }
@@ -92,32 +94,51 @@ class _HabitDetailPageState extends ConsumerState<HabitDetailPage> {
               // SliverAppBar with habit header
               _buildSliverAppBar(context, currentHabit),
 
-              // Progress card (always visible)
-              SliverToBoxAdapter(
-                child: HabitProgressCard(habit: currentHabit),
-              ),
-
-              // Overview widget (moved from Statistics page)
-              SliverToBoxAdapter(
-                child: HabitOverviewWidget(habit: currentHabit),
-              ),
-
-              // Lazy load heavy widgets to improve initial page load performance
+              // Progress card - lazy loaded with longer delay for heavy data processing
               SliverToBoxAdapter(
                 child: _LazyLoadedWidget(
-                  child: HabitHeatmapCard(habit: currentHabit),
+                  delay: const Duration(milliseconds: 250),
+                  child: RepaintBoundary(
+                    child: HabitProgressCard(habit: currentHabit),
+                  ),
+                ),
+              ),
+
+              // Overview widget - lazy loaded with longer delay for streak calculations
+              SliverToBoxAdapter(
+                child: _LazyLoadedWidget(
+                  delay: const Duration(milliseconds: 350),
+                  child: RepaintBoundary(
+                    child: HabitOverviewWidget(habit: currentHabit),
+                  ),
+                ),
+              ),
+
+              // Lazy load heavy widgets with staggered delays to prevent UI blocking
+              SliverToBoxAdapter(
+                child: _LazyLoadedWidget(
+                  delay: const Duration(milliseconds: 450),
+                  child: RepaintBoundary(
+                    child: HabitHeatmapCard(habit: currentHabit),
+                  ),
                 ),
               ),
 
               SliverToBoxAdapter(
                 child: _LazyLoadedWidget(
-                  child: HabitMilestonesCard(habit: currentHabit),
+                  delay: const Duration(milliseconds: 550),
+                  child: RepaintBoundary(
+                    child: HabitMilestonesCard(habit: currentHabit),
+                  ),
                 ),
               ),
 
               SliverToBoxAdapter(
                 child: _LazyLoadedWidget(
-                  child: HabitInsightsCard(habit: currentHabit),
+                  delay: const Duration(milliseconds: 650),
+                  child: RepaintBoundary(
+                    child: HabitInsightsCard(habit: currentHabit),
+                  ),
                 ),
               ),
 
@@ -273,8 +294,12 @@ class _HabitDetailPageState extends ConsumerState<HabitDetailPage> {
 /// This helps improve initial page load performance by deferring heavy widgets
 class _LazyLoadedWidget extends StatefulWidget {
   final Widget child;
+  final Duration delay;
 
-  const _LazyLoadedWidget({required this.child});
+  const _LazyLoadedWidget({
+    required this.child,
+    this.delay = const Duration(milliseconds: 0),
+  });
 
   @override
   State<_LazyLoadedWidget> createState() => _LazyLoadedWidgetState();
@@ -286,11 +311,15 @@ class _LazyLoadedWidgetState extends State<_LazyLoadedWidget> {
   @override
   void initState() {
     super.initState();
-    // Defer loading until after the current frame
+    // Defer loading until after the current frame + optional delay
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) {
-        setState(() {
-          _isLoaded = true;
+        Future.delayed(widget.delay, () {
+          if (mounted) {
+            setState(() {
+              _isLoaded = true;
+            });
+          }
         });
       }
     });
