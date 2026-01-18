@@ -578,58 +578,67 @@ class _PaywallWidgetState extends ConsumerState<PaywallPage> with TickerProvider
   }
 
   Widget _buildSecondaryButtons() {
-    return Column(
-      children: [
-        if (widget.isFromOnboarding) ...[
-          CustomButton(
-            onPressed: () {
-              navigator.navigateAndClear(path: KRoute.homePage);
-            },
-            child: Text(
-              LocaleKeys.paywall_continue_limited.tr(),
-              style: context.bodySmall.copyWith(
-                color: context.bodySmall.color?.withValues(alpha: 0.7),
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-          ),
-          SizedBox(height: 12)
-        ],
-        Row(
-          spacing: 14,
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Expanded(child: _restoreButton),
-            Expanded(
-              child: CupertinoButton(
-                minimumSize: Size.zero,
-                padding: EdgeInsets.zero,
-                onPressed: UrlLauncherHelper.openPrivacyPolicy,
+    return Builder(builder: (contextFromBuilder) {
+      final isDarkMode = contextFromBuilder.theme.brightness == Brightness.dark;
+
+      return Column(
+        children: [
+          if (widget.isFromOnboarding) ...[
+            SizedBox(
+              width: double.infinity,
+              child: CupertinoButton.filled(
+                color: isDarkMode ? CupertinoColors.white.withValues(alpha: 0.1) : CupertinoColors.black.withValues(alpha: 0.1),
+                onPressed: () {
+                  navigator.navigateAndClear(path: KRoute.homePage);
+                },
                 child: Text(
-                  LocaleKeys.paywall_privacy.tr(),
-                  style: context.bodySmall.copyWith(
-                    fontWeight: FontWeight.w500,
+                  LocaleKeys.paywall_continue_limited.tr(),
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
                   ),
                 ),
               ),
             ),
-            Expanded(
-              child: CupertinoButton(
-                minimumSize: Size.zero,
-                padding: EdgeInsets.zero,
-                onPressed: UrlLauncherHelper.openTermsOfUse,
-                child: Text(
-                  LocaleKeys.paywall_terms.tr(),
-                  style: context.bodySmall.copyWith(
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ),
-            ),
+            SizedBox(height: 12)
           ],
-        ),
-      ],
-    );
+          Row(
+            spacing: 14,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Expanded(child: _restoreButton),
+              Expanded(
+                child: CupertinoButton(
+                  minimumSize: Size.zero,
+                  padding: EdgeInsets.zero,
+                  onPressed: UrlLauncherHelper.openPrivacyPolicy,
+                  child: Text(
+                    LocaleKeys.paywall_privacy.tr(),
+                    style: context.bodySmall.copyWith(
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
+              ),
+              Expanded(
+                child: CupertinoButton(
+                  minimumSize: Size.zero,
+                  padding: EdgeInsets.zero,
+                  onPressed: UrlLauncherHelper.openTermsOfUse,
+                  child: Text(
+                    LocaleKeys.paywall_terms.tr(),
+                    style: context.bodySmall.copyWith(
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      );
+    });
   }
 
   Widget _buildLoadingState() {
@@ -672,14 +681,12 @@ class _PaywallWidgetState extends ConsumerState<PaywallPage> with TickerProvider
   CupertinoNavigationBar _navBar(BuildContext context) {
     return CupertinoNavigationBar(
       automaticallyImplyLeading: false,
-      leading: widget.isFromOnboarding
-          ? null
-          : CircularActionButton(
-              onPressed: () {
-                navigator.pop();
-              },
-              icon: CupertinoIcons.xmark,
-            ),
+      leading: CircularActionButton(
+        onPressed: () {
+          navigator.navigateAndClear(path: KRoute.homePage);
+        },
+        icon: CupertinoIcons.xmark,
+      ),
       middle: Text(
         LocaleKeys.paywall_title.tr(),
         style: context.titleMedium.copyWith(

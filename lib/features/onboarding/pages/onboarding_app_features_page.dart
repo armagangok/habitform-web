@@ -48,42 +48,49 @@ class _OnboardingAppFeaturesPageState extends State<OnboardingAppFeaturesPage> w
 
   List<AppFeature> get _appFeatures => [
         AppFeature(
+          identifier: 'habit_map',
           title: 'onboarding.app_features.features.habit_map.title'.tr(),
           description: 'onboarding.app_features.features.habit_map.description'.tr(),
           icon: CupertinoIcons.map_fill,
           color: context.cupertinoTheme.primaryColor,
         ),
         AppFeature(
+          identifier: 'habit_probability',
           title: 'onboarding.app_features.features.habit_probability.title'.tr(),
           description: 'onboarding.app_features.features.habit_probability.description'.tr(),
           icon: CupertinoIcons.chart_bar_square,
           color: context.cupertinoTheme.primaryColor,
         ),
         AppFeature(
+          identifier: 'home_widget',
           title: 'onboarding.app_features.features.home_widget.title'.tr(),
           description: 'onboarding.app_features.features.home_widget.description'.tr(),
           icon: CupertinoIcons.square_grid_2x2_fill,
           color: context.cupertinoTheme.primaryColor,
         ),
         AppFeature(
+          identifier: 'goal_setting',
           title: 'onboarding.app_features.features.goal_setting.title'.tr(),
           description: 'onboarding.app_features.features.goal_setting.description'.tr(),
           icon: CupertinoIcons.checkmark_circle_fill,
           color: context.cupertinoTheme.primaryColor,
         ),
         AppFeature(
+          identifier: 'customizable',
           title: 'onboarding.app_features.features.customizable.title'.tr(),
           description: 'onboarding.app_features.features.customizable.description'.tr(),
           icon: CupertinoIcons.paintbrush_fill,
           color: context.cupertinoTheme.primaryColor,
         ),
         AppFeature(
+          identifier: 'data_management',
           title: 'onboarding.app_features.features.data_management.title'.tr(),
           description: 'onboarding.app_features.features.data_management.description'.tr(),
           icon: CupertinoIcons.doc_text_fill,
           color: context.cupertinoTheme.primaryColor,
         ),
         AppFeature(
+          identifier: 'share_habits',
           title: 'onboarding.app_features.features.share_habits.title'.tr(),
           description: 'onboarding.app_features.features.share_habits.description'.tr(),
           icon: CupertinoIcons.share,
@@ -727,30 +734,25 @@ class _OnboardingAppFeaturesPageState extends State<OnboardingAppFeaturesPage> w
   }
 
   String? _screenshotForFeature(AppFeature feature) {
-    final title = feature.title.toLowerCase();
-    if (title.contains('habit map') || title.contains('map')) {
-      return 'assets/screenshots/habit_map.png';
+    // Use identifier instead of title to avoid language-dependent matching
+    switch (feature.identifier) {
+      case 'habit_map':
+        return 'assets/screenshots/habit_map.png';
+      case 'habit_probability':
+        return 'assets/screenshots/habit_probability.png';
+      case 'home_widget':
+        return 'assets/screenshots/home_widget.png';
+      case 'goal_setting':
+        return 'assets/screenshots/difficulty_goal.png';
+      case 'customizable':
+        return 'assets/screenshots/customize.png';
+      case 'data_management':
+        return 'assets/screenshots/export_import.png';
+      case 'share_habits':
+        return 'assets/screenshots/share.png';
+      default:
+        return null;
     }
-    if (title.contains('habit probability')) {
-      return 'assets/screenshots/habit_probability.png';
-    }
-    if (title.contains('home widget')) {
-      return 'assets/screenshots/home_widget.png';
-    }
-    if (title.contains('goal')) {
-      return 'assets/screenshots/difficulty_goal.png';
-    }
-    if (title.contains('custom')) {
-      return 'assets/screenshots/customize.png';
-    }
-    if (title.contains('data management') || title.contains('export') || title.contains('import')) {
-      return 'assets/screenshots/export_import.png';
-    }
-    if (title.contains('share')) {
-      return 'assets/screenshots/share.png';
-    }
-    // No screenshots available for other features
-    return null;
   }
 
   Widget _fallbackIcon(BuildContext context, AppFeature feature) {
@@ -903,12 +905,14 @@ class _OnboardingAppFeaturesPageState extends State<OnboardingAppFeaturesPage> w
 }
 
 class AppFeature {
+  final String identifier;
   final String title;
   final String description;
   final IconData icon;
   final Color color;
 
   const AppFeature({
+    required this.identifier,
     required this.title,
     required this.description,
     required this.icon,
