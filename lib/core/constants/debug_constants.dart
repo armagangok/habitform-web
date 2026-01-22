@@ -6,7 +6,7 @@ abstract final class KDebug {
   static const bool purchaseDebugMode = false;
 
   // enables onboarding debug mode for print
-  static const bool onboardingDebugMode = true;
+  static const bool onboardingDebugMode = false;
 
   // enables log debug mode for print
   static const bool logDebugMode = false;

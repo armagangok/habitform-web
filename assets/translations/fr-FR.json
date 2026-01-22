@@ -56,10 +56,6 @@
         "start_button": "Commencer 🚀",
         "continue_button": "Continuer →",
         "pages": {
-            "small_steps": {
-                "title": "Changez votre vie avec un petit pas.",
-                "description": "Développer de nouvelles habitudes devient plus facile et plus durable quand vous commencez par de petits pas gérables avec HabitForm."
-            },
             "welcome": {
                 "welcome_to": "Bienvenue dans",
                 "app_name": "HabitForm",
@@ -77,28 +73,11 @@
                     "meditate": "Méditer",
                     "drink_water": "Boire de l'eau"
                 }
-            },
-            "routine": {
-                "title": "La routine et la répétition aident les habitudes à prendre racine.",
-                "description": "Établir une routine cohérente et répéter les actions sont la clé pour faire tenir les habitudes avec HabitForm."
-            },
-            "patience": {
-                "title": "La patience et la constance aident les habitudes à porter leurs fruits.",
-                "description": "Former une habitude prend du temps ; apprécier le processus est la clé avec HabitForm."
-            },
-            "bad_habits": {
-                "title": "Briser les mauvaises habitudes est facile. Remplacez-les par de bonnes.",
-                "description": "Il est beaucoup plus facile de se débarrasser des habitudes négatives quand vous les remplacez activement par des alternatives positives et saines."
-            },
-            "become_person": {
-                "title": "Devenez la personne que vous voulez être",
-                "aristotleHabitQuote": "Nous sommes ce que nous faisons de manière répétée. Par conséquent, l'excellence n'est pas un acte, mais une habitude.",
-                "aristotle": "Aristote"
             }
         },
         "app_features": {
-            "title": "HabitForm vous aide à...",
-            "subtitle": "Construire des habitudes durables avec un suivi intelligent et des insights personnalisés",
+            "title": "Caractéristiques Uniques de HabitForm",
+            "subtitle": "Nos fonctionnalités les plus avancées pour nos utilisateurs les plus dévoués",
             "continue": "Continuer",
             "features": {
                 "habit_map": {
@@ -107,19 +86,35 @@
                 },
                 "habit_probability": {
                     "title": "Probabilité d'Habitude",
-                    "description": "Voyez exactement vos chances de réussir avec chaque habitude. Obtenez des insights personnalisés qui vous aident à rester motivé et à construire des habitudes durables."
+                    "description": "Voyez exactement vos chances de réussir avec chaque habitude. Obtenez des insights personnalisés qui vous aident à rester motivé et à construire des habitudes durables.",
+                    "sub_features_0": "Connaissez votre Taux de Réussite",
+                    "sub_features_1": "Restez Motivé Quotidiennement",
+                    "sub_features_2": "Renforcez votre Confiance"
                 },
                 "goal_setting": {
                     "title": "Fixation d'Objectifs",
-                    "description": "Planification basée sur la science qui s'adapte à la difficulté : les habitudes plus faciles se forment plus rapidement, les plus difficiles prennent plus de temps—gardant les objectifs réalistes."
+                    "description": "Planification basée sur la science qui s'adapte à la difficulté : les habitudes plus faciles se forment plus rapidement, les plus difficiles prennent plus de temps. Garde les objectifs réalistes.",
+                    "sub_features_0": "Actions Quotidiennes Claires",
+                    "sub_features_1": "Atteignez de Grands Rêves",
+                    "sub_features_2": "Restez Concentré"
                 },
                 "customizable": {
                     "title": "Personnalisable",
-                    "description": "Rendez HabitForm vraiment vôtre. Choisissez des couleurs, des thèmes et des mises en page qui correspondent à votre personnalité et vous gardent engagé."
+                    "description": "Rendez HabitForm vraiment vôtre. Choisissez des couleurs, des thèmes et des mises en page qui reflètent votre style et vous gardent motivé.",
+                    "sub_features_0": "Thèmes Personnels",
+                    "sub_features_1": "Votre Style",
+                    "sub_features_2": "Meilleure Expérience"
                 },
                 "data_management": {
                     "title": "Gestion des Données",
                     "description": "Exportez vos données d'habitudes vers des fichiers CSV pour sauvegarde ou transfert vers un autre appareil."
+                },
+                "habit_archive": {
+                    "title": "Archive d'Habitudes",
+                    "description": "Gardez votre historique de progrès sûr et organisé. Consultez vos réalisations passées et redémarrez les habitudes quand vous êtes prêt.",
+                    "sub_features_0": "Ne Perdez Jamais de Progrès",
+                    "sub_features_1": "Suivez votre Parcours",
+                    "sub_features_2": "Redémarrez à Tout Moment"
                 },
                 "smart_tracking": {
                     "title": "Suivi intelligent des habitudes",
@@ -143,11 +138,11 @@
                     "sub_features_2": "Analyses de progrès"
                 },
                 "share_habits": {
-                    "title": "Partager les habitudes",
-                    "description": "Partagez vos progrès d'habitudes avec de belles images personnalisables. Choisissez parmi différents designs pour mettre en valeur vos réalisations.",
-                    "sub_features_0": "Designs personnalisés",
-                    "sub_features_1": "Partage de progrès",
-                    "sub_features_2": "Images de réussite"
+                    "title": "Partager les Habitudes",
+                    "description": "Célébrez vos victoires avec vos amis et votre famille. Partagez de belles images de progrès qui inspirent les autres et vous gardent responsable.",
+                    "sub_features_0": "Inspirez les Autres",
+                    "sub_features_1": "Restez Responsable",
+                    "sub_features_2": "Célébrez les Victoires"
                 },
                 "home_widget": {
                     "title": "Widget d'Accueil",
@@ -182,36 +177,10 @@
                 }
             },
             "formation_probability": "Probabilité de Formation",
+            "formation_score": "Probabilité de Formation",
             "previous": "Précédent",
             "next": "Suivant",
             "start": "Commencer"
-        },
-        "information": {
-            "tips": {
-                "start_small": {
-                    "title": "Commencez petit et soyez spécifique",
-                    "description": "Commencez par des actions gérables qui sont faciles à intégrer dans votre routine quotidienne. Au lieu de \"faire plus d'exercice\", essayez \"faire 5 pompes chaque matin\"."
-                },
-                "make_obvious": {
-                    "title": "Rendez-le évident",
-                    "description": "Concevez votre environnement pour rendre les bonnes habitudes évidentes. Placez vos chaussures de course près de la porte, gardez une bouteille d'eau sur votre bureau, ou définissez des rappels visuels."
-                },
-                "stack_habits": {
-                    "title": "Empilez vos habitudes",
-                    "description": "Liez les nouvelles habitudes aux existantes. Après m'être brossé les dents, je méditerai pendant 2 minutes. Cela crée une association forte qui fait tenir les habitudes."
-                },
-                "make_satisfying": {
-                    "title": "Rendez-le satisfaisant",
-                    "description": "Récompensez-vous immédiatement après avoir terminé votre habitude. Cela pourrait être cocher une case, profiter d'une chanson préférée, ou célébrer les petites victoires."
-                },
-                "track_progress": {
-                    "title": "Suivez vos progrès",
-                    "description": "Surveillez le développement de vos habitudes pour rester motivé. Utilisez HabitForm, des journaux, ou de simples coches. Voir votre série grandir crée de l'élan et de la responsabilité."
-                }
-            },
-            "previous": "Précédent",
-            "next": "Suivant",
-            "get_started": "Commencer"
         },
         "rating": {
             "title": "Vous venez de découvrir\nles fonctionnalités uniques d'HabitForm",
@@ -377,7 +346,7 @@
             "info": "Choisissez à quel point cette habitude vous semble difficile. Nous utilisons cela pour estimer le temps de formation et personnaliser les insights.",
             "very_easy": "Très facile",
             "easy": "Facile",
-            "moderate": "Modéré",
+            "moderate": "Difficulté modérée",
             "difficult": "Difficile",
             "very_difficult": "Très difficile",
             "very_easy_description": "Habitudes simples qui nécessitent un effort et un temps minimal (ex: boire de l'eau, prendre des vitamines)",
@@ -779,8 +748,8 @@
         "congratulations_fully_formed": "Félicitations! Votre habitude est entièrement formée! 🎉",
         "outstanding_progress": "Exceptionnel! Il vous reste {days} jours pour former complètement cette habitude! 🎉",
         "great_progress": "Excellent progrès! Vous construisez de solides voies neuronales. {days} jours à faire! 💪",
-        "good_work": "Bon travail! Cette habitude {difficulty} nécessite {total} jours au total. {remaining} jours restants! 📈",
-        "keep_going_message": "Continuez! La constance est la clé. Cette habitude {difficulty} a besoin de {remaining} jours de plus! 🌱",
+        "good_work": "Bon travail! Cette habitude vous semble {difficulty}. Elle nécessite {total} jours au total; {remaining} jours restants! 📈",
+        "keep_going_message": "Continuez! La constance est la clé. Cette habitude, avec un niveau de difficulté {difficulty}, a besoin de {remaining} jours de plus! 🌱",
         "formation_takes_days": "Cette habitude nécessite {total} jours de pratique constante pour se former"
     },
     "languages": {

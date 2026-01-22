@@ -56,10 +56,6 @@
         "start_button": "Comenzar 🚀",
         "continue_button": "Continuar →",
         "pages": {
-            "small_steps": {
-                "title": "Cambia tu vida con un pequeño paso.",
-                "description": "Desarrollar nuevos hábitos se vuelve más fácil y sostenible cuando comienzas con pasos pequeños y manejables con HabitForm."
-            },
             "welcome": {
                 "welcome_to": "Bienvenido a",
                 "app_name": "HabitForm",
@@ -77,28 +73,11 @@
                     "meditate": "Meditar",
                     "drink_water": "Beber agua"
                 }
-            },
-            "routine": {
-                "title": "La rutina y la repetición ayudan a que los hábitos echen raíces.",
-                "description": "Establecer una rutina consistente y repetir acciones es clave para hacer que los hábitos se mantengan con HabitForm."
-            },
-            "patience": {
-                "title": "La paciencia y la consistencia ayudan a que los hábitos den frutos.",
-                "description": "Formar un hábito toma tiempo; disfrutar el proceso es la clave con HabitForm."
-            },
-            "bad_habits": {
-                "title": "Romper malos hábitos es fácil. Reemplázalos con buenos hábitos.",
-                "description": "Es mucho más fácil dejar de lado los hábitos negativos cuando los reemplazas activamente con alternativas positivas y saludables."
-            },
-            "become_person": {
-                "title": "Conviértete en la persona que quieres ser",
-                "aristotleHabitQuote": "Somos lo que hacemos repetidamente. Por lo tanto, la excelencia no es un acto, sino un hábito.",
-                "aristotle": "Aristóteles"
             }
         },
         "app_features": {
-            "title": "HabitForm te ayuda a...",
-            "subtitle": "Construir hábitos duraderos con seguimiento inteligente e ideas personalizadas",
+            "title": "Características Únicas de HabitForm",
+            "subtitle": "Nuestras características más avanzadas para nuestros usuarios más dedicados",
             "continue": "Continuar",
             "features": {
                 "habit_map": {
@@ -107,19 +86,35 @@
                 },
                 "habit_probability": {
                     "title": "Probabilidad del Hábito",
-                    "description": "Ve exactamente qué tan probable es que tengas éxito con cada hábito. Obtén insights personalizados que te ayuden a mantenerte motivado y construir hábitos duraderos."
+                    "description": "Ve exactamente qué tan probable es que tengas éxito con cada hábito. Obtén insights personalizados que te ayuden a mantenerte motivado y construir hábitos duraderos.",
+                    "sub_features_0": "Conoce tu Tasa de Éxito",
+                    "sub_features_1": "Mantente Motivado Diariamente",
+                    "sub_features_2": "Construye Confianza"
                 },
                 "goal_setting": {
                     "title": "Establecimiento de Metas",
-                    "description": "Planificación basada en la ciencia que se adapta a la dificultad: los hábitos más fáciles se forman más rápido, los más difíciles tardan más—manteniendo las metas realistas."
+                    "description": "Planificación basada en la ciencia que se adapta a la dificultad: los hábitos más fáciles se forman más rápido, los más difíciles tardan más. Mantiene las metas realistas.",
+                    "sub_features_0": "Acciones Diarias Claras",
+                    "sub_features_1": "Alcanza Grandes Sueños",
+                    "sub_features_2": "Mantente Enfocado"
                 },
                 "customizable": {
                     "title": "Personalizable",
-                    "description": "Haz que HabitForm sea verdaderamente tuyo. Elige colores, temas y diseños que coincidan con tu personalidad y te mantengan comprometido."
+                    "description": "Haz que HabitForm sea verdaderamente tuyo. Elige colores, temas y diseños que reflejen tu estilo y te mantengan motivado.",
+                    "sub_features_0": "Temas Personales",
+                    "sub_features_1": "Tu Estilo",
+                    "sub_features_2": "Mejor Experiencia"
                 },
                 "data_management": {
                     "title": "Gestión de Datos",
                     "description": "Exporta los datos de tus hábitos a archivos CSV para respaldo o transferencia a otro dispositivo."
+                },
+                "habit_archive": {
+                    "title": "Archivo de Hábitos",
+                    "description": "Mantén tu historial de progreso seguro y organizado. Ve tus logros pasados y reinicia hábitos cuando estés listo.",
+                    "sub_features_0": "Nunca Pierdas Progreso",
+                    "sub_features_1": "Rastrea tu Viaje",
+                    "sub_features_2": "Reinicia en Cualquier Momento"
                 },
                 "smart_tracking": {
                     "title": "Seguimiento inteligente de hábitos",
@@ -143,11 +138,11 @@
                     "sub_features_2": "Análisis de progreso"
                 },
                 "share_habits": {
-                    "title": "Compartir hábitos",
-                    "description": "Comparte tu progreso de hábitos con imágenes hermosas y personalizables. Elige entre diferentes diseños para mostrar tus logros.",
-                    "sub_features_0": "Diseños personalizados",
-                    "sub_features_1": "Compartir progreso",
-                    "sub_features_2": "Imágenes de logros"
+                    "title": "Compartir Hábitos",
+                    "description": "Celebra tus logros con amigos y familia. Comparte hermosas imágenes de progreso que inspiren a otros y te mantengan responsable.",
+                    "sub_features_0": "Inspira a Otros",
+                    "sub_features_1": "Mantente Responsable",
+                    "sub_features_2": "Celebra los Logros"
                 },
                 "home_widget": {
                     "title": "Widget de Inicio",
@@ -182,43 +177,17 @@
                 }
             },
             "formation_probability": "Probabilidad de Formación",
+            "formation_score": "Probabilidad de Formación",
             "previous": "Anterior",
             "next": "Siguiente",
             "start": "Comenzar"
-        },
-        "information": {
-            "tips": {
-                "start_small": {
-                    "title": "Comienza pequeño y sé específico",
-                    "description": "Comienza con acciones manejables que sean fáciles de incorporar a tu rutina diaria. En lugar de \"hacer más ejercicio\", prueba \"hacer 5 flexiones cada mañana\"."
-                },
-                "make_obvious": {
-                    "title": "Hazlo obvio",
-                    "description": "Diseña tu entorno para hacer obvios los buenos hábitos. Coloca tus zapatos de correr junto a la puerta, mantén una botella de agua en tu escritorio o establece recordatorios visuales."
-                },
-                "stack_habits": {
-                    "title": "Apila tus hábitos",
-                    "description": "Vincula nuevos hábitos con los existentes. Después de cepillarme los dientes, meditaré por 2 minutos. Esto crea una asociación fuerte que hace que los hábitos se mantengan."
-                },
-                "make_satisfying": {
-                    "title": "Hazlo satisfactorio",
-                    "description": "Recompénsate inmediatamente después de completar tu hábito. Esto podría ser marcar una casilla, disfrutar de una canción favorita o celebrar pequeñas victorias."
-                },
-                "track_progress": {
-                    "title": "Rastrea tu progreso",
-                    "description": "Monitorea el desarrollo de tus hábitos para mantenerte motivado. Usa HabitForm, diarios o simples marcas de verificación. Ver crecer tu racha crea impulso y responsabilidad."
-                }
-            },
-            "previous": "Anterior",
-            "next": "Siguiente",
-            "get_started": "Comenzar"
         },
         "rating": {
             "title": "Acabas de descubrir\nlas características únicas de HabitForm",
             "description": "Para ayudarnos a llegar a más personas que necesitan ayuda para construir mejores hábitos, ¿podrías darnos una reseña de nuestra app?",
             "thank_you": "¡Gracias!",
             "feedback_message": "Tu comentario nos ayuda a mejorar HabitForm y llegar a más personas que necesitan ayuda para construir mejores hábitos.",
-            "rate_title": "Calificar HabitForm",
+            "rate_title": "Califica HabitForm",
             "rate_message": "¡Gracias por tu interés en calificar HabitForm! Puedes calificarnos en la App Store o Google Play Store.",
             "continue": "Continuar",
             "maybe_later": "Tal vez más tarde",
@@ -377,7 +346,7 @@
             "info": "Elige qué tan desafiante se siente este hábito. Usamos esto para estimar el tiempo de formación y personalizar las ideas.",
             "very_easy": "Muy fácil",
             "easy": "Fácil",
-            "moderate": "Moderado",
+            "moderate": "Dificultad moderada",
             "difficult": "Difícil",
             "very_difficult": "Muy difícil",
             "very_easy_description": "Hábitos simples que requieren esfuerzo y tiempo mínimos (ej., beber agua, tomar vitaminas)",
@@ -779,8 +748,8 @@
         "congratulations_fully_formed": "¡Felicidades! ¡Tu hábito está completamente formado! 🎉",
         "outstanding_progress": "¡Excelente! Estás a {days} días de formar por completo este hábito. 🎉",
         "great_progress": "¡Gran progreso! Estás construyendo fuertes vías neuronales. ¡Faltan {days} días! 💪",
-        "good_work": "¡Buen trabajo! Este hábito {difficulty} necesita {total} días en total. ¡Quedan {remaining} días! 📈",
-        "keep_going_message": "¡Sigue así! La consistencia es clave. ¡Este hábito {difficulty} necesita {remaining} días más! 🌱",
+        "good_work": "¡Buen trabajo! Este hábito te parece {difficulty}. Necesita {total} días en total; ¡quedan {remaining} días! 📈",
+        "keep_going_message": "¡Sigue así! La consistencia es clave. Este hábito, con nivel de dificultad {difficulty}, necesita {remaining} días más! 🌱",
         "formation_takes_days": "Este hábito requiere {total} días de práctica constante para formarse"
     },
     "languages": {

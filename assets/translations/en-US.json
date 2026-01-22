@@ -56,10 +56,6 @@
         "start_button": "Start 🚀",
         "continue_button": "Continue →",
         "pages": {
-            "small_steps": {
-                "title": "Change your life with a small step.",
-                "description": "Developing new habits becomes easier and more sustainable when you start with small, manageable steps with HabitForm."
-            },
             "welcome": {
                 "welcome_to": "Welcome to",
                 "app_name": "HabitForm",
@@ -77,23 +73,6 @@
                     "meditate": "Meditate",
                     "drink_water": "Drink Water"
                 }
-            },
-            "routine": {
-                "title": "Routine and repeate help habits take root.",
-                "description": "Establishing a consistent routine and repeating actions are key to making habits stick with HabitForm."
-            },
-            "patience": {
-                "title": "Patience and consistency help habits bear fruit.",
-                "description": "Forming a habit takes time; enjoying the process is the key with HabitForm."
-            },
-            "bad_habits": {
-                "title": "Breaking bad habits is easy. Replace them with good ones.",
-                "description": "It's much easier to let go of negative habits when you actively replace them with positive and healthy alternatives."
-            },
-            "become_person": {
-                "title": "Become The Person You Want To Be",
-                "aristotleHabitQuote": "We are what we repeatedly do. Therefore, excellence is not an act, but a habit.",
-                "aristotle": "Aristotle"
             }
         },
         "app_features": {
@@ -180,33 +159,6 @@
             "previous": "Previous",
             "next": "Next",
             "start": "Start"
-        },
-        "information": {
-            "tips": {
-                "start_small": {
-                    "title": "Start Small & Be Specific",
-                    "description": "Begin with manageable actions that are easy to incorporate into your daily routine. Instead of \"exercise more,\" try \"do 5 push-ups every morning.\""
-                },
-                "make_obvious": {
-                    "title": "Make It Obvious",
-                    "description": "Design your environment to make good habits obvious. Place your running shoes by the door, keep a water bottle on your desk, or set visual reminders."
-                },
-                "stack_habits": {
-                    "title": "Stack Your Habits",
-                    "description": "Link new habits to existing ones. After I brush my teeth, I will meditate for 2 minutes. This creates a strong association that makes habits stick."
-                },
-                "make_satisfying": {
-                    "title": "Make It Satisfying",
-                    "description": "Reward yourself immediately after completing your habit. This could be checking off a box, enjoying a favorite song, or celebrating small wins."
-                },
-                "track_progress": {
-                    "title": "Track Your Progress",
-                    "description": "Monitor your habit development to stay motivated. Use HabitForm, journals, or simple checkmarks. Seeing your streak grow creates momentum and accountability."
-                }
-            },
-            "previous": "Previous",
-            "next": "Next",
-            "get_started": "Get Started"
         },
         "rating": {
             "title": "You've just discovered\nHabitForm's unique features",

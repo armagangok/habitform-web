@@ -56,10 +56,6 @@
         "start_button": "Aloita 🚀",
         "continue_button": "Jatka →",
         "pages": {
-            "small_steps": {
-                "title": "Muuta elämäsi pienellä askeleella.",
-                "description": "Uusien tapojen kehittäminen on helpompaa ja kestävämpää, kun aloitat pienillä, hallittavilla askelilla HabitFormin avulla."
-            },
             "welcome": {
                 "welcome_to": "Tervetuloa",
                 "app_name": "HabitForm",
@@ -77,28 +73,12 @@
                     "meditate": "Meditoi",
                     "drink_water": "Juo vettä"
                 }
-            },
-            "routine": {
-                "title": "Rutiini ja toisto auttavat tapoja juurtumaan.",
-                "description": "Johdonmukaisen rutiinin luominen ja toimintojen toistaminen on avain tapojen muodostumiseen HabitFormin avulla."
-            },
-            "patience": {
-                "title": "Kärsivällisyys ja johdonmukaisuus tuovat tulosta.",
-                "description": "Tavan muodostaminen vie aikaa; prosessista nauttiminen on avain HabitFormin kanssa."
-            },
-            "bad_habits": {
-                "title": "Huonojen tapojen rikkominen on helpompaa. Korvaa ne hyvillä.",
-                "description": "Negatiivisista tavoista luopuminen on paljon helpompaa, kun korvaat ne aktiivisesti positiivisilla ja terveellisillä vaihtoehdoilla."
-            },
-            "become_person": {
-                "title": "Tule ihmiseksi, joka haluat olla",
-                "aristotleHabitQuote": "Olemme sitä, mitä teemme toistuvasti. Siksi erinomaisuus ei ole teko, vaan tapa.",
-                "aristotle": "Aristoteles"
             }
         },
         "app_features": {
-            "title": "HabitForm auttaa sinua ...",
-            "subtitle": "Rakenna kestäviä tapoja älykkäällä seurannalla ja henkilökohtaisilla oivalluksilla",
+            "title": "HabitFormin Ainutlaatuiset Ominaisuudet",
+            "subtitle": "Kehittyneimmät ominaisuutemme omistautuneimmille käyttäjillemme",
+            "continue": "Jatka",
             "features": {
                 "habit_map": {
                     "title": "Tottumuskartta",
@@ -106,19 +86,35 @@
                 },
                 "habit_probability": {
                     "title": "Tavan todennäköisyys",
-                    "description": "Näe tarkalleen kuinka todennäköistä onnistumisesi on jokaisen tavan kanssa. Hanki henkilökohtaisia oivalluksia, jotka auttavat sinua pysymään motivoituneena ja rakentamaan kestäviä tapoja."
+                    "description": "Näe tarkalleen kuinka todennäköistä onnistumisesi on jokaisen tavan kanssa. Hanki henkilökohtaisia oivalluksia, jotka auttavat sinua pysymään motivoituneena ja rakentamaan kestäviä tapoja.",
+                    "sub_features_0": "Tunne Onnistumisprosenttisi",
+                    "sub_features_1": "Pysy Motivoituneena Päivittäin",
+                    "sub_features_2": "Rakenna Itsevarmuutta"
                 },
                 "goal_setting": {
                     "title": "Tavoitteiden Asettaminen",
-                    "description": "Tieteeseen perustuva suunnittelu, joka mukautuu vaikeuteen: helpommat tavat muodostuvat nopeammin, vaikeammat vievät kauemmin—pitäen tavoitteet realistisina."
+                    "description": "Tieteeseen perustuva suunnittelu, joka mukautuu vaikeuteen: helpommat tavat muodostuvat nopeammin, vaikeammat vievät kauemmin. Pitää tavoitteet realistisina.",
+                    "sub_features_0": "Selkeät Päivittäiset Toimet",
+                    "sub_features_1": "Saavuta Suuret Unelmat",
+                    "sub_features_2": "Pysy Keskittyneenä"
                 },
                 "customizable": {
                     "title": "Mukautettava",
-                    "description": "Tee HabitFormista todella sinun. Valitse värit, teemat ja asettelut, jotka vastaavat persoonallisuuttasi ja pitävät sinut kiinnostuneena."
+                    "description": "Tee HabitFormista todella sinun. Valitse värit, teemat ja asettelut, jotka heijastavat tyyliäsi ja pitävät sinut motivoituneena.",
+                    "sub_features_0": "Henkilökohtaiset Teemat",
+                    "sub_features_1": "Sinun Tyyli",
+                    "sub_features_2": "Parempi Kokemus"
                 },
                 "data_management": {
                     "title": "Tietojen Hallinta",
                     "description": "Vie tapojesi tiedot CSV-tiedostoihin varmuuskopiointia tai toiseen laitteeseen siirtoa varten."
+                },
+                "habit_archive": {
+                    "title": "Tapojen Arkisto",
+                    "description": "Pidä edistymisesi historia turvallisena ja organisoituna. Tarkastele menneitä saavutuksiasi ja käynnistä tapoja uudelleen kun olet valmis.",
+                    "sub_features_0": "Älä Koskaan Menetä Edistymistä",
+                    "sub_features_1": "Seuraa Matkaasi",
+                    "sub_features_2": "Käynnistä Uudelleen Milloin Tahansa"
                 },
                 "smart_tracking": {
                     "title": "Älykäs tapojen seuranta",
@@ -142,11 +138,11 @@
                     "sub_features_2": "Edistymisanalytiikka"
                 },
                 "share_habits": {
-                    "title": "Jaa tapoja",
-                    "description": "Jaa tapojesi edistys kauniilla, muokattavilla kuvilla. Valitse eri suunnitelmista korostaaksesi saavutuksiasi.",
-                    "sub_features_0": "Mukautetut designit",
-                    "sub_features_1": "Edistyksen jakaminen",
-                    "sub_features_2": "Saavutuskuvat"
+                    "title": "Jaa Tapoja",
+                    "description": "Juhli voittoja ystävien ja perheen kanssa. Jaa kauniita edistymiskuvia, jotka inspiroivat muita ja pitävät sinut vastuullisena.",
+                    "sub_features_0": "Inspiroi Muita",
+                    "sub_features_1": "Pysy Vastuullisena",
+                    "sub_features_2": "Juhli Voittoja"
                 },
                 "home_widget": {
                     "title": "Kotivalikko Widget",
@@ -181,36 +177,10 @@
                 }
             },
             "formation_probability": "Muodostumistodennäköisyys",
+            "formation_score": "Muodostumistodennäköisyys",
             "previous": "Edellinen",
             "next": "Seuraava",
             "start": "Aloita"
-        },
-        "information": {
-            "tips": {
-                "start_small": {
-                    "title": "Aloita pienesti ja ole täsmällinen",
-                    "description": "Aloita hallittavilla teoilla, jotka on helppo sisällyttää arkeen. Sen sijaan että \"liiku enemmän\", kokeile \"tee 5 punnerrusta joka aamu\"."
-                },
-                "make_obvious": {
-                    "title": "Tee siitä ilmeinen",
-                    "description": "Muotoile ympäristösi tukemaan hyviä tapoja. Pidä juoksukengät oven vieressä, vesipullo työpöydällä tai aseta visuaalisia muistutuksia."
-                },
-                "stack_habits": {
-                    "title": "Pinoa tapasi",
-                    "description": "Liitä uudet tavat olemassa oleviin. Kun harjaan hampaani, meditoi 2 minuuttia. Tämä luo vahvan assosiaation, joka auttaa tapoja tarttumaan."
-                },
-                "make_satisfying": {
-                    "title": "Tee siitä palkitsevaa",
-                    "description": "Palkitse itseäsi heti tavan suorittamisen jälkeen. Se voi olla ruutuvalinta, lempikappaleen kuuntelu tai pienten voittojen juhlistaminen."
-                },
-                "track_progress": {
-                    "title": "Seuraa edistymistäsi",
-                    "description": "Seuraa tapasi kehitystä pysyäksesi motivoituneena. Käytä HabitFormia, päiväkirjoja tai yksinkertaisia merkintöjä. Putken kasvu luo vauhtia ja vastuullisuutta."
-                }
-            },
-            "previous": "Edellinen",
-            "next": "Seuraava",
-            "get_started": "Aloita"
         },
         "rating": {
             "title": "Olet juuri löytänyt\nHabitFormin ainutlaatuiset ominaisuudet",
@@ -376,7 +346,7 @@
             "info": "Valitse, kuinka haastavalta tämä tapa tuntuu. Käytämme tätä arvioimaan muodostumisaikaa ja personoituja oivalluksia.",
             "very_easy": "Erittäin helppo",
             "easy": "Helppo",
-            "moderate": "Kohtalainen",
+            "moderate": "Kohtalainen vaikeus",
             "difficult": "Vaikea",
             "very_difficult": "Erittäin vaikea",
             "very_easy_description": "Yksinkertaiset tavat, jotka vaativat vähäistä vaivaa ja aikaa (esim. veden juonti, vitamiinien ottaminen)",
@@ -778,8 +748,8 @@
         "congratulations_fully_formed": "Onnittelut! Tapasi on täysin muodostunut! 🎉",
         "outstanding_progress": "Upeaa! Olet {days} päivän päässä tämän tavan täydellisestä muodostumisesta! 🎉",
         "great_progress": "Hienoa edistystä! Rakennat vahvoja hermoratoja. {days} päivää jäljellä! 💪",
-        "good_work": "Hyvää työtä! Tämä {difficulty} tapa vaatii yhteensä {total} päivää. {remaining} päivää jäljellä! 📈",
-        "keep_going_message": "Jatka! Johdonmukaisuus on avain. Tämä {difficulty} tapa tarvitsee vielä {remaining} päivää! 🌱",
+        "good_work": "Hyvää työtä! Tämä tapa tuntuu sinusta {difficulty}. Se vaatii yhteensä {total} päivää; {remaining} päivää jäljellä! 📈",
+        "keep_going_message": "Jatka! Johdonmukaisuus on avain. Tämä tapa, vaikeustasolla {difficulty}, tarvitsee vielä {remaining} päivää! 🌱",
         "formation_takes_days": "Tämä tapa vaatii {total} päivän johdonmukaisen harjoittelun"
     },
     "languages": {

@@ -56,10 +56,6 @@
         "start_button": "Başla 🚀",
         "continue_button": "Devam Et →",
         "pages": {
-            "small_steps": {
-                "title": "Hayatınızı küçük bir adımla değiştirin.",
-                "description": "HabitForm ile yeni alışkanlıklar edinmek; küçük, uygulanabilir adımlarla başladığınızda çok daha kolay ve sürdürülebilir olur."
-            },
             "welcome": {
                 "welcome_to": "Hoş geldiniz",
                 "app_name": "HabitForm",
@@ -77,23 +73,6 @@
                     "meditate": "Meditasyon Yap",
                     "drink_water": "Su İç"
                 }
-            },
-            "routine": {
-                "title": "Rutin ve tekrar, alışkanlıkların kök salmasını sağlar.",
-                "description": "Düzenli bir rutin oluşturmak ve eylemleri tekrar etmek, HabitForm ile alışkanlıkları kalıcı hale getirmenin anahtarıdır."
-            },
-            "patience": {
-                "title": "Sabır ve istikrar, alışkanlıkların meyve vermesini sağlar.",
-                "description": "Bir alışkanlığın oturması zaman alır; HabitForm ile sürecin keyfini çıkarmak en önemli parçadır."
-            },
-            "bad_habits": {
-                "title": "Kötü alışkanlıklardan kurtulmak zor değil. Yerine iyilerini koyun.",
-                "description": "Olumsuz alışkanlıkları bırakmanın en kolay yolu, onları olumlu ve sağlıklı alternatiflerle değiştirmektir."
-            },
-            "become_person": {
-                "title": "Olmak İstediğiniz Kişiye Dönüşün",
-                "aristotleHabitQuote": "Biz, tekrar tekrar yaptığımız şeyiz. Bu yüzden mükemmellik bir eylem değil, bir alışkanlıktır.",
-                "aristotle": "Aristoteles"
             }
         },
         "app_features": {
@@ -203,36 +182,9 @@
             "next": "Sonraki",
             "start": "Başla"
         },
-        "information": {
-            "tips": {
-                "start_small": {
-                    "title": "Küçük Başlayın ve Net Olun",
-                    "description": "Günlük rutininize kolayca ekleyebileceğiniz küçük adımlarla başlayın. \"Daha çok spor\" yerine \"her sabah 5 şınav\" gibi somut bir hedef belirleyin."
-                },
-                "make_obvious": {
-                    "title": "Görünür Kılın",
-                    "description": "İyi alışkanlıkları görünür hale getirmek için çevrenizi düzenleyin. Koşu ayakkabınızı kapının yanına koyun, masanızda bir su şişesi bulundurun ya da görsel hatırlatıcılar kullanın."
-                },
-                "stack_habits": {
-                    "title": "Alışkanlıkları Zincirleyin",
-                    "description": "Yeni alışkanlıkları mevcut alışkanlıklarınıza bağlayın. \"Dişlerimi fırçaladıktan sonra 2 dakika meditasyon yapacağım.\" gibi. Bu, alışkanlığın tutunmasını sağlayan güçlü bir bağ kurar."
-                },
-                "make_satisfying": {
-                    "title": "Tatmin Edici Hale Getirin",
-                    "description": "Alışkanlığınızı tamamlar tamamlamaz küçük bir ödül ekleyin. Bir kutucuğu işaretlemek, sevdiğiniz bir şarkıyı açmak ya da küçük bir başarıyı kutlamak bile işe yarar."
-                },
-                "track_progress": {
-                    "title": "İlerlemenizi Takip Edin",
-                    "description": "Motive kalmak için ilerlemenizi görünür kılın. HabitForm'u, bir günlük tutmayı veya basit işaretlemeleri kullanın. Serinizin büyüdüğünü görmek hem ivme hem de hesap verebilirlik sağlar."
-                }
-            },
-            "previous": "Önceki",
-            "next": "Sonraki",
-            "get_started": "Başlayalım"
-        },
         "rating": {
             "title": "Az önce HabitForm'un\nbenzersiz özelliklerini keşfettiniz",
-            "description": "Daha iyi alışkanlıklar edinmeye ihtiyacı olan daha fazla kişiye ulaşmamıza yardımcı olmak için uygulamamızı değerlendirir misiniz?",
+            "description": "Daha iyi alışkanlıklar edinmeye ihtiyacı olan daha fazla kişiye yardımcı olmak için uygulamamızı değerlendirir misiniz?",
             "thank_you": "Teşekkürler!",
             "feedback_message": "Geri bildiriminiz, HabitForm'u geliştirmemize ve daha iyi alışkanlıklar edinmek isteyen daha fazla kişiye ulaşmamıza yardımcı olur.",
             "rate_title": "HabitForm'u Değerlendirin",

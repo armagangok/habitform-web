@@ -56,10 +56,6 @@
         "start_button": "开始 🚀",
         "continue_button": "继续 →",
         "pages": {
-            "small_steps": {
-                "title": "用一小步改变你的生活。",
-                "description": "从小的、可管理的步骤开始，养成新习惯会变得更容易和更可持续，HabitForm 助你实现。"
-            },
             "welcome": {
                 "welcome_to": "欢迎来到",
                 "app_name": "HabitForm",
@@ -77,28 +73,12 @@
                     "meditate": "冥想",
                     "drink_water": "喝水"
                 }
-            },
-            "routine": {
-                "title": "规律和重复帮助习惯扎根。",
-                "description": "建立一致的规律和重复行动是让习惯坚持下去的关键，HabitForm 助你实现。"
-            },
-            "patience": {
-                "title": "耐心和坚持帮助习惯开花结果。",
-                "description": "养成习惯需要时间；享受这个过程是关键，HabitForm 与你同行。"
-            },
-            "bad_habits": {
-                "title": "改掉坏习惯很容易。用好的习惯替代它们。",
-                "description": "当你主动用积极健康的替代品替换负面习惯时，摆脱它们会变得容易得多。"
-            },
-            "become_person": {
-                "title": "成为你想成为的人",
-                "aristotleHabitQuote": "我们重复做的事情造就了我们。因此，卓越不是一种行为，而是一种习惯。",
-                "aristotle": "亚里士多德"
             }
         },
         "app_features": {
-            "title": "HabitForm 帮助你...",
-            "subtitle": "通过智能追踪和个性化洞察建立持久的习惯",
+            "title": "HabitForm 的独特功能",
+            "subtitle": "为最忠实的用户提供最先进的功能",
+            "continue": "继续",
             "features": {
                 "habit_map": {
                     "title": "习惯地图",
@@ -106,19 +86,35 @@
                 },
                 "habit_probability": {
                     "title": "习惯概率",
-                    "description": "准确了解您在每个习惯上成功的可能性。获得个性化洞察，帮助您保持动力并建立持久的习惯。"
+                    "description": "准确了解您在每个习惯上成功的可能性。获得个性化洞察，帮助您保持动力并建立持久的习惯。",
+                    "sub_features_0": "了解您的成功率",
+                    "sub_features_1": "每天保持动力",
+                    "sub_features_2": "建立信心"
                 },
                 "goal_setting": {
                     "title": "目标设定",
-                    "description": "基于科学的规划，适应难度：简单的习惯形成更快，困难的习惯需要更长时间—保持目标现实。"
+                    "description": "基于科学的规划，适应难度：简单的习惯形成更快，困难的习惯需要更长时间。保持目标现实。",
+                    "sub_features_0": "明确的日常行动",
+                    "sub_features_1": "实现大梦想",
+                    "sub_features_2": "保持专注"
                 },
                 "customizable": {
                     "title": "可定制",
-                    "description": "让 HabitForm 真正属于您。选择与您的个性匹配并让您保持参与的颜色、主题和布局。"
+                    "description": "让 HabitForm 真正属于您。选择反映您风格并让您保持动力的颜色、主题和布局。",
+                    "sub_features_0": "个人主题",
+                    "sub_features_1": "您的风格",
+                    "sub_features_2": "更好的体验"
                 },
                 "data_management": {
                     "title": "数据管理",
                     "description": "将您的习惯数据导出到 CSV 文件以进行备份或传输到另一台设备。"
+                },
+                "habit_archive": {
+                    "title": "习惯存档",
+                    "description": "安全有序地保存您的进度历史。查看过去的成就，随时准备重新开始习惯。",
+                    "sub_features_0": "永不丢失进度",
+                    "sub_features_1": "追踪您的旅程",
+                    "sub_features_2": "随时重新开始"
                 },
                 "smart_tracking": {
                     "title": "智能习惯追踪",
@@ -143,10 +139,10 @@
                 },
                 "share_habits": {
                     "title": "分享习惯",
-                    "description": "通过美观、可定制的图片分享你的习惯进度。选择不同的设计来展示你的成就。",
-                    "sub_features_0": "自定义设计",
-                    "sub_features_1": "进度分享",
-                    "sub_features_2": "成就图片"
+                    "description": "与朋友和家人一起庆祝您的胜利。分享美丽的进度图片，激励他人并让您保持责任感。",
+                    "sub_features_0": "激励他人",
+                    "sub_features_1": "保持责任感",
+                    "sub_features_2": "庆祝胜利"
                 },
                 "home_widget": {
                     "title": "主屏幕小部件",
@@ -181,36 +177,10 @@
                 }
             },
             "formation_probability": "形成概率",
+            "formation_score": "形成概率",
             "previous": "上一页",
             "next": "下一页",
             "start": "开始"
-        },
-        "information": {
-            "tips": {
-                "start_small": {
-                    "title": "从小开始，具体明确",
-                    "description": "从容易融入日常生活的可管理行动开始。与其说\"多运动\"，不如说\"每天早上做5个俯卧撑\"。"
-                },
-                "make_obvious": {
-                    "title": "让它显而易见",
-                    "description": "设计你的环境，让好习惯变得明显。把跑鞋放在门口，在桌上放个水瓶，或设置视觉提醒。"
-                },
-                "stack_habits": {
-                    "title": "叠加你的习惯",
-                    "description": "将新习惯与现有习惯联系起来。刷牙后，我会冥想2分钟。这创造了强烈的关联，让习惯坚持下去。"
-                },
-                "make_satisfying": {
-                    "title": "让它令人满意",
-                    "description": "完成习惯后立即奖励自己。这可以是勾选一个框、享受一首喜欢的歌，或庆祝小胜利。"
-                },
-                "track_progress": {
-                    "title": "追踪你的进度",
-                    "description": "监控你的习惯发展以保持动力。使用 HabitForm、日记或简单的勾选。看到你的连续天数增长会创造动力和责任感。"
-                }
-            },
-            "previous": "上一页",
-            "next": "下一页",
-            "get_started": "开始使用"
         },
         "rating": {
             "title": "你刚刚发现了\nHabitForm 的独特功能",
@@ -376,7 +346,7 @@
             "info": "选择这个习惯感觉有多具有挑战性。我们用它来估计养成时间并个性化洞察。",
             "very_easy": "非常简单",
             "easy": "简单",
-            "moderate": "中等",
+            "moderate": "中等难度",
             "difficult": "困难",
             "very_difficult": "非常困难",
             "very_easy_description": "需要最少努力和时间的简单习惯（例如，喝水、服用维生素）",
@@ -778,8 +748,8 @@
         "congratulations_fully_formed": "恭喜！你的习惯已经完全养成！🎉",
         "outstanding_progress": "出色！你还有{days}天就能完全养成这个习惯！🎉",
         "great_progress": "很好的进步！你正在建立强大的神经通路。还有{days}天！💪",
-        "good_work": "做得好！这个{difficulty}习惯总共需要{total}天。还剩{remaining}天！📈",
-        "keep_going_message": "继续！坚持是关键。这个{difficulty}习惯还需要{remaining}天！🌱",
+        "good_work": "做得好！这个习惯对你来说感觉{difficulty}。总共需要{total}天；还剩{remaining}天！📈",
+        "keep_going_message": "继续！坚持是关键。这个习惯在{difficulty}难度下，还需要{remaining}天！🌱",
         "formation_takes_days": "这个习惯需要{total}天的持续练习才能养成"
     },
     "languages": {

@@ -56,10 +56,6 @@
         "start_button": "スタート 🚀",
         "continue_button": "続行 →",
         "pages": {
-            "small_steps": {
-                "title": "小さな一歩で人生を変えましょう。",
-                "description": "HabitFormで小さく管理しやすいステップから始めることで、新しい習慣の形成がより簡単で持続可能になります。"
-            },
             "welcome": {
                 "welcome_to": "ようこそ",
                 "app_name": "HabitForm",
@@ -77,28 +73,12 @@
                     "meditate": "瞑想",
                     "drink_water": "水を飲む"
                 }
-            },
-            "routine": {
-                "title": "ルーティンと繰り返しが習慣を根付かせます。",
-                "description": "一貫したルーティンの確立と行動の繰り返しが、HabitFormで習慣を定着させる鍵です。"
-            },
-            "patience": {
-                "title": "忍耐と一貫性が習慣に実を結ばせます。",
-                "description": "習慣の形成には時間がかかります。プロセスを楽しむことがHabitFormの鍵です。"
-            },
-            "bad_habits": {
-                "title": "悪い習慣を断つのは簡単です。良い習慣に置き換えましょう。",
-                "description": "ネガティブな習慣を積極的にポジティブで健康的な代替案に置き換えることで、手放すことがずっと簡単になります。"
-            },
-            "become_person": {
-                "title": "なりたい自分になる",
-                "aristotleHabitQuote": "私たちは繰り返し行うことの結果です。したがって、卓越性は行為ではなく、習慣です。",
-                "aristotle": "アリストテレス"
             }
         },
         "app_features": {
-            "title": "HabitFormがあなたをサポート...",
-            "subtitle": "スマートトラッキングとパーソナライズされたインサイトで持続的な習慣を構築",
+            "title": "HabitFormのユニークな機能",
+            "subtitle": "最も献身的なユーザーのための最も高度な機能",
+            "continue": "続ける",
             "features": {
                 "habit_map": {
                     "title": "習慣マップ",
@@ -106,19 +86,35 @@
                 },
                 "habit_probability": {
                     "title": "習慣確率",
-                    "description": "各習慣でどれだけ成功する可能性があるかを正確に確認します。モチベーションを維持し、持続的な習慣を構築するのに役立つパーソナライズされたインサイトを取得します。"
+                    "description": "各習慣でどれだけ成功する可能性があるかを正確に確認します。モチベーションを維持し、持続的な習慣を構築するのに役立つパーソナライズされたインサイトを取得します。",
+                    "sub_features_0": "成功率を知る",
+                    "sub_features_1": "毎日モチベーションを維持",
+                    "sub_features_2": "自信を構築"
                 },
                 "goal_setting": {
                     "title": "目標設定",
-                    "description": "難易度に適応する科学に基づいた計画：簡単な習慣はより速く形成され、難しい習慣はより長くかかります—目標を現実的に保ちます。"
+                    "description": "難易度に適応する科学に基づいた計画：簡単な習慣はより速く形成され、難しい習慣はより長くかかります。目標を現実的に保ちます。",
+                    "sub_features_0": "明確な毎日の行動",
+                    "sub_features_1": "大きな夢を達成",
+                    "sub_features_2": "集中力を維持"
                 },
                 "customizable": {
                     "title": "カスタマイズ可能",
-                    "description": "HabitFormを本当にあなたのものにしてください。あなたの個性に合い、あなたを引き付ける色、テーマ、レイアウトを選択してください。"
+                    "description": "HabitFormを本当にあなたのものにしてください。あなたのスタイルを反映し、モチベーションを維持する色、テーマ、レイアウトを選択してください。",
+                    "sub_features_0": "パーソナルテーマ",
+                    "sub_features_1": "あなたのスタイル",
+                    "sub_features_2": "より良い体験"
                 },
                 "data_management": {
                     "title": "データ管理",
                     "description": "習慣データをCSVファイルにエクスポートして、バックアップまたは別のデバイスに転送します。"
+                },
+                "habit_archive": {
+                    "title": "習慣アーカイブ",
+                    "description": "進捗履歴を安全に整理して保管します。過去の成果を確認し、準備ができたら習慣を再開できます。",
+                    "sub_features_0": "進捗を失わない",
+                    "sub_features_1": "旅路を追跡",
+                    "sub_features_2": "いつでも再開"
                 },
                 "smart_tracking": {
                     "title": "スマート習慣トラッキング",
@@ -143,10 +139,10 @@
                 },
                 "share_habits": {
                     "title": "習慣の共有",
-                    "description": "美しくカスタマイズ可能な画像で習慣の進捗を共有。異なるデザインから選択して成果を紹介。",
-                    "sub_features_0": "カスタムデザイン",
-                    "sub_features_1": "進捗共有",
-                    "sub_features_2": "成果画像"
+                    "description": "友人や家族と成果を祝いましょう。他の人をインスピレーションし、責任を保つ美しい進捗画像を共有します。",
+                    "sub_features_0": "他の人をインスピレーション",
+                    "sub_features_1": "責任を保つ",
+                    "sub_features_2": "成果を祝う"
                 },
                 "home_widget": {
                     "title": "ホームウィジェット",
@@ -181,36 +177,10 @@
                 }
             },
             "formation_probability": "形成確率",
+            "formation_score": "形成確率",
             "previous": "前へ",
             "next": "次へ",
             "start": "スタート"
-        },
-        "information": {
-            "tips": {
-                "start_small": {
-                    "title": "小さく始めて具体的に",
-                    "description": "日常生活に取り入れやすい管理可能な行動から始めましょう。「もっと運動する」の代わりに「毎朝5回の腕立て伏せをする」を試してみてください。"
-                },
-                "make_obvious": {
-                    "title": "目立つようにする",
-                    "description": "良い習慣を目立つように環境を設計しましょう。ランニングシューズをドアのそばに置く、机に水筒を置く、視覚的なリマインダーを設定するなど。"
-                },
-                "stack_habits": {
-                    "title": "習慣を積み重ねる",
-                    "description": "新しい習慣を既存の習慣にリンクさせましょう。歯を磨いた後、2分間瞑想する。これにより習慣を定着させる強い関連性が生まれます。"
-                },
-                "make_satisfying": {
-                    "title": "満足感を与える",
-                    "description": "習慣を完了した直後に自分に報酬を与えましょう。チェックボックスにチェックを入れる、お気に入りの曲を楽しむ、小さな勝利を祝うなど。"
-                },
-                "track_progress": {
-                    "title": "進捗を追跡する",
-                    "description": "モチベーションを保つために習慣の発達を監視しましょう。HabitForm、日記、または簡単なチェックマークを使用。ストリークの成長を見ることで勢いと責任感が生まれます。"
-                }
-            },
-            "previous": "前へ",
-            "next": "次へ",
-            "get_started": "始める"
         },
         "rating": {
             "title": "HabitFormのユニークな機能を\n発見しました",
@@ -376,7 +346,7 @@
             "info": "この習慣がどの程度挑戦的かを選択してください。形成時間の推定とインサイトのパーソナライズに使用します。",
             "very_easy": "とても簡単",
             "easy": "簡単",
-            "moderate": "普通",
+            "moderate": "中程度の難しさ",
             "difficult": "困難",
             "very_difficult": "とても困難",
             "very_easy_description": "最小限の努力と時間で済む簡単な習慣（例：水を飲む、ビタミンを摂る）",
@@ -778,8 +748,8 @@
         "congratulations_fully_formed": "おめでとうございます！習慣が完全に形成されました！🎉",
         "outstanding_progress": "素晴らしい！この習慣を完全に形成するまで{days}日です！🎉",
         "great_progress": "素晴らしい進捗！強い神経経路を築いています。あと{days}日です！💪",
-        "good_work": "良い仕事です！この{difficulty}習慣には合計{total}日必要です。残り{remaining}日です！📈",
-        "keep_going_message": "続けましょう！一貫性が鍵です。この{difficulty}習慣にはあと{remaining}日必要です！🌱",
+        "good_work": "良い仕事です！この習慣は{difficulty}と感じます。合計{total}日必要です。残り{remaining}日です！📈",
+        "keep_going_message": "続けましょう！一貫性が鍵です。この習慣は{difficulty}の難易度で、あと{remaining}日必要です！🌱",
         "formation_takes_days": "この習慣は一貫した練習で{total}日かかります"
     },
     "languages": {

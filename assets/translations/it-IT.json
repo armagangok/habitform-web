@@ -56,10 +56,6 @@
         "start_button": "Inizia 🚀",
         "continue_button": "Continua →",
         "pages": {
-            "small_steps": {
-                "title": "Cambia la tua vita con un piccolo passo.",
-                "description": "Sviluppare nuove abitudini diventa più facile e sostenibile quando si inizia con piccoli passi gestibili con HabitForm."
-            },
             "welcome": {
                 "welcome_to": "Benvenuto in",
                 "app_name": "HabitForm",
@@ -77,28 +73,12 @@
                     "meditate": "Meditare",
                     "drink_water": "Bere Acqua"
                 }
-            },
-            "routine": {
-                "title": "La routine e la ripetizione aiutano le abitudini a radicarsi.",
-                "description": "Stabilire una routine coerente e ripetere le azioni è la chiave per far durare le abitudini con HabitForm."
-            },
-            "patience": {
-                "title": "La pazienza e la costanza aiutano le abitudini a dare frutti.",
-                "description": "Formare un'abitudine richiede tempo; godersi il processo è la chiave con HabitForm."
-            },
-            "bad_habits": {
-                "title": "Smettere con le cattive abitudini è facile. Sostituiscile con quelle buone.",
-                "description": "È molto più facile abbandonare le abitudini negative quando le si sostituisce attivamente con alternative positive e salutari."
-            },
-            "become_person": {
-                "title": "Diventa La Persona Che Vuoi Essere",
-                "aristotleHabitQuote": "Siamo ciò che facciamo ripetutamente. Dunque, l'eccellenza non è un atto, ma un'abitudine.",
-                "aristotle": "Aristotele"
             }
         },
         "app_features": {
-            "title": "HabitForm Ti Aiuta A ...",
-            "subtitle": "Costruisci abitudini durature con monitoraggio intelligente e approfondimenti personalizzati",
+            "title": "Caratteristiche Uniche di HabitForm",
+            "subtitle": "Le nostre funzionalità più avanzate per i nostri utenti più dedicati",
+            "continue": "Continua",
             "features": {
                 "habit_map": {
                     "title": "Mappa delle Abitudini",
@@ -106,19 +86,35 @@
                 },
                 "habit_probability": {
                     "title": "Probabilità Abitudine",
-                    "description": "Vedi esattamente quanto è probabile che tu abbia successo con ogni abitudine. Ottieni approfondimenti personalizzati che ti aiutano a rimanere motivato e costruire abitudini durature."
+                    "description": "Vedi esattamente quanto è probabile che tu abbia successo con ogni abitudine. Ottieni approfondimenti personalizzati che ti aiutano a rimanere motivato e costruire abitudini durature.",
+                    "sub_features_0": "Conosci il Tuo Tasso di Successo",
+                    "sub_features_1": "Resta Motivato Ogni Giorno",
+                    "sub_features_2": "Costruisci Fiducia"
                 },
                 "goal_setting": {
                     "title": "Impostazione Obiettivi",
-                    "description": "Pianificazione basata sulla scienza che si adatta alla difficoltà: le abitudini più facili si formano più velocemente, quelle più difficili richiedono più tempo—mantenendo gli obiettivi realistici."
+                    "description": "Pianificazione basata sulla scienza che si adatta alla difficoltà: le abitudini più facili si formano più velocemente, quelle più difficili richiedono più tempo. Mantiene gli obiettivi realistici.",
+                    "sub_features_0": "Azioni Giornaliere Chiare",
+                    "sub_features_1": "Raggiungi Grandi Sogni",
+                    "sub_features_2": "Resta Focalizzato"
                 },
                 "customizable": {
                     "title": "Personalizzabile",
-                    "description": "Rendi HabitForm veramente tuo. Scegli colori, temi e layout che corrispondono alla tua personalità e ti tengono coinvolto."
+                    "description": "Rendi HabitForm veramente tuo. Scegli colori, temi e layout che riflettono il tuo stile e ti tengono motivato.",
+                    "sub_features_0": "Temi Personali",
+                    "sub_features_1": "Il Tuo Stile",
+                    "sub_features_2": "Esperienza Migliore"
                 },
                 "data_management": {
                     "title": "Gestione Dati",
                     "description": "Esporta i dati delle tue abitudini in file CSV per backup o trasferimento su un altro dispositivo."
+                },
+                "habit_archive": {
+                    "title": "Archivio Abitudini",
+                    "description": "Mantieni la tua cronologia dei progressi sicura e organizzata. Visualizza i tuoi traguardi passati e riavvia le abitudini quando sei pronto.",
+                    "sub_features_0": "Non Perdere Mai i Progressi",
+                    "sub_features_1": "Traccia il Tuo Percorso",
+                    "sub_features_2": "Riavvia in Qualsiasi Momento"
                 },
                 "smart_tracking": {
                     "title": "Monitoraggio Abitudini Intelligente",
@@ -143,10 +139,10 @@
                 },
                 "share_habits": {
                     "title": "Condividi Abitudini",
-                    "description": "Condividi i progressi delle tue abitudini con immagini belle e personalizzabili. Scegli tra diversi design per mostrare i tuoi successi.",
-                    "sub_features_0": "Design Personalizzati",
-                    "sub_features_1": "Condivisione Progressi",
-                    "sub_features_2": "Immagini Successi"
+                    "description": "Celebra le tue vittorie con amici e famiglia. Condividi bellissime immagini dei progressi che ispirano gli altri e ti tengono responsabile.",
+                    "sub_features_0": "Ispira gli Altri",
+                    "sub_features_1": "Resta Responsabile",
+                    "sub_features_2": "Celebra le Vittorie"
                 },
                 "home_widget": {
                     "title": "Widget Home",
@@ -181,36 +177,10 @@
                 }
             },
             "formation_probability": "Probabilità di Formazione",
+            "formation_score": "Probabilità di Formazione",
             "previous": "Precedente",
             "next": "Prossimo",
             "start": "Inizia"
-        },
-        "information": {
-            "tips": {
-                "start_small": {
-                    "title": "Inizia in Piccolo & Sii Specifico",
-                    "description": "Inizia con azioni gestibili facili da incorporare nella tua routine quotidiana. Invece di \"fare più esercizio\", prova \"fai 5 flessioni ogni mattina\"."
-                },
-                "make_obvious": {
-                    "title": "Rendilo Evidente",
-                    "description": "Progetta il tuo ambiente per rendere le buone abitudini evidenti. Metti le tue scarpe da corsa vicino alla porta, tieni una bottiglia d'acqua sulla scrivania o imposta promemoria visivi."
-                },
-                "stack_habits": {
-                    "title": "Accumula le Tue Abitudini",
-                    "description": "Collega nuove abitudini a quelle esistenti. Dopo essermi lavato i denti, mediterò per 2 minuti. Questo crea una forte associazione che fa durare le abitudini."
-                },
-                "make_satisfying": {
-                    "title": "Rendilo Appagante",
-                    "description": "Premiati immediatamente dopo aver completato la tua abitudine. Potrebbe essere spuntare una casella, ascoltare una canzone preferita o celebrare piccole vittorie."
-                },
-                "track_progress": {
-                    "title": "Tieni Traccia dei Progressi",
-                    "description": "Monitora lo sviluppo delle tue abitudini per restare motivato. Usa HabitForm, diari o semplici segni di spunta. Vedere la tua serie crescere crea slancio e responsabilità."
-                }
-            },
-            "previous": "Precedente",
-            "next": "Prossimo",
-            "get_started": "Inizia"
         },
         "rating": {
             "title": "Hai appena scoperto\nle funzionalità uniche di HabitForm",
@@ -376,7 +346,7 @@
             "info": "Scegli quanto questa abitudine ti sembra impegnativa. Lo usiamo per stimare il tempo di formazione e personalizzare gli approfondimenti.",
             "very_easy": "Molto Facile",
             "easy": "Facile",
-            "moderate": "Moderato",
+            "moderate": "Difficoltà moderata",
             "difficult": "Difficile",
             "very_difficult": "Molto Difficile",
             "very_easy_description": "Abitudini semplici che richiedono sforzo e tempo minimi (es. bere acqua, prendere vitamine)",
@@ -778,8 +748,8 @@
         "congratulations_fully_formed": "Congratulazioni! La tua abitudine è completamente formata! 🎉",
         "outstanding_progress": "Straordinario! Ti mancano {days} giorni per formare completamente questa abitudine! 🎉",
         "great_progress": "Ottimo progresso! Stai costruendo forti percorsi neurali. {days} giorni da fare! 💪",
-        "good_work": "Buon lavoro! Questa abitudine {difficulty} ha bisogno di {total} giorni totali. {remaining} giorni rimanenti! 📈",
-        "keep_going_message": "Continua! La costanza è la chiave. Questa abitudine {difficulty} ha bisogno di {remaining} giorni in più! 🌱",
+        "good_work": "Buon lavoro! Questa abitudine ti sembra {difficulty}. Richiede {total} giorni in totale; {remaining} giorni rimanenti! 📈",
+        "keep_going_message": "Continua! La costanza è la chiave. Questa abitudine, con livello di difficoltà {difficulty}, ha bisogno di {remaining} giorni in più! 🌱",
         "formation_takes_days": "Questa abitudine richiede {total} giorni di pratica costante per formarsi"
     },
     "languages": {
