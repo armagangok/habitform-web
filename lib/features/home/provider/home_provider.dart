@@ -8,11 +8,13 @@ import '/features/purchase/providers/purchase_provider.dart';
 import '/features/reminder/service/reminder_service.dart';
 import '/models/completion_entry/completion_entry.dart';
 import '/models/habit/habit_model.dart';
+import '/models/habit/habit_summary.dart';
 import '/services/app_lifecycle_service.dart';
 import '/services/habit_service/habit_service_interface.dart';
 import '/services/widget_sync_service.dart';
 import '../../habit_probability/provider/habit_probability_provider.dart';
 import 'home_state.dart';
+import 'home_summaries_state.dart';
 
 /// Provider for filtered habits based on selected categories
 /// Optimized with memoization: Riverpod automatically caches results when dependencies don't change
@@ -21,7 +23,7 @@ final filteredHabitsProvider = Provider<List<Habit>>((ref) {
   final selectedCategories = ref.watch(selectedCategoriesProvider);
 
   final habits = homeState.value?.habits ?? [];
-  
+
   // Return all habits if no categories are selected
   if (selectedCategories.isEmpty) {
     return habits;
@@ -29,12 +31,63 @@ final filteredHabitsProvider = Provider<List<Habit>>((ref) {
 
   // Filter habits based on selected categories
   final filteredHabits = habits.where((habit) {
-        // Check if the habit has any of the selected categories
-        return habit.categoryIds.any((categoryId) => selectedCategories.contains(categoryId));
-      }).toList();
+    // Check if the habit has any of the selected categories
+    return habit.categoryIds.any((categoryId) => selectedCategories.contains(categoryId));
+  }).toList();
 
   return filteredHabits;
 });
+
+/// Provider for filtered habit summaries based on selected categories
+/// Optimized for main page rendering with lightweight data
+final filteredHabitSummariesProvider = Provider<List<HabitSummary>>((ref) {
+  final summariesState = ref.watch(homeSummariesProvider);
+  final selectedCategories = ref.watch(selectedCategoriesProvider);
+
+  final summaries = summariesState.value?.summaries ?? [];
+
+  // Return all summaries if no categories are selected
+  if (selectedCategories.isEmpty) {
+    return summaries;
+  }
+
+  // Filter summaries based on selected categories
+  final filteredSummaries = summaries.where((summary) {
+    // Check if the summary has any of the selected categories
+    return summary.categoryIds.any((categoryId) => selectedCategories.contains(categoryId));
+  }).toList();
+
+  return filteredSummaries;
+});
+
+/// Provider for managing habit summaries in the home screen (lightweight data)
+/// Returns an async state containing summaries and error info
+final homeSummariesProvider = AsyncNotifierProvider<HomeSummariesNotifier, HomeSummariesState>(() {
+  return HomeSummariesNotifier();
+});
+
+/// Notifier class that handles habit summary operations
+class HomeSummariesNotifier extends AsyncNotifier<HomeSummariesState> {
+  @override
+  Future<HomeSummariesState> build() async {
+    // Initial fetch of summaries when the provider is created
+    return await fetchSummaries();
+  }
+
+  /// Fetches habit summaries from the service layer
+  Future<HomeSummariesState> fetchSummaries() async {
+    final List<HabitSummary> summaries = await habitService.getHabitSummaries();
+    return HomeSummariesState(summaries: summaries);
+  }
+
+  /// Refreshes the summaries list from the service and updates the state
+  Future<void> refreshSummaries() async {
+    state = const AsyncValue.loading();
+    state = await AsyncValue.guard(() async {
+      return await fetchSummaries();
+    });
+  }
+}
 
 /// Provider for managing habits in the home screen
 /// Returns an async state containing habits and error info
@@ -139,6 +192,10 @@ class HomeNotifier extends AsyncNotifier<HomeState> {
       LogHelper.shared.debugPrint('🏠 Step 5: Fetching updated habits...');
       final result = await fetchHabits();
       LogHelper.shared.debugPrint('🏠 fetchHabits completed, returning result');
+
+      // Refresh summaries to keep them in sync
+      ref.read(homeSummariesProvider.notifier).refreshSummaries();
+
       return result;
     });
 
@@ -231,6 +288,9 @@ class HomeNotifier extends AsyncNotifier<HomeState> {
     final widgetEnd = DateTime.now();
     LogHelper.shared.debugPrint('📱 [PERF] Widget sync completed in ${widgetEnd.difference(widgetStart).inMilliseconds}ms');
 
+    // Refresh summaries to keep them in sync
+    ref.read(homeSummariesProvider.notifier).refreshSummaries();
+
     final homeEnd = DateTime.now();
     LogHelper.shared.debugPrint('✅ [PERF] adjustHabitCompletion total time: ${homeEnd.difference(homeStart).inMilliseconds}ms');
   }
@@ -245,6 +305,9 @@ class HomeNotifier extends AsyncNotifier<HomeState> {
       // Update widget data
       await WidgetSyncService().updateWidgetData(newState.habits);
 
+      // Refresh summaries to keep them in sync
+      ref.read(homeSummariesProvider.notifier).refreshSummaries();
+
       return newState;
     });
   }
@@ -258,6 +321,9 @@ class HomeNotifier extends AsyncNotifier<HomeState> {
 
       // Update widget data
       await WidgetSyncService().updateWidgetData(newState.habits);
+
+      // Refresh summaries to keep them in sync
+      ref.read(homeSummariesProvider.notifier).refreshSummaries();
 
       return newState;
     });
@@ -280,6 +346,9 @@ class HomeNotifier extends AsyncNotifier<HomeState> {
       // Update widget data
       await WidgetSyncService().updateWidgetData(newState.habits);
 
+      // Refresh summaries to keep them in sync
+      ref.read(homeSummariesProvider.notifier).refreshSummaries();
+
       return newState;
     });
   }
@@ -292,6 +361,9 @@ class HomeNotifier extends AsyncNotifier<HomeState> {
 
       // Update widget data
       await WidgetSyncService().updateWidgetData(newState.habits);
+
+      // Refresh summaries to keep them in sync
+      ref.read(homeSummariesProvider.notifier).refreshSummaries();
 
       return newState;
     });

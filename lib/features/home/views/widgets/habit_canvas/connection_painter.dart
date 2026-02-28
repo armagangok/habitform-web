@@ -2,14 +2,14 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 
-import '/models/habit/habit_model.dart';
 import 'habit_canvas_model.dart';
 
 /// Painter for drawing connection lines between habits
+/// Accepts both Habit and HabitSummary (both have id and colorCode)
 class ConnectionPainter extends CustomPainter {
   final Set<HabitConnection> connections;
   final Map<String, HabitPosition> positions;
-  final List<Habit> habits;
+  final List<dynamic> habits; // Can be List<Habit> or List<HabitSummary>
   final bool isDark;
 
   ConnectionPainter({
@@ -26,7 +26,7 @@ class ConnectionPainter extends CustomPainter {
     // Create a map of habit id to color
     final habitColors = <String, Color>{};
     for (final habit in habits) {
-      habitColors[habit.id] = Color(habit.colorCode);
+      habitColors[habit.id as String] = Color(habit.colorCode as int);
     }
 
     for (final connection in connections) {

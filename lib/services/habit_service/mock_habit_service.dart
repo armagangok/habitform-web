@@ -1,7 +1,10 @@
+import '../../core/extension/datetime_extension.dart';
 import '../../features/reminder/service/reminder_service.dart';
 import '../../models/completion_entry/completion_entry.dart';
+import '../../models/habit/habit_extension.dart';
 import '../../models/habit/habit_model.dart';
 import '../../models/habit/habit_status.dart';
+import '../../models/habit/habit_summary.dart';
 import 'habit_service_interface.dart';
 import 'mock_habit_data.dart';
 
@@ -17,6 +20,38 @@ class MockHabitService extends HabitService {
   @override
   Future<List<Habit>> getHabits() async {
     return _habits.where((habit) => habit.status == HabitStatus.active).toList();
+  }
+
+  @override
+  Future<List<HabitSummary>> getHabitSummaries() async {
+    final activeHabits = _habits.where((habit) => habit.status == HabitStatus.active).toList();
+    final today = DateTime.now().normalized;
+    final summaries = <HabitSummary>[];
+
+    for (final habit in activeHabits) {
+      // Calculate streak once during load
+      final streak = habit.calculateCurrentStreak();
+
+      // Extract today's completion data
+      final todayCount = habit.getCountForDate(today);
+      final target = habit.dailyTarget <= 0 ? 1 : habit.dailyTarget;
+      final todayIsCompleted = todayCount >= target;
+
+      summaries.add(HabitSummary(
+        id: habit.id,
+        habitName: habit.habitName,
+        emoji: habit.emoji,
+        colorCode: habit.colorCode,
+        dailyTarget: habit.dailyTarget,
+        categoryIds: habit.categoryIds,
+        completionTime: habit.completionTime,
+        todayCount: todayCount,
+        todayIsCompleted: todayIsCompleted,
+        currentStreak: streak,
+      ));
+    }
+
+    return summaries;
   }
 
   @override

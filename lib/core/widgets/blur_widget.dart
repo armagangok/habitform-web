@@ -20,7 +20,7 @@ class CustomBlurWidget extends StatelessWidget {
       borderRadius: borderRadius ?? BorderRadius.zero,
       child: BackdropFilter(
         filter: ImageFilter.blur(
-          tileMode: TileMode.mirror,
+          tileMode: TileMode.decal,
           sigmaX: blurValue,
           sigmaY: blurValue,
         ),

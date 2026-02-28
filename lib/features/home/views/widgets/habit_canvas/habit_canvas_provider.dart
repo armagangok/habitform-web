@@ -51,7 +51,8 @@ class HabitCanvasNotifier extends StateNotifier<HabitCanvasState> {
   }
 
   /// Initialize positions for habits that don't have positions yet
-  Future<void> initializePositions(List<Habit> habits, double canvasWidth, double canvasHeight) async {
+  /// Accepts both Habit and HabitSummary (both have id field)
+  Future<void> initializePositions(List<dynamic> habits, double canvasWidth, double canvasHeight) async {
     // Ensure state is loaded before initializing
     await ensureLoaded();
 
@@ -59,7 +60,7 @@ class HabitCanvasNotifier extends StateNotifier<HabitCanvasState> {
     bool hasChanges = false;
 
     // Remove positions for habits that no longer exist
-    final habitIds = habits.map((h) => h.id).toSet();
+    final habitIds = habits.map((h) => h.id as String).toSet();
     updatedPositions.removeWhere((key, _) => !habitIds.contains(key));
 
     // Add positions for new habits
@@ -68,14 +69,15 @@ class HabitCanvasNotifier extends StateNotifier<HabitCanvasState> {
     final centerY = canvasHeight / 2;
 
     for (final habit in habits) {
-      if (!updatedPositions.containsKey(habit.id)) {
+      final habitId = habit.id as String;
+      if (!updatedPositions.containsKey(habitId)) {
         // Place new habits in a circular pattern around center
         final existingCount = updatedPositions.length;
         final angle = (existingCount * 2 * math.pi / math.max(habits.length, 1)) + random.nextDouble() * 0.5;
         final radius = 100.0 + random.nextDouble() * 150;
 
-        updatedPositions[habit.id] = HabitPosition(
-          habitId: habit.id,
+        updatedPositions[habitId] = HabitPosition(
+          habitId: habitId,
           x: centerX + math.cos(angle) * radius,
           y: centerY + math.sin(angle) * radius,
         );

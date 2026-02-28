@@ -3,8 +3,10 @@ import 'package:hive_flutter/hive_flutter.dart';
 import '../../core/core.dart';
 import '../../features/reminder/service/reminder_service.dart';
 import '../../models/completion_entry/completion_entry.dart';
+import '../../models/habit/habit_extension.dart';
 import '../../models/habit/habit_model.dart';
 import '../../models/habit/habit_status.dart';
+import '../../models/habit/habit_summary.dart';
 import '../widget_service.dart';
 import 'habit_service_interface.dart';
 
@@ -35,6 +37,43 @@ class LocalHabitService extends HabitService {
     final activeHabits = habits.where((habit) => habit.status == HabitStatus.active).toList();
     LogHelper.shared.debugPrint('Found ${activeHabits.length} active habits');
     return activeHabits;
+  }
+
+  // Get habit summaries (lightweight data for main page)
+  @override
+  Future<List<HabitSummary>> getHabitSummaries() async {
+    LogHelper.shared.debugPrint('Fetching habit summaries from local storage');
+    final habits = await _hiveHelper.getAll<Habit>(HiveBoxes.habitBox);
+    final activeHabits = habits.where((habit) => habit.status == HabitStatus.active).toList();
+
+    final today = DateTime.now().normalized;
+    final summaries = <HabitSummary>[];
+
+    for (final habit in activeHabits) {
+      // Calculate streak once during load
+      final streak = habit.calculateCurrentStreak();
+
+      // Extract today's completion data
+      final todayCount = habit.getCountForDate(today);
+      final target = habit.dailyTarget <= 0 ? 1 : habit.dailyTarget;
+      final todayIsCompleted = todayCount >= target;
+
+      summaries.add(HabitSummary(
+        id: habit.id,
+        habitName: habit.habitName,
+        emoji: habit.emoji,
+        colorCode: habit.colorCode,
+        dailyTarget: habit.dailyTarget,
+        categoryIds: habit.categoryIds,
+        completionTime: habit.completionTime,
+        todayCount: todayCount,
+        todayIsCompleted: todayIsCompleted,
+        currentStreak: streak,
+      ));
+    }
+
+    LogHelper.shared.debugPrint('Found ${summaries.length} habit summaries');
+    return summaries;
   }
 
   // Get archived habits
@@ -294,21 +333,21 @@ class LocalHabitService extends HabitService {
   Future<void> migrateCompletionTimeFromReminders() async {
     try {
       LogHelper.shared.debugPrint('🔄 Starting completionTime migration...');
-      
+
       // Get all habits (active and archived)
       final allHabits = await getAllHabits();
       int migratedCount = 0;
-      
+
       for (final habit in allHabits) {
         // Skip if habit already has completionTime
         if (habit.completionTime != null) {
           continue;
         }
-        
+
         // Check if habit has reminderModel with a time
         if (habit.reminderModel != null) {
           DateTime? timeToMigrate;
-          
+
           // Try to get time from single reminder
           if (habit.reminderModel!.hasSingleReminder && habit.reminderModel!.reminderTime != null) {
             timeToMigrate = habit.reminderModel!.reminderTime;
@@ -320,26 +359,26 @@ class LocalHabitService extends HabitService {
               timeToMigrate = times.first;
             }
           }
-          
+
           // If we found a time to migrate, update the habit
           if (timeToMigrate != null) {
             final updatedHabit = habit.copyWith(completionTime: timeToMigrate);
-            
+
             // Save based on habit status
             if (habit.status == HabitStatus.active) {
               await _hiveHelper.putData<Habit>(HiveBoxes.habitBox, habit.id, updatedHabit);
             } else {
               await _hiveHelper.putData<Habit>(HiveBoxes.archivedHabitBox, habit.id, updatedHabit);
             }
-            
+
             migratedCount++;
             LogHelper.shared.debugPrint('✅ Migrated completionTime for habit: ${habit.habitName} (${timeToMigrate.toHHMM()})');
           }
         }
       }
-      
+
       LogHelper.shared.debugPrint('✅ CompletionTime migration completed. Migrated $migratedCount habit(s).');
-      
+
       // Export updated habits to widget
       await _exportHabitsForWidget();
     } catch (e, stackTrace) {

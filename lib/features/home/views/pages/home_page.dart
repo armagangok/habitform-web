@@ -2,7 +2,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '/core/core.dart';
-import '../../../../models/habit/habit_model.dart';
 import '../../../create_habit/create_habit_page.dart';
 import '../../../create_habit/provider/create_habit_provider.dart';
 import '../../../habit_probability/page/habit_probability_page.dart';
@@ -17,7 +16,6 @@ class HomePage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final homeStateAsyncValue = ref.watch(homeProvider);
     final isDark = CupertinoTheme.of(context).brightness == Brightness.dark;
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
@@ -31,29 +29,34 @@ class HomePage extends ConsumerWidget {
         child: Stack(
           children: [
             // Constellation view (full screen) - lazy loaded for better initial performance
-            homeStateAsyncValue.when(
-              data: (homeState) {
-                return Consumer(builder: (context, ref, _) {
-                  // Optimized: Use select to only rebuild when list length changes significantly
-                  final filteredHabits = ref.watch(filteredHabitsProvider);
-                  final habitsLength = filteredHabits.length;
+            // Use summaries provider for lightweight data on main page
+            Consumer(builder: (context, ref, _) {
+              final summariesStateAsyncValue = ref.watch(homeSummariesProvider);
 
-                  if (habitsLength == 0) {
-                    return _noHabitsWidget(ref, context);
-                  }
+              return summariesStateAsyncValue.when(
+                data: (summariesState) {
+                  return Consumer(builder: (context, ref, _) {
+                    // Optimized: Use select to only rebuild when list length changes significantly
+                    final filteredSummaries = ref.watch(filteredHabitSummariesProvider);
+                    final summariesLength = filteredSummaries.length;
 
-                  // Lazy load constellation view to prevent blocking initial page render
-                  // This helps when there are many habits with heavy completion data
-                  return _LazyConstellationView(habits: filteredHabits);
-                });
-              },
-              loading: () => _loadingWidget(),
-              error: (error, stack) {
-                LogHelper.shared.errorPrint('Error: $error');
-                LogHelper.shared.errorPrint('Stack: $stack');
-                return _errorWidget();
-              },
-            ),
+                    if (summariesLength == 0) {
+                      return _noHabitsWidget(ref, context);
+                    }
+
+                    // Lazy load constellation view to prevent blocking initial page render
+                    // This helps when there are many habits with heavy completion data
+                    return _LazyConstellationView(habits: filteredSummaries);
+                  });
+                },
+                loading: () => _loadingWidget(),
+                error: (error, stack) {
+                  LogHelper.shared.errorPrint('Error loading summaries: $error');
+                  LogHelper.shared.errorPrint('Stack: $stack');
+                  return _errorWidget();
+                },
+              );
+            }),
 
             // Floating navigation bar
             Positioned(
@@ -167,10 +170,13 @@ class HomePage extends ConsumerWidget {
                 // Add habit button
                 CircularActionButton(
                   onPressed: () async {
+                    // Use summaries for count check (lighter weight)
+                    final summariesState = ref.read(homeSummariesProvider).value;
                     final homeState = ref.read(homeProvider).value;
-                    if (homeState != null) {
+                    final habitCount = summariesState?.summaries.length ?? homeState?.habits.length ?? 0;
+                    if (habitCount > 0 || homeState != null) {
                       final canCreate = await ref.watch(createHabitProvider.notifier).canCreateHabit(
-                            homeState.habits.length,
+                            habitCount,
                           );
                       if (canCreate) {
                         WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -294,8 +300,9 @@ class HomePage extends ConsumerWidget {
 
 /// Lazy loaded constellation view widget
 /// Defers rendering until after the current frame to improve initial page load performance
+/// Accepts both Habit and HabitSummary for performance optimization
 class _LazyConstellationView extends StatefulWidget {
-  final List<Habit> habits;
+  final List<dynamic> habits; // Can be List<Habit> or List<HabitSummary>
 
   const _LazyConstellationView({required this.habits});
 

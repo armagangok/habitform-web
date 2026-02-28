@@ -5,6 +5,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '/core/core.dart';
 import '/models/habit/habit_model.dart';
+import '/models/habit/habit_summary.dart';
+import '/services/habit_service/habit_service_interface.dart';
 import '../../../../habit_detail/page/habit_detail.dart';
 import '../../../../habit_detail/providers/habit_detail_provider.dart';
 import 'circular_habit_widget.dart';
@@ -12,8 +14,9 @@ import 'connection_painter.dart';
 import 'habit_canvas_provider.dart';
 
 /// Main constellation view for habits
+/// Accepts both Habit and HabitSummary for performance optimization
 class HabitConstellationView extends ConsumerStatefulWidget {
-  final List<Habit> habits;
+  final List<dynamic> habits; // Can be List<Habit> or List<HabitSummary>
 
   const HabitConstellationView({
     super.key,
@@ -542,6 +545,36 @@ class _HabitConstellationViewState extends ConsumerState<HabitConstellationView>
     });
   }
 
+  // Open habit detail page, loading full habit if needed
+  Future<void> _openHabitDetail(dynamic habit) async {
+    // If it's a HabitSummary, load the full Habit first
+    Habit fullHabit;
+    if (habit is HabitSummary) {
+      final loadedHabit = await habitService.getHabit(habit.id);
+      if (loadedHabit == null) {
+        LogHelper.shared.errorPrint('Failed to load habit: ${habit.id}');
+        return;
+      }
+      fullHabit = loadedHabit;
+    } else {
+      fullHabit = habit as Habit;
+    }
+
+    // Keep provider alive by watching it BEFORE calling initHabit
+    // This prevents disposal before HabitDetailPage can watch it
+    final _ = ref.watch(habitDetailProvider);
+    // Set state immediately (synchronous) - sheet will have state ready
+    ref.read(habitDetailProvider.notifier).initHabit(fullHabit);
+    // Show sheet - HabitDetailPage will also watch, keeping provider alive
+    if (mounted) {
+      showCupertinoSheet(
+        enableDrag: false,
+        context: context,
+        builder: (contextFromSheet) => HabitDetailPage(),
+      );
+    }
+  }
+
   // Handle tap on habit for connection
   void _onHabitTapForConnection(String habitId) {
     if (!_isConnectingMode) return;
@@ -662,17 +695,8 @@ class _HabitConstellationViewState extends ConsumerState<HabitConstellationView>
                           if (_isConnectingMode) {
                             _onHabitTapForConnection(habit.id);
                           } else {
-                            // Keep provider alive by watching it BEFORE calling initHabit
-                            // This prevents disposal before HabitDetailPage can watch it
-                            final _ = ref.watch(habitDetailProvider);
-                            // Set state immediately (synchronous) - sheet will have state ready
-                            ref.read(habitDetailProvider.notifier).initHabit(habit);
-                            // Show sheet - HabitDetailPage will also watch, keeping provider alive
-                            showCupertinoSheet(
-                              enableDrag: false,
-                              context: context,
-                              builder: (contextFromSheet) => HabitDetailPage(),
-                            );
+                            // Load full habit if we have a summary, otherwise use the habit directly
+                            _openHabitDetail(habit);
                           }
                         },
                         onLongPressStart: (details) {
@@ -688,7 +712,7 @@ class _HabitConstellationViewState extends ConsumerState<HabitConstellationView>
                           // This allows dragging to continue even after finger is lifted
                         },
                         child: CircularHabitWidget(
-                          key: ValueKey('${habit.id}_${isDragging}_${isSelectedForConnection}_${_isConnectingMode}_$_showHabitNames'),
+                          key: ValueKey(habit.id),
                           habit: habit,
                           isSelected: isSelectedForConnection,
                           isDragging: isDragging,
@@ -998,9 +1022,13 @@ class _HabitConstellationViewState extends ConsumerState<HabitConstellationView>
   }
 }
 
-/// Grid background painter
+/// Grid background painter - optimized with Path batching and caching
 class _GridPainter extends CustomPainter {
   final bool isDark;
+
+  // Static cache for grid paths to avoid recalculation
+  static Path? _cachedPath;
+  static Size? _cachedSize;
 
   _GridPainter({required this.isDark});
 
@@ -1008,17 +1036,36 @@ class _GridPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
       ..color = isDark ? Colors.white.withValues(alpha: 0.175) : Colors.black.withValues(alpha: 0.175)
-      ..strokeWidth = 0.5;
+      ..strokeWidth = 0.5
+      ..style = PaintingStyle.stroke;
 
+    // Use cached path if size matches
+    if (_cachedPath != null && _cachedSize == size) {
+      canvas.drawPath(_cachedPath!, paint);
+      return;
+    }
+
+    // Build path with all grid lines (batch drawing is faster than individual lines)
     const spacing = 50.0;
+    final path = Path();
 
+    // Vertical lines
     for (double x = 0; x < size.width; x += spacing) {
-      canvas.drawLine(Offset(x, 0), Offset(x, size.height), paint);
+      path.moveTo(x, 0);
+      path.lineTo(x, size.height);
     }
 
+    // Horizontal lines
     for (double y = 0; y < size.height; y += spacing) {
-      canvas.drawLine(Offset(0, y), Offset(size.width, y), paint);
+      path.moveTo(0, y);
+      path.lineTo(size.width, y);
     }
+
+    // Cache the path
+    _cachedPath = path;
+    _cachedSize = size;
+
+    canvas.drawPath(path, paint);
   }
 
   @override

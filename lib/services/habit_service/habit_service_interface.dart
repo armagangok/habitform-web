@@ -1,6 +1,7 @@
 import '../../core/constants/debug_constants.dart';
 import '../../models/completion_entry/completion_entry.dart';
 import '../../models/habit/habit_model.dart';
+import '../../models/habit/habit_summary.dart';
 import 'local_habit_service.dart';
 import 'mock_habit_service.dart';
 
@@ -13,6 +14,9 @@ abstract class HabitService {
 
   // Get active habits
   Future<List<Habit>> getHabits();
+
+  // Get habit summaries (lightweight data for main page)
+  Future<List<HabitSummary>> getHabitSummaries();
 
   // Get archived habits
   Future<List<Habit>> getArchivedHabits();
