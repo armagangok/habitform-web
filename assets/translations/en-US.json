@@ -56,6 +56,27 @@
         "start_button": "Start 🚀",
         "continue_button": "Continue →",
         "pages": {
+            "small_steps": {
+                "title": "Small Steps",
+                "description": "Every big change starts with a single step. Build lasting habits one day at a time."
+            },
+            "routine": {
+                "title": "Build Your Routine",
+                "description": "Consistency is key. Create a routine that works for you and watch your habits flourish."
+            },
+            "patience": {
+                "title": "Patience Pays Off",
+                "description": "Habits take time to form. Stay patient and trust the process."
+            },
+            "bad_habits": {
+                "title": "Replace Bad Habits",
+                "description": "Identify what holds you back and replace it with positive alternatives."
+            },
+            "become_person": {
+                "title": "Become Who You Want to Be",
+                "aristotleHabitQuote": "Excellence is not a single act, but a habit. You are what you do consistently.",
+                "aristotle": "Aristotle"
+            },
             "welcome": {
                 "welcome_to": "Welcome to",
                 "app_name": "HabitForm",
@@ -742,5 +763,60 @@
         "russian": "Russian",
         "japanese": "Japanese",
         "italian": "Italian"
+    },
+    "auth": {
+        "my_account": "My Account",
+        "my_account_description": "Sign in to sync your habits and unlock cross-device support.",
+        "email": "Email",
+        "password": "Password",
+        "continue_btn": "Continue",
+        "sign_out": "Sign Out",
+        "sign_out_confirmation": "Are you sure you want to sign out?",
+        "sign_in_failed": "Authentication failed. Please check your credentials.",
+        "unknown_error": "An unknown error occurred during authentication.",
+        "welcome": "Welcome back!",
+        "create_account": "Create Account",
+        "invalid_email": "Please enter a valid email address.",
+        "weak_password": "Password is too weak. Please use a stronger password.",
+        "user_not_found": "User not found. A new account will be created.",
+        "processing": "Processing...",
+        "sign_in": "Sign In",
+        "register": "Register",
+        "verify_email_sent": "A verification email has been sent. Please check your inbox.",
+        "continue_with_google": "Continue with Google",
+        "continue_with_apple": "Continue with Apple",
+        "or": "or",
+        "profile": "Profile",
+        "security": "Security",
+        "linked_accounts": "Linked Accounts",
+        "data_and_privacy": "Data & Privacy",
+        "danger_zone": "Danger Zone",
+        "change_display_name": "Change Display Name",
+        "change_email": "Change Email",
+        "change_password": "Change Password",
+        "delete_account": "Delete Account",
+        "delete_account_confirmation": "Are you sure you want to delete your account? This action cannot be undone.",
+        "delete_account_warning": "All your data will be permanently deleted.",
+        "reauth_prompt": "Enter your password to continue",
+        "current_password": "Current Password",
+        "new_password": "New Password",
+        "confirm_password": "Confirm Password",
+        "password_mismatch": "Passwords do not match",
+        "display_name_required": "Display name is required",
+        "linked_google": "Google",
+        "linked_apple": "Apple",
+        "linked_email": "Email",
+        "account_created": "Account created",
+        "email_verified": "Verified",
+        "email_not_verified": "Not verified",
+        "two_factor_not_enabled": "Two-factor authentication is not enabled",
+        "data_export": "Export Data",
+        "privacy_policy": "Privacy Policy",
+        "confirm_password_required": "Please confirm your password",
+        "display_name_updated": "Display name updated",
+        "email_update_sent": "Verification email sent to your new address",
+        "password_updated": "Password updated",
+        "account_deleted": "Account deleted",
+        "password_change_email_only": "Password change is only available for email/password accounts."
     }
 }

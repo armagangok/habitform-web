@@ -280,7 +280,7 @@ class _HabitCategoryPageState extends ConsumerState<HabitCategoryPage> {
                             },
                             child: Container(
                               decoration: BoxDecoration(
-                                color: isSelected ? CupertinoColors.activeBlue.withOpacity(0.2) : null,
+                                color: isSelected ? CupertinoColors.activeBlue.withValues(alpha: 0.2) : null,
                                 borderRadius: BorderRadius.circular(10),
                                 border: Border.all(
                                   color: isSelected ? CupertinoColors.activeBlue : CupertinoColors.systemGrey3,
@@ -384,7 +384,7 @@ class _HabitCategoryPageState extends ConsumerState<HabitCategoryPage> {
                             },
                             child: Container(
                               decoration: BoxDecoration(
-                                color: isSelected ? CupertinoColors.activeBlue.withOpacity(0.2) : null,
+                                color: isSelected ? CupertinoColors.activeBlue.withValues(alpha: 0.2) : null,
                                 borderRadius: BorderRadius.circular(10),
                                 border: Border.all(
                                   color: isSelected ? CupertinoColors.activeBlue : CupertinoColors.systemGrey3,

@@ -103,5 +103,18 @@
 			</dict>
 		</dict>
 	</array>
+	<key>GIDClientID</key>
+	<string>639576600772-756spufiegn8pg83mjokb32kt5b92tlj.apps.googleusercontent.com</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.googleusercontent.apps.639576600772-756spufiegn8pg83mjokb32kt5b92tlj</string>
+			</array>
+		</dict>
+	</array>
 </dict>
 </plist>

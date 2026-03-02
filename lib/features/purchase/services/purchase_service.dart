@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 
@@ -22,6 +23,26 @@ class PurchaseService {
 
   static Future<CustomerInfo> purchasePackage(Package package) async {
     return await Purchases.purchasePackage(package);
+  }
+
+  /// Links RevenueCat to Firebase UID so subscription is shared across devices.
+  static Future<void> logIn(String firebaseUid) async {
+    await Purchases.logIn(firebaseUid);
+  }
+
+  /// Clears RevenueCat user; call when user signs out.
+  /// Ignores RevenueCat error when current user is anonymous (no-op in that case).
+  static Future<void> logOut() async {
+    try {
+      await Purchases.logOut();
+    } on PlatformException catch (e) {
+      if (e.code == '22' ||
+          (e.message?.contains('anonymous') ?? false) ||
+          (e.details?.toString().contains('LOGOUT_CALLED_WITH_ANONYMOUS_USER') ?? false)) {
+        return;
+      }
+      rethrow;
+    }
   }
 
   static Future<void> configureSDK() async {

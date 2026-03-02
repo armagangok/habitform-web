@@ -103,7 +103,7 @@ class _ColorStepState extends ConsumerState<ColorStep> {
                         habitName: habitName.isEmpty ? LocaleKeys.create_habit_preview_your_habit.tr() : habitName,
                         habitDescription: habitDescription.isEmpty ? '' : habitDescription,
                         emoji: selectedIcon ?? '',
-                        colorCode: selectedColor ?? context.primaryContrastingColor.value,
+                        colorCode: selectedColor ?? context.primaryContrastingColor.toARGB32(),
                       ),
                       showName: true,
                       scale: 1.2, // Smaller scale for create habit to prevent text overlap
@@ -122,7 +122,7 @@ class _ColorStepState extends ConsumerState<ColorStep> {
           ColorPickerWidget(
             selectedColor: selectedColor != null ? Color(selectedColor) : null,
             onColorSelected: (color) {
-              ref.watch(createHabitProvider.notifier).updateColorCode(color.value);
+              ref.watch(createHabitProvider.notifier).updateColorCode(color.toARGB32());
             },
           ),
         ],
@@ -135,7 +135,7 @@ class _ColorStepState extends ConsumerState<ColorStep> {
     final selectedColor = ref.read(colorProvider);
 
     if (selectedColor != null) {
-      ref.watch(createHabitProvider.notifier).updateColorCode(selectedColor.value);
+      ref.watch(createHabitProvider.notifier).updateColorCode(selectedColor.toARGB32());
     }
   }
 }

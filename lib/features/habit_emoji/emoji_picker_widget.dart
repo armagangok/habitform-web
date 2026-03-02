@@ -56,10 +56,11 @@ class IconPickerState extends ConsumerState<IconPicker> with SingleTickerProvide
 
     // Delay very slightly to ensure rendering is complete
     Future.delayed(Duration(milliseconds: 50), () {
-      if (!mounted) return;
+      if (!mounted || !context.mounted) return;
 
       try {
         // İkonun pozisyonunu ve boyutunu al
+        if (!context.mounted) return;
         final RenderBox box = context.findRenderObject() as RenderBox;
         final size = box.size;
         final position = box.localToGlobal(Offset.zero);
@@ -130,7 +131,6 @@ class IconPickerState extends ConsumerState<IconPicker> with SingleTickerProvide
               CategoryWidget(
                 categories: categoryNames,
                 initialSelectedIndex: state.selectedCategoryIndex,
-                
                 onCategorySelected: (int selectedCategory) {
                   if (selectedCategory == state.selectedCategoryIndex) return;
 

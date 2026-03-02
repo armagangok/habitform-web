@@ -143,7 +143,7 @@ class CreateHabitNotifier extends AutoDisposeNotifier<CreateHabitState> {
     final reminder = state.reminder ?? ref.read(reminderProvider).reminder;
     final categoryIds = state.categoryIds.isNotEmpty ? state.categoryIds : (ref.read(categoryButtonProvider) ?? []);
 
-    final defaultColor = NavigationService.shared.navigatorKey.currentContext?.theme.primaryColor.value;
+    final defaultColor = NavigationService.shared.navigatorKey.currentContext?.theme.primaryColor.toARGB32();
 
     try {
       final habit = Habit(
@@ -151,7 +151,7 @@ class CreateHabitNotifier extends AutoDisposeNotifier<CreateHabitState> {
         habitName: habitName.trim(),
         habitDescription: habitDescription.trim().isEmpty ? null : habitDescription.trim(),
         emoji: emoji.selectedEmoji ?? state.emoji ?? '📝',
-        colorCode: color?.value ?? state.colorCode ?? defaultColor ?? Colors.blueAccent.value,
+        colorCode: color?.toARGB32() ?? state.colorCode ?? defaultColor ?? Colors.blueAccent.toARGB32(),
         reminderModel: reminder,
         dailyTarget: state.dailyTarget,
         categoryIds: categoryIds,

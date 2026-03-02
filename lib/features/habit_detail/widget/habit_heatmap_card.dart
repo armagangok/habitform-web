@@ -5,7 +5,6 @@ import 'package:habitform/features/habit_detail/widget/habit_calendar_widget.dar
 
 import '/core/core.dart';
 import '/features/purchase/providers/purchase_provider.dart';
-import '/models/completion_entry/completion_entry.dart';
 import '/models/models.dart';
 import '../../purchase/page/paywall_page.dart';
 

@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "639576600772",
+    "project_id": "habitriseapp",
+    "storage_bucket": "habitriseapp.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:639576600772:android:3464a2014f5eb0af031991",
+        "android_client_info": {
+          "package_name": "com.appsweat.habitrise"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "639576600772-338vkhnauvtpekpmq6ik2nmopu0i1lrs.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAZJ52JyrJ9J_BkR7sYC5-AxrvqdezHMfI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "639576600772-338vkhnauvtpekpmq6ik2nmopu0i1lrs.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "639576600772-756spufiegn8pg83mjokb32kt5b92tlj.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.appsweat.habitrise"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

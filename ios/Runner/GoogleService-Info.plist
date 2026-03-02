@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>639576600772-756spufiegn8pg83mjokb32kt5b92tlj.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.639576600772-756spufiegn8pg83mjokb32kt5b92tlj</string>
+	<key>API_KEY</key>
+	<string>AIzaSyADKMTGL-_Nn4jBks6vY4KwMrtqK9TNGK0</string>
+	<key>GCM_SENDER_ID</key>
+	<string>639576600772</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.appsweat.habitrise</string>
+	<key>PROJECT_ID</key>
+	<string>habitriseapp</string>
+	<key>STORAGE_BUCKET</key>
+	<string>habitriseapp.firebasestorage.app</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:639576600772:ios:7c58b8594127f12c031991</string>
+</dict>
+</plist>

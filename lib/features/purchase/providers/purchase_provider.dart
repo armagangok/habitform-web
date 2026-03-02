@@ -1,9 +1,11 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/constants/debug_constants.dart';
 import '../../../core/core.dart';
 import '../../../models/user_defaults/user_defaults.dart';
+import '../../../services/sync_service.dart';
 import '../models/paywall_state.dart';
 import '../purchase.dart';
 
@@ -46,7 +48,16 @@ class PurchaseNotifier extends AsyncNotifier<PaywallState> {
         }
       }
 
-      // İnternet bağlantısı varsa, normal akışa devam et
+      // When logged in, pre-load Firestore subscription so fallback is ready if RevenueCat fails
+      if (FirebaseAuth.instance.currentUser != null) {
+        final userData = await SyncService().getUserSubscription();
+        if (userData != null) {
+          final isProFromFirestore = userData['isSubscribed'] as bool? ?? false;
+          final currentDefaults = await _getUserDefaults() ?? UserDefaults();
+          await _saveUserDefaults(currentDefaults.copyWith(isPro: isProFromFirestore));
+        }
+      }
+
       // Önce mevcut müşteri bilgilerini al
       final customerInfo = await Purchases.getCustomerInfo();
       final offerings = await Purchases.getOfferings();
@@ -58,6 +69,8 @@ class PurchaseNotifier extends AsyncNotifier<PaywallState> {
       final currentDefaults = await _getUserDefaults() ?? UserDefaults();
       await _saveUserDefaults(currentDefaults.copyWith(isPro: isActive));
 
+      await _syncSubscriptionToFirestore(customerInfo);
+
       return PaywallState(
         offerings: offerings,
         customerInfo: customerInfo,
@@ -66,13 +79,22 @@ class PurchaseNotifier extends AsyncNotifier<PaywallState> {
     } catch (e) {
       LogHelper.shared.debugPrint('Error initializing purchase state: $e');
 
-      // Hata durumunda UserDefaults'dan pro durumunu kontrol et
-      final userDefaults = await _getUserDefaults();
+      // Hata durumunda Firestore'dan veya UserDefaults'dan pro durumunu kontrol et
+      var isPro = (await _getUserDefaults())?.isPro ?? false;
+      if (!isPro && FirebaseAuth.instance.currentUser != null) {
+        final userData = await SyncService().getUserSubscription();
+        if (userData != null) {
+          isPro = userData['isSubscribed'] as bool? ?? false;
+          if (isPro) {
+            final currentDefaults = await _getUserDefaults() ?? UserDefaults();
+            await _saveUserDefaults(currentDefaults.copyWith(isPro: true));
+          }
+        }
+      }
 
-      // Eğer önceki state varsa, offerings ve customerInfo'yu koru
       final previousState = state.valueOrNull;
       return PaywallState(
-        isSubscriptionActive: userDefaults?.isPro ?? false,
+        isSubscriptionActive: isPro,
         offerings: previousState?.offerings,
         customerInfo: previousState?.customerInfo,
       );
@@ -103,6 +125,24 @@ class PurchaseNotifier extends AsyncNotifier<PaywallState> {
       );
     } catch (e) {
       LogHelper.shared.debugPrint('Error saving user defaults: $e');
+    }
+  }
+
+  /// Writes current subscription state from RevenueCat to Firestore (merge). No-op in debug mode or when not logged in.
+  Future<void> _syncSubscriptionToFirestore(CustomerInfo customerInfo) async {
+    if (KDebug.purchaseDebugMode) return;
+    try {
+      final isActive = customerInfo.entitlements.active.isNotEmpty;
+      final entitlement = customerInfo.entitlements.all[entitlementID];
+      final productId = entitlement?.productIdentifier;
+      final expirationDate = entitlement?.expirationDate;
+      await SyncService().updateUserSubscription(
+        isActive,
+        subscriptionProductId: productId,
+        subscriptionExpirationDate: expirationDate,
+      );
+    } catch (e) {
+      LogHelper.shared.debugPrint('Error syncing subscription to Firestore: $e');
     }
   }
 
@@ -137,6 +177,8 @@ class PurchaseNotifier extends AsyncNotifier<PaywallState> {
         // Mevcut UserDefaults'ı al ve güncelle
         final currentDefaults = await _getUserDefaults() ?? UserDefaults();
         await _saveUserDefaults(currentDefaults.copyWith(isPro: isActive));
+
+        await _syncSubscriptionToFirestore(customerInfo);
 
         return PaywallState(
           isSubscriptionActive: isActive,
@@ -176,6 +218,8 @@ class PurchaseNotifier extends AsyncNotifier<PaywallState> {
       // Mevcut UserDefaults'ı al ve güncelle
       final currentDefaults = await _getUserDefaults() ?? UserDefaults();
       await _saveUserDefaults(currentDefaults.copyWith(isPro: isActive));
+
+      await _syncSubscriptionToFirestore(customerInfo);
 
       // Önce state'i güncelle
       state = AsyncValue.data(
@@ -242,6 +286,8 @@ class PurchaseNotifier extends AsyncNotifier<PaywallState> {
       // Mevcut UserDefaults'ı al ve güncelle
       final currentDefaults = await _getUserDefaults() ?? UserDefaults();
       await _saveUserDefaults(currentDefaults.copyWith(isPro: isActive));
+
+      await _syncSubscriptionToFirestore(customerInfo);
 
       // Önce state'i güncelle
       state = AsyncValue.data(

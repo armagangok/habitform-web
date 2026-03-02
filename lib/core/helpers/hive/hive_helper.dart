@@ -6,9 +6,7 @@ import '../../../features/reminder/models/days/days_enum.dart';
 import '../../../features/reminder/models/multiple_reminder/multiple_reminder_model.dart';
 import '../../../features/reminder/models/reminder/reminder_model.dart';
 import '../../../models/app_defaults/app_defaults.dart';
-import '../../../models/completion_entry/completion_entry.dart';
 import '../../../models/habit/habit_difficulty.dart';
-import '../../../models/habit/habit_model.dart';
 import '../../../models/habit/habit_status.dart';
 import '../../../models/user_defaults/user_defaults.dart';
 import '../../core.dart';
@@ -108,6 +106,13 @@ class HiveHelper {
       LogHelper.shared.debugPrint('UserDefaultsAdapter registered successfully');
     } catch (e, s) {
       LogHelper.shared.debugPrint('Error registering UserDefaultsAdapter: $e\n $s');
+    }
+
+    try {
+      Hive.registerAdapter(SyncStatusAdapter());
+      LogHelper.shared.debugPrint('SyncStatusAdapter registered successfully');
+    } catch (e, s) {
+      LogHelper.shared.debugPrint('Error registering SyncStatusAdapter: $e\n $s');
     }
   }
 

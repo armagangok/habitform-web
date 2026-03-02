@@ -1,111 +1,48 @@
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 import '../../features/reminder/models/reminder/reminder_model.dart';
 import '../completion_entry/completion_entry.dart';
+import '../sync_status.dart';
 import 'habit_difficulty.dart';
+import 'habit_extension.dart';
 import 'habit_status.dart';
 
+part 'habit_model.freezed.dart';
 part 'habit_model.g.dart';
 
+@freezed
 @HiveType(typeId: 1)
-class Habit extends HiveObject {
-  @HiveField(0)
-  final String id;
+class Habit extends HiveObject with _$Habit {
+  factory Habit({
+    @HiveField(0) required String id,
+    @HiveField(1) required String habitName,
+    @HiveField(2) String? habitDescription,
+    @HiveField(3) String? emoji,
+    @HiveField(4) ReminderModel? reminderModel,
+    @Default(1) @HiveField(5) int dailyTarget,
+    @HiveField(6) required int colorCode,
+    @Default({}) @HiveField(7) Map<String, CompletionEntry> completions,
+    @HiveField(8) DateTime? archiveDate,
+    @Default(HabitStatus.active) @HiveField(10) HabitStatus status,
+    @Default([]) @HiveField(11) List<String> categoryIds,
+    @Default(HabitDifficulty.moderate) @HiveField(12) HabitDifficulty difficulty,
+    @Default(1.0) @HiveField(13) double rewardFactor,
+    @HiveField(14) DateTime? completionTime,
+    @Default(SyncStatus.synced) @HiveField(15) SyncStatus syncStatus,
+    @HiveField(16) DateTime? updatedAt,
+  }) = _Habit;
 
-  @HiveField(1)
-  final String habitName;
+  Habit._();
 
-  @HiveField(2)
-  final String? habitDescription;
+  /// Proxy methods to extension methods in [HabitUtils]
+  /// Required for dynamic dispatch when objects are typed as dynamic (e.g. in [CircularHabitWidget])
 
-  @HiveField(3)
-  final String? emoji;
+  int getCountForDate(DateTime date) => HabitUtils(this).getCountForDate(date);
 
-  @HiveField(4)
-  final ReminderModel? reminderModel;
+  double getCompletionRatioForDate(DateTime date) => HabitUtils(this).getCompletionRatioForDate(date);
 
-  // Number of times the habit is intended to be completed per day (e.g., brush teeth twice)
-  @HiveField(5, defaultValue: 1)
-  final int dailyTarget;
+  int calculateCurrentStreak() => HabitUtils(this).calculateCurrentStreak();
 
-  @HiveField(6)
-  final int colorCode;
-
-  @HiveField(7, defaultValue: {})
-  final Map<String, CompletionEntry> completions;
-
-  @HiveField(8)
-  final DateTime? archiveDate;
-
-  @HiveField(10, defaultValue: HabitStatus.active)
-  final HabitStatus status;
-
-  @HiveField(11, defaultValue: [])
-  final List<String> categoryIds;
-
-  @HiveField(12, defaultValue: HabitDifficulty.moderate)
-  final HabitDifficulty difficulty;
-
-  // Reward factor (α) representing emotional reinforcement
-  // Higher values (1.0-2.0) mean more enjoyable/rewarding habits form faster
-  // Lower values (0.5-1.0) mean less enjoyable habits form slower
-  // Default: 1.0 (normal reward)
-  @HiveField(13, defaultValue: 1.0)
-  final double rewardFactor;
-
-  // Completion time - the time when the user typically completes this habit
-  // This is separate from reminders - it's just for display purposes
-  @HiveField(14)
-  final DateTime? completionTime;
-
-  Habit({
-    required this.id,
-    required this.habitName,
-    this.habitDescription,
-    this.reminderModel,
-    this.emoji,
-    this.completions = const {},
-    this.dailyTarget = 1,
-    required this.colorCode,
-    this.archiveDate,
-    this.status = HabitStatus.active,
-    this.categoryIds = const [],
-    this.difficulty = HabitDifficulty.moderate,
-    this.rewardFactor = 1.0,
-    this.completionTime,
-  });
-
-  Habit copyWith({
-    String? id,
-    String? habitName,
-    String? habitDescription,
-    ReminderModel? reminderModel,
-    String? emoji,
-    int? colorCode,
-    Map<String, CompletionEntry>? completions,
-    int? dailyTarget,
-    DateTime? archiveDate,
-    HabitStatus? status,
-    List<String>? categoryIds,
-    HabitDifficulty? difficulty,
-    double? rewardFactor,
-    DateTime? completionTime,
-  }) {
-    return Habit(
-      id: id ?? this.id,
-      habitName: habitName ?? this.habitName,
-      habitDescription: habitDescription ?? this.habitDescription,
-      reminderModel: reminderModel ?? this.reminderModel,
-      emoji: emoji ?? this.emoji,
-      completions: completions ?? this.completions,
-      dailyTarget: dailyTarget ?? this.dailyTarget,
-      colorCode: colorCode ?? this.colorCode,
-      archiveDate: archiveDate ?? this.archiveDate,
-      status: status ?? this.status,
-      categoryIds: categoryIds ?? this.categoryIds,
-      difficulty: difficulty ?? this.difficulty,
-      rewardFactor: rewardFactor ?? this.rewardFactor,
-      completionTime: completionTime ?? this.completionTime,
-    );
-  }
+  factory Habit.fromJson(Map<String, dynamic> json) => _$HabitFromJson(json);
 }

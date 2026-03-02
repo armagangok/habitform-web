@@ -47,4 +47,11 @@ abstract class HabitService {
 
   // Update an archived habit
   Future<void> updateArchivedHabit(Habit habit);
+
+  // Sync any pending habits to remote storage
+  Future<void> syncPendingHabits();
+
+  /// Pulls habits from Firestore, merges with local using conflict resolution, and saves to Hive.
+  /// Call this when user logs in to sync remote data to local storage.
+  Future<void> syncFromRemote();
 }

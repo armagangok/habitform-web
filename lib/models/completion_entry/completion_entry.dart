@@ -1,49 +1,25 @@
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hive_flutter/adapters.dart';
 
+import '../sync_status.dart';
+
+part 'completion_entry.freezed.dart';
 part 'completion_entry.g.dart';
 
+@freezed
 @HiveType(typeId: 8)
-class CompletionEntry extends HiveObject {
-  @HiveField(0)
-  final String id;
+class CompletionEntry extends HiveObject with _$CompletionEntry {
+  factory CompletionEntry({
+    @HiveField(0) required String id,
+    @HiveField(1) required DateTime date,
+    @HiveField(2) required bool isCompleted,
+    @Default(1) @HiveField(3) int count,
+    @HiveField(4) double? rewardRating,
+    @Default(SyncStatus.synced) @HiveField(5) SyncStatus syncStatus,
+    @HiveField(6) DateTime? updatedAt,
+  }) = _CompletionEntry;
 
-  @HiveField(1)
-  final DateTime date;
+  CompletionEntry._();
 
-  @HiveField(2)
-  final bool isCompleted;
-
-  // Number of completions recorded for the given date
-  @HiveField(3, defaultValue: 1)
-  final int count;
-
-  // Reward rating (α) for this specific completion
-  // Represents how enjoyable/rewarding this completion felt (0.5-2.0)
-  // null means user hasn't rated this completion yet
-  @HiveField(4)
-  final double? rewardRating;
-
-  CompletionEntry({
-    required this.id,
-    required this.date,
-    required this.isCompleted,
-    this.count = 1,
-    this.rewardRating,
-  });
-
-  CompletionEntry copyWith({
-    String? id,
-    DateTime? date,
-    bool? isCompleted,
-    int? count,
-    double? rewardRating,
-  }) {
-    return CompletionEntry(
-      id: id ?? this.id,
-      date: date ?? this.date,
-      isCompleted: isCompleted ?? this.isCompleted,
-      count: count ?? this.count,
-      rewardRating: rewardRating ?? this.rewardRating,
-    );
-  }
+  factory CompletionEntry.fromJson(Map<String, dynamic> json) => _$CompletionEntryFromJson(json);
 }

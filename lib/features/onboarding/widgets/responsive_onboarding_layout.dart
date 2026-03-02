@@ -1,5 +1,3 @@
-import 'package:flutter/cupertino.dart';
-
 import '../../../core/core.dart';
 
 /// Responsive layout wrapper for onboarding pages
@@ -25,14 +23,12 @@ class ResponsiveOnboardingLayout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    final isTablet = ResponsiveHelper.isTablet(screenWidth) ||
-        ResponsiveHelper.isTabletLandscape(screenWidth) ||
-        ResponsiveHelper.isDesktop(screenWidth);
+    final isTablet = ResponsiveHelper.isTablet(screenWidth) || ResponsiveHelper.isTabletLandscape(screenWidth) || ResponsiveHelper.isDesktop(screenWidth);
 
     // For tablets and larger screens, center content with max width
     if (isTablet) {
       final maxWidth = maxContentWidth ?? ResponsiveHelper.getMaxContentWidth(screenWidth);
-      
+
       return Center(
         child: ConstrainedBox(
           constraints: BoxConstraints(
@@ -65,9 +61,7 @@ class ResponsiveOnboardingContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    final isTablet = ResponsiveHelper.isTablet(screenWidth) ||
-        ResponsiveHelper.isTabletLandscape(screenWidth) ||
-        ResponsiveHelper.isDesktop(screenWidth);
+    final isTablet = ResponsiveHelper.isTablet(screenWidth) || ResponsiveHelper.isTabletLandscape(screenWidth) || ResponsiveHelper.isDesktop(screenWidth);
 
     final effectivePadding = padding ??
         ResponsiveHelper.getResponsivePadding(
@@ -97,4 +91,3 @@ class ResponsiveOnboardingContainer extends StatelessWidget {
     return content;
   }
 }
-

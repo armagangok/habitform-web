@@ -2,7 +2,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:habitform/core/core.dart';
 import 'package:table_calendar/table_calendar.dart';
 
-import '../../../models/completion_entry/completion_entry.dart';
 import '../../../models/models.dart';
 import '../providers/habit_detail_provider.dart';
 

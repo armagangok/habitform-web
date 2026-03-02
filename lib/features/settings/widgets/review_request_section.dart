@@ -1,6 +1,5 @@
 import '../../../core/core.dart';
 import '../../../core/helpers/in_app_review/in_app_review.dart';
-import 'setting_item.dart';
 
 class ReviewRequestSection extends StatelessWidget {
   const ReviewRequestSection({super.key});
@@ -63,9 +62,14 @@ class ReviewRequestSection extends StatelessWidget {
       children: [
         CupertinoListTile(
           padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-          leading: const SettingLeadingWidget(
-            iconData: CupertinoIcons.star_fill,
-            cardColor: CupertinoColors.systemPink,
+          leading: CupertinoCard(
+            color: CupertinoColors.systemPink,
+            borderRadius: BorderRadius.circular(5),
+            padding: const EdgeInsets.all(2),
+            child: Icon(
+              CupertinoIcons.star_fill,
+              color: Colors.white.withValues(alpha: .9),
+            ),
           ),
           title: Text(
             LocaleKeys.settings_review_request_title.tr(),

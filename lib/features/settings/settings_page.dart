@@ -3,11 +3,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '/core/core.dart';
 import '/core/helpers/url_laucher/url_launcher.dart';
 import '/core/theme/widget/theme_mode_widget.dart';
+import '../auth/widgets/auth_header_widget.dart';
 import '../purchase/providers/purchase_provider.dart';
 import '../translation/widget/language_feature.dart';
 import 'widgets/membership_info_button.dart';
 import 'widgets/review_request_section.dart';
-import 'widgets/setting_item.dart';
 import 'widgets/subscribe_button.dart';
 
 class SettingsPage extends ConsumerWidget {
@@ -29,6 +29,7 @@ class SettingsPage extends ConsumerWidget {
           children: [
             Column(
               children: [
+                AuthHeaderWidget(),
                 // Wrap paywall section in RepaintBoundary to prevent unnecessary repaints
                 RepaintBoundary(
                   child: paywallState.when(
@@ -49,9 +50,14 @@ class SettingsPage extends ConsumerWidget {
                     ThemeModeFeature(),
                     LanguageFeature(),
                     CupertinoListTile(
-                      leading: SettingLeadingWidget(
-                        iconData: CupertinoIcons.bell_fill,
-                        cardColor: CupertinoColors.systemGreen,
+                      leading: CupertinoCard(
+                        color: CupertinoColors.systemGreen,
+                        borderRadius: BorderRadius.circular(5),
+                        padding: const EdgeInsets.all(2),
+                        child: Icon(
+                          CupertinoIcons.bell_fill,
+                          color: Colors.white.withValues(alpha: .9),
+                        ),
                       ),
                       title: Text(LocaleKeys.settings_notifications.tr()),
                       onTap: () => navigator.navigateTo(path: KRoute.notifications),
@@ -62,9 +68,14 @@ class SettingsPage extends ConsumerWidget {
                 CupertinoListSection.insetGrouped(
                   children: [
                     CupertinoListTile(
-                      leading: const SettingLeadingWidget(
-                        iconData: CupertinoIcons.archivebox_fill,
-                        cardColor: CupertinoColors.systemIndigo,
+                      leading: CupertinoCard(
+                        color: CupertinoColors.systemIndigo,
+                        borderRadius: BorderRadius.circular(5),
+                        padding: const EdgeInsets.all(2),
+                        child: Icon(
+                          CupertinoIcons.archivebox_fill,
+                          color: Colors.white.withValues(alpha: .9),
+                        ),
                       ),
                       title: Text(LocaleKeys.settings_habitArchive.tr()),
                       onTap: () {
@@ -73,10 +84,14 @@ class SettingsPage extends ConsumerWidget {
                       trailing: CupertinoListTileChevron(),
                     ),
                     CupertinoListTile(
-                      leading: SettingLeadingWidget(
-                        padding: 2.5,
-                        iconData: FontAwesomeIcons.database,
-                        cardColor: Colors.deepPurpleAccent,
+                      leading: CupertinoCard(
+                        color: Colors.deepPurpleAccent,
+                        borderRadius: BorderRadius.circular(5),
+                        padding: const EdgeInsets.all(2.5),
+                        child: Icon(
+                          FontAwesomeIcons.database,
+                          color: Colors.white.withValues(alpha: .9),
+                        ),
                       ),
                       title: Text(LocaleKeys.settings_data_export_import.tr()),
                       onTap: () {
@@ -85,9 +100,14 @@ class SettingsPage extends ConsumerWidget {
                       trailing: CupertinoListTileChevron(),
                     ),
                     CupertinoListTile(
-                      leading: const SettingLeadingWidget(
-                        iconData: CupertinoIcons.doc_person_fill,
-                        cardColor: Colors.blueAccent,
+                      leading: CupertinoCard(
+                        color: Colors.blueAccent,
+                        borderRadius: BorderRadius.circular(5),
+                        padding: const EdgeInsets.all(2),
+                        child: Icon(
+                          CupertinoIcons.doc_person_fill,
+                          color: Colors.white.withValues(alpha: .9),
+                        ),
                       ),
                       onTap: () => ref.read(purchaseProvider.notifier).copyCustomerId(),
                       title: Text(LocaleKeys.settings_rc_id.tr()),
@@ -106,27 +126,42 @@ class SettingsPage extends ConsumerWidget {
                 CupertinoListSection.insetGrouped(
                   children: [
                     CupertinoListTile(
-                      leading: const SettingLeadingWidget(
-                        iconData: CupertinoIcons.hand_raised_fill,
-                        cardColor: CupertinoColors.activeBlue,
+                      leading: CupertinoCard(
+                        color: CupertinoColors.activeBlue,
+                        borderRadius: BorderRadius.circular(5),
+                        padding: const EdgeInsets.all(2),
+                        child: Icon(
+                          CupertinoIcons.hand_raised_fill,
+                          color: Colors.white.withValues(alpha: .9),
+                        ),
                       ),
                       title: Text(LocaleKeys.settings_privacy.tr()),
                       onTap: UrlLauncherHelper.openPrivacyPolicy,
                       trailing: CupertinoListTileChevron(),
                     ),
                     CupertinoListTile(
-                      leading: const SettingLeadingWidget(
-                        iconData: CupertinoIcons.hand_point_right_fill,
-                        cardColor: CupertinoColors.activeBlue,
+                      leading: CupertinoCard(
+                        color: CupertinoColors.activeBlue,
+                        borderRadius: BorderRadius.circular(5),
+                        padding: const EdgeInsets.all(2),
+                        child: Icon(
+                          CupertinoIcons.hand_point_right_fill,
+                          color: Colors.white.withValues(alpha: .9),
+                        ),
                       ),
                       title: Text(LocaleKeys.settings_terms.tr()),
                       onTap: UrlLauncherHelper.openTermsOfUse,
                       trailing: CupertinoListTileChevron(),
                     ),
                     CupertinoListTile(
-                      leading: const SettingLeadingWidget(
-                        iconData: CupertinoIcons.mail_solid,
-                        cardColor: CupertinoColors.activeBlue,
+                      leading: CupertinoCard(
+                        color: CupertinoColors.activeBlue,
+                        borderRadius: BorderRadius.circular(5),
+                        padding: const EdgeInsets.all(2),
+                        child: Icon(
+                          CupertinoIcons.mail_solid,
+                          color: Colors.white.withValues(alpha: .9),
+                        ),
                       ),
                       title: Text(LocaleKeys.settings_feedback.tr()),
                       onTap: UrlLauncherHelper.requestEmail,

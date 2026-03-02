@@ -1,7 +1,6 @@
 import '../../core/extension/datetime_extension.dart';
 import '../../features/reminder/service/reminder_service.dart';
 import '../../models/completion_entry/completion_entry.dart';
-import '../../models/habit/habit_extension.dart';
 import '../../models/habit/habit_model.dart';
 import '../../models/habit/habit_status.dart';
 import '../../models/habit/habit_summary.dart';
@@ -144,5 +143,15 @@ class MockHabitService extends HabitService {
       archiveDate: habit.archiveDate ?? DateTime.now(),
     );
     await updateHabit(updatedHabit);
+  }
+
+  @override
+  Future<void> syncPendingHabits() async {
+    // Mock implementation does nothing for sync
+  }
+
+  @override
+  Future<void> syncFromRemote() async {
+    // Mock implementation does nothing
   }
 }

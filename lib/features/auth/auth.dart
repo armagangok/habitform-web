@@ -1,0 +1,11 @@
+export 'providers/account_actions_provider.dart';
+export 'providers/auth_provider.dart';
+export 'services/auth_service.dart';
+export 'views/pages/auth_page.dart';
+export 'views/pages/my_account_page.dart';
+export 'widgets/account_danger_zone_section.dart';
+export 'widgets/account_linked_accounts_section.dart';
+export 'widgets/account_privacy_section.dart';
+export 'widgets/account_profile_section.dart';
+export 'widgets/account_security_section.dart';
+export 'widgets/auth_header_widget.dart';

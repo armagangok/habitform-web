@@ -2,7 +2,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/core.dart';
 import '../../export_import_data/csv_service.dart';
-import 'setting_item.dart';
 
 class DataExportImportWidget extends ConsumerStatefulWidget {
   const DataExportImportWidget({super.key});
@@ -128,18 +127,28 @@ class _DataExportImportWidgetState extends ConsumerState<DataExportImportWidget>
     return Column(
       children: [
         CupertinoListTile(
-          leading: const SettingLeadingWidget(
-            iconData: CupertinoIcons.arrow_down_doc_fill,
-            cardColor: CupertinoColors.systemGreen,
+          leading: CupertinoCard(
+            color: CupertinoColors.systemGreen,
+            borderRadius: BorderRadius.circular(5),
+            padding: const EdgeInsets.all(2),
+            child: Icon(
+              CupertinoIcons.arrow_down_doc_fill,
+              color: Colors.white.withValues(alpha: .9),
+            ),
           ),
           title: Text(LocaleKeys.settings_export_data.tr()),
           trailing: _isExporting ? const CupertinoActivityIndicator() : const CupertinoListTileChevron(),
           onTap: _isExporting ? null : _exportData,
         ),
         CupertinoListTile(
-          leading: const SettingLeadingWidget(
-            iconData: CupertinoIcons.arrow_up_doc_fill,
-            cardColor: CupertinoColors.systemBlue,
+          leading: CupertinoCard(
+            color: CupertinoColors.systemBlue,
+            borderRadius: BorderRadius.circular(5),
+            padding: const EdgeInsets.all(2),
+            child: Icon(
+              CupertinoIcons.arrow_up_doc_fill,
+              color: Colors.white.withValues(alpha: .9),
+            ),
           ),
           title: Text(LocaleKeys.settings_import_data.tr()),
           trailing: _isImporting ? const CupertinoActivityIndicator() : const CupertinoListTileChevron(),

@@ -3,10 +3,11 @@ import 'package:hive_flutter/hive_flutter.dart';
 import '../../core/core.dart';
 import '../../features/reminder/service/reminder_service.dart';
 import '../../models/completion_entry/completion_entry.dart';
-import '../../models/habit/habit_extension.dart';
 import '../../models/habit/habit_model.dart';
 import '../../models/habit/habit_status.dart';
 import '../../models/habit/habit_summary.dart';
+import '../../models/sync_status.dart';
+import '../sync_service.dart';
 import '../widget_service.dart';
 import 'habit_service_interface.dart';
 
@@ -17,6 +18,7 @@ class LocalHabitService extends HabitService {
 
   final HiveHelper _hiveHelper = HiveHelper.shared;
   final WidgetService _widgetService = WidgetService();
+  final SyncService _syncService = SyncService();
 
   // Get all habits (both active and archived)
   @override
@@ -109,27 +111,41 @@ class LocalHabitService extends HabitService {
     return null;
   }
 
-  // Create a new habit
   @override
   Future<void> createHabit(Habit habit) async {
+    final updatedHabit = habit.copyWith(
+      updatedAt: DateTime.now(),
+      syncStatus: SyncStatus.pending,
+    );
+
     await _hiveHelper.putData<Habit>(
       HiveBoxes.habitBox,
-      habit.id,
-      habit.copyWith(),
+      updatedHabit.id,
+      updatedHabit,
     );
+
+    // Sync to Firestore in background
+    _syncHabitInBackground(updatedHabit, HiveBoxes.habitBox);
 
     // Export to widget
     await _exportHabitsForWidget();
   }
 
-  // Update an existing habit
   @override
   Future<void> updateHabit(Habit habit) async {
+    final updatedHabit = habit.copyWith(
+      updatedAt: DateTime.now(),
+      syncStatus: SyncStatus.pending,
+    );
+
     await _hiveHelper.putData<Habit>(
       HiveBoxes.habitBox,
-      habit.id,
-      habit,
+      updatedHabit.id,
+      updatedHabit,
     );
+
+    // Sync to Firestore in background
+    _syncHabitInBackground(updatedHabit, HiveBoxes.habitBox);
 
     // Export to widget
     await _exportHabitsForWidget();
@@ -207,8 +223,21 @@ class LocalHabitService extends HabitService {
 
     // Save updated habit
     final updateStart = DateTime.now();
-    final updatedHabit = habit.copyWith(completions: updatedCompletions);
-    await updateHabit(updatedHabit);
+    final updatedHabit = habit.copyWith(
+      completions: updatedCompletions,
+      updatedAt: DateTime.now(),
+      syncStatus: SyncStatus.pending,
+    );
+
+    await _hiveHelper.putData<Habit>(
+      HiveBoxes.habitBox,
+      updatedHabit.id,
+      updatedHabit,
+    );
+
+    // Sync to Firestore in background
+    _syncHabitInBackground(updatedHabit, HiveBoxes.habitBox);
+
     final updateEnd = DateTime.now();
     LogHelper.shared.debugPrint('💾 [PERF] updateHabit completed in ${updateEnd.difference(updateStart).inMilliseconds}ms');
 
@@ -221,13 +250,32 @@ class LocalHabitService extends HabitService {
   Future<void> deleteHabit(String habitId) async {
     final habit = _hiveHelper.getData<Habit>(HiveBoxes.habitBox, habitId);
     if (habit != null) {
+      final updatedHabit = habit.copyWith(
+        status: HabitStatus.archived,
+        updatedAt: DateTime.now(),
+        syncStatus: SyncStatus.pending,
+      );
       await _hiveHelper.putData<Habit>(
         HiveBoxes.habitBox,
         habitId,
-        habit.copyWith(
-          status: HabitStatus.archived,
-        ),
+        updatedHabit,
       );
+
+      // Sync to Firestore in background
+      _syncHabitInBackground(updatedHabit, HiveBoxes.habitBox);
+    }
+  }
+
+  Future<void> _syncHabitInBackground(Habit habit, String boxName) async {
+    try {
+      await _syncService.syncHabit(habit);
+      await _hiveHelper.putData<Habit>(
+        boxName,
+        habit.id,
+        habit.copyWith(syncStatus: SyncStatus.synced),
+      );
+    } catch (e, stack) {
+      LogHelper.shared.debugPrint('Sync failed for habit ${habit.id}: $e\n$stack');
     }
   }
 
@@ -249,10 +297,15 @@ class LocalHabitService extends HabitService {
     LogHelper.shared.debugPrint('💾 Step 2: Creating archived habit object');
     // Set habit to archived if it's not already
     final archivedHabit = habit.status == HabitStatus.archived
-        ? habit
+        ? habit.copyWith(
+            updatedAt: DateTime.now(),
+            syncStatus: SyncStatus.pending,
+          )
         : habit.copyWith(
             status: HabitStatus.archived,
             archiveDate: DateTime.now(),
+            updatedAt: DateTime.now(),
+            syncStatus: SyncStatus.pending,
           );
     LogHelper.shared.debugPrint('💾 Archived habit created with status: ${archivedHabit.status}');
 
@@ -266,6 +319,9 @@ class LocalHabitService extends HabitService {
     await _hiveHelper.putData<Habit>(HiveBoxes.archivedHabitBox, habit.id, archivedHabit);
     LogHelper.shared.debugPrint('💾 Added to archived habits box');
 
+    // Sync to Firestore in background
+    _syncHabitInBackground(archivedHabit, HiveBoxes.archivedHabitBox);
+
     LogHelper.shared.debugPrint('💾 HABIT SERVICE: Habit archived successfully: ${habit.id}');
   }
 
@@ -277,7 +333,11 @@ class LocalHabitService extends HabitService {
     final archivedHabit = _hiveHelper.getData<Habit>(HiveBoxes.archivedHabitBox, habitId);
     if (archivedHabit != null) {
       // Set habit to active
-      final activeHabit = archivedHabit.copyWith(status: HabitStatus.active);
+      final activeHabit = archivedHabit.copyWith(
+        status: HabitStatus.active,
+        updatedAt: DateTime.now(),
+        syncStatus: SyncStatus.pending,
+      );
 
       // Add to active habits
       await _hiveHelper.putData<Habit>(HiveBoxes.habitBox, habitId, activeHabit);
@@ -285,15 +345,20 @@ class LocalHabitService extends HabitService {
       // Remove from archived habits
       await _hiveHelper.deleteData<Habit>(HiveBoxes.archivedHabitBox, habitId);
 
+      // Sync to Firestore in background
+      _syncHabitInBackground(activeHabit, HiveBoxes.habitBox);
+
       LogHelper.shared.debugPrint('Habit unarchived successfully: $habitId');
     }
   }
 
-  // Permanently delete a habit
   @override
   Future<void> permanentlyDeleteHabit(String habitId) async {
     LogHelper.shared.debugPrint('Permanently deleting habit: $habitId');
     await _hiveHelper.deleteData<Habit>(HiveBoxes.archivedHabitBox, habitId);
+
+    // Also delete from Firestore
+    _syncService.deleteRemoteHabit(habitId);
   }
 
   // Update an archived habit
@@ -384,6 +449,98 @@ class LocalHabitService extends HabitService {
     } catch (e, stackTrace) {
       LogHelper.shared.errorPrint('❌ Error during completionTime migration: $e');
       LogHelper.shared.errorPrint('Stack trace: $stackTrace');
+    }
+  }
+
+  @override
+  Future<void> syncPendingHabits() async {
+    LogHelper.shared.debugPrint('🔄 Starting sync of pending habits...');
+
+    // Get all habits (active and archived)
+    final allHabits = await getAllHabits();
+
+    // Filter habits that need syncing
+    final pendingHabits = allHabits.where((habit) => habit.syncStatus == SyncStatus.pending).toList();
+
+    LogHelper.shared.debugPrint('🔄 Found ${pendingHabits.length} pending habits to sync');
+
+    int successCount = 0;
+    for (final habit in pendingHabits) {
+      try {
+        await _syncService.syncHabit(habit);
+
+        // Update local status to synced
+        final updatedHabit = habit.copyWith(syncStatus: SyncStatus.synced);
+        if (updatedHabit.status == HabitStatus.active) {
+          await _hiveHelper.putData<Habit>(HiveBoxes.habitBox, habit.id, updatedHabit);
+        } else {
+          await _hiveHelper.putData<Habit>(HiveBoxes.archivedHabitBox, habit.id, updatedHabit);
+        }
+
+        successCount++;
+        LogHelper.shared.debugPrint('✅ Synced pending habit: ${habit.id}');
+      } catch (e) {
+        LogHelper.shared.debugPrint('❌ Failed to sync pending habit ${habit.id}: $e');
+      }
+    }
+
+    LogHelper.shared.debugPrint('🔄 Finished syncing pending habits: $successCount successful, ${pendingHabits.length - successCount} failed.');
+  }
+
+  @override
+  Future<void> syncFromRemote() async {
+    try {
+      LogHelper.shared.debugPrint('🔄 syncFromRemote: Pulling habits from Firestore...');
+
+      final remoteHabits = await _syncService.fetchRemoteHabits();
+      if (remoteHabits.isEmpty) {
+        LogHelper.shared.debugPrint('🔄 syncFromRemote: No remote habits, syncing pending to remote.');
+        await syncPendingHabits();
+        return;
+      }
+
+      final localActive = await getHabits();
+      final localArchived = await getArchivedHabits();
+      final localMap = <String, Habit>{
+        for (final h in [...localActive, ...localArchived]) h.id: h,
+      };
+      final remoteIds = remoteHabits.map((h) => h.id).toSet();
+
+      final merged = <String, Habit>{};
+
+      for (final remote in remoteHabits) {
+        final local = localMap[remote.id];
+        final resolved = local != null
+            ? _syncService.resolveConflict(local, remote)
+            : remote.copyWith(syncStatus: SyncStatus.synced);
+        merged[resolved.id] = resolved;
+      }
+
+      for (final local in localMap.values) {
+        if (!remoteIds.contains(local.id)) {
+          merged[local.id] = local;
+        }
+      }
+
+      final activeHabits = merged.values.where((h) => h.status == HabitStatus.active).toList();
+      final archivedHabits = merged.values.where((h) => h.status == HabitStatus.archived).toList();
+
+      await _hiveHelper.clearBox<Habit>(HiveBoxes.habitBox);
+      await _hiveHelper.clearBox<Habit>(HiveBoxes.archivedHabitBox);
+
+      for (final habit in activeHabits) {
+        await _hiveHelper.putData<Habit>(HiveBoxes.habitBox, habit.id, habit);
+      }
+      for (final habit in archivedHabits) {
+        await _hiveHelper.putData<Habit>(HiveBoxes.archivedHabitBox, habit.id, habit);
+      }
+
+      await syncPendingHabits();
+      await _exportHabitsForWidget();
+
+      LogHelper.shared.debugPrint('✅ syncFromRemote: Merged ${merged.length} habits from Firestore.');
+    } catch (e, stack) {
+      LogHelper.shared.debugPrint('❌ syncFromRemote failed: $e\n$stack');
     }
   }
 }

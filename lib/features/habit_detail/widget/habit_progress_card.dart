@@ -3,10 +3,8 @@ import 'dart:math' as math;
 
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:habitform/models/habit/habit_extension.dart';
 
 import '/core/core.dart';
-import '/models/completion_entry/completion_entry.dart';
 import '/models/models.dart';
 import '../../home/components/reward_rating_dialog.dart';
 import '../providers/habit_detail_provider.dart';
@@ -355,7 +353,7 @@ class _WeeklyProgressChartState extends ConsumerState<_WeeklyProgressChart> {
       if (increment) {
         // Get updated habit after completion
         await Future.delayed(const Duration(milliseconds: 100));
-        if (!mounted) return;
+        if (!mounted || !context.mounted) return;
 
         final updatedHabit = ref.read(habitDetailProvider);
         if (updatedHabit != null) {
@@ -389,7 +387,7 @@ class _WeeklyProgressChartState extends ConsumerState<_WeeklyProgressChart> {
     if (!mounted) return;
 
     await Future.delayed(const Duration(milliseconds: 500));
-    if (!mounted) return;
+    if (!mounted || !context.mounted) return;
 
     // Show reward rating dialog (mandatory - user must select)
     // Dialog returns the selected rating when closed
@@ -411,7 +409,7 @@ class _WeeklyProgressChartState extends ConsumerState<_WeeklyProgressChart> {
 
     // Small delay to ensure dialog is fully closed before proceeding
     await Future.delayed(const Duration(milliseconds: 200));
-    if (!mounted) return;
+    if (!mounted || !context.mounted) return;
 
     // Get current completion entry
     final currentHabit = ref.read(habitDetailProvider);

@@ -1,7 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '/core/core.dart';
-import '../../settings/widgets/setting_item.dart';
 
 class LanguageFeature extends ConsumerWidget {
   const LanguageFeature({
@@ -37,9 +36,14 @@ class LanguageFeature extends ConsumerWidget {
           },
         );
       },
-      leading: const SettingLeadingWidget(
-        iconData: CupertinoIcons.globe,
-        cardColor: CupertinoColors.systemBlue,
+      leading: CupertinoCard(
+        color: CupertinoColors.systemBlue,
+        borderRadius: BorderRadius.circular(5),
+        padding: const EdgeInsets.all(2),
+        child: Icon(
+          CupertinoIcons.globe,
+          color: Colors.white.withValues(alpha: .9),
+        ),
       ),
       trailing: CupertinoListTileChevron(),
     );

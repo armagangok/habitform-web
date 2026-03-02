@@ -1,7 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '/core/core.dart';
-import '../../../features/settings/widgets/setting_item.dart';
 import '../providers/theme_provider.dart';
 
 class ThemeModeFeature extends ConsumerWidget {
@@ -10,9 +9,14 @@ class ThemeModeFeature extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return CupertinoListTile(
-      leading: const SettingLeadingWidget(
-        iconData: CupertinoIcons.paintbrush_fill,
-        cardColor: Colors.deepOrange,
+      leading: CupertinoCard(
+        color: Colors.deepOrange,
+        borderRadius: BorderRadius.circular(5),
+        padding: const EdgeInsets.all(2),
+        child: Icon(
+          CupertinoIcons.paintbrush_fill,
+          color: Colors.white.withValues(alpha: .9),
+        ),
       ),
       trailing: CupertinoListTileChevron(),
       title: Text(

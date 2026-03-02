@@ -2,7 +2,7 @@
 
 // ignore_for_file: constant_identifier_names
 
-abstract class  LocaleKeys {
+abstract class LocaleKeys {
   static const common_ok = 'common.ok';
   static const common_save = 'common.save';
   static const common_cancel = 'common.cancel';
@@ -55,9 +55,6 @@ abstract class  LocaleKeys {
   static const iconCategories = 'iconCategories';
   static const onboarding_start_button = 'onboarding.start_button';
   static const onboarding_continue_button = 'onboarding.continue_button';
-  static const onboarding_pages_small_steps_title = 'onboarding.pages.small_steps.title';
-  static const onboarding_pages_small_steps_description = 'onboarding.pages.small_steps.description';
-  static const onboarding_pages_small_steps = 'onboarding.pages.small_steps';
   static const onboarding_pages_welcome_welcome_to = 'onboarding.pages.welcome.welcome_to';
   static const onboarding_pages_welcome_app_name = 'onboarding.pages.welcome.app_name';
   static const onboarding_pages_welcome_build_dream_life = 'onboarding.pages.welcome.build_dream_life';
@@ -74,19 +71,6 @@ abstract class  LocaleKeys {
   static const onboarding_pages_welcome_habit_examples_drink_water = 'onboarding.pages.welcome.habit_examples.drink_water';
   static const onboarding_pages_welcome_habit_examples = 'onboarding.pages.welcome.habit_examples';
   static const onboarding_pages_welcome = 'onboarding.pages.welcome';
-  static const onboarding_pages_routine_title = 'onboarding.pages.routine.title';
-  static const onboarding_pages_routine_description = 'onboarding.pages.routine.description';
-  static const onboarding_pages_routine = 'onboarding.pages.routine';
-  static const onboarding_pages_patience_title = 'onboarding.pages.patience.title';
-  static const onboarding_pages_patience_description = 'onboarding.pages.patience.description';
-  static const onboarding_pages_patience = 'onboarding.pages.patience';
-  static const onboarding_pages_bad_habits_title = 'onboarding.pages.bad_habits.title';
-  static const onboarding_pages_bad_habits_description = 'onboarding.pages.bad_habits.description';
-  static const onboarding_pages_bad_habits = 'onboarding.pages.bad_habits';
-  static const onboarding_pages_become_person_title = 'onboarding.pages.become_person.title';
-  static const onboarding_pages_become_person_aristotleHabitQuote = 'onboarding.pages.become_person.aristotleHabitQuote';
-  static const onboarding_pages_become_person_aristotle = 'onboarding.pages.become_person.aristotle';
-  static const onboarding_pages_become_person = 'onboarding.pages.become_person';
   static const onboarding_pages = 'onboarding.pages';
   static const onboarding_app_features_title = 'onboarding.app_features.title';
   static const onboarding_app_features_subtitle = 'onboarding.app_features.subtitle';
@@ -718,4 +702,23 @@ abstract class  LocaleKeys {
   static const languages_japanese = 'languages.japanese';
   static const languages_italian = 'languages.italian';
   static const languages = 'languages';
+  static const auth_my_account = 'auth.my_account';
+  static const auth_my_account_description = 'auth.my_account_description';
+  static const auth_email = 'auth.email';
+  static const auth_password = 'auth.password';
+  static const auth_continue_btn = 'auth.continue_btn';
+  static const auth_sign_out = 'auth.sign_out';
+  static const auth_sign_out_confirmation = 'auth.sign_out_confirmation';
+  static const auth_sign_in_failed = 'auth.sign_in_failed';
+  static const auth_unknown_error = 'auth.unknown_error';
+  static const auth_welcome = 'auth.welcome';
+  static const auth_create_account = 'auth.create_account';
+  static const auth_invalid_email = 'auth.invalid_email';
+  static const auth_weak_password = 'auth.weak_password';
+  static const auth_user_not_found = 'auth.user_not_found';
+  static const auth_processing = 'auth.processing';
+  static const auth_sign_in = 'auth.sign_in';
+  static const auth_register = 'auth.register';
+  static const auth_verify_email_sent = 'auth.verify_email_sent';
+  static const auth = 'auth';
 }

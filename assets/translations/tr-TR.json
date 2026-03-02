@@ -56,6 +56,27 @@
         "start_button": "Başla 🚀",
         "continue_button": "Devam Et →",
         "pages": {
+            "small_steps": {
+                "title": "Küçük Adımlar",
+                "description": "Her büyük değişim tek bir adımla başlar. Kalıcı alışkanlıklar oluşturun."
+            },
+            "routine": {
+                "title": "Rutininizi Kurun",
+                "description": "Tutarlılık anahtardır. Size uygun bir rutin oluşturun ve alışkanlıklarınızın gelişmesini izleyin."
+            },
+            "patience": {
+                "title": "Sabır Karşılığını Verir",
+                "description": "Alışkanlıklar oluşması zaman alır. Sabırlı olun ve sürece güvenin."
+            },
+            "bad_habits": {
+                "title": "Kötü Alışkanlıkları Değiştirin",
+                "description": "Sizi geride tutan şeyleri belirleyin ve olumlu alternatiflerle değiştirin."
+            },
+            "become_person": {
+                "title": "Olmak İstediğiniz Kişi Olun",
+                "aristotleHabitQuote": "Mükemmellik tek bir eylem değil, alışkanlıktır. Tutarlı yaptığınız şeysiniz.",
+                "aristotle": "Aristoteles"
+            },
             "welcome": {
                 "welcome_to": "Hoş geldiniz",
                 "app_name": "HabitForm",
@@ -764,5 +785,60 @@
         "russian": "Rusça",
         "japanese": "Japonca",
         "italian": "İtalyanca"
+    },
+    "auth": {
+        "my_account": "Hesabım",
+        "my_account_description": "Alışkanlıklarınızı senkronize etmek ve cihazlar arası desteği açmak için giriş yapın.",
+        "email": "E-posta",
+        "password": "Şifre",
+        "continue_btn": "Devam Et",
+        "sign_out": "Çıkış Yap",
+        "sign_out_confirmation": "Çıkış yapmak istediğinizden emin misiniz?",
+        "sign_in_failed": "Kimlik doğrulama başarısız. Lütfen bilgilerinizi kontrol edin.",
+        "unknown_error": "Kimlik doğrulama sırasında bilinmeyen bir hata oluştu.",
+        "welcome": "Tekrar hoş geldiniz!",
+        "create_account": "Hesap Oluştur",
+        "invalid_email": "Lütfen geçerli bir e-posta adresi girin.",
+        "weak_password": "Şifre çok zayıf. Lütfen daha güçlü bir şifre kullanın.",
+        "user_not_found": "Kullanıcı bulunamadı. Yeni bir hesap oluşturulacak.",
+        "processing": "İşleniyor...",
+        "sign_in": "Giriş Yap",
+        "register": "Kayıt Ol",
+        "verify_email_sent": "Doğrulama e-postası gönderildi. Lütfen gelen kutunuzu kontrol edin.",
+        "continue_with_google": "Google ile Devam Et",
+        "continue_with_apple": "Apple ile Devam Et",
+        "or": "veya",
+        "profile": "Profil",
+        "security": "Güvenlik",
+        "linked_accounts": "Bağlı Hesaplar",
+        "data_and_privacy": "Veri ve Gizlilik",
+        "danger_zone": "Tehlikeli Bölge",
+        "change_display_name": "Görünen Adı Değiştir",
+        "change_email": "E-posta Değiştir",
+        "change_password": "Şifre Değiştir",
+        "delete_account": "Hesabı Sil",
+        "delete_account_confirmation": "Hesabınızı silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.",
+        "delete_account_warning": "Tüm verileriniz kalıcı olarak silinecektir.",
+        "reauth_prompt": "Devam etmek için şifrenizi girin",
+        "current_password": "Mevcut Şifre",
+        "new_password": "Yeni Şifre",
+        "confirm_password": "Şifreyi Onayla",
+        "password_mismatch": "Şifreler eşleşmiyor",
+        "display_name_required": "Görünen ad gerekli",
+        "linked_google": "Google",
+        "linked_apple": "Apple",
+        "linked_email": "E-posta",
+        "account_created": "Hesap oluşturuldu",
+        "email_verified": "Doğrulandı",
+        "email_not_verified": "Doğrulanmadı",
+        "two_factor_not_enabled": "İki faktörlü kimlik doğrulama etkin değil",
+        "data_export": "Verileri Dışa Aktar",
+        "privacy_policy": "Gizlilik Politikası",
+        "confirm_password_required": "Lütfen şifrenizi onaylayın",
+        "display_name_updated": "Görünen ad güncellendi",
+        "email_update_sent": "Yeni adresinize doğrulama e-postası gönderildi",
+        "password_updated": "Şifre güncellendi",
+        "account_deleted": "Hesap silindi",
+        "password_change_email_only": "Şifre değişikliği yalnızca e-posta/şifre hesapları için kullanılabilir."
     }
 }

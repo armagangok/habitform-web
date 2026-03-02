@@ -21,12 +21,9 @@ class CircularHabitWidget extends ConsumerStatefulWidget {
 
   final VoidCallback? onComplete;
   final bool? showName;
-  final bool
-      useProvider; // If false, uses widget.habit directly without provider
-  final bool
-      showCompleteButton; // If true, shows complete button even when useProvider is false
-  final bool
-      enableCompleteButton; // If false, complete button is visible but not tappable
+  final bool useProvider; // If false, uses widget.habit directly without provider
+  final bool showCompleteButton; // If true, shows complete button even when useProvider is false
+  final bool enableCompleteButton; // If false, complete button is visible but not tappable
 
   const CircularHabitWidget({
     super.key,
@@ -37,15 +34,12 @@ class CircularHabitWidget extends ConsumerStatefulWidget {
     this.onComplete,
     this.showName,
     this.useProvider = true, // Default to true for backward compatibility
-    this.showCompleteButton =
-        false, // Default to false for backward compatibility
-    this.enableCompleteButton =
-        true, // Default to true for backward compatibility
+    this.showCompleteButton = false, // Default to false for backward compatibility
+    this.enableCompleteButton = true, // Default to true for backward compatibility
   });
 
   @override
-  ConsumerState<CircularHabitWidget> createState() =>
-      _CircularHabitWidgetState();
+  ConsumerState<CircularHabitWidget> createState() => _CircularHabitWidgetState();
 }
 
 class _CircularHabitWidgetState extends ConsumerState<CircularHabitWidget> {
@@ -55,12 +49,9 @@ class _CircularHabitWidgetState extends ConsumerState<CircularHabitWidget> {
   // Static const values for performance optimization
   static const double _size = 90.0;
   static const double _containerSize = _size + 10;
-  static const EdgeInsets _badgePadding =
-      EdgeInsets.symmetric(horizontal: 6, vertical: 3);
-  static const EdgeInsets _namePadding =
-      EdgeInsets.symmetric(horizontal: 8, vertical: 5);
-  static const BorderRadius _badgeBorderRadius =
-      BorderRadius.all(Radius.circular(12));
+  static const EdgeInsets _badgePadding = EdgeInsets.symmetric(horizontal: 6, vertical: 3);
+  static const EdgeInsets _namePadding = EdgeInsets.symmetric(horizontal: 8, vertical: 5);
+  static const BorderRadius _badgeBorderRadius = BorderRadius.all(Radius.circular(12));
   static const TextStyle _emojiStyle = TextStyle(
     fontSize: 42,
     fontFeatures: [FontFeature.tabularFigures()],
@@ -81,31 +72,28 @@ class _CircularHabitWidgetState extends ConsumerState<CircularHabitWidget> {
     final homeNotifier = ref.read(homeProvider.notifier);
 
     // Get full habit from provider for completion operations
-    final beforeHabit = ref.read(homeProvider).maybeWhen(
+    final Habit beforeHabit = ref.read(homeProvider).maybeWhen(
           data: (homeState) => homeState.habits.firstWhere(
-            (h) => h.id == widget.habit.id,
+            (h) => h.id == (widget.habit as dynamic).id,
             orElse: () {
               // If not found, return widget.habit if it's a full Habit, otherwise we need to load it
               if (widget.habit is Habit) {
                 return widget.habit as Habit;
               }
               // If it's a summary, we need to load the full habit
-              throw Exception(
-                  'Habit not found and cannot use summary for completion');
+              throw Exception('Habit not found and cannot use summary for completion');
             },
           ),
           orElse: () {
             if (widget.habit is Habit) {
               return widget.habit as Habit;
             }
-            throw Exception(
-                'Habit not found and cannot use summary for completion');
+            throw Exception('Habit not found and cannot use summary for completion');
           },
         );
 
-    final beforeCount = beforeHabit.getCountForDate(today);
-    final beforeTarget =
-        beforeHabit.dailyTarget <= 0 ? 1 : beforeHabit.dailyTarget;
+    final int beforeCount = beforeHabit.getCountForDate(today);
+    final int beforeTarget = beforeHabit.dailyTarget <= 0 ? 1 : beforeHabit.dailyTarget;
     final beforeRatio = (beforeCount / beforeTarget).clamp(0.0, 1.0);
 
     // Determine current mode (similar to Last 7 Days widget)
@@ -120,7 +108,7 @@ class _CircularHabitWidgetState extends ConsumerState<CircularHabitWidget> {
     final shouldIncrement = !isDecreasing;
 
     await homeNotifier.adjustHabitCompletion(
-      widget.habit.id,
+      (widget.habit as dynamic).id,
       today,
       increment: shouldIncrement,
     );
@@ -147,10 +135,9 @@ class _CircularHabitWidgetState extends ConsumerState<CircularHabitWidget> {
             },
           );
       if (!mounted) return;
-      final afterCount = afterHabit.getCountForDate(today);
-      final afterTarget =
-          afterHabit.dailyTarget <= 0 ? 1 : afterHabit.dailyTarget;
-      final afterRatio = (afterCount / afterTarget).clamp(0.0, 1.0);
+      final int afterCount = afterHabit.getCountForDate(today);
+      final int afterTarget = afterHabit.dailyTarget <= 0 ? 1 : afterHabit.dailyTarget;
+      final double afterRatio = (afterCount / afterTarget).clamp(0.0, 1.0);
 
       // Update decreasing mode after action based on new ratio (similar to Last 7 Days)
       if (afterRatio >= 1.0) {
@@ -162,8 +149,7 @@ class _CircularHabitWidgetState extends ConsumerState<CircularHabitWidget> {
       // Show reward rating dialog for each increment in multi-completion mode
       // This allows users to rate each completion separately, which affects probability calculation
       if (shouldIncrement && afterCount > beforeCount) {
-        await _showRewardRatingDialog(
-            updatedHabit: afterHabit, previousHabit: beforeHabit);
+        await _showRewardRatingDialog(updatedHabit: afterHabit, previousHabit: beforeHabit);
       }
     } catch (e) {
       LogHelper.shared.debugPrint('Achievement dialog error: $e');
@@ -225,13 +211,11 @@ class _CircularHabitWidgetState extends ConsumerState<CircularHabitWidget> {
     if (existingEntry != null) {
       // Update completion entry with reward rating
       final updatedEntry = existingEntry.copyWith(rewardRating: rewardRating);
-      final updatedCompletions =
-          Map<String, CompletionEntry>.from(currentHabit.completions);
+      final updatedCompletions = Map<String, CompletionEntry>.from(currentHabit.completions);
       updatedCompletions[dateKey] = updatedEntry;
 
       // Update habit locally
-      final habitWithRating =
-          currentHabit.copyWith(completions: updatedCompletions);
+      final habitWithRating = currentHabit.copyWith(completions: updatedCompletions);
 
       // Save to service via home provider
       await ref.read(homeProvider.notifier).updateHabit(habitWithRating);
@@ -267,8 +251,7 @@ class _CircularHabitWidgetState extends ConsumerState<CircularHabitWidget> {
     }
   }
 
-  Future<void> _showAchievementIfEarned(
-      {required Habit previousHabit, required Habit updatedHabit}) async {
+  Future<void> _showAchievementIfEarned({required Habit previousHabit, required Habit updatedHabit}) async {
     if (!mounted) return;
 
     final previousScore = _getProgressPercentage(previousHabit);
@@ -305,20 +288,20 @@ class _CircularHabitWidgetState extends ConsumerState<CircularHabitWidget> {
               ),
             ),
           )
-        : widget.habit;
+        : widget.habit as dynamic;
 
     final today = DateTime.now();
-    final count = currentHabit.getCountForDate(today);
-    final target = currentHabit.dailyTarget <= 0 ? 1 : currentHabit.dailyTarget;
-    final ratio = (count / target).clamp(0.0, 1.0);
-    final isCompleted = ratio >= 1.0;
+    final int count = currentHabit.getCountForDate(today);
+    final int target = (currentHabit.dailyTarget as int) <= 0 ? 1 : currentHabit.dailyTarget;
+    final double ratio = (count / target).clamp(0.0, 1.0);
+    final bool isCompleted = ratio >= 1.0;
 
-    final habitColor = Color(currentHabit.colorCode);
-    final emoji = currentHabit.emoji ?? '🎯';
-    final streak = currentHabit.calculateCurrentStreak();
+    final Color habitColor = Color(currentHabit.colorCode);
+    final String emoji = currentHabit.emoji ?? '🎯';
+    final int streak = currentHabit.calculateCurrentStreak();
 
-    final isDark = CupertinoTheme.of(context).brightness == Brightness.dark;
-    final dragScale = widget.isDragging ? 1.15 : 1.0;
+    final bool isDark = CupertinoTheme.of(context).brightness == Brightness.dark;
+    final double dragScale = widget.isDragging ? 1.15 : 1.0;
 
     return Transform.scale(
       scale: dragScale,
@@ -351,9 +334,7 @@ class _CircularHabitWidgetState extends ConsumerState<CircularHabitWidget> {
               height: _containerSize,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: isDark
-                    ? CupertinoColors.systemGrey6.darkColor
-                    : Colors.white,
+                color: isDark ? CupertinoColors.systemGrey6.darkColor : Colors.white,
                 border: Border.all(
                   color: widget.isSelected || widget.isDragging
                       ? habitColor
@@ -379,8 +360,7 @@ class _CircularHabitWidgetState extends ConsumerState<CircularHabitWidget> {
                     ),
                   ] else ...[
                     BoxShadow(
-                      color:
-                          Colors.black.withValues(alpha: isDark ? 0.4 : 0.12),
+                      color: Colors.black.withValues(alpha: isDark ? 0.4 : 0.12),
                       blurRadius: 10,
                       spreadRadius: 0,
                       offset: const Offset(0, 4),
@@ -398,36 +378,36 @@ class _CircularHabitWidgetState extends ConsumerState<CircularHabitWidget> {
                   Positioned(
                     top: 0,
                     right: 0,
-                    child: Container(
-                      padding: _badgePadding,
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: habitColor.withValues(alpha: 0.8),
-                          width: 1,
+                    child: CustomBlurWidget(
+                      blurValue: 10,
+                      borderRadius: BorderRadius.circular(999),
+                      child: Container(
+                        padding: _badgePadding,
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: habitColor.withValues(alpha: 0.8),
+                            width: 1,
+                          ),
+                          color: isDark ? habitColor.withValues(alpha: 0.3) : habitColor.withValues(alpha: 0.15),
+                          borderRadius: _badgeBorderRadius,
                         ),
-                        color: isDark
-                            ? habitColor.withValues(alpha: 0.3)
-                            : habitColor.withValues(alpha: 0.15),
-                        borderRadius: _badgeBorderRadius,
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(
-                            CupertinoIcons.flame_fill,
-                            size: 14,
-                            color: context.theme.primaryContrastingColor
-                                .withValues(alpha: 0.9),
-                          ),
-                          const SizedBox(width: 2),
-                          Text(
-                            '$streak',
-                            style: _streakStyle.copyWith(
-                              color: context.theme.primaryContrastingColor
-                                  .withValues(alpha: 0.9),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(
+                              CupertinoIcons.flame_fill,
+                              size: 14,
+                              color: context.theme.primaryContrastingColor.withValues(alpha: 0.9),
                             ),
-                          ),
-                        ],
+                            const SizedBox(width: 2),
+                            Text(
+                              '$streak',
+                              style: _streakStyle.copyWith(
+                                color: context.theme.primaryContrastingColor.withValues(alpha: 0.9),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -440,39 +420,38 @@ class _CircularHabitWidgetState extends ConsumerState<CircularHabitWidget> {
                       right: 0,
                       child: IgnorePointer(
                         ignoring: !widget.enableCompleteButton,
-                        child: CustomButton(
-                          onPressed: _toggleCompletion,
-                          child: Container(
-                            width: 30,
-                            height: 30,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              // Progressive alpha based on completion ratio
-                              color: habitColor.withValues(
-                                  alpha: (0.1 + (0.9 * ratio)).clamp(0.1, 1.0)),
-                              border: Border.all(
-                                color: habitColor,
-                                width: 1,
-                              ),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: habitColor.withValues(
-                                      alpha: isCompleted ? 0.3 : 0.15),
-                                  blurRadius: isCompleted ? 8 : 4,
-                                  spreadRadius: isCompleted ? 1 : 0,
+                        child: CustomBlurWidget(
+                          blurValue: 10,
+                          borderRadius: BorderRadius.circular(999),
+                          child: CustomButton(
+                            onPressed: _toggleCompletion,
+                            child: Container(
+                              width: 30,
+                              height: 30,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                // Progressive alpha based on completion ratio
+                                color: habitColor.withValues(alpha: (0.1 + (0.9 * ratio)).clamp(0.1, 1.0)),
+                                border: Border.all(
+                                  color: habitColor,
+                                  width: 1,
                                 ),
-                              ],
-                            ),
-                            child: Center(
-                              child: FaIcon(
-                                isCompleted
-                                    ? FontAwesomeIcons.check
-                                    : FontAwesomeIcons.plus,
-                                size: 17,
-                                color: isCompleted
-                                    ? Colors
-                                        .white // Always white when completed (background is habitColor)
-                                    : habitColor, // Use habitColor when not completed (background is light)
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: habitColor.withValues(alpha: isCompleted ? 0.3 : 0.15),
+                                    blurRadius: isCompleted ? 8 : 4,
+                                    spreadRadius: isCompleted ? 1 : 0,
+                                  ),
+                                ],
+                              ),
+                              child: Center(
+                                child: FaIcon(
+                                  isCompleted ? FontAwesomeIcons.check : FontAwesomeIcons.plus,
+                                  size: 17,
+                                  color: isCompleted
+                                      ? Colors.white // Always white when completed (background is habitColor)
+                                      : habitColor, // Use habitColor when not completed (background is light)
+                                ),
                               ),
                             ),
                           ),
@@ -492,13 +471,10 @@ class _CircularHabitWidgetState extends ConsumerState<CircularHabitWidget> {
                 borderRadius: _badgeBorderRadius,
                 child: BackdropFilter(
                   // Lower blur value (6 instead of 10) for better performance
-                  filter: ImageFilter.blur(
-                      sigmaX: 6, sigmaY: 6, tileMode: TileMode.decal),
+                  filter: ImageFilter.blur(sigmaX: 6, sigmaY: 6, tileMode: TileMode.decal),
                   child: Container(
                     decoration: BoxDecoration(
-                      color: isDark
-                          ? habitColor.withValues(alpha: 0.25)
-                          : habitColor.withValues(alpha: 0.15),
+                      color: isDark ? habitColor.withValues(alpha: 0.25) : habitColor.withValues(alpha: 0.15),
                       borderRadius: _badgeBorderRadius,
                     ),
                     padding: _namePadding,
@@ -510,9 +486,7 @@ class _CircularHabitWidgetState extends ConsumerState<CircularHabitWidget> {
                       style: context.labelSmall.copyWith(
                         fontWeight: FontWeight.w600,
                         fontSize: 13,
-                        color: isDark
-                            ? Colors.white.withValues(alpha: 0.95)
-                            : Colors.black.withValues(alpha: 0.85),
+                        color: isDark ? Colors.white.withValues(alpha: 0.95) : Colors.black.withValues(alpha: 0.85),
                       ),
                     ),
                   ),

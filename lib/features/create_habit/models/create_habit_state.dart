@@ -1,6 +1,6 @@
 // CreateHabitStep enum and extension
-import '../../../core/core.dart';
-import '../../../models/habit/habit_difficulty.dart';
+import '/core/core.dart';
+import '/models/habit/habit_difficulty.dart';
 import '../../reminder/models/reminder/reminder_model.dart';
 
 enum CreateHabitStep {

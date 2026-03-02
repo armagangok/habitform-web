@@ -11,6 +11,7 @@ class KRoute {
   static const onboardingRating = '/onboardingRating';
 
   static const auth = '/auth';
+  static const myAccount = '/myAccount';
   static const archivedHabits = '/archivedHabits';
   static const dataManagement = '/dataManagement';
   static const emojiPage = '/emojiPage';

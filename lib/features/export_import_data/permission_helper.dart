@@ -25,10 +25,12 @@ class PermissionHelper {
     if (Platform.isAndroid) {
       // For Android 13 (API 33) and above
       if (await _isAndroid13OrHigher()) {
+        if (!context.mounted) return false;
         return await _checkAndRequestPhotosAndDocumentsPermission(context);
       }
       // For Android below 13
       else {
+        if (!context.mounted) return false;
         return await _checkAndRequestStoragePermission(context);
       }
     }
@@ -58,6 +60,7 @@ class PermissionHelper {
 
     // If any permission is permanently denied
     if (photosStatus.isPermanentlyDenied || documentsStatus.isPermanentlyDenied) {
+      if (!context.mounted) return false;
       return await _showPermanentlyDeniedDialog(context);
     }
 
@@ -72,6 +75,7 @@ class PermissionHelper {
 
     // If permissions are denied
     if (photosResult.isDenied || documentsResult.isDenied) {
+      if (!context.mounted) return false;
       return await _showDeniedDialog(context);
     }
 
@@ -90,6 +94,7 @@ class PermissionHelper {
 
     // If permission is permanently denied
     if (status.isPermanentlyDenied) {
+      if (!context.mounted) return false;
       return await _showPermanentlyDeniedDialog(context);
     }
 
@@ -103,6 +108,7 @@ class PermissionHelper {
 
     // If permission is denied
     if (result.isDenied) {
+      if (!context.mounted) return false;
       return await _showDeniedDialog(context);
     }
 

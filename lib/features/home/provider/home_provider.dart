@@ -104,6 +104,9 @@ class HomeNotifier extends AsyncNotifier<HomeState> {
     // Initial fetch of habits when the provider is created
     final initialState = await fetchHabits();
 
+    // Trigger sync for any pending habits
+    habitService.syncPendingHabits();
+
     // Listen for widget updates
     _setupWidgetUpdateListener();
 

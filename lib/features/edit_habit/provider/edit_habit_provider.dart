@@ -125,7 +125,7 @@ class EditHabitNotifier extends AutoDisposeNotifier<Habit?> {
       habitName: habitName,
       habitDescription: habitDescription,
       emoji: habitEmojiState ?? state?.emoji,
-      colorCode: habitColorState?.value,
+      colorCode: habitColorState?.toARGB32() ?? state?.colorCode ?? 0xFF000000,
       reminderModel: reminderModel,
       categoryIds: categoryIds,
       difficulty: _selectedDifficulty,
