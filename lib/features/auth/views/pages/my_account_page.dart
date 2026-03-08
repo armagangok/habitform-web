@@ -10,17 +10,23 @@ import '../../widgets/account_security_section.dart';
 import '../../widgets/auth_header_widget.dart';
 
 class MyAccountPage extends ConsumerWidget {
-  const MyAccountPage({super.key});
+  final bool isFromHome;
+  const MyAccountPage({super.key, this.isFromHome = false});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final authState = ref.watch(authStateProvider);
 
     return CupertinoPageScaffold(
-      navigationBar: CupertinoNavigationBar(
-        previousPageTitle: context.tr(LocaleKeys.settings_settings),
-        middle: Text(LocaleKeys.auth_my_account.tr()),
-      ),
+      navigationBar: isFromHome
+          ? SheetHeader(
+              closeButtonPosition: CloseButtonPosition.left,
+              title: LocaleKeys.auth_my_account.tr(),
+            )
+          : CupertinoNavigationBar(
+              previousPageTitle: context.tr(LocaleKeys.settings_settings),
+              middle: Text(LocaleKeys.auth_my_account.tr()),
+            ),
       child: SafeArea(
         bottom: false,
         child: authState.when(

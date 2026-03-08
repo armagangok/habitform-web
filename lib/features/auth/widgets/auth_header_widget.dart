@@ -1,6 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../core/core.dart';
+import '/core/core.dart';
+import '/features/purchase/page/pre_paywall_page.dart';
+import '../../purchase/providers/purchase_provider.dart';
 import '../providers/auth_provider.dart';
 
 class AuthHeaderWidget extends ConsumerWidget {
@@ -10,6 +12,40 @@ class AuthHeaderWidget extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final authState = ref.watch(authStateProvider);
     final theme = CupertinoTheme.of(context);
+
+    final paywallState = ref.watch(purchaseProvider);
+    final isPro = paywallState.valueOrNull?.isSubscriptionActive ?? false;
+
+    void showProAlert() {
+      showCupertinoDialog(
+        context: context,
+        builder: (context) => CupertinoAlertDialog(
+          title: const Text("Pro Özellik"),
+          content: const Text("Alışkanlıklarınızı senkronize edebilmek için ve farklı cihazlarda da cross-device support olması için pro olun"),
+          actions: [
+            CupertinoDialogAction(
+              onPressed: () => Navigator.pop(context),
+              child: const Text("İptal"),
+            ),
+            CupertinoDialogAction(
+              isDefaultAction: true,
+              onPressed: () {
+                Navigator.pop(context);
+                showCupertinoSheet(
+                  enableDrag: false,
+                  context: context,
+                  builder: (context) => PrePaywallPage(
+                    isFromOnboarding: false,
+                    isFromSettings: true,
+                  ),
+                );
+              },
+              child: const Text("Pro Ol"),
+            ),
+          ],
+        ),
+      );
+    }
 
     return authState.when(
       data: (user) {
@@ -28,7 +64,11 @@ class AuthHeaderWidget extends ConsumerWidget {
                 title: Text(LocaleKeys.auth_my_account.tr()),
                 trailing: CupertinoListTileChevron(),
                 onTap: () {
-                  Navigator.of(context).pushNamed(KRoute.auth);
+                  if (isPro) {
+                    Navigator.of(context).pushNamed(KRoute.auth);
+                  } else {
+                    showProAlert();
+                  }
                 },
               ),
             ],
@@ -44,7 +84,11 @@ class AuthHeaderWidget extends ConsumerWidget {
           children: [
             CupertinoListTile(
               onTap: () {
-                Navigator.of(context).pushNamed(KRoute.myAccount);
+                if (isPro) {
+                  Navigator.of(context).pushNamed(KRoute.myAccount);
+                } else {
+                  showProAlert();
+                }
               },
               leading: imageUrl != null
                   ? Image.network(

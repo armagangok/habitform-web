@@ -154,15 +154,40 @@ class AuthService {
 
   Future<void> deleteAccount() async {
     final user = _auth.currentUser;
-    if (user == null) throw FirebaseAuthException(code: 'no-user', message: 'No user logged in');
-    final userRef = _firestore.collection('users').doc(user.uid);
-    try {
-      await userRef.delete();
-    } catch (e) {
-      LogHelper.shared.debugPrint('❌ Error deleting Firestore user doc: $e');
+    if (user == null) {
+      throw FirebaseAuthException(code: 'no-user', message: 'No user logged in');
     }
+
+    final uid = user.uid;
+    final userRef = _firestore.collection('users').doc(uid);
+    final habitsRef = userRef.collection('habits');
+
+    try {
+      // 1. Delete all habits in the subcollection
+      final habitsSnapshot = await habitsRef.get();
+      if (habitsSnapshot.docs.isNotEmpty) {
+        final batch = _firestore.batch();
+        for (final doc in habitsSnapshot.docs) {
+          batch.delete(doc.reference);
+        }
+        await batch.commit();
+        LogHelper.shared.debugPrint('✅ Deleted ${habitsSnapshot.docs.length} habits for $uid');
+      }
+
+      // 2. Delete the user profile document
+      await userRef.delete();
+      LogHelper.shared.debugPrint('✅ Deleted user profile document for $uid');
+    } catch (e) {
+      LogHelper.shared.debugPrint('❌ Error during Firestore data deletion for $uid: $e');
+      // We still want to try deleting local data and the auth account
+    }
+
+    // 3. Clear local Hive data
     await HiveHelper.shared.clearAllLocalData();
+
+    // 4. Delete the Firebase Auth user account
     await user.delete();
+    LogHelper.shared.debugPrint('✅ Firebase Auth user deleted successfully for $uid');
   }
 
   bool get hasEmailPasswordProvider {

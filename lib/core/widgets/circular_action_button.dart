@@ -3,6 +3,7 @@ import '../core.dart';
 class CircularActionButton extends StatelessWidget {
   final VoidCallback? onPressed;
   final IconData icon;
+  final String? imageUrl;
   final Color? iconColor;
   final Color? backgroundColor;
   final double size;
@@ -14,6 +15,7 @@ class CircularActionButton extends StatelessWidget {
     super.key,
     required this.onPressed,
     required this.icon,
+    this.imageUrl,
     this.iconColor,
     this.backgroundColor,
     this.size = 34.0,
@@ -39,11 +41,31 @@ class CircularActionButton extends StatelessWidget {
               shape: BoxShape.circle,
               color: effectiveBackgroundColor,
             ),
-            child: Icon(
-              icon,
-              size: iconSize,
-              color: effectiveIconColor,
-            ),
+            child: imageUrl != null
+                ? Image.network(
+                    imageUrl!,
+                    fit: BoxFit.cover,
+                    width: size,
+                    height: size,
+                    errorBuilder: (context, error, stackTrace) => Icon(
+                      icon,
+                      size: iconSize,
+                      color: effectiveIconColor,
+                    ),
+                    loadingBuilder: (context, child, loadingProgress) {
+                      if (loadingProgress == null) return child;
+                      return Center(
+                        child: CupertinoActivityIndicator(
+                          radius: iconSize / 2,
+                        ),
+                      );
+                    },
+                  )
+                : Icon(
+                    icon,
+                    size: iconSize,
+                    color: effectiveIconColor,
+                  ),
           ),
         ),
       ),

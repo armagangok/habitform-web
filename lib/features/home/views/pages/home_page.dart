@@ -2,6 +2,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '/core/core.dart';
+import '../../../auth/providers/auth_provider.dart';
+import '../../../auth/views/pages/my_account_page.dart';
 import '../../../create_habit/create_habit_page.dart';
 import '../../../create_habit/provider/create_habit_provider.dart';
 import '../../../habit_probability/page/habit_probability_page.dart';
@@ -73,6 +75,7 @@ class HomePage extends ConsumerWidget {
 
   Widget _buildFloatingNavBar(WidgetRef ref, BuildContext context, bool isDark) {
     final paywallState = ref.watch(purchaseProvider);
+    final userProfile = ref.watch(userProfileProvider).value;
     final isSubActive = paywallState.value?.isSubscriptionActive ?? false;
     final isPurchasing = paywallState.value?.isPurchasing ?? false;
     final isRestoring = paywallState.value?.isRestoring ?? false;
@@ -132,7 +135,7 @@ class HomePage extends ConsumerWidget {
             Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                // Premium button
+                // Premium / Profile button
                 if (isLoading || isPurchasing || isRestoring)
                   Container(
                     width: 40,
@@ -140,11 +143,25 @@ class HomePage extends ConsumerWidget {
                     alignment: Alignment.center,
                     child: const CupertinoActivityIndicator(),
                   )
-                else if (!isSubActive)
+                else if (isSubActive)
+                  CircularActionButton(
+                    onPressed: () {
+                      showCupertinoSheet(
+                        enableDrag: true,
+                        context: context,
+                        builder: (contextFromSheet) => const MyAccountPage(isFromHome: true),
+                      );
+                    },
+                    imageUrl: userProfile?.photoUrl,
+                    icon: FontAwesomeIcons.user,
+                    size: 40,
+                    iconSize: 18,
+                  )
+                else
                   CircularActionButton(
                     onPressed: () => _handlePaywallAction(context),
                     icon: FontAwesomeIcons.crown,
-                    iconColor: Colors.amber,
+                    iconColor: context.primary,
                     size: 40,
                     iconSize: 18,
                   ),
