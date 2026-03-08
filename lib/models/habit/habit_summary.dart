@@ -13,6 +13,9 @@ class HabitSummary {
   final int todayCount;
   final bool todayIsCompleted;
   final int currentStreak;
+  final double? constellationPosX;
+  final double? constellationPosY;
+  final List<String> linkedHabitIds;
 
   HabitSummary({
     required this.id,
@@ -25,6 +28,9 @@ class HabitSummary {
     required this.todayCount,
     required this.todayIsCompleted,
     required this.currentStreak,
+    this.constellationPosX,
+    this.constellationPosY,
+    this.linkedHabitIds = const [],
   });
 
   /// Get count for a specific date

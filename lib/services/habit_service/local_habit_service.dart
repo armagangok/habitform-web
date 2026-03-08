@@ -71,6 +71,9 @@ class LocalHabitService extends HabitService {
         todayCount: todayCount,
         todayIsCompleted: todayIsCompleted,
         currentStreak: streak,
+        constellationPosX: habit.constellationPosX,
+        constellationPosY: habit.constellationPosY,
+        linkedHabitIds: habit.linkedHabitIds,
       ));
     }
 
@@ -510,9 +513,7 @@ class LocalHabitService extends HabitService {
 
       for (final remote in remoteHabits) {
         final local = localMap[remote.id];
-        final resolved = local != null
-            ? _syncService.resolveConflict(local, remote)
-            : remote.copyWith(syncStatus: SyncStatus.synced);
+        final resolved = local != null ? _syncService.resolveConflict(local, remote) : remote.copyWith(syncStatus: SyncStatus.synced);
         merged[resolved.id] = resolved;
       }
 

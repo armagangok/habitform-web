@@ -372,7 +372,9 @@ class _HabitConstellationViewState extends ConsumerState<HabitConstellationView>
   @override
   void didUpdateWidget(HabitConstellationView oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (widget.habits.length != oldWidget.habits.length) {
+    // Trigger position update if the habits list object changes
+    // This ensures we pick up position updates from remote sync even if count is same
+    if (widget.habits != oldWidget.habits) {
       _updateHabitPositions();
     }
   }

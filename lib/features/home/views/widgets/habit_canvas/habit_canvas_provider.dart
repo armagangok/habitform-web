@@ -4,17 +4,22 @@ import 'dart:math' as math;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '/core/core.dart';
+import '/features/auth/providers/auth_provider.dart';
 import '/models/habit/habit_model.dart';
+import '/models/habit/habit_summary.dart';
+import '/services/habit_service/habit_service_interface.dart';
+import '/services/sync_service.dart';
 import 'habit_canvas_model.dart';
 
 /// Provider for the canvas state
 final habitCanvasProvider = StateNotifierProvider<HabitCanvasNotifier, HabitCanvasState>((ref) {
-  return HabitCanvasNotifier();
+  return HabitCanvasNotifier(ref);
 });
 
 /// Notifier for managing habit canvas state
 class HabitCanvasNotifier extends StateNotifier<HabitCanvasState> {
-  HabitCanvasNotifier() : super(const HabitCanvasState()) {
+  final Ref _ref;
+  HabitCanvasNotifier(this._ref) : super(const HabitCanvasState()) {
     _loadStateFuture = _loadState();
   }
 
@@ -26,8 +31,20 @@ class HabitCanvasNotifier extends StateNotifier<HabitCanvasState> {
   static const Duration _saveDebounceDuration = Duration(milliseconds: 300);
 
   Future<void> _loadState() async {
-    final loadedState = await HabitCanvasStorage.load();
-    state = loadedState;
+    // 1. Load local state for migration/fallback
+    final localState = await HabitCanvasStorage.load();
+
+    // 2. Load global canvas state from user profile if available
+    final userProfile = await _ref.read(userProfileProvider.future);
+    final scale = userProfile?.canvasScale ?? localState.scale;
+    final offsetX = userProfile?.canvasOffsetX ?? localState.offsetX;
+    final offsetY = userProfile?.canvasOffsetY ?? localState.offsetY;
+
+    state = localState.copyWith(
+      scale: scale,
+      offsetX: offsetX,
+      offsetY: offsetY,
+    );
     _isLoaded = true;
   }
 
@@ -38,7 +55,7 @@ class HabitCanvasNotifier extends StateNotifier<HabitCanvasState> {
     }
   }
 
-  Future<void> _saveState({bool immediate = false}) async {
+  Future<void> _saveLocalState({bool immediate = false}) async {
     if (immediate) {
       _saveStateTimer?.cancel();
       await HabitCanvasStorage.save(state);
@@ -57,130 +74,223 @@ class HabitCanvasNotifier extends StateNotifier<HabitCanvasState> {
     await ensureLoaded();
 
     final updatedPositions = Map<String, HabitPosition>.from(state.positions);
+    final updatedConnections = Set<HabitConnection>.from(state.connections);
     bool hasChanges = false;
 
-    // Remove positions for habits that no longer exist
-    final habitIds = habits.map((h) => h.id as String).toSet();
-    updatedPositions.removeWhere((key, _) => !habitIds.contains(key));
-
-    // Add positions for new habits
-    final random = math.Random();
-    final centerX = canvasWidth / 2;
-    final centerY = canvasHeight / 2;
+    // Load local storage as a fallback for migration
+    final localState = await HabitCanvasStorage.load();
 
     for (final habit in habits) {
-      final habitId = habit.id as String;
-      if (!updatedPositions.containsKey(habitId)) {
-        // Place new habits in a circular pattern around center
+      final habitId = (habit is Habit) ? habit.id : (habit as HabitSummary).id;
+
+      // 1. Try to get position from the habit itself
+      double? posX;
+      double? posY;
+      List<String> linkedIds = [];
+
+      if (habit is Habit) {
+        posX = habit.constellationPosX;
+        posY = habit.constellationPosY;
+        linkedIds = habit.linkedHabitIds;
+      } else if (habit is HabitSummary) {
+        posX = habit.constellationPosX;
+        posY = habit.constellationPosY;
+        linkedIds = habit.linkedHabitIds;
+      }
+
+      // 2. Migration fallback: If habit doesn't have position, use localState
+      if (posX == null || posY == null) {
+        final localPos = localState.positions[habitId];
+        if (localPos != null) {
+          posX = localPos.x;
+          posY = localPos.y;
+          // Mark as changed so we save it back to the Habit model later
+          hasChanges = true;
+        }
+      }
+
+      // 3. Last fallback: random circular pattern
+      if (posX == null || posY == null) {
+        final random = math.Random();
+        final centerX = canvasWidth / 2;
+        final centerY = canvasHeight / 2;
         final existingCount = updatedPositions.length;
         final angle = (existingCount * 2 * math.pi / math.max(habits.length, 1)) + random.nextDouble() * 0.5;
         final radius = 100.0 + random.nextDouble() * 150;
 
-        updatedPositions[habitId] = HabitPosition(
-          habitId: habitId,
-          x: centerX + math.cos(angle) * radius,
-          y: centerY + math.sin(angle) * radius,
-        );
+        posX = centerX + math.cos(angle) * radius;
+        posY = centerY + math.sin(angle) * radius;
         hasChanges = true;
+      }
+
+      // 4. Update state and detect changes from model (important for device sync)
+      final existingPos = updatedPositions[habitId];
+      if (existingPos == null || existingPos.x != posX || existingPos.y != posY) {
+        updatedPositions[habitId] = HabitPosition(habitId: habitId, x: posX, y: posY);
+        hasChanges = true;
+      }
+
+      // 5. Update connections from linkedHabitIds
+      for (final targetId in linkedIds) {
+        final connection = HabitConnection(fromHabitId: habitId, toHabitId: targetId);
+        if (!updatedConnections.contains(connection)) {
+          updatedConnections.add(connection);
+          hasChanges = true;
+        }
       }
     }
 
-    if (hasChanges || updatedPositions.length != state.positions.length) {
-      state = state.copyWith(positions: updatedPositions);
-      _saveState(immediate: true); // Immediate save for initialization
+    // 5. Cleanup connections for non-existent habits
+    final habitIds = habits.map((h) => (h is Habit) ? h.id : (h as HabitSummary).id).toSet();
+    updatedConnections.removeWhere((c) => !habitIds.contains(c.fromHabitId) || !habitIds.contains(c.toHabitId));
+
+    if (hasChanges || updatedPositions.length != state.positions.length || updatedConnections.length != state.connections.length) {
+      state = state.copyWith(positions: updatedPositions, connections: updatedConnections);
+      unawaited(_saveLocalState(immediate: true));
+
+      // If we migrated or generated new positions, update the habits themselves
+      if (hasChanges) {
+        for (final habit in habits) {
+          final habitId = (habit is Habit) ? habit.id : (habit as HabitSummary).id;
+          final pos = updatedPositions[habitId]!;
+          if (habit is Habit) {
+            if (habit.constellationPosX != pos.x || habit.constellationPosY != pos.y) {
+              _updateHabitModelPosition(habit, pos.x, pos.y);
+            }
+          }
+        }
+      }
     }
   }
 
   /// Update position of a single habit
-  /// Uses debounced save to avoid excessive disk I/O during dragging
   void updatePosition(String habitId, double x, double y) {
     final updatedPositions = Map<String, HabitPosition>.from(state.positions);
     updatedPositions[habitId] = HabitPosition(habitId: habitId, x: x, y: y);
     state = state.copyWith(positions: updatedPositions);
-    _saveState(); // Debounced save
+
+    _saveLocalState();
+
+    // Update the Habit model itself to trigger sync
+    _deferHabitUpdate(habitId, (habit) => habit.copyWith(constellationPosX: x, constellationPosY: y));
   }
 
-  /// Add a connection between two habits
-  void addConnection(String fromHabitId, String toHabitId) {
-    if (fromHabitId == toHabitId) return;
+  Timer? _habitUpdateDebounce;
+  final Map<String, Habit> _pendingHabitUpdates = {};
 
-    final connection = HabitConnection(fromHabitId: fromHabitId, toHabitId: toHabitId);
-    final updatedConnections = Set<HabitConnection>.from(state.connections);
+  void _deferHabitUpdate(String habitId, Habit Function(Habit) updater) async {
+    final habit = await habitService.getHabit(habitId);
+    if (habit == null) return;
 
-    // Check if connection already exists (in either direction)
-    final exists = updatedConnections.any((c) => (c.fromHabitId == fromHabitId && c.toHabitId == toHabitId) || (c.fromHabitId == toHabitId && c.toHabitId == fromHabitId));
+    final updatedHabit = updater(habit);
+    _pendingHabitUpdates[habitId] = updatedHabit;
 
-    if (!exists) {
-      updatedConnections.add(connection);
-      state = state.copyWith(connections: updatedConnections);
-      _saveState(immediate: true); // Immediate save for user actions
-    }
+    _habitUpdateDebounce?.cancel();
+    _habitUpdateDebounce = Timer(_saveDebounceDuration, () async {
+      for (final habit in _pendingHabitUpdates.values) {
+        await habitService.updateHabit(habit);
+      }
+      _pendingHabitUpdates.clear();
+    });
   }
 
-  /// Remove a connection between two habits
-  void removeConnection(String fromHabitId, String toHabitId) {
-    final updatedConnections = Set<HabitConnection>.from(state.connections);
-    updatedConnections.removeWhere((c) => (c.fromHabitId == fromHabitId && c.toHabitId == toHabitId) || (c.fromHabitId == toHabitId && c.toHabitId == fromHabitId));
-    state = state.copyWith(connections: updatedConnections);
-    _saveState(immediate: true); // Immediate save for user actions
+  Future<void> _updateHabitModelPosition(Habit habit, double x, double y) async {
+    await habitService.updateHabit(habit.copyWith(constellationPosX: x, constellationPosY: y));
   }
 
   /// Toggle connection between two habits
-  void toggleConnection(String fromHabitId, String toHabitId) {
+  void toggleConnection(String fromHabitId, String toHabitId) async {
     if (fromHabitId == toHabitId) return;
 
     final exists = state.connections.any((c) => (c.fromHabitId == fromHabitId && c.toHabitId == toHabitId) || (c.fromHabitId == toHabitId && c.toHabitId == fromHabitId));
 
+    final fromHabit = await habitService.getHabit(fromHabitId);
+    final toHabit = await habitService.getHabit(toHabitId);
+
+    if (fromHabit == null || toHabit == null) return;
+
+    final updatedFromLinks = List<String>.from(fromHabit.linkedHabitIds);
+    final updatedToLinks = List<String>.from(toHabit.linkedHabitIds);
+
     if (exists) {
-      removeConnection(fromHabitId, toHabitId);
+      updatedFromLinks.remove(toHabitId);
+      updatedToLinks.remove(fromHabitId);
     } else {
-      addConnection(fromHabitId, toHabitId);
+      if (!updatedFromLinks.contains(toHabitId)) updatedFromLinks.add(toHabitId);
+      if (!updatedToLinks.contains(fromHabitId)) updatedToLinks.add(fromHabitId);
     }
+
+    await habitService.updateHabit(fromHabit.copyWith(linkedHabitIds: updatedFromLinks));
+    await habitService.updateHabit(toHabit.copyWith(linkedHabitIds: updatedToLinks));
+
+    // Update local state
+    final updatedConnections = Set<HabitConnection>.from(state.connections);
+    if (exists) {
+      updatedConnections.removeWhere((c) => (c.fromHabitId == fromHabitId && c.toHabitId == toHabitId) || (c.fromHabitId == toHabitId && c.toHabitId == fromHabitId));
+    } else {
+      updatedConnections.add(HabitConnection(fromHabitId: fromHabitId, toHabitId: toHabitId));
+    }
+
+    state = state.copyWith(connections: updatedConnections);
+    _saveLocalState(immediate: true);
   }
 
   /// Update canvas scale
   void updateScale(double scale) {
     state = state.copyWith(scale: scale.clamp(0.3, 3.0));
-    _saveState(); // Debounced save for smooth zoom/pan
+    _saveLocalState();
   }
 
   /// Update canvas offset
   void updateOffset(double offsetX, double offsetY) {
     state = state.copyWith(offsetX: offsetX, offsetY: offsetY);
-    _saveState(); // Debounced save for smooth zoom/pan
+    _saveLocalState();
   }
 
   /// Update canvas scale and offset immediately (for interaction end)
-  /// Also saves the raw matrix values for precise restoration
   void updateTransformImmediate(double scale, double offsetX, double offsetY, {List<double>? matrixValues}) {
-    LogHelper.shared.debugPrint('🟡 [CanvasProvider] updateTransformImmediate called - scale: $scale, offsetX: $offsetX, offsetY: $offsetY, hasMatrix: ${matrixValues != null}');
+    LogHelper.shared.debugPrint('🟡 [CanvasProvider] updateTransformImmediate called - scale: $scale, offsetX: $offsetX, offsetY: $offsetY');
     state = state.copyWith(
       scale: scale.clamp(0.3, 3.0),
       offsetX: offsetX,
       offsetY: offsetY,
       matrixValues: matrixValues,
     );
-    // Use unawaited to ensure save happens without blocking, but still executes
-    unawaited(_saveState(immediate: true)); // Immediate save for interaction end
+
+    unawaited(_saveLocalState(immediate: true));
+
+    // Sync to Firestore
+    _ref.read(syncServiceProvider).updateCanvasState(scale, offsetX, offsetY);
   }
 
   /// Reset all positions to default layout
   Future<void> resetLayout(List<Habit> habits, double canvasWidth, double canvasHeight) async {
-    // Create a fresh state to clear matrixValues
     state = HabitCanvasState(
       positions: const {},
-      connections: state.connections, // Keep connections
+      connections: state.connections,
       scale: 1.0,
       offsetX: 0.0,
       offsetY: 0.0,
-      matrixValues: null, // Clear saved matrix
+      matrixValues: null,
     );
+
+    // Reset positions on habit models too
+    for (final habit in habits) {
+      await habitService.updateHabit(habit.copyWith(constellationPosX: null, constellationPosY: null));
+    }
+
     await initializePositions(habits, canvasWidth, canvasHeight);
   }
 
   /// Clear all connections
-  void clearConnections() {
+  void clearConnections() async {
+    final activeHabits = await habitService.getHabits();
+    for (final habit in activeHabits) {
+      if (habit.linkedHabitIds.isNotEmpty) {
+        await habitService.updateHabit(habit.copyWith(linkedHabitIds: []));
+      }
+    }
     state = state.copyWith(connections: {});
-    _saveState(immediate: true); // Immediate save for user actions
+    _saveLocalState(immediate: true);
   }
 }

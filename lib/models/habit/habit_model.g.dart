@@ -24,22 +24,29 @@ class HabitAdapter extends TypeAdapter<Habit> {
       reminderModel: fields[4] as ReminderModel?,
       dailyTarget: fields[5] as int,
       colorCode: fields[6] as int,
-      completions: (fields[7] as Map).cast<String, CompletionEntry>(),
+      completions: fields[7] == null
+          ? {}
+          : (fields[7] as Map).cast<String, CompletionEntry>(),
       archiveDate: fields[8] as DateTime?,
       status: fields[10] as HabitStatus,
-      categoryIds: (fields[11] as List).cast<String>(),
+      categoryIds:
+          fields[11] == null ? [] : (fields[11] as List).cast<String>(),
       difficulty: fields[12] as HabitDifficulty,
       rewardFactor: fields[13] as double,
       completionTime: fields[14] as DateTime?,
       syncStatus: fields[15] as SyncStatus,
       updatedAt: fields[16] as DateTime?,
+      constellationPosX: fields[17] as double?,
+      constellationPosY: fields[18] as double?,
+      linkedHabitIds:
+          fields[19] == null ? [] : (fields[19] as List).cast<String>(),
     );
   }
 
   @override
   void write(BinaryWriter writer, Habit obj) {
     writer
-      ..writeByte(16)
+      ..writeByte(19)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -71,7 +78,13 @@ class HabitAdapter extends TypeAdapter<Habit> {
       ..writeByte(15)
       ..write(obj.syncStatus)
       ..writeByte(16)
-      ..write(obj.updatedAt);
+      ..write(obj.updatedAt)
+      ..writeByte(17)
+      ..write(obj.constellationPosX)
+      ..writeByte(18)
+      ..write(obj.constellationPosY)
+      ..writeByte(19)
+      ..write(obj.linkedHabitIds);
   }
 
   @override
@@ -105,9 +118,7 @@ _$HabitImpl _$$HabitImplFromJson(Map<String, dynamic> json) => _$HabitImpl(
                 k, CompletionEntry.fromJson(e as Map<String, dynamic>)),
           ) ??
           const {},
-      archiveDate: json['archiveDate'] == null
-          ? null
-          : DateTime.parse(json['archiveDate'] as String),
+      archiveDate: const TimestampConverter().fromJson(json['archiveDate']),
       status: $enumDecodeNullable(_$HabitStatusEnumMap, json['status']) ??
           HabitStatus.active,
       categoryIds: (json['categoryIds'] as List<dynamic>?)
@@ -118,15 +129,18 @@ _$HabitImpl _$$HabitImplFromJson(Map<String, dynamic> json) => _$HabitImpl(
           $enumDecodeNullable(_$HabitDifficultyEnumMap, json['difficulty']) ??
               HabitDifficulty.moderate,
       rewardFactor: (json['rewardFactor'] as num?)?.toDouble() ?? 1.0,
-      completionTime: json['completionTime'] == null
-          ? null
-          : DateTime.parse(json['completionTime'] as String),
+      completionTime:
+          const TimestampConverter().fromJson(json['completionTime']),
       syncStatus:
           $enumDecodeNullable(_$SyncStatusEnumMap, json['syncStatus']) ??
               SyncStatus.synced,
-      updatedAt: json['updatedAt'] == null
-          ? null
-          : DateTime.parse(json['updatedAt'] as String),
+      updatedAt: const TimestampConverter().fromJson(json['updatedAt']),
+      constellationPosX: (json['constellationPosX'] as num?)?.toDouble(),
+      constellationPosY: (json['constellationPosY'] as num?)?.toDouble(),
+      linkedHabitIds: (json['linkedHabitIds'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList() ??
+          const [],
     );
 
 Map<String, dynamic> _$$HabitImplToJson(_$HabitImpl instance) =>
@@ -139,14 +153,18 @@ Map<String, dynamic> _$$HabitImplToJson(_$HabitImpl instance) =>
       'dailyTarget': instance.dailyTarget,
       'colorCode': instance.colorCode,
       'completions': instance.completions,
-      'archiveDate': instance.archiveDate?.toIso8601String(),
+      'archiveDate': const TimestampConverter().toJson(instance.archiveDate),
       'status': _$HabitStatusEnumMap[instance.status]!,
       'categoryIds': instance.categoryIds,
       'difficulty': _$HabitDifficultyEnumMap[instance.difficulty]!,
       'rewardFactor': instance.rewardFactor,
-      'completionTime': instance.completionTime?.toIso8601String(),
+      'completionTime':
+          const TimestampConverter().toJson(instance.completionTime),
       'syncStatus': _$SyncStatusEnumMap[instance.syncStatus]!,
-      'updatedAt': instance.updatedAt?.toIso8601String(),
+      'updatedAt': const TimestampConverter().toJson(instance.updatedAt),
+      'constellationPosX': instance.constellationPosX,
+      'constellationPosY': instance.constellationPosY,
+      'linkedHabitIds': instance.linkedHabitIds,
     };
 
 const _$HabitStatusEnumMap = {

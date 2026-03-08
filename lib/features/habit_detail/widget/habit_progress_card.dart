@@ -6,7 +6,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '/core/core.dart';
 import '/models/models.dart';
-import '../../home/components/reward_rating_dialog.dart';
 import '../providers/habit_detail_provider.dart';
 import '../providers/habit_statistics_provider.dart';
 
@@ -336,7 +335,7 @@ class _WeeklyProgressChartState extends ConsumerState<_WeeklyProgressChart> {
 
     // Get before count for reward rating dialog
     final beforeCount = currentHabit.getCountForDate(targetDate);
-    final previousHabit = currentHabit;
+    // final previousHabit = currentHabit;
 
     final completionEntry = CompletionEntry(
       id: dateKey,
@@ -361,13 +360,13 @@ class _WeeklyProgressChartState extends ConsumerState<_WeeklyProgressChart> {
 
           // Show reward rating dialog if count increased
           if (afterCount > beforeCount) {
-            await _showRewardRatingDialog(
-              context: context,
-              updatedHabit: updatedHabit,
-              previousHabit: previousHabit,
-              targetDate: targetDate,
-              dateKey: dateKey,
-            );
+            // await _showRewardRatingDialog(
+            //   context: context,
+            //   updatedHabit: updatedHabit,
+            //   previousHabit: previousHabit,
+            //   targetDate: targetDate,
+            //   dateKey: dateKey,
+            // );
           }
         }
       }
@@ -377,58 +376,58 @@ class _WeeklyProgressChartState extends ConsumerState<_WeeklyProgressChart> {
     }
   }
 
-  Future<void> _showRewardRatingDialog({
-    required BuildContext context,
-    required Habit updatedHabit,
-    required Habit previousHabit,
-    required DateTime targetDate,
-    required String dateKey,
-  }) async {
-    if (!mounted) return;
-
-    await Future.delayed(const Duration(milliseconds: 500));
-    if (!mounted || !context.mounted) return;
-
-    // Show reward rating dialog (mandatory - user must select)
-    // Dialog returns the selected rating when closed
-    double? rewardRating;
-    try {
-      rewardRating = await showCupertinoDialog<double>(
-        context: context,
-        barrierDismissible: false, // User must select a rating
-        builder: (dialogContext) => RewardRatingDialog(
-          habit: updatedHabit,
-        ),
-      );
-    } catch (e) {
-      LogHelper.shared.errorPrint('Error showing reward rating dialog: $e');
-      return;
-    }
-
-    if (!mounted || rewardRating == null) return;
-
-    // Small delay to ensure dialog is fully closed before proceeding
-    await Future.delayed(const Duration(milliseconds: 200));
-    if (!mounted || !context.mounted) return;
-
-    // Get current completion entry
-    final currentHabit = ref.read(habitDetailProvider);
-    if (currentHabit == null) return;
-
-    final existingEntry = currentHabit.completions[dateKey];
-    if (existingEntry != null) {
-      // Update completion entry with reward rating
-      final updatedEntry = existingEntry.copyWith(rewardRating: rewardRating);
-      final updatedCompletions = Map<String, CompletionEntry>.from(currentHabit.completions);
-      updatedCompletions[dateKey] = updatedEntry;
-
-      // Update habit locally
-      final habitWithRating = currentHabit.copyWith(completions: updatedCompletions);
-
-      // Save to service via habit detail provider
-      await ref.read(habitDetailProvider.notifier).updateHabit(habitWithRating);
-    }
-  }
+  // Future<void> _showRewardRatingDialog({
+  //   required BuildContext context,
+  //   required Habit updatedHabit,
+  //   required Habit previousHabit,
+  //   required DateTime targetDate,
+  //   required String dateKey,
+  // }) async {
+  //   if (!mounted) return;
+  //
+  //   await Future.delayed(const Duration(milliseconds: 500));
+  //   if (!mounted || !context.mounted) return;
+  //
+  //   // Show reward rating dialog (mandatory - user must select)
+  //   // Dialog returns the selected rating when closed
+  //   double? rewardRating;
+  //   try {
+  //     rewardRating = await showCupertinoDialog<double>(
+  //       context: context,
+  //       barrierDismissible: false, // User must select a rating
+  //       builder: (dialogContext) => RewardRatingDialog(
+  //         habit: updatedHabit,
+  //       ),
+  //     );
+  //   } catch (e) {
+  //     LogHelper.shared.errorPrint('Error showing reward rating dialog: $e');
+  //     return;
+  //   }
+  //
+  //   if (!mounted || rewardRating == null) return;
+  //
+  //   // Small delay to ensure dialog is fully closed before proceeding
+  //   await Future.delayed(const Duration(milliseconds: 200));
+  //   if (!mounted || !context.mounted) return;
+  //
+  //   // Get current completion entry
+  //   final currentHabit = ref.read(habitDetailProvider);
+  //   if (currentHabit == null) return;
+  //
+  //   final existingEntry = currentHabit.completions[dateKey];
+  //   if (existingEntry != null) {
+  //     // Update completion entry with reward rating
+  //     final updatedEntry = existingEntry.copyWith(rewardRating: rewardRating);
+  //     final updatedCompletions = Map<String, CompletionEntry>.from(currentHabit.completions);
+  //     updatedCompletions[dateKey] = updatedEntry;
+  //
+  //     // Update habit locally
+  //     final habitWithRating = currentHabit.copyWith(completions: updatedCompletions);
+  //
+  //     // Save to service via habit detail provider
+  //     await ref.read(habitDetailProvider.notifier).updateHabit(habitWithRating);
+  //   }
+  // }
 
   Future<void> _handleTap(int index, Habit habit) async {
     final today = DateUtils.dateOnly(DateTime.now());

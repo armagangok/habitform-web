@@ -34,25 +34,34 @@ mixin _$Habit {
   int get dailyTarget => throw _privateConstructorUsedError;
   @HiveField(6)
   int get colorCode => throw _privateConstructorUsedError;
-  @HiveField(7)
+  @HiveField(7, defaultValue: {})
   Map<String, CompletionEntry> get completions =>
       throw _privateConstructorUsedError;
+  @TimestampConverter()
   @HiveField(8)
   DateTime? get archiveDate => throw _privateConstructorUsedError;
   @HiveField(10)
   HabitStatus get status => throw _privateConstructorUsedError;
-  @HiveField(11)
+  @HiveField(11, defaultValue: [])
   List<String> get categoryIds => throw _privateConstructorUsedError;
   @HiveField(12)
   HabitDifficulty get difficulty => throw _privateConstructorUsedError;
   @HiveField(13)
   double get rewardFactor => throw _privateConstructorUsedError;
+  @TimestampConverter()
   @HiveField(14)
   DateTime? get completionTime => throw _privateConstructorUsedError;
   @HiveField(15)
   SyncStatus get syncStatus => throw _privateConstructorUsedError;
+  @TimestampConverter()
   @HiveField(16)
   DateTime? get updatedAt => throw _privateConstructorUsedError;
+  @HiveField(17)
+  double? get constellationPosX => throw _privateConstructorUsedError;
+  @HiveField(18)
+  double? get constellationPosY => throw _privateConstructorUsedError;
+  @HiveField(19, defaultValue: [])
+  List<String> get linkedHabitIds => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -72,15 +81,18 @@ abstract class $HabitCopyWith<$Res> {
       @HiveField(4) ReminderModel? reminderModel,
       @HiveField(5) int dailyTarget,
       @HiveField(6) int colorCode,
-      @HiveField(7) Map<String, CompletionEntry> completions,
-      @HiveField(8) DateTime? archiveDate,
+      @HiveField(7, defaultValue: {}) Map<String, CompletionEntry> completions,
+      @TimestampConverter() @HiveField(8) DateTime? archiveDate,
       @HiveField(10) HabitStatus status,
-      @HiveField(11) List<String> categoryIds,
+      @HiveField(11, defaultValue: []) List<String> categoryIds,
       @HiveField(12) HabitDifficulty difficulty,
       @HiveField(13) double rewardFactor,
-      @HiveField(14) DateTime? completionTime,
+      @TimestampConverter() @HiveField(14) DateTime? completionTime,
       @HiveField(15) SyncStatus syncStatus,
-      @HiveField(16) DateTime? updatedAt});
+      @TimestampConverter() @HiveField(16) DateTime? updatedAt,
+      @HiveField(17) double? constellationPosX,
+      @HiveField(18) double? constellationPosY,
+      @HiveField(19, defaultValue: []) List<String> linkedHabitIds});
 }
 
 /// @nodoc
@@ -112,6 +124,9 @@ class _$HabitCopyWithImpl<$Res, $Val extends Habit>
     Object? completionTime = freezed,
     Object? syncStatus = null,
     Object? updatedAt = freezed,
+    Object? constellationPosX = freezed,
+    Object? constellationPosY = freezed,
+    Object? linkedHabitIds = null,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -178,6 +193,18 @@ class _$HabitCopyWithImpl<$Res, $Val extends Habit>
           ? _value.updatedAt
           : updatedAt // ignore: cast_nullable_to_non_nullable
               as DateTime?,
+      constellationPosX: freezed == constellationPosX
+          ? _value.constellationPosX
+          : constellationPosX // ignore: cast_nullable_to_non_nullable
+              as double?,
+      constellationPosY: freezed == constellationPosY
+          ? _value.constellationPosY
+          : constellationPosY // ignore: cast_nullable_to_non_nullable
+              as double?,
+      linkedHabitIds: null == linkedHabitIds
+          ? _value.linkedHabitIds
+          : linkedHabitIds // ignore: cast_nullable_to_non_nullable
+              as List<String>,
     ) as $Val);
   }
 }
@@ -197,15 +224,18 @@ abstract class _$$HabitImplCopyWith<$Res> implements $HabitCopyWith<$Res> {
       @HiveField(4) ReminderModel? reminderModel,
       @HiveField(5) int dailyTarget,
       @HiveField(6) int colorCode,
-      @HiveField(7) Map<String, CompletionEntry> completions,
-      @HiveField(8) DateTime? archiveDate,
+      @HiveField(7, defaultValue: {}) Map<String, CompletionEntry> completions,
+      @TimestampConverter() @HiveField(8) DateTime? archiveDate,
       @HiveField(10) HabitStatus status,
-      @HiveField(11) List<String> categoryIds,
+      @HiveField(11, defaultValue: []) List<String> categoryIds,
       @HiveField(12) HabitDifficulty difficulty,
       @HiveField(13) double rewardFactor,
-      @HiveField(14) DateTime? completionTime,
+      @TimestampConverter() @HiveField(14) DateTime? completionTime,
       @HiveField(15) SyncStatus syncStatus,
-      @HiveField(16) DateTime? updatedAt});
+      @TimestampConverter() @HiveField(16) DateTime? updatedAt,
+      @HiveField(17) double? constellationPosX,
+      @HiveField(18) double? constellationPosY,
+      @HiveField(19, defaultValue: []) List<String> linkedHabitIds});
 }
 
 /// @nodoc
@@ -235,6 +265,9 @@ class __$$HabitImplCopyWithImpl<$Res>
     Object? completionTime = freezed,
     Object? syncStatus = null,
     Object? updatedAt = freezed,
+    Object? constellationPosX = freezed,
+    Object? constellationPosY = freezed,
+    Object? linkedHabitIds = null,
   }) {
     return _then(_$HabitImpl(
       id: null == id
@@ -301,6 +334,18 @@ class __$$HabitImplCopyWithImpl<$Res>
           ? _value.updatedAt
           : updatedAt // ignore: cast_nullable_to_non_nullable
               as DateTime?,
+      constellationPosX: freezed == constellationPosX
+          ? _value.constellationPosX
+          : constellationPosX // ignore: cast_nullable_to_non_nullable
+              as double?,
+      constellationPosY: freezed == constellationPosY
+          ? _value.constellationPosY
+          : constellationPosY // ignore: cast_nullable_to_non_nullable
+              as double?,
+      linkedHabitIds: null == linkedHabitIds
+          ? _value._linkedHabitIds
+          : linkedHabitIds // ignore: cast_nullable_to_non_nullable
+              as List<String>,
     ));
   }
 }
@@ -316,17 +361,24 @@ class _$HabitImpl extends _Habit {
       @HiveField(4) this.reminderModel,
       @HiveField(5) this.dailyTarget = 1,
       @HiveField(6) required this.colorCode,
-      @HiveField(7) final Map<String, CompletionEntry> completions = const {},
-      @HiveField(8) this.archiveDate,
+      @HiveField(7, defaultValue: {})
+      final Map<String, CompletionEntry> completions = const {},
+      @TimestampConverter() @HiveField(8) this.archiveDate,
       @HiveField(10) this.status = HabitStatus.active,
-      @HiveField(11) final List<String> categoryIds = const [],
+      @HiveField(11, defaultValue: [])
+      final List<String> categoryIds = const [],
       @HiveField(12) this.difficulty = HabitDifficulty.moderate,
       @HiveField(13) this.rewardFactor = 1.0,
-      @HiveField(14) this.completionTime,
+      @TimestampConverter() @HiveField(14) this.completionTime,
       @HiveField(15) this.syncStatus = SyncStatus.synced,
-      @HiveField(16) this.updatedAt})
+      @TimestampConverter() @HiveField(16) this.updatedAt,
+      @HiveField(17) this.constellationPosX,
+      @HiveField(18) this.constellationPosY,
+      @HiveField(19, defaultValue: [])
+      final List<String> linkedHabitIds = const []})
       : _completions = completions,
         _categoryIds = categoryIds,
+        _linkedHabitIds = linkedHabitIds,
         super._();
 
   factory _$HabitImpl.fromJson(Map<String, dynamic> json) =>
@@ -357,7 +409,7 @@ class _$HabitImpl extends _Habit {
   final Map<String, CompletionEntry> _completions;
   @override
   @JsonKey()
-  @HiveField(7)
+  @HiveField(7, defaultValue: {})
   Map<String, CompletionEntry> get completions {
     if (_completions is EqualUnmodifiableMapView) return _completions;
     // ignore: implicit_dynamic_type
@@ -365,6 +417,7 @@ class _$HabitImpl extends _Habit {
   }
 
   @override
+  @TimestampConverter()
   @HiveField(8)
   final DateTime? archiveDate;
   @override
@@ -374,7 +427,7 @@ class _$HabitImpl extends _Habit {
   final List<String> _categoryIds;
   @override
   @JsonKey()
-  @HiveField(11)
+  @HiveField(11, defaultValue: [])
   List<String> get categoryIds {
     if (_categoryIds is EqualUnmodifiableListView) return _categoryIds;
     // ignore: implicit_dynamic_type
@@ -390,6 +443,7 @@ class _$HabitImpl extends _Habit {
   @HiveField(13)
   final double rewardFactor;
   @override
+  @TimestampConverter()
   @HiveField(14)
   final DateTime? completionTime;
   @override
@@ -397,12 +451,28 @@ class _$HabitImpl extends _Habit {
   @HiveField(15)
   final SyncStatus syncStatus;
   @override
+  @TimestampConverter()
   @HiveField(16)
   final DateTime? updatedAt;
+  @override
+  @HiveField(17)
+  final double? constellationPosX;
+  @override
+  @HiveField(18)
+  final double? constellationPosY;
+  final List<String> _linkedHabitIds;
+  @override
+  @JsonKey()
+  @HiveField(19, defaultValue: [])
+  List<String> get linkedHabitIds {
+    if (_linkedHabitIds is EqualUnmodifiableListView) return _linkedHabitIds;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_linkedHabitIds);
+  }
 
   @override
   String toString() {
-    return 'Habit(id: $id, habitName: $habitName, habitDescription: $habitDescription, emoji: $emoji, reminderModel: $reminderModel, dailyTarget: $dailyTarget, colorCode: $colorCode, completions: $completions, archiveDate: $archiveDate, status: $status, categoryIds: $categoryIds, difficulty: $difficulty, rewardFactor: $rewardFactor, completionTime: $completionTime, syncStatus: $syncStatus, updatedAt: $updatedAt)';
+    return 'Habit(id: $id, habitName: $habitName, habitDescription: $habitDescription, emoji: $emoji, reminderModel: $reminderModel, dailyTarget: $dailyTarget, colorCode: $colorCode, completions: $completions, archiveDate: $archiveDate, status: $status, categoryIds: $categoryIds, difficulty: $difficulty, rewardFactor: $rewardFactor, completionTime: $completionTime, syncStatus: $syncStatus, updatedAt: $updatedAt, constellationPosX: $constellationPosX, constellationPosY: $constellationPosY, linkedHabitIds: $linkedHabitIds)';
   }
 
   @override
@@ -438,29 +508,39 @@ class _$HabitImpl extends _Habit {
             (identical(other.syncStatus, syncStatus) ||
                 other.syncStatus == syncStatus) &&
             (identical(other.updatedAt, updatedAt) ||
-                other.updatedAt == updatedAt));
+                other.updatedAt == updatedAt) &&
+            (identical(other.constellationPosX, constellationPosX) ||
+                other.constellationPosX == constellationPosX) &&
+            (identical(other.constellationPosY, constellationPosY) ||
+                other.constellationPosY == constellationPosY) &&
+            const DeepCollectionEquality()
+                .equals(other._linkedHabitIds, _linkedHabitIds));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      id,
-      habitName,
-      habitDescription,
-      emoji,
-      reminderModel,
-      dailyTarget,
-      colorCode,
-      const DeepCollectionEquality().hash(_completions),
-      archiveDate,
-      status,
-      const DeepCollectionEquality().hash(_categoryIds),
-      difficulty,
-      rewardFactor,
-      completionTime,
-      syncStatus,
-      updatedAt);
+  int get hashCode => Object.hashAll([
+        runtimeType,
+        id,
+        habitName,
+        habitDescription,
+        emoji,
+        reminderModel,
+        dailyTarget,
+        colorCode,
+        const DeepCollectionEquality().hash(_completions),
+        archiveDate,
+        status,
+        const DeepCollectionEquality().hash(_categoryIds),
+        difficulty,
+        rewardFactor,
+        completionTime,
+        syncStatus,
+        updatedAt,
+        constellationPosX,
+        constellationPosY,
+        const DeepCollectionEquality().hash(_linkedHabitIds)
+      ]);
 
   @JsonKey(ignore: true)
   @override
@@ -478,22 +558,27 @@ class _$HabitImpl extends _Habit {
 
 abstract class _Habit extends Habit {
   factory _Habit(
-      {@HiveField(0) required final String id,
-      @HiveField(1) required final String habitName,
-      @HiveField(2) final String? habitDescription,
-      @HiveField(3) final String? emoji,
-      @HiveField(4) final ReminderModel? reminderModel,
-      @HiveField(5) final int dailyTarget,
-      @HiveField(6) required final int colorCode,
-      @HiveField(7) final Map<String, CompletionEntry> completions,
-      @HiveField(8) final DateTime? archiveDate,
-      @HiveField(10) final HabitStatus status,
-      @HiveField(11) final List<String> categoryIds,
-      @HiveField(12) final HabitDifficulty difficulty,
-      @HiveField(13) final double rewardFactor,
-      @HiveField(14) final DateTime? completionTime,
-      @HiveField(15) final SyncStatus syncStatus,
-      @HiveField(16) final DateTime? updatedAt}) = _$HabitImpl;
+          {@HiveField(0) required final String id,
+          @HiveField(1) required final String habitName,
+          @HiveField(2) final String? habitDescription,
+          @HiveField(3) final String? emoji,
+          @HiveField(4) final ReminderModel? reminderModel,
+          @HiveField(5) final int dailyTarget,
+          @HiveField(6) required final int colorCode,
+          @HiveField(7, defaultValue: {})
+          final Map<String, CompletionEntry> completions,
+          @TimestampConverter() @HiveField(8) final DateTime? archiveDate,
+          @HiveField(10) final HabitStatus status,
+          @HiveField(11, defaultValue: []) final List<String> categoryIds,
+          @HiveField(12) final HabitDifficulty difficulty,
+          @HiveField(13) final double rewardFactor,
+          @TimestampConverter() @HiveField(14) final DateTime? completionTime,
+          @HiveField(15) final SyncStatus syncStatus,
+          @TimestampConverter() @HiveField(16) final DateTime? updatedAt,
+          @HiveField(17) final double? constellationPosX,
+          @HiveField(18) final double? constellationPosY,
+          @HiveField(19, defaultValue: []) final List<String> linkedHabitIds}) =
+      _$HabitImpl;
   _Habit._() : super._();
 
   factory _Habit.fromJson(Map<String, dynamic> json) = _$HabitImpl.fromJson;
@@ -520,16 +605,17 @@ abstract class _Habit extends Habit {
   @HiveField(6)
   int get colorCode;
   @override
-  @HiveField(7)
+  @HiveField(7, defaultValue: {})
   Map<String, CompletionEntry> get completions;
   @override
+  @TimestampConverter()
   @HiveField(8)
   DateTime? get archiveDate;
   @override
   @HiveField(10)
   HabitStatus get status;
   @override
-  @HiveField(11)
+  @HiveField(11, defaultValue: [])
   List<String> get categoryIds;
   @override
   @HiveField(12)
@@ -538,14 +624,25 @@ abstract class _Habit extends Habit {
   @HiveField(13)
   double get rewardFactor;
   @override
+  @TimestampConverter()
   @HiveField(14)
   DateTime? get completionTime;
   @override
   @HiveField(15)
   SyncStatus get syncStatus;
   @override
+  @TimestampConverter()
   @HiveField(16)
   DateTime? get updatedAt;
+  @override
+  @HiveField(17)
+  double? get constellationPosX;
+  @override
+  @HiveField(18)
+  double? get constellationPosY;
+  @override
+  @HiveField(19, defaultValue: [])
+  List<String> get linkedHabitIds;
   @override
   @JsonKey(ignore: true)
   _$$HabitImplCopyWith<_$HabitImpl> get copyWith =>

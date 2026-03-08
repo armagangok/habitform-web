@@ -4,11 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '/core/core.dart';
-import '/models/completion_entry/completion_entry.dart';
-import '/models/habit/habit_extension.dart';
 import '/models/habit/habit_model.dart';
-import '../../../components/habit_probability_dialog.dart';
-import '../../../components/reward_rating_dialog.dart';
 import '../../../provider/home_provider.dart';
 
 /// Circular habit item for the constellation view
@@ -148,9 +144,9 @@ class _CircularHabitWidgetState extends ConsumerState<CircularHabitWidget> {
 
       // Show reward rating dialog for each increment in multi-completion mode
       // This allows users to rate each completion separately, which affects probability calculation
-      if (shouldIncrement && afterCount > beforeCount) {
-        await _showRewardRatingDialog(updatedHabit: afterHabit, previousHabit: beforeHabit);
-      }
+      // if (shouldIncrement && afterCount > beforeCount) {
+      //   await _showRewardRatingDialog(updatedHabit: afterHabit, previousHabit: beforeHabit);
+      // }
     } catch (e) {
       LogHelper.shared.debugPrint('Achievement dialog error: $e');
     }
@@ -158,119 +154,119 @@ class _CircularHabitWidgetState extends ConsumerState<CircularHabitWidget> {
     widget.onComplete?.call();
   }
 
-  double _getProgressPercentage(Habit habit) {
-    return habit.calculateWeightedProgressPercentageFromFirstCompletion();
-  }
+  // double _getProgressPercentage(Habit habit) {
+  //   return habit.calculateWeightedProgressPercentageFromFirstCompletion();
+  // }
 
-  /// Show reward rating dialog first, then update completion and show probability dialog
-  Future<void> _showRewardRatingDialog({
-    required Habit updatedHabit,
-    required Habit previousHabit,
-  }) async {
-    if (!mounted) return;
+  // /// Show reward rating dialog first, then update completion and show probability dialog
+  // Future<void> _showRewardRatingDialog({
+  //   required Habit updatedHabit,
+  //   required Habit previousHabit,
+  // }) async {
+  //   if (!mounted) return;
+  //
+  //   await Future.delayed(const Duration(milliseconds: 500));
+  //   if (!mounted) return;
+  //
+  //   // Show reward rating dialog (mandatory - user must select)
+  //   // Dialog returns the selected rating when closed
+  //   double? rewardRating;
+  //   try {
+  //     rewardRating = await showCupertinoDialog<double>(
+  //       context: context,
+  //       barrierDismissible: false, // User must select a rating
+  //       builder: (dialogContext) => RewardRatingDialog(
+  //         habit: updatedHabit,
+  //       ),
+  //     );
+  //   } catch (e) {
+  //     LogHelper.shared.errorPrint('Error showing reward rating dialog: $e');
+  //     return;
+  //   }
+  //
+  //   if (!mounted || rewardRating == null) return;
+  //
+  //   // Small delay to ensure dialog is fully closed before proceeding
+  //   await Future.delayed(const Duration(milliseconds: 200));
+  //   if (!mounted) return;
+  //
+  //   // Update the completion entry with reward rating
+  //   final today = DateUtils.dateOnly(DateTime.now());
+  //   final dateKey = '${today.year}-${today.month}-${today.day}';
+  //
+  //   // Get current completion entry
+  //   final currentHabit = ref.read(homeProvider).maybeWhen(
+  //         data: (homeState) => homeState.habits.firstWhere(
+  //           (h) => h.id == updatedHabit.id,
+  //           orElse: () => updatedHabit,
+  //         ),
+  //         orElse: () => updatedHabit,
+  //       );
+  //
+  //   final existingEntry = currentHabit.completions[dateKey];
+  //   if (existingEntry != null) {
+  //     // Update completion entry with reward rating
+  //     final updatedEntry = existingEntry.copyWith(rewardRating: rewardRating);
+  //     final updatedCompletions = Map<String, CompletionEntry>.from(currentHabit.completions);
+  //     updatedCompletions[dateKey] = updatedEntry;
+  //
+  //     // Update habit locally
+  //     final habitWithRating = currentHabit.copyWith(completions: updatedCompletions);
+  //
+  //     // Save to service via home provider
+  //     await ref.read(homeProvider.notifier).updateHabit(habitWithRating);
+  //
+  //     // Refresh to get updated habit
+  //     await ref.read(homeProvider.notifier).fetchHabits();
+  //
+  //     // Small delay before showing probability dialog
+  //     await Future.delayed(const Duration(milliseconds: 300));
+  //     if (!mounted) return;
+  //
+  //     // Get the latest habit state after refresh to ensure reward rating is included
+  //     final latestHabit = ref.read(homeProvider).maybeWhen(
+  //           data: (homeState) => homeState.habits.firstWhere(
+  //             (h) => h.id == updatedHabit.id,
+  //             orElse: () => habitWithRating,
+  //           ),
+  //           orElse: () => habitWithRating,
+  //         );
+  //
+  //     // Show probability dialog after rating is saved
+  //     await _showAchievementIfEarned(
+  //       previousHabit: previousHabit,
+  //       updatedHabit: latestHabit,
+  //     );
+  //   } else {
+  //     // If entry not found, just show probability dialog
+  //     if (!mounted) return;
+  //     await _showAchievementIfEarned(
+  //       previousHabit: previousHabit,
+  //       updatedHabit: updatedHabit,
+  //     );
+  //   }
+  // }
 
-    await Future.delayed(const Duration(milliseconds: 500));
-    if (!mounted) return;
-
-    // Show reward rating dialog (mandatory - user must select)
-    // Dialog returns the selected rating when closed
-    double? rewardRating;
-    try {
-      rewardRating = await showCupertinoDialog<double>(
-        context: context,
-        barrierDismissible: false, // User must select a rating
-        builder: (dialogContext) => RewardRatingDialog(
-          habit: updatedHabit,
-        ),
-      );
-    } catch (e) {
-      LogHelper.shared.errorPrint('Error showing reward rating dialog: $e');
-      return;
-    }
-
-    if (!mounted || rewardRating == null) return;
-
-    // Small delay to ensure dialog is fully closed before proceeding
-    await Future.delayed(const Duration(milliseconds: 200));
-    if (!mounted) return;
-
-    // Update the completion entry with reward rating
-    final today = DateUtils.dateOnly(DateTime.now());
-    final dateKey = '${today.year}-${today.month}-${today.day}';
-
-    // Get current completion entry
-    final currentHabit = ref.read(homeProvider).maybeWhen(
-          data: (homeState) => homeState.habits.firstWhere(
-            (h) => h.id == updatedHabit.id,
-            orElse: () => updatedHabit,
-          ),
-          orElse: () => updatedHabit,
-        );
-
-    final existingEntry = currentHabit.completions[dateKey];
-    if (existingEntry != null) {
-      // Update completion entry with reward rating
-      final updatedEntry = existingEntry.copyWith(rewardRating: rewardRating);
-      final updatedCompletions = Map<String, CompletionEntry>.from(currentHabit.completions);
-      updatedCompletions[dateKey] = updatedEntry;
-
-      // Update habit locally
-      final habitWithRating = currentHabit.copyWith(completions: updatedCompletions);
-
-      // Save to service via home provider
-      await ref.read(homeProvider.notifier).updateHabit(habitWithRating);
-
-      // Refresh to get updated habit
-      await ref.read(homeProvider.notifier).fetchHabits();
-
-      // Small delay before showing probability dialog
-      await Future.delayed(const Duration(milliseconds: 300));
-      if (!mounted) return;
-
-      // Get the latest habit state after refresh to ensure reward rating is included
-      final latestHabit = ref.read(homeProvider).maybeWhen(
-            data: (homeState) => homeState.habits.firstWhere(
-              (h) => h.id == updatedHabit.id,
-              orElse: () => habitWithRating,
-            ),
-            orElse: () => habitWithRating,
-          );
-
-      // Show probability dialog after rating is saved
-      await _showAchievementIfEarned(
-        previousHabit: previousHabit,
-        updatedHabit: latestHabit,
-      );
-    } else {
-      // If entry not found, just show probability dialog
-      if (!mounted) return;
-      await _showAchievementIfEarned(
-        previousHabit: previousHabit,
-        updatedHabit: updatedHabit,
-      );
-    }
-  }
-
-  Future<void> _showAchievementIfEarned({required Habit previousHabit, required Habit updatedHabit}) async {
-    if (!mounted) return;
-
-    final previousScore = _getProgressPercentage(previousHabit);
-    final newScore = _getProgressPercentage(updatedHabit);
-
-    if (!mounted) return;
-
-    await showCupertinoDialog(
-      context: context,
-      barrierDismissible: true,
-      builder: (_) => HabitProbabilityDialog(
-        habit: updatedHabit,
-        pointsGained: 10,
-        previousScore: previousScore.round(),
-        newScore: newScore.round(),
-        message: 'Nice! You completed today. Keep the streak going! 🔥',
-      ),
-    );
-  }
+  // Future<void> _showAchievementIfEarned({required Habit previousHabit, required Habit updatedHabit}) async {
+  //   if (!mounted) return;
+  //
+  //   final previousScore = _getProgressPercentage(previousHabit);
+  //   final newScore = _getProgressPercentage(updatedHabit);
+  //
+  //   if (!mounted) return;
+  //
+  //   await showCupertinoDialog(
+  //     context: context,
+  //     barrierDismissible: true,
+  //     builder: (_) => HabitProbabilityDialog(
+  //       habit: updatedHabit,
+  //       pointsGained: 10,
+  //       previousScore: previousScore.round(),
+  //       newScore: newScore.round(),
+  //       message: 'Nice! You completed today. Keep the streak going! 🔥',
+  //     ),
+  //   );
+  // }
 
   @override
   Widget build(BuildContext context) {

@@ -24,12 +24,17 @@ mixin _$UserModel {
   String get email => throw _privateConstructorUsedError;
   String? get displayName => throw _privateConstructorUsedError;
   String? get photoUrl => throw _privateConstructorUsedError;
+  @TimestampConverter()
   DateTime? get createdAt => throw _privateConstructorUsedError;
+  @TimestampConverter()
   DateTime? get updatedAt => throw _privateConstructorUsedError;
   bool get isEmailVerified => throw _privateConstructorUsedError;
   bool get isSubscribed => throw _privateConstructorUsedError;
   String? get subscriptionProductId => throw _privateConstructorUsedError;
   String? get subscriptionExpirationDate => throw _privateConstructorUsedError;
+  double get canvasScale => throw _privateConstructorUsedError;
+  double get canvasOffsetX => throw _privateConstructorUsedError;
+  double get canvasOffsetY => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -47,12 +52,15 @@ abstract class $UserModelCopyWith<$Res> {
       String email,
       String? displayName,
       String? photoUrl,
-      DateTime? createdAt,
-      DateTime? updatedAt,
+      @TimestampConverter() DateTime? createdAt,
+      @TimestampConverter() DateTime? updatedAt,
       bool isEmailVerified,
       bool isSubscribed,
       String? subscriptionProductId,
-      String? subscriptionExpirationDate});
+      String? subscriptionExpirationDate,
+      double canvasScale,
+      double canvasOffsetX,
+      double canvasOffsetY});
 }
 
 /// @nodoc
@@ -78,6 +86,9 @@ class _$UserModelCopyWithImpl<$Res, $Val extends UserModel>
     Object? isSubscribed = null,
     Object? subscriptionProductId = freezed,
     Object? subscriptionExpirationDate = freezed,
+    Object? canvasScale = null,
+    Object? canvasOffsetX = null,
+    Object? canvasOffsetY = null,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -120,6 +131,18 @@ class _$UserModelCopyWithImpl<$Res, $Val extends UserModel>
           ? _value.subscriptionExpirationDate
           : subscriptionExpirationDate // ignore: cast_nullable_to_non_nullable
               as String?,
+      canvasScale: null == canvasScale
+          ? _value.canvasScale
+          : canvasScale // ignore: cast_nullable_to_non_nullable
+              as double,
+      canvasOffsetX: null == canvasOffsetX
+          ? _value.canvasOffsetX
+          : canvasOffsetX // ignore: cast_nullable_to_non_nullable
+              as double,
+      canvasOffsetY: null == canvasOffsetY
+          ? _value.canvasOffsetY
+          : canvasOffsetY // ignore: cast_nullable_to_non_nullable
+              as double,
     ) as $Val);
   }
 }
@@ -137,12 +160,15 @@ abstract class _$$UserModelImplCopyWith<$Res>
       String email,
       String? displayName,
       String? photoUrl,
-      DateTime? createdAt,
-      DateTime? updatedAt,
+      @TimestampConverter() DateTime? createdAt,
+      @TimestampConverter() DateTime? updatedAt,
       bool isEmailVerified,
       bool isSubscribed,
       String? subscriptionProductId,
-      String? subscriptionExpirationDate});
+      String? subscriptionExpirationDate,
+      double canvasScale,
+      double canvasOffsetX,
+      double canvasOffsetY});
 }
 
 /// @nodoc
@@ -166,6 +192,9 @@ class __$$UserModelImplCopyWithImpl<$Res>
     Object? isSubscribed = null,
     Object? subscriptionProductId = freezed,
     Object? subscriptionExpirationDate = freezed,
+    Object? canvasScale = null,
+    Object? canvasOffsetX = null,
+    Object? canvasOffsetY = null,
   }) {
     return _then(_$UserModelImpl(
       id: null == id
@@ -208,6 +237,18 @@ class __$$UserModelImplCopyWithImpl<$Res>
           ? _value.subscriptionExpirationDate
           : subscriptionExpirationDate // ignore: cast_nullable_to_non_nullable
               as String?,
+      canvasScale: null == canvasScale
+          ? _value.canvasScale
+          : canvasScale // ignore: cast_nullable_to_non_nullable
+              as double,
+      canvasOffsetX: null == canvasOffsetX
+          ? _value.canvasOffsetX
+          : canvasOffsetX // ignore: cast_nullable_to_non_nullable
+              as double,
+      canvasOffsetY: null == canvasOffsetY
+          ? _value.canvasOffsetY
+          : canvasOffsetY // ignore: cast_nullable_to_non_nullable
+              as double,
     ));
   }
 }
@@ -220,12 +261,15 @@ class _$UserModelImpl implements _UserModel {
       required this.email,
       this.displayName,
       this.photoUrl,
-      this.createdAt,
-      this.updatedAt,
+      @TimestampConverter() this.createdAt,
+      @TimestampConverter() this.updatedAt,
       this.isEmailVerified = false,
       this.isSubscribed = false,
       this.subscriptionProductId,
-      this.subscriptionExpirationDate});
+      this.subscriptionExpirationDate,
+      this.canvasScale = 1.0,
+      this.canvasOffsetX = 0.0,
+      this.canvasOffsetY = 0.0});
 
   factory _$UserModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$UserModelImplFromJson(json);
@@ -239,8 +283,10 @@ class _$UserModelImpl implements _UserModel {
   @override
   final String? photoUrl;
   @override
+  @TimestampConverter()
   final DateTime? createdAt;
   @override
+  @TimestampConverter()
   final DateTime? updatedAt;
   @override
   @JsonKey()
@@ -252,10 +298,19 @@ class _$UserModelImpl implements _UserModel {
   final String? subscriptionProductId;
   @override
   final String? subscriptionExpirationDate;
+  @override
+  @JsonKey()
+  final double canvasScale;
+  @override
+  @JsonKey()
+  final double canvasOffsetX;
+  @override
+  @JsonKey()
+  final double canvasOffsetY;
 
   @override
   String toString() {
-    return 'UserModel(id: $id, email: $email, displayName: $displayName, photoUrl: $photoUrl, createdAt: $createdAt, updatedAt: $updatedAt, isEmailVerified: $isEmailVerified, isSubscribed: $isSubscribed, subscriptionProductId: $subscriptionProductId, subscriptionExpirationDate: $subscriptionExpirationDate)';
+    return 'UserModel(id: $id, email: $email, displayName: $displayName, photoUrl: $photoUrl, createdAt: $createdAt, updatedAt: $updatedAt, isEmailVerified: $isEmailVerified, isSubscribed: $isSubscribed, subscriptionProductId: $subscriptionProductId, subscriptionExpirationDate: $subscriptionExpirationDate, canvasScale: $canvasScale, canvasOffsetX: $canvasOffsetX, canvasOffsetY: $canvasOffsetY)';
   }
 
   @override
@@ -282,7 +337,13 @@ class _$UserModelImpl implements _UserModel {
             (identical(other.subscriptionExpirationDate,
                     subscriptionExpirationDate) ||
                 other.subscriptionExpirationDate ==
-                    subscriptionExpirationDate));
+                    subscriptionExpirationDate) &&
+            (identical(other.canvasScale, canvasScale) ||
+                other.canvasScale == canvasScale) &&
+            (identical(other.canvasOffsetX, canvasOffsetX) ||
+                other.canvasOffsetX == canvasOffsetX) &&
+            (identical(other.canvasOffsetY, canvasOffsetY) ||
+                other.canvasOffsetY == canvasOffsetY));
   }
 
   @JsonKey(ignore: true)
@@ -298,7 +359,10 @@ class _$UserModelImpl implements _UserModel {
       isEmailVerified,
       isSubscribed,
       subscriptionProductId,
-      subscriptionExpirationDate);
+      subscriptionExpirationDate,
+      canvasScale,
+      canvasOffsetX,
+      canvasOffsetY);
 
   @JsonKey(ignore: true)
   @override
@@ -320,12 +384,15 @@ abstract class _UserModel implements UserModel {
       required final String email,
       final String? displayName,
       final String? photoUrl,
-      final DateTime? createdAt,
-      final DateTime? updatedAt,
+      @TimestampConverter() final DateTime? createdAt,
+      @TimestampConverter() final DateTime? updatedAt,
       final bool isEmailVerified,
       final bool isSubscribed,
       final String? subscriptionProductId,
-      final String? subscriptionExpirationDate}) = _$UserModelImpl;
+      final String? subscriptionExpirationDate,
+      final double canvasScale,
+      final double canvasOffsetX,
+      final double canvasOffsetY}) = _$UserModelImpl;
 
   factory _UserModel.fromJson(Map<String, dynamic> json) =
       _$UserModelImpl.fromJson;
@@ -339,8 +406,10 @@ abstract class _UserModel implements UserModel {
   @override
   String? get photoUrl;
   @override
+  @TimestampConverter()
   DateTime? get createdAt;
   @override
+  @TimestampConverter()
   DateTime? get updatedAt;
   @override
   bool get isEmailVerified;
@@ -350,6 +419,12 @@ abstract class _UserModel implements UserModel {
   String? get subscriptionProductId;
   @override
   String? get subscriptionExpirationDate;
+  @override
+  double get canvasScale;
+  @override
+  double get canvasOffsetX;
+  @override
+  double get canvasOffsetY;
   @override
   @JsonKey(ignore: true)
   _$$UserModelImplCopyWith<_$UserModelImpl> get copyWith =>

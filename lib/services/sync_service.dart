@@ -1,11 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '/core/core.dart';
 import '/models/completion_entry/completion_entry.dart';
 import '/models/habit/habit_model.dart';
 import '/models/sync_status.dart';
+
+final syncServiceProvider = Provider<SyncService>((ref) => SyncService());
 
 class SyncService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instanceFor(app: Firebase.app(), databaseId: 'habitformdatabase');
@@ -80,9 +83,7 @@ class SyncService {
   /// so no completion is lost when syncing across devices.
   Habit resolveConflict(Habit local, Habit remote) {
     final mergedCompletions = _mergeCompletions(local.completions, remote.completions);
-    final base = (local.updatedAt == null || (remote.updatedAt != null && !local.updatedAt!.isAfter(remote.updatedAt!)))
-        ? remote
-        : local;
+    final base = (local.updatedAt == null || (remote.updatedAt != null && !local.updatedAt!.isAfter(remote.updatedAt!))) ? remote : local;
     return base.copyWith(completions: mergedCompletions);
   }
 
@@ -133,16 +134,35 @@ class SyncService {
     if (_userId == null) return;
     try {
       await _firestore.collection('users').doc(_userId!).set(
-            {
-              'isSubscribed': isSubscribed,
-              if (subscriptionProductId != null) 'subscriptionProductId': subscriptionProductId,
-              if (subscriptionExpirationDate != null) 'subscriptionExpirationDate': subscriptionExpirationDate,
-            },
-            SetOptions(merge: true),
-          );
+        {
+          'isSubscribed': isSubscribed,
+          if (subscriptionProductId != null) 'subscriptionProductId': subscriptionProductId,
+          if (subscriptionExpirationDate != null) 'subscriptionExpirationDate': subscriptionExpirationDate,
+        },
+        SetOptions(merge: true),
+      );
       LogHelper.shared.debugPrint('✅ Updated user subscription in Firestore: isSubscribed=$isSubscribed');
     } catch (e) {
       LogHelper.shared.debugPrint('❌ Error updating user subscription: $e');
+    }
+  }
+
+  /// Updates the global habit constellation canvas state in Firestore.
+  Future<void> updateCanvasState(double scale, double offsetX, double offsetY) async {
+    if (_userId == null) return;
+    try {
+      await _firestore.collection('users').doc(_userId!).set(
+        {
+          'canvasScale': scale,
+          'canvasOffsetX': offsetX,
+          'canvasOffsetY': offsetY,
+          'updatedAt': FieldValue.serverTimestamp(),
+        },
+        SetOptions(merge: true),
+      );
+      LogHelper.shared.debugPrint('✅ Updated habit constellation canvas state in Firestore: scale=$scale, offset=($offsetX, $offsetY)');
+    } catch (e) {
+      LogHelper.shared.debugPrint('❌ Error updating canvas state in Firestore: $e');
     }
   }
 }

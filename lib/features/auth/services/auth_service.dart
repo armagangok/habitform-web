@@ -187,4 +187,11 @@ class AuthService {
       LogHelper.shared.debugPrint('❌ Error updating user data: $e');
     }
   }
+
+  Stream<UserModel?> getUserProfileStream(String uid) {
+    return _firestore.collection('users').doc(uid).snapshots().map((snapshot) {
+      if (!snapshot.exists) return null;
+      return UserModel.fromJson(snapshot.data()!);
+    });
+  }
 }
