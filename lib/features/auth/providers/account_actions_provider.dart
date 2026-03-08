@@ -4,8 +4,7 @@ import '../models/account_action_state.dart';
 import '../services/auth_service.dart';
 import 'auth_provider.dart';
 
-final accountActionsProvider =
-    StateNotifierProvider<AccountActionsNotifier, AccountActionState>((ref) {
+final accountActionsProvider = StateNotifierProvider<AccountActionsNotifier, AccountActionState>((ref) {
   return AccountActionsNotifier(ref.read(authServiceProvider));
 });
 
@@ -74,10 +73,12 @@ class AccountActionsNotifier extends StateNotifier<AccountActionState> {
     }
   }
 
-  Future<void> deleteAccount(String email, String password) async {
+  Future<void> deleteAccount(String? email, String? password) async {
     state = state.copyWith(status: AccountActionStatus.loading, errorMessage: null);
     try {
-      await _authService.reauthenticateWithEmailPassword(email, password);
+      if (email != null && password != null) {
+        await _authService.reauthenticateWithEmailPassword(email, password);
+      }
       await _authService.deleteAccount();
       state = state.copyWith(status: AccountActionStatus.success);
     } catch (e) {

@@ -11,14 +11,9 @@ abstract class HabitCategoryServiceInterface {
 }
 
 class HabitCategoryService implements HabitCategoryServiceInterface {
-  final Box<HabitCategory> _box;
+  HabitCategoryService();
 
-  HabitCategoryService(this._box);
-
-  static Future<HabitCategoryService> init() async {
-    final box = await Hive.openBox<HabitCategory>(HiveBoxes.habitCategoryBox);
-    return HabitCategoryService(box);
-  }
+  Box<HabitCategory> get _box => Hive.box<HabitCategory>(HiveBoxes.habitCategoryBox);
 
   @override
   Future<List<HabitCategory>> getCategories() async {

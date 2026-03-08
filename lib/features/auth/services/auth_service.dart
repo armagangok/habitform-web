@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
+import '../../../core/helpers/hive/hive_helper.dart';
 import '../../../core/helpers/logger/logger.dart';
 import '../../../models/user/user_model.dart';
 
@@ -93,7 +94,14 @@ class AuthService {
   }
 
   Future<void> signOut() async {
-    await _auth.signOut();
+    try {
+      await HiveHelper.shared.clearAllLocalData();
+      await _auth.signOut();
+      await GoogleSignIn.instance.signOut(); // Ensure Google sign-out as well
+    } catch (e) {
+      LogHelper.shared.debugPrint('❌ Error during sign out: $e');
+      rethrow;
+    }
   }
 
   Future<void> sendEmailVerification() async {
@@ -153,6 +161,7 @@ class AuthService {
     } catch (e) {
       LogHelper.shared.debugPrint('❌ Error deleting Firestore user doc: $e');
     }
+    await HiveHelper.shared.clearAllLocalData();
     await user.delete();
   }
 
@@ -160,6 +169,12 @@ class AuthService {
     final user = _auth.currentUser;
     if (user == null) return false;
     return user.providerData.any((p) => p.providerId == 'password');
+  }
+
+  bool get isSocialProvider {
+    final user = _auth.currentUser;
+    if (user == null) return false;
+    return user.providerData.any((p) => p.providerId == 'google.com' || p.providerId == 'apple.com');
   }
 
   Future<void> _updateUserData(User? user) async {

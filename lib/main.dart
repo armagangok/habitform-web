@@ -16,6 +16,7 @@ import 'core/helpers/notifications/notification_helper.dart';
 import 'core/helpers/notifications/timezone.dart';
 import 'core/theme/providers/theme_provider.dart';
 import 'features/auth/providers/auth_provider.dart';
+import 'features/habit_category/provider/habit_category_provider.dart';
 import 'features/home/provider/home_provider.dart';
 import 'features/home/views/pages/home_page.dart';
 import 'features/onboarding/pages/onboarding_welcome_page.dart';
@@ -135,6 +136,16 @@ class _MyAppState extends ConsumerState<MyApp> {
           final hadUser = previous?.valueOrNull != null;
           if (hadUser) {
             await PurchaseService.logOut();
+
+            // Invalidate providers to reset their state
+            ref.invalidate(homeProvider);
+            ref.invalidate(homeSummariesProvider);
+            ref.invalidate(purchaseProvider);
+            ref.invalidate(habitCategoryProvider);
+            ref.invalidate(selectedCategoriesProvider);
+
+            // Force a rebuild of the main view to return to onboarding/auth
+            ref.invalidate(onboardingProvider);
           }
         }
       });

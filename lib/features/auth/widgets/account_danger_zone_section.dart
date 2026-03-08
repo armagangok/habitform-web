@@ -54,10 +54,9 @@ class _AccountDangerZoneSectionState extends ConsumerState<AccountDangerZoneSect
 
   Future<void> _confirmDeleteAccount() async {
     final authService = ref.read(authServiceProvider);
-    if (!authService.hasEmailPasswordProvider) {
-      AppFlushbar.shared.warningFlushbar(LocaleKeys.auth_password_change_email_only.tr());
-      return;
-    }
+    final isSocial = authService.isSocialProvider;
+    final hasPassword = authService.hasEmailPasswordProvider;
+
     final confirmed = await showCupertinoDialog<bool>(
       context: context,
       builder: (ctx) => CupertinoAlertDialog(
@@ -79,6 +78,25 @@ class _AccountDangerZoneSectionState extends ConsumerState<AccountDangerZoneSect
       ),
     );
     if (confirmed != true || !mounted) return;
+
+    if (!hasPassword && isSocial) {
+      // Social only users can delete without password re-auth
+      try {
+        await ref.read(accountActionsProvider.notifier).deleteAccount(null, null);
+        if (mounted) {
+          Navigator.of(context).pop();
+          AppFlushbar.shared.successFlushbar(LocaleKeys.auth_account_deleted.tr());
+        }
+      } catch (e) {
+        if (mounted) AppFlushbar.shared.errorFlushbar(e.toString());
+      }
+      return;
+    }
+
+    if (!hasPassword) {
+      AppFlushbar.shared.warningFlushbar(LocaleKeys.auth_password_change_email_only.tr());
+      return;
+    }
 
     _passwordController.clear();
     await showCupertinoModalPopup<void>(
@@ -140,9 +158,6 @@ class _AccountDangerZoneSectionState extends ConsumerState<AccountDangerZoneSect
 
   @override
   Widget build(BuildContext context) {
-    final authService = ref.read(authServiceProvider);
-    final hasEmailPassword = authService.hasEmailPasswordProvider;
-
     return CupertinoListSection.insetGrouped(
       header: Text(
         LocaleKeys.auth_danger_zone.tr(),
@@ -160,21 +175,20 @@ class _AccountDangerZoneSectionState extends ConsumerState<AccountDangerZoneSect
           onTap: _confirmSignOut,
           trailing: const CupertinoListTileChevron(),
         ),
-        if (hasEmailPassword)
-          CupertinoListTile(
-            leading: CupertinoCard(
-              color: CupertinoColors.systemRed,
-              borderRadius: BorderRadius.circular(5),
-              padding: const EdgeInsets.all(2),
-              child: Icon(CupertinoIcons.trash_fill, color: Colors.white.withValues(alpha: .9), size: 18),
-            ),
-            title: Text(
-              LocaleKeys.auth_delete_account.tr(),
-              style: const TextStyle(color: CupertinoColors.systemRed, fontWeight: FontWeight.w600),
-            ),
-            onTap: _confirmDeleteAccount,
-            trailing: const CupertinoListTileChevron(),
+        CupertinoListTile(
+          leading: CupertinoCard(
+            color: CupertinoColors.systemRed,
+            borderRadius: BorderRadius.circular(5),
+            padding: const EdgeInsets.all(2),
+            child: Icon(CupertinoIcons.trash_fill, color: Colors.white.withValues(alpha: .9), size: 18),
           ),
+          title: Text(
+            LocaleKeys.auth_delete_account.tr(),
+            style: const TextStyle(color: CupertinoColors.systemRed, fontWeight: FontWeight.w600),
+          ),
+          onTap: _confirmDeleteAccount,
+          trailing: const CupertinoListTileChevron(),
+        ),
       ],
     );
   }

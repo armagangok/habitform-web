@@ -1,4 +1,5 @@
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '/models/models.dart';
 import '../../../features/habit_category/model/habit_category_model.dart';
@@ -32,87 +33,49 @@ class HiveHelper {
       Hive.openBox<String?>(HiveBoxes.habitRiseDefaults),
       Hive.openBox<String?>(HiveBoxes.themeBox),
       Hive.openBox<String?>(HiveBoxes.localeBox),
+      Hive.openBox<HabitCategory>(HiveBoxes.habitCategoryBox),
     ]);
     LogHelper.shared.debugPrint('Hive initialization completed successfully');
   }
 
   void _registerAdapters() {
     try {
-      Hive.registerAdapter(HabitStatusAdapter());
-
-      LogHelper.shared.debugPrint('All Hive adapters registered successfully');
+      if (!Hive.isAdapterRegistered(7)) {
+        Hive.registerAdapter(HabitStatusAdapter());
+      }
+      if (!Hive.isAdapterRegistered(10)) {
+        Hive.registerAdapter(HabitDifficultyAdapter());
+      }
+      if (!Hive.isAdapterRegistered(9)) {
+        Hive.registerAdapter(HabitCategoryAdapter());
+      }
+      if (!Hive.isAdapterRegistered(1)) {
+        Hive.registerAdapter(HabitAdapter());
+      }
+      if (!Hive.isAdapterRegistered(4)) {
+        Hive.registerAdapter(ReminderModelAdapter());
+      }
+      if (!Hive.isAdapterRegistered(77)) {
+        Hive.registerAdapter(MultipleReminderModelAdapter());
+      }
+      if (!Hive.isAdapterRegistered(3)) {
+        Hive.registerAdapter(DaysAdapter());
+      }
+      if (!Hive.isAdapterRegistered(6)) {
+        Hive.registerAdapter(AppDefaultsAdapter());
+      }
+      if (!Hive.isAdapterRegistered(8)) {
+        Hive.registerAdapter(CompletionEntryAdapter());
+      }
+      if (!Hive.isAdapterRegistered(5)) {
+        Hive.registerAdapter(UserDefaultsAdapter());
+      }
+      if (!Hive.isAdapterRegistered(20)) {
+        Hive.registerAdapter(SyncStatusAdapter());
+      }
+      LogHelper.shared.debugPrint('All Hive adapters registered or already checked successfully');
     } catch (e, stack) {
       LogHelper.shared.debugPrint('Error registering Hive adapters: $e\n $stack');
-    }
-
-    try {
-      Hive.registerAdapter(HabitDifficultyAdapter());
-      LogHelper.shared.debugPrint('HabitDifficultyAdapter registered successfully');
-    } catch (e, s) {
-      LogHelper.shared.debugPrint('Error registering HabitDifficultyAdapter: $e\n $s');
-    }
-
-    try {
-      Hive.registerAdapter(HabitCategoryAdapter());
-      LogHelper.shared.debugPrint('HabitCategoryAdapter registered successfully');
-    } catch (e, s) {
-      LogHelper.shared.debugPrint('Error registering HabitCategoryAdapter: $e\n $s');
-    }
-
-    try {
-      Hive.registerAdapter(HabitAdapter());
-      LogHelper.shared.debugPrint('HabitAdapter registered successfully');
-    } catch (e, s) {
-      LogHelper.shared.debugPrint('Error registering HabitAdapter: $e\n $s');
-    }
-
-    try {
-      Hive.registerAdapter(ReminderModelAdapter());
-      LogHelper.shared.debugPrint('ReminderModelAdapter registered successfully');
-    } catch (e, s) {
-      LogHelper.shared.debugPrint('Error registering ReminderModelAdapter: $e\n $s');
-    }
-
-    try {
-      Hive.registerAdapter(MultipleReminderModelAdapter());
-      LogHelper.shared.debugPrint('MultipleReminderModelAdapter registered successfully');
-    } catch (e, s) {
-      LogHelper.shared.debugPrint('Error registering MultipleReminderModelAdapter: $e\n $s');
-    }
-
-    try {
-      Hive.registerAdapter(DaysAdapter());
-      LogHelper.shared.debugPrint('DaysAdapter registered successfully');
-    } catch (e, s) {
-      LogHelper.shared.debugPrint('Error registering DaysAdapter: $e\n $s');
-    }
-
-    try {
-      Hive.registerAdapter(AppDefaultsAdapter());
-      LogHelper.shared.debugPrint('AppDefaultsAdapter registered successfully');
-    } catch (e, s) {
-      LogHelper.shared.debugPrint('Error registering AppDefaultsAdapter: $e\n $s');
-    }
-
-    try {
-      Hive.registerAdapter(CompletionEntryAdapter());
-      LogHelper.shared.debugPrint('CompletionEntryAdapter registered successfully');
-    } catch (e, s) {
-      LogHelper.shared.debugPrint('Error registering CompletionEntryAdapter: $e\n $s');
-    }
-
-    try {
-      Hive.registerAdapter(UserDefaultsAdapter());
-      LogHelper.shared.debugPrint('UserDefaultsAdapter registered successfully');
-    } catch (e, s) {
-      LogHelper.shared.debugPrint('Error registering UserDefaultsAdapter: $e\n $s');
-    }
-
-    try {
-      Hive.registerAdapter(SyncStatusAdapter());
-      LogHelper.shared.debugPrint('SyncStatusAdapter registered successfully');
-    } catch (e, s) {
-      LogHelper.shared.debugPrint('Error registering SyncStatusAdapter: $e\n $s');
     }
   }
 
@@ -139,7 +102,28 @@ class HiveHelper {
     }
   }
 
-  // Sadece gerektiğinde çağrılacak metod
+  /// Clears user-specific local data. Called during logout to ensure data privacy.
+  Future<void> clearAllLocalData() async {
+    try {
+      LogHelper.shared.debugPrint('🧹 [HiveHelper] Clearing user data...');
+
+      // Boxes are always open (opened at startup), just clear their contents
+      await Hive.box<Habit>(HiveBoxes.habitBox).clear();
+      await Hive.box<Habit>(HiveBoxes.archivedHabitBox).clear();
+      await Hive.box<HabitCategory>(HiveBoxes.habitCategoryBox).clear();
+      await Hive.box<UserDefaults>(HiveBoxes.userDefaultsBox).clear();
+
+      // Clear canvas positions from SharedPreferences
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.remove('habit_canvas_state');
+
+      LogHelper.shared.debugPrint('✅ [HiveHelper] User data cleared successfully.');
+    } catch (e, stack) {
+      LogHelper.shared.debugPrint('❌ [HiveHelper] Error clearing user data: $e\n$stack');
+    }
+  }
+
+  // Sadece gerektiğinde çağrılacak metod (Legacy)
   Future<void> clearAllBoxes() async {
     try {
       await Hive.deleteBoxFromDisk(HiveBoxes.habitBox);
