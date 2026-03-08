@@ -97,9 +97,9 @@ class _AuthPageState extends ConsumerState<AuthPage> {
     return GestureDetector(
       onTap: context.hideKeyboard,
       child: CupertinoPageScaffold(
-        navigationBar: SheetHeader(
-          title: LocaleKeys.auth_welcome.tr(),
-          closeButtonPosition: CloseButtonPosition.left,
+        navigationBar: CupertinoNavigationBar(
+          previousPageTitle: context.tr(LocaleKeys.settings_settings),
+          middle: Text(LocaleKeys.auth_welcome.tr()),
         ),
         child: SafeArea(
           bottom: false,
@@ -168,9 +168,7 @@ class _AuthPageState extends ConsumerState<AuthPage> {
                             borderRadius: BorderRadius.circular(12),
                           ),
                           child: Text(
-                            _segmentedValue == 0
-                                ? LocaleKeys.auth_sign_in.tr()
-                                : LocaleKeys.auth_register.tr(),
+                            _segmentedValue == 0 ? LocaleKeys.auth_sign_in.tr() : LocaleKeys.auth_register.tr(),
                             style: const TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,

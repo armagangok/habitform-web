@@ -31,7 +31,7 @@ class _AccountProfileSectionState extends ConsumerState<AccountProfileSection> {
 
   Future<void> _showChangeNameSheet() async {
     _nameController.text = widget.user.displayName ?? '';
-    await showCupertinoModalPopup<void>(
+    await showCupertinoSheet<void>(
       context: context,
       builder: (ctx) => GestureDetector(
         onTap: context.hideKeyboard,
@@ -65,16 +65,19 @@ class _AccountProfileSectionState extends ConsumerState<AccountProfileSection> {
               child: Text(LocaleKeys.common_save.tr()),
             ),
           ),
-          child: SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.all(2),
-              child: CupertinoTextField(
-                controller: _nameController,
-                placeholder: LocaleKeys.auth_change_display_name.tr(),
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                style: context.bodyLarge,
+          child: ListView(
+            children: [
+              SizedBox(height: 20),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: CupertinoTextField(
+                  controller: _nameController,
+                  placeholder: LocaleKeys.auth_change_display_name.tr(),
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  style: context.bodyLarge,
+                ),
               ),
-            ),
+            ],
           ),
         ),
       ),
@@ -123,8 +126,7 @@ class _AccountProfileSectionState extends ConsumerState<AccountProfileSection> {
           trailing: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              if (emailVerified)
-                Icon(CupertinoIcons.checkmark_seal_fill, color: CupertinoColors.systemGreen, size: 18),
+              if (emailVerified) Icon(CupertinoIcons.checkmark_seal_fill, color: CupertinoColors.systemGreen, size: 18),
               if (emailVerified) const SizedBox(width: 4),
               const CupertinoListTileChevron(),
             ],

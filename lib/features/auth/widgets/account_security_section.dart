@@ -32,7 +32,7 @@ class _AccountSecuritySectionState extends ConsumerState<AccountSecuritySection>
 
   Future<void> _showChangeEmailSheet() async {
     _emailController.text = '';
-    await showCupertinoModalPopup<void>(
+    await showCupertinoSheet<void>(
       context: context,
       builder: (ctx) => GestureDetector(
         onTap: context.hideKeyboard,
@@ -93,7 +93,7 @@ class _AccountSecuritySectionState extends ConsumerState<AccountSecuritySection>
     _currentPasswordController.clear();
     _newPasswordController.clear();
     _confirmPasswordController.clear();
-    await showCupertinoModalPopup<void>(
+    await showCupertinoSheet<void>(
       context: context,
       builder: (ctx) => GestureDetector(
         onTap: context.hideKeyboard,
@@ -218,15 +218,15 @@ class _AccountSecuritySectionState extends ConsumerState<AccountSecuritySection>
             onTap: _showChangePasswordSheet,
             trailing: const CupertinoListTileChevron(),
           ),
-        CupertinoListTile(
-          leading: CupertinoCard(
-            color: CupertinoColors.systemIndigo,
-            borderRadius: BorderRadius.circular(5),
-            padding: const EdgeInsets.all(2),
-            child: Icon(CupertinoIcons.shield_fill, color: Colors.white.withValues(alpha: .9), size: 18),
-          ),
-          title: Text(LocaleKeys.auth_two_factor_not_enabled.tr()),
-        ),
+        // CupertinoListTile(
+        //   leading: CupertinoCard(
+        //     color: CupertinoColors.systemIndigo,
+        //     borderRadius: BorderRadius.circular(5),
+        //     padding: const EdgeInsets.all(2),
+        //     child: Icon(CupertinoIcons.shield_fill, color: Colors.white.withValues(alpha: .9), size: 18),
+        //   ),
+        //   title: Text(LocaleKeys.auth_two_factor_not_enabled.tr(), maxLines: 4),
+        // ),
       ],
     );
   }

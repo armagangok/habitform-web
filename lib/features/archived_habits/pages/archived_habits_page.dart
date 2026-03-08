@@ -34,7 +34,9 @@ class _ArchivedHabitsPageState extends ConsumerState<ArchivedHabitsPage> {
       error: (error, _) => CupertinoPageScaffold(
         navigationBar: SheetHeader(
           closeButtonPosition: CloseButtonPosition.left,
-          middle: Text(LocaleKeys.archived_habits_title.tr()),
+          middle: Text(
+            LocaleKeys.archived_habits_title.tr(),
+          ),
         ),
         child: Center(
           child: Column(

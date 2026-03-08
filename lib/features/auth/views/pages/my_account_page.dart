@@ -17,9 +17,9 @@ class MyAccountPage extends ConsumerWidget {
     final authState = ref.watch(authStateProvider);
 
     return CupertinoPageScaffold(
-      navigationBar: SheetHeader(
-        title: LocaleKeys.auth_my_account.tr(),
-        closeButtonPosition: CloseButtonPosition.left,
+      navigationBar: CupertinoNavigationBar(
+        previousPageTitle: context.tr(LocaleKeys.settings_settings),
+        middle: Text(LocaleKeys.auth_my_account.tr()),
       ),
       child: SafeArea(
         bottom: false,
@@ -66,4 +66,3 @@ class MyAccountPage extends ConsumerWidget {
     );
   }
 }
-
