@@ -51,50 +51,57 @@ class _OnboardingAppFeaturesPageState extends State<OnboardingAppFeaturesPage> w
     final features = [
       AppFeature(
         identifier: 'habit_map',
-        title: 'onboarding.app_features.features.habit_map.title'.tr(),
-        description: 'onboarding.app_features.features.habit_map.description'.tr(),
+        title: LocaleKeys.onboarding_app_features_features_habit_map_title.tr(),
+        description: LocaleKeys.onboarding_app_features_features_habit_map_description.tr(),
         icon: CupertinoIcons.map_fill,
         color: context.cupertinoTheme.primaryColor,
       ),
       AppFeature(
+        identifier: 'cloud_sync',
+        title: LocaleKeys.onboarding_app_features_features_cloud_sync_title.tr(),
+        description: LocaleKeys.onboarding_app_features_features_cloud_sync_description.tr(),
+        icon: CupertinoIcons.cloud_upload_fill,
+        color: context.cupertinoTheme.primaryColor,
+      ),
+      AppFeature(
         identifier: 'habit_probability',
-        title: 'onboarding.app_features.features.habit_probability.title'.tr(),
-        description: 'onboarding.app_features.features.habit_probability.description'.tr(),
+        title: LocaleKeys.onboarding_app_features_features_habit_probability_title.tr(),
+        description: LocaleKeys.onboarding_app_features_features_habit_probability_description.tr(),
         icon: CupertinoIcons.chart_bar_square,
         color: context.cupertinoTheme.primaryColor,
       ),
       AppFeature(
         identifier: 'home_widget',
-        title: 'onboarding.app_features.features.home_widget.title'.tr(),
-        description: 'onboarding.app_features.features.home_widget.description'.tr(),
+        title: LocaleKeys.onboarding_app_features_features_home_widget_title.tr(),
+        description: LocaleKeys.onboarding_app_features_features_home_widget_description.tr(),
         icon: CupertinoIcons.square_grid_2x2_fill,
         color: context.cupertinoTheme.primaryColor,
       ),
       AppFeature(
         identifier: 'goal_setting',
-        title: 'onboarding.app_features.features.goal_setting.title'.tr(),
-        description: 'onboarding.app_features.features.goal_setting.description'.tr(),
+        title: LocaleKeys.onboarding_app_features_features_goal_setting_title.tr(),
+        description: LocaleKeys.onboarding_app_features_features_goal_setting_description.tr(),
         icon: CupertinoIcons.checkmark_circle_fill,
         color: context.cupertinoTheme.primaryColor,
       ),
       AppFeature(
         identifier: 'customizable',
-        title: 'onboarding.app_features.features.customizable.title'.tr(),
-        description: 'onboarding.app_features.features.customizable.description'.tr(),
+        title: LocaleKeys.onboarding_app_features_features_customizable_title.tr(),
+        description: LocaleKeys.onboarding_app_features_features_customizable_description.tr(),
         icon: CupertinoIcons.paintbrush_fill,
         color: context.cupertinoTheme.primaryColor,
       ),
       AppFeature(
         identifier: 'data_management',
-        title: 'onboarding.app_features.features.data_management.title'.tr(),
-        description: 'onboarding.app_features.features.data_management.description'.tr(),
+        title: LocaleKeys.onboarding_app_features_features_data_management_title.tr(),
+        description: LocaleKeys.onboarding_app_features_features_data_management_description.tr(),
         icon: CupertinoIcons.doc_text_fill,
         color: context.cupertinoTheme.primaryColor,
       ),
       AppFeature(
         identifier: 'share_habits',
-        title: 'onboarding.app_features.features.share_habits.title'.tr(),
-        description: 'onboarding.app_features.features.share_habits.description'.tr(),
+        title: LocaleKeys.onboarding_app_features_features_share_habits_title.tr(),
+        description: LocaleKeys.onboarding_app_features_features_share_habits_description.tr(),
         icon: CupertinoIcons.share,
         color: context.cupertinoTheme.primaryColor,
       ),
@@ -748,6 +755,8 @@ class _OnboardingAppFeaturesPageState extends State<OnboardingAppFeaturesPage> w
     switch (feature.identifier) {
       case 'habit_map':
         return 'assets/screenshots/habit_map.png';
+      case 'cloud_sync':
+        return 'assets/screenshots/cloud_sync.png';
       case 'habit_probability':
         return 'assets/screenshots/habit_probability.png';
       case 'home_widget':

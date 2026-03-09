@@ -124,10 +124,12 @@ class _HomePageState extends ConsumerState<HomePage> {
 
   Widget _buildFloatingNavBar(WidgetRef ref, BuildContext context, bool isDark) {
     final paywallState = ref.watch(purchaseProvider);
-    final userProfile = ref.watch(userProfileProvider).value;
-    final isSubActive = paywallState.value?.isSubscriptionActive ?? false;
-    final isPurchasing = paywallState.value?.isPurchasing ?? false;
-    final isRestoring = paywallState.value?.isRestoring ?? false;
+    final authState = ref.watch(authStateProvider).valueOrNull;
+    final userProfile = ref.watch(userProfileProvider).valueOrNull;
+    final paywallValue = paywallState.valueOrNull;
+    final isSubActive = paywallValue?.isSubscriptionActive ?? false;
+    final isPurchasing = paywallValue?.isPurchasing ?? false;
+    final isRestoring = paywallValue?.isRestoring ?? false;
     final bool isLoading = paywallState is AsyncLoading;
 
     return SafeArea(
@@ -201,10 +203,10 @@ class _HomePageState extends ConsumerState<HomePage> {
                         builder: (contextFromSheet) => const MyAccountPage(isFromHome: true),
                       );
                     },
-                    imageUrl: userProfile?.photoUrl,
-                    icon: FontAwesomeIcons.user,
+                    imageUrl: userProfile?.photoUrl ?? authState?.photoURL,
+                    icon: CupertinoIcons.person_fill,
                     size: 40,
-                    iconSize: 18,
+                    iconSize: 22,
                   )
                 else
                   CircularActionButton(
