@@ -720,5 +720,8 @@ abstract class LocaleKeys {
   static const auth_sign_in = 'auth.sign_in';
   static const auth_register = 'auth.register';
   static const auth_verify_email_sent = 'auth.verify_email_sent';
+  static const auth_pro_login_alert_title = 'auth.pro_login_alert_title';
+  static const auth_pro_login_alert_message = 'auth.pro_login_alert_message';
+  static const auth_pro_login_alert_action = 'auth.pro_login_alert_action';
   static const auth = 'auth';
 }

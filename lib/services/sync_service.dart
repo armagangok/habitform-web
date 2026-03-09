@@ -7,6 +7,7 @@ import '/core/core.dart';
 import '/models/completion_entry/completion_entry.dart';
 import '/models/habit/habit_model.dart';
 import '/models/sync_status.dart';
+import '/models/user_defaults/user_defaults.dart';
 
 final syncServiceProvider = Provider<SyncService>((ref) => SyncService());
 
@@ -26,9 +27,17 @@ class SyncService {
     }
 
     final user = _auth.currentUser;
-    // Guard: Block sync if email is not verified (only for non-anonymous accounts)
-    if (user != null && !user.isAnonymous && !user.emailVerified) {
-      LogHelper.shared.debugPrint('⚠️ Sync skipped: Email not verified for ${user.email}');
+    final defaults = HiveHelper.shared.getData<UserDefaults>(HiveBoxes.userDefaultsBox, HiveKeys.userDefaultsKey);
+    final isPro = defaults?.isPro ?? false;
+
+    // Determine if user signed in via a social provider (Apple, Google)
+    // Social provider users are already trusted — no email verification needed.
+    final isSocialProvider = user != null && user.providerData.any((p) => p.providerId == 'apple.com' || p.providerId == 'google.com');
+
+    // Guard: Block sync ONLY for email/password users who haven't verified their email yet
+    // and are not Pro subscribers. Social users and Pro users always sync.
+    if (user != null && !user.isAnonymous && !isSocialProvider && !user.emailVerified && !isPro) {
+      LogHelper.shared.debugPrint('⚠️ Sync skipped: Email not verified for ${user.email} (email/password account, not Pro).');
       return;
     }
 

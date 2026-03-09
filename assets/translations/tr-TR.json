@@ -839,6 +839,9 @@
         "email_update_sent": "Yeni adresinize doğrulama e-postası gönderildi",
         "password_updated": "Şifre güncellendi",
         "account_deleted": "Hesap silindi",
-        "password_change_email_only": "Şifre değişikliği yalnızca e-posta/şifre hesapları için kullanılabilir."
+        "password_change_email_only": "Şifre değişikliği yalnızca e-posta/şifre hesapları için kullanılabilir.",
+        "pro_login_alert_title": "Bulut Senkronizasyonu",
+        "pro_login_alert_message": "Hesabınızı oluşturun ve verilerinizi bulutta senkronize edin. Verilerinizi kaybetmemeniz için bu önerilir.",
+        "pro_login_alert_action": "Hesap Oluştur / Giriş Yap"
     }
 }

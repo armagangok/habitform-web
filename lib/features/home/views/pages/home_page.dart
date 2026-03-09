@@ -13,11 +13,60 @@ import '../../../settings/settings_page.dart';
 import '../../provider/home_provider.dart';
 import '../widgets/habit_canvas/habit_constellation_view.dart';
 
-class HomePage extends ConsumerWidget {
+class HomePage extends ConsumerStatefulWidget {
   const HomePage({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends ConsumerState<HomePage> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _checkLoginSyncAlert();
+    });
+  }
+
+  Future<void> _checkLoginSyncAlert() async {
+    // 1. Check Auth status
+    final user = ref.read(authStateProvider).valueOrNull;
+    final isLoggedOut = user == null || user.isAnonymous;
+    if (!isLoggedOut) return;
+
+    // 2. Show Alert
+    if (!mounted) return;
+
+    showCupertinoDialog(
+      context: context,
+      builder: (context) => CupertinoAlertDialog(
+        title: Text(LocaleKeys.auth_pro_login_alert_title.tr()),
+        content: Text(LocaleKeys.auth_pro_login_alert_message.tr()),
+        actions: [
+          CupertinoDialogAction(
+            onPressed: () => Navigator.pop(context),
+            child: Text(LocaleKeys.common_cancel.tr()),
+          ),
+          CupertinoDialogAction(
+            isDefaultAction: true,
+            onPressed: () {
+              Navigator.pop(context);
+              showCupertinoSheet(
+                enableDrag: true,
+                context: context,
+                builder: (contextFromSheet) => const MyAccountPage(isFromHome: true),
+              );
+            },
+            child: Text(LocaleKeys.auth_pro_login_alert_action.tr()),
+          ),
+        ],
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final isDark = CupertinoTheme.of(context).brightness == Brightness.dark;
 
     return AnnotatedRegion<SystemUiOverlayStyle>(

@@ -817,6 +817,9 @@
         "email_update_sent": "Verification email sent to your new address",
         "password_updated": "Password updated",
         "account_deleted": "Account deleted",
-        "password_change_email_only": "Password change is only available for email/password accounts."
+        "password_change_email_only": "Password change is only available for email/password accounts.",
+        "pro_login_alert_title": "Cloud Sync",
+        "pro_login_alert_message": "It is recommended to create an account to sync your data with the cloud and prevent data loss.",
+        "pro_login_alert_action": "Create Account / Login"
     }
 }

@@ -2,7 +2,7 @@
 
 // ignore_for_file: constant_identifier_names
 
-abstract class  LocaleKeys {
+abstract class LocaleKeys {
   static const common_ok = 'common.ok';
   static const common_save = 'common.save';
   static const common_cancel = 'common.cancel';
@@ -771,6 +771,8 @@ abstract class  LocaleKeys {
   static const auth_password_updated = 'auth.password_updated';
   static const auth_account_deleted = 'auth.account_deleted';
   static const auth_password_change_email_only = 'auth.password_change_email_only';
+  static const auth_pro_login_alert_title = 'auth.pro_login_alert_title';
+  static const auth_pro_login_alert_message = 'auth.pro_login_alert_message';
+  static const auth_pro_login_alert_action = 'auth.pro_login_alert_action';
   static const auth = 'auth';
-
 }
