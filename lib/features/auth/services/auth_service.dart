@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
@@ -17,7 +20,7 @@ class AuthService {
     databaseId: 'habitformdatabase',
   );
 
-  Stream<User?> get authStateChanges => _auth.authStateChanges();
+  Stream<User?> get authStateChanges => _auth.userChanges();
 
   User? get currentUser => _auth.currentUser;
 
@@ -137,6 +140,44 @@ class AuthService {
     if (user == null) throw FirebaseAuthException(code: 'no-user', message: 'No user logged in');
     await user.updateDisplayName(displayName);
     await user.reload();
+    await _updateUserData(_auth.currentUser);
+  }
+
+  Future<void> updateProfilePhoto(String filePath) async {
+    final user = _auth.currentUser;
+    if (user == null) throw FirebaseAuthException(code: 'no-user', message: 'No user logged in');
+
+    // 1. Upload to Firebase Storage
+    final storageRef = FirebaseStorage.instance.ref().child('user_photos').child('${user.uid}.jpg');
+    final uploadTask = await storageRef.putFile(File(filePath));
+    final downloadUrl = await uploadTask.ref.getDownloadURL();
+
+    // 2. Update Auth Profile
+    await user.updatePhotoURL(downloadUrl);
+    await user.reload();
+
+    // 3. Update Firestore
+    await _updateUserData(_auth.currentUser);
+  }
+
+  Future<void> deleteProfilePhoto() async {
+    final user = _auth.currentUser;
+    if (user == null) throw FirebaseAuthException(code: 'no-user', message: 'No user logged in');
+
+    try {
+      // 1. Delete from Firebase Storage
+      final storageRef = FirebaseStorage.instance.ref().child('user_photos').child('${user.uid}.jpg');
+      await storageRef.delete();
+    } catch (e) {
+      // If file doesn't exist, we still want to clear the URL in Auth/Firestore
+      LogHelper.shared.debugPrint('⚠️ Error deleting photo from Storage (might not exist): $e');
+    }
+
+    // 2. Clear Auth Profile photoURL
+    await user.updatePhotoURL(null);
+    await user.reload();
+
+    // 3. Update Firestore
     await _updateUserData(_auth.currentUser);
   }
 

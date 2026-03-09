@@ -27,6 +27,34 @@ class AccountActionsNotifier extends StateNotifier<AccountActionState> {
     }
   }
 
+  Future<void> updateProfilePhoto(String filePath) async {
+    state = state.copyWith(status: AccountActionStatus.loading, errorMessage: null);
+    try {
+      await _authService.updateProfilePhoto(filePath);
+      state = state.copyWith(status: AccountActionStatus.success);
+    } catch (e) {
+      state = state.copyWith(
+        status: AccountActionStatus.error,
+        errorMessage: e.toString(),
+      );
+      rethrow;
+    }
+  }
+
+  Future<void> deleteProfilePhoto() async {
+    state = state.copyWith(status: AccountActionStatus.loading, errorMessage: null);
+    try {
+      await _authService.deleteProfilePhoto();
+      state = state.copyWith(status: AccountActionStatus.success);
+    } catch (e) {
+      state = state.copyWith(
+        status: AccountActionStatus.error,
+        errorMessage: e.toString(),
+      );
+      rethrow;
+    }
+  }
+
   Future<void> updateEmail(String newEmail) async {
     state = state.copyWith(status: AccountActionStatus.loading, errorMessage: null);
     try {

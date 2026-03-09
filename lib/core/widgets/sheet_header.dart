@@ -54,12 +54,18 @@ class SheetHeader extends StatelessWidget implements ObstructingPreferredSizeWid
     return Builder(builder: (context) {
       return Align(
         widthFactor: 1,
-        child: CircularActionButton(
-          onPressed: () {
-            onClose?.call();
-            navigator.pop();
-          },
-          icon: CupertinoIcons.xmark,
+        child: FittedBox(
+          child: SizedBox(
+            width: 40,
+            height: 40,
+            child: CircularActionButton(
+              onPressed: () {
+                onClose?.call();
+                navigator.pop();
+              },
+              icon: CupertinoIcons.xmark,
+            ),
+          ),
         ),
       );
     });

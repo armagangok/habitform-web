@@ -27,45 +27,58 @@ class CircularActionButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final effectiveIconColor = iconColor ?? context.theme.primaryContrastingColor.withValues(alpha: .8);
-    final effectiveBackgroundColor = backgroundColor ?? context.theme.primaryContrastingColor.withValues(alpha: .11);
+    final effectiveBackgroundColor = backgroundColor ?? context.theme.selectionHandleColor;
 
-    Widget button = CustomButton(
-      onPressed: onPressed,
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(100),
-        child: CustomBlurWidget(
-          child: Container(
-            width: size,
-            height: size,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: effectiveBackgroundColor,
-            ),
-            child: imageUrl != null
-                ? Image.network(
-                    imageUrl!,
-                    fit: BoxFit.cover,
-                    width: size,
-                    height: size,
-                    errorBuilder: (context, error, stackTrace) => Icon(
+    Widget button = ClipRRect(
+      borderRadius: BorderRadius.circular(999),
+      child: CustomBlurWidget(
+        child: CustomButton(
+          onPressed: onPressed,
+          child: CupertinoCard(
+            child: Container(
+              width: size,
+              height: size,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: effectiveBackgroundColor,
+                border: Border.all(
+                  color: context.cupertinoTheme.primaryContrastingColor.withValues(alpha: 0.125),
+                  width: .7,
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: context.cupertinoTheme.primaryContrastingColor.withValues(alpha: 0.125),
+                    blurRadius: 5,
+                    offset: const Offset(0, 0),
+                  ),
+                ],
+              ),
+              child: imageUrl != null
+                  ? Image.network(
+                      imageUrl!,
+                      fit: BoxFit.cover,
+                      width: size,
+                      height: size,
+                      errorBuilder: (context, error, stackTrace) => Icon(
+                        icon,
+                        size: iconSize,
+                        color: effectiveIconColor,
+                      ),
+                      loadingBuilder: (context, child, loadingProgress) {
+                        if (loadingProgress == null) return child;
+                        return Center(
+                          child: CupertinoActivityIndicator(
+                            radius: iconSize / 2,
+                          ),
+                        );
+                      },
+                    )
+                  : Icon(
                       icon,
                       size: iconSize,
                       color: effectiveIconColor,
                     ),
-                    loadingBuilder: (context, child, loadingProgress) {
-                      if (loadingProgress == null) return child;
-                      return Center(
-                        child: CupertinoActivityIndicator(
-                          radius: iconSize / 2,
-                        ),
-                      );
-                    },
-                  )
-                : Icon(
-                    icon,
-                    size: iconSize,
-                    color: effectiveIconColor,
-                  ),
+            ),
           ),
         ),
       ),

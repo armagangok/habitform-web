@@ -4,6 +4,7 @@ import '/core/core.dart';
 import '/features/purchase/page/pre_paywall_page.dart';
 import '../../purchase/providers/purchase_provider.dart';
 import '../providers/auth_provider.dart';
+import 'user_avatar_widget.dart';
 
 class AuthHeaderWidget extends ConsumerWidget {
   const AuthHeaderWidget({super.key});
@@ -11,6 +12,7 @@ class AuthHeaderWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final authState = ref.watch(authStateProvider);
+    final userProfile = ref.watch(userProfileProvider).valueOrNull;
     final theme = CupertinoTheme.of(context);
 
     final paywallState = ref.watch(purchaseProvider);
@@ -75,9 +77,9 @@ class AuthHeaderWidget extends ConsumerWidget {
           );
         }
 
-        final imageUrl = user.photoURL;
-        final displayName = user.displayName;
-        final email = user.email;
+        final imageUrl = userProfile?.photoUrl ?? user.photoURL;
+        final displayName = userProfile?.displayName ?? user.displayName;
+        final email = userProfile?.email ?? user.email;
 
         return CupertinoListSection.insetGrouped(
           footer: const SizedBox.shrink(),
@@ -90,18 +92,10 @@ class AuthHeaderWidget extends ConsumerWidget {
                   showProAlert();
                 }
               },
-              leading: imageUrl != null
-                  ? Image.network(
-                      imageUrl,
-                      width: 36,
-                      height: 36,
-                      fit: BoxFit.cover,
-                    )
-                  : Icon(
-                      CupertinoIcons.person_crop_circle_fill,
-                      color: theme.primaryColor,
-                      size: 30,
-                    ),
+              leading: UserAvatarWidget(
+                photoUrl: imageUrl,
+                radius: 18,
+              ),
               title: Text(displayName ?? email ?? ''),
               trailing: CupertinoListTileChevron(),
             ),

@@ -35,6 +35,9 @@ target 'Runner' do
   # Firebase Auth needs < 5.0, >= 3.4; GoogleSignIn needs ~> 3.3. Use 3.x for both.
   pod 'GTMSessionFetcher/Core', '~> 3.4'
 
+  # Optimize build time by using pre-compiled Firestore binaries
+  pod 'FirebaseFirestore', :git => 'https://github.com/invertase/firestore-ios-sdk-frameworks.git', :tag => '11.15.0'
+
   flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
   target 'RunnerTests' do
     inherit! :search_paths

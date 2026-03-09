@@ -819,7 +819,7 @@ class _HabitConstellationViewState extends ConsumerState<HabitConstellationView>
               child: Column(
                 children: [
                   _buildControlButton(
-                    icon: CupertinoIcons.plus,
+                    icon: CupertinoIcons.zoom_in,
                     onTap: () {
                       HapticFeedback.lightImpact();
                       final currentScale = _transformationController.value.getMaxScaleOnAxis();
@@ -829,7 +829,7 @@ class _HabitConstellationViewState extends ConsumerState<HabitConstellationView>
                   ),
                   const SizedBox(height: 10),
                   _buildControlButton(
-                    icon: CupertinoIcons.minus,
+                    icon: CupertinoIcons.zoom_out,
                     onTap: () {
                       HapticFeedback.lightImpact();
                       final currentScale = _transformationController.value.getMaxScaleOnAxis();
@@ -925,34 +925,36 @@ class _HabitConstellationViewState extends ConsumerState<HabitConstellationView>
     required bool isDark,
     bool isActive = false,
   }) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        width: 48,
-        height: 48,
-        decoration: BoxDecoration(
-          color: isActive
-              ? CupertinoColors.activeGreen
-              : isDark
-                  ? CupertinoColors.systemGrey6.darkColor
-                  : Colors.white,
-          shape: BoxShape.circle,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.15),
-              blurRadius: 10,
-              offset: const Offset(0, 4),
+    return CustomBlurWidget(
+      borderRadius: BorderRadius.circular(999),
+      child: CustomButton(
+        onPressed: onTap,
+        child: CupertinoCard(
+          borderRadius: BorderRadius.circular(999),
+          child: Container(
+            width: 48,
+            height: 48,
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: context.cupertinoTheme.primaryContrastingColor.withValues(alpha: 0.125),
+                width: .7,
+              ),
+              color: isActive ? CupertinoColors.activeGreen : context.cupertinoTheme.selectionHandleColor,
+              shape: BoxShape.circle,
+              boxShadow: [
+                BoxShadow(
+                  color: context.cupertinoTheme.primaryContrastingColor.withValues(alpha: 0.125),
+                  blurRadius: 5,
+                  offset: const Offset(0, 0),
+                ),
+              ],
             ),
-          ],
-        ),
-        child: Icon(
-          icon,
-          size: 24,
-          color: isActive
-              ? Colors.white
-              : isDark
-                  ? Colors.white70
-                  : Colors.black87,
+            child: Icon(
+              icon,
+              size: 24,
+              color: isActive ? Colors.white : context.cupertinoTheme.primaryContrastingColor.withValues(alpha: .8),
+            ),
+          ),
         ),
       ),
     );
