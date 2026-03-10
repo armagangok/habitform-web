@@ -3,9 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/core.dart';
 import '../providers/account_actions_provider.dart';
-import '../providers/auth_provider.dart';
 import '../utils/auth_validators.dart';
-import 'user_avatar_widget.dart';
 
 class AccountProfileSection extends ConsumerStatefulWidget {
   const AccountProfileSection({super.key, required this.user});
@@ -42,33 +40,11 @@ class _AccountProfileSectionState extends ConsumerState<AccountProfileSection> {
   @override
   Widget build(BuildContext context) {
     final user = widget.user;
-    final userProfile = ref.watch(userProfileProvider).valueOrNull;
     final createdAt = user.metadata.creationTime;
-    final emailVerified = user.emailVerified;
 
     return CupertinoListSection.insetGrouped(
       header: Text(LocaleKeys.auth_profile.tr()),
       children: [
-        CupertinoListTile(
-          leading: UserAvatarWidget(
-            photoUrl: userProfile?.photoUrl ?? user.photoURL,
-            radius: 22,
-          ),
-          title: Text(user.displayName ?? user.email ?? ''),
-          subtitle: user.email != null
-              ? Text(
-                  user.email!,
-                  style: context.bodySmall.copyWith(color: CupertinoColors.secondaryLabel.resolveFrom(context)),
-                )
-              : null,
-          trailing: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              if (emailVerified) Icon(CupertinoIcons.checkmark_seal_fill, color: CupertinoColors.systemGreen, size: 18),
-              if (emailVerified) const SizedBox(width: 4),
-            ],
-          ),
-        ),
         if (createdAt != null)
           CupertinoListTile(
             leading: CupertinoCard(

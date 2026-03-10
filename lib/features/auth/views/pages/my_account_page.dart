@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 
-import '../../../../core/core.dart';
+import '/core/core.dart';
 import '../../providers/account_actions_provider.dart';
 import '../../providers/auth_provider.dart';
 import '../../widgets/account_danger_zone_section.dart';
@@ -74,20 +74,20 @@ class MyAccountPage extends ConsumerWidget {
       context: context,
       builder: (ctx) => CupertinoActionSheet(
         title: Text(LocaleKeys.auth_profile.tr()),
-        message: const Text('Profil fotoğrafınızı yönetin.'),
+        message: Text(LocaleKeys.auth_profile_photo_manage_message.tr()),
         actions: [
           CupertinoActionSheetAction(
             onPressed: () => Navigator.pop(ctx, 'camera'),
-            child: const Text('Kamera'),
+            child: Text(LocaleKeys.auth_camera.tr()),
           ),
           CupertinoActionSheetAction(
             onPressed: () => Navigator.pop(ctx, 'gallery'),
-            child: const Text('Galeri'),
+            child: Text(LocaleKeys.auth_gallery.tr()),
           ),
           CupertinoActionSheetAction(
             isDestructiveAction: true,
             onPressed: () => Navigator.pop(ctx, 'delete'),
-            child: const Text('Fotoğrafı Sil'),
+            child: Text(LocaleKeys.auth_delete_photo.tr()),
           ),
         ],
         cancelButton: CupertinoActionSheetAction(
@@ -102,7 +102,7 @@ class MyAccountPage extends ConsumerWidget {
     if (action == 'delete') {
       try {
         await ref.read(accountActionsProvider.notifier).deleteProfilePhoto();
-        AppFlushbar.shared.successFlushbar('Profil fotoğrafı silindi');
+        AppFlushbar.shared.successFlushbar(LocaleKeys.auth_profile_photo_deleted.tr());
       } catch (e) {
         AppFlushbar.shared.errorFlushbar(e.toString());
       }
@@ -121,7 +121,7 @@ class MyAccountPage extends ConsumerWidget {
 
     try {
       await ref.read(accountActionsProvider.notifier).updateProfilePhoto(pickedFile.path);
-      AppFlushbar.shared.successFlushbar('Profil fotoğrafı güncellendi');
+      AppFlushbar.shared.successFlushbar(LocaleKeys.auth_profile_photo_updated.tr());
     } catch (e) {
       AppFlushbar.shared.errorFlushbar(e.toString());
     }
@@ -173,42 +173,62 @@ class MyAccountPage extends ConsumerWidget {
               children: [
                 const SizedBox(height: 16),
                 Center(
-                  child: CupertinoCard(
-                    borderRadius: BorderRadius.circular(100),
-                    borderColor: context.primaryContrastingColor,
-                    onTap: accountActionState.isLoading ? null : () => _handlePhotoAction(context, ref),
-                    child: Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        UserAvatarWidget(
-                          photoUrl: photoUrl,
-                          radius: 54,
+                  child: Column(
+                    children: [
+                      CupertinoCard(
+                        borderRadius: BorderRadius.circular(100),
+                        borderColor: context.primaryContrastingColor,
+                        onTap: accountActionState.isLoading ? null : () => _handlePhotoAction(context, ref),
+                        child: Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            UserAvatarWidget(
+                              photoUrl: photoUrl,
+                              radius: 54,
+                            ),
+                            if (accountActionState.isLoading)
+                              const Positioned.fill(
+                                child: Center(
+                                  child: CupertinoActivityIndicator(radius: 14),
+                                ),
+                              ),
+                            Positioned(
+                              right: 0,
+                              bottom: 0,
+                              child: Container(
+                                padding: const EdgeInsets.all(4),
+                                decoration: BoxDecoration(
+                                  color: context.primary,
+                                  shape: BoxShape.circle,
+                                  border: Border.all(color: context.primaryContrastingColor, width: 2),
+                                ),
+                                child: const Icon(
+                                  CupertinoIcons.camera_fill,
+                                  size: 16,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                        if (accountActionState.isLoading)
-                          const Positioned.fill(
-                            child: Center(
-                              child: CupertinoActivityIndicator(radius: 14),
-                            ),
-                          ),
-                        Positioned(
-                          right: 0,
-                          bottom: 0,
-                          child: Container(
-                            padding: const EdgeInsets.all(4),
-                            decoration: BoxDecoration(
-                              color: context.primary,
-                              shape: BoxShape.circle,
-                              border: Border.all(color: context.primaryContrastingColor, width: 2),
-                            ),
-                            child: const Icon(
-                              CupertinoIcons.camera_fill,
-                              size: 16,
-                              color: Colors.white,
-                            ),
+                      ),
+                      if (user.displayName != null && user.displayName!.isNotEmpty) ...[
+                        const SizedBox(height: 12),
+                        Text(
+                          user.displayName!,
+                          style: context.titleLarge.copyWith(fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                      if (user.email != null && user.email!.isNotEmpty) ...[
+                        const SizedBox(height: 4),
+                        Text(
+                          user.email!,
+                          style: context.bodyMedium.copyWith(
+                            color: CupertinoColors.secondaryLabel.resolveFrom(context),
                           ),
                         ),
                       ],
-                    ),
+                    ],
                   ),
                 ),
                 AccountProfileSection(user: user),

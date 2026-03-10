@@ -76,7 +76,6 @@
 		3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = AppFrameworkInfo.plist; path = Flutter/AppFrameworkInfo.plist; sourceTree = "<group>"; };
 		3E5FA8055F359BEAE02C7E35 /* Pods-Runner.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.profile.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.profile.xcconfig"; sourceTree = "<group>"; };
 		4E370FB62E772479005BE567 /* PurchaseTest.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = PurchaseTest.storekit; sourceTree = "<group>"; };
-		4E7AE7E52E913B5300BF21C5 /* HabitWidgetExtension copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "HabitWidgetExtension copy-Info.plist"; path = "/Users/armagangok/Documents/AppSweat/habitrise/ios/HabitWidgetExtension copy-Info.plist"; sourceTree = "<absolute>"; };
 		4E7AE80E2E913C3600BF21C5 /* HabitFormWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = HabitFormWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		4E7AE8282E913C4F00BF21C5 /* HabitFormWidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = HabitFormWidgetExtension.entitlements; sourceTree = "<group>"; };
 		4E985A042D37C9FB0094DA72 /* Runner.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Runner.entitlements; sourceTree = "<group>"; };
@@ -199,7 +198,6 @@
 				331C8082294A63A400263BE5 /* RunnerTests */,
 				B43BF3345A79C30AF35DE240 /* Pods */,
 				95532DBF46DA28CC4E9C267A /* Frameworks */,
-				4E7AE7E52E913B5300BF21C5 /* HabitWidgetExtension copy-Info.plist */,
 				207D9E2CA040B43B9D9257A6 /* GoogleService-Info.plist */,
 			);
 			sourceTree = "<group>";

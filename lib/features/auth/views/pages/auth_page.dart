@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/core.dart';
 import '../../providers/auth_provider.dart';
+import 'forgot_password_page.dart';
 
 class AuthPage extends ConsumerStatefulWidget {
   const AuthPage({super.key});
@@ -56,11 +57,12 @@ class _AuthPageState extends ConsumerState<AuthPage> {
         } else {
           await authService.createUserWithEmailAndPassword(email, password);
         }
+      }
+      if (mounted) Navigator.of(context).pop();
 
+      if (_segmentedValue == 1) {
         AppFlushbar.shared.successFlushbar(LocaleKeys.auth_verify_email_sent.tr());
       }
-
-      if (mounted) Navigator.of(context).pop();
     } finally {
       if (mounted) setState(() => _isLoading = false);
     }
@@ -179,6 +181,26 @@ class _AuthPageState extends ConsumerState<AuthPage> {
                         ),
                       ),
               ),
+              if (_segmentedValue == 0)
+                Padding(
+                  padding: const EdgeInsets.only(top: 8.0),
+                  child: CupertinoButton(
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        CupertinoPageRoute(
+                          builder: (context) => const ForgotPasswordPage(),
+                        ),
+                      );
+                    },
+                    child: Text(
+                      LocaleKeys.auth_forgot_password.tr(),
+                      style: TextStyle(
+                        color: context.primary,
+                        fontSize: 14,
+                      ),
+                    ),
+                  ),
+                ),
               const SizedBox(height: 24),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20.0),

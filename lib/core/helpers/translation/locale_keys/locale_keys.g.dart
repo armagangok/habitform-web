@@ -723,5 +723,11 @@ abstract class LocaleKeys {
   static const auth_pro_login_alert_title = 'auth.pro_login_alert_title';
   static const auth_pro_login_alert_message = 'auth.pro_login_alert_message';
   static const auth_pro_login_alert_action = 'auth.pro_login_alert_action';
+  static const auth_forgot_password = 'auth.forgot_password';
+  static const auth_forgot_password_title = 'auth.forgot_password_title';
+  static const auth_forgot_password_desc = 'auth.forgot_password_desc';
+  static const auth_forgot_password_button = 'auth.forgot_password_button';
+  static const auth_forgot_password_success = 'auth.forgot_password_success';
+  static const auth_forgot_password_error = 'auth.forgot_password_error';
   static const auth = 'auth';
 }

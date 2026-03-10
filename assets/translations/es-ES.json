@@ -102,7 +102,19 @@
         "user_not_found": "User not found. A new account will be created.",
         "verify_email_sent": "A verification email has been sent. Please check your inbox.",
         "weak_password": "Password is too weak. Please use a stronger password.",
-        "welcome": "Welcome back!"
+        "welcome": "¡Bienvenido de nuevo!",
+        "forgot_password": "¿Olvidaste tu contraseña?",
+        "forgot_password_title": "Restablecer contraseña",
+        "forgot_password_desc": "Introduce tu dirección de correo electrónico ve te enviaremos un enlace para restablecer tu contraseña.",
+        "forgot_password_button": "Enviar enlace de restablecimiento",
+        "forgot_password_success": "Correo electrónico de restablecimiento de contraseña enviado. Por favor, comprueba tu bandeja de entrada.",
+        "forgot_password_error": "Error al enviar el correo electrónico de restablecimiento de contraseña. Por favor, inténtalo de nuevo.",
+        "profile_photo_manage_message": "Gestiona tu foto de perfil.",
+        "camera": "Cámara",
+        "gallery": "Galería",
+        "delete_photo": "Eliminar foto",
+        "profile_photo_deleted": "Foto de perfil eliminada",
+        "profile_photo_updated": "Foto de perfil actualizada"
     },
     "colors": {
         "Lime": "Lima",

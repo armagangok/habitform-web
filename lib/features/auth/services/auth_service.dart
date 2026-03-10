@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:google_sign_in/google_sign_in.dart';
+import 'package:google_sign_in/google_sign_in.dart' as auth;
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 import '../../../core/helpers/hive/hive_helper.dart';
@@ -19,6 +19,12 @@ class AuthService {
     app: Firebase.app(),
     databaseId: 'habitformdatabase',
   );
+
+  // The web client ID from google-services.json (client_type 3)
+  static const String _webClientId = '639576600772-338vkhnauvtpekpmq6ik2nmopu0i1lrs.apps.googleusercontent.com';
+
+  // Singleton Google Sign-In instance (v7+ API)
+  static auth.GoogleSignIn get _googleSignIn => auth.GoogleSignIn.instance;
 
   Stream<User?> get authStateChanges => _auth.userChanges();
 
@@ -57,12 +63,8 @@ class AuthService {
 
   Future<UserCredential?> signInWithGoogle() async {
     try {
-      final googleUser = await GoogleSignIn.instance.authenticate();
-
-      final googleAuth = googleUser.authentication;
-      final credential = GoogleAuthProvider.credential(
-        idToken: googleAuth.idToken,
-      );
+      final credential = await _getGoogleCredential();
+      if (credential == null) return null;
 
       final userCredential = await _auth.signInWithCredential(credential);
       await _updateUserData(userCredential.user);
@@ -73,19 +75,26 @@ class AuthService {
     }
   }
 
+  Future<AuthCredential?> _getGoogleCredential() async {
+    // Ensure GoogleSignIn is initialized with serverClientId on Android
+    await _googleSignIn.initialize(
+      serverClientId: Platform.isAndroid ? _webClientId : null,
+    );
+
+    final googleUser = await _googleSignIn.authenticate();
+
+    final googleAuth = googleUser.authentication;
+    final clientAuth = await googleUser.authorizationClient.authorizeScopes(<String>['email', 'profile']);
+    return GoogleAuthProvider.credential(
+      idToken: googleAuth.idToken,
+      accessToken: clientAuth.accessToken,
+    );
+  }
+
   Future<UserCredential?> signInWithApple() async {
     try {
-      final appleCredential = await SignInWithApple.getAppleIDCredential(
-        scopes: [
-          AppleIDAuthorizationScopes.email,
-          AppleIDAuthorizationScopes.fullName,
-        ],
-      );
-
-      final OAuthCredential credential = OAuthProvider('apple.com').credential(
-        idToken: appleCredential.identityToken,
-        accessToken: appleCredential.authorizationCode,
-      );
+      final credential = await _getAppleCredential();
+      if (credential == null) return null;
 
       final userCredential = await _auth.signInWithCredential(credential);
       await _updateUserData(userCredential.user);
@@ -96,11 +105,25 @@ class AuthService {
     }
   }
 
+  Future<OAuthCredential?> _getAppleCredential() async {
+    final appleCredential = await SignInWithApple.getAppleIDCredential(
+      scopes: [
+        AppleIDAuthorizationScopes.email,
+        AppleIDAuthorizationScopes.fullName,
+      ],
+    );
+
+    return OAuthProvider('apple.com').credential(
+      idToken: appleCredential.identityToken,
+      accessToken: appleCredential.authorizationCode,
+    );
+  }
+
   Future<void> signOut() async {
     try {
       await HiveHelper.shared.clearAllLocalData();
       await _auth.signOut();
-      await GoogleSignIn.instance.signOut(); // Ensure Google sign-out as well
+      await _googleSignIn.signOut(); // Ensure Google sign-out as well
     } catch (e) {
       LogHelper.shared.debugPrint('❌ Error during sign out: $e');
       rethrow;
@@ -124,6 +147,28 @@ class AuthService {
       );
       await user.linkWithCredential(credential);
       await user.sendEmailVerification();
+      await _updateUserData(user);
+    }
+  }
+
+  Future<void> linkWithGoogle() async {
+    final user = _auth.currentUser;
+    if (user == null) throw FirebaseAuthException(code: 'no-user', message: 'No user logged in');
+
+    final credential = await _getGoogleCredential();
+    if (credential != null) {
+      await user.linkWithCredential(credential);
+      await _updateUserData(user);
+    }
+  }
+
+  Future<void> linkWithApple() async {
+    final user = _auth.currentUser;
+    if (user == null) throw FirebaseAuthException(code: 'no-user', message: 'No user logged in');
+
+    final credential = await _getAppleCredential();
+    if (credential != null) {
+      await user.linkWithCredential(credential);
       await _updateUserData(user);
     }
   }

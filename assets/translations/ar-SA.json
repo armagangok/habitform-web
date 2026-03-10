@@ -102,7 +102,19 @@
         "user_not_found": "User not found. A new account will be created.",
         "verify_email_sent": "A verification email has been sent. Please check your inbox.",
         "weak_password": "Password is too weak. Please use a stronger password.",
-        "welcome": "Welcome back!"
+        "welcome": "مرحباً بعودتك!",
+        "forgot_password": "هل نسيت كلمة السر؟",
+        "forgot_password_title": "إعادة تعيين كلمة المرور",
+        "forgot_password_desc": "أدخل عنوان بريدك الإلكتروني وسنرسل لك رابطًا لإعادة تعيين كلمة المرور الخاصة بك.",
+        "forgot_password_button": "إرسال رابط إعادة التعيين",
+        "forgot_password_success": "تم إرسال بريد إعادة تعيين كلمة المرور. يرجى التحقق من بريدك الوارد.",
+        "forgot_password_error": "خطأ في إرسال بريد إعادة تعيين كلمة المرور. يرجى المحاولة مرة أخرى.",
+        "profile_photo_manage_message": "إدارة صورة الملف الشخصي.",
+        "camera": "الكاميرا",
+        "gallery": "المعرض",
+        "delete_photo": "حذف الصورة",
+        "profile_photo_deleted": "تم حذف صورة الملف الشخصي",
+        "profile_photo_updated": "تم تحديث صورة الملف الشخصي"
     },
     "colors": {
         "Lime": "ليموني",

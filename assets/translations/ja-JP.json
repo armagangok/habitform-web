@@ -102,7 +102,19 @@
         "user_not_found": "User not found. A new account will be created.",
         "verify_email_sent": "A verification email has been sent. Please check your inbox.",
         "weak_password": "Password is too weak. Please use a stronger password.",
-        "welcome": "Welcome back!"
+        "welcome": "おかえりなさい！",
+        "forgot_password": "パスワードをお忘れですか？",
+        "forgot_password_title": "パスワードをリセット",
+        "forgot_password_desc": "メールアドレスを入力してください。パスワード再設定用のリンクをお送りします。",
+        "forgot_password_button": "リセットリンクを送信",
+        "forgot_password_success": "パスワード再設定メールを送信しました。受信トレイを確認してください。",
+        "forgot_password_error": "パスワード再設定メールの送信中にエラーが発生しました。もう一度お試しください。",
+        "profile_photo_manage_message": "プロフィール写真を管理します。",
+        "camera": "カメラ",
+        "gallery": "ギャラリー",
+        "delete_photo": "写真を削除",
+        "profile_photo_deleted": "プロフィール写真を削除しました",
+        "profile_photo_updated": "プロフィール写真を更新しました"
     },
     "colors": {
         "Lime": "ライム",

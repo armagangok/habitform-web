@@ -102,7 +102,19 @@
         "user_not_found": "User not found. A new account will be created.",
         "verify_email_sent": "A verification email has been sent. Please check your inbox.",
         "weak_password": "Password is too weak. Please use a stronger password.",
-        "welcome": "Welcome back!"
+        "welcome": "欢迎回来！",
+        "forgot_password": "忘记密码？",
+        "forgot_password_title": "重置密码",
+        "forgot_password_desc": "输入您的电子邮件地址，我们将向您发送重置密码的链接。",
+        "forgot_password_button": "发送重置链接",
+        "forgot_password_success": "密码重置邮件已发送。请检查您的收件箱。",
+        "forgot_password_error": "发送密码重置邮件时出错。请再试一次。",
+        "profile_photo_manage_message": "管理您的个人资料照片。",
+        "camera": "相机",
+        "gallery": "相册",
+        "delete_photo": "删除照片",
+        "profile_photo_deleted": "个人资料照片已删除",
+        "profile_photo_updated": "个人资料照片已更新"
     },
     "colors": {
         "Lime": "青柠色",

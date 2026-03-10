@@ -102,7 +102,19 @@
         "user_not_found": "User not found. A new account will be created.",
         "verify_email_sent": "A verification email has been sent. Please check your inbox.",
         "weak_password": "Password is too weak. Please use a stronger password.",
-        "welcome": "Welcome back!"
+        "welcome": "Tervetuloa takaisin!",
+        "forgot_password": "Unohditko salasanan?",
+        "forgot_password_title": "Nollaa salasana",
+        "forgot_password_desc": "Syötä sähköpostiosoitteesi, niin lähetämme sinulle linkin salasanan nollaamiseksi.",
+        "forgot_password_button": "Lähetä nollauslinkki",
+        "forgot_password_success": "Salasann nollausviesti lähetetty. Tarkista sähköpostisi.",
+        "forgot_password_error": "Virhe lähetettäessä salasanan nollausviestiä. Yritä uudelleen.",
+        "profile_photo_manage_message": "Hallinnoi profiilikuvaasi.",
+        "camera": "Kamera",
+        "gallery": "Galleria",
+        "delete_photo": "Poista kuva",
+        "profile_photo_deleted": "Profiilikuva poistettu",
+        "profile_photo_updated": "Profiilikuva päivitetty"
     },
     "colors": {
         "Lime": "Limetin vihreä",

@@ -2,7 +2,7 @@
 
 // ignore_for_file: constant_identifier_names
 
-abstract class  LocaleKeys {
+abstract class LocaleKeys {
   static const achievement_dialog_almost_there = 'achievement_dialog.almost_there';
   static const achievement_dialog_amazing_progress = 'achievement_dialog.amazing_progress';
   static const achievement_dialog_building_momentum = 'achievement_dialog.building_momentum';
@@ -104,6 +104,25 @@ abstract class  LocaleKeys {
   static const auth_verify_email_sent = 'auth.verify_email_sent';
   static const auth_weak_password = 'auth.weak_password';
   static const auth_welcome = 'auth.welcome';
+  static const auth_forgot_password = 'auth.forgot_password';
+  static const auth_forgot_password_title = 'auth.forgot_password_title';
+  static const auth_forgot_password_desc = 'auth.forgot_password_desc';
+  static const auth_forgot_password_button = 'auth.forgot_password_button';
+  static const auth_forgot_password_success = 'auth.forgot_password_success';
+  static const auth_forgot_password_error = 'auth.forgot_password_error';
+  static const auth_profile_photo_manage_message = 'auth.profile_photo_manage_message';
+  static const auth_camera = 'auth.camera';
+  static const auth_gallery = 'auth.gallery';
+  static const auth_delete_photo = 'auth.delete_photo';
+  static const auth_profile_photo_deleted = 'auth.profile_photo_deleted';
+  static const auth_profile_photo_updated = 'auth.profile_photo_updated';
+  static const auth_link = 'auth.link';
+  static const auth_unlink = 'auth.unlink';
+  static const auth_linked = 'auth.linked';
+  static const auth_link_success = 'auth.link_success';
+  static const auth_unlink_success = 'auth.unlink_success';
+  static const auth_unlink_warning = 'auth.unlink_warning';
+  static const auth_last_provider_error = 'auth.last_provider_error';
   static const auth = 'auth';
   static const colors_Lime = 'colors.Lime';
   static const colors_amber = 'colors.amber';
@@ -782,5 +801,4 @@ abstract class  LocaleKeys {
   static const subscription_upcomingFeaturesDescription = 'subscription.upcomingFeaturesDescription';
   static const subscription_youAlreadyHaveAnActiveSubscription = 'subscription.youAlreadyHaveAnActiveSubscription';
   static const subscription = 'subscription';
-
 }

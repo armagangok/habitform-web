@@ -69,6 +69,48 @@ class AccountActionsNotifier extends StateNotifier<AccountActionState> {
     }
   }
 
+  Future<void> linkEmail(String email, String password) async {
+    state = state.copyWith(status: AccountActionStatus.loading, errorMessage: null);
+    try {
+      await _authService.linkWithEmailAndPassword(email, password);
+      state = state.copyWith(status: AccountActionStatus.success);
+    } catch (e) {
+      state = state.copyWith(
+        status: AccountActionStatus.error,
+        errorMessage: e.toString(),
+      );
+      rethrow;
+    }
+  }
+
+  Future<void> linkGoogle() async {
+    state = state.copyWith(status: AccountActionStatus.loading, errorMessage: null);
+    try {
+      await _authService.linkWithGoogle();
+      state = state.copyWith(status: AccountActionStatus.success);
+    } catch (e) {
+      state = state.copyWith(
+        status: AccountActionStatus.error,
+        errorMessage: e.toString(),
+      );
+      rethrow;
+    }
+  }
+
+  Future<void> linkApple() async {
+    state = state.copyWith(status: AccountActionStatus.loading, errorMessage: null);
+    try {
+      await _authService.linkWithApple();
+      state = state.copyWith(status: AccountActionStatus.success);
+    } catch (e) {
+      state = state.copyWith(
+        status: AccountActionStatus.error,
+        errorMessage: e.toString(),
+      );
+      rethrow;
+    }
+  }
+
   Future<void> updatePassword(String currentPassword, String newPassword) async {
     state = state.copyWith(status: AccountActionStatus.loading, errorMessage: null);
     try {
