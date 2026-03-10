@@ -143,9 +143,6 @@ class _MyAppState extends ConsumerState<MyApp> {
             ref.invalidate(purchaseProvider);
             ref.invalidate(habitCategoryProvider);
             ref.invalidate(selectedCategoriesProvider);
-
-            // Force a rebuild of the main view to return to onboarding/auth
-            ref.invalidate(onboardingProvider);
           }
         }
       });

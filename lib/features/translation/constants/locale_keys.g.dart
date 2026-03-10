@@ -83,6 +83,9 @@ abstract class  LocaleKeys {
   static const auth_password_mismatch = 'auth.password_mismatch';
   static const auth_password_updated = 'auth.password_updated';
   static const auth_privacy_policy = 'auth.privacy_policy';
+  static const auth_pro_feature_title = 'auth.pro_feature_title';
+  static const auth_pro_feature_message = 'auth.pro_feature_message';
+  static const auth_pro_feature_action = 'auth.pro_feature_action';
   static const auth_pro_login_alert_action = 'auth.pro_login_alert_action';
   static const auth_pro_login_alert_message = 'auth.pro_login_alert_message';
   static const auth_pro_login_alert_title = 'auth.pro_login_alert_title';

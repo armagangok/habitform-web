@@ -327,14 +327,14 @@ class _PaywallWidgetState extends ConsumerState<PaywallPage> with TickerProvider
                     textAlign: TextAlign.center,
                   ),
                 ),
-                SizedBox(height: 24),
-                Text(
-                  LocaleKeys.paywall_choose_plan.tr(),
-                  style: context.titleLarge.copyWith(
-                    fontWeight: FontWeight.w600,
-                    color: context.headlineMedium.color?.withValues(alpha: 0.7),
-                  ),
-                ),
+                // SizedBox(height: 24),
+                // Text(
+                //   LocaleKeys.paywall_choose_plan.tr(),
+                //   style: context.titleLarge.copyWith(
+                //     fontWeight: FontWeight.w600,
+                //     color: context.headlineMedium.color?.withValues(alpha: 0.7),
+                //   ),
+                // ),
                 SizedBox(height: 10),
                 _productSection(state),
               ],
@@ -458,15 +458,15 @@ class _PaywallWidgetState extends ConsumerState<PaywallPage> with TickerProvider
     return Positioned.fill(
       child: Align(
         alignment: Alignment.bottomCenter,
-        child: AnimatedBuilder(
-          animation: _buttonController,
-          builder: (context, child) {
-            return FadeTransition(
-              opacity: _buttonFadeAnimation,
-              child: SlideTransition(
-                position: _buttonSlideAnimation,
-                child: CustomBlurWidget(
-                  blurValue: 20,
+        child: CustomBlurWidget(
+          blurValue: 15,
+          child: AnimatedBuilder(
+            animation: _buttonController,
+            builder: (context, child) {
+              return FadeTransition(
+                opacity: _buttonFadeAnimation,
+                child: SlideTransition(
+                  position: _buttonSlideAnimation,
                   child: Container(
                     decoration: BoxDecoration(
                       border: Border(
@@ -492,23 +492,31 @@ class _PaywallWidgetState extends ConsumerState<PaywallPage> with TickerProvider
                     ),
                     child: SafeArea(
                       top: false,
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 24, vertical: 8),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            _buildMainCTAButton(state),
-                            SizedBox(height: 16),
-                            _buildSecondaryButtons(),
-                          ],
-                        ),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 20,
+                              vertical: 8,
+                            ),
+                            child: _buildMainCTAButton(state),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 20,
+                              vertical: 2,
+                            ),
+                            child: _buildSecondaryButtons(),
+                          ),
+                        ],
                       ),
                     ),
                   ),
                 ),
-              ),
-            );
-          },
+              );
+            },
+          ),
         ),
       ),
     );
@@ -522,54 +530,50 @@ class _PaywallWidgetState extends ConsumerState<PaywallPage> with TickerProvider
       builder: (context, child) {
         return Transform.scale(
           scale: _pulseAnimation.value,
-          child: SizedBox(
-            width: double.infinity,
-            child: CupertinoButton.filled(
-              padding: EdgeInsets.zero,
-              onPressed: purchaseLoading || selectedPackage == null
-                  ? null
-                  : () async {
-                      HapticFeedback.heavyImpact();
-                      if (selectedPackage != null) {
-                        ref.read(purchaseProvider.notifier).purchasePackage(
-                              selectedPackage!,
-                              widget.isFromOnboarding,
-                              isFromSettings: widget.isFromSettings,
-                            );
-                      }
-                    },
-              child: Container(
-                padding: EdgeInsets.symmetric(vertical: 18),
-                child: purchaseLoading
-                    ? Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          CupertinoActivityIndicator(radius: 12),
-                          SizedBox(width: 12),
-                          Text(
-                            LocaleKeys.paywall_processing.tr(),
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                            ),
+          child: CupertinoButton.filled(
+            padding: EdgeInsets.symmetric(horizontal: 24, vertical: 10),
+            onPressed: purchaseLoading || selectedPackage == null
+                ? null
+                : () async {
+                    HapticFeedback.heavyImpact();
+                    if (selectedPackage != null) {
+                      ref.read(purchaseProvider.notifier).purchasePackage(
+                            selectedPackage!,
+                            widget.isFromOnboarding,
+                            isFromSettings: widget.isFromSettings,
+                          );
+                    }
+                  },
+            child: Container(
+              child: purchaseLoading
+                  ? Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        CupertinoActivityIndicator(radius: 12),
+                        SizedBox(width: 12),
+                        Text(
+                          LocaleKeys.paywall_processing.tr(),
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
                           ),
-                        ],
-                      )
-                    : Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            _getCTAButtonText(),
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                            ),
+                        ),
+                      ],
+                    )
+                  : Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          _getCTAButtonText(),
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
                           ),
-                        ],
-                      ),
-              ),
+                        ),
+                      ],
+                    ),
             ),
           ),
         );
@@ -587,6 +591,7 @@ class _PaywallWidgetState extends ConsumerState<PaywallPage> with TickerProvider
             SizedBox(
               width: double.infinity,
               child: CupertinoButton.filled(
+                padding: EdgeInsets.symmetric(vertical: 10),
                 color: isDarkMode ? CupertinoColors.white.withValues(alpha: 0.1) : CupertinoColors.black.withValues(alpha: 0.1),
                 onPressed: () {
                   navigator.navigateAndClear(path: KRoute.homePage);
@@ -594,47 +599,50 @@ class _PaywallWidgetState extends ConsumerState<PaywallPage> with TickerProvider
                 child: Text(
                   LocaleKeys.paywall_continue_limited.tr(),
                   style: TextStyle(
-                    fontSize: 18,
+                    fontSize: 16,
                     fontWeight: FontWeight.bold,
-                    color: Colors.white,
+                    color: context.theme.primaryContrastingColor.withValues(alpha: 0.6),
                   ),
                 ),
               ),
             ),
             SizedBox(height: 12)
           ],
-          Row(
-            spacing: 14,
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Expanded(child: _restoreButton),
-              Expanded(
-                child: CupertinoButton(
-                  minimumSize: Size.zero,
-                  padding: EdgeInsets.zero,
-                  onPressed: UrlLauncherHelper.openPrivacyPolicy,
-                  child: Text(
-                    LocaleKeys.paywall_privacy.tr(),
-                    style: context.bodySmall.copyWith(
-                      fontWeight: FontWeight.w500,
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Row(
+              spacing: 10,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Expanded(child: _restoreButton),
+                Expanded(
+                  child: CupertinoButton(
+                    minimumSize: Size.zero,
+                    padding: EdgeInsets.zero,
+                    onPressed: UrlLauncherHelper.openPrivacyPolicy,
+                    child: Text(
+                      LocaleKeys.paywall_privacy.tr(),
+                      style: context.bodySmall.copyWith(
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
                   ),
                 ),
-              ),
-              Expanded(
-                child: CupertinoButton(
-                  minimumSize: Size.zero,
-                  padding: EdgeInsets.zero,
-                  onPressed: UrlLauncherHelper.openTermsOfUse,
-                  child: Text(
-                    LocaleKeys.paywall_terms.tr(),
-                    style: context.bodySmall.copyWith(
-                      fontWeight: FontWeight.w500,
+                Expanded(
+                  child: CupertinoButton(
+                    minimumSize: Size.zero,
+                    padding: EdgeInsets.zero,
+                    onPressed: UrlLauncherHelper.openTermsOfUse,
+                    child: Text(
+                      LocaleKeys.paywall_terms.tr(),
+                      style: context.bodySmall.copyWith(
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ],
       );

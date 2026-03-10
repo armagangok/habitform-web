@@ -70,7 +70,7 @@ class CodegenLoader extends AssetLoader{
     "continue_btn": "Continue",
     "continue_with_apple": "Continue with Apple",
     "continue_with_google": "Continue with Google",
-    "create_account": "Create Account",
+    "create_account": "Registrati",
     "current_password": "Current Password",
     "danger_zone": "Danger Zone",
     "data_and_privacy": "Data & Privacy",
@@ -98,13 +98,16 @@ class CodegenLoader extends AssetLoader{
     "password_mismatch": "Passwords do not match",
     "password_updated": "Password updated",
     "privacy_policy": "Privacy Policy",
-    "pro_login_alert_action": "Create Account / Login",
+    "pro_feature_title": "Funzione Pro",
+    "pro_feature_message": "Passa a Pro per sincronizzare le tue abitudini e sbloccare il supporto per più dispositivi.",
+    "pro_feature_action": "Ottieni Pro",
+    "pro_login_alert_action": "Registrati / Accedi",
     "pro_login_alert_message": "It is recommended to create an account to sync your data with the cloud and prevent data loss.",
     "pro_login_alert_title": "Cloud Sync",
     "processing": "Processing...",
     "profile": "Profile",
     "reauth_prompt": "Enter your password to continue",
-    "register": "Register",
+    "register": "Registrati",
     "security": "Security",
     "sign_in": "Sign In",
     "sign_in_failed": "Authentication failed. Please check your credentials.",
@@ -478,6 +481,10 @@ class CodegenLoader extends AssetLoader{
     "app_features": {
       "continue": "Continua",
       "features": {
+        "cloud_sync": {
+          "description": "Your habits are securely synced across all your devices. Never lose your progress even if you switch devices.",
+          "title": "Cloud Sync"
+        },
         "customizable": {
           "description": "Rendi HabitForm veramente tuo. Scegli colori, temi e layout che riflettono il tuo stile e ti tengono motivato.",
           "sub_features_0": "Temi Personali",
@@ -918,7 +925,7 @@ static const Map<String,dynamic> _es_ES = {
     "continue_btn": "Continue",
     "continue_with_apple": "Continue with Apple",
     "continue_with_google": "Continue with Google",
-    "create_account": "Create Account",
+    "create_account": "Registrarse",
     "current_password": "Current Password",
     "danger_zone": "Danger Zone",
     "data_and_privacy": "Data & Privacy",
@@ -946,13 +953,16 @@ static const Map<String,dynamic> _es_ES = {
     "password_mismatch": "Passwords do not match",
     "password_updated": "Password updated",
     "privacy_policy": "Privacy Policy",
-    "pro_login_alert_action": "Create Account / Login",
+    "pro_feature_title": "Función Pro",
+    "pro_feature_message": "Actualiza a pro para sincronizar tus hábitos y desbloquear el soporte multidispositivo.",
+    "pro_feature_action": "Obtener Pro",
+    "pro_login_alert_action": "Registrarse / Iniciar sesión",
     "pro_login_alert_message": "It is recommended to create an account to sync your data with the cloud and prevent data loss.",
     "pro_login_alert_title": "Cloud Sync",
     "processing": "Processing...",
     "profile": "Profile",
     "reauth_prompt": "Enter your password to continue",
-    "register": "Register",
+    "register": "Registrarse",
     "security": "Security",
     "sign_in": "Sign In",
     "sign_in_failed": "Authentication failed. Please check your credentials.",
@@ -1326,6 +1336,10 @@ static const Map<String,dynamic> _es_ES = {
     "app_features": {
       "continue": "Continuar",
       "features": {
+        "cloud_sync": {
+          "description": "Tus hábitos se sincronizan de forma segura en todos tus dispositivos. Nunca pierdas tu progreso, incluso si cambias de dispositivo.",
+          "title": "Sincronización en la Nube"
+        },
         "customizable": {
           "description": "Haz que HabitForm sea verdaderamente tuyo. Elige colores, temas y diseños que reflejen tu estilo y te mantengan motivado.",
           "sub_features_0": "Temas Personales",
@@ -1766,7 +1780,7 @@ static const Map<String,dynamic> _ja_JP = {
     "continue_btn": "Continue",
     "continue_with_apple": "Continue with Apple",
     "continue_with_google": "Continue with Google",
-    "create_account": "Create Account",
+    "create_account": "登録",
     "current_password": "Current Password",
     "danger_zone": "Danger Zone",
     "data_and_privacy": "Data & Privacy",
@@ -1794,7 +1808,10 @@ static const Map<String,dynamic> _ja_JP = {
     "password_mismatch": "Passwords do not match",
     "password_updated": "Password updated",
     "privacy_policy": "Privacy Policy",
-    "pro_login_alert_action": "Create Account / Login",
+    "pro_feature_title": "Pro機能",
+    "pro_feature_message": "習慣を同期し、クロスデバイスサポートを有効にするにはProにアップグレードしてください。",
+    "pro_feature_action": "Proを入手",
+    "pro_login_alert_action": "登録 / ログイン",
     "pro_login_alert_message": "It is recommended to create an account to sync your data with the cloud and prevent data loss.",
     "pro_login_alert_title": "Cloud Sync",
     "processing": "Processing...",
@@ -2174,6 +2191,10 @@ static const Map<String,dynamic> _ja_JP = {
     "app_features": {
       "continue": "続ける",
       "features": {
+        "cloud_sync": {
+          "description": "あなたの習慣はすべてのデバイス間で安全に同期されます。デバイスを切り替えても進捗を失うことはありません。",
+          "title": "クラウド同期"
+        },
         "customizable": {
           "description": "HabitFormを本当にあなたのものにしてください。あなたのスタイルを反映し、モチベーションを維持する色、テーマ、レイアウトを選択してください。",
           "sub_features_0": "パーソナルテーマ",
@@ -2614,7 +2635,7 @@ static const Map<String,dynamic> _tr_TR = {
     "continue_btn": "Devam Et",
     "continue_with_apple": "Apple ile Devam Et",
     "continue_with_google": "Google ile Devam Et",
-    "create_account": "Hesap Oluştur",
+    "create_account": "Kayıt Ol",
     "current_password": "Mevcut Şifre",
     "danger_zone": "Tehlikeli Bölge",
     "data_and_privacy": "Veri ve Gizlilik",
@@ -2642,7 +2663,10 @@ static const Map<String,dynamic> _tr_TR = {
     "password_mismatch": "Şifreler eşleşmiyor",
     "password_updated": "Şifre güncellendi",
     "privacy_policy": "Gizlilik Politikası",
-    "pro_login_alert_action": "Hesap Oluştur / Giriş Yap",
+    "pro_feature_title": "Pro Özellik",
+    "pro_feature_message": "Alışkanlıklarınızı senkronize edebilmek için ve farklı cihazlarda da cross-device support olması için pro olun",
+    "pro_feature_action": "Pro Ol",
+    "pro_login_alert_action": "Kayıt Ol / Giriş Yap",
     "pro_login_alert_message": "Hesabınızı oluşturun ve verilerinizi bulutta senkronize edin. Verilerinizi kaybetmemeniz için bu önerilir.",
     "pro_login_alert_title": "Bulut Senkronizasyonu",
     "processing": "İşleniyor...",
@@ -3022,10 +3046,14 @@ static const Map<String,dynamic> _tr_TR = {
     "app_features": {
       "continue": "Devam",
       "features": {
+        "cloud_sync": {
+          "description": "Alışkanlıklarınız tüm cihazlarınız arasında güvenli bir şekilde senkronize edilir. Cihaz değiştirseniz bile ilerlemenizi asla kaybetmeyin.",
+          "title": "Bulut Senkronizasyon"
+        },
         "customizable": {
-          "description": "HabitForm'u gerçekten size uygun hale getirin. Tarzınızı yansıtan renkleri, temaları ve düzenleri seçin; motivasyonunuzu canlı tutun.",
+          "description": "HabitForm'u gerçekten size özel yapın. Kişiliğinize uygun olan ve bağlılığınızı artıran renkleri, temaları ve düzenleri seçin.",
           "sub_features_0": "Kişisel Temalar",
-          "sub_features_1": "Tarzınız",
+          "sub_features_1": "Sizin Stiliniz",
           "sub_features_2": "Daha İyi Deneyim",
           "title": "Özelleştirilebilir"
         },
@@ -3462,7 +3490,7 @@ static const Map<String,dynamic> _ar_SA = {
     "continue_btn": "Continue",
     "continue_with_apple": "Continue with Apple",
     "continue_with_google": "Continue with Google",
-    "create_account": "Create Account",
+    "create_account": "تسجيل",
     "current_password": "Current Password",
     "danger_zone": "Danger Zone",
     "data_and_privacy": "Data & Privacy",
@@ -3490,13 +3518,16 @@ static const Map<String,dynamic> _ar_SA = {
     "password_mismatch": "Passwords do not match",
     "password_updated": "Password updated",
     "privacy_policy": "Privacy Policy",
-    "pro_login_alert_action": "Create Account / Login",
-    "pro_login_alert_message": "It is recommended to create an account to sync your data with the cloud and prevent data loss.",
-    "pro_login_alert_title": "Cloud Sync",
+    "pro_feature_title": "ميزة برو",
+    "pro_feature_message": "يرجى الترقية إلى برو لمزامنة عاداتك وفتح دعم الأجهزة المتعددة.",
+    "pro_feature_action": "احصل على برو",
+    "pro_login_alert_action": "تسجيل / تسجيل الدخول",
+    "pro_login_alert_message": "يوصى بإنشاء حساب لمزامنة بياناتك مع السحابة ومنع فقدان البيانات.",
+    "pro_login_alert_title": "مزامنة السحابة",
     "processing": "Processing...",
     "profile": "Profile",
     "reauth_prompt": "Enter your password to continue",
-    "register": "Register",
+    "register": "تسجيل",
     "security": "Security",
     "sign_in": "Sign In",
     "sign_in_failed": "Authentication failed. Please check your credentials.",
@@ -3870,6 +3901,10 @@ static const Map<String,dynamic> _ar_SA = {
     "app_features": {
       "continue": "متابعة",
       "features": {
+        "cloud_sync": {
+          "description": "Your habits are securely synced across all your devices. Never lose your progress even if you switch devices.",
+          "title": "Cloud Sync"
+        },
         "customizable": {
           "description": "اجعل HabitForm ملكك حقًا. اختر الألوان والسمات والتخطيطات التي تعكس أسلوبك وتجعلك متحفزاً.",
           "sub_features_0": "سمات شخصية",
@@ -4310,7 +4345,7 @@ static const Map<String,dynamic> _zh_Hans = {
     "continue_btn": "Continue",
     "continue_with_apple": "Continue with Apple",
     "continue_with_google": "Continue with Google",
-    "create_account": "Create Account",
+    "create_account": "注册",
     "current_password": "Current Password",
     "danger_zone": "Danger Zone",
     "data_and_privacy": "Data & Privacy",
@@ -4338,13 +4373,16 @@ static const Map<String,dynamic> _zh_Hans = {
     "password_mismatch": "Passwords do not match",
     "password_updated": "Password updated",
     "privacy_policy": "Privacy Policy",
-    "pro_login_alert_action": "Create Account / Login",
-    "pro_login_alert_message": "It is recommended to create an account to sync your data with the cloud and prevent data loss.",
-    "pro_login_alert_title": "Cloud Sync",
+    "pro_feature_title": "Pro 功能",
+    "pro_feature_message": "升级到 Pro 以同步您的习惯并解锁跨设备支持。",
+    "pro_feature_action": "获取 Pro",
+    "pro_login_alert_action": "注册 / 登录",
+    "pro_login_alert_message": "建议创建一个帐户，以便将您的数据与云同步并防止数据丢失。",
+    "pro_login_alert_title": "云同步",
     "processing": "Processing...",
     "profile": "Profile",
     "reauth_prompt": "Enter your password to continue",
-    "register": "Register",
+    "register": "注册",
     "security": "Security",
     "sign_in": "Sign In",
     "sign_in_failed": "Authentication failed. Please check your credentials.",
@@ -4718,6 +4756,10 @@ static const Map<String,dynamic> _zh_Hans = {
     "app_features": {
       "continue": "继续",
       "features": {
+        "cloud_sync": {
+          "description": "您的习惯在所有设备上安全同步。即使您更换设备，也绝不会丢失您的进度。",
+          "title": "云同步"
+        },
         "customizable": {
           "description": "让 HabitForm 真正属于您。选择反映您风格并让您保持动力的颜色、主题和布局。",
           "sub_features_0": "个人主题",
@@ -5158,7 +5200,7 @@ static const Map<String,dynamic> _fr_FR = {
     "continue_btn": "Continue",
     "continue_with_apple": "Continue with Apple",
     "continue_with_google": "Continue with Google",
-    "create_account": "Create Account",
+    "create_account": "S'inscrire",
     "current_password": "Current Password",
     "danger_zone": "Danger Zone",
     "data_and_privacy": "Data & Privacy",
@@ -5186,13 +5228,16 @@ static const Map<String,dynamic> _fr_FR = {
     "password_mismatch": "Passwords do not match",
     "password_updated": "Password updated",
     "privacy_policy": "Privacy Policy",
-    "pro_login_alert_action": "Create Account / Login",
+    "pro_feature_title": "Fonction Pro",
+    "pro_feature_message": "Passez à Pro pour synchroniser vos habitudes et débloquer le support multi-appareils.",
+    "pro_feature_action": "Obtenir Pro",
+    "pro_login_alert_action": "S'inscrire / Se connecter",
     "pro_login_alert_message": "It is recommended to create an account to sync your data with the cloud and prevent data loss.",
     "pro_login_alert_title": "Cloud Sync",
     "processing": "Processing...",
     "profile": "Profile",
     "reauth_prompt": "Enter your password to continue",
-    "register": "Register",
+    "register": "S'inscrire",
     "security": "Security",
     "sign_in": "Sign In",
     "sign_in_failed": "Authentication failed. Please check your credentials.",
@@ -5566,6 +5611,10 @@ static const Map<String,dynamic> _fr_FR = {
     "app_features": {
       "continue": "Continuer",
       "features": {
+        "cloud_sync": {
+          "description": "Vos habitudes sont synchronisées en toute sécurité sur tous vos appareils. Ne perdez jamais votre progression même si vous changez d'appareil.",
+          "title": "Synchronisation Cloud"
+        },
         "customizable": {
           "description": "Rendez HabitForm vraiment vôtre. Choisissez des couleurs, des thèmes et des mises en page qui reflètent votre style et vous gardent motivé.",
           "sub_features_0": "Thèmes Personnels",
@@ -6006,7 +6055,7 @@ static const Map<String,dynamic> _en_US = {
     "continue_btn": "Continue",
     "continue_with_apple": "Continue with Apple",
     "continue_with_google": "Continue with Google",
-    "create_account": "Create Account",
+    "create_account": "Register",
     "current_password": "Current Password",
     "danger_zone": "Danger Zone",
     "data_and_privacy": "Data & Privacy",
@@ -6034,7 +6083,10 @@ static const Map<String,dynamic> _en_US = {
     "password_mismatch": "Passwords do not match",
     "password_updated": "Password updated",
     "privacy_policy": "Privacy Policy",
-    "pro_login_alert_action": "Create Account / Login",
+    "pro_feature_title": "Pro Feature",
+    "pro_feature_message": "Upgrade to pro to sync your habits and unlock cross-device support.",
+    "pro_feature_action": "Get Pro",
+    "pro_login_alert_action": "Register / Login",
     "pro_login_alert_message": "It is recommended to create an account to sync your data with the cloud and prevent data loss.",
     "pro_login_alert_title": "Cloud Sync",
     "processing": "Processing...",
@@ -6414,6 +6466,10 @@ static const Map<String,dynamic> _en_US = {
     "app_features": {
       "continue": "Continue",
       "features": {
+        "cloud_sync": {
+          "description": "Your habits are securely synced across all your devices. Never lose your progress even if you switch devices.",
+          "title": "Cloud Sync"
+        },
         "customizable": {
           "description": "Make HabitForm truly yours. Choose colors, themes, and layouts that match your personality and keep you engaged.",
           "sub_features_0": "Personal Themes",
@@ -6854,7 +6910,7 @@ static const Map<String,dynamic> _fi_FI = {
     "continue_btn": "Continue",
     "continue_with_apple": "Continue with Apple",
     "continue_with_google": "Continue with Google",
-    "create_account": "Create Account",
+    "create_account": "Rekisteröidy",
     "current_password": "Current Password",
     "danger_zone": "Danger Zone",
     "data_and_privacy": "Data & Privacy",
@@ -6882,13 +6938,16 @@ static const Map<String,dynamic> _fi_FI = {
     "password_mismatch": "Passwords do not match",
     "password_updated": "Password updated",
     "privacy_policy": "Privacy Policy",
-    "pro_login_alert_action": "Create Account / Login",
+    "pro_feature_title": "Pro-ominaisuus",
+    "pro_feature_message": "Päivitä pro-versioon synkronoidaksesi tapasi ja avataksesi useiden laitteiden tuen.",
+    "pro_feature_action": "Hanki Pro",
+    "pro_login_alert_action": "Rekisteröidy / Kirjaudu sisään",
     "pro_login_alert_message": "It is recommended to create an account to sync your data with the cloud and prevent data loss.",
     "pro_login_alert_title": "Cloud Sync",
     "processing": "Processing...",
     "profile": "Profile",
     "reauth_prompt": "Enter your password to continue",
-    "register": "Register",
+    "register": "Rekisteröidy",
     "security": "Security",
     "sign_in": "Sign In",
     "sign_in_failed": "Authentication failed. Please check your credentials.",
@@ -7262,6 +7321,10 @@ static const Map<String,dynamic> _fi_FI = {
     "app_features": {
       "continue": "Jatka",
       "features": {
+        "cloud_sync": {
+          "description": "Tapasi synkronoidaan turvallisesti kaikilla laitteillasi. Et koskaan menetä edistymistäsi, vaikka vaihtaisit laitetta.",
+          "title": "Pilvisynkronointi"
+        },
         "customizable": {
           "description": "Tee HabitFormista todella sinun. Valitse värit, teemat ja asettelut, jotka heijastavat tyyliäsi ja pitävät sinut motivoituneena.",
           "sub_features_0": "Henkilökohtaiset Teemat",

@@ -22,12 +22,12 @@ class AuthHeaderWidget extends ConsumerWidget {
       showCupertinoDialog(
         context: context,
         builder: (context) => CupertinoAlertDialog(
-          title: const Text("Pro Özellik"),
-          content: const Text("Alışkanlıklarınızı senkronize edebilmek için ve farklı cihazlarda da cross-device support olması için pro olun"),
+          title: Text(LocaleKeys.auth_pro_feature_title.tr()),
+          content: Text(LocaleKeys.auth_pro_feature_message.tr()),
           actions: [
             CupertinoDialogAction(
               onPressed: () => Navigator.pop(context),
-              child: const Text("İptal"),
+              child: Text(LocaleKeys.common_cancel.tr()),
             ),
             CupertinoDialogAction(
               isDefaultAction: true,
@@ -42,7 +42,7 @@ class AuthHeaderWidget extends ConsumerWidget {
                   ),
                 );
               },
-              child: const Text("Pro Ol"),
+              child: Text(LocaleKeys.auth_pro_feature_action.tr()),
             ),
           ],
         ),
