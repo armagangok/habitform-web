@@ -1,4 +1,7 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import '../../../core/core.dart';
+import '../providers/purchase_provider.dart';
 
 Future<void> showUnlockProDialog() async {
   final context = navigator.navigatorKey.currentContext;
@@ -17,21 +20,22 @@ Future<void> showUnlockProDialog() async {
             style: TextStyle(color: CupertinoColors.systemBlue),
           ),
         ),
-        CupertinoDialogAction(
-          onPressed: () {
-            Navigator.pop(context);
-            navigator.navigateTo(
-              path: KRoute.prePaywall,
-              data: {'isFromOnboarding': false},
+        Consumer(
+          builder: (context, ref, child) {
+            return CupertinoDialogAction(
+              onPressed: () {
+                Navigator.pop(context);
+                ref.read(purchaseProvider.notifier).presentPaywall(isFromOnboarding: false);
+              },
+              child: Text(
+                LocaleKeys.subscription_continue.tr(),
+                style: TextStyle(
+                  color: CupertinoColors.systemBlue,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
             );
-          },
-          child: Text(
-            LocaleKeys.subscription_continue.tr(),
-            style: TextStyle(
-              color: CupertinoColors.systemBlue,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
+          }
         ),
       ],
     ),

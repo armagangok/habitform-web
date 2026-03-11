@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
+import 'package:purchases_ui_flutter/purchases_ui_flutter.dart';
 
 import '../utils/store_config.dart';
 
@@ -23,6 +24,14 @@ class PurchaseService {
 
   static Future<CustomerInfo> purchasePackage(Package package) async {
     return await Purchases.purchasePackage(package);
+  }
+
+  static Future<PaywallResult> presentPaywall({Offering? offering}) async {
+    return await RevenueCatUI.presentPaywall(offering: offering);
+  }
+
+  static Future<PaywallResult> presentPaywallIfNeeded(String entitlementIdentifier, {Offering? offering}) async {
+    return await RevenueCatUI.presentPaywallIfNeeded(entitlementIdentifier, offering: offering);
   }
 
   /// Links RevenueCat to Firebase UID so subscription is shared across devices.

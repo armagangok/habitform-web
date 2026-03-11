@@ -3,6 +3,7 @@ import 'package:lottie/lottie.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '/core/core.dart' hide showCupertinoSheet;
+import '../../purchase/providers/purchase_provider.dart';
 import '../provider/habit_probability_provider.dart';
 import '../provider/selected_habit_index_provider.dart';
 import '../widgets/formation_widget/formation_insights_widget.dart';
@@ -114,10 +115,8 @@ class HabitProbabilityPage extends ConsumerWidget {
                                       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
                                       child: CustomButton(
                                         onPressed: () {
-                                          navigator.navigateTo(
-                                            path: KRoute.prePaywall,
-                                            data: {'isFromOnboarding': false},
-                                          );
+                                          ref.read(purchaseProvider.notifier).presentPaywall(isFromOnboarding: false);
+                                          return;
                                         },
                                         child: Shimmer.fromColors(
                                           baseColor: Colors.deepOrange,

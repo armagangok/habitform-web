@@ -401,7 +401,7 @@ abstract class LocaleKeys {
   static const subscription_statisticsTitle = 'subscription.statisticsTitle';
   static const subscription_statisticsDescription = 'subscription.statisticsDescription';
   static const subscription_loading = 'subscription.loading';
-  static const subscription_purchaseRestoredSuccessfuly = 'subscription.purchaseRestoredSuccessfuly';
+  
   static const subscription_youAlreadyHaveAnActiveSubscription = 'subscription.youAlreadyHaveAnActiveSubscription';
   static const subscription_purchaseSuccessful = 'subscription.purchaseSuccessful';
   static const subscription_purchaseCancelled = 'subscription.purchaseCancelled';

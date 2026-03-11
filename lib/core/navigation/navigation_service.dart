@@ -11,12 +11,14 @@ class NavigationService extends INavigationService {
   static NavigationService get shared => _shared;
   NavigationService._();
 
-  GlobalKey<NavigatorState> navigatorKey = GlobalKey();
+  final GlobalKey<NavigatorState> navigatorKey = GlobalKey();
+
+  NavigatorState? get _navigator => navigatorKey.currentState;
 
   @override
   Future<void> navigateTo({required String path, Object? data}) async {
     try {
-      await navigatorKey.currentState?.pushNamed(
+      await _navigator?.pushNamed(
         path,
         arguments: data,
       );
@@ -29,7 +31,7 @@ class NavigationService extends INavigationService {
   @override
   Future<void> navigateAndClear({required String path, Object? data}) async {
     try {
-      await navigatorKey.currentState?.pushNamedAndRemoveUntil(
+      await _navigator?.pushNamedAndRemoveUntil(
         path,
         (Route<dynamic> route) => false,
         arguments: data,
@@ -41,7 +43,10 @@ class NavigationService extends INavigationService {
   }
 
   @override
-  void pop() async {
-    navigatorKey.currentState?.pop();
+  void pop() {
+    final navigator = _navigator;
+    if (navigator != null && navigator.canPop()) {
+      navigator.pop();
+    }
   }
 }

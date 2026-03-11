@@ -6,7 +6,6 @@ import 'package:habitform/features/habit_detail/widget/habit_calendar_widget.dar
 import '/core/core.dart';
 import '/features/purchase/providers/purchase_provider.dart';
 import '/models/models.dart';
-import '../../purchase/page/paywall_page.dart';
 
 class HabitHeatmapCard extends ConsumerWidget {
   final Habit habit;
@@ -86,10 +85,8 @@ class HabitHeatmapCard extends ConsumerWidget {
           CustomButton(
             onPressed: () {
               if (!isProUser) {
-                navigator.navigateTo(
-                  path: KRoute.prePaywall,
-                  data: {'isFromOnboarding': false},
-                );
+                ref.read(purchaseProvider.notifier).presentPaywall(isFromOnboarding: false);
+
                 return;
               }
               showCupertinoSheet(
@@ -145,12 +142,8 @@ class HabitHeatmapCard extends ConsumerWidget {
                   padding: EdgeInsets.zero,
                   minimumSize: Size.zero,
                   color: Colors.transparent,
-                  onPressed: () {
-                    showCupertinoSheet(
-                      enableDrag: false,
-                      context: context,
-                      builder: (context) => PaywallPage(isFromOnboarding: false),
-                    );
+                  onPressed: () async {
+                    await ref.read(purchaseProvider.notifier).presentPaywall(isFromOnboarding: false);
                   },
                   child: Container(
                     padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),

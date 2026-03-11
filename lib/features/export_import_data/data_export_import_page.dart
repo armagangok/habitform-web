@@ -126,10 +126,10 @@ class _DataExportImportPageState extends ConsumerState<DataExportImportPage> {
     }
   }
 
-  void _showPaywallPage() {
-    navigator.navigateTo(
-      path: KRoute.prePaywall,
-      data: {'isFromOnboarding': false, 'isFromSettings': true},
+  void _showPaywall() {
+    ref.read(purchaseProvider.notifier).presentPaywall(
+      isFromOnboarding: false,
+      isFromSettings: true,
     );
   }
 
@@ -194,7 +194,7 @@ class _DataExportImportPageState extends ConsumerState<DataExportImportPage> {
                     width: double.infinity,
                     child: CupertinoButton.filled(
                       padding: EdgeInsets.symmetric(vertical: 12),
-                      onPressed: isProUser ? (_isExporting ? null : _exportData) : _showPaywallPage,
+                      onPressed: isProUser ? (_isExporting ? null : _exportData) : _showPaywall,
                       child: _isExporting
                           ? Row(
                               mainAxisSize: MainAxisSize.min,
@@ -269,7 +269,7 @@ class _DataExportImportPageState extends ConsumerState<DataExportImportPage> {
                     width: double.infinity,
                     child: CupertinoButton.filled(
                       padding: EdgeInsets.symmetric(vertical: 12),
-                      onPressed: isProUser ? (_isImporting ? null : _importData) : _showPaywallPage,
+                      onPressed: isProUser ? (_isImporting ? null : _importData) : _showPaywall,
                       child: _isImporting
                           ? Row(
                               mainAxisSize: MainAxisSize.min,

@@ -1,752 +1,746 @@
-import 'package:flutter/services.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+// import 'package:flutter/services.dart';
+// import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '/core/core.dart' hide LocaleKeys;
-import '../../translation/constants/locale_keys.g.dart';
-import '../providers/purchase_provider.dart';
-import 'paywall_page.dart';
+// import '/core/core.dart' hide LocaleKeys;
+// import '../../translation/constants/locale_keys.g.dart';
+// import '../providers/purchase_provider.dart';
 
-class PrePaywallPage extends ConsumerStatefulWidget {
-  const PrePaywallPage({this.isFromOnboarding = false, this.isFromSettings = false, super.key});
+// class PrePaywallPage extends ConsumerStatefulWidget {
+//   const PrePaywallPage({this.isFromOnboarding = false, this.isFromSettings = false, super.key});
 
-  final bool isFromOnboarding;
-  final bool isFromSettings;
+//   final bool isFromOnboarding;
+//   final bool isFromSettings;
 
-  @override
-  ConsumerState<PrePaywallPage> createState() => _PrePaywallPageState();
-}
+//   @override
+//   ConsumerState<PrePaywallPage> createState() => _PrePaywallPageState();
+// }
 
-class _PrePaywallPageState extends ConsumerState<PrePaywallPage> with TickerProviderStateMixin {
-  // Animation controllers
-  late AnimationController _heroController;
-  late AnimationController _testimonialsController;
-  late AnimationController _featuresController;
-  late AnimationController _pricingController;
-  late AnimationController _floatingController;
+// class _PrePaywallPageState extends ConsumerState<PrePaywallPage> with TickerProviderStateMixin {
+//   // Animation controllers
+//   late AnimationController _heroController;
+//   late AnimationController _testimonialsController;
+//   late AnimationController _featuresController;
+//   late AnimationController _pricingController;
+//   late AnimationController _floatingController;
 
-  // Animations
-  late Animation<double> _heroFadeAnimation;
-  late Animation<Offset> _heroSlideAnimation;
-  late Animation<double> _heroScaleAnimation;
-  late Animation<double> _testimonialsFadeAnimation;
-  late Animation<Offset> _testimonialsSlideAnimation;
-  late Animation<double> _featuresFadeAnimation;
-  late Animation<Offset> _featuresSlideAnimation;
+//   // Animations
+//   late Animation<double> _heroFadeAnimation;
+//   late Animation<Offset> _heroSlideAnimation;
+//   late Animation<double> _heroScaleAnimation;
+//   late Animation<double> _testimonialsFadeAnimation;
+//   late Animation<Offset> _testimonialsSlideAnimation;
+//   late Animation<double> _featuresFadeAnimation;
+//   late Animation<Offset> _featuresSlideAnimation;
 
-  // Scroll controller
-  late ScrollController _scrollController;
+//   // Scroll controller
+//   late ScrollController _scrollController;
 
-  List<TestimonialModel> get testimonials => [
-        TestimonialModel(
-          LocaleKeys.paywall_testimonial_1_name.tr(),
-          "⭐⭐⭐⭐⭐",
-          LocaleKeys.paywall_testimonial_1_comment.tr(),
-          LocaleKeys.paywall_testimonial_1_user_type.tr(),
-        ),
-        TestimonialModel(
-          LocaleKeys.paywall_testimonial_2_name.tr(),
-          "⭐⭐⭐⭐⭐",
-          LocaleKeys.paywall_testimonial_2_comment.tr(),
-          LocaleKeys.paywall_testimonial_2_user_type.tr(),
-        ),
-        TestimonialModel(
-          LocaleKeys.paywall_testimonial_3_name.tr(),
-          "⭐⭐⭐⭐⭐",
-          LocaleKeys.paywall_testimonial_3_comment.tr(),
-          LocaleKeys.paywall_testimonial_3_user_type.tr(),
-        ),
-      ];
+//   List<TestimonialModel> get testimonials => [
+//         TestimonialModel(
+//           LocaleKeys.paywall_testimonial_1_name.tr(),
+//           "⭐⭐⭐⭐⭐",
+//           LocaleKeys.paywall_testimonial_1_comment.tr(),
+//           LocaleKeys.paywall_testimonial_1_user_type.tr(),
+//         ),
+//         TestimonialModel(
+//           LocaleKeys.paywall_testimonial_2_name.tr(),
+//           "⭐⭐⭐⭐⭐",
+//           LocaleKeys.paywall_testimonial_2_comment.tr(),
+//           LocaleKeys.paywall_testimonial_2_user_type.tr(),
+//         ),
+//         TestimonialModel(
+//           LocaleKeys.paywall_testimonial_3_name.tr(),
+//           "⭐⭐⭐⭐⭐",
+//           LocaleKeys.paywall_testimonial_3_comment.tr(),
+//           LocaleKeys.paywall_testimonial_3_user_type.tr(),
+//         ),
+//       ];
 
-  final List<FeatureModel> featureList = [
-    FeatureModel(
-      LocaleKeys.subscription_unlimitiedHabits.tr(),
-      CupertinoIcons.square_grid_3x2_fill,
-      LocaleKeys.subscription_unlimitiedHabitsDescription.tr(),
-      Colors.blue,
-    ),
-    FeatureModel(
-      LocaleKeys.subscription_statisticsTitle.tr(),
-      FontAwesomeIcons.chartLine,
-      LocaleKeys.subscription_statisticsDescription.tr(),
-      Colors.blueAccent,
-    ),
-    FeatureModel(
-      LocaleKeys.subscription_archiveSupportTitle.tr(),
-      FontAwesomeIcons.boxArchive,
-      LocaleKeys.subscription_archiveSupportDescription.tr(),
-      Colors.deepPurpleAccent,
-    ),
-    FeatureModel(
-      LocaleKeys.subscription_habitReminderTitle.tr(),
-      FontAwesomeIcons.solidBell,
-      LocaleKeys.subscription_habitReminderDescription.tr(),
-      CupertinoColors.systemGreen,
-    ),
-    FeatureModel(
-      LocaleKeys.subscription_unlimitiedCustomization.tr(),
-      FontAwesomeIcons.solidPenToSquare,
-      LocaleKeys.subscription_unlimitiedCustomizationDescription.tr(),
-      Colors.redAccent,
-    ),
-    FeatureModel(
-      LocaleKeys.subscription_alwaysUpToDate.tr(),
-      FontAwesomeIcons.rotateRight,
-      LocaleKeys.subscription_alwaysUpToDateDescription.tr(),
-      Colors.cyan,
-    ),
-  ];
+//   final List<FeatureModel> featureList = [
+//     FeatureModel(
+//       LocaleKeys.subscription_unlimitiedHabits.tr(),
+//       CupertinoIcons.square_grid_3x2_fill,
+//       LocaleKeys.subscription_unlimitiedHabitsDescription.tr(),
+//       Colors.blue,
+//     ),
+//     FeatureModel(
+//       LocaleKeys.subscription_statisticsTitle.tr(),
+//       FontAwesomeIcons.chartLine,
+//       LocaleKeys.subscription_statisticsDescription.tr(),
+//       Colors.blueAccent,
+//     ),
+//     FeatureModel(
+//       LocaleKeys.subscription_archiveSupportTitle.tr(),
+//       FontAwesomeIcons.boxArchive,
+//       LocaleKeys.subscription_archiveSupportDescription.tr(),
+//       Colors.deepPurpleAccent,
+//     ),
+//     FeatureModel(
+//       LocaleKeys.subscription_habitReminderTitle.tr(),
+//       FontAwesomeIcons.solidBell,
+//       LocaleKeys.subscription_habitReminderDescription.tr(),
+//       CupertinoColors.systemGreen,
+//     ),
+//     FeatureModel(
+//       LocaleKeys.subscription_unlimitiedCustomization.tr(),
+//       FontAwesomeIcons.solidPenToSquare,
+//       LocaleKeys.subscription_unlimitiedCustomizationDescription.tr(),
+//       Colors.redAccent,
+//     ),
+//     FeatureModel(
+//       LocaleKeys.subscription_alwaysUpToDate.tr(),
+//       FontAwesomeIcons.rotateRight,
+//       LocaleKeys.subscription_alwaysUpToDateDescription.tr(),
+//       Colors.cyan,
+//     ),
+//   ];
 
-  @override
-  void initState() {
-    super.initState();
-    _initializeAnimations();
-    _scrollController = ScrollController();
-  }
+//   @override
+//   void initState() {
+//     super.initState();
+//     _initializeAnimations();
+//     _scrollController = ScrollController();
+//   }
 
-  void _initializeAnimations() {
-    // Hero animations
-    _heroController = AnimationController(
-      duration: Duration(milliseconds: 1000),
-      vsync: this,
-    );
+//   void _initializeAnimations() {
+//     // Hero animations
+//     _heroController = AnimationController(
+//       duration: Duration(milliseconds: 1000),
+//       vsync: this,
+//     );
 
-    _heroFadeAnimation = Tween<double>(
-      begin: 0.0,
-      end: 1.0,
-    ).animate(CurvedAnimation(
-      parent: _heroController,
-      curve: Interval(0.0, 0.6, curve: Curves.easeOut),
-    ));
+//     _heroFadeAnimation = Tween<double>(
+//       begin: 0.0,
+//       end: 1.0,
+//     ).animate(CurvedAnimation(
+//       parent: _heroController,
+//       curve: Interval(0.0, 0.6, curve: Curves.easeOut),
+//     ));
 
-    _heroSlideAnimation = Tween<Offset>(
-      begin: Offset(0, 0.2),
-      end: Offset.zero,
-    ).animate(CurvedAnimation(
-      parent: _heroController,
-      curve: Interval(0.0, 0.8, curve: Curves.easeOutCubic),
-    ));
+//     _heroSlideAnimation = Tween<Offset>(
+//       begin: Offset(0, 0.2),
+//       end: Offset.zero,
+//     ).animate(CurvedAnimation(
+//       parent: _heroController,
+//       curve: Interval(0.0, 0.8, curve: Curves.easeOutCubic),
+//     ));
 
-    _heroScaleAnimation = Tween<double>(
-      begin: 0.95,
-      end: 1.0,
-    ).animate(CurvedAnimation(
-      parent: _heroController,
-      curve: Interval(0.2, 1.0, curve: Curves.elasticOut),
-    ));
+//     _heroScaleAnimation = Tween<double>(
+//       begin: 0.95,
+//       end: 1.0,
+//     ).animate(CurvedAnimation(
+//       parent: _heroController,
+//       curve: Interval(0.2, 1.0, curve: Curves.elasticOut),
+//     ));
 
-    // Testimonials animations
-    _testimonialsController = AnimationController(
-      duration: Duration(milliseconds: 800),
-      vsync: this,
-    );
+//     // Testimonials animations
+//     _testimonialsController = AnimationController(
+//       duration: Duration(milliseconds: 800),
+//       vsync: this,
+//     );
 
-    _testimonialsFadeAnimation = Tween<double>(
-      begin: 0.0,
-      end: 1.0,
-    ).animate(CurvedAnimation(
-      parent: _testimonialsController,
-      curve: Interval(0.0, 0.7, curve: Curves.easeOut),
-    ));
+//     _testimonialsFadeAnimation = Tween<double>(
+//       begin: 0.0,
+//       end: 1.0,
+//     ).animate(CurvedAnimation(
+//       parent: _testimonialsController,
+//       curve: Interval(0.0, 0.7, curve: Curves.easeOut),
+//     ));
 
-    _testimonialsSlideAnimation = Tween<Offset>(
-      begin: Offset(0, 0.3),
-      end: Offset.zero,
-    ).animate(CurvedAnimation(
-      parent: _testimonialsController,
-      curve: Interval(0.0, 0.8, curve: Curves.easeOutCubic),
-    ));
+//     _testimonialsSlideAnimation = Tween<Offset>(
+//       begin: Offset(0, 0.3),
+//       end: Offset.zero,
+//     ).animate(CurvedAnimation(
+//       parent: _testimonialsController,
+//       curve: Interval(0.0, 0.8, curve: Curves.easeOutCubic),
+//     ));
 
-    // Features animations
-    _featuresController = AnimationController(
-      duration: Duration(milliseconds: 800),
-      vsync: this,
-    );
+//     // Features animations
+//     _featuresController = AnimationController(
+//       duration: Duration(milliseconds: 800),
+//       vsync: this,
+//     );
 
-    _featuresFadeAnimation = Tween<double>(
-      begin: 0.0,
-      end: 1.0,
-    ).animate(CurvedAnimation(
-      parent: _featuresController,
-      curve: Interval(0.0, 0.7, curve: Curves.easeOut),
-    ));
+//     _featuresFadeAnimation = Tween<double>(
+//       begin: 0.0,
+//       end: 1.0,
+//     ).animate(CurvedAnimation(
+//       parent: _featuresController,
+//       curve: Interval(0.0, 0.7, curve: Curves.easeOut),
+//     ));
 
-    _featuresSlideAnimation = Tween<Offset>(
-      begin: Offset(0, 0.3),
-      end: Offset.zero,
-    ).animate(CurvedAnimation(
-      parent: _featuresController,
-      curve: Interval(0.0, 0.8, curve: Curves.easeOutCubic),
-    ));
+//     _featuresSlideAnimation = Tween<Offset>(
+//       begin: Offset(0, 0.3),
+//       end: Offset.zero,
+//     ).animate(CurvedAnimation(
+//       parent: _featuresController,
+//       curve: Interval(0.0, 0.8, curve: Curves.easeOutCubic),
+//     ));
 
-    // Pricing animations
-    _pricingController = AnimationController(
-      duration: Duration(milliseconds: 600),
-      vsync: this,
-    );
+//     // Pricing animations
+//     _pricingController = AnimationController(
+//       duration: Duration(milliseconds: 600),
+//       vsync: this,
+//     );
 
-    // Floating elements animation
-    _floatingController = AnimationController(
-      duration: Duration(seconds: 6),
-      vsync: this,
-    );
+//     // Floating elements animation
+//     _floatingController = AnimationController(
+//       duration: Duration(seconds: 6),
+//       vsync: this,
+//     );
 
-    // Start animations
-    _startAnimations();
-  }
+//     // Start animations
+//     _startAnimations();
+//   }
 
-  void _startAnimations() {
-    Future.delayed(Duration(milliseconds: 100), () {
-      if (mounted) {
-        _heroController.forward();
-        Future.delayed(Duration(milliseconds: 200), () {
-          if (mounted) _testimonialsController.forward();
-        });
-        Future.delayed(Duration(milliseconds: 400), () {
-          if (mounted) _featuresController.forward();
-        });
-        Future.delayed(Duration(milliseconds: 600), () {
-          if (mounted) _pricingController.forward();
-        });
-        Future.delayed(Duration(milliseconds: 800), () {
-          if (mounted) _floatingController.repeat(reverse: true);
-        });
-      }
-    });
-  }
+//   void _startAnimations() {
+//     Future.delayed(Duration(milliseconds: 100), () {
+//       if (mounted) {
+//         _heroController.forward();
+//         Future.delayed(Duration(milliseconds: 200), () {
+//           if (mounted) _testimonialsController.forward();
+//         });
+//         Future.delayed(Duration(milliseconds: 400), () {
+//           if (mounted) _featuresController.forward();
+//         });
+//         Future.delayed(Duration(milliseconds: 600), () {
+//           if (mounted) _pricingController.forward();
+//         });
+//         Future.delayed(Duration(milliseconds: 800), () {
+//           if (mounted) _floatingController.repeat(reverse: true);
+//         });
+//       }
+//     });
+//   }
 
-  @override
-  void dispose() {
-    _heroController.dispose();
-    _testimonialsController.dispose();
-    _featuresController.dispose();
-    _pricingController.dispose();
-    _floatingController.dispose();
-    _scrollController.dispose();
-    super.dispose();
-  }
+//   @override
+//   void dispose() {
+//     _heroController.dispose();
+//     _testimonialsController.dispose();
+//     _featuresController.dispose();
+//     _pricingController.dispose();
+//     _floatingController.dispose();
+//     _scrollController.dispose();
+//     super.dispose();
+//   }
 
-  Widget _buildSocialProofSection() {
-    return AnimatedBuilder(
-      animation: _featuresController,
-      builder: (context, child) {
-        return FadeTransition(
-          opacity: _featuresFadeAnimation,
-          child: SlideTransition(
-            position: _featuresSlideAnimation,
-            child: CupertinoListSection.insetGrouped(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Column(
-                          children: [
-                            Text(
-                              '50K+',
-                              style: context.titleLarge.copyWith(
-                                fontWeight: FontWeight.bold,
-                                color: context.primary,
-                              ),
-                            ),
-                            Text(
-                              LocaleKeys.paywall_social_active_users.tr(),
-                              style: context.bodySmall.copyWith(
-                                color: context.bodySmall.color?.withValues(alpha: 0.7),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Container(
-                        width: 1,
-                        height: 40,
-                        color: Theme.of(context).dividerColor.withValues(alpha: 0.3),
-                      ),
-                      Expanded(
-                        child: Column(
-                          children: [
-                            Text(
-                              '4.9★',
-                              style: context.titleLarge.copyWith(
-                                fontWeight: FontWeight.bold,
-                                color: context.primary,
-                              ),
-                            ),
-                            Text(
-                              LocaleKeys.paywall_social_app_store_rating.tr(),
-                              style: context.bodySmall.copyWith(
-                                color: context.bodySmall.color?.withValues(alpha: 0.7),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Container(
-                        width: 1,
-                        height: 40,
-                        color: Theme.of(context).dividerColor.withValues(alpha: 0.3),
-                      ),
-                      Expanded(
-                        child: Column(
-                          children: [
-                            Text(
-                              '98%',
-                              style: context.titleLarge.copyWith(
-                                fontWeight: FontWeight.bold,
-                                color: context.primary,
-                              ),
-                            ),
-                            Text(
-                              LocaleKeys.paywall_social_success_rate.tr(),
-                              style: context.bodySmall.copyWith(
-                                color: context.bodySmall.color?.withValues(alpha: 0.7),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
+//   Widget _buildSocialProofSection() {
+//     return AnimatedBuilder(
+//       animation: _featuresController,
+//       builder: (context, child) {
+//         return FadeTransition(
+//           opacity: _featuresFadeAnimation,
+//           child: SlideTransition(
+//             position: _featuresSlideAnimation,
+//             child: CupertinoListSection.insetGrouped(
+//               children: [
+//                 Padding(
+//                   padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10),
+//                   child: Row(
+//                     children: [
+//                       Expanded(
+//                         child: Column(
+//                           children: [
+//                             Text(
+//                               '50K+',
+//                               style: context.titleLarge.copyWith(
+//                                 fontWeight: FontWeight.bold,
+//                                 color: context.primary,
+//                               ),
+//                             ),
+//                             Text(
+//                               LocaleKeys.paywall_social_active_users.tr(),
+//                               style: context.bodySmall.copyWith(
+//                                 color: context.bodySmall.color?.withValues(alpha: 0.7),
+//                               ),
+//                             ),
+//                           ],
+//                         ),
+//                       ),
+//                       Container(
+//                         width: 1,
+//                         height: 40,
+//                         color: Theme.of(context).dividerColor.withValues(alpha: 0.3),
+//                       ),
+//                       Expanded(
+//                         child: Column(
+//                           children: [
+//                             Text(
+//                               '4.9★',
+//                               style: context.titleLarge.copyWith(
+//                                 fontWeight: FontWeight.bold,
+//                                 color: context.primary,
+//                               ),
+//                             ),
+//                             Text(
+//                               LocaleKeys.paywall_social_app_store_rating.tr(),
+//                               style: context.bodySmall.copyWith(
+//                                 color: context.bodySmall.color?.withValues(alpha: 0.7),
+//                               ),
+//                             ),
+//                           ],
+//                         ),
+//                       ),
+//                       Container(
+//                         width: 1,
+//                         height: 40,
+//                         color: Theme.of(context).dividerColor.withValues(alpha: 0.3),
+//                       ),
+//                       Expanded(
+//                         child: Column(
+//                           children: [
+//                             Text(
+//                               '98%',
+//                               style: context.titleLarge.copyWith(
+//                                 fontWeight: FontWeight.bold,
+//                                 color: context.primary,
+//                               ),
+//                             ),
+//                             Text(
+//                               LocaleKeys.paywall_social_success_rate.tr(),
+//                               style: context.bodySmall.copyWith(
+//                                 color: context.bodySmall.color?.withValues(alpha: 0.7),
+//                               ),
+//                             ),
+//                           ],
+//                         ),
+//                       ),
+//                     ],
+//                   ),
+//                 ),
+//               ],
+//             ),
+//           ),
+//         );
+//       },
+//     );
+//   }
 
-  @override
-  Widget build(BuildContext context) {
-    final purchaseState = ref.watch(purchaseProvider);
+//   @override
+//   Widget build(BuildContext context) {
+//     final purchaseState = ref.watch(purchaseProvider);
 
-    return PopScope(
-      canPop: false, // Prevent dismissal by back button or swipe
-      child: purchaseState.when(
-        data: (state) {
-          return CupertinoPageScaffold(
-            navigationBar: _navBar(context),
-            child: Stack(
-              children: [
-                // Main content
-                SizedBox(
-                  width: double.infinity,
-                  child: SafeArea(
-                    bottom: false,
-                    child: ListView(
-                      controller: _scrollController,
-                      children: [
-                        SizedBox(height: 10),
+//     return PopScope(
+//       canPop: false, // Prevent dismissal by back button or swipe
+//       child: purchaseState.when(
+//         data: (state) {
+//           return CupertinoPageScaffold(
+//             navigationBar: _navBar(context),
+//             child: Stack(
+//               children: [
+//                 // Main content
+//                 SizedBox(
+//                   width: double.infinity,
+//                   child: SafeArea(
+//                     bottom: false,
+//                     child: ListView(
+//                       controller: _scrollController,
+//                       children: [
+//                         SizedBox(height: 10),
 
-                        // Hero section
-                        _buildHeroSection(),
+//                         // Hero section
+//                         _buildHeroSection(),
 
-                        _buildSocialProofSection(),
+//                         _buildSocialProofSection(),
 
-                        // Testimonials section
-                        _buildTestimonialsSection(),
+//                         // Testimonials section
+//                         _buildTestimonialsSection(),
 
-                        // Features section
-                        _buildFeaturesSection(),
+//                         // Features section
+//                         _buildFeaturesSection(),
 
-                        SizedBox(height: 40),
+//                         SizedBox(height: 40),
 
-                        SizedBox(height: 120), // Space for fixed button
-                      ],
-                    ),
-                  ),
-                ),
+//                         SizedBox(height: 120), // Space for fixed button
+//                       ],
+//                     ),
+//                   ),
+//                 ),
 
-                // Fixed continue button
-                _buildFixedContinueButton(),
-              ],
-            ),
-          );
-        },
-        loading: () => _buildLoadingState(),
-        error: (error, _) => _buildErrorState(),
-      ),
-    );
-  }
+//                 // Fixed continue button
+//                 _buildFixedContinueButton(),
+//               ],
+//             ),
+//           );
+//         },
+//         loading: () => _buildLoadingState(),
+//         error: (error, _) => _buildErrorState(),
+//       ),
+//     );
+//   }
 
-  Widget _buildHeroSection() {
-    return AnimatedBuilder(
-      animation: _heroController,
-      builder: (context, child) {
-        return FadeTransition(
-          opacity: _heroFadeAnimation,
-          child: SlideTransition(
-            position: _heroSlideAnimation,
-            child: ScaleTransition(
-              scale: _heroScaleAnimation,
-              child: CupertinoListSection.insetGrouped(
-                children: [
-                  // App icon and title
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: SizedBox(
-                      width: double.infinity,
-                      child: Column(
-                        children: [
-                          FittedBox(
-                            child: Text(
-                              LocaleKeys.paywall_headline.tr(),
-                              style: context.bodyLarge.copyWith(
-                                fontWeight: FontWeight.w600,
-                                fontSize: 21,
-                              ),
-                              textAlign: TextAlign.center,
-                              maxLines: 2,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        );
-      },
-    );
-  }
+//   Widget _buildHeroSection() {
+//     return AnimatedBuilder(
+//       animation: _heroController,
+//       builder: (context, child) {
+//         return FadeTransition(
+//           opacity: _heroFadeAnimation,
+//           child: SlideTransition(
+//             position: _heroSlideAnimation,
+//             child: ScaleTransition(
+//               scale: _heroScaleAnimation,
+//               child: CupertinoListSection.insetGrouped(
+//                 children: [
+//                   // App icon and title
+//                   Padding(
+//                     padding: const EdgeInsets.all(8.0),
+//                     child: SizedBox(
+//                       width: double.infinity,
+//                       child: Column(
+//                         children: [
+//                           FittedBox(
+//                             child: Text(
+//                               LocaleKeys.paywall_headline.tr(),
+//                               style: context.bodyLarge.copyWith(
+//                                 fontWeight: FontWeight.w600,
+//                                 fontSize: 21,
+//                               ),
+//                               textAlign: TextAlign.center,
+//                               maxLines: 2,
+//                             ),
+//                           ),
+//                         ],
+//                       ),
+//                     ),
+//                   ),
+//                 ],
+//               ),
+//             ),
+//           ),
+//         );
+//       },
+//     );
+//   }
 
-  Widget _buildTestimonialsSection() {
-    return AnimatedBuilder(
-      animation: _testimonialsController,
-      builder: (context, child) {
-        return FadeTransition(
-          opacity: _testimonialsFadeAnimation,
-          child: SlideTransition(
-            position: _testimonialsSlideAnimation,
-            child: CupertinoListSection.insetGrouped(
-              header: Text(LocaleKeys.paywall_what_users_saying.tr()),
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ListView.separated(
-                    physics: ClampingScrollPhysics(),
-                    itemCount: testimonials.length,
-                    shrinkWrap: true,
-                    separatorBuilder: (_, __) => SizedBox(height: 16),
-                    itemBuilder: (context, index) {
-                      final testimonial = testimonials[index];
+//   Widget _buildTestimonialsSection() {
+//     return AnimatedBuilder(
+//       animation: _testimonialsController,
+//       builder: (context, child) {
+//         return FadeTransition(
+//           opacity: _testimonialsFadeAnimation,
+//           child: SlideTransition(
+//             position: _testimonialsSlideAnimation,
+//             child: CupertinoListSection.insetGrouped(
+//               header: Text(LocaleKeys.paywall_what_users_saying.tr()),
+//               children: [
+//                 Padding(
+//                   padding: const EdgeInsets.all(8.0),
+//                   child: ListView.separated(
+//                     physics: ClampingScrollPhysics(),
+//                     itemCount: testimonials.length,
+//                     shrinkWrap: true,
+//                     separatorBuilder: (_, __) => SizedBox(height: 16),
+//                     itemBuilder: (context, index) {
+//                       final testimonial = testimonials[index];
 
-                      return TweenAnimationBuilder<double>(
-                        duration: Duration(milliseconds: 500),
-                        tween: Tween(begin: 0.0, end: 1.0),
-                        curve: Curves.easeOutCubic,
-                        builder: (context, value, child) {
-                          return Transform.translate(
-                            offset: Offset(0, (1 - value) * 20),
-                            child: Opacity(
-                              opacity: value,
-                              child: _buildTestimonialCard(testimonial),
-                            ),
-                          );
-                        },
-                      );
-                    },
-                  ),
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
+//                       return TweenAnimationBuilder<double>(
+//                         duration: Duration(milliseconds: 500),
+//                         tween: Tween(begin: 0.0, end: 1.0),
+//                         curve: Curves.easeOutCubic,
+//                         builder: (context, value, child) {
+//                           return Transform.translate(
+//                             offset: Offset(0, (1 - value) * 20),
+//                             child: Opacity(
+//                               opacity: value,
+//                               child: _buildTestimonialCard(testimonial),
+//                             ),
+//                           );
+//                         },
+//                       );
+//                     },
+//                   ),
+//                 ),
+//               ],
+//             ),
+//           ),
+//         );
+//       },
+//     );
+//   }
 
-  Widget _buildTestimonialCard(TestimonialModel testimonial) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-      decoration: BoxDecoration(
-        color: context.primaryContrastingColor.withValues(alpha: 0.075),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Text(
-                testimonial.stars,
-                style: TextStyle(fontSize: 16),
-              ),
-              Spacer(),
-              Text(
-                testimonial.userType,
-                style: context.bodySmall.copyWith(
-                  color: context.primary,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ],
-          ),
-          SizedBox(height: 12),
-          Text(
-            testimonial.comment,
-            style: context.bodyMedium.copyWith(
-              height: 1.4,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-          SizedBox(height: 12),
-          Text(
-            testimonial.userName,
-            style: context.bodySmall.copyWith(
-              color: context.bodySmall.color?.withValues(alpha: 0.7),
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+//   Widget _buildTestimonialCard(TestimonialModel testimonial) {
+//     return Container(
+//       padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+//       decoration: BoxDecoration(
+//         color: context.primaryContrastingColor.withValues(alpha: 0.075),
+//         borderRadius: BorderRadius.circular(12),
+//       ),
+//       child: Column(
+//         crossAxisAlignment: CrossAxisAlignment.start,
+//         children: [
+//           Row(
+//             children: [
+//               Text(
+//                 testimonial.stars,
+//                 style: TextStyle(fontSize: 16),
+//               ),
+//               Spacer(),
+//               Text(
+//                 testimonial.userType,
+//                 style: context.bodySmall.copyWith(
+//                   color: context.primary,
+//                   fontWeight: FontWeight.w600,
+//                 ),
+//               ),
+//             ],
+//           ),
+//           SizedBox(height: 12),
+//           Text(
+//             testimonial.comment,
+//             style: context.bodyMedium.copyWith(
+//               height: 1.4,
+//               fontWeight: FontWeight.w500,
+//             ),
+//           ),
+//           SizedBox(height: 12),
+//           Text(
+//             testimonial.userName,
+//             style: context.bodySmall.copyWith(
+//               color: context.bodySmall.color?.withValues(alpha: 0.7),
+//               fontWeight: FontWeight.w600,
+//             ),
+//           ),
+//         ],
+//       ),
+//     );
+//   }
 
-  Widget _buildFeaturesSection() {
-    return AnimatedBuilder(
-      animation: _featuresController,
-      builder: (context, child) {
-        return FadeTransition(
-          opacity: _featuresFadeAnimation,
-          child: SlideTransition(
-            position: _featuresSlideAnimation,
-            child: CupertinoListSection.insetGrouped(
-              header: Text(LocaleKeys.paywall_what_you_get.tr()),
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ListView.separated(
-                    physics: ClampingScrollPhysics(),
-                    itemCount: featureList.length,
-                    shrinkWrap: true,
-                    separatorBuilder: (_, __) => SizedBox(height: 12),
-                    itemBuilder: (context, index) {
-                      final feature = featureList[index];
+//   Widget _buildFeaturesSection() {
+//     return AnimatedBuilder(
+//       animation: _featuresController,
+//       builder: (context, child) {
+//         return FadeTransition(
+//           opacity: _featuresFadeAnimation,
+//           child: SlideTransition(
+//             position: _featuresSlideAnimation,
+//             child: CupertinoListSection.insetGrouped(
+//               header: Text(LocaleKeys.paywall_what_you_get.tr()),
+//               children: [
+//                 Padding(
+//                   padding: const EdgeInsets.all(8.0),
+//                   child: ListView.separated(
+//                     physics: ClampingScrollPhysics(),
+//                     itemCount: featureList.length,
+//                     shrinkWrap: true,
+//                     separatorBuilder: (_, __) => SizedBox(height: 12),
+//                     itemBuilder: (context, index) {
+//                       final feature = featureList[index];
 
-                      return TweenAnimationBuilder<double>(
-                        duration: Duration(milliseconds: 500),
-                        tween: Tween(begin: 0.0, end: 1.0),
-                        curve: Curves.easeOutCubic,
-                        builder: (context, value, child) {
-                          return Transform.translate(
-                            offset: Offset(0, (1 - value) * 20),
-                            child: Opacity(
-                              opacity: value,
-                              child: _buildFeatureItem(feature, index),
-                            ),
-                          );
-                        },
-                      );
-                    },
-                  ),
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
+//                       return TweenAnimationBuilder<double>(
+//                         duration: Duration(milliseconds: 500),
+//                         tween: Tween(begin: 0.0, end: 1.0),
+//                         curve: Curves.easeOutCubic,
+//                         builder: (context, value, child) {
+//                           return Transform.translate(
+//                             offset: Offset(0, (1 - value) * 20),
+//                             child: Opacity(
+//                               opacity: value,
+//                               child: _buildFeatureItem(feature, index),
+//                             ),
+//                           );
+//                         },
+//                       );
+//                     },
+//                   ),
+//                 ),
+//               ],
+//             ),
+//           ),
+//         );
+//       },
+//     );
+//   }
 
-  Widget _buildFeatureItem(FeatureModel feature, int index) {
-    return Container(
-      padding: EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: feature.color.withValues(alpha: 0.05),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: feature.color.withValues(alpha: 0.1),
-          width: 1,
-        ),
-      ),
-      child: Row(
-        children: [
-          Container(
-            padding: EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              color: feature.color.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Icon(
-              feature.widget,
-              color: feature.color,
-              size: 20,
-            ),
-          ),
-          SizedBox(width: 16),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  feature.name,
-                  style: context.titleMedium.copyWith(
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                SizedBox(height: 4),
-                Text(
-                  feature.description,
-                  style: context.bodySmall.copyWith(
-                    color: context.bodySmall.color?.withValues(alpha: 0.8),
-                    height: 1.3,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Icon(
-            CupertinoIcons.checkmark_circle_fill,
-            color: feature.color,
-            size: 20,
-          ),
-        ],
-      ),
-    );
-  }
+//   Widget _buildFeatureItem(FeatureModel feature, int index) {
+//     return Container(
+//       padding: EdgeInsets.all(16),
+//       decoration: BoxDecoration(
+//         color: feature.color.withValues(alpha: 0.05),
+//         borderRadius: BorderRadius.circular(12),
+//         border: Border.all(
+//           color: feature.color.withValues(alpha: 0.1),
+//           width: 1,
+//         ),
+//       ),
+//       child: Row(
+//         children: [
+//           Container(
+//             padding: EdgeInsets.all(8),
+//             decoration: BoxDecoration(
+//               color: feature.color.withValues(alpha: 0.1),
+//               borderRadius: BorderRadius.circular(8),
+//             ),
+//             child: Icon(
+//               feature.widget,
+//               color: feature.color,
+//               size: 20,
+//             ),
+//           ),
+//           SizedBox(width: 16),
+//           Expanded(
+//             child: Column(
+//               crossAxisAlignment: CrossAxisAlignment.start,
+//               children: [
+//                 Text(
+//                   feature.name,
+//                   style: context.titleMedium.copyWith(
+//                     fontWeight: FontWeight.w600,
+//                   ),
+//                 ),
+//                 SizedBox(height: 4),
+//                 Text(
+//                   feature.description,
+//                   style: context.bodySmall.copyWith(
+//                     color: context.bodySmall.color?.withValues(alpha: 0.8),
+//                     height: 1.3,
+//                   ),
+//                 ),
+//               ],
+//             ),
+//           ),
+//           Icon(
+//             CupertinoIcons.checkmark_circle_fill,
+//             color: feature.color,
+//             size: 20,
+//           ),
+//         ],
+//       ),
+//     );
+//   }
 
-  Widget _buildFixedContinueButton() {
-    return Positioned.fill(
-      child: Align(
-        alignment: Alignment.bottomCenter,
-        child: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [
-                context.scaffoldBackgroundColor.withValues(alpha: 0.0),
-                context.scaffoldBackgroundColor.withValues(alpha: 0.25),
-                context.scaffoldBackgroundColor.withValues(alpha: 1),
-              ],
-              stops: [0.0, 0.3, 1.0],
-            ),
-          ),
-          child: SafeArea(
-            top: false,
-            child: Padding(
-              padding: EdgeInsets.all(24),
-              child: CupertinoButton.filled(
-                padding: EdgeInsets.zero,
-                onPressed: () {
-                  HapticFeedback.heavyImpact();
+//   Widget _buildFixedContinueButton() {
+//     return Positioned.fill(
+//       child: Align(
+//         alignment: Alignment.bottomCenter,
+//         child: Container(
+//           decoration: BoxDecoration(
+//             gradient: LinearGradient(
+//               begin: Alignment.topCenter,
+//               end: Alignment.bottomCenter,
+//               colors: [
+//                 context.scaffoldBackgroundColor.withValues(alpha: 0.0),
+//                 context.scaffoldBackgroundColor.withValues(alpha: 0.25),
+//                 context.scaffoldBackgroundColor.withValues(alpha: 1),
+//               ],
+//               stops: [0.0, 0.3, 1.0],
+//             ),
+//           ),
+//           child: SafeArea(
+//             top: false,
+//             child: Padding(
+//               padding: EdgeInsets.all(24),
+//               child: CupertinoButton.filled(
+//                 padding: EdgeInsets.zero,
+//                 onPressed: () async {
+//                   HapticFeedback.heavyImpact();
+//                   await ref.read(purchaseProvider.notifier).presentPaywall(
+//                     isFromOnboarding: widget.isFromOnboarding,
+//                     isFromSettings: widget.isFromSettings,
+//                   );
+//                 },
+//                 child: Container(
+//                   padding: EdgeInsets.symmetric(vertical: 18),
+//                   child: Row(
+//                     mainAxisAlignment: MainAxisAlignment.center,
+//                     children: [
+//                       Text(
+//                         LocaleKeys.paywall_continue.tr(),
+//                         style: TextStyle(
+//                           fontSize: 18,
+//                           fontWeight: FontWeight.bold,
+//                           color: Colors.white,
+//                         ),
+//                       ),
+//                     ],
+//                   ),
+//                 ),
+//               ),
+//             ),
+//           ),
+//         ),
+//       ),
+//     );
+//   }
 
-                  showCupertinoSheet(
-                    enableDrag: false,
-                    context: context,
-                    builder: (context) => PaywallPage(
-                      isFromOnboarding: widget.isFromOnboarding,
-                      isFromSettings: widget.isFromSettings,
-                    ),
-                  );
-                },
-                child: Container(
-                  padding: EdgeInsets.symmetric(vertical: 18),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        LocaleKeys.paywall_continue.tr(),
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
+//   Widget _buildLoadingState() {
+//     return Center(
+//       child: Column(
+//         mainAxisAlignment: MainAxisAlignment.center,
+//         children: [
+//           CupertinoActivityIndicator(radius: 20),
+//           SizedBox(height: 16),
+//           Text(
+//             LocaleKeys.paywall_loading.tr(),
+//             style: context.bodyMedium,
+//           ),
+//         ],
+//       ),
+//     );
+//   }
 
-  Widget _buildLoadingState() {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          CupertinoActivityIndicator(radius: 20),
-          SizedBox(height: 16),
-          Text(
-            LocaleKeys.paywall_loading.tr(),
-            style: context.bodyMedium,
-          ),
-        ],
-      ),
-    );
-  }
+//   Widget _buildErrorState() {
+//     return Center(
+//       child: Column(
+//         mainAxisAlignment: MainAxisAlignment.center,
+//         children: [
+//           Icon(
+//             CupertinoIcons.exclamationmark_triangle,
+//             size: 48,
+//             color: Colors.red,
+//           ),
+//           SizedBox(height: 16),
+//           Text(
+//             LocaleKeys.paywall_something_went_wrong.tr(),
+//             style: context.bodyMedium,
+//             textAlign: TextAlign.center,
+//           ),
+//         ],
+//       ),
+//     );
+//   }
 
-  Widget _buildErrorState() {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            CupertinoIcons.exclamationmark_triangle,
-            size: 48,
-            color: Colors.red,
-          ),
-          SizedBox(height: 16),
-          Text(
-            LocaleKeys.paywall_something_went_wrong.tr(),
-            style: context.bodyMedium,
-            textAlign: TextAlign.center,
-          ),
-        ],
-      ),
-    );
-  }
+//   CupertinoNavigationBar _navBar(BuildContext context) {
+//     return CupertinoNavigationBar(
+//       automaticallyImplyLeading: false,
+//       leading: widget.isFromOnboarding
+//           ? null
+//           : CircularActionButton(
+//               onPressed: () {
+//                 navigator.pop();
+//               },
+//               icon: CupertinoIcons.xmark,
+//             ),
+//       middle: Text(
+//         LocaleKeys.paywall_title.tr(),
+//         style: context.titleMedium.copyWith(
+//           fontWeight: FontWeight.bold,
+//         ),
+//       ),
+//       border: Border(
+//         bottom: BorderSide(
+//           color: CupertinoColors.separator,
+//           width: 0.5,
+//         ),
+//       ),
+//       transitionBetweenRoutes: false,
+//     );
+//   }
+// }
 
-  CupertinoNavigationBar _navBar(BuildContext context) {
-    return CupertinoNavigationBar(
-      automaticallyImplyLeading: false,
-      leading: widget.isFromOnboarding
-          ? null
-          : CircularActionButton(
-              onPressed: () {
-                navigator.pop();
-              },
-              icon: CupertinoIcons.xmark,
-            ),
-      middle: Text(
-        LocaleKeys.paywall_title.tr(),
-        style: context.titleMedium.copyWith(
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-      border: Border(
-        bottom: BorderSide(
-          color: CupertinoColors.separator,
-          width: 0.5,
-        ),
-      ),
-      transitionBetweenRoutes: false,
-    );
-  }
-}
+// class TestimonialModel {
+//   final String userName;
+//   final String stars;
+//   final String comment;
+//   final String userType;
 
-class TestimonialModel {
-  final String userName;
-  final String stars;
-  final String comment;
-  final String userType;
+//   TestimonialModel(this.userName, this.stars, this.comment, this.userType);
+// }
 
-  TestimonialModel(this.userName, this.stars, this.comment, this.userType);
-}
+// class FeatureModel {
+//   final IconData widget;
+//   final String name;
+//   final String description;
+//   final Color color;
 
-class FeatureModel {
-  final IconData widget;
-  final String name;
-  final String description;
-  final Color color;
-
-  FeatureModel(this.name, this.widget, this.description, this.color);
-}
+//   FeatureModel(this.name, this.widget, this.description, this.color);
+// }

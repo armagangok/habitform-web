@@ -7,7 +7,6 @@ import '../../../auth/views/pages/my_account_page.dart';
 import '../../../create_habit/create_habit_page.dart';
 import '../../../create_habit/provider/create_habit_provider.dart';
 import '../../../habit_probability/page/habit_probability_page.dart';
-import '../../../purchase/page/paywall_page.dart';
 import '../../../purchase/providers/purchase_provider.dart';
 import '../../../settings/settings_page.dart';
 import '../../provider/home_provider.dart';
@@ -346,13 +345,7 @@ class _HomePageState extends ConsumerState<HomePage> {
   }
 
   Future<void> _handlePaywallAction(BuildContext context) async {
-    showCupertinoSheet(
-      enableDrag: false,
-      context: context,
-      builder: (contextFromSheet) {
-        return PaywallPage(isFromOnboarding: false);
-      },
-    );
+    await ref.read(purchaseProvider.notifier).presentPaywall(isFromOnboarding: false);
   }
 
   Future<dynamic> _openCreateHabitPage(BuildContext context) {

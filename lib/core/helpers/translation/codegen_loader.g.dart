@@ -6941,7 +6941,7 @@ static const Map<String,dynamic> _en_US = {
     "purchaseCancelled": "Purchase was cancelled",
     "purchaseInvalidated": "Purchase was invalidated.",
     "purchaseNotAllowed": "Purchase is not allowed at this time",
-    "purchaseRestoredSuccessfuly": "Purchase restored successfully",
+    
     "purchaseSuccessful": "Purchase completed successfully",
     "receiptAlreadyInUse": "This receipt is already in use",
     "restoreSuccessful": "Purchases successfully restored",

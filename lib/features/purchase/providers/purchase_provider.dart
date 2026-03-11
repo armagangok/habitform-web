@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:purchases_ui_flutter/purchases_ui_flutter.dart';
 
 import '../../../core/constants/debug_constants.dart';
 import '../../../core/core.dart';
@@ -354,6 +355,37 @@ class PurchaseNotifier extends AsyncNotifier<PaywallState> {
     // Try to get current subscription package
     final currentPackage = offerings.current?.monthly ?? offerings.current?.annual;
     return currentPackage;
+  }
+
+  /// Presents the RevenueCat paywall via RevenueCatUI.presentPaywall (modal).
+  /// Handles result: refreshes subscription state, shows flushbars, and navigates to home when from onboarding.
+  Future<void> presentPaywall({
+    required bool isFromOnboarding,
+    bool isFromSettings = false,
+    Offering? offering,
+  }) async {
+    final result = await PurchaseService.presentPaywall(offering: offering);
+    await checkSubscriptionStatus();
+
+    switch (result) {
+      case PaywallResult.purchased:
+        AppFlushbar.shared.successFlushbar(LocaleKeys.subscription_purchaseSuccessful.tr());
+        break;
+      case PaywallResult.restored:
+        AppFlushbar.shared.successFlushbar(LocaleKeys.subscription_restoreSuccessful.tr());
+        break;
+      case PaywallResult.cancelled:
+      case PaywallResult.notPresented:
+        break;
+      case PaywallResult.error:
+        AppFlushbar.shared.errorFlushbar(LocaleKeys.errors_try_again.tr());
+        break;
+    }
+
+    // Always navigate to home page if we're coming from onboarding
+    if (isFromOnboarding) {
+      navigator.navigateAndClear(path: KRoute.homePage);
+    }
   }
 
   /// Copies the customer ID to clipboard and shows a success message

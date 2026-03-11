@@ -3,27 +3,24 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/core.dart';
 import '../../../models/app_defaults/app_defaults.dart';
 import '../../../services/app_default.dart';
+import '../../purchase/providers/purchase_provider.dart';
 import '../enum/user_goal_enum.dart';
-import '../models/onboarding_page_model.dart';
 import 'onboarding_state.dart';
 
-final onboardingProvider = StateNotifierProvider<OnboardingNotifier, OnboardingState>((ref) {
-  return OnboardingNotifier(AppDefaultsService());
-});
+final onboardingProvider = AutoDisposeNotifierProvider<OnboardingNotifier, OnboardingState>(
+  OnboardingNotifier.new,
+);
 
-class OnboardingNotifier extends StateNotifier<OnboardingState> {
-  final AppDefaultsService _appDefaultsService;
+class OnboardingNotifier extends AutoDisposeNotifier<OnboardingState> {
   late final PageController pageController;
-
-  OnboardingNotifier(this._appDefaultsService) : super(const OnboardingState()) {
-    pageController = PageController();
-    checkFirstLaunch();
-  }
+  AppDefaultsService get _appDefaultsService => AppDefaultsService();
 
   @override
-  void dispose() {
-    pageController.dispose();
-    super.dispose();
+  OnboardingState build() {
+    pageController = PageController();
+    ref.onDispose(() => pageController.dispose());
+    Future.microtask(() => checkFirstLaunch());
+    return const OnboardingState();
   }
 
   Future<void> checkFirstLaunch() async {
@@ -56,10 +53,7 @@ class OnboardingNotifier extends StateNotifier<OnboardingState> {
 
       if (!context.mounted) return;
 
-      navigator.navigateAndClear(
-        path: KRoute.prePaywall,
-        data: {'isFromOnboarding': true},
-      );
+      ref.read(purchaseProvider.notifier).presentPaywall(isFromOnboarding: true);
     } catch (e, s) {
       LogHelper.shared.debugPrint(e.toString());
       LogHelper.shared.debugPrint(s.toString());
@@ -100,17 +94,9 @@ class OnboardingNotifier extends StateNotifier<OnboardingState> {
       completeOnboarding(context);
     } else {
       pageController.nextPage(
-        duration: const Duration(milliseconds: 500),
+        duration: const Duration(milliseconds: 350),
         curve: Curves.easeInOut,
       );
     }
-  }
-
-  void skipToLastPage() {
-    pageController.animateToPage(
-      OnboardingPages.pages.length - 1,
-      duration: const Duration(milliseconds: 500),
-      curve: Curves.easeInOut,
-    );
   }
 }

@@ -8,7 +8,6 @@ import '/features/purchase/providers/purchase_provider.dart';
 import '/models/habit/habit_model.dart';
 import '../../habit_probability/provider/habit_probability_provider.dart';
 import '../../habit_probability/provider/habit_probability_state.dart';
-import '../../purchase/page/paywall_page.dart';
 import '../providers/habit_statistics_provider.dart';
 import 'statistic_card.dart';
 
@@ -139,6 +138,7 @@ class HabitOverviewWidget extends ConsumerWidget {
                   Expanded(
                     child: _ProLockedStat(
                       isPro: isProUser,
+                      onShowPaywall: () => ref.read(purchaseProvider.notifier).presentPaywall(isFromOnboarding: false),
                       child: StatisticCard(
                         icon: Icons.check_circle_outline,
                         title: LocaleKeys.statistics_completed.tr(),
@@ -153,6 +153,7 @@ class HabitOverviewWidget extends ConsumerWidget {
                   Expanded(
                     child: _ProLockedStat(
                       isPro: isProUser,
+                      onShowPaywall: () => ref.read(purchaseProvider.notifier).presentPaywall(isFromOnboarding: false),
                       child: StatisticCard(
                         icon: Icons.calendar_today,
                         title: LocaleKeys.statistics_total_days.tr(),
@@ -284,6 +285,7 @@ class HabitOverviewCompact extends ConsumerWidget {
               Expanded(
                 child: _ProLockedStat(
                   isPro: isProUser,
+                  onShowPaywall: () => ref.read(purchaseProvider.notifier).presentPaywall(isFromOnboarding: false),
                   child: StatisticCard(
                     icon: CupertinoIcons.checkmark_circle_fill,
                     title: LocaleKeys.statistics_completed.tr(),
@@ -300,6 +302,7 @@ class HabitOverviewCompact extends ConsumerWidget {
               Expanded(
                 child: _ProLockedStat(
                   isPro: isProUser,
+                  onShowPaywall: () => ref.read(purchaseProvider.notifier).presentPaywall(isFromOnboarding: false),
                   child: StatisticCard(
                     icon: CupertinoIcons.calendar,
                     title: LocaleKeys.statistics_total_days.tr(),
@@ -323,16 +326,9 @@ class HabitOverviewCompact extends ConsumerWidget {
 class _ProLockedStat extends StatelessWidget {
   final bool isPro;
   final Widget child;
+  final VoidCallback onShowPaywall;
 
-  const _ProLockedStat({required this.isPro, required this.child});
-
-  void _showPaywall(BuildContext context) {
-    showCupertinoSheet(
-      enableDrag: false,
-      context: context,
-      builder: (context) => PaywallPage(isFromOnboarding: false),
-    );
-  }
+  const _ProLockedStat({required this.isPro, required this.child, required this.onShowPaywall});
 
   @override
   Widget build(BuildContext context) {
@@ -362,7 +358,7 @@ class _ProLockedStat extends StatelessWidget {
           ),
         ),
         CustomButton(
-          onPressed: () => _showPaywall(context),
+          onPressed: onShowPaywall,
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
             decoration: BoxDecoration(

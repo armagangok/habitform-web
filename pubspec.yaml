@@ -57,7 +57,6 @@ dependencies:
   screenshot: ^3.0.0
   flutter_svg: ^2.0.17
   permission_handler: ^11.3.1
-  purchases_flutter: ^8.8.1
   flutter_dotenv: ^5.2.1
   in_app_review: ^2.0.10
   emoji_picker_flutter: ^4.3.0  
@@ -80,6 +79,8 @@ dependencies:
   sign_in_with_apple: ^7.0.1
   firebase_storage: ^12.4.10
   image_picker: ^1.2.1
+  purchases_flutter: ^8.8.1
+  purchases_ui_flutter: ^8.11.0
 
 dev_dependencies:
   flutter_test:

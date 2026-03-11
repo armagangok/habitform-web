@@ -1,7 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '/core/core.dart';
-import '/features/purchase/page/pre_paywall_page.dart';
 import '../../purchase/providers/purchase_provider.dart';
 import '../providers/auth_provider.dart';
 import 'user_avatar_widget.dart';
@@ -33,14 +32,8 @@ class AuthHeaderWidget extends ConsumerWidget {
               isDefaultAction: true,
               onPressed: () {
                 Navigator.pop(context);
-                showCupertinoSheet(
-                  enableDrag: false,
-                  context: context,
-                  builder: (context) => PrePaywallPage(
-                    isFromOnboarding: false,
-                    isFromSettings: true,
-                  ),
-                );
+
+                ref.read(purchaseProvider.notifier).presentPaywall(isFromOnboarding: false, isFromSettings: true);
               },
               child: Text(LocaleKeys.auth_pro_feature_action.tr()),
             ),

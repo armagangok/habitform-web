@@ -8,7 +8,6 @@ import 'package:share_plus/share_plus.dart';
 import '/core/core.dart';
 import '/features/purchase/providers/purchase_provider.dart';
 import '/models/habit/habit_model.dart';
-import '../purchase/page/paywall_page.dart';
 import 'provider/share_template_provider.dart';
 import 'templates/templates.dart';
 
@@ -317,11 +316,7 @@ class _TemplateSelector extends ConsumerWidget {
           onValueChanged: (i) {
             final template = provider.templates[i];
             if (template.requiresPro && !isPro) {
-              showCupertinoSheet(
-                context: context,
-                builder: (context) => PaywallPage(isFromOnboarding: false),
-              );
-
+              ref.read(purchaseProvider.notifier).presentPaywall(isFromOnboarding: false);
               return;
             }
             ref.read(shareTemplateProvider.notifier).select(i);

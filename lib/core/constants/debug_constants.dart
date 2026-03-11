@@ -11,6 +11,6 @@ abstract final class KDebug {
   // enables log debug mode for print
   static const bool logDebugMode = false;
 
-  // enables mock data debug mode for print
+  // enables mock data debug mode for printd
   static const bool mockHabitServiceDebugMode = false;
 }

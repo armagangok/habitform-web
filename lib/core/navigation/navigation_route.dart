@@ -10,8 +10,6 @@ import '/features/settings/settings_page.dart';
 import '../../features/onboarding/pages/onboarding_app_features_page.dart';
 import '../../features/onboarding/pages/onboarding_rating_page.dart';
 import '../../features/onboarding/pages/onboarding_welcome_page.dart';
-import '../../features/purchase/page/paywall_page.dart';
-import '../../features/purchase/page/pre_paywall_page.dart';
 import '../core.dart';
 
 @immutable
@@ -60,29 +58,17 @@ final class NavigationRoute {
           settings: args,
         );
 
-      case KRoute.prePaywall:
-        final data = args.arguments as Map<String, Object?>?;
-        final isFromOnboarding = data != null ? data['isFromOnboarding'] as bool? : false;
-        final isFromSettings = data != null ? data['isFromSettings'] as bool? : false;
-        return _getRoute(
-          page: PrePaywallPage(
-            isFromOnboarding: isFromOnboarding ?? false,
-            isFromSettings: isFromSettings ?? false,
-          ),
-          settings: args,
-        );
-
-      case KRoute.paywall:
-        final data = args.arguments as Map<String, Object?>?;
-        final isFromOnboarding = data != null ? data['isFromOnboarding'] as bool? : false;
-        final isFromSettings = data != null ? data['isFromSettings'] as bool? : false;
-        return _getRoute(
-          page: PaywallPage(
-            isFromOnboarding: isFromOnboarding ?? false,
-            isFromSettings: isFromSettings ?? false,
-          ),
-          settings: args,
-        );
+      // case KRoute.prePaywall:
+      //   final data = args.arguments as Map<String, Object?>?;
+      //   final isFromOnboarding = data != null ? data['isFromOnboarding'] as bool? : false;
+      //   final isFromSettings = data != null ? data['isFromSettings'] as bool? : false;
+      //   return _getRoute(
+      //     page: PaywallPage(
+      //       isFromOnboarding: isFromOnboarding ?? false,
+      //       isFromSettings: isFromSettings ?? false,
+      //     ),
+      //     settings: args,
+      //   );
 
       case KRoute.auth:
         return _getRoute(page: const AuthPage(), settings: args);

@@ -7,7 +7,7 @@ class RevenueCatHelper {
   const RevenueCatHelper._();
 
   static String get purchaseSuccessMessage => LocaleKeys.subscription_purchaseSuccessful.tr();
-  static String get restoreSuccessMessage => LocaleKeys.subscription_purchaseRestoredSuccessfuly.tr();
+
   static String get loadingMessage => LocaleKeys.subscription_loading.tr();
   static String get alreadyPurchasedMessage => LocaleKeys.subscription_youAlreadyHaveAnActiveSubscription.tr();
 

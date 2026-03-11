@@ -2,7 +2,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/core.dart';
 import '../../../core/theme/providers/theme_provider.dart';
-import '../../purchase/page/pre_paywall_page.dart';
 import '../../purchase/providers/purchase_provider.dart';
 
 class SubscribeButton extends ConsumerWidget {
@@ -20,14 +19,15 @@ class SubscribeButton extends ConsumerWidget {
         } else {
           return CustomButton(
             onPressed: () async {
-              await showCupertinoSheet(
-                enableDrag: false,
-                context: context,
-                builder: (contextFromSheet) => PrePaywallPage(
-                  isFromOnboarding: false,
-                  isFromSettings: true,
-                ),
-              );
+              // await showCupertinoSheet(
+              //   enableDrag: false,
+              //   context: context,
+              //   builder: (contextFromSheet) => PrePaywallPage(
+              //     isFromOnboarding: false,
+              //     isFromSettings: true,
+              //   ),
+              // );
+              ref.read(purchaseProvider.notifier).presentPaywall(isFromOnboarding: false, isFromSettings: true);
             },
             child: CupertinoListSection.insetGrouped(
               children: [
