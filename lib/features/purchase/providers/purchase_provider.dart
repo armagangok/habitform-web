@@ -388,6 +388,12 @@ class PurchaseNotifier extends AsyncNotifier<PaywallState> {
     }
   }
 
+  /// Presents the RevenueCat Customer Center UI.
+  Future<void> presentCustomerCenter() async {
+    await PurchaseService.presentCustomerCenter();
+    await checkSubscriptionStatus();
+  }
+
   /// Copies the customer ID to clipboard and shows a success message
   Future<void> copyCustomerId() async {
     try {

@@ -2,7 +2,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/core.dart';
 import '../../purchase/providers/purchase_provider.dart';
-import '../../purchase/widgets/membership_info_widget.dart';
 
 class MembershipInfoButton extends ConsumerWidget {
   const MembershipInfoButton({super.key});
@@ -11,13 +10,7 @@ class MembershipInfoButton extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return CustomButton(
       onPressed: () async {
-        await showCupertinoSheet(
-          enableDrag: false,
-          context: context,
-          builder: (contextFromSheet) => MembershipInfoWidget(
-            onCopyCustomerId: () => ref.read(purchaseProvider.notifier).copyCustomerId(),
-          ),
-        );
+        await ref.read(purchaseProvider.notifier).presentCustomerCenter();
       },
       child: CupertinoListSection.insetGrouped(
         children: [

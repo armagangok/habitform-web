@@ -34,6 +34,10 @@ class PurchaseService {
     return await RevenueCatUI.presentPaywallIfNeeded(entitlementIdentifier, offering: offering);
   }
 
+  static Future<void> presentCustomerCenter() async {
+    await RevenueCatUI.presentCustomerCenter();
+  }
+
   /// Links RevenueCat to Firebase UID so subscription is shared across devices.
   static Future<void> logIn(String firebaseUid) async {
     await Purchases.logIn(firebaseUid);
