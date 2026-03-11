@@ -218,6 +218,8 @@ class PurchaseNotifier extends AsyncNotifier<PaywallState> {
     // State'i güncelle
     state = AsyncValue.data(currentState.copyWith(isPurchasing: true));
 
+    await Future.delayed(const Duration(seconds: 3));
+
     try {
       final customerInfo = await Purchases.purchasePackage(package);
       final isActive = customerInfo.entitlements.active.isNotEmpty;

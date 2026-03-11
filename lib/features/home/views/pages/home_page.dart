@@ -31,7 +31,7 @@ class _HomePageState extends ConsumerState<HomePage> {
   Future<void> _checkLoginSyncAlert() async {
     // 1. Check Auth status
     final user = ref.read(authStateProvider).valueOrNull;
-    final isLoggedOut = user == null || user.isAnonymous;
+    final isLoggedOut = user == null;
     if (!isLoggedOut) return;
 
     // 2. Show Alert

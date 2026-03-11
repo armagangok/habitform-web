@@ -52,11 +52,7 @@ class _AuthPageState extends ConsumerState<AuthPage> {
           return;
         }
       } else {
-        if (authService.currentUser?.isAnonymous == true) {
-          await authService.linkWithEmailAndPassword(email, password);
-        } else {
-          await authService.createUserWithEmailAndPassword(email, password);
-        }
+        await authService.createUserWithEmailAndPassword(email, password);
       }
       if (mounted) Navigator.of(context).pop();
 

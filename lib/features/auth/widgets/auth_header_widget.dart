@@ -44,7 +44,7 @@ class AuthHeaderWidget extends ConsumerWidget {
 
     return authState.when(
       data: (user) {
-        if (user == null || user.isAnonymous) {
+        if (user == null) {
           return CupertinoListSection.insetGrouped(
             footer: Text(
               LocaleKeys.auth_my_account_description.tr(),

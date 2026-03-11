@@ -5,7 +5,9 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:purchases_ui_flutter/purchases_ui_flutter.dart';
 
+import '/core/helpers/logger/logger.dart';
 import '../utils/store_config.dart';
+import '../../../core/core.dart';
 
 class PurchaseService {
   const PurchaseService._();
@@ -44,14 +46,11 @@ class PurchaseService {
   }
 
   /// Clears RevenueCat user; call when user signs out.
-  /// Ignores RevenueCat error when current user is anonymous (no-op in that case).
   static Future<CustomerInfo> logOut() async {
     try {
       return await Purchases.logOut();
     } on PlatformException catch (e) {
-      if (e.code == '22' || (e.message?.contains('anonymous') ?? false) || (e.details?.toString().contains('LOGOUT_CALLED_WITH_ANONYMOUS_USER') ?? false)) {
-        return await Purchases.getCustomerInfo();
-      }
+      LogHelper.shared.errorPrint('❌ Error during RevenueCat logout: $e');
       rethrow;
     }
   }
@@ -81,7 +80,7 @@ class PurchaseService {
     await Purchases.setLogLevel(LogLevel.debug);
 
     /*
-    - appUserID is nil, so an anonymous ID will be generated automatically by the Purchases SDK. Read more about Identifying Users here: https://docs.revenuecat.com/docs/user-ids
+    - appUserID is nil, so the SDK will handle user identification based on our logIn/logOut calls.
 
     - observerMode is false, so Purchases will automatically handle finishing transactions. Read more about Observer Mode here: https://docs.revenuecat.com/docs/observer-mode
     */

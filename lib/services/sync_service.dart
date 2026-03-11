@@ -36,7 +36,7 @@ class SyncService {
 
     // Guard: Block sync ONLY for email/password users who haven't verified their email yet
     // and are not Pro subscribers. Social users and Pro users always sync.
-    if (user != null && !user.isAnonymous && !isSocialProvider && !user.emailVerified && !isPro) {
+    if (user != null && !isSocialProvider && !user.emailVerified && !isPro) {
       LogHelper.shared.debugPrint('⚠️ Sync skipped: Email not verified for ${user.email} (email/password account, not Pro).');
       return;
     }

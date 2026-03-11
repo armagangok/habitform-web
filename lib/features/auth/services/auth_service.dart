@@ -30,11 +30,6 @@ class AuthService {
 
   User? get currentUser => _auth.currentUser;
 
-  Future<UserCredential> signInAnonymously() async {
-    final credential = await _auth.signInAnonymously();
-    await _updateUserData(credential.user);
-    return credential;
-  }
 
   Future<UserCredential> createUserWithEmailAndPassword(
     String email,

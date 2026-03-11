@@ -154,7 +154,7 @@ class MyAccountPage extends ConsumerWidget {
             ),
           ),
           data: (user) {
-            if (user == null || user.isAnonymous) {
+            if (user == null) {
               return ListView(
                 padding: EdgeInsets.zero,
                 children: const [
