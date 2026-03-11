@@ -811,6 +811,15 @@ class _PaywallWidgetState extends ConsumerState<PaywallPage> with TickerProvider
     );
   }
 
+  /// Finds a package whose product identifier contains any of the given keywords (case-insensitive).
+  Package? _findPackageByIdentifier(List<Package> packages, List<String> keywords) {
+    for (final package in packages) {
+      final id = package.storeProduct.identifier.toLowerCase();
+      if (keywords.any((kw) => id.contains(kw))) return package;
+    }
+    return null;
+  }
+
   Widget _productSection(PaywallState state) {
     final availablePackages = state.offerings?.current?.availablePackages;
 
@@ -825,13 +834,20 @@ class _PaywallWidgetState extends ConsumerState<PaywallPage> with TickerProvider
         final isSelected = selectedIndex == index;
         final isPopular = index == 1 && availablePackages.length > 1;
 
-        // Calculate discount
+        // Calculate discount for annual package (find monthly and annual by identifier, not index)
         String? discount;
-        if (availablePackages.length > 1 && index == 1) {
-          final monthlyPrice = availablePackages.first.storeProduct.price * 12;
-          final annualPrice = availablePackages[1].storeProduct.price;
-          final discountPercent = (((monthlyPrice - annualPrice) / monthlyPrice) * 100).toStringAsFixed(0);
-          discount = "-$discountPercent%";
+        if (availablePackages.length > 1) {
+          final monthlyPackage = _findPackageByIdentifier(availablePackages, ['month', 'monthly']);
+          final annualPackage = _findPackageByIdentifier(availablePackages, ['year', 'annual', 'yearly']);
+          final isAnnualPackage = annualPackage != null && annualPackage.storeProduct.identifier == package.storeProduct.identifier;
+          if (isAnnualPackage && monthlyPackage != null) {
+            final monthlyPrice = monthlyPackage.storeProduct.price * 12;
+            final annualPrice = annualPackage.storeProduct.price;
+            if (monthlyPrice > 0) {
+              final discountPercent = (((monthlyPrice - annualPrice) / monthlyPrice) * 100).toStringAsFixed(0);
+              discount = "-$discountPercent%";
+            }
+          }
         }
 
         return Container(

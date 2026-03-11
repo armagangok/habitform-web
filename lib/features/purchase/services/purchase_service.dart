@@ -32,14 +32,12 @@ class PurchaseService {
 
   /// Clears RevenueCat user; call when user signs out.
   /// Ignores RevenueCat error when current user is anonymous (no-op in that case).
-  static Future<void> logOut() async {
+  static Future<CustomerInfo> logOut() async {
     try {
-      await Purchases.logOut();
+      return await Purchases.logOut();
     } on PlatformException catch (e) {
-      if (e.code == '22' ||
-          (e.message?.contains('anonymous') ?? false) ||
-          (e.details?.toString().contains('LOGOUT_CALLED_WITH_ANONYMOUS_USER') ?? false)) {
-        return;
+      if (e.code == '22' || (e.message?.contains('anonymous') ?? false) || (e.details?.toString().contains('LOGOUT_CALLED_WITH_ANONYMOUS_USER') ?? false)) {
+        return await Purchases.getCustomerInfo();
       }
       rethrow;
     }

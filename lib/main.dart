@@ -22,10 +22,8 @@ import 'features/home/views/pages/home_page.dart';
 import 'features/onboarding/pages/onboarding_welcome_page.dart';
 import 'features/purchase/providers/purchase_provider.dart';
 import 'firebase_options.dart';
-import 'models/user_defaults/user_defaults.dart';
 import 'services/habit_service/habit_service_interface.dart';
 import 'services/habit_service/local_habit_service.dart';
-import 'services/sync_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -123,20 +121,17 @@ class _MyAppState extends ConsumerState<MyApp> {
         if (user != null) {
           await PurchaseService.logIn(user.uid);
           await habitService.syncFromRemote();
-          final userData = await SyncService().getUserSubscription();
-          if (userData != null) {
-            final isPro = userData['isSubscribed'] as bool? ?? false;
-            final defaults = HiveHelper.shared.getData<UserDefaults>(HiveBoxes.userDefaultsBox, HiveKeys.userDefaultsKey) ?? UserDefaults();
-            await HiveHelper.shared.putData(HiveBoxes.userDefaultsBox, HiveKeys.userDefaultsKey, defaults.copyWith(isPro: isPro));
-          }
+
+          // Re-validate home data
           ref.invalidate(homeProvider);
           ref.invalidate(homeSummariesProvider);
+
+          // Let purchaseProvider handle the subscription state correctly
+          // instead of manually overwriting Hive here with potentially stale Firestore data
           ref.invalidate(purchaseProvider);
         } else {
           final hadUser = previous?.valueOrNull != null;
           if (hadUser) {
-            await PurchaseService.logOut();
-
             // Invalidate providers to reset their state
             ref.invalidate(homeProvider);
             ref.invalidate(homeSummariesProvider);

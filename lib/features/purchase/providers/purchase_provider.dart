@@ -48,15 +48,21 @@ class PurchaseNotifier extends AsyncNotifier<PaywallState> {
         }
       }
 
-      // When logged in, pre-load Firestore subscription so fallback is ready if RevenueCat fails
+      // Skip Firestore overwrite here: RevenueCat is the source of truth for "isPro".
+      // Only keep this if you want a local-only fallback before RevenueCat starts up,
+      // but RevenueCat is usually fast enough and more accurate.
+      /*
       if (FirebaseAuth.instance.currentUser != null) {
         final userData = await SyncService().getUserSubscription();
         if (userData != null) {
           final isProFromFirestore = userData['isSubscribed'] as bool? ?? false;
-          final currentDefaults = await _getUserDefaults() ?? UserDefaults();
-          await _saveUserDefaults(currentDefaults.copyWith(isPro: isProFromFirestore));
+          if (isProFromFirestore) {
+            final currentDefaults = await _getUserDefaults() ?? UserDefaults();
+            await _saveUserDefaults(currentDefaults.copyWith(isPro: true));
+          }
         }
       }
+      */
 
       // Önce mevcut müşteri bilgilerini al
       final customerInfo = await Purchases.getCustomerInfo();

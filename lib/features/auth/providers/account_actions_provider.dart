@@ -1,17 +1,19 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../purchase/providers/purchase_provider.dart';
 import '../models/account_action_state.dart';
 import '../services/auth_service.dart';
 import 'auth_provider.dart';
 
 final accountActionsProvider = StateNotifierProvider<AccountActionsNotifier, AccountActionState>((ref) {
-  return AccountActionsNotifier(ref.read(authServiceProvider));
+  return AccountActionsNotifier(ref.read(authServiceProvider), ref);
 });
 
 class AccountActionsNotifier extends StateNotifier<AccountActionState> {
-  AccountActionsNotifier(this._authService) : super(const AccountActionState());
+  AccountActionsNotifier(this._authService, this._ref) : super(const AccountActionState());
 
   final AuthService _authService;
+  final Ref _ref;
 
   Future<void> updateDisplayName(String displayName) async {
     state = state.copyWith(status: AccountActionStatus.loading, errorMessage: null);
@@ -133,6 +135,8 @@ class AccountActionsNotifier extends StateNotifier<AccountActionState> {
     state = state.copyWith(status: AccountActionStatus.loading, errorMessage: null);
     try {
       await _authService.signOut();
+      // Invalidate purchaseProvider to force a fresh state
+      _ref.invalidate(purchaseProvider);
       state = state.copyWith(status: AccountActionStatus.success);
     } catch (e) {
       state = state.copyWith(
