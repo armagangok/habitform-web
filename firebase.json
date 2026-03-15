@@ -1,1 +1,36 @@
-{"flutter":{"platforms":{"android":{"default":{"projectId":"habitriseapp","appId":"1:639576600772:android:3464a2014f5eb0af031991","fileOutput":"android/app/google-services.json"}},"ios":{"default":{"projectId":"habitriseapp","appId":"1:639576600772:ios:7c58b8594127f12c031991","uploadDebugSymbols":false,"fileOutput":"ios/Runner/GoogleService-Info.plist"}},"dart":{"lib/firebase_options.dart":{"projectId":"habitriseapp","configurations":{"android":"1:639576600772:android:3464a2014f5eb0af031991","ios":"1:639576600772:ios:7c58b8594127f12c031991"}}}}}}
+{
+  "firestore": {
+    "rules": "firestore.rules"
+  },
+  "storage": {
+    "rules": "firebase/storage.rules"
+  },
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "habitriseapp",
+          "appId": "1:639576600772:android:3464a2014f5eb0af031991",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "ios": {
+        "default": {
+          "projectId": "habitriseapp",
+          "appId": "1:639576600772:ios:7c58b8594127f12c031991",
+          "uploadDebugSymbols": false,
+          "fileOutput": "ios/Runner/GoogleService-Info.plist"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "habitriseapp",
+          "configurations": {
+            "android": "1:639576600772:android:3464a2014f5eb0af031991",
+            "ios": "1:639576600772:ios:7c58b8594127f12c031991"
+          }
+        }
+      }
+    }
+  }
+}

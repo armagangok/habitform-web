@@ -384,7 +384,20 @@ class PurchaseNotifier extends AsyncNotifier<PaywallState> {
         break;
     }
 
-    // Always navigate to home page if we're coming from onboarding
+    // After a successful purchase or restore with an active entitlement,
+    // close the current paywall container (or go home) similarly to manual flows.
+    final isActive = state.valueOrNull?.isSubscriptionActive ?? false;
+    if (isActive && (result == PaywallResult.purchased || result == PaywallResult.restored)) {
+      if (isFromOnboarding || isFromSettings) {
+        navigator.navigateAndClear(path: KRoute.homePage);
+      } else {
+        navigator.pop();
+      }
+      return;
+    }
+
+    // Fallback: if we're coming from onboarding but subscription is not active,
+    // keep existing behavior and still navigate to home.
     if (isFromOnboarding) {
       navigator.navigateAndClear(path: KRoute.homePage);
     }
