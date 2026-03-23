@@ -13,7 +13,11 @@ import 'habit_canvas_model.dart';
 
 /// Provider for the canvas state
 final habitCanvasProvider = StateNotifierProvider<HabitCanvasNotifier, HabitCanvasState>((ref) {
-  return HabitCanvasNotifier(ref);
+  final notifier = HabitCanvasNotifier(ref);
+  ref.onDispose(() {
+    unawaited(notifier.flushPendingRemoteSync());
+  });
+  return notifier;
 });
 
 /// Notifier for managing habit canvas state
@@ -29,6 +33,17 @@ class HabitCanvasNotifier extends StateNotifier<HabitCanvasState> {
   // Debounce timer for position updates to avoid excessive disk I/O
   Timer? _saveStateTimer;
   static const Duration _saveDebounceDuration = Duration(milliseconds: 300);
+
+  /// Firestore writes for habit positions / canvas: single idle window — any canvas-related
+  /// activity resets this timer; all pending remote work runs once after 3s of no activity.
+  static const Duration _firebaseDebounceDuration = Duration(seconds: 3);
+
+  Timer? _remoteFirebaseIdleTimer;
+  final Set<String> _pendingRemoteHabitIds = {};
+
+  double? _pendingCanvasFirestoreScale;
+  double? _pendingCanvasFirestoreOffsetX;
+  double? _pendingCanvasFirestoreOffsetY;
 
   Future<void> _loadState() async {
     // 1. Load local state for migration/fallback
@@ -69,9 +84,18 @@ class HabitCanvasNotifier extends StateNotifier<HabitCanvasState> {
 
   /// Initialize positions for habits that don't have positions yet
   /// Accepts both Habit and HabitSummary (both have id field)
-  Future<void> initializePositions(List<dynamic> habits, double canvasWidth, double canvasHeight) async {
+  ///
+  /// [shouldAbort] — when it returns true (e.g. host widget disposed), skips any
+  /// [state] mutation so Riverpod does not try to rebuild a defunct element.
+  Future<void> initializePositions(
+    List<dynamic> habits,
+    double canvasWidth,
+    double canvasHeight, {
+    bool Function()? shouldAbort,
+  }) async {
     // Ensure state is loaded before initializing
     await ensureLoaded();
+    if (shouldAbort?.call() ?? false) return;
 
     final updatedPositions = Map<String, HabitPosition>.from(state.positions);
     final updatedConnections = Set<HabitConnection>.from(state.connections);
@@ -79,8 +103,10 @@ class HabitCanvasNotifier extends StateNotifier<HabitCanvasState> {
 
     // Load local storage as a fallback for migration
     final localState = await HabitCanvasStorage.load();
+    if (shouldAbort?.call() ?? false) return;
 
     for (final habit in habits) {
+      if (shouldAbort?.call() ?? false) return;
       final habitId = (habit is Habit) ? habit.id : (habit as HabitSummary).id;
 
       // 1. Try to get position from the habit itself
@@ -144,6 +170,8 @@ class HabitCanvasNotifier extends StateNotifier<HabitCanvasState> {
     final habitIds = habits.map((h) => (h is Habit) ? h.id : (h as HabitSummary).id).toSet();
     updatedConnections.removeWhere((c) => !habitIds.contains(c.fromHabitId) || !habitIds.contains(c.toHabitId));
 
+    if (shouldAbort?.call() ?? false) return;
+
     if (hasChanges || updatedPositions.length != state.positions.length || updatedConnections.length != state.connections.length) {
       state = state.copyWith(positions: updatedPositions, connections: updatedConnections);
       unawaited(_saveLocalState(immediate: true));
@@ -187,11 +215,75 @@ class HabitCanvasNotifier extends StateNotifier<HabitCanvasState> {
 
     _habitUpdateDebounce?.cancel();
     _habitUpdateDebounce = Timer(_saveDebounceDuration, () async {
+      final ids = _pendingHabitUpdates.keys.toList();
       for (final habit in _pendingHabitUpdates.values) {
-        await habitService.updateHabit(habit);
+        await habitService.updateHabit(habit, skipRemoteSync: true);
       }
       _pendingHabitUpdates.clear();
+      for (final id in ids) {
+        _pendingRemoteHabitIds.add(id);
+      }
+      _scheduleRemoteFirebaseIdleSync();
     });
+  }
+
+  /// Resets the 3s idle clock on every call. Dragging another item, zoom, or pan after a drop
+  /// all keep pushing the Firestore flush until the user is idle for a full [_firebaseDebounceDuration].
+  void _scheduleRemoteFirebaseIdleSync() {
+    _remoteFirebaseIdleTimer?.cancel();
+    _remoteFirebaseIdleTimer = Timer(_firebaseDebounceDuration, () async {
+      await _runPendingRemoteFirebaseWrites();
+    });
+  }
+
+  Future<void> _runPendingRemoteFirebaseWrites() async {
+    final sync = _ref.read(syncServiceProvider);
+
+    final ids = _pendingRemoteHabitIds.toList();
+    _pendingRemoteHabitIds.clear();
+    for (final id in ids) {
+      final h = await habitService.getHabit(id);
+      if (h != null) {
+        try {
+          await sync.syncHabit(h);
+        } catch (e, st) {
+          LogHelper.shared.debugPrint('❌ Idle sync syncHabit failed for $id: $e\n$st');
+        }
+      }
+    }
+
+    final s = _pendingCanvasFirestoreScale;
+    final ox = _pendingCanvasFirestoreOffsetX;
+    final oy = _pendingCanvasFirestoreOffsetY;
+    if (s != null && ox != null && oy != null) {
+      try {
+        await sync.updateCanvasState(s, ox, oy);
+        _pendingCanvasFirestoreScale = null;
+        _pendingCanvasFirestoreOffsetX = null;
+        _pendingCanvasFirestoreOffsetY = null;
+      } catch (e, st) {
+        LogHelper.shared.debugPrint('❌ Idle sync updateCanvasState failed: $e\n$st');
+      }
+    }
+  }
+
+  /// Pushes any pending Firestore writes immediately (e.g. app background / provider dispose).
+  Future<void> flushPendingRemoteSync() async {
+    _habitUpdateDebounce?.cancel();
+    _remoteFirebaseIdleTimer?.cancel();
+
+    if (_pendingHabitUpdates.isNotEmpty) {
+      final ids = _pendingHabitUpdates.keys.toList();
+      for (final habit in _pendingHabitUpdates.values) {
+        await habitService.updateHabit(habit, skipRemoteSync: true);
+      }
+      _pendingHabitUpdates.clear();
+      for (final id in ids) {
+        _pendingRemoteHabitIds.add(id);
+      }
+    }
+
+    await _runPendingRemoteFirebaseWrites();
   }
 
   Future<void> _updateHabitModelPosition(Habit habit, double x, double y) async {
@@ -259,8 +351,10 @@ class HabitCanvasNotifier extends StateNotifier<HabitCanvasState> {
 
     unawaited(_saveLocalState(immediate: true));
 
-    // Sync to Firestore
-    _ref.read(syncServiceProvider).updateCanvasState(scale, offsetX, offsetY);
+    _pendingCanvasFirestoreScale = scale;
+    _pendingCanvasFirestoreOffsetX = offsetX;
+    _pendingCanvasFirestoreOffsetY = offsetY;
+    _scheduleRemoteFirebaseIdleSync();
   }
 
   /// Reset all positions to default layout

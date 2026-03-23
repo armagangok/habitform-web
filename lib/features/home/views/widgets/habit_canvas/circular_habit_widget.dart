@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -45,6 +43,9 @@ class _CircularHabitWidgetState extends ConsumerState<CircularHabitWidget> {
   // Static const values for performance optimization
   static const double _size = 90.0;
   static const double _containerSize = _size + 10;
+
+  /// Incomplete-state tint over the habit circle (no BackdropFilter). Try 0.5 vs ~0.1.
+  // static const double _incompleteHabitOverlayAlpha = 0.5;
   static const EdgeInsets _badgePadding = EdgeInsets.symmetric(horizontal: 6, vertical: 3);
   static const EdgeInsets _namePadding = EdgeInsets.symmetric(horizontal: 8, vertical: 5);
   static const BorderRadius _badgeBorderRadius = BorderRadius.all(Radius.circular(12));
@@ -77,14 +78,18 @@ class _CircularHabitWidgetState extends ConsumerState<CircularHabitWidget> {
                 return widget.habit as Habit;
               }
               // If it's a summary, we need to load the full habit
-              throw Exception('Habit not found and cannot use summary for completion');
+              throw Exception(
+                'Habit not found and cannot use summary for completion',
+              );
             },
           ),
           orElse: () {
             if (widget.habit is Habit) {
               return widget.habit as Habit;
             }
-            throw Exception('Habit not found and cannot use summary for completion');
+            throw Exception(
+              'Habit not found and cannot use summary for completion',
+            );
           },
         );
 
@@ -153,6 +158,228 @@ class _CircularHabitWidgetState extends ConsumerState<CircularHabitWidget> {
 
     widget.onComplete?.call();
   }
+
+  @override
+  Widget build(BuildContext context) {
+    // Use provider if enabled and habit is a full Habit, otherwise use widget.habit directly
+    // For HabitSummary, we don't watch provider since summaries are lightweight
+    final currentHabit = widget.useProvider && widget.habit is Habit
+        ? ref.watch(
+            homeProvider.select(
+              (state) => state.maybeWhen(
+                data: (homeState) => homeState.habits.firstWhere(
+                  (h) => h.id == widget.habit.id,
+                  orElse: () => widget.habit as Habit,
+                ),
+                orElse: () => widget.habit as Habit,
+              ),
+            ),
+          )
+        : widget.habit as dynamic;
+
+    final today = DateTime.now();
+    final int count = currentHabit.getCountForDate(today);
+    final int target = (currentHabit.dailyTarget as int) <= 0 ? 1 : currentHabit.dailyTarget;
+    final double ratio = (count / target).clamp(0.0, 1.0);
+    final bool isCompleted = ratio >= 1.0;
+
+    final Color habitColor = Color(currentHabit.colorCode);
+    final String emoji = currentHabit.emoji ?? '';
+    final int streak = currentHabit.calculateCurrentStreak();
+
+    final bool isDark = CupertinoTheme.of(context).brightness == Brightness.dark;
+    final double dragScale = widget.isDragging ? 1.15 : 1.0;
+    final bool shouldUseStrongBorderColor = widget.isSelected || widget.isDragging || widget.isConnecting || isCompleted;
+    final Color borderColor = shouldUseStrongBorderColor ? habitColor : habitColor.withValues(alpha: 0.7);
+
+    return Transform.scale(
+      scale: dragScale,
+      child: SizedBox(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // Completion time (top, if exists) - displayed on main page
+            if (currentHabit.completionTime != null) ...[
+              AnimatedOpacity(
+                duration: const Duration(milliseconds: 300),
+                opacity: widget.showName ?? true ? 1.0 : 0.0,
+                child: Text(
+                  (currentHabit.completionTime as DateTime).toHHMM(),
+                  textAlign: TextAlign.center,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: context.labelSmall.copyWith(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 14,
+                    color: isDark ? Colors.white60 : Colors.black54,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 2.5),
+            ],
+
+            // Main circular item - using Container for better performance
+            Container(
+              width: _containerSize,
+              height: _containerSize,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: isDark ? CupertinoColors.systemGrey6.darkColor : Colors.white,
+                border: Border.all(
+                  color: borderColor,
+                  width: widget.isSelected || widget.isDragging ? 2.5 : 2.5,
+                ),
+                boxShadow: [
+                  if (widget.isDragging) ...[
+                    BoxShadow(
+                      color: habitColor.withValues(alpha: 0.4),
+                      blurRadius: 20,
+                      spreadRadius: 4,
+                    ),
+                  ] else if (isCompleted) ...[
+                    BoxShadow(
+                      color: habitColor.withValues(alpha: 0.25),
+                      blurRadius: 16,
+                      spreadRadius: 2,
+                    ),
+                  ] else ...[
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: isDark ? 0.4 : 0.12),
+                      blurRadius: 10,
+                      spreadRadius: 0,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
+                ],
+              ),
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  // Emoji
+                  Text(emoji, style: _emojiStyle),
+
+                  // Streak badge (top right) - optimized without BackdropFilter
+                  Positioned(
+                    top: 0,
+                    right: 0,
+                    child: Container(
+                      padding: _badgePadding,
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: habitColor.withValues(alpha: 0.8),
+                          width: 1,
+                        ),
+                        color: habitColor,
+                        borderRadius: _badgeBorderRadius,
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            CupertinoIcons.flame_fill,
+                            size: 14,
+                            color: habitColor.colorRegardingToBrightness.withValues(alpha: 0.9),
+                          ),
+                          const SizedBox(width: 2),
+                          Text(
+                            '$streak',
+                            style: _streakStyle.copyWith(
+                              color: habitColor.colorRegardingToBrightness.withValues(alpha: 0.9),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+
+                  // Complete button (bottom right) - optimized without BackdropFilter
+                  // Show if useProvider is true or showCompleteButton is true
+                  if (widget.useProvider || widget.showCompleteButton)
+                    Positioned(
+                      bottom: 0,
+                      right: 0,
+                      child: IgnorePointer(
+                        ignoring: !widget.enableCompleteButton,
+                        child: CustomButton(
+                          onPressed: _toggleCompletion,
+                          child: Container(
+                            width: 30,
+                            height: 30,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: isCompleted
+                                  ? habitColor
+                                  : habitColor.shadeForHabitCircleIncompleteFill(
+                                      context,
+                                    ),
+                              border: Border.all(
+                                color: habitColor,
+                                width: 1,
+                              ),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: habitColor.withValues(
+                                    alpha: isCompleted ? 0.3 : 0.15,
+                                  ),
+                                  blurRadius: isCompleted ? 8 : 4,
+                                  spreadRadius: isCompleted ? 1 : 0,
+                                ),
+                              ],
+                            ),
+                            child: Center(
+                              child: FaIcon(
+                                isCompleted ? FontAwesomeIcons.check : FontAwesomeIcons.plus,
+                                size: 17,
+                                color: isCompleted
+                                    ? habitColor.colorRegardingToBrightness
+                                    : habitColor
+                                        .shadeForHabitCircleIncompleteFill(
+                                          context,
+                                        )
+                                        .colorRegardingToBrightness,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+            ),
+
+            const SizedBox(height: 8),
+
+            // Habit name - with optimized blur (lower sigma value for better performance)
+            AnimatedOpacity(
+              duration: const Duration(milliseconds: 300),
+              opacity: widget.showName ?? true ? 1.0 : 0.0,
+              child: Container(
+                decoration: BoxDecoration(
+                  color: habitColor.shadeForHabitNameChip(context),
+                  borderRadius: _badgeBorderRadius,
+                ),
+                padding: _namePadding,
+                child: Text(
+                  currentHabit.habitName,
+                  textAlign: TextAlign.center,
+                  maxLines: 5,
+                  overflow: TextOverflow.ellipsis,
+                  style: context.labelSmall.copyWith(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 13,
+                    color: habitColor.shadeForHabitNameChip(context).colorRegardingToBrightness,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+
 
   // double _getProgressPercentage(Habit habit) {
   //   return habit.calculateWeightedProgressPercentageFromFirstCompletion();
@@ -267,231 +494,3 @@ class _CircularHabitWidgetState extends ConsumerState<CircularHabitWidget> {
   //     ),
   //   );
   // }
-
-  @override
-  Widget build(BuildContext context) {
-    // Use provider if enabled and habit is a full Habit, otherwise use widget.habit directly
-    // For HabitSummary, we don't watch provider since summaries are lightweight
-    final currentHabit = widget.useProvider && widget.habit is Habit
-        ? ref.watch(
-            homeProvider.select(
-              (state) => state.maybeWhen(
-                data: (homeState) => homeState.habits.firstWhere(
-                  (h) => h.id == widget.habit.id,
-                  orElse: () => widget.habit as Habit,
-                ),
-                orElse: () => widget.habit as Habit,
-              ),
-            ),
-          )
-        : widget.habit as dynamic;
-
-    final today = DateTime.now();
-    final int count = currentHabit.getCountForDate(today);
-    final int target = (currentHabit.dailyTarget as int) <= 0 ? 1 : currentHabit.dailyTarget;
-    final double ratio = (count / target).clamp(0.0, 1.0);
-    final bool isCompleted = ratio >= 1.0;
-
-    final Color habitColor = Color(currentHabit.colorCode);
-    final String emoji = currentHabit.emoji ?? '🎯';
-    final int streak = currentHabit.calculateCurrentStreak();
-
-    final bool isDark = CupertinoTheme.of(context).brightness == Brightness.dark;
-    final double dragScale = widget.isDragging ? 1.15 : 1.0;
-
-    return Transform.scale(
-      scale: dragScale,
-      child: SizedBox(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            // Completion time (top, if exists) - displayed on main page
-            if (currentHabit.completionTime != null) ...[
-              Opacity(
-                opacity: widget.showName ?? true ? 1.0 : 0.0,
-                child: Text(
-                  (currentHabit.completionTime as DateTime).toHHMM(),
-                  textAlign: TextAlign.center,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: context.labelSmall.copyWith(
-                    fontWeight: FontWeight.w500,
-                    fontSize: 14,
-                    color: isDark ? Colors.white60 : Colors.black54,
-                  ),
-                ),
-              ),
-              const SizedBox(height: 2.5),
-            ],
-
-            // Main circular item - using Container for better performance
-            Container(
-              width: _containerSize,
-              height: _containerSize,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: isDark ? CupertinoColors.systemGrey6.darkColor : Colors.white,
-                border: Border.all(
-                  color: widget.isSelected || widget.isDragging
-                      ? habitColor
-                      : widget.isConnecting
-                          ? habitColor
-                          : isCompleted
-                              ? habitColor
-                              : habitColor.withValues(alpha: 0.7),
-                  width: widget.isSelected || widget.isDragging ? 3.5 : 2.5,
-                ),
-                boxShadow: [
-                  if (widget.isDragging) ...[
-                    BoxShadow(
-                      color: habitColor.withValues(alpha: 0.4),
-                      blurRadius: 20,
-                      spreadRadius: 4,
-                    ),
-                  ] else if (isCompleted) ...[
-                    BoxShadow(
-                      color: habitColor.withValues(alpha: 0.25),
-                      blurRadius: 16,
-                      spreadRadius: 2,
-                    ),
-                  ] else ...[
-                    BoxShadow(
-                      color: Colors.black.withValues(alpha: isDark ? 0.4 : 0.12),
-                      blurRadius: 10,
-                      spreadRadius: 0,
-                      offset: const Offset(0, 4),
-                    ),
-                  ],
-                ],
-              ),
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  // Emoji
-                  Text(emoji, style: _emojiStyle),
-
-                  // Streak badge (top right) - optimized without BackdropFilter
-                  Positioned(
-                    top: 0,
-                    right: 0,
-                    child: CustomBlurWidget(
-                      blurValue: 10,
-                      borderRadius: BorderRadius.circular(999),
-                      child: Container(
-                        padding: _badgePadding,
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: habitColor.withValues(alpha: 0.8),
-                            width: 1,
-                          ),
-                          color: isDark ? habitColor.withValues(alpha: 0.3) : habitColor.withValues(alpha: 0.15),
-                          borderRadius: _badgeBorderRadius,
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Icon(
-                              CupertinoIcons.flame_fill,
-                              size: 14,
-                              color: context.theme.primaryContrastingColor.withValues(alpha: 0.9),
-                            ),
-                            const SizedBox(width: 2),
-                            Text(
-                              '$streak',
-                              style: _streakStyle.copyWith(
-                                color: context.theme.primaryContrastingColor.withValues(alpha: 0.9),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-
-                  // Complete button (bottom right) - optimized without BackdropFilter
-                  // Show if useProvider is true or showCompleteButton is true
-                  if (widget.useProvider || widget.showCompleteButton)
-                    Positioned(
-                      bottom: 0,
-                      right: 0,
-                      child: IgnorePointer(
-                        ignoring: !widget.enableCompleteButton,
-                        child: CustomBlurWidget(
-                          blurValue: 10,
-                          borderRadius: BorderRadius.circular(999),
-                          child: CustomButton(
-                            onPressed: _toggleCompletion,
-                            child: Container(
-                              width: 30,
-                              height: 30,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                // Progressive alpha based on completion ratio
-                                color: habitColor.withValues(alpha: (0.1 + (0.9 * ratio)).clamp(0.1, 1.0)),
-                                border: Border.all(
-                                  color: habitColor,
-                                  width: 1,
-                                ),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: habitColor.withValues(alpha: isCompleted ? 0.3 : 0.15),
-                                    blurRadius: isCompleted ? 8 : 4,
-                                    spreadRadius: isCompleted ? 1 : 0,
-                                  ),
-                                ],
-                              ),
-                              child: Center(
-                                child: FaIcon(
-                                  isCompleted ? FontAwesomeIcons.check : FontAwesomeIcons.plus,
-                                  size: 17,
-                                  color: isCompleted
-                                      ? Colors.white // Always white when completed (background is habitColor)
-                                      : habitColor, // Use habitColor when not completed (background is light)
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                ],
-              ),
-            ),
-
-            const SizedBox(height: 8),
-
-            // Habit name - with optimized blur (lower sigma value for better performance)
-            Opacity(
-              opacity: widget.showName ?? true ? 1.0 : 0.0,
-              child: ClipRRect(
-                borderRadius: _badgeBorderRadius,
-                child: BackdropFilter(
-                  // Lower blur value (6 instead of 10) for better performance
-                  filter: ImageFilter.blur(sigmaX: 6, sigmaY: 6, tileMode: TileMode.decal),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: isDark ? habitColor.withValues(alpha: 0.25) : habitColor.withValues(alpha: 0.15),
-                      borderRadius: _badgeBorderRadius,
-                    ),
-                    padding: _namePadding,
-                    child: Text(
-                      currentHabit.habitName,
-                      textAlign: TextAlign.center,
-                      maxLines: 5,
-                      overflow: TextOverflow.ellipsis,
-                      style: context.labelSmall.copyWith(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 13,
-                        color: isDark ? Colors.white.withValues(alpha: 0.95) : Colors.black.withValues(alpha: 0.85),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}

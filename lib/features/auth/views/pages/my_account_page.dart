@@ -7,6 +7,7 @@ import '../../providers/auth_provider.dart';
 import '../../widgets/account_danger_zone_section.dart';
 import '../../widgets/account_linked_accounts_section.dart';
 import '../../widgets/account_privacy_section.dart';
+import '../../widgets/account_cloud_sync_pro_banner.dart';
 import '../../widgets/account_profile_section.dart';
 import '../../widgets/account_security_section.dart';
 import '../../widgets/auth_header_widget.dart';
@@ -16,57 +17,7 @@ class MyAccountPage extends ConsumerWidget {
   final bool isFromHome;
   const MyAccountPage({super.key, this.isFromHome = false});
 
-  // Future<void> _pickAndUploadImage(BuildContext context, WidgetRef ref) async {
-  //   final picker = ImagePicker();
-  //   final source = await showCupertinoModalPopup<ImageSource>(
-  //     context: context,
-  //     builder: (ctx) => CupertinoActionSheet(
-  //       title: Text(LocaleKeys.auth_profile.tr()),
-  //       message: const Text('Profil fotoğrafınızı değiştirmek için bir kaynak seçin.'),
-  //       actions: [
-  //         CupertinoActionSheetAction(
-  //           onPressed: () => Navigator.pop(ctx, ImageSource.camera),
-  //           child: const Text('Kamera'),
-  //         ),
-  //         CupertinoActionSheetAction(
-  //           onPressed: () => Navigator.pop(ctx, ImageSource.gallery),
-  //           child: const Text('Galeri'),
-  //         ),
-  //         CupertinoActionSheetAction(
-  //           isDestructiveAction: true,
-  //           onPressed: () => Navigator.pop(ctx, null), // We use null to signal delete in a second step or just use a separate action
-  //           child: const Text('Fotoğrafı Sil'),
-  //         ),
-  //       ],
-  //       cancelButton: CupertinoActionSheetAction(
-  //         onPressed: () => Navigator.pop(ctx),
-  //         child: Text(LocaleKeys.common_cancel.tr()),
-  //       ),
-  //     ),
-  //   );
-
-  //   // Re-show for delete confirmation or handle it directly
-  //   if (source == null) {
-  //     // Check if user clicked delete (we passed null above for simplicity, let's refine)
-  //     return;
-  //   }
-
-  //   final pickedFile = await picker.pickImage(
-  //     source: source,
-  //     maxWidth: 512,
-  //     maxHeight: 512,
-  //     imageQuality: 75,
-  //   );
-
-  //   if (pickedFile == null) return;
-
-  //   try {
-  //     await ref.read(accountActionsProvider.notifier).updateProfilePhoto(pickedFile.path);
-  //     AppFlushbar.shared.successFlushbar('Profil fotoğrafı güncellendi');
-  //   } catch (e) {
-  //     AppFlushbar.shared.errorFlushbar(e.toString());
-  //   }
-  // }
+ 
 
   Future<void> _handlePhotoAction(BuildContext context, WidgetRef ref) async {
     final picker = ImagePicker();
@@ -171,6 +122,7 @@ class MyAccountPage extends ConsumerWidget {
             return ListView(
               padding: EdgeInsets.zero,
               children: [
+                const AccountCloudSyncProBanner(),
                 const SizedBox(height: 16),
                 Center(
                   child: Column(

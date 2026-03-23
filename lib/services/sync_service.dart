@@ -7,6 +7,7 @@ import '/core/core.dart';
 import '/models/completion_entry/completion_entry.dart';
 import '/models/habit/habit_model.dart';
 import '/models/sync_status.dart';
+import '/models/revenue_cat_device_record/revenue_cat_device_record.dart';
 import '/models/user_defaults/user_defaults.dart';
 
 final syncServiceProvider = Provider<SyncService>((ref) => SyncService());
@@ -19,6 +20,11 @@ class SyncService {
 
   CollectionReference<Map<String, dynamic>> get _habitsCollection => _firestore.collection('users').doc(_userId).collection('habits');
 
+  bool _isProSubscriber() {
+    final defaults = HiveHelper.shared.getData<UserDefaults>(HiveBoxes.userDefaultsBox, HiveKeys.userDefaultsKey);
+    return defaults?.isPro ?? false;
+  }
+
   Future<void> syncHabit(Habit habit) async {
     LogHelper.shared.debugPrint('🔄 SyncService.syncHabit called for ${habit.id}. Current userId: $_userId');
     if (_userId == null) {
@@ -26,18 +32,8 @@ class SyncService {
       return;
     }
 
-    final user = _auth.currentUser;
-    final defaults = HiveHelper.shared.getData<UserDefaults>(HiveBoxes.userDefaultsBox, HiveKeys.userDefaultsKey);
-    final isPro = defaults?.isPro ?? false;
-
-    // Determine if user signed in via a social provider (Apple, Google)
-    // Social provider users are already trusted — no email verification needed.
-    final isSocialProvider = user != null && user.providerData.any((p) => p.providerId == 'apple.com' || p.providerId == 'google.com');
-
-    // Guard: Block sync ONLY for email/password users who haven't verified their email yet
-    // and are not Pro subscribers. Social users and Pro users always sync.
-    if (user != null && !isSocialProvider && !user.emailVerified && !isPro) {
-      LogHelper.shared.debugPrint('⚠️ Sync skipped: Email not verified for ${user.email} (email/password account, not Pro).');
+    if (!_isProSubscriber()) {
+      LogHelper.shared.debugPrint('⚠️ Sync skipped: Cloud habit sync requires Pro.');
       return;
     }
 
@@ -56,6 +52,7 @@ class SyncService {
 
       // Ensure syncStatus is synced when uploading
       habitData['syncStatus'] = SyncStatus.synced.name;
+      habitData['updatedAt'] = FieldValue.serverTimestamp();
 
       await _habitsCollection.doc(habit.id).set(habitData);
       LogHelper.shared.debugPrint('✅ Synced habit ${habit.id} to Firestore');
@@ -68,6 +65,11 @@ class SyncService {
   Future<List<Habit>> fetchRemoteHabits() async {
     if (_userId == null) return [];
 
+    if (!_isProSubscriber()) {
+      LogHelper.shared.debugPrint('⚠️ fetchRemoteHabits skipped: Cloud habit sync requires Pro.');
+      return [];
+    }
+
     try {
       final snapshot = await _habitsCollection.get();
       return snapshot.docs.map((doc) => Habit.fromJson(doc.data())).toList();
@@ -79,6 +81,11 @@ class SyncService {
 
   Future<void> deleteRemoteHabit(String habitId) async {
     if (_userId == null) return;
+
+    if (!_isProSubscriber()) {
+      LogHelper.shared.debugPrint('⚠️ deleteRemoteHabit skipped: Cloud habit sync requires Pro.');
+      return;
+    }
 
     try {
       await _habitsCollection.doc(habitId).delete();
@@ -134,6 +141,37 @@ class SyncService {
     }
   }
 
+  /// Merges one install's RevenueCat + device snapshot under `revenueCatDevices[installId]`.
+  Future<void> mergeRevenueCatDeviceSnapshot({
+    required String installId,
+    required RevenueCatDeviceRecord record,
+  }) async {
+    if (_userId == null) return;
+    try {
+      final payload = <String, dynamic>{
+        'currentAppUserId': record.currentAppUserId,
+        'platform': record.platform,
+        'deviceModel': record.deviceModel,
+        'appVersion': record.appVersion,
+        'lastSyncedAt': FieldValue.serverTimestamp(),
+      };
+      if (record.originalAppUserId != null) {
+        payload['originalAppUserId'] = record.originalAppUserId;
+      }
+      await _firestore.collection('users').doc(_userId!).set(
+        {
+          'revenueCatDevices': {
+            installId: payload,
+          },
+        },
+        SetOptions(merge: true),
+      );
+      LogHelper.shared.debugPrint('✅ Merged RevenueCat device snapshot for install $installId');
+    } catch (e) {
+      LogHelper.shared.debugPrint('❌ Error merging RevenueCat device snapshot: $e');
+    }
+  }
+
   /// Writes subscription fields to the user document (merge). Call when RevenueCat state is known.
   Future<void> updateUserSubscription(
     bool isSubscribed, {
@@ -159,6 +197,12 @@ class SyncService {
   /// Updates the global habit constellation canvas state in Firestore.
   Future<void> updateCanvasState(double scale, double offsetX, double offsetY) async {
     if (_userId == null) return;
+
+    if (!_isProSubscriber()) {
+      LogHelper.shared.debugPrint('⚠️ updateCanvasState skipped: Cloud sync requires Pro.');
+      return;
+    }
+
     try {
       await _firestore.collection('users').doc(_userId!).set(
         {

@@ -5,7 +5,9 @@ import 'package:purchases_ui_flutter/purchases_ui_flutter.dart';
 
 import '../../../core/constants/debug_constants.dart';
 import '../../../core/core.dart';
+import '../../../models/revenue_cat_device_record/revenue_cat_device_record.dart';
 import '../../../models/user_defaults/user_defaults.dart';
+import '../../../services/device_metadata_service.dart';
 import '../../../services/sync_service.dart';
 import '../models/paywall_state.dart';
 import '../purchase.dart';
@@ -139,6 +141,8 @@ class PurchaseNotifier extends AsyncNotifier<PaywallState> {
   Future<void> _syncSubscriptionToFirestore(CustomerInfo customerInfo) async {
     if (KDebug.purchaseDebugMode) return;
     try {
+      if (FirebaseAuth.instance.currentUser == null) return;
+
       final isActive = customerInfo.entitlements.active.isNotEmpty;
       final entitlement = customerInfo.entitlements.all[entitlementID];
       final productId = entitlement?.productIdentifier;
@@ -147,6 +151,22 @@ class PurchaseNotifier extends AsyncNotifier<PaywallState> {
         isActive,
         subscriptionProductId: productId,
         subscriptionExpirationDate: expirationDate,
+      );
+
+      if (!isActive) return;
+
+      final currentAppUserId = await Purchases.appUserID;
+      final metadata = await DeviceMetadataService.collect();
+      final installId = await InstallIdHelper.getOrCreate();
+      await SyncService().mergeRevenueCatDeviceSnapshot(
+        installId: installId,
+        record: RevenueCatDeviceRecord(
+          currentAppUserId: currentAppUserId,
+          originalAppUserId: customerInfo.originalAppUserId,
+          platform: metadata.platform,
+          deviceModel: metadata.deviceModel,
+          appVersion: metadata.appVersion,
+        ),
       );
     } catch (e) {
       LogHelper.shared.debugPrint('Error syncing subscription to Firestore: $e');

@@ -108,54 +108,71 @@ extension EasyText on BuildContext {
   TextStyle get titleSmall => cupertinoTextTheme.textStyle.copyWith(
         fontSize: isTablet ? 18 : 17,
         fontWeight: FontWeight.w600,
+        textBaseline: TextBaseline.alphabetic,
       );
   TextStyle get titleMedium => cupertinoTextTheme.textStyle.copyWith(
         fontSize: isTablet ? 16 : 15,
         fontWeight: FontWeight.w600,
+        textBaseline: TextBaseline.alphabetic,
       );
-  TextStyle get titleLarge => cupertinoTextTheme.navTitleTextStyle;
+  TextStyle get titleLarge => cupertinoTextTheme.navTitleTextStyle.copyWith(
+        textBaseline: TextBaseline.alphabetic,
+      );
 
   TextStyle get labelSmall => cupertinoTextTheme.textStyle.copyWith(
         fontSize: isTablet ? 16 : 15,
+        textBaseline: TextBaseline.alphabetic,
       );
   TextStyle get labelMedium => cupertinoTextTheme.textStyle.copyWith(
         fontSize: isTablet ? 15 : 14,
+        textBaseline: TextBaseline.alphabetic,
       );
   TextStyle get labelLarge => cupertinoTextTheme.textStyle.copyWith(
         fontSize: isTablet ? 14 : 13,
+        textBaseline: TextBaseline.alphabetic,
       );
 
   TextStyle get bodyLarge => cupertinoTextTheme.textStyle.copyWith(
         fontSize: isTablet ? 19 : 17,
+        textBaseline: TextBaseline.alphabetic,
       );
   TextStyle get bodyMedium => cupertinoTextTheme.textStyle.copyWith(
         fontSize: isTablet ? 17 : 15,
+        textBaseline: TextBaseline.alphabetic,
       );
   TextStyle get bodySmall => cupertinoTextTheme.textStyle.copyWith(
         fontSize: isTablet ? 15 : 13,
+        textBaseline: TextBaseline.alphabetic,
       );
 
-  TextStyle get headlineLarge => cupertinoTextTheme.navLargeTitleTextStyle;
+  TextStyle get headlineLarge => cupertinoTextTheme.navLargeTitleTextStyle.copyWith(
+        textBaseline: TextBaseline.alphabetic,
+      );
   TextStyle get headlineMedium => cupertinoTextTheme.textStyle.copyWith(
         fontSize: isTablet ? 24 : 20,
         fontWeight: FontWeight.w600,
+        textBaseline: TextBaseline.alphabetic,
       );
   TextStyle get headlineSmall => cupertinoTextTheme.textStyle.copyWith(
         fontSize: isTablet ? 17 : 15,
         fontWeight: FontWeight.w600,
+        textBaseline: TextBaseline.alphabetic,
       );
 
   TextStyle get displayLarge => cupertinoTextTheme.textStyle.copyWith(
         fontSize: isTablet ? 34 : 30,
         fontWeight: FontWeight.bold,
+        textBaseline: TextBaseline.alphabetic,
       );
   TextStyle get displayMedium => cupertinoTextTheme.textStyle.copyWith(
         fontSize: isTablet ? 28 : 24,
         fontWeight: FontWeight.bold,
+        textBaseline: TextBaseline.alphabetic,
       );
   TextStyle get displaySmall => cupertinoTextTheme.textStyle.copyWith(
         fontSize: isTablet ? 22 : 18,
         fontWeight: FontWeight.bold,
+        textBaseline: TextBaseline.alphabetic,
       );
 
   String? get fontFamily => cupertinoTextTheme.textStyle.fontFamily;

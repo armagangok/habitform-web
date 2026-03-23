@@ -9,25 +9,30 @@ class UserAvatarWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CircleAvatar(
-      backgroundColor: context.theme.selectionHandleColor.withValues(alpha: 0.1),
+      backgroundColor: context.theme.selectionHandleColor.withValues(
+        alpha: 0.1,
+      ),
       radius: radius,
-      child: photoUrl != null
-          ? ClipOval(
-              child: Image.network(
-                photoUrl!,
-                width: radius * 2,
-                height: radius * 2,
-                fit: BoxFit.cover,
-                loadingBuilder: (context, child, loadingProgress) {
-                  if (loadingProgress == null) return child;
-                  return CupertinoActivityIndicator();
-                },
-                errorBuilder: (context, error, stackTrace) {
-                  return Icon(CupertinoIcons.person);
-                },
-              ),
-            )
-          : Icon(CupertinoIcons.person_fill, color: context.primaryContrastingColor.withValues(alpha: .7)),
+      child: ClipOval(
+        child: Image.network(
+          photoUrl ?? '',
+          width: radius * 2,
+          height: radius * 2,
+          fit: BoxFit.cover,
+          loadingBuilder: (context, child, loadingProgress) {
+            if (loadingProgress == null)
+              return child.animate().fadeIn(
+                    duration: const Duration(milliseconds: 300),
+                  );
+            return CircularProgressIndicator.adaptive();
+          },
+          errorBuilder: (context, error, stackTrace) {
+            return Icon(CupertinoIcons.person)
+                .animate()
+                .fadeIn(duration: const Duration(milliseconds: 300));
+          },
+        ),
+      ),
     );
   }
 }

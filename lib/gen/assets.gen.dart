@@ -1,3 +1,5 @@
+// dart format width=80
+
 /// GENERATED CODE - DO NOT MODIFY BY HAND
 /// *****************************************************
 ///  FlutterGen
@@ -5,21 +7,12 @@
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
-// ignore_for_file: directives_ordering,unnecessary_import,implicit_dynamic_list_literal,deprecated_member_use
+// ignore_for_file: deprecated_member_use,directives_ordering,implicit_dynamic_list_literal,unnecessary_import
 
 import 'package:flutter/widgets.dart';
 
 class $AssetsAnimationsGen {
   const $AssetsAnimationsGen();
-
-  /// File path: assets/animations/astronout.json
-  String get astronout => 'assets/animations/astronout.json';
-
-  /// File path: assets/animations/completion.json
-  String get completion => 'assets/animations/completion.json';
-
-  /// List of all assets
-  List<String> get values => [astronout, completion];
 }
 
 class $AssetsAppGen {
@@ -33,26 +26,12 @@ class $AssetsAppGen {
   List<AssetGenImage> get values => [appLogoDark];
 }
 
-class $AssetsImagesGen {
-  const $AssetsImagesGen();
-
-  /// Directory path: assets/images/onboarding
-  $AssetsImagesOnboardingGen get onboarding =>
-      const $AssetsImagesOnboardingGen();
-}
-
-class $AssetsLottieGen {
-  const $AssetsLottieGen();
-
-  /// File path: assets/lottie/rocket_animation.json
-  String get rocketAnimation => 'assets/lottie/rocket_animation.json';
-
-  /// List of all assets
-  List<String> get values => [rocketAnimation];
-}
-
 class $AssetsScreenshotsGen {
   const $AssetsScreenshotsGen();
+
+  /// File path: assets/screenshots/cloud_sync.png
+  AssetGenImage get cloudSync =>
+      const AssetGenImage('assets/screenshots/cloud_sync.png');
 
   /// File path: assets/screenshots/customize.png
   AssetGenImage get customize =>
@@ -84,6 +63,7 @@ class $AssetsScreenshotsGen {
 
   /// List of all assets
   List<AssetGenImage> get values => [
+        cloudSync,
         customize,
         difficultyGoal,
         exportImport,
@@ -129,42 +109,12 @@ class $AssetsTranslationsGen {
       [arSA, enUS, esES, fiFI, frFR, itIT, jaJP, trTR, zhHans];
 }
 
-class $AssetsImagesOnboardingGen {
-  const $AssetsImagesOnboardingGen();
-
-  /// File path: assets/images/onboarding/aristoteles.png
-  AssetGenImage get aristoteles =>
-      const AssetGenImage('assets/images/onboarding/aristoteles.png');
-
-  /// File path: assets/images/onboarding/badHabits.png
-  AssetGenImage get badHabits =>
-      const AssetGenImage('assets/images/onboarding/badHabits.png');
-
-  /// File path: assets/images/onboarding/orangeFruit.png
-  AssetGenImage get orangeFruit =>
-      const AssetGenImage('assets/images/onboarding/orangeFruit.png');
-
-  /// File path: assets/images/onboarding/smallSteps.png
-  AssetGenImage get smallSteps =>
-      const AssetGenImage('assets/images/onboarding/smallSteps.png');
-
-  /// File path: assets/images/onboarding/waterTree.png
-  AssetGenImage get waterTree =>
-      const AssetGenImage('assets/images/onboarding/waterTree.png');
-
-  /// List of all assets
-  List<AssetGenImage> get values =>
-      [aristoteles, badHabits, orangeFruit, smallSteps, waterTree];
-}
-
 class Assets {
-  Assets._();
+  const Assets._();
 
   static const String aEnv = '.env';
   static const $AssetsAnimationsGen animations = $AssetsAnimationsGen();
   static const $AssetsAppGen app = $AssetsAppGen();
-  static const $AssetsImagesGen images = $AssetsImagesGen();
-  static const $AssetsLottieGen lottie = $AssetsLottieGen();
   static const $AssetsScreenshotsGen screenshots = $AssetsScreenshotsGen();
   static const $AssetsTranslationsGen translations = $AssetsTranslationsGen();
 
@@ -177,12 +127,14 @@ class AssetGenImage {
     this._assetName, {
     this.size,
     this.flavors = const {},
+    this.animation,
   });
 
   final String _assetName;
 
   final Size? size;
   final Set<String> flavors;
+  final AssetGenImageAnimation? animation;
 
   Image image({
     Key? key,
@@ -202,10 +154,10 @@ class AssetGenImage {
     ImageRepeat repeat = ImageRepeat.noRepeat,
     Rect? centerSlice,
     bool matchTextDirection = false,
-    bool gaplessPlayback = false,
+    bool gaplessPlayback = true,
     bool isAntiAlias = false,
     String? package,
-    FilterQuality filterQuality = FilterQuality.low,
+    FilterQuality filterQuality = FilterQuality.medium,
     int? cacheWidth,
     int? cacheHeight,
   }) {
@@ -251,4 +203,16 @@ class AssetGenImage {
   String get path => _assetName;
 
   String get keyName => _assetName;
+}
+
+class AssetGenImageAnimation {
+  const AssetGenImageAnimation({
+    required this.isAnimation,
+    required this.duration,
+    required this.frames,
+  });
+
+  final bool isAnimation;
+  final Duration duration;
+  final int frames;
 }

@@ -27,7 +27,10 @@ class HabitConstellationView extends ConsumerStatefulWidget {
   ConsumerState<HabitConstellationView> createState() => _HabitConstellationViewState();
 }
 
-class _HabitConstellationViewState extends ConsumerState<HabitConstellationView> with TickerProviderStateMixin {
+class _HabitConstellationViewState extends ConsumerState<HabitConstellationView> with TickerProviderStateMixin, WidgetsBindingObserver {
+  /// Cached in [didChangeDependencies]; [ref] is invalid in [dispose] for Consumer widgets.
+  ProviderContainer? _providerContainer;
+
   final TransformationController _transformationController = TransformationController();
 
   // Drag state
@@ -64,8 +67,15 @@ class _HabitConstellationViewState extends ConsumerState<HabitConstellationView>
   static const double canvasHeight = 2000.0;
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _providerContainer = ProviderScope.containerOf(context);
+  }
+
+  @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     _zoomAnimationController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 300),
@@ -73,6 +83,19 @@ class _HabitConstellationViewState extends ConsumerState<HabitConstellationView>
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _initializeCanvas();
     });
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused || state == AppLifecycleState.detached) {
+      final container = _providerContainer;
+      if (container != null) {
+        unawaited(
+          container.read(habitCanvasProvider.notifier).flushPendingRemoteSync(),
+        );
+      }
+    }
+    super.didChangeAppLifecycleState(state);
   }
 
   Future<void> _initializeCanvas() async {
@@ -85,6 +108,7 @@ class _HabitConstellationViewState extends ConsumerState<HabitConstellationView>
           widget.habits,
           canvasWidth,
           canvasHeight,
+          shouldAbort: () => !mounted,
         );
 
     if (!mounted) return;
@@ -94,15 +118,21 @@ class _HabitConstellationViewState extends ConsumerState<HabitConstellationView>
     final hasUserTransform = canvasState.hasUserTransform;
     final matrixValues = canvasState.matrixValues;
 
-    LogHelper.shared.debugPrint('🔷 [ConstellationView] hasUserTransform: $hasUserTransform, matrixValues: ${matrixValues?.length ?? 0} values');
+    LogHelper.shared.debugPrint(
+      '🔷 [ConstellationView] hasUserTransform: $hasUserTransform, matrixValues: ${matrixValues?.length ?? 0} values',
+    );
 
     if (hasUserTransform && matrixValues != null && matrixValues.length == 16) {
       // Restore saved transform state using raw matrix values
-      LogHelper.shared.debugPrint('🔷 [ConstellationView] Restoring saved transform from matrix values');
+      LogHelper.shared.debugPrint(
+        '🔷 [ConstellationView] Restoring saved transform from matrix values',
+      );
       _restoreSavedTransform(matrixValues);
     } else {
       // First time or reset - center view on habits
-      LogHelper.shared.debugPrint('🔷 [ConstellationView] Centering view on habits (no saved transform)');
+      LogHelper.shared.debugPrint(
+        '🔷 [ConstellationView] Centering view on habits (no saved transform)',
+      );
       _centerViewOnHabits();
     }
 
@@ -111,9 +141,13 @@ class _HabitConstellationViewState extends ConsumerState<HabitConstellationView>
 
   /// Restores the saved transform state from raw matrix values
   void _restoreSavedTransform(List<double> matrixValues) {
-    LogHelper.shared.debugPrint('🔷 [ConstellationView] _restoreSavedTransform with ${matrixValues.length} matrix values');
+    LogHelper.shared.debugPrint(
+      '🔷 [ConstellationView] _restoreSavedTransform with ${matrixValues.length} matrix values',
+    );
     final matrix = Matrix4.fromList(matrixValues);
-    LogHelper.shared.debugPrint('🔷 [ConstellationView] Restored scale: ${matrix.getMaxScaleOnAxis()}, translation: ${matrix.getTranslation()}');
+    LogHelper.shared.debugPrint(
+      '🔷 [ConstellationView] Restored scale: ${matrix.getMaxScaleOnAxis()}, translation: ${matrix.getTranslation()}',
+    );
     _transformationController.value = matrix;
   }
 
@@ -287,7 +321,12 @@ class _HabitConstellationViewState extends ConsumerState<HabitConstellationView>
         final animatedTranslation = currentTranslation + (translationDelta * progress);
 
         final animatedMatrix = Matrix4.identity()
-          ..translateByDouble(animatedTranslation.dx, animatedTranslation.dy, 0.0, 1.0)
+          ..translateByDouble(
+            animatedTranslation.dx,
+            animatedTranslation.dy,
+            0.0,
+            1.0,
+          )
           ..scaleByDouble(animatedScale, animatedScale, 1.0, 1.0);
 
         _transformationController.value = animatedMatrix;
@@ -384,11 +423,20 @@ class _HabitConstellationViewState extends ConsumerState<HabitConstellationView>
           widget.habits,
           canvasWidth,
           canvasHeight,
+          shouldAbort: () => !mounted,
         );
   }
 
   @override
   void dispose() {
+    final container = _providerContainer;
+    _providerContainer = null;
+    if (container != null) {
+      unawaited(
+        container.read(habitCanvasProvider.notifier).flushPendingRemoteSync(),
+      );
+    }
+    WidgetsBinding.instance.removeObserver(this);
     _saveStateTimer?.cancel();
     // Remove animation listeners before disposing
     if (_currentAnimationListener != null) {
@@ -455,7 +503,9 @@ class _HabitConstellationViewState extends ConsumerState<HabitConstellationView>
 
     // Save raw matrix values for precise restoration
     final matrixValues = matrix.storage.toList();
-    LogHelper.shared.debugPrint('🟠 [ConstellationView] Saving matrix values: ${matrixValues.length} values');
+    LogHelper.shared.debugPrint(
+      '🟠 [ConstellationView] Saving matrix values: ${matrixValues.length} values',
+    );
 
     // Use immediate save to ensure state is persisted even if app closes
     ref.read(habitCanvasProvider.notifier).updateTransformImmediate(
@@ -756,9 +806,9 @@ class _HabitConstellationViewState extends ConsumerState<HabitConstellationView>
             right: 16,
             child: Center(
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                 decoration: BoxDecoration(
-                  color: CupertinoColors.activeGreen,
+                  color: CupertinoColors.activeGreen.elevatedColor,
                   borderRadius: BorderRadius.circular(24),
                   boxShadow: [
                     BoxShadow(
@@ -782,7 +832,7 @@ class _HabitConstellationViewState extends ConsumerState<HabitConstellationView>
                       style: const TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.w600,
-                        fontSize: 14,
+                        fontSize: 13,
                       ),
                     ),
                     const SizedBox(width: 12),
@@ -943,7 +993,9 @@ class _HabitConstellationViewState extends ConsumerState<HabitConstellationView>
               shape: BoxShape.circle,
               boxShadow: [
                 BoxShadow(
-                  color: context.cupertinoTheme.primaryContrastingColor.withValues(alpha: 0.125),
+                  color: context.cupertinoTheme.primaryContrastingColor.withValues(
+                    alpha: 0.125,
+                  ),
                   blurRadius: 5,
                   offset: const Offset(0, 0),
                 ),
@@ -952,7 +1004,11 @@ class _HabitConstellationViewState extends ConsumerState<HabitConstellationView>
             child: Icon(
               icon,
               size: 24,
-              color: isActive ? Colors.white : context.cupertinoTheme.primaryContrastingColor.withValues(alpha: .8),
+              color: isActive
+                  ? Colors.white
+                  : context.cupertinoTheme.primaryContrastingColor.withValues(
+                      alpha: .8,
+                    ),
             ),
           ),
         ),

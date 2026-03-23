@@ -47,6 +47,9 @@ class _OnboardingAppFeaturesPageState extends State<OnboardingAppFeaturesPage> w
 
   bool _showIntro = true;
 
+  /// Half of the feature-step transition (out + in). Total step time is 300ms.
+  static const Duration _kFeatureStepHalfDuration = Duration(milliseconds: 300);
+
   List<AppFeature> get _appFeatures {
     final features = [
       AppFeature(
@@ -265,29 +268,43 @@ class _OnboardingAppFeaturesPageState extends State<OnboardingAppFeaturesPage> w
       _isTransitioning = true;
     });
 
-    // Animate out current content
-    await _fadeController.reverse();
-    await _slideController.reverse();
+    final fadeDuration = _fadeController.duration!;
+    final slideDuration = _slideController.duration!;
+    final progressDuration = _progressController.duration!;
+    _fadeController.duration = _kFeatureStepHalfDuration;
+    _slideController.duration = _kFeatureStepHalfDuration;
+    _progressController.duration = _kFeatureStepHalfDuration;
 
-    // Move to next feature
-    setState(() {
-      _currentFeature++;
-    });
+    try {
+      await Future.wait([
+        _fadeController.reverse(),
+        _slideController.reverse(),
+      ]);
 
-    // Reset and animate in new content
-    _fadeController.reset();
-    _slideController.reset();
-    _progressController.reset();
+      if (!mounted) return;
+      setState(() {
+        _currentFeature++;
+      });
 
-    await Future.delayed(const Duration(milliseconds: 100));
+      _fadeController.reset();
+      _slideController.reset();
+      _progressController.reset();
 
-    _fadeController.forward();
-    _slideController.forward();
-    _progressController.forward();
-
-    setState(() {
-      _isTransitioning = false;
-    });
+      await Future.wait([
+        _fadeController.forward(),
+        _slideController.forward(),
+        _progressController.forward(),
+      ]);
+    } finally {
+      _fadeController.duration = fadeDuration;
+      _slideController.duration = slideDuration;
+      _progressController.duration = progressDuration;
+      if (mounted) {
+        setState(() {
+          _isTransitioning = false;
+        });
+      }
+    }
   }
 
   void _previousFeature() async {
@@ -297,29 +314,43 @@ class _OnboardingAppFeaturesPageState extends State<OnboardingAppFeaturesPage> w
       _isTransitioning = true;
     });
 
-    // Animate out current content
-    await _fadeController.reverse();
-    await _slideController.reverse();
+    final fadeDuration = _fadeController.duration!;
+    final slideDuration = _slideController.duration!;
+    final progressDuration = _progressController.duration!;
+    _fadeController.duration = _kFeatureStepHalfDuration;
+    _slideController.duration = _kFeatureStepHalfDuration;
+    _progressController.duration = _kFeatureStepHalfDuration;
 
-    // Move to previous feature
-    setState(() {
-      _currentFeature--;
-    });
+    try {
+      await Future.wait([
+        _fadeController.reverse(),
+        _slideController.reverse(),
+      ]);
 
-    // Reset and animate in new content
-    _fadeController.reset();
-    _slideController.reset();
-    _progressController.reset();
+      if (!mounted) return;
+      setState(() {
+        _currentFeature--;
+      });
 
-    await Future.delayed(const Duration(milliseconds: 100));
+      _fadeController.reset();
+      _slideController.reset();
+      _progressController.reset();
 
-    _fadeController.forward();
-    _slideController.forward();
-    _progressController.forward();
-
-    setState(() {
-      _isTransitioning = false;
-    });
+      await Future.wait([
+        _fadeController.forward(),
+        _slideController.forward(),
+        _progressController.forward(),
+      ]);
+    } finally {
+      _fadeController.duration = fadeDuration;
+      _slideController.duration = slideDuration;
+      _progressController.duration = progressDuration;
+      if (mounted) {
+        setState(() {
+          _isTransitioning = false;
+        });
+      }
+    }
   }
 
   // Transition from the intro hero to the features carousel

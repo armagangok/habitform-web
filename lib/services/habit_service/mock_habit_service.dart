@@ -73,7 +73,7 @@ class MockHabitService extends HabitService {
   }
 
   @override
-  Future<void> updateHabit(Habit habit) async {
+  Future<void> updateHabit(Habit habit, {bool skipRemoteSync = false}) async {
     final index = _habits.indexWhere((h) => h.id == habit.id);
     if (index != -1) {
       _habits[index] = habit;

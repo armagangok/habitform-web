@@ -2,7 +2,7 @@
 
 // ignore_for_file: constant_identifier_names
 
-abstract class LocaleKeys {
+abstract class  LocaleKeys {
   static const achievement_dialog_almost_there = 'achievement_dialog.almost_there';
   static const achievement_dialog_amazing_progress = 'achievement_dialog.amazing_progress';
   static const achievement_dialog_building_momentum = 'achievement_dialog.building_momentum';
@@ -74,6 +74,8 @@ abstract class LocaleKeys {
   static const auth_linked_apple = 'auth.linked_apple';
   static const auth_linked_email = 'auth.linked_email';
   static const auth_linked_google = 'auth.linked_google';
+  static const auth_link = 'auth.link';
+  static const auth_link_success = 'auth.link_success';
   static const auth_my_account = 'auth.my_account';
   static const auth_my_account_description = 'auth.my_account_description';
   static const auth_new_password = 'auth.new_password';
@@ -89,6 +91,9 @@ abstract class LocaleKeys {
   static const auth_pro_login_alert_action = 'auth.pro_login_alert_action';
   static const auth_pro_login_alert_message = 'auth.pro_login_alert_message';
   static const auth_pro_login_alert_title = 'auth.pro_login_alert_title';
+  static const auth_cloud_sync_pro_title = 'auth.cloud_sync_pro_title';
+  static const auth_cloud_sync_pro_message = 'auth.cloud_sync_pro_message';
+  static const auth_cloud_sync_pro_cta = 'auth.cloud_sync_pro_cta';
   static const auth_processing = 'auth.processing';
   static const auth_profile = 'auth.profile';
   static const auth_reauth_prompt = 'auth.reauth_prompt';
@@ -116,13 +121,6 @@ abstract class LocaleKeys {
   static const auth_delete_photo = 'auth.delete_photo';
   static const auth_profile_photo_deleted = 'auth.profile_photo_deleted';
   static const auth_profile_photo_updated = 'auth.profile_photo_updated';
-  static const auth_link = 'auth.link';
-  static const auth_unlink = 'auth.unlink';
-  static const auth_linked = 'auth.linked';
-  static const auth_link_success = 'auth.link_success';
-  static const auth_unlink_success = 'auth.unlink_success';
-  static const auth_unlink_warning = 'auth.unlink_warning';
-  static const auth_last_provider_error = 'auth.last_provider_error';
   static const auth = 'auth';
   static const colors_Lime = 'colors.Lime';
   static const colors_amber = 'colors.amber';
@@ -269,6 +267,16 @@ abstract class LocaleKeys {
   static const habit_reminder = 'habit.reminder';
   static const habit_timeToCompleteYourHabit = 'habit.timeToCompleteYourHabit';
   static const habit = 'habit';
+  static const habit_insights_archive_hint = 'habit_insights.archive_hint';
+  static const habit_insights_focus_mode_subtitle = 'habit_insights.focus_mode_subtitle';
+  static const habit_insights_focus_mode_title = 'habit_insights.focus_mode_title';
+  static const habit_insights_friction_sheet_body = 'habit_insights.friction_sheet_body';
+  static const habit_insights_friction_sheet_continue = 'habit_insights.friction_sheet_continue';
+  static const habit_insights_friction_sheet_title = 'habit_insights.friction_sheet_title';
+  static const habit_insights_keystone_body = 'habit_insights.keystone_body';
+  static const habit_insights_keystone_title = 'habit_insights.keystone_title';
+  static const habit_insights_onboarding_sustainable_focus = 'habit_insights.onboarding_sustainable_focus';
+  static const habit_insights = 'habit_insights';
   static const habit_category_category_options = 'habit_category.category_options';
   static const habit_category_category_options_message = 'habit_category.category_options_message';
   static const habit_category_create = 'habit_category.create';
@@ -801,4 +809,5 @@ abstract class LocaleKeys {
   static const subscription_upcomingFeaturesDescription = 'subscription.upcomingFeaturesDescription';
   static const subscription_youAlreadyHaveAnActiveSubscription = 'subscription.youAlreadyHaveAnActiveSubscription';
   static const subscription = 'subscription';
+
 }

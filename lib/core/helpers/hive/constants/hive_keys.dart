@@ -6,4 +6,7 @@ final class HiveKeys {
   static const String userDefaultsKey = 'userDefaultsKeyHabitRise';
   static const String habitRiseDefaultsKeys = 'habitRiseDefaultsKeys';
   static const String localeKey = 'localeKeyHabitForm';
+
+  /// Stable per-app-install id (UUID); persists across login/logout, not cleared with user data.
+  static const String installIdKey = 'appInstallIdKeyHabitForm';
 }

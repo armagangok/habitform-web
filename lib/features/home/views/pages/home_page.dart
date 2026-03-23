@@ -126,7 +126,6 @@ class _HomePageState extends ConsumerState<HomePage> {
     final authState = ref.watch(authStateProvider).valueOrNull;
     final userProfile = ref.watch(userProfileProvider).valueOrNull;
     final paywallValue = paywallState.valueOrNull;
-    final isSubActive = paywallValue?.isSubscriptionActive ?? false;
     final isPurchasing = paywallValue?.isPurchasing ?? false;
     final isRestoring = paywallValue?.isRestoring ?? false;
     final bool isLoading = paywallState is AsyncLoading;
@@ -185,7 +184,7 @@ class _HomePageState extends ConsumerState<HomePage> {
             Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                // Premium / Profile button
+                // Profile → My Account (Pro not required; upgrade via Settings / account banner)
                 if (isLoading || isPurchasing || isRestoring)
                   Container(
                     width: 40,
@@ -193,7 +192,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                     alignment: Alignment.center,
                     child: const CupertinoActivityIndicator(),
                   )
-                else if (isSubActive)
+                else
                   CircularActionButton(
                     onPressed: () {
                       showCupertinoSheet(
@@ -206,14 +205,6 @@ class _HomePageState extends ConsumerState<HomePage> {
                     icon: CupertinoIcons.person_fill,
                     size: 40,
                     iconSize: 22,
-                  )
-                else
-                  CircularActionButton(
-                    onPressed: () => _handlePaywallAction(context),
-                    icon: FontAwesomeIcons.crown,
-                    iconColor: context.primary,
-                    size: 40,
-                    iconSize: 18,
                   ),
 
                 const SizedBox(width: 8),

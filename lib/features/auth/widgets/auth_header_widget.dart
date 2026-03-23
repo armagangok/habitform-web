@@ -1,7 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '/core/core.dart';
-import '../../purchase/providers/purchase_provider.dart';
 import '../providers/auth_provider.dart';
 import 'user_avatar_widget.dart';
 
@@ -13,34 +12,6 @@ class AuthHeaderWidget extends ConsumerWidget {
     final authState = ref.watch(authStateProvider);
     final userProfile = ref.watch(userProfileProvider).valueOrNull;
     final theme = CupertinoTheme.of(context);
-
-    final paywallState = ref.watch(purchaseProvider);
-    final isPro = paywallState.valueOrNull?.isSubscriptionActive ?? false;
-
-    void showProAlert() {
-      showCupertinoDialog(
-        context: context,
-        builder: (context) => CupertinoAlertDialog(
-          title: Text(LocaleKeys.auth_pro_feature_title.tr()),
-          content: Text(LocaleKeys.auth_pro_feature_message.tr()),
-          actions: [
-            CupertinoDialogAction(
-              onPressed: () => Navigator.pop(context),
-              child: Text(LocaleKeys.common_cancel.tr()),
-            ),
-            CupertinoDialogAction(
-              isDefaultAction: true,
-              onPressed: () {
-                Navigator.pop(context);
-
-                ref.read(purchaseProvider.notifier).presentPaywall(isFromOnboarding: false, isFromSettings: true);
-              },
-              child: Text(LocaleKeys.auth_pro_feature_action.tr()),
-            ),
-          ],
-        ),
-      );
-    }
 
     return authState.when(
       data: (user) {
@@ -59,11 +30,7 @@ class AuthHeaderWidget extends ConsumerWidget {
                 title: Text(LocaleKeys.auth_my_account.tr()),
                 trailing: CupertinoListTileChevron(),
                 onTap: () {
-                  if (isPro) {
-                    Navigator.of(context).pushNamed(KRoute.auth);
-                  } else {
-                    showProAlert();
-                  }
+                  Navigator.of(context).pushNamed(KRoute.auth);
                 },
               ),
             ],
@@ -79,11 +46,7 @@ class AuthHeaderWidget extends ConsumerWidget {
           children: [
             CupertinoListTile(
               onTap: () {
-                if (isPro) {
-                  Navigator.of(context).pushNamed(KRoute.myAccount);
-                } else {
-                  showProAlert();
-                }
+                Navigator.of(context).pushNamed(KRoute.myAccount);
               },
               leading: UserAvatarWidget(
                 photoUrl: imageUrl,

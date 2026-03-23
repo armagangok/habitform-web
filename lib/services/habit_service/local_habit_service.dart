@@ -135,7 +135,7 @@ class LocalHabitService extends HabitService {
   }
 
   @override
-  Future<void> updateHabit(Habit habit) async {
+  Future<void> updateHabit(Habit habit, {bool skipRemoteSync = false}) async {
     final updatedHabit = habit.copyWith(
       updatedAt: DateTime.now(),
       syncStatus: SyncStatus.pending,
@@ -147,8 +147,9 @@ class LocalHabitService extends HabitService {
       updatedHabit,
     );
 
-    // Sync to Firestore in background
-    _syncHabitInBackground(updatedHabit, HiveBoxes.habitBox);
+    if (!skipRemoteSync) {
+      _syncHabitInBackground(updatedHabit, HiveBoxes.habitBox);
+    }
 
     // Export to widget
     await _exportHabitsForWidget();

@@ -27,8 +27,8 @@ abstract class HabitService {
   // Create a new habit
   Future<void> createHabit(Habit habit);
 
-  // Update an existing habit
-  Future<void> updateHabit(Habit habit);
+  // Update an existing habit. When [skipRemoteSync] is true, Hive/widget update runs but Firestore is not called (e.g. canvas debounce).
+  Future<void> updateHabit(Habit habit, {bool skipRemoteSync = false});
 
   // Mark habit as complete/incomplete
   Future<void> updateHabitCompletionStatus(String habitId, CompletionEntry completion);
