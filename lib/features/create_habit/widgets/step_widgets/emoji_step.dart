@@ -49,7 +49,7 @@ class EmojiStep extends ConsumerWidget {
             ),
           ),
 
-          SizedBox(height: 30),
+          const SizedBox(height: 30),
 
           // Emoji picker button
           EmojiPickerButton(

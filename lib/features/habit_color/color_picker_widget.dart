@@ -268,7 +268,7 @@ class ColorPickerWidgetState extends State<ColorPickerWidget> with SingleTickerP
       text: LocaleKeys.colors_color.tr(),
       child: ListView(
         shrinkWrap: true,
-        physics: ClampingScrollPhysics(),
+        physics: const ClampingScrollPhysics(),
         padding: EdgeInsets.zero,
         children: [
           Padding(
@@ -304,11 +304,11 @@ class ColorPickerWidgetState extends State<ColorPickerWidget> with SingleTickerP
               },
             ),
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           GridView.builder(
-            physics: ClampingScrollPhysics(),
+            physics: const ClampingScrollPhysics(),
             shrinkWrap: true,
-            padding: EdgeInsets.all(8),
+            padding: const EdgeInsets.all(8),
             itemCount: colorCategories[categoryNames[selectedCategoryIndex]]!.length,
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: crossAxisCount,
@@ -325,7 +325,7 @@ class ColorPickerWidgetState extends State<ColorPickerWidget> with SingleTickerP
               );
             },
           ).animate(controller: controller).fadeIn(duration: 500.ms),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
         ],
       ),
     );

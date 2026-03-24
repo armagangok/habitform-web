@@ -65,7 +65,7 @@ class StatisticCard extends StatelessWidget {
                             height: 1.0,
                             color: valueColor ?? context.cupertinoTheme.textTheme.textStyle.color,
                             fontFeatures: [
-                              FontFeature.tabularFigures(),
+                              const FontFeature.tabularFigures(),
                             ],
                           ),
                           maxLines: 1,
@@ -79,7 +79,7 @@ class StatisticCard extends StatelessWidget {
                               fontSize: 11,
                               fontWeight: FontWeight.w600,
                               fontFeatures: [
-                                FontFeature.tabularFigures(),
+                                const FontFeature.tabularFigures(),
                               ],
                             ),
                             maxLines: 1,

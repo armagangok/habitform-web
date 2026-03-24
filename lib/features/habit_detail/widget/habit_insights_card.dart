@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:habitform/models/habit/habit_extension.dart';
+import '../../../models/habit/habit_extension.dart';
 
 import '/core/core.dart';
 import '/models/models.dart';
@@ -82,77 +82,93 @@ class HabitInsightsCard extends ConsumerWidget {
 
     // Achievements
     if (currentStreak >= 7) {
-      achievements.add(Achievement(
-        title: LocaleKeys.habit_detail_achievement_week_warrior.tr(),
-        description: LocaleKeys.habit_detail_achievement_week_warrior_description.tr().replaceAll('{{streak}}', currentStreak.toString()),
-        icon: FontAwesomeIcons.fire,
-        color: Colors.orange,
-        isNew: currentStreak == 7,
-      ));
+      achievements.add(
+        Achievement(
+          title: LocaleKeys.habit_detail_achievement_week_warrior.tr(),
+          description: LocaleKeys.habit_detail_achievement_week_warrior_description.tr().replaceAll('{{streak}}', currentStreak.toString()),
+          icon: FontAwesomeIcons.fire,
+          color: Colors.orange,
+          isNew: currentStreak == 7,
+        ),
+      );
     }
 
     if (currentStreak >= 30) {
-      achievements.add(Achievement(
-        title: LocaleKeys.habit_detail_achievement_monthly_master.tr(),
-        description: LocaleKeys.habit_detail_achievement_monthly_master_description.tr(),
-        icon: FontAwesomeIcons.medal,
-        color: Colors.amber,
-        isNew: currentStreak == 30,
-      ));
+      achievements.add(
+        Achievement(
+          title: LocaleKeys.habit_detail_achievement_monthly_master.tr(),
+          description: LocaleKeys.habit_detail_achievement_monthly_master_description.tr(),
+          icon: FontAwesomeIcons.medal,
+          color: Colors.amber,
+          isNew: currentStreak == 30,
+        ),
+      );
     }
 
     if (longestStreak >= 66) {
-      achievements.add(Achievement(
-        title: LocaleKeys.habit_detail_achievement_habit_hero.tr(),
-        description: LocaleKeys.habit_detail_achievement_probability_threshold.tr(),
-        icon: FontAwesomeIcons.crown,
-        color: Colors.purple,
-        isNew: longestStreak == 66,
-      ));
+      achievements.add(
+        Achievement(
+          title: LocaleKeys.habit_detail_achievement_habit_hero.tr(),
+          description: LocaleKeys.habit_detail_achievement_probability_threshold.tr(),
+          icon: FontAwesomeIcons.crown,
+          color: Colors.purple,
+          isNew: longestStreak == 66,
+        ),
+      );
     }
 
     if (completionRate >= 90) {
-      achievements.add(Achievement(
-        title: LocaleKeys.habit_detail_achievement_perfectionist.tr(),
-        description: LocaleKeys.habit_detail_achievement_perfectionist_description.tr().replaceAll('{{rate}}', completionRate.toStringAsFixed(0)),
-        icon: FontAwesomeIcons.star,
-        color: Colors.blue,
-        isNew: false,
-      ));
+      achievements.add(
+        Achievement(
+          title: LocaleKeys.habit_detail_achievement_perfectionist.tr(),
+          description: LocaleKeys.habit_detail_achievement_perfectionist_description.tr().replaceAll('{{rate}}', completionRate.toStringAsFixed(0)),
+          icon: FontAwesomeIcons.star,
+          color: Colors.blue,
+          isNew: false,
+        ),
+      );
     }
 
     // Insights
     if (currentStreak > longestStreak * 0.8) {
-      insights.add(InsightItem(
-        title: LocaleKeys.habit_detail_achievement_consistency_champion.tr(),
-        description: LocaleKeys.habit_detail_achievement_consistency_description.tr().replaceAll('{{percentage}}', (currentStreak / longestStreak * 100).toStringAsFixed(0)),
-        type: InsightType.positive,
-      ));
+      insights.add(
+        InsightItem(
+          title: LocaleKeys.habit_detail_achievement_consistency_champion.tr(),
+          description: LocaleKeys.habit_detail_achievement_consistency_description.tr().replaceAll('{{percentage}}', (currentStreak / longestStreak * 100).toStringAsFixed(0)),
+          type: InsightType.positive,
+        ),
+      );
     }
 
     if (_isWeekendWarrior()) {
-      insights.add(InsightItem(
-        title: LocaleKeys.habit_detail_achievement_weekend_warrior.tr(),
-        description: LocaleKeys.habit_detail_achievement_weekend_description.tr(),
-        type: InsightType.positive,
-      ));
+      insights.add(
+        InsightItem(
+          title: LocaleKeys.habit_detail_achievement_weekend_warrior.tr(),
+          description: LocaleKeys.habit_detail_achievement_weekend_description.tr(),
+          type: InsightType.positive,
+        ),
+      );
     }
 
     if (_getMissedDaysThisWeek() > 2) {
-      insights.add(InsightItem(
-        title: LocaleKeys.habit_detail_achievement_weekly_checkin.tr(),
-        description: LocaleKeys.habit_detail_achievement_weekly_description.tr().replaceAll('{{days}}', _getMissedDaysThisWeek().toString()),
-        type: InsightType.motivational,
-      ));
+      insights.add(
+        InsightItem(
+          title: LocaleKeys.habit_detail_achievement_weekly_checkin.tr(),
+          description: LocaleKeys.habit_detail_achievement_weekly_description.tr().replaceAll('{{days}}', _getMissedDaysThisWeek().toString()),
+          type: InsightType.motivational,
+        ),
+      );
     }
 
     final probabilityProgress = habitStatistic?.probabilityScore ?? habit.calculateHabitProbability();
     if (probabilityProgress >= 50 && probabilityProgress < 100) {
-      insights.add(InsightItem(
-        title: LocaleKeys.habit_detail_achievement_probability_journey.tr(),
-        description: LocaleKeys.habit_detail_achievement_probability_description.tr().replaceAll('{{percentage}}', probabilityProgress.toStringAsFixed(0)),
-        type: InsightType.informational,
-      ));
+      insights.add(
+        InsightItem(
+          title: LocaleKeys.habit_detail_achievement_probability_journey.tr(),
+          description: LocaleKeys.habit_detail_achievement_probability_description.tr().replaceAll('{{percentage}}', probabilityProgress.toStringAsFixed(0)),
+          type: InsightType.informational,
+        ),
+      );
     }
 
     return HabitInsights(
@@ -224,9 +240,11 @@ class _AchievementsSection extends StatelessWidget {
           spacing: 8,
           runSpacing: 8,
           children: achievements
-              .map((achievement) => _AchievementBadge(
-                    achievement: achievement,
-                  ))
+              .map(
+                (achievement) => _AchievementBadge(
+                  achievement: achievement,
+                ),
+              )
               .toList(),
         ),
       ],

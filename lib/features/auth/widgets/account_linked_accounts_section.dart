@@ -52,7 +52,7 @@ class AccountLinkedAccountsSection extends ConsumerWidget {
         actions: [
           CupertinoDialogAction(
             onPressed: () => Navigator.pop(ctx),
-            child: Text(LocaleKeys.common_cancel.tr()),
+            child: Text(context.tr(LocaleKeys.common_cancel)),
           ),
           CupertinoDialogAction(
             onPressed: () async {
@@ -68,7 +68,7 @@ class AccountLinkedAccountsSection extends ConsumerWidget {
                 AppFlushbar.shared.errorFlushbar(e.toString());
               }
             },
-            child: Text(LocaleKeys.auth_link.tr()),
+            child: Text(context.tr(LocaleKeys.auth_link)),
           ),
         ],
       ),
@@ -84,14 +84,14 @@ class AccountLinkedAccountsSection extends ConsumerWidget {
     final actionState = ref.watch(accountActionsProvider);
 
     return CupertinoListSection.insetGrouped(
-      header: Text(LocaleKeys.auth_linked_accounts.tr()),
+      header: Text(context.tr(LocaleKeys.auth_linked_accounts)),
       children: [
         _buildProviderTile(
           context,
           ref,
           icon: FontAwesomeIcons.google,
           iconColor: CupertinoColors.systemOrange,
-          title: LocaleKeys.auth_linked_google.tr(),
+          title: context.tr(LocaleKeys.auth_linked_google),
           isLinked: hasGoogle,
           providerId: 'google.com',
           isLoading: actionState.isLoading,
@@ -101,7 +101,7 @@ class AccountLinkedAccountsSection extends ConsumerWidget {
           ref,
           icon: FontAwesomeIcons.apple,
           iconColor: CupertinoColors.black,
-          title: LocaleKeys.auth_linked_apple.tr(),
+          title: context.tr(LocaleKeys.auth_linked_apple),
           isLinked: hasApple,
           providerId: 'apple.com',
           isLoading: actionState.isLoading,
@@ -111,7 +111,7 @@ class AccountLinkedAccountsSection extends ConsumerWidget {
           ref,
           icon: CupertinoIcons.mail_solid,
           iconColor: CupertinoColors.systemBlue,
-          title: LocaleKeys.auth_linked_email.tr(),
+          title: context.tr(LocaleKeys.auth_linked_email),
           isLinked: hasPassword,
           providerId: 'password',
           isLoading: actionState.isLoading,
@@ -148,7 +148,7 @@ class AccountLinkedAccountsSection extends ConsumerWidget {
               padding: EdgeInsets.zero,
               onPressed: isLoading ? null : () => _handleLink(context, ref, providerId),
               child: Text(
-                LocaleKeys.auth_link.tr(),
+                context.tr(LocaleKeys.auth_link),
                 style: context.bodyMedium.copyWith(
                   color: context.primary,
                   fontWeight: FontWeight.w600,

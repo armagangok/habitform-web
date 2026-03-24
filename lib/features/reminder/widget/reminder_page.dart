@@ -33,12 +33,12 @@ class ReminderPage extends ConsumerWidget {
               children: [
                 CustomSection(
                   text: LocaleKeys.common_days.tr(),
-                  child: Padding(
-                    padding: const EdgeInsets.all(10.0),
+                  child: const Padding(
+                    padding: EdgeInsets.all(10.0),
                     child: Column(
                       children: [
                         DaySelectionWidget(),
-                        const SizedBox(height: 5),
+                        SizedBox(height: 5),
                         SelectionButtons(),
                       ],
                     ),
@@ -67,7 +67,7 @@ class ReminderPage extends ConsumerWidget {
                         } else {
                           return CustomSection(
                             text: LocaleKeys.reminder_time.tr(),
-                            child: SelectTimeWidget().animate(),
+                            child: const SelectTimeWidget().animate(),
                           );
                         }
                       },

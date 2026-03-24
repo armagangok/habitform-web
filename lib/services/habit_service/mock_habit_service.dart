@@ -35,19 +35,24 @@ class MockHabitService extends HabitService {
       final todayCount = habit.getCountForDate(today);
       final target = habit.dailyTarget <= 0 ? 1 : habit.dailyTarget;
       final todayIsCompleted = todayCount >= target;
+      final todayCompletionUpdatedAt = habit.getCompletionEntryForDate(today)?.updatedAt;
 
-      summaries.add(HabitSummary(
-        id: habit.id,
-        habitName: habit.habitName,
-        emoji: habit.emoji,
-        colorCode: habit.colorCode,
-        dailyTarget: habit.dailyTarget,
-        categoryIds: habit.categoryIds,
-        completionTime: habit.completionTime,
-        todayCount: todayCount,
-        todayIsCompleted: todayIsCompleted,
-        currentStreak: streak,
-      ));
+      summaries.add(
+        HabitSummary(
+          id: habit.id,
+          habitName: habit.habitName,
+          emoji: habit.emoji,
+          colorCode: habit.colorCode,
+          dailyTarget: habit.dailyTarget,
+          categoryIds: habit.categoryIds,
+          completionTime: habit.completionTime,
+          reminderTime: habit.reminderModel?.reminderTime,
+          todayCount: todayCount,
+          todayIsCompleted: todayIsCompleted,
+          todayCompletionUpdatedAt: todayCompletionUpdatedAt,
+          currentStreak: streak,
+        ),
+      );
     }
 
     return summaries;

@@ -402,7 +402,9 @@
     },
     "home": {
         "long_press_to_move": "Basılı tutarak hareket ettir • Detaylar için dokun",
-        "release_to_place": "Yerleştirmek için bırak"
+        "release_to_place": "Yerleştirmek için bırak",
+        "tap_a_habit_to_start_connecting": "Bağlantı kurmaya başlamak için bir alışkanlığa dokun",
+        "tap_another_habit_to_connect": "Bağlamak için başka bir alışkanlığa dokun"
     },
     "iconCategories": {
         "art": "Sanat",
@@ -752,6 +754,11 @@
         "review_request": {
             "subtitle": "Alışkanlık geliştirmeye ihtiyacı olan daha fazla kişiye ulaşmamıza yardımcı olmak için HabitForm'a bir değerlendirme bırakın",
             "title": "HabitForm'ı sevdiniz mi?"
+        },
+        "pro_features": {
+            "title": "Pro Özellikler",
+            "subtitle": "Pro ile açabileceğiniz tüm özellikleri görün",
+            "description": "Tutarlılığınızı artırmak, verilerinizi korumak ve kalıcı alışkanlıkları daha hızlı oluşturmak için geliştirilmiş premium araçları keşfedin."
         },
         "settings": "Ayarlar",
         "system": "Sistem",

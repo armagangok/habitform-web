@@ -46,8 +46,8 @@ class _HabitCategoryPageState extends ConsumerState<HabitCategoryPage> {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(CupertinoIcons.add, size: 20),
-              SizedBox(width: 4),
+              const Icon(CupertinoIcons.add, size: 20),
+              const SizedBox(width: 4),
               Text(LocaleKeys.habit_category_new.tr()),
             ],
           ),
@@ -109,7 +109,7 @@ class _HabitCategoryPageState extends ConsumerState<HabitCategoryPage> {
     final customCategories = state.categories.where((cat) => !cat.isDefault).toList();
 
     return ListView(
-      padding: EdgeInsets.only(bottom: 80),
+      padding: const EdgeInsets.only(bottom: 80),
       children: [
         if (defaultCategories.isNotEmpty) ...[
           Wrap(
@@ -117,7 +117,7 @@ class _HabitCategoryPageState extends ConsumerState<HabitCategoryPage> {
             runSpacing: 8.0,
             children: defaultCategories.map((category) => _buildCategoryChip(category, localSelectedIds)).toList(),
           ),
-          SizedBox(height: 24),
+          const SizedBox(height: 24),
         ],
         if (customCategories.isNotEmpty) ...[
           _buildSectionHeader(LocaleKeys.habit_category_custom_categories.tr()),
@@ -126,7 +126,7 @@ class _HabitCategoryPageState extends ConsumerState<HabitCategoryPage> {
             runSpacing: 8.0,
             children: customCategories.map((category) => _buildDeletableCategoryChip(category, localSelectedIds)).toList(),
           ),
-          SizedBox(height: 24),
+          const SizedBox(height: 24),
         ],
       ],
     );
@@ -173,7 +173,7 @@ class _HabitCategoryPageState extends ConsumerState<HabitCategoryPage> {
                 size: 16,
                 color: isSelected ? Colors.white : context.primaryContrastingColor.withValues(alpha: isSelected ? 1.0 : 0.5),
               ),
-              SizedBox(width: 6),
+              const SizedBox(width: 6),
             ],
             Text(
               category.getDisplayName(),
@@ -261,7 +261,7 @@ class _HabitCategoryPageState extends ConsumerState<HabitCategoryPage> {
                   height: 230,
                   child: GridView.builder(
                     itemCount: CategoryIconUtil.getIconList().length,
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 7,
                     ),
                     itemBuilder: (context, index) {
@@ -365,7 +365,7 @@ class _HabitCategoryPageState extends ConsumerState<HabitCategoryPage> {
                   height: 230,
                   child: GridView.builder(
                     itemCount: CategoryIconUtil.getIconList().length,
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 7,
                     ),
                     itemBuilder: (context, index) {

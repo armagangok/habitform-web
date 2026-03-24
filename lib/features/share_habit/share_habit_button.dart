@@ -27,7 +27,7 @@ class ShareHabitButton extends StatelessWidget {
         _scrollToEnd();
 
         // Add a small delay to ensure scroll completes before showing the sheet
-        Future.delayed(Duration(milliseconds: 100), () {
+        Future.delayed(const Duration(milliseconds: 100), () {
           if (!context.mounted) return;
           showCupertinoSheet(
             context: context,
@@ -35,7 +35,7 @@ class ShareHabitButton extends StatelessWidget {
           );
         });
       },
-      child: Icon(
+      child: const Icon(
         FontAwesomeIcons.share,
         size: 20,
       ),

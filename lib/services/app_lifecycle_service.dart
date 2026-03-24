@@ -1,4 +1,4 @@
-import 'package:habitform/core/core.dart';
+import '../core/core.dart';
 
 import '/core/helpers/notifications/smart_notification_manager.dart';
 import '/features/reminder/models/reminder/reminder_model.dart';

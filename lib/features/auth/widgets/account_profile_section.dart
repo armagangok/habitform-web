@@ -43,7 +43,7 @@ class _AccountProfileSectionState extends ConsumerState<AccountProfileSection> {
     final createdAt = user.metadata.creationTime;
 
     return CupertinoListSection.insetGrouped(
-      header: Text(LocaleKeys.auth_profile.tr()),
+      header: Text(context.tr(LocaleKeys.auth_profile)),
       children: [
         if (createdAt != null)
           CupertinoListTile(
@@ -53,7 +53,7 @@ class _AccountProfileSectionState extends ConsumerState<AccountProfileSection> {
               padding: const EdgeInsets.all(2),
               child: Icon(CupertinoIcons.calendar, color: Colors.white.withValues(alpha: .9), size: 18),
             ),
-            title: Text(LocaleKeys.auth_account_created.tr()),
+            title: Text(context.tr(LocaleKeys.auth_account_created)),
             subtitle: Text(
               '${createdAt.day}/${createdAt.month}/${createdAt.year}',
               style: context.bodySmall.copyWith(color: CupertinoColors.secondaryLabel.resolveFrom(context)),
@@ -70,7 +70,7 @@ class _AccountProfileSectionState extends ConsumerState<AccountProfileSection> {
               size: 18,
             ),
           ),
-          title: Text(LocaleKeys.auth_change_display_name.tr()),
+          title: Text(context.tr(LocaleKeys.auth_change_display_name)),
           onTap: _showChangeNameSheet,
           trailing: const CupertinoListTileChevron(),
         ),
@@ -99,9 +99,9 @@ class _ChangeNameSheetBodyState extends ConsumerState<_ChangeNameSheetBody> {
           leading: CupertinoButton(
             padding: EdgeInsets.zero,
             onPressed: _isLoading ? null : () => Navigator.of(context).pop(),
-            child: Text(LocaleKeys.common_cancel.tr()),
+            child: Text(context.tr(LocaleKeys.common_cancel)),
           ),
-          middle: Text(LocaleKeys.auth_change_display_name.tr()),
+          middle: Text(context.tr(LocaleKeys.auth_change_display_name)),
           trailing: _isLoading
               ? const Padding(
                   padding: EdgeInsets.only(right: 8.0),
@@ -113,7 +113,7 @@ class _ChangeNameSheetBodyState extends ConsumerState<_ChangeNameSheetBody> {
                     final name = widget.nameController.text.trim();
                     final error = AuthValidators.validateDisplayName(name);
                     if (error != null) {
-                      AppFlushbar.shared.errorFlushbar(error.tr());
+                      AppFlushbar.shared.errorFlushbar(error.toString());
                       return;
                     }
                     setState(() => _isLoading = true);
@@ -121,7 +121,7 @@ class _ChangeNameSheetBodyState extends ConsumerState<_ChangeNameSheetBody> {
                       await ref.read(accountActionsProvider.notifier).updateDisplayName(name);
                       if (context.mounted) {
                         Navigator.of(context).pop();
-                        AppFlushbar.shared.successFlushbar(LocaleKeys.auth_display_name_updated.tr());
+                        AppFlushbar.shared.successFlushbar(context.tr(LocaleKeys.auth_display_name_updated));
                       }
                     } catch (e) {
                       if (context.mounted) AppFlushbar.shared.errorFlushbar(e.toString());
@@ -129,17 +129,17 @@ class _ChangeNameSheetBodyState extends ConsumerState<_ChangeNameSheetBody> {
                       if (mounted) setState(() => _isLoading = false);
                     }
                   },
-                  child: Text(LocaleKeys.common_save.tr()),
+                  child: Text(context.tr(LocaleKeys.common_save)),
                 ),
         ),
         child: ListView(
           children: [
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: CupertinoTextField(
                 controller: widget.nameController,
-                placeholder: LocaleKeys.auth_change_display_name.tr(),
+                placeholder: context.tr(LocaleKeys.auth_change_display_name),
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 style: context.bodyLarge,
                 enabled: !_isLoading,

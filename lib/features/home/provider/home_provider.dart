@@ -12,7 +12,6 @@ import '/models/habit/habit_summary.dart';
 import '/services/app_lifecycle_service.dart';
 import '/services/habit_service/habit_service_interface.dart';
 import '/services/widget_sync_service.dart';
-import '../../habit_probability/provider/habit_probability_provider.dart';
 import 'home_state.dart';
 import 'home_summaries_state.dart';
 
@@ -80,9 +79,12 @@ class HomeSummariesNotifier extends AsyncNotifier<HomeSummariesState> {
     return HomeSummariesState(summaries: summaries);
   }
 
-  /// Refreshes the summaries list from the service and updates the state
-  Future<void> refreshSummaries() async {
-    state = const AsyncValue.loading();
+  /// Refreshes the summaries list from the service and updates the state.
+  /// When [showLoading] is false, avoids an intermediate loading state (reduces UI flash).
+  Future<void> refreshSummaries({bool showLoading = true}) async {
+    if (showLoading) {
+      state = const AsyncValue.loading();
+    }
     state = await AsyncValue.guard(() async {
       return await fetchSummaries();
     });
@@ -263,6 +265,7 @@ class HomeNotifier extends AsyncNotifier<HomeState> {
       isCompleted: newCount > 0,
       count: newCount,
       rewardRating: existingEntry?.rewardRating, // Preserve reward rating when updating count
+      updatedAt: DateTime.now(),
     );
     updatedCompletions[dateKey] = updatedEntry;
 
@@ -279,11 +282,7 @@ class HomeNotifier extends AsyncNotifier<HomeState> {
     final persistEnd = DateTime.now();
     LogHelper.shared.debugPrint('💾 [PERF] Habit service persist completed in ${persistEnd.difference(persistStart).inMilliseconds}ms');
 
-    // Refresh formation statistics after completion update
-    final formationStart = DateTime.now();
-    await ref.read(probabilityProvider.notifier).refreshFormationStatistics();
-    final formationEnd = DateTime.now();
-    LogHelper.shared.debugPrint('📊 [PERF] Formation provider refresh completed in ${formationEnd.difference(formationStart).inMilliseconds}ms');
+    // Formation statistics: [probabilityProvider] listens to [homeProvider] and debounces refresh
 
     // Update widget data (debounced in WidgetSyncService)
     final widgetStart = DateTime.now();
@@ -291,8 +290,8 @@ class HomeNotifier extends AsyncNotifier<HomeState> {
     final widgetEnd = DateTime.now();
     LogHelper.shared.debugPrint('📱 [PERF] Widget sync completed in ${widgetEnd.difference(widgetStart).inMilliseconds}ms');
 
-    // Refresh summaries to keep them in sync
-    ref.read(homeSummariesProvider.notifier).refreshSummaries();
+    // Refresh summaries without loading flash (optimistic home state already updated)
+    await ref.read(homeSummariesProvider.notifier).refreshSummaries(showLoading: false);
 
     final homeEnd = DateTime.now();
     LogHelper.shared.debugPrint('✅ [PERF] adjustHabitCompletion total time: ${homeEnd.difference(homeStart).inMilliseconds}ms');

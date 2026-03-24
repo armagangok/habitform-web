@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '/core/core.dart';
+import '../../widgets/custom_list_tile.dart';
 import '../providers/theme_provider.dart';
 
 class ThemeModeFeature extends ConsumerWidget {
@@ -8,7 +9,7 @@ class ThemeModeFeature extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return CupertinoListTile(
+    return CustomListTile(
       leading: CupertinoCard(
         color: Colors.deepOrange,
         borderRadius: BorderRadius.circular(5),
@@ -18,11 +19,8 @@ class ThemeModeFeature extends ConsumerWidget {
           color: Colors.white.withValues(alpha: .9),
         ),
       ),
-      trailing: CupertinoListTileChevron(),
-      title: Text(
-        LocaleKeys.settings_theme.tr(),
-        maxLines: 344,
-      ),
+      trailing: const CupertinoListTileChevron(),
+      title: LocaleKeys.settings_theme.tr(),
       onTap: () {
         showCupertinoModalPopup(
           context: context,

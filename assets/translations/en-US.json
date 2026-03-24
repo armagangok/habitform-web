@@ -402,7 +402,9 @@
     },
     "home": {
         "long_press_to_move": "Long press to move • Tap for details",
-        "release_to_place": "Release to place"
+        "release_to_place": "Release to place",
+        "tap_a_habit_to_start_connecting": "Tap a habit to start connecting",
+        "tap_another_habit_to_connect": "Tap another habit to connect"
     },
     "iconCategories": {
         "art": "Art",
@@ -752,6 +754,11 @@
         "review_request": {
             "subtitle": "To help us reach more people who need help building habits, give HabitForm a 5-stars review",
             "title": "Loved HabitForm?"
+        },
+        "pro_features": {
+            "title": "Pro Features",
+            "subtitle": "See everything you can unlock with Pro",
+            "description": "Discover premium tools designed to help you stay consistent, protect your data, and build lasting habits faster."
         },
         "settings": "Settings",
         "system": "System",

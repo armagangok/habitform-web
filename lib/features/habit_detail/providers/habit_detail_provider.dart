@@ -96,6 +96,7 @@ class HabitDetailNotifier extends AutoDisposeNotifier<Habit?> {
           date: completion.date.normalized,
           isCompleted: newCount >= target,
           count: newCount,
+          updatedAt: DateTime.now(),
         );
         updatedCompletions[updatedEntry.id] = updatedEntry;
 

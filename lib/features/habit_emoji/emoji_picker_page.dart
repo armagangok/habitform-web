@@ -139,7 +139,7 @@ class _IconPickerPageState extends ConsumerState<EmojiPickerPage> {
                                   child: Row(
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
-                                      Icon(
+                                      const Icon(
                                         CupertinoIcons.search,
                                         color: Colors.white,
                                         size: 16,
@@ -147,7 +147,7 @@ class _IconPickerPageState extends ConsumerState<EmojiPickerPage> {
                                       const SizedBox(width: 6),
                                       Text(
                                         LocaleKeys.common_search.tr(),
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                           color: Colors.white,
                                           fontSize: 14,
                                           fontWeight: FontWeight.w600,
@@ -217,7 +217,7 @@ class _IconPickerPageState extends ConsumerState<EmojiPickerPage> {
                     ),
                   ],
                 ),
-                SizedBox(height: 120),
+                const SizedBox(height: 120),
               ],
             ),
           ),
@@ -226,7 +226,7 @@ class _IconPickerPageState extends ConsumerState<EmojiPickerPage> {
           alignment: Alignment.bottomCenter,
           child: SafeArea(
             child: Padding(
-              padding: EdgeInsets.only(bottom: 16) + EdgeInsets.symmetric(horizontal: 32),
+              padding: const EdgeInsets.only(bottom: 16) + const EdgeInsets.symmetric(horizontal: 32),
               child: SizedBox(
                 width: double.infinity,
                 child: CupertinoButton.filled(

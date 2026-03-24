@@ -148,18 +148,20 @@ class _ThisMonthCalendarWidgetState extends State<ThisMonthCalendarWidget> {
             LocaleKeys.habit_detail_friday.tr().toUpperCase(),
             LocaleKeys.habit_detail_sat.tr().toUpperCase(),
           ]
-              .map((day) => Expanded(
-                    child: Center(
-                      child: Text(
-                        day,
-                        style: TextStyle(
-                          fontSize: 11,
-                          fontWeight: FontWeight.w500,
-                          color: context.primaryContrastingColor.withValues(alpha: 0.7),
-                        ),
+              .map(
+                (day) => Expanded(
+                  child: Center(
+                    child: Text(
+                      day,
+                      style: TextStyle(
+                        fontSize: 11,
+                        fontWeight: FontWeight.w500,
+                        color: context.primaryContrastingColor.withValues(alpha: 0.7),
                       ),
                     ),
-                  ))
+                  ),
+                ),
+              )
               .toList(),
         ),
         const SizedBox(height: 6),
@@ -176,7 +178,9 @@ class _ThisMonthCalendarWidgetState extends State<ThisMonthCalendarWidget> {
                     final dayNumber = (weekIndex * 7) + dayIndex - firstWeekday + 1;
 
                     if (dayNumber < 1 || dayNumber > daysInMonth) {
-                      return const Expanded(child: SizedBox(height: 32));
+                      return const Expanded(
+                        child: SizedBox(height: 32),
+                      );
                     }
 
                     final currentDate = DateTime(year, month, dayNumber);

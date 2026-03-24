@@ -85,7 +85,7 @@ void main() async {
         ],
         path: 'assets/translations',
         fallbackLocale: const Locale('en', 'US'),
-        child: MyApp(),
+        child: const MyApp(),
       ),
     ),
   );
@@ -172,6 +172,6 @@ class _MyAppState extends ConsumerState<MyApp> {
       return const OnboardingWelcomePage();
     }
 
-    return HomePage();
+    return const HomePage();
   }
 }

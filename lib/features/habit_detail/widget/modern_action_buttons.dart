@@ -30,7 +30,7 @@ class ActionButtons extends ConsumerWidget {
           blurValue: 20,
           child: Container(
             width: double.infinity,
-            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             color: context.cupertinoTheme.scaffoldBackgroundColor.withValues(alpha: 0.5),
             child: SafeArea(
               child: Row(

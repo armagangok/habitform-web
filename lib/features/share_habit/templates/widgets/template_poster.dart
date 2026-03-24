@@ -34,13 +34,13 @@ class TemplatePoster extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                   decoration: BoxDecoration(color: onAccent.withValues(alpha: .12), borderRadius: BorderRadius.circular(10)),
                   child: Text(DateTime.now().year.toString(), style: context.labelLarge.copyWith(color: onAccent)),
-                )
+                ),
               ],
             ),
-            Spacer(),
+            const Spacer(),
             Text(
               habit.emoji ?? '',
-              style: TextStyle(fontSize: 60, fontWeight: FontWeight.bold),
+              style: const TextStyle(fontSize: 60, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 14),
             Text(habit.habitName, style: context.displaySmall.copyWith(color: onAccent, fontWeight: FontWeight.w900)),
@@ -68,7 +68,7 @@ class TemplatePoster extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Row(
               children: [
                 Assets.app.appLogoDark.image(height: 22, width: 22),
@@ -76,7 +76,7 @@ class TemplatePoster extends StatelessWidget {
                 Text(LocaleKeys.share_templates_app_name.tr(), style: context.bodySmall.copyWith(color: onAccent, fontWeight: FontWeight.bold)),
               ],
             ),
-            Spacer(),
+            const Spacer(),
           ],
         ),
       ),

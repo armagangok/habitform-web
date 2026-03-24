@@ -30,15 +30,15 @@ class HomeCategoryFilter extends ConsumerWidget {
           final usedCategories = state.categories.where((cat) => usedCategoryIds.contains(cat.id)).toList();
 
           if (usedCategories.isEmpty) {
-            return SizedBox.shrink(); // No categories to show
+            return const SizedBox.shrink(); // No categories to show
           }
 
           // Single row ListView
           return SizedBox(
             height: 40,
             child: SingleChildScrollView(
-              padding: EdgeInsets.only(left: 16),
-              physics: BouncingScrollPhysics(),
+              padding: const EdgeInsets.only(left: 16),
+              physics: const BouncingScrollPhysics(),
               scrollDirection: Axis.horizontal,
               child: Row(
                 mainAxisSize: MainAxisSize.min,
@@ -72,7 +72,7 @@ class HomeCategoryFilter extends ConsumerWidget {
                               size: 13,
                               color: isSelected ? Colors.white : context.bodyMedium.color,
                             ),
-                            SizedBox(width: 5),
+                            const SizedBox(width: 5),
                             Text(
                               category.getDisplayName(),
                               style: context.bodySmall.copyWith(

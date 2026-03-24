@@ -45,7 +45,7 @@ class PurchaseNotifier extends AsyncNotifier<PaywallState> {
         } catch (e) {
           // API çağrıları başarısız olursa sadece aktif abonelik ile devam et
           LogHelper.shared.debugPrint('Failed to get RevenueCat data in debug mode: $e');
-          return PaywallState(
+          return const PaywallState(
             isSubscriptionActive: true, // Debug modunda aboneliği aktif olarak zorla
           );
         }

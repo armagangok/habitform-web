@@ -50,7 +50,7 @@ class _AccountSecuritySectionState extends ConsumerState<AccountSecuritySection>
                 final email = _emailController.text.trim();
                 final error = AuthValidators.validateEmail(email);
                 if (error != null) {
-                  AppFlushbar.shared.errorFlushbar(error.tr());
+                  LogHelper.shared.errorPrint(error);
                   return;
                 }
                 try {

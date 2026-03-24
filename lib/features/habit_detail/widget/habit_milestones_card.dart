@@ -51,7 +51,7 @@ class HabitMilestonesCard extends ConsumerWidget {
                     isAchieved: totalCompletedDays >= milestone.days,
                     isCurrent: milestone == currentMilestone,
                     color: Color(habit.colorCode),
-                  )),
+                  ),),
             ],
           ),
         ),

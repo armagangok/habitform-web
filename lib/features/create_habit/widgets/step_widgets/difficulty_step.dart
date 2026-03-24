@@ -48,7 +48,7 @@ class DifficultyStep extends ConsumerWidget {
           ),
 
           // Difficulty picker
-          DifficultyPickerWidget(),
+          const DifficultyPickerWidget(),
         ],
       ),
     );

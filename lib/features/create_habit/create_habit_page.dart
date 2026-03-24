@@ -20,9 +20,9 @@ class _CreateHabitPageState extends ConsumerState<CreateHabitPage> {
           title: LocaleKeys.habit_create_habit.tr(),
           closeButtonPosition: CloseButtonPosition.left,
         ),
-        child: SafeArea(
+        child: const SafeArea(
           bottom: true,
-          child: const PageViewStepRouter(),
+          child: PageViewStepRouter(),
         ),
       ),
     );

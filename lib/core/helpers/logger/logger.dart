@@ -16,8 +16,8 @@ class LogHelper {
     if (KDebug.logDebugMode) _logger.w(message);
   }
 
-  void errorPrint(String message) {
-    if (KDebug.logDebugMode) _logger.e(message);
+  void errorPrint(String message, [Object? error, StackTrace? stackTrace]) {
+    if (KDebug.logDebugMode) _logger.e(message, error: error, stackTrace: stackTrace);
   }
 
   void whatTheFuckPrint(String message) {

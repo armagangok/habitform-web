@@ -77,14 +77,18 @@ class ArchivedHabitsNotifier extends AutoDisposeAsyncNotifier<ArchivedHabitsStat
 
       final updatedState = await fetchArchivedHabits();
 
-      state = AsyncValue.data(updatedState.copyWith(
-        successMessage: LocaleKeys.archived_habits_unarchive_success.tr(),
-      ));
+      state = AsyncValue.data(
+        updatedState.copyWith(
+          successMessage: LocaleKeys.archived_habits_unarchive_success.tr(),
+        ),
+      );
     } catch (e) {
-      state = AsyncValue.data(state.value!.copyWith(
-        isLoading: false,
-        error: e.toString(),
-      ));
+      state = AsyncValue.data(
+        state.value!.copyWith(
+          isLoading: false,
+          error: e.toString(),
+        ),
+      );
     }
   }
 
@@ -104,23 +108,29 @@ class ArchivedHabitsNotifier extends AutoDisposeAsyncNotifier<ArchivedHabitsStat
       // Trigger a reschedule of all remaining notifications to ensure archived habit's notifications are removed
       await _rescheduleAllNotifications();
 
-      state = AsyncValue.data(ArchivedHabitsState(
-        archivedHabits: updatedHabits,
-        successMessage: LocaleKeys.archived_habits_marked_for_deletion.tr(),
-      ));
+      state = AsyncValue.data(
+        ArchivedHabitsState(
+          archivedHabits: updatedHabits,
+          successMessage: LocaleKeys.archived_habits_marked_for_deletion.tr(),
+        ),
+      );
     } catch (e) {
-      state = AsyncValue.data(state.value!.copyWith(
-        isLoading: false,
-        error: e.toString(),
-      ));
+      state = AsyncValue.data(
+        state.value!.copyWith(
+          isLoading: false,
+          error: e.toString(),
+        ),
+      );
     }
   }
 
   void toggleSelectionMode() {
-    state = AsyncValue.data(state.value!.copyWith(
-      isSelectionMode: !state.value!.isSelectionMode,
-      selectedHabitIds: state.value!.isSelectionMode ? {} : state.value!.selectedHabitIds,
-    ));
+    state = AsyncValue.data(
+      state.value!.copyWith(
+        isSelectionMode: !state.value!.isSelectionMode,
+        selectedHabitIds: state.value!.isSelectionMode ? {} : state.value!.selectedHabitIds,
+      ),
+    );
   }
 
   void toggleHabitSelection(String habitId) {
@@ -131,9 +141,11 @@ class ArchivedHabitsNotifier extends AutoDisposeAsyncNotifier<ArchivedHabitsStat
       currentSelected.add(habitId);
     }
 
-    state = AsyncValue.data(state.value!.copyWith(
-      selectedHabitIds: currentSelected,
-    ));
+    state = AsyncValue.data(
+      state.value!.copyWith(
+        selectedHabitIds: currentSelected,
+      ),
+    );
   }
 
   Future<void> deleteSelectedHabits() async {
@@ -156,17 +168,21 @@ class ArchivedHabitsNotifier extends AutoDisposeAsyncNotifier<ArchivedHabitsStat
       // Trigger a reschedule of all remaining notifications to ensure archived habits' notifications are removed
       await _rescheduleAllNotifications();
 
-      state = AsyncValue.data(ArchivedHabitsState(
-        archivedHabits: updatedHabits,
-        isSelectionMode: false,
-        selectedHabitIds: {},
-        successMessage: LocaleKeys.archived_habits_delete_selected_success.tr(namedArgs: {'count': selectedHabits.length.toString()}),
-      ));
+      state = AsyncValue.data(
+        ArchivedHabitsState(
+          archivedHabits: updatedHabits,
+          isSelectionMode: false,
+          selectedHabitIds: {},
+          successMessage: LocaleKeys.archived_habits_delete_selected_success.tr(namedArgs: {'count': selectedHabits.length.toString()}),
+        ),
+      );
     } catch (e) {
-      state = AsyncValue.data(state.value!.copyWith(
-        isLoading: false,
-        error: e.toString(),
-      ));
+      state = AsyncValue.data(
+        state.value!.copyWith(
+          isLoading: false,
+          error: e.toString(),
+        ),
+      );
     }
   }
 

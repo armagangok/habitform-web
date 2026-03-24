@@ -32,3 +32,5 @@ linter:
 
 
     require_trailing_commas: true  # Require trailing commas for better formatting
+    prefer_relative_imports: true  # Require relative imports for better readability
+    prefer_const_constructors: true  # Require const constructors for better performance    

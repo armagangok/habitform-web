@@ -1,4 +1,4 @@
-import 'package:habitform/core/core.dart';
+import '../core.dart';
 
 enum CloseButtonPosition { left, right, none }
 
@@ -38,7 +38,7 @@ class SheetHeader extends StatelessWidget implements ObstructingPreferredSizeWid
       middle: middle ??
           Text(
             title ?? '',
-            style: TextStyle(
+            style: const TextStyle(
               fontWeight: FontWeight.w600,
             ),
           ),
@@ -51,24 +51,26 @@ class SheetHeader extends StatelessWidget implements ObstructingPreferredSizeWid
   }
 
   Widget _closeButton() {
-    return Builder(builder: (context) {
-      return Align(
-        widthFactor: 1,
-        child: FittedBox(
-          child: SizedBox(
-            width: 40,
-            height: 40,
-            child: CircularActionButton(
-              onPressed: () {
-                onClose?.call();
-                navigator.pop();
-              },
-              icon: CupertinoIcons.xmark,
+    return Builder(
+      builder: (context) {
+        return Align(
+          widthFactor: 1,
+          child: FittedBox(
+            child: SizedBox(
+              width: 40,
+              height: 40,
+              child: CircularActionButton(
+                onPressed: () {
+                  onClose?.call();
+                  navigator.pop();
+                },
+                icon: CupertinoIcons.xmark,
+              ),
             ),
           ),
-        ),
-      );
-    });
+        );
+      },
+    );
   }
 
   @override

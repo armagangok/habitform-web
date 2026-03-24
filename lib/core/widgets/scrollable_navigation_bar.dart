@@ -120,7 +120,7 @@ class _ScrollableNavigationBarState extends State<ScrollableNavigationBar> with 
     _scrollEndTimer?.cancel();
 
     // Reset scroll delta after a short delay (to detect quick successive scrolls)
-    _scrollEndTimer = Timer(Duration(milliseconds: 100), () {
+    _scrollEndTimer = Timer(const Duration(milliseconds: 100), () {
       _scrollDelta = 0;
     });
 

@@ -91,7 +91,7 @@ class DifficultyPickerWidget extends ConsumerWidget {
                     ],
                   ),
                   child: isSelected
-                      ? Icon(
+                      ? const Icon(
                           Icons.check,
                           size: 12,
                           color: Colors.white,

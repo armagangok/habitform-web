@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '/core/core.dart';
 import '/features/habit_category/model/habit_category_model.dart';
 import '/features/habit_category/provider/habit_category_provider.dart';
-import '../../../core/widgets/my_list_tile.dart';
+import '../../../core/widgets/custom_list_tile.dart';
 import '../provider/habit_category_button_provider.dart';
 import '../util/icon_util.dart';
 
@@ -54,12 +54,12 @@ class CategoryPickerButton extends ConsumerWidget {
 
         return CustomSection(
           header: header,
-          child: MyListTile(
+          child: CustomListTile(
             onTap: () {
               context.hideKeyboard();
               navigator.navigateTo(path: KRoute.habitCategoryPage);
             },
-            trailing: CupertinoListTileChevron(),
+            trailing: const CupertinoListTileChevron(),
             titleWidget: selectedCategories.isEmpty
                 ? Text(LocaleKeys.habit_category_select_categories.tr())
                 : Wrap(
@@ -71,7 +71,7 @@ class CategoryPickerButton extends ConsumerWidget {
                       final iconData = category.icon != null ? CategoryIconUtil.getIconFromString(category.icon!) : _getCategoryIcon(category.name);
 
                       return Container(
-                        padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                         decoration: BoxDecoration(
                           color: context.primary.withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(8),
@@ -88,7 +88,7 @@ class CategoryPickerButton extends ConsumerWidget {
                               size: 14,
                               color: context.primary,
                             ),
-                            SizedBox(width: 6),
+                            const SizedBox(width: 6),
                             Text(
                               category.getDisplayName(),
                               style: context.bodySmall.copyWith(
@@ -104,8 +104,8 @@ class CategoryPickerButton extends ConsumerWidget {
           ),
         );
       },
-      loading: () => SizedBox.shrink(),
-      error: (_, __) => SizedBox.shrink(),
+      loading: () => const SizedBox.shrink(),
+      error: (_, __) => const SizedBox.shrink(),
     );
   }
 }

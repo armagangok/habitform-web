@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:habitform/models/habit/habit_extension.dart';
+import '../../../models/habit/habit_extension.dart';
 
 import '/core/core.dart';
 import '/models/models.dart';
@@ -106,7 +106,7 @@ class _HabitDataWidgetState extends ConsumerState<HabitDataWidget> {
                 child: PageView.builder(
                   controller: _pageController,
                   onPageChanged: _onPageChanged,
-                  physics: ClampingScrollPhysics(),
+                  physics: const ClampingScrollPhysics(),
                   itemBuilder: (context, index) {
                     final quarterStartMonth = (index * 3) % 12;
                     final year = 2020 + (index * 3) ~/ 12;
@@ -119,7 +119,7 @@ class _HabitDataWidgetState extends ConsumerState<HabitDataWidget> {
                   },
                 ),
               );
-            }),
+            },),
           ],
         ),
       ),
@@ -137,7 +137,7 @@ class _HabitDataWidgetState extends ConsumerState<HabitDataWidget> {
           padding: EdgeInsets.zero,
           onPressed: () {
             _pageController.previousPage(
-              duration: Duration(milliseconds: 300),
+              duration: const Duration(milliseconds: 300),
               curve: Curves.easeIn,
             );
           },
@@ -163,7 +163,7 @@ class _HabitDataWidgetState extends ConsumerState<HabitDataWidget> {
               ? null
               : () {
                   _pageController.nextPage(
-                    duration: Duration(milliseconds: 300),
+                    duration: const Duration(milliseconds: 300),
                     curve: Curves.easeIn,
                   );
                 },
@@ -193,7 +193,7 @@ class _HabitDataWidgetState extends ConsumerState<HabitDataWidget> {
 
         return Expanded(
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 4),
+            padding: const EdgeInsets.symmetric(horizontal: 4),
             child: _buildCompactMonthCard(
               color: color,
               monthIndex: month,
@@ -274,9 +274,9 @@ class _HabitDataWidgetState extends ConsumerState<HabitDataWidget> {
     completions.sort((a, b) => a.compareTo(b));
 
     return GridView.builder(
-      physics: NeverScrollableScrollPhysics(),
-      padding: EdgeInsets.all(4),
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+      physics: const NeverScrollableScrollPhysics(),
+      padding: const EdgeInsets.all(4),
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: numberOfWeeks,
         mainAxisSpacing: 2,
         crossAxisSpacing: 2,
@@ -291,7 +291,7 @@ class _HabitDataWidgetState extends ConsumerState<HabitDataWidget> {
         final dayNumber = week * 7 + weekday + 1 - firstWeekday;
 
         final isDayInMonth = dayNumber > 0 && dayNumber <= daysInMonth;
-        if (!isDayInMonth) return SizedBox.shrink();
+        if (!isDayInMonth) return const SizedBox.shrink();
 
         final currentDate = DateTime(year, monthIndex + 1, dayNumber);
         final isToday = currentDate.isToday;

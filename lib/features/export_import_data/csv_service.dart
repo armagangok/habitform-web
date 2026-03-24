@@ -24,7 +24,7 @@ class CSVService {
   static CSVService get instance => _instance;
 
   final _habitService = habitService;
-  final _uuid = Uuid();
+  final _uuid = const Uuid();
 
   // Export habits to CSV
   Future<String> exportHabitsToCSV() async {

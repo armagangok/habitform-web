@@ -32,7 +32,7 @@ class _ReminderStepState extends ConsumerState<ReminderStep> {
         children: [
           // Step title and description
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0) + EdgeInsets.only(top: 16.0),
+            padding: const EdgeInsets.symmetric(horizontal: 16.0) + const EdgeInsets.only(top: 16.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

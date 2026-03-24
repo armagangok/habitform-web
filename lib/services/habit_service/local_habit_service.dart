@@ -59,6 +59,7 @@ class LocalHabitService extends HabitService {
       final todayCount = habit.getCountForDate(today);
       final target = habit.dailyTarget <= 0 ? 1 : habit.dailyTarget;
       final todayIsCompleted = todayCount >= target;
+      final todayCompletionUpdatedAt = habit.getCompletionEntryForDate(today)?.updatedAt;
 
       summaries.add(HabitSummary(
         id: habit.id,
@@ -68,13 +69,15 @@ class LocalHabitService extends HabitService {
         dailyTarget: habit.dailyTarget,
         categoryIds: habit.categoryIds,
         completionTime: habit.completionTime,
+        reminderTime: habit.reminderModel?.reminderTime,
         todayCount: todayCount,
         todayIsCompleted: todayIsCompleted,
+        todayCompletionUpdatedAt: todayCompletionUpdatedAt,
         currentStreak: streak,
         constellationPosX: habit.constellationPosX,
         constellationPosY: habit.constellationPosY,
         linkedHabitIds: habit.linkedHabitIds,
-      ));
+      ),);
     }
 
     LogHelper.shared.debugPrint('Found ${summaries.length} habit summaries');
@@ -222,6 +225,7 @@ class LocalHabitService extends HabitService {
       isCompleted: newCount >= target,
       count: newCount,
       rewardRating: existingEntry?.rewardRating, // Preserve reward rating when updating count
+      updatedAt: DateTime.now(),
     );
     updatedCompletions[updatedEntry.id] = updatedEntry;
 
@@ -239,8 +243,16 @@ class LocalHabitService extends HabitService {
       updatedHabit,
     );
 
-    // Sync to Firestore in background
-    _syncHabitInBackground(updatedHabit, HiveBoxes.habitBox);
+    // Sync only the touched completion day to Firestore (not the whole habit document)
+    final removeKey =
+        existingKey != null && existingKey != updatedEntry.id ? existingKey : null;
+    _syncCompletionPatchInBackground(
+      habit: updatedHabit,
+      completionMapKey: updatedEntry.id,
+      entryForRemote: updatedEntry.copyWith(syncStatus: SyncStatus.synced),
+      removeCompletionKeyIfDifferent: removeKey,
+      boxName: HiveBoxes.habitBox,
+    );
 
     final updateEnd = DateTime.now();
     LogHelper.shared.debugPrint('💾 [PERF] updateHabit completed in ${updateEnd.difference(updateStart).inMilliseconds}ms');
@@ -280,6 +292,41 @@ class LocalHabitService extends HabitService {
       );
     } catch (e, stack) {
       LogHelper.shared.debugPrint('Sync failed for habit ${habit.id}: $e\n$stack');
+    }
+  }
+
+  /// Writes a single completion entry to Firestore; falls back to full [syncHabit] on failure.
+  Future<void> _syncCompletionPatchInBackground({
+    required Habit habit,
+    required String completionMapKey,
+    required CompletionEntry entryForRemote,
+    String? removeCompletionKeyIfDifferent,
+    required String boxName,
+  }) async {
+    try {
+      await _syncService.patchHabitCompletion(
+        habitId: habit.id,
+        completionMapKey: completionMapKey,
+        entry: entryForRemote,
+        removeCompletionKeyIfDifferent: removeCompletionKeyIfDifferent,
+      );
+      await _hiveHelper.putData<Habit>(
+        boxName,
+        habit.id,
+        habit.copyWith(syncStatus: SyncStatus.synced),
+      );
+    } catch (e, stack) {
+      LogHelper.shared.debugPrint('Completion patch sync failed for habit ${habit.id}: $e\n$stack');
+      try {
+        await _syncService.syncHabit(habit);
+        await _hiveHelper.putData<Habit>(
+          boxName,
+          habit.id,
+          habit.copyWith(syncStatus: SyncStatus.synced),
+        );
+      } catch (e2, stack2) {
+        LogHelper.shared.debugPrint('Fallback full sync failed for habit ${habit.id}: $e2\n$stack2');
+      }
     }
   }
 

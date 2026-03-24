@@ -1,5 +1,6 @@
 import 'package:flutter/services.dart';
-import 'package:habitform/core/core.dart';
+
+import '../../core.dart';
 
 class CategoryWidget extends StatefulWidget {
   final List<String> categories;
@@ -121,7 +122,7 @@ class CategoryWidgetState extends State<CategoryWidget> {
 
         return IntrinsicHeight(
           child: SingleChildScrollView(
-            physics: BouncingScrollPhysics(),
+            physics: const BouncingScrollPhysics(),
             controller: _scrollController,
             scrollDirection: Axis.horizontal,
             child: Column(
@@ -129,7 +130,7 @@ class CategoryWidgetState extends State<CategoryWidget> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 _buildRow(firstRow, 0, minItemHeight, horizontalPadding, verticalPadding, spacing),
-                SizedBox(height: spacing),
+                const SizedBox(height: spacing),
                 _buildRow(secondRow, itemsPerRow, minItemHeight, horizontalPadding, verticalPadding, spacing),
               ],
             ),
@@ -165,7 +166,7 @@ class CategoryWidgetState extends State<CategoryWidget> {
                 widget.onCategorySelected(index);
 
                 // Delay scrolling slightly to ensure UI updates first
-                Future.delayed(Duration(milliseconds: 50), () {
+                Future.delayed(const Duration(milliseconds: 50), () {
                   if (mounted) _scrollSelectedItemIntoView();
                 });
               },

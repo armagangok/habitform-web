@@ -94,19 +94,21 @@ class HabitCategoryNotifier extends StateNotifier<AsyncValue<HabitCategoryState>
         newSelectedIds.add(categoryId);
       }
 
-      state = AsyncValue.data(currentState.copyWith(
-        selectedCategoryIds: newSelectedIds,
-      ));
+      state = AsyncValue.data(
+        currentState.copyWith(
+          selectedCategoryIds: newSelectedIds,
+        ),
+      );
     });
   }
 
-  
-
   void setSelectedCategories(Set<String> categoryIds) {
     state.whenData((currentState) {
-      state = AsyncValue.data(currentState.copyWith(
-        selectedCategoryIds: categoryIds,
-      ));
+      state = AsyncValue.data(
+        currentState.copyWith(
+          selectedCategoryIds: categoryIds,
+        ),
+      );
     });
   }
 }

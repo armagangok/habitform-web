@@ -6,6 +6,7 @@ import '/features/habit_category/page/habit_category_page.dart';
 import '/features/habit_emoji/emoji_picker_page.dart';
 import '/features/home/views/pages/home_page.dart';
 import '/features/settings/pages/notifications_page.dart';
+import '/features/settings/pages/pro_features_page.dart';
 import '/features/settings/settings_page.dart';
 import '../../features/onboarding/pages/onboarding_app_features_page.dart';
 import '../../features/onboarding/pages/onboarding_rating_page.dart';
@@ -15,7 +16,7 @@ import '../core.dart';
 @immutable
 final class NavigationRoute {
   const NavigationRoute._();
-  static final shared = NavigationRoute._();
+  static final shared = const NavigationRoute._();
 
   Route<dynamic> generateRoute(RouteSettings args) {
     switch (args.name) {
@@ -33,6 +34,9 @@ final class NavigationRoute {
 
       case KRoute.dataManagement:
         return _getRoute(page: const DataExportImportPage(), settings: args);
+
+      case KRoute.proFeatures:
+        return _getRoute(page: const ProFeaturesPage(), settings: args);
 
       case KRoute.onboardingWelcome:
         return _getRoute(page: const OnboardingWelcomePage(), settings: args);

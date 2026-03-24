@@ -42,12 +42,12 @@ class AccountCloudSyncProBanner extends ConsumerWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          LocaleKeys.auth_cloud_sync_pro_title.tr(),
+                          context.tr(LocaleKeys.auth_cloud_sync_pro_title),
                           style: context.titleMedium.copyWith(fontWeight: FontWeight.w600),
                         ),
                         const SizedBox(height: 6),
                         Text(
-                          LocaleKeys.auth_cloud_sync_pro_message.tr(),
+                          context.tr(LocaleKeys.auth_cloud_sync_pro_message),
                           style: context.bodyMedium.copyWith(
                             color: CupertinoColors.secondaryLabel.resolveFrom(context),
                           ),
@@ -68,7 +68,7 @@ class AccountCloudSyncProBanner extends ConsumerWidget {
                       );
                 },
                 child: Text(
-                  LocaleKeys.auth_cloud_sync_pro_cta.tr(),
+                  context.tr(LocaleKeys.auth_cloud_sync_pro_cta),
                   style: context.titleSmall.copyWith(
                     color: CupertinoColors.white,
                     fontWeight: FontWeight.w600,

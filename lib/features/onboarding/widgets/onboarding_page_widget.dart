@@ -27,12 +27,13 @@ class OnboardingPageWidget extends StatelessWidget {
                 child: Stack(
                   children: [
                     Center(
-                        child: Animate(
-                      child: Image.asset(
-                        pageModel.imagePath,
-                        fit: BoxFit.contain,
+                      child: Animate(
+                        child: Image.asset(
+                          pageModel.imagePath,
+                          fit: BoxFit.contain,
+                        ),
                       ),
-                    )),
+                    ),
                     if (isLastPage)
                       Align(
                         alignment: Alignment.bottomCenter,

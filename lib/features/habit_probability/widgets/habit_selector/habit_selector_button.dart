@@ -44,7 +44,7 @@ class HabitSelectorButton extends StatelessWidget {
                     color: isSelected ? CupertinoColors.white : null,
                   ),
                 ),
-              ]
+              ],
             ],
           ),
         ),

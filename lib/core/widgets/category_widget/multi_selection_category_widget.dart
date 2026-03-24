@@ -1,5 +1,5 @@
 import 'package:flutter/services.dart';
-import 'package:habitform/core/core.dart';
+import '../../core.dart';
 
 class MultiCategoryWidget<T> extends StatefulWidget {
   final List<T> categories;

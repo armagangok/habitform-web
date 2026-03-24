@@ -55,7 +55,7 @@ class IconPickerState extends ConsumerState<IconPicker> with SingleTickerProvide
     }
 
     // Delay very slightly to ensure rendering is complete
-    Future.delayed(Duration(milliseconds: 50), () {
+    Future.delayed(const Duration(milliseconds: 50), () {
       if (!mounted || !context.mounted) return;
 
       try {
@@ -125,7 +125,7 @@ class IconPickerState extends ConsumerState<IconPicker> with SingleTickerProvide
           padding: const EdgeInsets.all(8.0),
           child: ListView(
             shrinkWrap: true,
-            physics: ClampingScrollPhysics(),
+            physics: const ClampingScrollPhysics(),
             padding: EdgeInsets.zero,
             children: [
               CategoryWidget(
@@ -153,18 +153,18 @@ class IconPickerState extends ConsumerState<IconPicker> with SingleTickerProvide
                   });
                 },
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               SizedBox(
                 child: GridView.builder(
                   controller: _gridScrollController,
                   shrinkWrap: true,
                   padding: EdgeInsets.zero,
                   scrollDirection: Axis.vertical,
-                  physics: BouncingScrollPhysics(),
+                  physics: const BouncingScrollPhysics(),
 
                   cacheExtent: 1000, // Daha fazla öğeyi önbelleğe al
                   itemCount: currentCategoryIcons.length,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 5,
                     crossAxisSpacing: 10,
                     mainAxisSpacing: 10,

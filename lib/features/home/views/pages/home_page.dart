@@ -80,33 +80,37 @@ class _HomePageState extends ConsumerState<HomePage> {
           children: [
             // Constellation view (full screen) - lazy loaded for better initial performance
             // Use summaries provider for lightweight data on main page
-            Consumer(builder: (context, ref, _) {
-              final summariesStateAsyncValue = ref.watch(homeSummariesProvider);
+            Consumer(
+              builder: (context, ref, _) {
+                final summariesStateAsyncValue = ref.watch(homeSummariesProvider);
 
-              return summariesStateAsyncValue.when(
-                data: (summariesState) {
-                  return Consumer(builder: (context, ref, _) {
-                    // Optimized: Use select to only rebuild when list length changes significantly
-                    final filteredSummaries = ref.watch(filteredHabitSummariesProvider);
-                    final summariesLength = filteredSummaries.length;
+                return summariesStateAsyncValue.when(
+                  data: (summariesState) {
+                    return Consumer(
+                      builder: (context, ref, _) {
+                        // Optimized: Use select to only rebuild when list length changes significantly
+                        final filteredSummaries = ref.watch(filteredHabitSummariesProvider);
+                        final summariesLength = filteredSummaries.length;
 
-                    if (summariesLength == 0) {
-                      return _noHabitsWidget(ref, context);
-                    }
+                        if (summariesLength == 0) {
+                          return _noHabitsWidget(ref, context);
+                        }
 
-                    // Lazy load constellation view to prevent blocking initial page render
-                    // This helps when there are many habits with heavy completion data
-                    return _LazyConstellationView(habits: filteredSummaries);
-                  });
-                },
-                loading: () => _loadingWidget(),
-                error: (error, stack) {
-                  LogHelper.shared.errorPrint('Error loading summaries: $error');
-                  LogHelper.shared.errorPrint('Stack: $stack');
-                  return _errorWidget();
-                },
-              );
-            }),
+                        // Lazy load constellation view to prevent blocking initial page render
+                        // This helps when there are many habits with heavy completion data
+                        return _LazyConstellationView(habits: filteredSummaries);
+                      },
+                    );
+                  },
+                  loading: () => _loadingWidget(),
+                  error: (error, stack) {
+                    LogHelper.shared.errorPrint('Error loading summaries: $error');
+                    LogHelper.shared.errorPrint('Stack: $stack');
+                    return _errorWidget();
+                  },
+                );
+              },
+            ),
 
             // Floating navigation bar
             Positioned(
@@ -167,13 +171,15 @@ class _HomePageState extends ConsumerState<HomePage> {
                 ],
               ),
               child: Text.rich(
-                TextSpan(children: [
-                  const TextSpan(text: "Habit"),
-                  TextSpan(
-                    text: "Form",
-                    style: TextStyle(color: context.primary),
-                  ),
-                ]),
+                TextSpan(
+                  children: [
+                    const TextSpan(text: "Habit"),
+                    TextSpan(
+                      text: "Form",
+                      style: TextStyle(color: context.primary),
+                    ),
+                  ],
+                ),
                 style: context.titleMedium.copyWith(fontWeight: FontWeight.bold),
               ),
             ),
@@ -267,8 +273,8 @@ class _HomePageState extends ConsumerState<HomePage> {
     return Stack(
       children: [
         // Empty constellation view as motivational background
-        RepaintBoundary(
-          child: HabitConstellationView(habits: const []),
+        const RepaintBoundary(
+          child: HabitConstellationView(habits: []),
         ),
         // Create habit button and message overlay
         Center(
@@ -306,33 +312,37 @@ class _HomePageState extends ConsumerState<HomePage> {
 
   Widget _errorWidget() {
     return Center(
-      child: Builder(builder: (context) {
-        return Text(
-          LocaleKeys.errors_something_went_wrong.tr(),
-          style: context.bodyMedium,
-          textAlign: TextAlign.center,
-        );
-      }),
+      child: Builder(
+        builder: (context) {
+          return Text(
+            LocaleKeys.errors_something_went_wrong.tr(),
+            style: context.bodyMedium,
+            textAlign: TextAlign.center,
+          );
+        },
+      ),
     );
   }
 
   Widget _loadingWidget() {
-    return Builder(builder: (context) {
-      return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const CupertinoActivityIndicator(),
-            const SizedBox(height: 10),
-            Text(
-              LocaleKeys.common_loading_habits.tr(),
-              style: context.bodyMedium,
-              textAlign: TextAlign.center,
-            ),
-          ],
-        ),
-      );
-    });
+    return Builder(
+      builder: (context) {
+        return Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const CupertinoActivityIndicator(),
+              const SizedBox(height: 10),
+              Text(
+                LocaleKeys.common_loading_habits.tr(),
+                style: context.bodyMedium,
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 
   Future<void> _handlePaywallAction(BuildContext context) async {
@@ -344,7 +354,7 @@ class _HomePageState extends ConsumerState<HomePage> {
       enableDrag: false,
       context: context,
       builder: (contextFromSheet) {
-        return CreateHabitPage();
+        return const CreateHabitPage();
       },
     );
   }

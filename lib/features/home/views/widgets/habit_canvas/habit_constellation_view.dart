@@ -58,6 +58,9 @@ class _HabitConstellationViewState extends ConsumerState<HabitConstellationView>
   // Animation controller for smooth zoom
   late final AnimationController _zoomAnimationController;
 
+  // Animation controller for wave motion on connection-line arrows
+  late final AnimationController _arrowWaveController;
+
   // Store animation listeners to properly dispose them
   VoidCallback? _currentAnimationListener;
   void Function(AnimationStatus)? _currentStatusListener;
@@ -80,6 +83,10 @@ class _HabitConstellationViewState extends ConsumerState<HabitConstellationView>
       vsync: this,
       duration: const Duration(milliseconds: 300),
     );
+    _arrowWaveController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1500),
+    )..repeat();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _initializeCanvas();
     });
@@ -448,6 +455,7 @@ class _HabitConstellationViewState extends ConsumerState<HabitConstellationView>
       _currentStatusListener = null;
     }
     _zoomAnimationController.dispose();
+    _arrowWaveController.dispose();
     _transformationController.dispose();
     super.dispose();
   }
@@ -622,7 +630,7 @@ class _HabitConstellationViewState extends ConsumerState<HabitConstellationView>
       showCupertinoSheet(
         enableDrag: false,
         context: context,
-        builder: (contextFromSheet) => HabitDetailPage(),
+        builder: (contextFromSheet) => const HabitDetailPage(),
       );
     }
   }
@@ -688,7 +696,7 @@ class _HabitConstellationViewState extends ConsumerState<HabitConstellationView>
                   ),
                 ),
 
-                // Connection lines - already in RepaintBoundary, stays cached
+                // Connection lines with animated directional arrows
                 RepaintBoundary(
                   child: CustomPaint(
                     size: const Size(canvasWidth, canvasHeight),
@@ -697,6 +705,7 @@ class _HabitConstellationViewState extends ConsumerState<HabitConstellationView>
                       positions: positions,
                       habits: widget.habits,
                       isDark: isDark,
+                      arrowAnimation: _arrowWaveController,
                     ),
                   ),
                 ),
@@ -828,7 +837,9 @@ class _HabitConstellationViewState extends ConsumerState<HabitConstellationView>
                     ),
                     const SizedBox(width: 10),
                     Text(
-                      _selectedHabitForConnection == null ? 'Tap a habit to start connecting' : 'Tap another habit to connect',
+                      _selectedHabitForConnection == null
+                          ? LocaleKeys.home_tap_a_habit_to_start_connecting.tr()
+                          : LocaleKeys.home_tap_another_habit_to_connect.tr(),
                       style: const TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.w600,

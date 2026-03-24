@@ -61,7 +61,7 @@ class ReviewRequestSection extends StatelessWidget {
     return CupertinoListSection.insetGrouped(
       children: [
         CupertinoListTile(
-          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
           leading: CupertinoCard(
             color: CupertinoColors.systemPink,
             borderRadius: BorderRadius.circular(5),
@@ -82,7 +82,7 @@ class ReviewRequestSection extends StatelessWidget {
             overflow: TextOverflow.ellipsis,
           ),
           onTap: () => _handleRequestReview(context),
-          trailing: CupertinoListTileChevron(),
+          trailing: const CupertinoListTileChevron(),
         ),
       ],
     );

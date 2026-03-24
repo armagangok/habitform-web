@@ -156,11 +156,11 @@ class _ShareHabitPageState extends ConsumerState<ShareHabitPage> {
                                 : Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      Icon(FontAwesomeIcons.solidFileImage),
+                                      const Icon(FontAwesomeIcons.solidFileImage),
                                       const SizedBox(width: 5),
                                       Text(
                                         LocaleKeys.share_share_image.tr(),
-                                        style: TextStyle(fontWeight: FontWeight.w600),
+                                        style: const TextStyle(fontWeight: FontWeight.w600),
                                       ),
                                     ],
                                   ),
@@ -177,8 +177,8 @@ class _ShareHabitPageState extends ConsumerState<ShareHabitPage> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Icon(FontAwesomeIcons.solidFileLines),
-                                SizedBox(width: 5),
+                                const Icon(FontAwesomeIcons.solidFileLines),
+                                const SizedBox(width: 5),
                                 Text(LocaleKeys.share_share_text.tr()),
                               ],
                             ),
@@ -220,7 +220,7 @@ class _ShareHabitPreviewState extends State<ShareHabitPreview> {
 
   void _scrollToEnd() async {
     // Wait for the widget to be fully built and laid out
-    await Future.delayed(Duration(milliseconds: 100));
+    await Future.delayed(const Duration(milliseconds: 100));
     if (_scrollController.hasClients) {
       _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
     }

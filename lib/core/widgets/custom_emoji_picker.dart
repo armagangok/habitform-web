@@ -19,7 +19,7 @@ class CustomEmojiPicker extends StatelessWidget {
     return SafeArea(
       bottom: false,
       child: Padding(
-        padding: EdgeInsets.only(bottom: 16) + EdgeInsets.symmetric(horizontal: 32),
+        padding: const EdgeInsets.only(bottom: 16) + const EdgeInsets.symmetric(horizontal: 32),
         child: SizedBox(
           width: double.infinity,
           child: CupertinoButton.filled(

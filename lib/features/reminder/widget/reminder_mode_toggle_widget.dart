@@ -125,7 +125,7 @@ class ReminderModeToggleWidget extends ConsumerWidget {
               ],
             ],
           ),
-        )
+        ),
       ],
     );
   }

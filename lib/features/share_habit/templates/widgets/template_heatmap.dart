@@ -51,7 +51,7 @@ class TemplateHeatmap extends StatelessWidget {
                 child: HabitHeatmapCompact(habit: habit),
               ),
             ),
-            Spacer(),
+            const Spacer(),
             ClipRRect(
               borderRadius: BorderRadius.circular(14),
               child: HabitOverviewCompact(
@@ -61,7 +61,7 @@ class TemplateHeatmap extends StatelessWidget {
                 cardBackgroundColor: context.scaffoldBackgroundColor,
               ),
             ),
-            Spacer(flex: 3),
+            const Spacer(flex: 3),
             Row(
               children: [
                 Assets.app.appLogoDark.image(height: 22, width: 22),
@@ -74,7 +74,7 @@ class TemplateHeatmap extends StatelessWidget {
                   ),
                 ),
               ],
-            )
+            ),
           ],
         ),
       ),

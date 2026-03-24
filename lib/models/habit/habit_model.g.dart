@@ -24,13 +24,10 @@ class HabitAdapter extends TypeAdapter<Habit> {
       reminderModel: fields[4] as ReminderModel?,
       dailyTarget: fields[5] as int,
       colorCode: fields[6] as int,
-      completions: fields[7] == null
-          ? {}
-          : (fields[7] as Map).cast<String, CompletionEntry>(),
+      completions: fields[7] == null ? {} : (fields[7] as Map).cast<String, CompletionEntry>(),
       archiveDate: fields[8] as DateTime?,
       status: fields[10] as HabitStatus,
-      categoryIds:
-          fields[11] == null ? [] : (fields[11] as List).cast<String>(),
+      categoryIds: fields[11] == null ? [] : (fields[11] as List).cast<String>(),
       difficulty: fields[12] as HabitDifficulty,
       rewardFactor: fields[13] as double,
       completionTime: fields[14] as DateTime?,
@@ -38,8 +35,7 @@ class HabitAdapter extends TypeAdapter<Habit> {
       updatedAt: fields[16] as DateTime?,
       constellationPosX: fields[17] as double?,
       constellationPosY: fields[18] as double?,
-      linkedHabitIds:
-          fields[19] == null ? [] : (fields[19] as List).cast<String>(),
+      linkedHabitIds: fields[19] == null ? [] : (fields[19] as List).cast<String>(),
     );
   }
 
@@ -91,11 +87,7 @@ class HabitAdapter extends TypeAdapter<Habit> {
   int get hashCode => typeId.hashCode;
 
   @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is HabitAdapter &&
-          runtimeType == other.runtimeType &&
-          typeId == other.typeId;
+  bool operator ==(Object other) => identical(this, other) || other is HabitAdapter && runtimeType == other.runtimeType && typeId == other.typeId;
 }
 
 // **************************************************************************
@@ -107,44 +99,27 @@ _$HabitImpl _$$HabitImplFromJson(Map<String, dynamic> json) => _$HabitImpl(
       habitName: json['habitName'] as String,
       habitDescription: json['habitDescription'] as String?,
       emoji: json['emoji'] as String?,
-      reminderModel: json['reminderModel'] == null
-          ? null
-          : ReminderModel.fromJson(
-              json['reminderModel'] as Map<String, dynamic>),
+      reminderModel: json['reminderModel'] == null ? null : ReminderModel.fromJson(json['reminderModel'] as Map<String, dynamic>),
       dailyTarget: (json['dailyTarget'] as num?)?.toInt() ?? 1,
       colorCode: (json['colorCode'] as num).toInt(),
       completions: (json['completions'] as Map<String, dynamic>?)?.map(
-            (k, e) => MapEntry(
-                k, CompletionEntry.fromJson(e as Map<String, dynamic>)),
+            (k, e) => MapEntry(k, CompletionEntry.fromJson(e as Map<String, dynamic>)),
           ) ??
           const {},
       archiveDate: const TimestampConverter().fromJson(json['archiveDate']),
-      status: $enumDecodeNullable(_$HabitStatusEnumMap, json['status']) ??
-          HabitStatus.active,
-      categoryIds: (json['categoryIds'] as List<dynamic>?)
-              ?.map((e) => e as String)
-              .toList() ??
-          const [],
-      difficulty:
-          $enumDecodeNullable(_$HabitDifficultyEnumMap, json['difficulty']) ??
-              HabitDifficulty.moderate,
+      status: $enumDecodeNullable(_$HabitStatusEnumMap, json['status']) ?? HabitStatus.active,
+      categoryIds: (json['categoryIds'] as List<dynamic>?)?.map((e) => e as String).toList() ?? const [],
+      difficulty: $enumDecodeNullable(_$HabitDifficultyEnumMap, json['difficulty']) ?? HabitDifficulty.moderate,
       rewardFactor: (json['rewardFactor'] as num?)?.toDouble() ?? 1.0,
-      completionTime:
-          const TimestampConverter().fromJson(json['completionTime']),
-      syncStatus:
-          $enumDecodeNullable(_$SyncStatusEnumMap, json['syncStatus']) ??
-              SyncStatus.synced,
+      completionTime: const TimestampConverter().fromJson(json['completionTime']),
+      syncStatus: $enumDecodeNullable(_$SyncStatusEnumMap, json['syncStatus']) ?? SyncStatus.synced,
       updatedAt: const TimestampConverter().fromJson(json['updatedAt']),
       constellationPosX: (json['constellationPosX'] as num?)?.toDouble(),
       constellationPosY: (json['constellationPosY'] as num?)?.toDouble(),
-      linkedHabitIds: (json['linkedHabitIds'] as List<dynamic>?)
-              ?.map((e) => e as String)
-              .toList() ??
-          const [],
+      linkedHabitIds: (json['linkedHabitIds'] as List<dynamic>?)?.map((e) => e as String).toList() ?? const [],
     );
 
-Map<String, dynamic> _$$HabitImplToJson(_$HabitImpl instance) =>
-    <String, dynamic>{
+Map<String, dynamic> _$$HabitImplToJson(_$HabitImpl instance) => <String, dynamic>{
       'id': instance.id,
       'habitName': instance.habitName,
       'habitDescription': instance.habitDescription,
@@ -158,8 +133,7 @@ Map<String, dynamic> _$$HabitImplToJson(_$HabitImpl instance) =>
       'categoryIds': instance.categoryIds,
       'difficulty': _$HabitDifficultyEnumMap[instance.difficulty]!,
       'rewardFactor': instance.rewardFactor,
-      'completionTime':
-          const TimestampConverter().toJson(instance.completionTime),
+      'completionTime': const TimestampConverter().toJson(instance.completionTime),
       'syncStatus': _$SyncStatusEnumMap[instance.syncStatus]!,
       'updatedAt': const TimestampConverter().toJson(instance.updatedAt),
       'constellationPosX': instance.constellationPosX,

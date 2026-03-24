@@ -12,8 +12,11 @@ extension EasyLuminance on Color {
     return luminance > brightnessThreshold ? Colors.black : Colors.white;
   }
 
-  Color adaptiveShade(BuildContext context,
-      {int lightShade = 400, int darkShade = 600}) {
+  Color adaptiveShade(
+    BuildContext context, {
+    int lightShade = 400,
+    int darkShade = 600,
+  }) {
     final brightness = Theme.of(context).brightness;
 
     // Eğer renk bir MaterialColor ise, shade değerini temaya göre ayarla
@@ -21,8 +24,7 @@ extension EasyLuminance on Color {
       final materialColor = this as MaterialColor;
       return brightness == Brightness.dark
           ? materialColor[darkShade] ?? this // Koyu tema için daha koyu shade
-          : materialColor[lightShade] ??
-              this; // Aydınlık tema için daha açık shade
+          : materialColor[lightShade] ?? this; // Aydınlık tema için daha açık shade
     }
 
     // Eğer renk MaterialColor değilse, temaya göre basitçe karart veya aydınlat
@@ -44,8 +46,7 @@ extension EasyLuminance on Color {
     assert(amount >= 0 && amount <= 1);
 
     final hsl = HSLColor.fromColor(this);
-    final hslLight =
-        hsl.withLightness((hsl.lightness + amount).clamp(0.0, 1.0));
+    final hslLight = hsl.withLightness((hsl.lightness + amount).clamp(0.0, 1.0));
 
     return hslLight.toColor();
   }
@@ -54,8 +55,7 @@ extension EasyLuminance on Color {
 /// Seçilen rengin tonunu koruyarak 9 opak varyasyon (opacity her zaman 1).
 /// [0] en açık, [8] en koyu.
 
-bool _isDarkTheme(BuildContext context) =>
-    CupertinoTheme.of(context).brightness == Brightness.dark;
+bool _isDarkTheme(BuildContext context) => CupertinoTheme.of(context).brightness == Brightness.dark;
 
 extension ColorShades on Color {
   static const int _count = 9;
@@ -73,8 +73,7 @@ extension ColorShades on Color {
     return List<Color>.generate(_count, (i) {
       final t = i / (_count - 1);
       final lightness = _lightnessMax - (_lightnessMax - _lightnessMin) * t;
-      return HSLColor.fromAHSL(1.0, hue, saturation, lightness.clamp(0.0, 1.0))
-          .toColor();
+      return HSLColor.fromAHSL(1.0, hue, saturation, lightness.clamp(0.0, 1.0)).toColor();
     });
   }
 
@@ -86,12 +85,12 @@ extension ColorShades on Color {
 
   /// Beyaz veya koyu gri daire zemini üzerinde tamamlanmamış (+) dolgusu.
   /// Tema [context] üzerinden okunur; çağıranın `isDark` geçmesi gerekmez.
-  Color shadeForHabitCircleIncompleteFill(BuildContext context) {
-    return shade(_isDarkTheme(context) ? 8 : 0);
+  Color getOptimizedShade(BuildContext context) {
+    return shade(_isDarkTheme(context) ? 7 : 1);
   }
 
   /// Scaffold / sayfa zemini üzerindeki isim etiketi arka planı.
   Color shadeForHabitNameChip(BuildContext context) {
-    return shade(_isDarkTheme(context) ? 8 : 0);
+    return shade(_isDarkTheme(context) ? 7 : 1);
   }
 }

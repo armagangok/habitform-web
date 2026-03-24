@@ -28,7 +28,7 @@ final class AppFlushbar {
       borderRadius: BorderRadius.circular(16),
       borderColor: context?.theme.primaryContrastingColor.withValues(alpha: .25),
       borderWidth: 1,
-      margin: EdgeInsets.all(20),
+      margin: const EdgeInsets.all(20),
       barBlur: 10,
       duration: const Duration(seconds: 4),
       flushbarPosition: FlushbarPosition.TOP,
@@ -56,7 +56,7 @@ final class AppFlushbar {
       borderRadius: BorderRadius.circular(16),
       borderColor: context?.theme.primaryContrastingColor.withValues(alpha: .25),
       borderWidth: 1,
-      margin: EdgeInsets.all(20),
+      margin: const EdgeInsets.all(20),
       duration: const Duration(seconds: 4),
       flushbarPosition: FlushbarPosition.TOP,
     )..show(NavigationService.shared.navigatorKey.currentContext!);
@@ -80,7 +80,7 @@ final class AppFlushbar {
       borderRadius: BorderRadius.circular(16),
       borderColor: context?.theme.primaryContrastingColor.withValues(alpha: .25),
       borderWidth: 1,
-      margin: EdgeInsets.all(20),
+      margin: const EdgeInsets.all(20),
       duration: const Duration(seconds: 4),
       flushbarPosition: FlushbarPosition.TOP,
     )..show(NavigationService.shared.navigatorKey.currentContext!);

@@ -251,8 +251,8 @@ class _MultipleReminderTimesWidgetState extends ConsumerState<MultipleReminderTi
                           CupertinoButton(
                             padding: EdgeInsets.zero,
                             onPressed: () => _removeReminderTime(index),
-                            minimumSize: Size(0, 0),
-                            child: Icon(
+                            minimumSize: const Size(0, 0),
+                            child: const Icon(
                               CupertinoIcons.minus_circle_fill,
                               size: 20,
                               color: CupertinoColors.systemRed,

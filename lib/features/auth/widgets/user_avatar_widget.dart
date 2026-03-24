@@ -20,14 +20,15 @@ class UserAvatarWidget extends StatelessWidget {
           height: radius * 2,
           fit: BoxFit.cover,
           loadingBuilder: (context, child, loadingProgress) {
-            if (loadingProgress == null)
+            if (loadingProgress == null) {
               return child.animate().fadeIn(
                     duration: const Duration(milliseconds: 300),
                   );
-            return CircularProgressIndicator.adaptive();
+            }
+            return const CircularProgressIndicator.adaptive();
           },
           errorBuilder: (context, error, stackTrace) {
-            return Icon(CupertinoIcons.person)
+            return const Icon(CupertinoIcons.person)
                 .animate()
                 .fadeIn(duration: const Duration(milliseconds: 300));
           },

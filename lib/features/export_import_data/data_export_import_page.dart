@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:habitform/core/widgets/my_list_tile.dart';
 
 import '../../core/core.dart';
+import '../../core/widgets/custom_list_tile.dart';
 import '../home/provider/home_provider.dart';
 import '../purchase/providers/purchase_provider.dart';
 import 'csv_service.dart';
@@ -128,9 +128,9 @@ class _DataExportImportPageState extends ConsumerState<DataExportImportPage> {
 
   void _showPaywall() {
     ref.read(purchaseProvider.notifier).presentPaywall(
-      isFromOnboarding: false,
-      isFromSettings: true,
-    );
+          isFromOnboarding: false,
+          isFromSettings: true,
+        );
   }
 
   @override
@@ -156,20 +156,20 @@ class _DataExportImportPageState extends ConsumerState<DataExportImportPage> {
                     CupertinoIcons.info_circle_fill,
                     color: context.primary,
                   ),
-                  SizedBox(width: 8),
+                  const SizedBox(width: 8),
                   Text(
                     LocaleKeys.settings_about_data_management.tr(),
                   ),
                 ],
               ),
               children: [
-                MyListTile(
+                CustomListTile(
                   title: LocaleKeys.settings_data_management_description.tr(),
                 ),
               ],
             ),
 
-            SizedBox(height: 24),
+            const SizedBox(height: 24),
 
             // Export section
             Stack(
@@ -177,11 +177,11 @@ class _DataExportImportPageState extends ConsumerState<DataExportImportPage> {
                 CupertinoListSection.insetGrouped(
                   header: Row(
                     children: [
-                      Icon(
+                      const Icon(
                         CupertinoIcons.arrow_down_doc_fill,
                         color: CupertinoColors.systemGreen,
                       ),
-                      SizedBox(width: 8),
+                      const SizedBox(width: 8),
                       Text(
                         LocaleKeys.settings_export_data.tr(),
                         style: context.titleMedium.copyWith(
@@ -193,20 +193,20 @@ class _DataExportImportPageState extends ConsumerState<DataExportImportPage> {
                   footer: SizedBox(
                     width: double.infinity,
                     child: CupertinoButton.filled(
-                      padding: EdgeInsets.symmetric(vertical: 12),
+                      padding: const EdgeInsets.symmetric(vertical: 12),
                       onPressed: isProUser ? (_isExporting ? null : _exportData) : _showPaywall,
                       child: _isExporting
                           ? Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                CupertinoActivityIndicator(),
-                                SizedBox(width: 8),
+                                const CupertinoActivityIndicator(),
+                                const SizedBox(width: 8),
                                 Text(LocaleKeys.settings_exporting.tr()),
                               ],
                             )
                           : Text(
                               LocaleKeys.settings_export_data.tr(),
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontWeight: FontWeight.bold,
                                 color: Colors.white,
                               ),
@@ -214,7 +214,7 @@ class _DataExportImportPageState extends ConsumerState<DataExportImportPage> {
                     ),
                   ),
                   children: [
-                    MyListTile(
+                    CustomListTile(
                       title: LocaleKeys.settings_export_description.tr(),
                     ),
                   ],
@@ -224,12 +224,12 @@ class _DataExportImportPageState extends ConsumerState<DataExportImportPage> {
                     top: 12,
                     right: 12,
                     child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
                       decoration: BoxDecoration(
                         color: Colors.black.withValues(alpha: .8),
                         borderRadius: BorderRadius.circular(90),
                       ),
-                      child: Row(
+                      child: const Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           FaIcon(
@@ -244,7 +244,7 @@ class _DataExportImportPageState extends ConsumerState<DataExportImportPage> {
               ],
             ),
 
-            SizedBox(height: 24),
+            const SizedBox(height: 24),
 
             // Import section
             Stack(
@@ -252,11 +252,11 @@ class _DataExportImportPageState extends ConsumerState<DataExportImportPage> {
                 CupertinoListSection.insetGrouped(
                   header: Row(
                     children: [
-                      Icon(
+                      const Icon(
                         CupertinoIcons.arrow_up_doc_fill,
                         color: CupertinoColors.systemBlue,
                       ),
-                      SizedBox(width: 8),
+                      const SizedBox(width: 8),
                       Text(
                         LocaleKeys.settings_import_data.tr(),
                         style: context.titleMedium.copyWith(
@@ -268,20 +268,20 @@ class _DataExportImportPageState extends ConsumerState<DataExportImportPage> {
                   footer: SizedBox(
                     width: double.infinity,
                     child: CupertinoButton.filled(
-                      padding: EdgeInsets.symmetric(vertical: 12),
+                      padding: const EdgeInsets.symmetric(vertical: 12),
                       onPressed: isProUser ? (_isImporting ? null : _importData) : _showPaywall,
                       child: _isImporting
                           ? Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                CupertinoActivityIndicator(),
-                                SizedBox(width: 8),
+                                const CupertinoActivityIndicator(),
+                                const SizedBox(width: 8),
                                 Text(LocaleKeys.settings_importing.tr()),
                               ],
                             )
                           : Text(
                               LocaleKeys.settings_import_data.tr(),
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontWeight: FontWeight.bold,
                                 color: Colors.white,
                               ),
@@ -289,7 +289,7 @@ class _DataExportImportPageState extends ConsumerState<DataExportImportPage> {
                     ),
                   ),
                   children: [
-                    MyListTile(
+                    CustomListTile(
                       title: LocaleKeys.settings_import_description.tr(),
                     ),
                   ],
@@ -299,12 +299,12 @@ class _DataExportImportPageState extends ConsumerState<DataExportImportPage> {
                     top: 12,
                     right: 12,
                     child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
                       decoration: BoxDecoration(
                         color: Colors.black.withValues(alpha: .8),
                         borderRadius: BorderRadius.circular(90),
                       ),
-                      child: Row(
+                      child: const Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           FaIcon(

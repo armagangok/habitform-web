@@ -44,6 +44,8 @@ class Habit extends HiveObject with _$Habit {
 
   int getCountForDate(DateTime date) => HabitUtils(this).getCountForDate(date);
 
+  CompletionEntry? getCompletionEntryForDate(DateTime date) => HabitUtils(this).getCompletionEntryForDate(date);
+
   double getCompletionRatioForDate(DateTime date) => HabitUtils(this).getCompletionRatioForDate(date);
 
   int calculateCurrentStreak() => HabitUtils(this).calculateCurrentStreak();

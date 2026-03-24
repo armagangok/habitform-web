@@ -39,25 +39,35 @@ class _FormationInsightsWidgetState extends ConsumerState<FormationInsightsWidge
     final percentage = probabilityScore.toStringAsFixed(0);
 
     if (probabilityScore >= 90) {
-      return LocaleKeys.statistics_probability_status_excellent.tr(namedArgs: {
-        'percentage': percentage,
-      });
+      return LocaleKeys.statistics_probability_status_excellent.tr(
+        namedArgs: {
+          'percentage': percentage,
+        },
+      );
     } else if (probabilityScore >= 75) {
-      return LocaleKeys.statistics_probability_status_very_good.tr(namedArgs: {
-        'percentage': percentage,
-      });
+      return LocaleKeys.statistics_probability_status_very_good.tr(
+        namedArgs: {
+          'percentage': percentage,
+        },
+      );
     } else if (probabilityScore >= 60) {
-      return LocaleKeys.statistics_probability_status_good.tr(namedArgs: {
-        'percentage': percentage,
-      });
+      return LocaleKeys.statistics_probability_status_good.tr(
+        namedArgs: {
+          'percentage': percentage,
+        },
+      );
     } else if (probabilityScore >= 40) {
-      return LocaleKeys.statistics_probability_status_improving.tr(namedArgs: {
-        'percentage': percentage,
-      });
+      return LocaleKeys.statistics_probability_status_improving.tr(
+        namedArgs: {
+          'percentage': percentage,
+        },
+      );
     } else {
-      return LocaleKeys.statistics_probability_status_needs_work.tr(namedArgs: {
-        'percentage': percentage,
-      });
+      return LocaleKeys.statistics_probability_status_needs_work.tr(
+        namedArgs: {
+          'percentage': percentage,
+        },
+      );
     }
   }
 
@@ -78,10 +88,12 @@ class _FormationInsightsWidgetState extends ConsumerState<FormationInsightsWidge
         return LocaleKeys.statistics_probability_time_completed_needs_work.tr();
       }
     } else {
-      return LocaleKeys.statistics_probability_time_remaining_days.tr(namedArgs: {
-        'days': remainingFormationDays.toString(),
-        'total': estimatedFormationDays.toString(),
-      });
+      return LocaleKeys.statistics_probability_time_remaining_days.tr(
+        namedArgs: {
+          'days': remainingFormationDays.toString(),
+          'total': estimatedFormationDays.toString(),
+        },
+      );
     }
   }
 
@@ -512,8 +524,8 @@ class _FormationInsightsWidgetState extends ConsumerState<FormationInsightsWidge
   }
 
   Padding _verticalDivider() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 12.5),
+    return const Padding(
+      padding: EdgeInsets.symmetric(vertical: 12.5),
       child: VerticalDivider(
         thickness: .75,
       ),
@@ -699,7 +711,7 @@ class _FormationInsightsWidgetState extends ConsumerState<FormationInsightsWidge
           CupertinoButton(
             padding: EdgeInsets.zero,
             onPressed: () => _showYearPicker(context, availableYears),
-            minimumSize: Size(0, 0),
+            minimumSize: const Size(0, 0),
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -882,7 +894,7 @@ class _FormationInsightsWidgetState extends ConsumerState<FormationInsightsWidge
     showCupertinoModalPopup(
       context: context,
       builder: (context) => CupertinoActionSheet(
-        title: Text('Select Year'),
+        title: const Text('Select Year'),
         actions: availableYears.reversed.map((year) {
           return CupertinoActionSheetAction(
             onPressed: () {
@@ -903,7 +915,7 @@ class _FormationInsightsWidgetState extends ConsumerState<FormationInsightsWidge
         cancelButton: CupertinoActionSheetAction(
           isDestructiveAction: false,
           onPressed: () => Navigator.of(context).pop(),
-          child: Text('Cancel'),
+          child: const Text('Cancel'),
         ),
       ),
     );

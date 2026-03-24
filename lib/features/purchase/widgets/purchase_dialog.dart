@@ -17,7 +17,7 @@ Future<void> showUnlockProDialog() async {
           onPressed: () => Navigator.pop(context),
           child: Text(
             LocaleKeys.common_later.tr(),
-            style: TextStyle(color: CupertinoColors.systemBlue),
+            style: const TextStyle(color: CupertinoColors.systemBlue),
           ),
         ),
         Consumer(
@@ -29,13 +29,13 @@ Future<void> showUnlockProDialog() async {
               },
               child: Text(
                 LocaleKeys.subscription_continue.tr(),
-                style: TextStyle(
+                style: const TextStyle(
                   color: CupertinoColors.systemBlue,
                   fontWeight: FontWeight.w600,
                 ),
               ),
             );
-          }
+          },
         ),
       ],
     ),

@@ -10,8 +10,11 @@ class HabitSummary {
   final int dailyTarget;
   final List<String> categoryIds;
   final DateTime? completionTime;
+  final DateTime? reminderTime;
   final int todayCount;
   final bool todayIsCompleted;
+  /// Last time today's completion entry was updated (for link sequence ordering).
+  final DateTime? todayCompletionUpdatedAt;
   final int currentStreak;
   final double? constellationPosX;
   final double? constellationPosY;
@@ -25,8 +28,10 @@ class HabitSummary {
     required this.dailyTarget,
     required this.categoryIds,
     this.completionTime,
+    this.reminderTime,
     required this.todayCount,
     required this.todayIsCompleted,
+    this.todayCompletionUpdatedAt,
     required this.currentStreak,
     this.constellationPosX,
     this.constellationPosY,

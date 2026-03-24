@@ -2,8 +2,8 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/services.dart';
-import 'package:habitform/core/core.dart';
-import 'package:habitform/models/habit/habit_extension.dart';
+import '../core/core.dart';
+import '../models/habit/habit_extension.dart';
 
 import '../models/completion_entry/completion_entry.dart';
 import '../models/habit/habit_model.dart';

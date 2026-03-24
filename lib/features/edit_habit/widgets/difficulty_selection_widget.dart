@@ -19,7 +19,7 @@ class DifficultySelectionWidget extends ConsumerWidget {
       header: Text(LocaleKeys.edit_habit_difficulty.tr()),
       children: [
         CupertinoListTile(
-          padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
           title: Text(
             selectedDifficulty.displayName,
             style: context.bodyLarge.copyWith(
@@ -41,7 +41,7 @@ class DifficultySelectionWidget extends ConsumerWidget {
               shape: BoxShape.circle,
             ),
           ),
-          trailing: CupertinoListTileChevron(),
+          trailing: const CupertinoListTileChevron(),
           onTap: () => _showDifficultyPicker(context),
         ),
       ],

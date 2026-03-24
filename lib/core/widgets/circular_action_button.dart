@@ -8,6 +8,7 @@ class CircularActionButton extends StatelessWidget {
   final Color? iconColor;
   final Color? backgroundColor;
   final double size;
+  final double? elevation;
   final double iconSize;
   final bool showAnimation;
   final Duration? animationDuration;
@@ -20,6 +21,7 @@ class CircularActionButton extends StatelessWidget {
     this.iconColor,
     this.backgroundColor,
     this.size = 34.0,
+    this.elevation,
     this.iconSize = 20.0,
     this.showAnimation = false,
     this.animationDuration,
@@ -28,8 +30,12 @@ class CircularActionButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final effectiveIconColor = iconColor ?? context.theme.primaryContrastingColor.withValues(alpha: .8);
-    final effectiveBackgroundColor = backgroundColor ?? context.theme.selectionHandleColor;
 
+    final isDark = CupertinoTheme.of(context).brightness == Brightness.dark;
+
+    final activeBackgroundColor = isDark ? CupertinoColors.tertiarySystemGroupedBackground.darkColor : CupertinoColors.white;
+
+    final effectiveBackgroundColor = backgroundColor ?? activeBackgroundColor.withValues(alpha: 1);
     Widget button = CustomButton(
       borderRadius: BorderRadius.circular(999),
       onPressed: onPressed,
@@ -39,16 +45,13 @@ class CircularActionButton extends StatelessWidget {
         decoration: BoxDecoration(
           shape: BoxShape.circle,
           color: effectiveBackgroundColor,
-          border: Border.all(
-            color: context.cupertinoTheme.primaryContrastingColor.withValues(alpha: 0.125),
-            width: .7,
-          ),
           boxShadow: [
-            BoxShadow(
-              color: context.cupertinoTheme.primaryContrastingColor.withValues(alpha: 0.125),
-              blurRadius: 5,
-              offset: const Offset(0, 0),
-            ),
+            if (elevation != null)
+              BoxShadow(
+                color: context.cupertinoTheme.primaryContrastingColor.withValues(alpha: 0.125),
+                blurRadius: 5,
+                offset: const Offset(0, 0),
+              ),
           ],
         ),
         child: imageUrl != null

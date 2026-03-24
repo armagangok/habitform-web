@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:confetti/confetti.dart';
 import 'package:flutter/services.dart';
-import 'package:habitform/models/habit/habit_extension.dart';
+import '../../../models/habit/habit_extension.dart';
 
 import '../../../core/core.dart';
 import '../../../models/habit/habit_difficulty.dart';
@@ -143,79 +143,81 @@ class _HabitProbabilityDialogState extends State<HabitProbabilityDialog> with Ti
           animation: Listenable.merge([_fadeAnimation, _slideAnimation, _scaleAnimation]),
           builder: (context, child) {
             return FadeTransition(
-                opacity: _fadeAnimation,
-                child: SlideTransition(
-                    position: _slideAnimation,
-                    child: ScaleTransition(
-                      scale: _scaleAnimation,
-                      child: Center(
-                        child: CupertinoPopupSurface(
-                          child: Builder(
-                            builder: (context) {
-                              final screenWidth = MediaQuery.of(context).size.width;
-                              final isTablet = ResponsiveHelper.isTablet(screenWidth) || ResponsiveHelper.isTabletLandscape(screenWidth) || ResponsiveHelper.isDesktop(screenWidth);
+              opacity: _fadeAnimation,
+              child: SlideTransition(
+                position: _slideAnimation,
+                child: ScaleTransition(
+                  scale: _scaleAnimation,
+                  child: Center(
+                    child: CupertinoPopupSurface(
+                      child: Builder(
+                        builder: (context) {
+                          final screenWidth = MediaQuery.of(context).size.width;
+                          final isTablet = ResponsiveHelper.isTablet(screenWidth) || ResponsiveHelper.isTabletLandscape(screenWidth) || ResponsiveHelper.isDesktop(screenWidth);
 
-                              // For tablets, use max content width; for phones, use screen width
-                              final maxWidth = isTablet ? ResponsiveHelper.getMaxContentWidth(screenWidth) : context.width(0.9);
+                          // For tablets, use max content width; for phones, use screen width
+                          final maxWidth = isTablet ? ResponsiveHelper.getMaxContentWidth(screenWidth) : context.width(0.9);
 
-                              return ConstrainedBox(
-                                constraints: BoxConstraints(
-                                  maxHeight: context.height(0.85),
-                                  maxWidth: maxWidth,
-                                ),
-                                child: Padding(
-                                  padding: context.padding(isTablet ? 0.06 : 0.04),
-                                  child: SingleChildScrollView(
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        // Achievement Emoji with premium effects
-                                        Builder(
-                                          builder: (context) {
-                                            final screenWidth = MediaQuery.of(context).size.width;
-                                            final isTablet = ResponsiveHelper.isTablet(screenWidth) || ResponsiveHelper.isTabletLandscape(screenWidth) || ResponsiveHelper.isDesktop(screenWidth);
+                          return ConstrainedBox(
+                            constraints: BoxConstraints(
+                              maxHeight: context.height(0.85),
+                              maxWidth: maxWidth,
+                            ),
+                            child: Padding(
+                              padding: context.padding(isTablet ? 0.06 : 0.04),
+                              child: SingleChildScrollView(
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    // Achievement Emoji with premium effects
+                                    Builder(
+                                      builder: (context) {
+                                        final screenWidth = MediaQuery.of(context).size.width;
+                                        final isTablet = ResponsiveHelper.isTablet(screenWidth) || ResponsiveHelper.isTabletLandscape(screenWidth) || ResponsiveHelper.isDesktop(screenWidth);
 
-                                            return Row(
-                                              mainAxisAlignment: MainAxisAlignment.center,
-                                              children: [
-                                                Text(
-                                                  LocaleKeys.achievement_dialog_habit_probability.tr(),
-                                                  style: context.titleMedium.copyWith(
-                                                    fontWeight: FontWeight.w500,
-                                                    fontSize: isTablet ? 24 : 20,
-                                                  ),
-                                                  textAlign: TextAlign.center,
-                                                ),
-                                              ],
-                                            );
-                                          },
-                                        ),
-                                        SizedBox(height: context.height(0.01)),
-
-                                        _buildAnimatedEmoji(context, habitColor),
-
-                                        SizedBox(height: context.height(0.01)),
-
-                                        // Score display with premium styling
-                                        _buildScoreDisplay(context, cupertinoTheme, habitColor),
-                                        SizedBox(height: context.height(0.01)),
-
-                                        // Progress section
-                                        _buildProgressSection(context, cupertinoTheme, habitColor),
-                                        SizedBox(height: context.height(0.01)),
-
-                                        // Continue button with premium styling
-                                        _buildPremiumButton(context, habitColor),
-                                      ],
+                                        return Row(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              LocaleKeys.achievement_dialog_habit_probability.tr(),
+                                              style: context.titleMedium.copyWith(
+                                                fontWeight: FontWeight.w500,
+                                                fontSize: isTablet ? 24 : 20,
+                                              ),
+                                              textAlign: TextAlign.center,
+                                            ),
+                                          ],
+                                        );
+                                      },
                                     ),
-                                  ),
+                                    SizedBox(height: context.height(0.01)),
+
+                                    _buildAnimatedEmoji(context, habitColor),
+
+                                    SizedBox(height: context.height(0.01)),
+
+                                    // Score display with premium styling
+                                    _buildScoreDisplay(context, cupertinoTheme, habitColor),
+                                    SizedBox(height: context.height(0.01)),
+
+                                    // Progress section
+                                    _buildProgressSection(context, cupertinoTheme, habitColor),
+                                    SizedBox(height: context.height(0.01)),
+
+                                    // Continue button with premium styling
+                                    _buildPremiumButton(context, habitColor),
+                                  ],
                                 ),
-                              );
-                            },
-                          ),
-                        ),
+                              ),
+                            ),
+                          );
+                        },
                       ),
-                    )));
+                    ),
+                  ),
+                ),
+              ),
+            );
           },
         ),
 
@@ -368,59 +370,61 @@ class _HabitProbabilityDialogState extends State<HabitProbabilityDialog> with Ti
     Color scoreColor,
     CupertinoThemeData theme,
   ) {
-    return Builder(builder: (context) {
-      final screenWidth = MediaQuery.of(context).size.width;
-      final isTablet = ResponsiveHelper.isTablet(screenWidth) || ResponsiveHelper.isTabletLandscape(screenWidth) || ResponsiveHelper.isDesktop(screenWidth);
+    return Builder(
+      builder: (context) {
+        final screenWidth = MediaQuery.of(context).size.width;
+        final isTablet = ResponsiveHelper.isTablet(screenWidth) || ResponsiveHelper.isTabletLandscape(screenWidth) || ResponsiveHelper.isDesktop(screenWidth);
 
-      // For tablets, use smaller relative size but maintain minimum size
-      final diameter = isTablet ? (ResponsiveHelper.getMaxContentWidth(screenWidth) * 0.35).clamp(180.0, 240.0) : context.width(0.5);
+        // For tablets, use smaller relative size but maintain minimum size
+        final diameter = isTablet ? (ResponsiveHelper.getMaxContentWidth(screenWidth) * 0.35).clamp(180.0, 240.0) : context.width(0.5);
 
-      return SizedBox(
-        height: diameter,
-        width: diameter,
-        child: Stack(
-          alignment: Alignment.center,
-          children: [
-            // Background ring and progress with sheen
-            CustomPaint(
-              size: Size.square(diameter),
-              painter: _GlossyProgressPainter(
-                progress: progress.clamp(0.0, 1.0),
-                baseColor: scoreColor,
-                sheenPhase: _pulseAnimation.value,
-              ),
-            ),
-            // Centered score and label
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                AnimatedBuilder(
-                  animation: _scoreAnimation,
-                  builder: (context, child) {
-                    final screenWidth = MediaQuery.of(context).size.width;
-                    final isTablet = ResponsiveHelper.isTablet(screenWidth) || ResponsiveHelper.isTabletLandscape(screenWidth) || ResponsiveHelper.isDesktop(screenWidth);
-
-                    final fontSize = isTablet ? 52.0 : 44.0;
-
-                    return Text(
-                      '${animatedScore.round()}',
-                      style: context.displayLarge.copyWith(
-                        fontWeight: FontWeight.w800,
-                        color: scoreColor,
-                        fontSize: fontSize,
-                        fontFeatures: [
-                          FontFeature.tabularFigures(),
-                        ],
-                      ),
-                    );
-                  },
+        return SizedBox(
+          height: diameter,
+          width: diameter,
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              // Background ring and progress with sheen
+              CustomPaint(
+                size: Size.square(diameter),
+                painter: _GlossyProgressPainter(
+                  progress: progress.clamp(0.0, 1.0),
+                  baseColor: scoreColor,
+                  sheenPhase: _pulseAnimation.value,
                 ),
-              ],
-            ),
-          ],
-        ),
-      );
-    });
+              ),
+              // Centered score and label
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  AnimatedBuilder(
+                    animation: _scoreAnimation,
+                    builder: (context, child) {
+                      final screenWidth = MediaQuery.of(context).size.width;
+                      final isTablet = ResponsiveHelper.isTablet(screenWidth) || ResponsiveHelper.isTabletLandscape(screenWidth) || ResponsiveHelper.isDesktop(screenWidth);
+
+                      final fontSize = isTablet ? 52.0 : 44.0;
+
+                      return Text(
+                        '${animatedScore.round()}',
+                        style: context.displayLarge.copyWith(
+                          fontWeight: FontWeight.w800,
+                          color: scoreColor,
+                          fontSize: fontSize,
+                          fontFeatures: [
+                            const FontFeature.tabularFigures(),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 
   Widget _buildProgressSection(BuildContext context, CupertinoThemeData theme, Color habitColor) {
@@ -600,16 +604,20 @@ class _HabitProbabilityDialogState extends State<HabitProbabilityDialog> with Ti
         return LocaleKeys.achievement_dialog_great_progress.tr(namedArgs: {'days': remainingDays.toString()});
       }
     } else if (score >= 50) {
-      return LocaleKeys.achievement_dialog_good_work.tr(namedArgs: {
-        'difficulty': difficultyName,
-        'total': totalDays.toString(),
-        'remaining': remainingDays.toString(),
-      });
+      return LocaleKeys.achievement_dialog_good_work.tr(
+        namedArgs: {
+          'difficulty': difficultyName,
+          'total': totalDays.toString(),
+          'remaining': remainingDays.toString(),
+        },
+      );
     } else {
-      return LocaleKeys.achievement_dialog_keep_going_message.tr(namedArgs: {
-        'difficulty': difficultyName,
-        'remaining': remainingDays.toString(),
-      });
+      return LocaleKeys.achievement_dialog_keep_going_message.tr(
+        namedArgs: {
+          'difficulty': difficultyName,
+          'remaining': remainingDays.toString(),
+        },
+      );
     }
   }
 

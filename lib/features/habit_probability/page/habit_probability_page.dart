@@ -29,27 +29,23 @@ class HabitProbabilityPage extends ConsumerWidget {
                   children: [
                     Consumer(
                       builder: (context, ref, child) {
-                        final statisticsAsyncValue =
-                            ref.watch(probabilityProvider);
+                        final statisticsAsyncValue = ref.watch(probabilityProvider);
 
                         return statisticsAsyncValue.when(
-                          loading: () =>
-                              const Center(child: CircularProgressIndicator()),
+                          loading: () => const Center(child: CircularProgressIndicator()),
                           error: (error, stackTrace) => Center(
-                              child: Text(
-                                  '${LocaleKeys.errors_something_went_wrong.tr()}: $error')),
+                            child: Text(
+                              '${LocaleKeys.errors_something_went_wrong.tr()}: $error',
+                            ),
+                          ),
                           data: (state) {
-                            if (state.habitStatistics.isEmpty)return NoDataWidgetStatistics();
+                            if (state.habitStatistics.isEmpty) return const NoDataWidgetStatistics();
 
                             // Auto-select the first habit if none selected yet
-                            final selectedIndex =
-                                ref.read(selectedHabitIndexProvider);
-                            if (selectedIndex < 0 &&
-                                state.habitStatistics.isNotEmpty) {
+                            final selectedIndex = ref.read(selectedHabitIndexProvider);
+                            if (selectedIndex < 0 && state.habitStatistics.isNotEmpty) {
                               WidgetsBinding.instance.addPostFrameCallback((_) {
-                                ref
-                                    .read(selectedHabitIndexProvider.notifier)
-                                    .state = 0;
+                                ref.read(selectedHabitIndexProvider.notifier).state = 0;
                               });
                             }
 
@@ -59,22 +55,23 @@ class HabitProbabilityPage extends ConsumerWidget {
                                 // Wrap habit selector in RepaintBoundary
                                 RepaintBoundary(
                                   child: HabitSelector(
-                                    habitStats:
-                                        state.habitStatistics.values.toList(),
+                                    habitStats: state.habitStatistics.values.toList(),
                                     onHabitSelected: (index) {
                                       ref
-                                          .read(selectedHabitIndexProvider
-                                              .notifier)
+                                          .read(
+                                            selectedHabitIndexProvider.notifier,
+                                          )
                                           .state = index;
                                     },
                                   ),
                                 ),
                                 // Wrap formation insights widget in RepaintBoundary (contains charts)
-                                RepaintBoundary(
-                                  child: const FormationInsightsWidget(),
+                                const RepaintBoundary(
+                                  child: FormationInsightsWidget(),
                                 ),
                                 const SizedBox(
-                                    height: 100), // Extra space for watermark
+                                  height: 100,
+                                ), // Extra space for watermark
                               ],
                             );
                           },
@@ -91,10 +88,7 @@ class HabitProbabilityPage extends ConsumerWidget {
               builder: (context, ref, child) {
                 final statisticsAsyncValue = ref.watch(probabilityProvider);
 
-                if (statisticsAsyncValue is AsyncData &&
-                    statisticsAsyncValue.value?.isMockData == true &&
-                    statisticsAsyncValue.value?.habitStatistics.isNotEmpty ==
-                        true) {
+                if (statisticsAsyncValue is AsyncData && statisticsAsyncValue.value?.isMockData == true && statisticsAsyncValue.value?.habitStatistics.isNotEmpty == true) {
                   return Positioned(
                     bottom: 10,
                     left: 30,
@@ -105,26 +99,22 @@ class HabitProbabilityPage extends ConsumerWidget {
                           borderRadius: BorderRadius.circular(12),
                           child: CustomBlurWidget(
                             child: CupertinoCard(
-                              color: context.primaryContrastingColor
-                                  .withValues(alpha: .1),
+                              color: context.primaryContrastingColor.withValues(alpha: .1),
                               child: Padding(
                                 padding: const EdgeInsets.symmetric(
-                                    horizontal: 16, vertical: 8),
+                                  horizontal: 16,
+                                  vertical: 8,
+                                ),
                                 child: Row(
                                   children: [
                                     Expanded(
                                       child: Shimmer.fromColors(
-                                        baseColor: context.titleSmall.color ??
-                                            Colors.deepOrange,
-                                        highlightColor: context.titleSmall.color
-                                                ?.withValues(alpha: 0.5) ??
-                                            Colors.blueAccent,
+                                        baseColor: context.titleSmall.color ?? Colors.deepOrange,
+                                        highlightColor: context.titleSmall.color?.withValues(alpha: 0.5) ?? Colors.blueAccent,
                                         period: const Duration(seconds: 2),
                                         direction: ShimmerDirection.ltr,
                                         child: Text(
-                                          LocaleKeys
-                                              .statistics_chart_labels_demo_data_message
-                                              .tr(),
+                                          LocaleKeys.statistics_chart_labels_demo_data_message.tr(),
                                           style: context.titleSmall.copyWith(
                                             fontSize: 14,
                                             fontWeight: FontWeight.bold,
@@ -132,16 +122,17 @@ class HabitProbabilityPage extends ConsumerWidget {
                                         ),
                                       ),
                                     ),
-                                    SizedBox(width: 12),
+                                    const SizedBox(width: 12),
                                     Padding(
                                       padding: const EdgeInsets.symmetric(
-                                          horizontal: 12, vertical: 5),
+                                        horizontal: 12,
+                                        vertical: 5,
+                                      ),
                                       child: CustomButton(
                                         onPressed: () {
-                                          ref
-                                              .read(purchaseProvider.notifier)
-                                              .presentPaywall(
-                                                  isFromOnboarding: false);
+                                          ref.read(purchaseProvider.notifier).presentPaywall(
+                                                isFromOnboarding: false,
+                                              );
                                           return;
                                         },
                                         child: Shimmer.fromColors(
@@ -150,10 +141,8 @@ class HabitProbabilityPage extends ConsumerWidget {
                                           period: const Duration(seconds: 1),
                                           direction: ShimmerDirection.ltr,
                                           child: Text(
-                                            LocaleKeys
-                                                .statistics_chart_labels_upgrade_button
-                                                .tr(),
-                                            style: TextStyle(
+                                            LocaleKeys.statistics_chart_labels_upgrade_button.tr(),
+                                            style: const TextStyle(
                                               fontSize: 14,
                                               fontWeight: FontWeight.bold,
                                               color: Colors.deepOrange,
@@ -161,7 +150,7 @@ class HabitProbabilityPage extends ConsumerWidget {
                                           ),
                                         ),
                                       ),
-                                    )
+                                    ),
                                   ],
                                 ),
                               ),
@@ -205,7 +194,7 @@ class NoDataWidgetStatistics extends StatelessWidget {
           const SizedBox(height: 24),
           Text(
             LocaleKeys.statistics_no_data_title.tr(),
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.bold,
             ),
@@ -214,7 +203,7 @@ class NoDataWidgetStatistics extends StatelessWidget {
           Text(
             LocaleKeys.statistics_no_data_description.tr(),
             textAlign: TextAlign.center,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 16,
               height: 1.5,
             ),

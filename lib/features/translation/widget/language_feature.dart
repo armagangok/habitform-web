@@ -10,27 +10,27 @@ class LanguageFeature extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return CupertinoListTile(
-      title: Text(LocaleKeys.settings_language.tr()),
+      title: Text(context.tr(LocaleKeys.settings_language)),
       onTap: () {
         showCupertinoModalPopup(
           context: context,
           builder: (context) {
             return CupertinoActionSheet(
-              title: Text(LocaleKeys.settings_language.tr()),
+              title: Text(context.tr(LocaleKeys.settings_language)),
               actions: [
-                _buildLanguageAction(context, 'en', 'US', "🇬🇧", LocaleKeys.languages_english.tr()),
-                _buildLanguageAction(context, 'tr', 'TR', "🇹🇷", LocaleKeys.languages_turkish.tr()),
-                _buildLanguageAction(context, 'zh', 'Hans', "🇨🇳", LocaleKeys.languages_chinese.tr()),
-                _buildLanguageAction(context, 'es', 'ES', "🇪🇸", LocaleKeys.languages_spanish.tr()),
-                _buildLanguageAction(context, 'it', 'IT', "🇮🇹", LocaleKeys.languages_italian.tr()),
-                _buildLanguageAction(context, 'ar', 'SA', "🇸🇦", LocaleKeys.languages_arabic.tr()),
-                _buildLanguageAction(context, 'fi', 'FI', "🇫🇮", LocaleKeys.languages_finnish.tr()),
-                _buildLanguageAction(context, 'ja', 'JP', "🇯🇵", LocaleKeys.languages_japanese.tr()),
+                _buildLanguageAction(context, 'en', 'US', "🇬🇧", context.tr(LocaleKeys.languages_english)),
+                _buildLanguageAction(context, 'tr', 'TR', "🇹🇷", context.tr(LocaleKeys.languages_turkish)),
+                _buildLanguageAction(context, 'zh', 'Hans', "🇨🇳", context.tr(LocaleKeys.languages_chinese)),
+                _buildLanguageAction(context, 'es', 'ES', "🇪🇸", context.tr(LocaleKeys.languages_spanish)),
+                _buildLanguageAction(context, 'it', 'IT', "🇮🇹", context.tr(LocaleKeys.languages_italian)),
+                _buildLanguageAction(context, 'ar', 'SA', "🇸🇦", context.tr(LocaleKeys.languages_arabic)),
+                _buildLanguageAction(context, 'fi', 'FI', "🇫🇮", context.tr(LocaleKeys.languages_finnish)),
+                _buildLanguageAction(context, 'ja', 'JP', "🇯🇵", context.tr(LocaleKeys.languages_japanese)),
               ],
               cancelButton: CupertinoActionSheetAction(
                 isDestructiveAction: true,
                 onPressed: navigator.pop,
-                child: Text(LocaleKeys.common_ok.tr()),
+                child: Text(context.tr(LocaleKeys.common_cancel)),
               ),
             );
           },
@@ -45,7 +45,7 @@ class LanguageFeature extends ConsumerWidget {
           color: Colors.white.withValues(alpha: .9),
         ),
       ),
-      trailing: CupertinoListTileChevron(),
+      trailing: const CupertinoListTileChevron(),
     );
   }
 

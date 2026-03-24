@@ -20,30 +20,40 @@ class ProbabilityWidget extends ConsumerWidget {
     final probabilityPercentage = probabilityScore.toStringAsFixed(0);
 
     if (probabilityScore >= 90) {
-      return LocaleKeys.statistics_probability_status_excellent.tr(namedArgs: {
-        'percentage': percentage,
-        'probability': probabilityPercentage,
-      });
+      return LocaleKeys.statistics_probability_status_excellent.tr(
+        namedArgs: {
+          'percentage': percentage,
+          'probability': probabilityPercentage,
+        },
+      );
     } else if (probabilityScore >= 75) {
-      return LocaleKeys.statistics_probability_status_very_good.tr(namedArgs: {
-        'percentage': percentage,
-        'probability': probabilityPercentage,
-      });
+      return LocaleKeys.statistics_probability_status_very_good.tr(
+        namedArgs: {
+          'percentage': percentage,
+          'probability': probabilityPercentage,
+        },
+      );
     } else if (probabilityScore >= 60) {
-      return LocaleKeys.statistics_probability_status_good.tr(namedArgs: {
-        'percentage': percentage,
-        'probability': probabilityPercentage,
-      });
+      return LocaleKeys.statistics_probability_status_good.tr(
+        namedArgs: {
+          'percentage': percentage,
+          'probability': probabilityPercentage,
+        },
+      );
     } else if (probabilityScore >= 40) {
-      return LocaleKeys.statistics_probability_status_improving.tr(namedArgs: {
-        'percentage': percentage,
-        'probability': probabilityPercentage,
-      });
+      return LocaleKeys.statistics_probability_status_improving.tr(
+        namedArgs: {
+          'percentage': percentage,
+          'probability': probabilityPercentage,
+        },
+      );
     } else {
-      return LocaleKeys.statistics_probability_status_needs_work.tr(namedArgs: {
-        'percentage': percentage,
-        'probability': probabilityPercentage,
-      });
+      return LocaleKeys.statistics_probability_status_needs_work.tr(
+        namedArgs: {
+          'percentage': percentage,
+          'probability': probabilityPercentage,
+        },
+      );
     }
   }
 
@@ -64,10 +74,12 @@ class ProbabilityWidget extends ConsumerWidget {
         return LocaleKeys.statistics_probability_time_completed_needs_work.tr();
       }
     } else {
-      return LocaleKeys.statistics_probability_time_remaining_days.tr(namedArgs: {
-        'days': remainingFormationDays.toString(),
-        'total': estimatedFormationDays.toString(),
-      });
+      return LocaleKeys.statistics_probability_time_remaining_days.tr(
+        namedArgs: {
+          'days': remainingFormationDays.toString(),
+          'total': estimatedFormationDays.toString(),
+        },
+      );
     }
   }
 
@@ -390,8 +402,8 @@ class ProbabilityWidget extends ConsumerWidget {
   }
 
   Padding _verticalDivider() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 12.5),
+    return const Padding(
+      padding: EdgeInsets.symmetric(vertical: 12.5),
       child: VerticalDivider(
         thickness: .75,
       ),

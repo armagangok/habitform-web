@@ -51,36 +51,24 @@ class CompletionEntryAdapter extends TypeAdapter<CompletionEntry> {
   int get hashCode => typeId.hashCode;
 
   @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is CompletionEntryAdapter &&
-          runtimeType == other.runtimeType &&
-          typeId == other.typeId;
+  bool operator ==(Object other) => identical(this, other) || other is CompletionEntryAdapter && runtimeType == other.runtimeType && typeId == other.typeId;
 }
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$CompletionEntryImpl _$$CompletionEntryImplFromJson(
-        Map<String, dynamic> json) =>
-    _$CompletionEntryImpl(
+_$CompletionEntryImpl _$$CompletionEntryImplFromJson(Map<String, dynamic> json) => _$CompletionEntryImpl(
       id: json['id'] as String,
       date: DateTime.parse(json['date'] as String),
       isCompleted: json['isCompleted'] as bool,
       count: (json['count'] as num?)?.toInt() ?? 1,
       rewardRating: (json['rewardRating'] as num?)?.toDouble(),
-      syncStatus:
-          $enumDecodeNullable(_$SyncStatusEnumMap, json['syncStatus']) ??
-              SyncStatus.synced,
-      updatedAt: json['updatedAt'] == null
-          ? null
-          : DateTime.parse(json['updatedAt'] as String),
+      syncStatus: $enumDecodeNullable(_$SyncStatusEnumMap, json['syncStatus']) ?? SyncStatus.synced,
+      updatedAt: json['updatedAt'] == null ? null : DateTime.parse(json['updatedAt'] as String),
     );
 
-Map<String, dynamic> _$$CompletionEntryImplToJson(
-        _$CompletionEntryImpl instance) =>
-    <String, dynamic>{
+Map<String, dynamic> _$$CompletionEntryImplToJson(_$CompletionEntryImpl instance) => <String, dynamic>{
       'id': instance.id,
       'date': instance.date.toIso8601String(),
       'isCompleted': instance.isCompleted,

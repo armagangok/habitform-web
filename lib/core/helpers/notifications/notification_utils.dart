@@ -97,13 +97,15 @@ class NotificationUtils {
       final days = reminder.days ?? Days.values;
       final notificationCount = times.length * days.length;
 
-      breakdown.add(HabitNotificationInfo(
-        reminderId: reminder.id,
-        notificationCount: notificationCount,
-        timesPerDay: times.length,
-        daysPerWeek: days.length,
-        priority: _calculateHabitPriority(reminder),
-      ));
+      breakdown.add(
+        HabitNotificationInfo(
+          reminderId: reminder.id,
+          notificationCount: notificationCount,
+          timesPerDay: times.length,
+          daysPerWeek: days.length,
+          priority: _calculateHabitPriority(reminder),
+        ),
+      );
     }
 
     // Sort by notification count (highest first)

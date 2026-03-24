@@ -17,8 +17,9 @@ class AuthHeaderWidget extends ConsumerWidget {
       data: (user) {
         if (user == null) {
           return CupertinoListSection.insetGrouped(
+            separatorColor: Colors.transparent,
             footer: Text(
-              LocaleKeys.auth_my_account_description.tr(),
+              context.tr(LocaleKeys.auth_my_account_description),
             ),
             children: [
               CupertinoListTile(
@@ -27,8 +28,8 @@ class AuthHeaderWidget extends ConsumerWidget {
                   color: theme.primaryColor,
                   size: 30,
                 ),
-                title: Text(LocaleKeys.auth_my_account.tr()),
-                trailing: CupertinoListTileChevron(),
+                title: Text(context.tr(LocaleKeys.auth_my_account)),
+                trailing: const CupertinoListTileChevron(),
                 onTap: () {
                   Navigator.of(context).pushNamed(KRoute.auth);
                 },
@@ -42,7 +43,7 @@ class AuthHeaderWidget extends ConsumerWidget {
         final email = userProfile?.email ?? user.email;
 
         return CupertinoListSection.insetGrouped(
-          footer: const SizedBox.shrink(),
+          separatorColor: Colors.transparent,
           children: [
             CupertinoListTile(
               onTap: () {
@@ -53,8 +54,10 @@ class AuthHeaderWidget extends ConsumerWidget {
                 radius: 18,
               ),
               title: Text(displayName ?? email ?? ''),
-              trailing: CupertinoListTileChevron(),
+              trailing: const CupertinoListTileChevron(),
             ),
+
+            // Membership Info Button and Subscribe Button
           ],
         );
       },
@@ -62,7 +65,10 @@ class AuthHeaderWidget extends ConsumerWidget {
         padding: EdgeInsets.all(24.0),
         child: Center(child: CupertinoActivityIndicator()),
       ),
-      error: (_, __) => const SizedBox.shrink(),
+      error: (e, s) {
+        LogHelper.shared.errorPrint("Error fetching auth state: $e", e, s);
+        return const SizedBox.shrink();
+      },
     );
   }
 }

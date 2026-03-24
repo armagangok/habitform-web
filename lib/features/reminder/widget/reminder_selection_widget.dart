@@ -1,11 +1,11 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:habitform/features/edit_habit/provider/edit_habit_provider.dart';
-import 'package:habitform/features/reminder/extension/easy_day.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import '/core/core.dart';
 import '/core/helpers/notifications/notification_helper.dart';
-import '../../../core/widgets/my_list_tile.dart';
+import '../../../core/widgets/custom_list_tile.dart';
+import '../../edit_habit/provider/edit_habit_provider.dart';
+import '../extension/easy_day.dart';
 import '../models/days/days_enum.dart';
 import '../models/reminder/reminder_model.dart';
 import '../provider/reminder_provider.dart';
@@ -56,8 +56,8 @@ class _ReminderSelectionWidgetState extends ConsumerState<ReminderSelectionWidge
     return CupertinoListSection.insetGrouped(
       header: widget.header,
       children: [
-        MyListTile(
-          trailing: CupertinoListTileChevron(),
+        CustomListTile(
+          trailing: const CupertinoListTileChevron(),
           additionalInfo: Row(
             children: [
               if (reminder?.hasMultipleReminders == true) ...[

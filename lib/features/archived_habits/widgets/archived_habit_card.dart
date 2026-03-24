@@ -51,7 +51,7 @@ class ArchivedHabitCard extends ConsumerWidget {
                     style: context.titleLarge.copyWith(fontSize: 24),
                   ),
             title: Text(habit.habitName),
-            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
             subtitle: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

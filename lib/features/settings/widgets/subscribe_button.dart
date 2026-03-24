@@ -16,7 +16,7 @@ class SubscribeButton extends ConsumerWidget {
     return CupertinoListSection.insetGrouped(
       children: [
         CupertinoListTile(
-          padding: const EdgeInsets.all(12),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
           onTap: () => ref.read(purchaseProvider.notifier).presentPaywall(
                 isFromOnboarding: false,
                 isFromSettings: true,
@@ -68,10 +68,12 @@ class SubscribeButton extends ConsumerWidget {
               ),
               CupertinoCard(
                 color: context.primary,
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+                elevation: 0,
+                borderRadius: BorderRadius.circular(12),
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
                 child: Text(
-                  'Pro',
-                  style: context.titleMedium.copyWith(
+                  'PRO',
+                  style: context.titleSmall.copyWith(
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
                   ),
@@ -91,7 +93,7 @@ class SubscribeButton extends ConsumerWidget {
                   color: context.primary,
                 )
               : null,
-          trailing: CupertinoListTileChevron(),
+          trailing: const CupertinoListTileChevron(),
         ),
       ],
     );

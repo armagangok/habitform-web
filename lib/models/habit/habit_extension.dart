@@ -1,8 +1,9 @@
 import 'dart:math' as math;
 
-import 'package:habitform/models/habit/habit_difficulty.dart';
+import 'habit_difficulty.dart';
 
 import '../../core/core.dart';
+import '../completion_entry/completion_entry.dart';
 import 'habit_model.dart';
 
 /// Represents a single completion attempt (success or failure) for probabilistic habit formation
@@ -145,41 +146,42 @@ extension HabitUtils on Habit {
     return false;
   }
 
-  // Get recorded count for a specific date (0 if none)
-  // Optimized to try multiple key formats for O(1) lookup
-  int getCountForDate(DateTime date) {
+  /// Resolves the stored [CompletionEntry] for a calendar day (same key strategy as [getCountForDate]).
+  CompletionEntry? getCompletionEntryForDate(DateTime date) {
     final normalizedDate = date.normalized;
 
-    // Try ISO8601 format first (YYYY-MM-DD) - most common format
     final isoKey = normalizedDate.toIso8601DateString;
     final isoEntry = completions[isoKey];
     if (isoEntry != null && isoEntry.date.normalized.isSameDayWith(normalizedDate)) {
-      return isoEntry.count;
+      return isoEntry;
     }
 
-    // Try numeric format (Y-M-D) - used in some legacy data
     final numericKey = '${normalizedDate.year}-${normalizedDate.month}-${normalizedDate.day}';
     final numericEntry = completions[numericKey];
     if (numericEntry != null && numericEntry.date.normalized.isSameDayWith(normalizedDate)) {
-      return numericEntry.count;
+      return numericEntry;
     }
 
-    // Try padded numeric format (YYYY-MM-DD) - alternative format
     final paddedKey = '${normalizedDate.year.toString().padLeft(4, '0')}-${normalizedDate.month.toString().padLeft(2, '0')}-${normalizedDate.day.toString().padLeft(2, '0')}';
     if (paddedKey != isoKey) {
       final paddedEntry = completions[paddedKey];
       if (paddedEntry != null && paddedEntry.date.normalized.isSameDayWith(normalizedDate)) {
-        return paddedEntry.count;
+        return paddedEntry;
       }
     }
 
-    // Fallback to linear search only for truly legacy data (should be rare)
     for (final entry in completions.values) {
       if (entry.date.normalized.isSameDayWith(normalizedDate)) {
-        return entry.count;
+        return entry;
       }
     }
-    return 0;
+    return null;
+  }
+
+  // Get recorded count for a specific date (0 if none)
+  // Optimized to try multiple key formats for O(1) lookup
+  int getCountForDate(DateTime date) {
+    return getCompletionEntryForDate(date)?.count ?? 0;
   }
 
   // Get completion ratio for a date given a dailyTarget
@@ -361,10 +363,12 @@ extension HabitUtils on Habit {
       if (entry.isCompleted) {
         final ratio = (entry.count / effectiveTarget).clamp(0.0, 1.0);
         if (ratio >= 0.5) {
-          sortedCompletions.add(_CompletionData(
-            date: entryDate,
-            rewardRating: entry.rewardRating ?? rewardFactor,
-          ));
+          sortedCompletions.add(
+            _CompletionData(
+              date: entryDate,
+              rewardRating: entry.rewardRating ?? rewardFactor,
+            ),
+          );
         }
       }
     }

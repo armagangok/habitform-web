@@ -105,17 +105,19 @@ class SmartNotificationManager {
           if (scheduledTime.isAfter(now)) {
             final priority = _calculatePriority(reminder, time, day);
 
-            notifications.add(UpcomingNotification(
-              id: _generateNotificationId(reminder.id, day, time, timeIndex),
-              reminderId: reminder.id,
-              title: habit.habitName, // Use individual habit name as title
-              body: 'Time to complete your habit!', // Use generic body
-              scheduledTime: scheduledTime,
-              day: day,
-              time: time,
-              priority: priority,
-              timeIndex: timeIndex,
-            ));
+            notifications.add(
+              UpcomingNotification(
+                id: _generateNotificationId(reminder.id, day, time, timeIndex),
+                reminderId: reminder.id,
+                title: habit.habitName, // Use individual habit name as title
+                body: 'Time to complete your habit!', // Use generic body
+                scheduledTime: scheduledTime,
+                day: day,
+                time: time,
+                priority: priority,
+                timeIndex: timeIndex,
+              ),
+            );
           }
         }
       }

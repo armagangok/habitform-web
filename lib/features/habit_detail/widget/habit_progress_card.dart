@@ -46,8 +46,8 @@ class HabitProgressCard extends ConsumerWidget {
         ],
       ),
       children: [
-        CupertinoListTile(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+        const CupertinoListTile(
+          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
           title: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

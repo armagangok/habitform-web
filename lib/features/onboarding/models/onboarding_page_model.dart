@@ -1,4 +1,4 @@
-import 'package:habitform/core/core.dart';
+import '../../../core/core.dart';
 
 /// Onboarding sayfalarını temsil eden model sınıfı
 class OnboardingPageModel {

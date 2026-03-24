@@ -14,6 +14,7 @@ class KRoute {
   static const myAccount = '/myAccount';
   static const archivedHabits = '/archivedHabits';
   static const dataManagement = '/dataManagement';
+  static const proFeatures = '/proFeatures';
   static const emojiPage = '/emojiPage';
 
   static const habitCategoryPage = '/habitCategoryPage';

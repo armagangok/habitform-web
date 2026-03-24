@@ -57,7 +57,7 @@ class BaseStepWidget extends ConsumerWidget {
             ),
             style: context.bodySmall.copyWith(
               color: Theme.of(context).hintColor,
-              fontFeatures: [FontFeature.tabularFigures()],
+              fontFeatures: [const FontFeature.tabularFigures()],
             ),
           ),
         ],
@@ -69,7 +69,7 @@ class BaseStepWidget extends ConsumerWidget {
     return SafeArea(
       child: Container(
         padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(),
+        decoration: const BoxDecoration(),
         child: Row(
           children: [
             // Previous button

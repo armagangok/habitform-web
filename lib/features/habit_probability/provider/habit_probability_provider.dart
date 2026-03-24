@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:habitform/models/habit/habit_extension.dart';
+import '../../../models/habit/habit_extension.dart';
 
 import '/core/core.dart';
 import '/features/home/provider/home_provider.dart';

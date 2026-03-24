@@ -72,12 +72,12 @@ class _HabitDetailPageState extends ConsumerState<HabitDetailPage> {
 
     if (currentHabit == null) {
       // Show loading state while habit data is being loaded
-      return CupertinoPageScaffold(
+      return const CupertinoPageScaffold(
         navigationBar: SheetHeader(
           title: '',
           closeButtonPosition: CloseButtonPosition.left,
         ),
-        child: const Center(
+        child: Center(
           child: CupertinoActivityIndicator(),
         ),
       );
@@ -148,7 +148,7 @@ class _HabitDetailPageState extends ConsumerState<HabitDetailPage> {
               ),
             ],
           ),
-          ActionButtons(),
+          const ActionButtons(),
         ],
       ),
     );
@@ -212,7 +212,7 @@ class _HabitDetailPageState extends ConsumerState<HabitDetailPage> {
                       overflow: TextOverflow.visible,
                     ),
                   ),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
               ],
             ),
           ),

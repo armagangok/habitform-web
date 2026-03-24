@@ -62,6 +62,85 @@ class SyncService {
     }
   }
 
+  /// Updates a single completion entry under [habitId] without rewriting the whole habit document.
+  /// Uses [FieldPath] so map keys work even when they contain `.` (e.g. ISO date strings).
+  ///
+  /// When [removeCompletionKeyIfDifferent] is set and differs from [completionMapKey], the old
+  /// map entry is deleted (e.g. legacy key migration).
+  Future<void> patchHabitCompletion({
+    required String habitId,
+    required String completionMapKey,
+    required CompletionEntry entry,
+    String? removeCompletionKeyIfDifferent,
+  }) async {
+    LogHelper.shared.debugPrint('🔄 SyncService.patchHabitCompletion called for $habitId / $completionMapKey');
+    if (_userId == null) {
+      LogHelper.shared.debugPrint('⚠️ Patch skipped: _userId is null.');
+      return;
+    }
+
+    if (!_isProSubscriber()) {
+      LogHelper.shared.debugPrint('⚠️ Patch skipped: Cloud habit sync requires Pro.');
+      return;
+    }
+
+    final docRef = _habitsCollection.doc(habitId);
+    final entryMap = entry.toJson();
+    entryMap['syncStatus'] = SyncStatus.synced.name;
+
+    final pathNew = FieldPath(['completions', completionMapKey]);
+    final updateData = <Object, Object?>{
+      pathNew: entryMap,
+      'updatedAt': FieldValue.serverTimestamp(),
+      'syncStatus': SyncStatus.synced.name,
+    };
+
+    if (removeCompletionKeyIfDifferent != null && removeCompletionKeyIfDifferent != completionMapKey) {
+      final pathOld = FieldPath(['completions', removeCompletionKeyIfDifferent]);
+      updateData[pathOld] = FieldValue.delete();
+    }
+
+    try {
+      await docRef.update(updateData);
+      LogHelper.shared.debugPrint('✅ Patched completion $completionMapKey on habit $habitId');
+    } on FirebaseException catch (e) {
+      if (_isDocumentMissingException(e)) {
+        await _patchHabitCompletionWhenDocMissing(
+          docRef: docRef,
+          completionMapKey: completionMapKey,
+          entryMap: entryMap,
+        );
+        LogHelper.shared.debugPrint('✅ Created/merged habit $habitId document for completion patch');
+      } else {
+        LogHelper.shared.debugPrint('❌ Error patching completion on habit $habitId: $e');
+        rethrow;
+      }
+    }
+  }
+
+  bool _isDocumentMissingException(FirebaseException e) {
+    final code = e.code.toLowerCase();
+    return code == 'not-found' || code.contains('not-found');
+  }
+
+  /// When the habit doc does not exist yet on the server, merge only the one completion key.
+  Future<void> _patchHabitCompletionWhenDocMissing({
+    required DocumentReference<Map<String, dynamic>> docRef,
+    required String completionMapKey,
+    required Map<String, dynamic> entryMap,
+  }) async {
+    await docRef.set(
+      <String, dynamic>{
+        'completions': <String, dynamic>{
+          completionMapKey: entryMap,
+        },
+        'updatedAt': FieldValue.serverTimestamp(),
+        'syncStatus': SyncStatus.synced.name,
+      },
+      SetOptions(merge: true),
+    );
+  }
+
   Future<List<Habit>> fetchRemoteHabits() async {
     if (_userId == null) return [];
 

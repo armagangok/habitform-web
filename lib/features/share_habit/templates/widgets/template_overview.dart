@@ -31,7 +31,7 @@ class TemplateOverview extends StatelessWidget {
                   backgroundColor: context.primaryContrastingColor.withValues(alpha: 0.1),
                   child: Text(
                     habit.emoji ?? '🌟',
-                    style: TextStyle(fontSize: 60),
+                    style: const TextStyle(fontSize: 60),
                   ),
                 ),
                 const SizedBox(height: 8),
@@ -43,7 +43,7 @@ class TemplateOverview extends StatelessWidget {
                 ),
               ],
             ),
-            Spacer(),
+            const Spacer(),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -59,7 +59,7 @@ class TemplateOverview extends StatelessWidget {
                 ),
               ],
             ),
-            Spacer(flex: 10),
+            const Spacer(flex: 10),
             Row(
               children: [
                 Assets.app.appLogoDark.image(height: 22, width: 22),
@@ -72,7 +72,7 @@ class TemplateOverview extends StatelessWidget {
                   ),
                 ),
               ],
-            )
+            ),
           ],
         ),
       ),

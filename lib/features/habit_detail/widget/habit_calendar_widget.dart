@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:habitform/core/core.dart';
+import '../../../core/core.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 import '../../../models/models.dart';
@@ -22,7 +22,7 @@ class HabitCalendarWidget extends ConsumerWidget {
           builder: (context) => HabitCalendarCompletionSheet(habit: currentHabit!),
         );
       },
-      child: Icon(
+      child: const Icon(
         FontAwesomeIcons.solidCalendarDays,
         size: 20,
       ),

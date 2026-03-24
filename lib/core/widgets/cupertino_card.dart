@@ -1,4 +1,4 @@
-import 'package:habitform/core/core.dart';
+import '../core.dart';
 
 /// A Cupertino-style card widget that replaces Material CupertinoCard
 /// Uses iOS design language with rounded corners and subtle shadows

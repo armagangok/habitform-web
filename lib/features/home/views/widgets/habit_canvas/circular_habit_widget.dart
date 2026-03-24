@@ -309,7 +309,7 @@ class _CircularHabitWidgetState extends ConsumerState<CircularHabitWidget> {
                               shape: BoxShape.circle,
                               color: isCompleted
                                   ? habitColor
-                                  : habitColor.shadeForHabitCircleIncompleteFill(
+                                  : habitColor.getOptimizedShade(
                                       context,
                                     ),
                               border: Border.all(
@@ -333,7 +333,7 @@ class _CircularHabitWidgetState extends ConsumerState<CircularHabitWidget> {
                                 color: isCompleted
                                     ? habitColor.colorRegardingToBrightness
                                     : habitColor
-                                        .shadeForHabitCircleIncompleteFill(
+                                        .getOptimizedShade(
                                           context,
                                         )
                                         .colorRegardingToBrightness,

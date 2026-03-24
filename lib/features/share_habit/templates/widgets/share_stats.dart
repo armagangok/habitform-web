@@ -1,4 +1,4 @@
-import 'package:habitform/models/habit/habit_extension.dart';
+import '../../../../models/habit/habit_extension.dart';
 
 import '../../../../models/habit/habit_model.dart';
 

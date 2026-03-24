@@ -161,7 +161,7 @@ class _AccountDangerZoneSectionState extends ConsumerState<AccountDangerZoneSect
     return CupertinoListSection.insetGrouped(
       header: Text(
         LocaleKeys.auth_danger_zone.tr(),
-        style: TextStyle(color: CupertinoColors.systemRed, fontWeight: FontWeight.w600),
+        style: const TextStyle(color: CupertinoColors.systemRed, fontWeight: FontWeight.w600),
       ),
       children: [
         CupertinoListTile(

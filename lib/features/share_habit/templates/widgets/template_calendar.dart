@@ -33,7 +33,7 @@ class TemplateCalendar extends StatelessWidget {
               physics: const BouncingScrollPhysics(),
               child: Column(
                 children: [
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
@@ -44,7 +44,7 @@ class TemplateCalendar extends StatelessWidget {
                           child: Center(
                             child: Text(
                               habit.emoji ?? '🌟',
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontSize: 44, // Reduced from 56 to save space
                                 fontWeight: FontWeight.bold,
                               ),
@@ -52,7 +52,7 @@ class TemplateCalendar extends StatelessWidget {
                           ),
                         ),
                       ),
-                      SizedBox(height: 6), // Reduced from 8
+                      const SizedBox(height: 6), // Reduced from 8
                       Text(
                         habit.habitName,
                         style: context.titleLarge.copyWith(
@@ -63,7 +63,7 @@ class TemplateCalendar extends StatelessWidget {
                         maxLines: 1,
                       ),
 
-                      SizedBox(height: 32), // Reduced from 16
+                      const SizedBox(height: 32), // Reduced from 16
                     ],
                   ),
                   // Add "dismount running" text
@@ -90,7 +90,7 @@ class TemplateCalendar extends StatelessWidget {
                 ),
               ],
             ),
-          )
+          ),
         ],
       ),
     );

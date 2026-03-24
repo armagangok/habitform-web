@@ -106,7 +106,7 @@ extension EasyText on BuildContext {
   CupertinoThemeData get cupertinoTheme => CupertinoTheme.of(this);
 
   TextStyle get titleSmall => cupertinoTextTheme.textStyle.copyWith(
-        fontSize: isTablet ? 18 : 17,
+        fontSize: isTablet ? 14 : 13,
         fontWeight: FontWeight.w600,
         textBaseline: TextBaseline.alphabetic,
       );
@@ -115,8 +115,9 @@ extension EasyText on BuildContext {
         fontWeight: FontWeight.w600,
         textBaseline: TextBaseline.alphabetic,
       );
-  TextStyle get titleLarge => cupertinoTextTheme.navTitleTextStyle.copyWith(
+  TextStyle get titleLarge => cupertinoTextTheme.textStyle.copyWith(
         textBaseline: TextBaseline.alphabetic,
+        fontSize: isTablet ? 18 : 17,
       );
 
   TextStyle get labelSmall => cupertinoTextTheme.textStyle.copyWith(

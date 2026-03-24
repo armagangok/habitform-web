@@ -1,4 +1,4 @@
-import 'package:habitform/core/core.dart';
+import '../core/core.dart';
 
 import '../models/user_defaults/user_defaults.dart';
 

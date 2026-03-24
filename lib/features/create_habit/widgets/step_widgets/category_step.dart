@@ -79,7 +79,7 @@ class _CategoryStepState extends ConsumerState<CategoryStep> {
           ),
 
           // Category picker
-          CategoryPickerButton(),
+          const CategoryPickerButton(),
         ],
       ),
     );
