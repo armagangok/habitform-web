@@ -247,14 +247,22 @@ struct Habit: Codable, Identifiable {
     var currentStreak: Int {
         var streak = 0
         let calendar = Calendar.current
-        var currentDate = Calendar.current.startOfDay(for: Date())
-
+        let today = calendar.startOfDay(for: Date())
+        
+        // 1. Check today
+        let todayKey = DateFormatter.habitDateKey.string(from: today)
+        if let completion = completions[todayKey], completion.isCompleted {
+            streak += 1
+        }
+        
+        // 2. Start looping backwards from yesterday
+        var checkDate = calendar.date(byAdding: .day, value: -1, to: today) ?? today
+        
         while true {
-            let dateKey = DateFormatter.habitDateKey.string(from: currentDate)
+            let dateKey = DateFormatter.habitDateKey.string(from: checkDate)
             if let completion = completions[dateKey], completion.isCompleted {
                 streak += 1
-                currentDate =
-                    calendar.date(byAdding: .day, value: -1, to: currentDate) ?? currentDate
+                checkDate = calendar.date(byAdding: .day, value: -1, to: checkDate) ?? checkDate
             } else {
                 break
             }

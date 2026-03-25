@@ -209,15 +209,20 @@ class WidgetMethodChannelService {
   }
 
   /// Called by main app to update widget data
-  Future<void> updateWidgetData(List<Habit> habits, {bool isProMember = false}) async {
+  Future<void> updateWidgetData(List<Habit> habits, {bool isProMember = false, bool forceUpdate = false}) async {
     if (!Platform.isIOS) return;
 
     final methodChannelStart = DateTime.now();
     LogHelper.shared.debugPrint('📡 [PERF] WidgetMethodChannelService: Starting updateWidgetData at ${methodChannelStart.millisecondsSinceEpoch}');
 
     // Check if we can use cached data to avoid unnecessary operations
+    // Skip cache check when forceUpdate is true (e.g., on app resume)
     final now = DateTime.now();
-    if (_cachedHabits != null && _lastCacheUpdate != null && now.difference(_lastCacheUpdate!).inSeconds < 2 && _habitsAreEqual(_cachedHabits!, habits)) {
+    if (!forceUpdate &&
+        _cachedHabits != null &&
+        _lastCacheUpdate != null &&
+        now.difference(_lastCacheUpdate!).inSeconds < 2 &&
+        _habitsAreEqual(_cachedHabits!, habits)) {
       LogHelper.shared.debugPrint('⏭️ WidgetMethodChannelService: Using cached data (no changes detected)');
       return;
     }

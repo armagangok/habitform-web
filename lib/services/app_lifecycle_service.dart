@@ -3,6 +3,7 @@ import '../core/core.dart';
 import '/core/helpers/notifications/smart_notification_manager.dart';
 import '/features/reminder/models/reminder/reminder_model.dart';
 import '/services/habit_service/habit_service_interface.dart';
+import '/services/widget_sync_service.dart';
 
 /// Uygulama yaşam döngüsü servis sınıfı.
 /// Bu sınıf, uygulama yaşam döngüsü olaylarını dinler ve gerekli işlemleri tetikler.
@@ -54,8 +55,13 @@ class AppLifecycleService with WidgetsBindingObserver {
     }
   }
 
-  /// Handle app resumed - reschedule notifications if needed
+  /// Handle app resumed - sync widget data and reschedule notifications if needed
   Future<void> _handleAppResumed() async {
+    // Always sync widget data on resume — this fixes both widget bugs:
+    // 1. Reads completion_updates.json written by widget button taps → syncs into Flutter DB (Bug 2)
+    // 2. Re-pushes correct Pro status + fresh habits to the widget (Bug 1)
+    _syncWidgetDataOnResume();
+
     try {
       // Check if we're in the cooldown period after an archiving operation
       if (_isInArchivingCooldown) {
@@ -90,6 +96,26 @@ class AppLifecycleService with WidgetsBindingObserver {
       }
     } catch (e) {
       LogHelper.shared.debugPrint('Error handling app resumed: $e');
+    }
+  }
+
+  /// Sync widget data when the app comes to foreground.
+  /// Called on every resume — runs in the background so it doesn't block the UI.
+  Future<void> _syncWidgetDataOnResume() async {
+    try {
+      LogHelper.shared.debugPrint('🔄 APP LIFECYCLE: Syncing widget data on resume...');
+
+      // 1. Process any completions written to completion_updates.json by the widget button.
+      //    This syncs widget taps → Flutter database (fixes Bug 2).
+      await WidgetSyncService().checkForWidgetUpdates();
+
+      // 2. Push fresh habits + correct Pro status back to the widget.
+      //    This prevents stale isProMember=false from showing the lock screen (fixes Bug 1).
+      await WidgetSyncService().forceWidgetUpdate();
+
+      LogHelper.shared.debugPrint('✅ APP LIFECYCLE: Widget data synced on resume');
+    } catch (e) {
+      LogHelper.shared.debugPrint('❌ APP LIFECYCLE: Error syncing widget data on resume: $e');
     }
   }
 

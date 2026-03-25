@@ -122,31 +122,42 @@ class WidgetSyncService {
 
     // Set a new debounce timer (500ms delay)
     _debounceTimer = Timer(const Duration(milliseconds: 500), () async {
-      await _performWidgetDataUpdate(_pendingHabits);
+      await _performWidgetDataUpdate(_pendingHabits, forceUpdate: false);
     });
   }
 
-  /// Actually perform the widget data update
-  Future<void> _performWidgetDataUpdate(List<Habit>? habits) async {
+  /// Actually perform the widget data update.
+  /// When [forceUpdate] is true the 1-second throttle and the method-channel
+  /// habits-equal cache are both bypassed, ensuring fresh data is always written.
+  Future<void> _performWidgetDataUpdate(List<Habit>? habits, {bool forceUpdate = false}) async {
     if (habits == null) return;
 
     final widgetUpdateStart = DateTime.now();
     LogHelper.shared.debugPrint('📱 [PERF] Starting widget data update at ${widgetUpdateStart.millisecondsSinceEpoch}');
 
-    // Throttle widget updates to prevent too frequent updates
+    // Throttle widget updates to prevent too frequent updates (skipped for forced calls)
     final now = DateTime.now();
-    if (_lastWidgetUpdate != null && now.difference(_lastWidgetUpdate!).inMilliseconds < 1000) {
+    if (!forceUpdate && _lastWidgetUpdate != null && now.difference(_lastWidgetUpdate!).inMilliseconds < 1000) {
       LogHelper.shared.debugPrint('⏳ Throttling widget update (too frequent)');
       return;
     }
 
-    // Get Pro membership status from purchase provider
+    // Get Pro membership status from purchase provider (or UserDefaults if still loading)
     bool isProMember = false;
     if (_providerContainer != null) {
       try {
         final purchaseState = _providerContainer!.read(purchaseProvider);
-        isProMember = purchaseState.valueOrNull?.isSubscriptionActive ?? false;
-        LogHelper.shared.debugPrint('🔓 Pro membership status from purchase provider: $isProMember');
+        
+        // If the purchase provider is still loading, or if we somehow don't have a value yet,
+        // we must fallback to UserDefaults. Otherwise, we'll incorrectly push 'false' to
+        // the widget during app launch/resume (which locks the widget for Pro users).
+        if (purchaseState.isLoading || purchaseState.valueOrNull == null) {
+          LogHelper.shared.debugPrint('⏳ Purchase state is loading/null, falling back to UserDefaults for widget sync');
+          isProMember = await _getProStatusFromUserDefaults();
+        } else {
+          isProMember = purchaseState.value!.isSubscriptionActive;
+          LogHelper.shared.debugPrint('🔓 Pro membership status from purchase provider: $isProMember');
+        }
       } catch (e) {
         LogHelper.shared.debugPrint('⚠️ Could not get Pro status from purchase provider, trying UserDefaults fallback: $e');
         // Fallback to UserDefaults
@@ -161,7 +172,7 @@ class WidgetSyncService {
     try {
       // Update widget data using the method channel service
       final methodChannelStart = DateTime.now();
-      await _methodChannelService.updateWidgetData(habits, isProMember: isProMember);
+      await _methodChannelService.updateWidgetData(habits, isProMember: isProMember, forceUpdate: forceUpdate);
       final methodChannelEnd = DateTime.now();
       LogHelper.shared.debugPrint('📡 [PERF] Method channel update completed in ${methodChannelEnd.difference(methodChannelStart).inMilliseconds}ms');
 
@@ -268,7 +279,8 @@ class WidgetSyncService {
     }
   }
 
-  /// Force widget update with current Pro status (for debugging)
+  /// Force widget update with current Pro status — bypasses the debounce/throttle.
+  /// Use this when you specifically need fresh data pushed (e.g., on app resume).
   Future<void> forceWidgetUpdate() async {
     try {
       LogHelper.shared.debugPrint('🔄 Force updating widgets...');
@@ -277,7 +289,9 @@ class WidgetSyncService {
 
       LogHelper.shared.debugPrint('📊 Updating widgets with ${habits.length} habits');
 
-      await updateWidgetData(habits);
+      // Pass forceUpdate:true to bypass both the 1-second throttle and the
+      // 2-second habits-equal cache in WidgetMethodChannelService.
+      await _performWidgetDataUpdate(habits, forceUpdate: true);
 
       LogHelper.shared.debugPrint('✅ Widget update completed');
     } catch (e) {

@@ -68,7 +68,7 @@ struct LargeHabitProvider: AppIntentTimelineProvider {
                 flutterCurrentStreak: 0,
                 flutterCompletedDays: 0,
                 flutterTotalDays: 0,
-                isProMember: false
+                isProMember: nil,  // nil = unknown, never lock the placeholder
             ),
             heatmapData: [:]
         )
