@@ -1,5 +1,6 @@
 import 'package:logger/logger.dart';
 
+import '../../../services/crashlytics_service.dart';
 import '../../constants/debug_constants.dart';
 
 class LogHelper {
@@ -16,8 +17,15 @@ class LogHelper {
     if (KDebug.logDebugMode) _logger.w(message);
   }
 
+  /// Logs an error locally (debug only) and always forwards it to Crashlytics
+  /// as a non-fatal crash so production issues are visible in Firebase Console.
   void errorPrint(String message, [Object? error, StackTrace? stackTrace]) {
     if (KDebug.logDebugMode) _logger.e(message, error: error, stackTrace: stackTrace);
+    CrashlyticsService.recordError(
+      error ?? message,
+      stackTrace,
+      reason: message,
+    );
   }
 
   void whatTheFuckPrint(String message) {
@@ -29,8 +37,8 @@ class LogHelper {
     required String errorCode,
     required String methodCode,
   }) {
-    var errorText = errorMessage ?? "Something went wrong.";
-    errorPrint("ERROR OCCURED -> Code: $errorCode$methodCode");
-    return "$errorText | Code: $errorCode$methodCode";
+    final errorText = errorMessage ?? 'Something went wrong.';
+    errorPrint('ERROR OCCURED -> Code: $errorCode$methodCode');
+    return '$errorText | Code: $errorCode$methodCode';
   }
 }

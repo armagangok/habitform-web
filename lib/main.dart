@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -16,6 +19,8 @@ import 'core/helpers/notifications/notification_helper.dart';
 import 'core/helpers/notifications/timezone.dart';
 import 'core/theme/providers/theme_provider.dart';
 import 'features/auth/providers/auth_provider.dart';
+import 'services/analytics_service.dart';
+import 'services/crashlytics_service.dart';
 import 'features/habit_category/provider/habit_category_provider.dart';
 import 'features/home/provider/home_provider.dart';
 import 'features/home/views/pages/home_page.dart';
@@ -25,11 +30,31 @@ import 'firebase_options.dart';
 import 'services/habit_service/habit_service_interface.dart';
 import 'services/habit_service/local_habit_service.dart';
 
-void main() async {
+void main() {
+  runZonedGuarded(_bootstrap, (error, stack) {
+    CrashlyticsService.recordError(error, stack, fatal: true);
+  });
+}
+
+Future<void> _bootstrap() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+  FlutterError.onError = (details) {
+    FlutterError.presentError(details);
+    CrashlyticsService.recordError(
+      details.exception,
+      details.stack,
+      reason: details.exceptionAsString(),
+    );
+  };
+
+  PlatformDispatcher.instance.onError = (error, stack) {
+    CrashlyticsService.recordError(error, stack, fatal: true);
+    return true;
+  };
 
   // Lock orientation to portrait only for all platforms
   await SystemChrome.setPreferredOrientations([
@@ -122,6 +147,8 @@ class _MyAppState extends ConsumerState<MyApp> {
         next.whenData(
           (user) async {
             if (user != null) {
+              await AnalyticsService.setUserId(user.uid);
+              await CrashlyticsService.setUserId(user.uid);
               await PurchaseService.logIn(user.uid);
               await habitService.syncFromRemote();
 
@@ -135,6 +162,8 @@ class _MyAppState extends ConsumerState<MyApp> {
             } else {
               final hadUser = previous?.valueOrNull != null;
               if (hadUser) {
+                await AnalyticsService.setUserId(null);
+                await CrashlyticsService.setUserId(null);
                 // Invalidate providers to reset their state
                 ref.invalidate(homeProvider);
                 ref.invalidate(homeSummariesProvider);
