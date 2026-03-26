@@ -8,7 +8,8 @@ class KRoute {
   static const onboardingPaywall = '/onboardingPaywall';
   static const onboardingWelcome = '/onboardingWelcome';
   static const onboardingAppFeatures = '/onboardingAppFeatures';
-  static const onboardingRating = '/onboardingRating';
+  static const onboardingGoal = '/onboardingGoal';
+
 
   static const auth = '/auth';
   static const myAccount = '/myAccount';

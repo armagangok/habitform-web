@@ -486,6 +486,17 @@
         "achievement": {
             "first_habit_message": "Hienoa! Suoritit ensimmäisen tapasi käyttöönotossa!"
         },
+        "goals": {
+            "better_productivity": "Parempi tuottavuus",
+            "build_routine": "Rakenna rutiini",
+            "break_bad_habits": "Eroon huonoista tavoista",
+            "get_healthier": "Tule terveemmäksi",
+            "time_management": "Ajanhallinta",
+            "reduce_stress": "Vähennä stressiä",
+            "other": "Muu",
+            "page_title": "Mikä on päätavoitteesi?",
+            "page_subtitle": "Valitse yksi tai useampi personoidaksesi kokemuksesi"
+        },
         "app_features": {
             "continue": "Jatka",
             "features": {
@@ -796,7 +807,7 @@
         "estimated_probability_time": "Arvioitu todennäköisyysaika",
         "formation_info": "Yllä oleva prosenttiosuus näyttää, kuinka todennäköisesti tavasta tulee automaattinen nykyisen johdonmukaisuutesi perusteella. Korkeampi prosentti tarkoittaa suurempaa todennäköisyyttä.",
         "formation_probability": "Muodostumistodennäköisyys",
-        "habit_formation": "Habit Probability",
+        "habit_formation": "Tavan Todennäköisyys",
         "legend_60_75": "60–75%",
         "legend_75_90": "75–90%",
         "legend_above_90": "Yli 90%",

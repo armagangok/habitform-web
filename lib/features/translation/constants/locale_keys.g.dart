@@ -458,6 +458,15 @@ abstract class  LocaleKeys {
   static const notifications = 'notifications';
   static const onboarding_achievement_first_habit_message = 'onboarding.achievement.first_habit_message';
   static const onboarding_achievement = 'onboarding.achievement';
+  static const onboarding_goals_better_productivity = 'onboarding.goals.better_productivity';
+  static const onboarding_goals_build_routine = 'onboarding.goals.build_routine';
+  static const onboarding_goals_break_bad_habits = 'onboarding.goals.break_bad_habits';
+  static const onboarding_goals_get_healthier = 'onboarding.goals.get_healthier';
+  static const onboarding_goals_time_management = 'onboarding.goals.time_management';
+  static const onboarding_goals_reduce_stress = 'onboarding.goals.reduce_stress';
+  static const onboarding_goals_page_title = 'onboarding.goals.page_title';
+  static const onboarding_goals_page_subtitle = 'onboarding.goals.page_subtitle';
+  static const onboarding_goals = 'onboarding.goals';
   static const onboarding_app_features_continue = 'onboarding.app_features.continue';
   static const onboarding_app_features_features_cloud_sync_description = 'onboarding.app_features.features.cloud_sync.description';
   static const onboarding_app_features_features_cloud_sync_title = 'onboarding.app_features.features.cloud_sync.title';
@@ -692,6 +701,10 @@ abstract class  LocaleKeys {
   static const settings_review_request_subtitle = 'settings.review_request.subtitle';
   static const settings_review_request_title = 'settings.review_request.title';
   static const settings_review_request = 'settings.review_request';
+  static const settings_pro_features_title = 'settings.pro_features.title';
+  static const settings_pro_features_subtitle = 'settings.pro_features.subtitle';
+  static const settings_pro_features_description = 'settings.pro_features.description';
+  static const settings_pro_features = 'settings.pro_features';
   static const settings_settings = 'settings.settings';
   static const settings_system = 'settings.system';
   static const settings_terms = 'settings.terms';

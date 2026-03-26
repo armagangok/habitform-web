@@ -82,25 +82,14 @@ class CupertinoCard extends StatelessWidget {
   }
 
   BoxDecoration _buildDecoration(BuildContext context, bool isDark) {
-    final themeColor = color ?? (isDark ? CupertinoColors.tertiarySystemFill : CupertinoColors.tertiarySystemBackground);
+    final themeColor = color ?? (isDark ? CupertinoColors.tertiarySystemGroupedBackground.darkColor : CupertinoColors.white);
 
-    final radius = borderRadius ?? BorderRadius.circular(12);
-
-    List<BoxShadow>? shadows;
-    if (elevation > 0) {
-      shadows = [
-        BoxShadow(
-          color: (shadowColor ?? CupertinoColors.systemGrey).withValues(alpha: 0.1),
-          blurRadius: elevation * 2,
-          offset: Offset(0, elevation),
-        ),
-      ];
-    }
+    final radius = borderRadius ?? BorderRadius.circular(24);
 
     return BoxDecoration(
       color: themeColor,
       borderRadius: radius,
-      boxShadow: shadows,
+
       // iOS-style subtle border
       border: Border.all(
         color: borderColor ?? (isDark ? CupertinoColors.systemGrey6.withValues(alpha: 0.1) : CupertinoColors.systemGrey5.withValues(alpha: 0.3)),

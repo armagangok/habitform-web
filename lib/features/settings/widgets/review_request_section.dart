@@ -13,12 +13,18 @@ class ReviewRequestSection extends StatelessWidget {
         showCupertinoDialog(
           context: context,
           builder: (context) => CupertinoAlertDialog(
-            title: Text(LocaleKeys.onboarding_rating_thank_you.tr()),
-            content: Text(LocaleKeys.onboarding_rating_feedback_message.tr()),
+            title: Text(
+              context.tr(LocaleKeys.onboarding_rating_thank_you),
+            ),
+            content: Text(
+              context.tr(LocaleKeys.onboarding_rating_feedback_message),
+            ),
             actions: [
               CupertinoDialogAction(
                 onPressed: () => Navigator.of(context).pop(),
-                child: Text(LocaleKeys.onboarding_rating_continue.tr()),
+                child: Text(
+                  context.tr(LocaleKeys.onboarding_rating_continue),
+                ),
               ),
             ],
           ),
@@ -27,12 +33,18 @@ class ReviewRequestSection extends StatelessWidget {
         showCupertinoDialog(
           context: context,
           builder: (context) => CupertinoAlertDialog(
-            title: Text(LocaleKeys.onboarding_rating_rate_title.tr()),
-            content: Text(LocaleKeys.onboarding_rating_rate_message.tr()),
+            title: Text(
+              context.tr(LocaleKeys.onboarding_rating_rate_title),
+            ),
+            content: Text(
+              context.tr(LocaleKeys.onboarding_rating_rate_message),
+            ),
             actions: [
               CupertinoDialogAction(
                 onPressed: () => Navigator.of(context).pop(),
-                child: Text(LocaleKeys.onboarding_rating_continue.tr()),
+                child: Text(
+                  context.tr(LocaleKeys.onboarding_rating_continue),
+                ),
               ),
             ],
           ),
@@ -43,12 +55,18 @@ class ReviewRequestSection extends StatelessWidget {
       showCupertinoDialog(
         context: context,
         builder: (context) => CupertinoAlertDialog(
-          title: Text(LocaleKeys.onboarding_rating_rate_title.tr()),
-          content: Text(LocaleKeys.onboarding_rating_rate_message.tr()),
+          title: Text(
+            context.tr(LocaleKeys.onboarding_rating_rate_title),
+          ),
+          content: Text(
+            context.tr(LocaleKeys.onboarding_rating_rate_message),
+          ),
           actions: [
             CupertinoDialogAction(
               onPressed: () => Navigator.of(context).pop(),
-              child: Text(LocaleKeys.onboarding_rating_continue.tr()),
+              child: Text(
+                context.tr(LocaleKeys.onboarding_rating_continue),
+              ),
             ),
           ],
         ),
@@ -72,12 +90,12 @@ class ReviewRequestSection extends StatelessWidget {
             ),
           ),
           title: Text(
-            LocaleKeys.settings_review_request_title.tr(),
+            context.tr(LocaleKeys.settings_review_request_title),
             maxLines: 10,
             overflow: TextOverflow.ellipsis,
           ),
           subtitle: Text(
-            LocaleKeys.settings_review_request_subtitle.tr(),
+            context.tr(LocaleKeys.settings_review_request_subtitle),
             maxLines: 10,
             overflow: TextOverflow.ellipsis,
           ),

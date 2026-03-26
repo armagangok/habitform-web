@@ -2,8 +2,6 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 
-import '/core/extension/datetime_extension.dart';
-import '/models/habit/habit_model.dart';
 import '/models/habit/habit_summary.dart';
 import 'habit_canvas_model.dart';
 
@@ -61,66 +59,17 @@ class ConnectionPainter extends CustomPainter {
       final startColor = habitColors[resolved.fromId] ?? Colors.grey;
       final endColor = habitColors[resolved.toId] ?? Colors.grey;
 
-      final sequenceFulfilled = _isSequenceFulfilled(
-        resolved.fromId,
-        resolved.toId,
-        habitById,
-      );
-
       _drawConnection(
         canvas,
         Offset(positions[resolved.fromId]!.x, positions[resolved.fromId]!.y),
         Offset(positions[resolved.toId]!.x, positions[resolved.toId]!.y),
         startColor,
         endColor,
-        sequenceFulfilled,
       );
     }
   }
 
-  /// Both habits met daily target today, and first habit’s completion was updated
-  /// strictly before the second’s (requires non-null [todayCompletionUpdatedAt] on both).
-  bool _isSequenceFulfilled(
-    String fromId,
-    String toId,
-    Map<String, dynamic> habitById,
-  ) {
-    final first = habitById[fromId];
-    final second = habitById[toId];
-    if (first == null || second == null) return false;
 
-    if (!_habitTargetMetToday(first) || !_habitTargetMetToday(second)) {
-      return false;
-    }
-
-    final tFirst = _todayCompletionUpdatedAt(first);
-    final tSecond = _todayCompletionUpdatedAt(second);
-
-    // Strict: missing timestamps (legacy data) → keep wave until user gets new updates.
-    if (tFirst == null || tSecond == null) return false;
-    if (!tFirst.isBefore(tSecond)) return false;
-
-    return true;
-  }
-
-  bool _habitTargetMetToday(dynamic habit) {
-    if (habit is HabitSummary) return habit.todayIsCompleted;
-    if (habit is Habit) {
-      final today = DateTime.now().normalized;
-      final target = habit.dailyTarget <= 0 ? 1 : habit.dailyTarget;
-      return habit.getCountForDate(today) >= target;
-    }
-    return false;
-  }
-
-  DateTime? _todayCompletionUpdatedAt(dynamic habit) {
-    if (habit is HabitSummary) return habit.todayCompletionUpdatedAt;
-    if (habit is Habit) {
-      final today = DateTime.now().normalized;
-      return habit.getCompletionEntryForDate(today)?.updatedAt;
-    }
-    return null;
-  }
 
   /// Extracts the effective time-of-day for direction comparison.
   DateTime? _resolveEffectiveTime(dynamic habit) {
@@ -166,7 +115,6 @@ class ConnectionPainter extends CustomPainter {
     Offset end,
     Color startColor,
     Color endColor,
-    bool sequenceFulfilled,
   ) {
     final gradient = LinearGradient(
       colors: [startColor.withValues(), endColor.withValues()],
@@ -212,7 +160,6 @@ class ConnectionPainter extends CustomPainter {
       end,
       startColor,
       endColor,
-      sequenceFulfilled,
     );
 
     final dotPaint = Paint()..style = PaintingStyle.fill;
@@ -230,7 +177,7 @@ class ConnectionPainter extends CustomPainter {
     canvas.drawCircle(end, 10, ringPaint);
   }
 
-  /// Staggered scale wave along the curve, or static chevrons when [sequenceFulfilled].
+  /// Staggered scale wave along the curve.
   void _drawDirectionalArrows(
     Canvas canvas,
     Offset p0,
@@ -238,7 +185,6 @@ class ConnectionPainter extends CustomPainter {
     Offset p2,
     Color startColor,
     Color endColor,
-    bool sequenceFulfilled,
   ) {
     const arrowTs = [0.35, 0.5, 0.65];
     const baseChevronSize = 7.5;
@@ -253,16 +199,9 @@ class ConnectionPainter extends CustomPainter {
       final tangent = _quadraticBezierTangent(p0, p1, p2, t);
       final angle = math.atan2(tangent.dy, tangent.dx);
 
-      late final double scale;
-      late final double opacity;
-      if (sequenceFulfilled) {
-        scale = 1.0;
-        opacity = 0.92;
-      } else {
-        final phase = 2 * math.pi * (anim + i * phaseStep);
-        scale = 0.88 + 0.24 * (0.5 + 0.5 * math.sin(phase));
-        opacity = 0.82 + 0.18 * (0.5 + 0.5 * math.sin(phase + math.pi * 0.25));
-      }
+      final phase = 2 * math.pi * (anim + i * phaseStep);
+      final scale = 0.88 + 0.24 * (0.5 + 0.5 * math.sin(phase));
+      final opacity = 0.82 + 0.18 * (0.5 + 0.5 * math.sin(phase + math.pi * 0.25));
 
       final chevronSize = baseChevronSize * scale;
       final color = Color.lerp(startColor, endColor, t)!.withValues(alpha: opacity);
@@ -304,30 +243,6 @@ class ConnectionPainter extends CustomPainter {
     );
   }
 
-  /// Stable signature for completion-related fields on habits that appear in [connections].
-  String _habitCompletionSignature() {
-    final endpointIds = <String>{};
-    for (final c in connections) {
-      endpointIds.add(c.fromHabitId);
-      endpointIds.add(c.toHabitId);
-    }
-    final buf = StringBuffer();
-    for (final habit in habits) {
-      final id = habit.id as String;
-      if (!endpointIds.contains(id)) continue;
-      final updated = _todayCompletionUpdatedAt(habit)?.millisecondsSinceEpoch ?? -1;
-      if (habit is HabitSummary) {
-        buf.write('$id:${habit.todayCount}:${habit.todayIsCompleted}:$updated;');
-      } else if (habit is Habit) {
-        final today = DateTime.now().normalized;
-        final count = habit.getCountForDate(today);
-        final target = habit.dailyTarget <= 0 ? 1 : habit.dailyTarget;
-        buf.write('$id:$count:${count >= target}:$updated;');
-      }
-    }
-    return buf.toString();
-  }
-
   @override
   bool shouldRepaint(covariant ConnectionPainter oldDelegate) {
     if (oldDelegate.isDark != isDark) return true;
@@ -347,8 +262,6 @@ class ConnectionPainter extends CustomPainter {
       final newToPos = positions[connection.toHabitId];
       if (oldToPos?.x != newToPos?.x || oldToPos?.y != newToPos?.y) return true;
     }
-
-    if (oldDelegate._habitCompletionSignature() != _habitCompletionSignature()) return true;
 
     return false;
   }

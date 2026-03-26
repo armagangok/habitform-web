@@ -486,6 +486,17 @@
         "achievement": {
             "first_habit_message": "عمل رائع! لقد أكملت أول عادة لك في مرحلة البدء!"
         },
+        "goals": {
+            "better_productivity": "إنتاجية أفضل",
+            "build_routine": "بناء روتين",
+            "break_bad_habits": "التخلص من العادات السيئة",
+            "get_healthier": "كن أكثر صحة",
+            "time_management": "إدارة الوقت",
+            "reduce_stress": "تقليل التوتر",
+            "other": "آخر",
+            "page_title": "ما هو هدفك الرئيسي؟",
+            "page_subtitle": "حدد واحدًا أو أكثر لتخصيص تجربتك"
+        },
         "app_features": {
             "continue": "متابعة",
             "features": {
@@ -785,18 +796,18 @@
         "this_month": "هذا الشهر:"
     },
     "statistics": {
-        "about_formation": "About Habit Probability",
-        "about_formation_title": "About Probability",
+        "about_formation": "حول احتمالية العادة",
+        "about_formation_title": "حول الاحتمالية",
         "chart_labels": {
             "demo_data_message": "هذه بيانات تجريبية. قم بالترقية لفتح البيانات الحقيقية",
             "upgrade_button": "ترقية"
         },
         "completed": "مكتمل",
         "current_streak": "السلسلة الحالية",
-        "estimated_probability_time": "Estimated Probability Time",
+        "estimated_probability_time": "وقت الاحتمالية المقدر",
         "formation_info": "تُظهر النسبة أعلاه مدى احتمالية أن تصبح عادتك تلقائية بناءً على اتساقك الحالي. كلما ارتفعت النسبة، زادت فرص ترسخ العادة. وفقًا للأبحاث، يستغرق الأمر في المتوسط 66 يومًا من الممارسة المنتظمة لتصبح العادة تلقائية.",
         "formation_probability": "احتمالية التشكّل",
-        "habit_formation": "Habit Probability",
+        "habit_formation": "احتمالية العادة",
         "legend_60_75": "60-75%",
         "legend_75_90": "75-90%",
         "legend_above_90": "أكثر من 90%",

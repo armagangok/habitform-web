@@ -486,6 +486,17 @@
         "achievement": {
             "first_habit_message": "Excellent travail ! Vous avez terminé votre première habitude dans l'intégration !"
         },
+        "goals": {
+            "better_productivity": "Meilleure productivité",
+            "build_routine": "Créer une routine",
+            "break_bad_habits": "Arrêter les mauvaises habitudes",
+            "get_healthier": "Être en meilleure santé",
+            "time_management": "Gestion du temps",
+            "reduce_stress": "Réduire le stress",
+            "other": "Autre",
+            "page_title": "Quel est votre objectif principal ?",
+            "page_subtitle": "Sélectionnez-en un ou plusieurs pour personnaliser votre expérience"
+        },
         "app_features": {
             "continue": "Continuer",
             "features": {
@@ -785,18 +796,18 @@
         "this_month": "Ce mois-ci :"
     },
     "statistics": {
-        "about_formation": "About Habit Probability",
-        "about_formation_title": "About Probability",
+        "about_formation": "À propos de la probabilité d'habitude",
+        "about_formation_title": "À propos de la probabilité",
         "chart_labels": {
             "demo_data_message": "Ce sont des données de démonstration, mettez à niveau pour débloquer les vraies données",
             "upgrade_button": "Mettre à niveau"
         },
         "completed": "Terminé",
         "current_streak": "Série actuelle",
-        "estimated_probability_time": "Estimated Probability Time",
+        "estimated_probability_time": "Temps de formation estimé",
         "formation_info": "Le pourcentage ci-dessus montre la probabilité que votre habitude devienne automatique basée sur votre constance actuelle. Des pourcentages plus élevés signifient que votre habitude est plus susceptible de tenir. Selon la recherche, il faut en moyenne 66 jours de pratique régulière pour qu'une habitude devienne automatique.",
         "formation_probability": "Probabilité de Formation",
-        "habit_formation": "Habit Probability",
+        "habit_formation": "Probabilité d'habitude",
         "legend_60_75": "60-75%",
         "legend_75_90": "75-90%",
         "legend_above_90": "Au-dessus de 90%",

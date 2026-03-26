@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '/core/core.dart';
-import '/features/habit_category/provider/habit_category_provider.dart';
 import '/features/purchase/providers/purchase_provider.dart';
 import '/features/reminder/service/reminder_service.dart';
 import '/models/completion_entry/completion_entry.dart';
@@ -19,44 +18,41 @@ import 'home_summaries_state.dart';
 /// Optimized with memoization: Riverpod automatically caches results when dependencies don't change
 final filteredHabitsProvider = Provider<List<Habit>>((ref) {
   final homeState = ref.watch(homeProvider);
-  final selectedCategories = ref.watch(selectedCategoriesProvider);
-
   final habits = homeState.value?.habits ?? [];
 
-  // Return all habits if no categories are selected
-  if (selectedCategories.isEmpty) {
-    return habits;
+  // Categorization is not used on the main page for now, so we disable filtering.
+  // Return all habits even if there are selected categories.
+  /*
+  final selectedCategories = ref.watch(selectedCategoriesProvider);
+  if (selectedCategories.isNotEmpty) {
+    return habits.where((habit) {
+      return habit.categoryIds.any((categoryId) => selectedCategories.contains(categoryId));
+    }).toList();
   }
+  */
 
-  // Filter habits based on selected categories
-  final filteredHabits = habits.where((habit) {
-    // Check if the habit has any of the selected categories
-    return habit.categoryIds.any((categoryId) => selectedCategories.contains(categoryId));
-  }).toList();
-
-  return filteredHabits;
+  return habits;
 });
 
 /// Provider for filtered habit summaries based on selected categories
 /// Optimized for main page rendering with lightweight data
 final filteredHabitSummariesProvider = Provider<List<HabitSummary>>((ref) {
   final summariesState = ref.watch(homeSummariesProvider);
-  final selectedCategories = ref.watch(selectedCategoriesProvider);
 
   final summaries = summariesState.value?.summaries ?? [];
 
-  // Return all summaries if no categories are selected
-  if (selectedCategories.isEmpty) {
-    return summaries;
+  // Categorization is not used on the main page for now, so we disable filtering.
+  // Return all summaries even if there are selected categories.
+  /*
+  final selectedCategories = ref.watch(selectedCategoriesProvider);
+  if (selectedCategories.isNotEmpty) {
+    return summaries.where((summary) {
+      return summary.categoryIds.any((categoryId) => selectedCategories.contains(categoryId));
+    }).toList();
   }
+  */
 
-  // Filter summaries based on selected categories
-  final filteredSummaries = summaries.where((summary) {
-    // Check if the summary has any of the selected categories
-    return summary.categoryIds.any((categoryId) => selectedCategories.contains(categoryId));
-  }).toList();
-
-  return filteredSummaries;
+  return summaries;
 });
 
 /// Provider for managing habit summaries in the home screen (lightweight data)

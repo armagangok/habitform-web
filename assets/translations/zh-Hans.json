@@ -486,6 +486,17 @@
         "achievement": {
             "first_habit_message": "太棒了！你在引导中完成了第一个习惯！"
         },
+        "goals": {
+            "better_productivity": "提高生产力",
+            "build_routine": "建立常规",
+            "break_bad_habits": "戒掉坏习惯",
+            "get_healthier": "变得更健康",
+            "time_management": "时间管理",
+            "reduce_stress": "减轻压力",
+            "other": "其他",
+            "page_title": "您的主要目标是什么？",
+            "page_subtitle": "选择一个或多个以个性化您的体验"
+        },
         "app_features": {
             "continue": "继续",
             "features": {
@@ -796,7 +807,7 @@
         "estimated_probability_time": "估计概率时间",
         "formation_info": "上面的百分比显示基于你当前一致性，你的习惯变得自动化的可能性。百分比越高意味着你的习惯越可能坚持。根据研究，习惯平均需要66天的规律练习才能变得自动化。",
         "formation_probability": "形成概率",
-        "habit_formation": "Habit Probability",
+        "habit_formation": "养成概率",
         "legend_60_75": "60-75%",
         "legend_75_90": "75-90%",
         "legend_above_90": "高于90%",

@@ -9,8 +9,9 @@ import '/features/settings/pages/notifications_page.dart';
 import '/features/settings/pages/pro_features_page.dart';
 import '/features/settings/settings_page.dart';
 import '../../features/onboarding/pages/onboarding_app_features_page.dart';
-import '../../features/onboarding/pages/onboarding_rating_page.dart';
+import '../../features/onboarding/pages/onboarding_goal_page.dart';
 import '../../features/onboarding/pages/onboarding_welcome_page.dart';
+import '../../features/purchase/page/pre_paywall_page.dart';
 import '../core.dart';
 
 @immutable
@@ -44,8 +45,15 @@ final class NavigationRoute {
       case KRoute.onboardingAppFeatures:
         return _getRoute(page: const OnboardingAppFeaturesPage(), settings: args);
 
-      case KRoute.onboardingRating:
-        return _getRoute(page: const OnboardingRatingPage(), settings: args);
+      case KRoute.onboardingGoal:
+        return _getRoute(page: const OnboardingGoalPage(), settings: args);
+
+      // PrePaywall warm-up screen — shown between Rating and native paywall
+      case KRoute.onboardingPaywall:
+        return _getRoute(
+          page: const PrePaywallPage(isFromOnboarding: true),
+          settings: args,
+        );
 
       case KRoute.habitCategoryPage:
         return _getRoute(page: const HabitCategoryPage(), settings: args);
@@ -61,18 +69,6 @@ final class NavigationRoute {
           ),
           settings: args,
         );
-
-      // case KRoute.prePaywall:
-      //   final data = args.arguments as Map<String, Object?>?;
-      //   final isFromOnboarding = data != null ? data['isFromOnboarding'] as bool? : false;
-      //   final isFromSettings = data != null ? data['isFromSettings'] as bool? : false;
-      //   return _getRoute(
-      //     page: PaywallPage(
-      //       isFromOnboarding: isFromOnboarding ?? false,
-      //       isFromSettings: isFromSettings ?? false,
-      //     ),
-      //     settings: args,
-      //   );
 
       case KRoute.auth:
         return _getRoute(page: const AuthPage(), settings: args);

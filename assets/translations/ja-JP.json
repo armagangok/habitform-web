@@ -486,6 +486,17 @@
         "achievement": {
             "first_habit_message": "素晴らしい！オンボーディングで最初の習慣を完了しました！"
         },
+        "goals": {
+            "better_productivity": "生産性の向上",
+            "build_routine": "ルーチンの構築",
+            "break_bad_habits": "悪い習慣を断ち切る",
+            "get_healthier": "より健康になる",
+            "time_management": "時間管理",
+            "reduce_stress": "ストレスを軽減する",
+            "other": "その他",
+            "page_title": "あなたの主な目標は何ですか？",
+            "page_subtitle": "体験をパーソナライズするために1つ以上選択してください"
+        },
         "app_features": {
             "continue": "続ける",
             "features": {
@@ -796,7 +807,7 @@
         "estimated_probability_time": "推定確率時間",
         "formation_info": "上記のパーセンテージは、現在の一貫性に基づいて習慣が自動的になる可能性を示しています。パーセンテージが高いほど、習慣が定着する可能性が高くなります。研究によると、習慣が自動的になるまで平均66日間の定期的な練習が必要です。",
         "formation_probability": "形成確率",
-        "habit_formation": "Habit Probability",
+        "habit_formation": "習慣の確率",
         "legend_60_75": "60-75%",
         "legend_75_90": "75-90%",
         "legend_above_90": "90%以上",

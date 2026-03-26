@@ -7,6 +7,7 @@ import '../../../core/constants/debug_constants.dart';
 import '../../../core/core.dart';
 import '../../../models/revenue_cat_device_record/revenue_cat_device_record.dart';
 import '../../../models/user_defaults/user_defaults.dart';
+import '../../../services/analytics_service.dart';
 import '../../../services/device_metadata_service.dart';
 import '../../../services/sync_service.dart';
 import '../models/paywall_state.dart';
@@ -391,6 +392,7 @@ class PurchaseNotifier extends AsyncNotifier<PaywallState> {
 
     switch (result) {
       case PaywallResult.purchased:
+        AnalyticsService.logPaywallConverted(plan: offering?.identifier ?? 'unknown');
         AppFlushbar.shared.successFlushbar(LocaleKeys.subscription_purchaseSuccessful.tr());
         break;
       case PaywallResult.restored:

@@ -9,28 +9,34 @@ class MembershipInfoButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return CustomListTile(
-      leading: FaIcon(
-        FontAwesomeIcons.caretDown,
-        color: Colors.white.withValues(alpha: .9),
-      ),
-      title: LocaleKeys.membership_info_title.tr(),
-      onTap: () async {
-        await ref.read(purchaseProvider.notifier).presentCustomerCenter();
-      },
-      trailing: const CupertinoListTileChevron(),
-      additionalInfo: Row(
-        mainAxisSize: MainAxisSize.min,
+    return CustomSection(
+      child: Column(
         children: [
-          CupertinoCard(
-            color: context.primary,
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
-            child: Text(
-              'Pro',
-              style: context.titleMedium.copyWith(
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-              ),
+          CustomListTile(
+            leading: FaIcon(
+              FontAwesomeIcons.info,
+              color: context.primaryContrastingColor,
+            ),
+            title: context.tr(LocaleKeys.membership_info_title),
+            onTap: () async {
+              await ref.read(purchaseProvider.notifier).presentCustomerCenter();
+            },
+            trailing: const CupertinoListTileChevron(),
+            additionalInfo: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                CupertinoCard(
+                  color: context.primary,
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+                  child: Text(
+                    'Pro',
+                    style: context.titleMedium.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
         ],

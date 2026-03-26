@@ -45,7 +45,7 @@ class SubscribeButton extends ConsumerWidget {
                   ),
                   children: [
                     TextSpan(
-                      text: LocaleKeys.subscription_subscribe_to.tr(),
+                      text: context.tr(LocaleKeys.subscription_subscribe_to),
                       style: context.titleMedium.copyWith(
                         fontWeight: FontWeight.bold,
                       ),
@@ -82,7 +82,7 @@ class SubscribeButton extends ConsumerWidget {
             ],
           ),
           subtitle: Text(
-            LocaleKeys.subscription_tap_advantages.tr(),
+            context.tr(LocaleKeys.subscription_tap_advantages),
             textAlign: TextAlign.start,
             style: context.bodySmall.copyWith(
               color: context.cupertinoTextTheme.textStyle.color?.withValues(alpha: 0.7),

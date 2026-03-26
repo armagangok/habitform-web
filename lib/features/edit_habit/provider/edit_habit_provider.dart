@@ -4,7 +4,6 @@ import '/core/core.dart';
 import '/models/habit/habit_difficulty.dart';
 import '/models/habit/habit_model.dart';
 import '../../habit_category/provider/habit_category_button_provider.dart';
-import '../../habit_category/provider/habit_category_provider.dart';
 import '../../habit_color/provider/habit_color_provider.dart';
 import '../../habit_detail/providers/habit_detail_provider.dart';
 import '../../habit_emoji/provider/emoji_picker_provider.dart';
@@ -37,12 +36,11 @@ class EditHabitNotifier extends AutoDisposeNotifier<Habit?> {
     if (habit.emoji != null && habit.emoji!.isNotEmpty) {
       ref.read(emojiPickerProvider.notifier).initializeWithSelectedIcon(habit.emoji);
     }
-    ref.watch(colorProvider.notifier).pickColor(Color(habit.colorCode));
+    ref.read(colorProvider.notifier).pickColor(Color(habit.colorCode));
 
-    ref.watch(habitCategoryProvider.notifier).setSelectedCategories(habit.categoryIds.toSet());
-    ref.watch(categoryButtonProvider.notifier).setSelectedCategories(habit.categoryIds);
+    ref.read(categoryButtonProvider.notifier).setSelectedCategories(habit.categoryIds);
 
-    ref.watch(reminderProvider.notifier).initializeReminder(reminder);
+    ref.read(reminderProvider.notifier).initializeReminder(reminder);
     state = habit;
   }
 
@@ -106,20 +104,20 @@ class EditHabitNotifier extends AutoDisposeNotifier<Habit?> {
     }
 
     final habitDescription = habitDescriptionController.text;
-    final reminderState = ref.watch(reminderProvider);
-    final habitEmojiState = ref.watch(emojiPickerProvider).selectedEmoji;
-    final habitColorState = ref.watch(colorProvider);
+    final reminderState = ref.read(reminderProvider);
+    final habitEmojiState = ref.read(emojiPickerProvider).selectedEmoji;
+    final habitColorState = ref.read(colorProvider);
     final reminderModel = reminderState.reminder;
 
-    final categoryIds = ref.watch(categoryButtonProvider) ?? [];
+    final categoryIds = ref.read(categoryButtonProvider) ?? [];
 
     // Mevcut alışkanlığın hatırlatıcısını al
     final currentReminderModel = state?.reminderModel;
 
     // Store references to notifiers before making any state changes
-    final habitDetailNotifier = ref.watch(habitDetailProvider.notifier);
-    final homeNotifier = ref.watch(homeProvider.notifier);
-    final reminderNotifier = ref.watch(reminderProvider.notifier);
+    final habitDetailNotifier = ref.read(habitDetailProvider.notifier);
+    final homeNotifier = ref.read(homeProvider.notifier);
+    final reminderNotifier = ref.read(reminderProvider.notifier);
 
     final updatedHabit = state?.copyWith(
       habitName: habitName,

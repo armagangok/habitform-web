@@ -3,6 +3,7 @@ import 'dart:math';
 import 'dart:ui' as ui;
 
 import '../../../core/core.dart';
+import '../../../services/analytics_service.dart';
 
 /// Onboarding - App Features page
 ///
@@ -367,12 +368,13 @@ class _OnboardingAppFeaturesPageState extends State<OnboardingAppFeaturesPage> w
   }
 
   void _completeOnboarding() {
-    // Proceed to the next step (rating) after features are done
+    // Proceed directly to the pre-paywall warm-up screen instead of the rating page
+    AnalyticsService.logOnboardingStep('features_completed');
     if (widget.onContinue != null) {
       widget.onContinue!();
     } else {
       if (mounted) {
-        navigator.navigateAndClear(path: KRoute.onboardingRating);
+        navigator.navigateAndClear(path: KRoute.onboardingPaywall);
       }
     }
   }

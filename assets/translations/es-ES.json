@@ -486,6 +486,17 @@
         "achievement": {
             "first_habit_message": "¡Excelente trabajo! ¡Completaste tu primer hábito en la introducción!"
         },
+        "goals": {
+            "better_productivity": "Mejor productividad",
+            "build_routine": "Crear una rutina",
+            "break_bad_habits": "Romper malos hábitos",
+            "get_healthier": "Estar más saludable",
+            "time_management": "Gestión del tiempo",
+            "reduce_stress": "Reducir el estrés",
+            "other": "Otro",
+            "page_title": "¿Cuál es tu objetivo principal?",
+            "page_subtitle": "Selecciona uno o más para personalizar tu experiencia"
+        },
         "app_features": {
             "continue": "Continuar",
             "features": {
@@ -796,7 +807,7 @@
         "estimated_probability_time": "Tiempo Estimado de Probabilidad",
         "formation_info": "El porcentaje de arriba muestra qué tan probable es que tu hábito se vuelva automático basado en tu consistencia actual. Porcentajes más altos significan que es más probable que tu hábito se mantenga. Según la investigación, se necesitan en promedio 66 días de práctica regular para que un hábito se vuelva automático.",
         "formation_probability": "Probabilidad de Formación",
-        "habit_formation": "Habit Probability",
+        "habit_formation": "Probabilidad del Hábito",
         "legend_60_75": "60-75%",
         "legend_75_90": "75-90%",
         "legend_above_90": "Por encima del 90%",

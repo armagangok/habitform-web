@@ -486,6 +486,17 @@
         "achievement": {
             "first_habit_message": "Harika iş! Onboarding sırasında ilk alışkanlığınızı tamamladınız!"
         },
+        "goals": {
+            "better_productivity": "Daha İyi Üretkenlik",
+            "build_routine": "Rutin Oluştur",
+            "break_bad_habits": "Kötü Alışkanlıkları Bırak",
+            "get_healthier": "Daha Sağlıklı Ol",
+            "time_management": "Zaman Yönetimi",
+            "reduce_stress": "Stresi Azalt",
+            "other": "Diğer",
+            "page_title": "Ana hedefiniz nedir?",
+            "page_subtitle": "Deneyiminizi kişiselleştirmek için bir veya daha fazlasını seçin"
+        },
         "app_features": {
             "continue": "Devam",
             "features": {
@@ -785,18 +796,18 @@
         "this_month": "Bu ay:"
     },
     "statistics": {
-        "about_formation": "About Habit Probability",
-        "about_formation_title": "About Probability",
+        "about_formation": "Alışkanlık Olasılığı Hakkında",
+        "about_formation_title": "Olasılık Hakkında",
         "chart_labels": {
             "demo_data_message": "Bu demo verisidir, gerçek verileri açmak için yükseltin",
             "upgrade_button": "Yükselt"
         },
         "completed": "Tamamlandı",
         "current_streak": "Mevcut Seri",
-        "estimated_probability_time": "Estimated Probability Time",
+        "estimated_probability_time": "Tahmini Oluşum Süresi",
         "formation_info": "Yukarıdaki yüzde, alışkanlığınızın mevcut tutarlılığınıza göre otomatik hale gelme olasılığını gösterir. Daha yüksek yüzdeler, alışkanlığınızın kalıcı olma olasılığının daha yüksek olduğu anlamına gelir. Araştırmalara göre, bir alışkanlığın otomatik hale gelmesi için ortalama 66 günlük düzenli pratik gerekir.",
         "formation_probability": "Oluşum Olasılığı",
-        "habit_formation": "Habit Probability",
+        "habit_formation": "Alışkanlık Olasılığı",
         "legend_60_75": "%60-75",
         "legend_75_90": "%75-90",
         "legend_above_90": "%90 Üstü",

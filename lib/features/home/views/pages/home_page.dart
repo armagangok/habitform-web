@@ -29,35 +29,48 @@ class _HomePageState extends ConsumerState<HomePage> {
   }
 
   Future<void> _checkLoginSyncAlert() async {
-    // 1. Check Auth status
-    final user = ref.read(authStateProvider).valueOrNull;
-    final isLoggedOut = user == null;
-    if (!isLoggedOut) return;
+    // 1. Ensure we have the latest status by waiting for the providers to initialize
+    // This prevents the dialog from showing incorrectly while data is still loading
+    final paywallState = await ref.read(purchaseProvider.future);
+    final user = await ref.read(authStateProvider.future);
 
-    // 2. Show Alert
+    final isPro = paywallState.isSubscriptionActive;
+    final isLoggedOut = user == null;
+
+    // 2. Already signed in and is pro? No need to show sync alert.
+    if (isPro && !isLoggedOut) return;
+
+    // 3. Already pro but logged out? Recommend cloud sync (account linking/signup).
+    // Or not pro? Recommend cloud sync + pro features.
+
+    // 4. Show Alert
     if (!mounted) return;
 
     showCupertinoDialog(
       context: context,
       builder: (context) => CupertinoAlertDialog(
-        title: Text(LocaleKeys.auth_pro_login_alert_title.tr()),
-        content: Text(LocaleKeys.auth_pro_login_alert_message.tr()),
+        title: Text(isLoggedOut ? context.tr(LocaleKeys.auth_pro_login_alert_title) : context.tr(LocaleKeys.auth_cloud_sync_pro_title)),
+        content: Text(isLoggedOut ? context.tr(LocaleKeys.auth_pro_login_alert_message) : context.tr(LocaleKeys.auth_cloud_sync_pro_message)),
         actions: [
           CupertinoDialogAction(
             onPressed: () => Navigator.pop(context),
-            child: Text(LocaleKeys.common_cancel.tr()),
+            child: Text(context.tr(LocaleKeys.common_later)),
           ),
           CupertinoDialogAction(
             isDefaultAction: true,
             onPressed: () {
               Navigator.pop(context);
-              showCupertinoSheet(
-                enableDrag: true,
-                context: context,
-                builder: (contextFromSheet) => const MyAccountPage(isFromHome: true),
-              );
+              if (isLoggedOut) {
+                showCupertinoSheet(
+                  enableDrag: true,
+                  context: context,
+                  builder: (contextFromSheet) => const MyAccountPage(isFromHome: true),
+                );
+              } else {
+                ref.read(purchaseProvider.notifier).presentPaywall(isFromOnboarding: false);
+              }
             },
-            child: Text(LocaleKeys.auth_pro_login_alert_action.tr()),
+            child: Text(isLoggedOut ? context.tr(LocaleKeys.auth_pro_login_alert_action) : context.tr(LocaleKeys.auth_cloud_sync_pro_cta)),
           ),
         ],
       ),
@@ -282,7 +295,7 @@ class _HomePageState extends ConsumerState<HomePage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                LocaleKeys.habit_no_habit_found.tr(),
+                context.tr(LocaleKeys.habit_no_habit_found),
                 style: context.titleLarge.copyWith(
                   fontWeight: FontWeight.w500,
                   color: CupertinoTheme.of(context).brightness == Brightness.dark ? Colors.white.withValues(alpha: 0.9) : Colors.black87,
@@ -296,7 +309,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                   _openCreateHabitPage(context);
                 },
                 child: Text(
-                  LocaleKeys.create_habit_create_habit.tr(),
+                  context.tr(LocaleKeys.create_habit_create_habit),
                   style: context.titleLarge.copyWith(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
@@ -315,7 +328,7 @@ class _HomePageState extends ConsumerState<HomePage> {
       child: Builder(
         builder: (context) {
           return Text(
-            LocaleKeys.errors_something_went_wrong.tr(),
+            context.tr(LocaleKeys.errors_something_went_wrong),
             style: context.bodyMedium,
             textAlign: TextAlign.center,
           );
@@ -334,7 +347,7 @@ class _HomePageState extends ConsumerState<HomePage> {
               const CupertinoActivityIndicator(),
               const SizedBox(height: 10),
               Text(
-                LocaleKeys.common_loading_habits.tr(),
+                context.tr(LocaleKeys.common_loading_habits),
                 style: context.bodyMedium,
                 textAlign: TextAlign.center,
               ),

@@ -116,32 +116,37 @@ class _MyAppState extends ConsumerState<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    ref.listen(authStateProvider, (previous, next) {
-      next.whenData((user) async {
-        if (user != null) {
-          await PurchaseService.logIn(user.uid);
-          await habitService.syncFromRemote();
+    ref.listen(
+      authStateProvider,
+      (previous, next) {
+        next.whenData(
+          (user) async {
+            if (user != null) {
+              await PurchaseService.logIn(user.uid);
+              await habitService.syncFromRemote();
 
-          // Re-validate home data
-          ref.invalidate(homeProvider);
-          ref.invalidate(homeSummariesProvider);
+              // Re-validate home data
+              ref.invalidate(homeProvider);
+              ref.invalidate(homeSummariesProvider);
 
-          // Let purchaseProvider handle the subscription state correctly
-          // instead of manually overwriting Hive here with potentially stale Firestore data
-          ref.invalidate(purchaseProvider);
-        } else {
-          final hadUser = previous?.valueOrNull != null;
-          if (hadUser) {
-            // Invalidate providers to reset their state
-            ref.invalidate(homeProvider);
-            ref.invalidate(homeSummariesProvider);
-            ref.invalidate(purchaseProvider);
-            ref.invalidate(habitCategoryProvider);
-            ref.invalidate(selectedCategoriesProvider);
-          }
-        }
-      });
-    });
+              // Let purchaseProvider handle the subscription state correctly
+              // instead of manually overwriting Hive here with potentially stale Firestore data
+              ref.invalidate(purchaseProvider);
+            } else {
+              final hadUser = previous?.valueOrNull != null;
+              if (hadUser) {
+                // Invalidate providers to reset their state
+                ref.invalidate(homeProvider);
+                ref.invalidate(homeSummariesProvider);
+                ref.invalidate(purchaseProvider);
+                ref.invalidate(habitCategoryProvider);
+                ref.invalidate(selectedCategoriesProvider);
+              }
+            }
+          },
+        );
+      },
+    );
 
     final themeMode = ref.watch(themeProvider);
     // EasyLocalization drives locale; no custom provider to avoid conflicts

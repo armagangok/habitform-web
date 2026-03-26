@@ -486,6 +486,17 @@
         "achievement": {
             "first_habit_message": "Ottimo lavoro! Hai completato la tua prima abitudine nell'onboarding!"
         },
+        "goals": {
+            "better_productivity": "Migliore produttività",
+            "build_routine": "Costruire una routine",
+            "break_bad_habits": "Rompere le cattive abitudini",
+            "get_healthier": "Diventare più sani",
+            "time_management": "Gestione del tempo",
+            "reduce_stress": "Ridurre lo stress",
+            "other": "Altro",
+            "page_title": "Qual è il tuo obiettivo principale?",
+            "page_subtitle": "Seleziona uno o più per personalizzare la tua esperienza"
+        },
         "app_features": {
             "continue": "Continua",
             "features": {
@@ -796,7 +807,7 @@
         "estimated_probability_time": "Tempo Stimato di Probabilità",
         "formation_info": "La percentuale sopra mostra quanto è probabile che la tua abitudine diventi automatica in base alla tua attuale costanza. Percentuali più alte significano che è più probabile che la tua abitudine resti. Secondo la ricerca, occorrono in media 66 giorni di pratica regolare affinché un'abitudine diventi automatica.",
         "formation_probability": "Probabilità di Formazione",
-        "habit_formation": "Habit Probability",
+        "habit_formation": "Probabilità Abitudine",
         "legend_60_75": "60-75%",
         "legend_75_90": "75-90%",
         "legend_above_90": "Oltre il 90%",

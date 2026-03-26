@@ -12,11 +12,11 @@ class ProFeaturesSection extends ConsumerWidget {
     return ClipRRect(
       borderRadius: BorderRadius.circular(24),
       child: CustomSection(
-        footer: Text(context.tr('settings.pro_features.subtitle')),
+        footer: Text(context.tr(LocaleKeys.settings_pro_features_subtitle)),
         child: Column(
           children: [
             CustomListTile(
-              title: context.tr('settings.pro_features.title'),
+              title: context.tr(LocaleKeys.settings_pro_features_title),
               onTap: () => navigator.navigateTo(path: KRoute.proFeatures),
               trailing: const CupertinoListTileChevron(),
               additionalInfo: Row(

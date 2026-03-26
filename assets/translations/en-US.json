@@ -486,6 +486,17 @@
         "achievement": {
             "first_habit_message": "Great job! You completed your first habit in the onboarding!"
         },
+        "goals": {
+            "better_productivity": "Better Productivity",
+            "build_routine": "Build a Routine",
+            "break_bad_habits": "Break Bad Habits",
+            "get_healthier": "Get Healthier",
+            "time_management": "Time Management",
+            "reduce_stress": "Reduce Stress",
+            "other": "Other",
+            "page_title": "What's your main goal?",
+            "page_subtitle": "Select one or more to personalize your experience"
+        },
         "app_features": {
             "continue": "Continue",
             "features": {

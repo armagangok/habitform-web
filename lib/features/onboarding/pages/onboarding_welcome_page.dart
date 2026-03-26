@@ -7,6 +7,7 @@ import '../../../core/core.dart';
 import '../../../models/completion_entry/completion_entry.dart';
 import '../../../models/habit/habit_difficulty.dart';
 import '../../../models/habit/habit_model.dart';
+import '../../../services/analytics_service.dart';
 import '../../home/components/habit_probability_dialog.dart';
 import '../../home/views/widgets/habit_canvas/circular_habit_preview_widget.dart';
 import '../enum/onboarding_step_enum.dart';
@@ -342,12 +343,14 @@ class _OnboardingWelcomePageState extends State<OnboardingWelcomePage> with Tick
                     // Bottom CTA button - Fixed positioning at bottom
                     if (!(_currentStep == OnboardingStep.exerciseCardInCenter && !_showMotivationalMessage) && (_currentStep != OnboardingStep.completed || _showFinalCta))
                       Positioned(
-                        bottom: context.height(0.022), // Responsive spacing from bottom
+                        bottom: context.height(0.022),
                         left: 0,
                         right: 0,
                         child: _BottomCtaButton(
                           arrowOffsetX: _arrowOffsetX,
                           onPressed: _isButtonDisabled ? null : _onCtaPressed,
+                          // Show a motivating label once the aha-moment is complete
+                          label: _currentStep == OnboardingStep.completed && _showFinalCta ? 'See my plan' : null,
                         ),
                       ),
                     // Center-step instruction (below the card area)
@@ -597,9 +600,10 @@ class _OnboardingWelcomePageState extends State<OnboardingWelcomePage> with Tick
       case OnboardingStep.completed:
         // Final step - handle final CTA button press
         if (_showFinalCta) {
-          // Navigate directly to app features page
+          AnalyticsService.logOnboardingStep('welcome_completed');
+          // Navigate to goal selection page
           if (mounted) {
-            Navigator.of(context).pushNamed('/onboardingAppFeatures');
+            Navigator.of(context).pushNamed('/onboardingGoal');
           }
         } else {
           // If CTA not ready yet, do nothing
@@ -1138,57 +1142,87 @@ class _BottomCtaButton extends StatelessWidget {
   const _BottomCtaButton({
     required this.arrowOffsetX,
     required this.onPressed,
+    this.label,
   });
 
   final Animation<double> arrowOffsetX;
   final VoidCallback? onPressed;
 
+  /// Optional text label — when set, the button expands and shows text + glow.
+  final String? label;
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final hasLabel = label != null;
 
-    // Responsive button sizing
-    final double buttonHeight = context.height(0.062); // 6.2% of screen height
-    final double buttonWidth = context.width(0.35); // 35% of screen width
+    // When a label is shown (aha-moment CTA), use a wider pill with gradient
+    final double buttonHeight = context.height(0.062);
+    final double buttonWidth = hasLabel ? context.width(0.65) : context.width(0.35);
 
     return Center(
       child: ClipRRect(
         borderRadius: BorderRadius.circular(360),
-        child: CupertinoButton(
-          padding: EdgeInsets.zero,
-          onPressed: onPressed,
-          child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
-            child: ColoredBox(
-              color: theme.colorScheme.onSurface.withValues(alpha: 0.08),
-              child: Container(
-                height: buttonHeight,
-                width: buttonWidth,
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(360),
-                  border: Border.all(
-                    color: theme.colorScheme.onSurface.withValues(alpha: 0.16),
-                  ),
+        child: CustomBlurWidget(
+          child: CupertinoButton(
+            padding: EdgeInsets.zero,
+            onPressed: onPressed,
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 350),
+              curve: Curves.easeOutCubic,
+              height: buttonHeight,
+              width: buttonWidth,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(360),
+                gradient: hasLabel
+                    ? LinearGradient(
+                        colors: [
+                          theme.colorScheme.primary,
+                          theme.colorScheme.primary.withValues(alpha: 0.75),
+                        ],
+                      )
+                    : null,
+                color: hasLabel ? null : theme.colorScheme.onSurface.withValues(alpha: 0.08),
+                border: Border.all(
+                  color: hasLabel ? theme.colorScheme.primary.withValues(alpha: 0.0) : theme.colorScheme.onSurface.withValues(alpha: 0.16),
                 ),
-                child: AnimatedBuilder(
-                  animation: arrowOffsetX,
-                  builder: (context, child) {
-                    return Transform.translate(
-                      offset: Offset(arrowOffsetX.value, 0),
-                      child: child,
-                    );
-                  },
-                  child: Icon(
-                    Icons.arrow_forward_ios_rounded,
-                    size: context.isTablet ? 26 : 20,
-                    color: theme.colorScheme.onSurface.withValues(alpha: 0.92),
-                  ),
-                ),
+                boxShadow: hasLabel
+                    ? [
+                        BoxShadow(
+                          color: theme.colorScheme.primary.withValues(alpha: 0.45),
+                          blurRadius: 22,
+                          spreadRadius: 2,
+                          offset: const Offset(0, 3),
+                        ),
+                      ]
+                    : null,
               ),
+              child: hasLabel
+                  ? Text(
+                      label!,
+                      style: context.titleMedium.copyWith(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    )
+                  : AnimatedBuilder(
+                      animation: arrowOffsetX,
+                      builder: (context, child) {
+                        return Transform.translate(
+                          offset: Offset(arrowOffsetX.value, 0),
+                          child: child,
+                        );
+                      },
+                      child: Icon(
+                        Icons.arrow_forward_ios_rounded,
+                        size: context.isTablet ? 26 : 20,
+                        color: theme.colorScheme.onSurface.withValues(alpha: 0.92),
+                      ),
+                    ),
             ),
           ),
-        ),
+        ).animate().fadeIn(duration: const Duration(milliseconds: 350)),
       ),
     );
   }
