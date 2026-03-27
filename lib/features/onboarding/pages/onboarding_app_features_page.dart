@@ -2,8 +2,11 @@ import 'dart:io';
 import 'dart:math';
 import 'dart:ui' as ui;
 
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import '../../../core/core.dart';
 import '../../../services/analytics_service.dart';
+import '../providers/onboarding_provider.dart';
 
 /// Onboarding - App Features page
 ///
@@ -367,15 +370,15 @@ class _OnboardingAppFeaturesPageState extends State<OnboardingAppFeaturesPage> w
     _progressController.forward();
   }
 
-  void _completeOnboarding() {
+  Future<void> _completeOnboarding() async {
     // Proceed directly to the pre-paywall warm-up screen instead of the rating page
     AnalyticsService.logOnboardingStep('features_completed');
+    await ProviderScope.containerOf(context).read(onboardingProvider.notifier).markOnboardingCompleted();
+    if (!mounted) return;
     if (widget.onContinue != null) {
       widget.onContinue!();
     } else {
-      if (mounted) {
-        navigator.navigateAndClear(path: KRoute.onboardingPaywall);
-      }
+      navigator.navigateAndClear(path: KRoute.onboardingPaywall);
     }
   }
 

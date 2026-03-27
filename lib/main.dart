@@ -240,6 +240,14 @@ class _MyAppState extends ConsumerState<MyApp> {
 
   Widget get _buildHomeScreen {
     final onboardingState = ref.watch(onboardingProvider);
+    if (!onboardingState.hasCheckedFirstLaunch || onboardingState.isLoading) {
+      return const CupertinoPageScaffold(
+        child: Center(
+          child: CupertinoActivityIndicator(),
+        ),
+      );
+    }
+
     if (KDebug.onboardingDebugMode || onboardingState.isFirstLaunch) {
       return const OnboardingWelcomePage();
     }

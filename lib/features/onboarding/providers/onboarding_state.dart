@@ -2,6 +2,7 @@ import '../enum/user_goal_enum.dart';
 
 class OnboardingState {
   final bool isFirstLaunch;
+  final bool hasCheckedFirstLaunch;
   final bool isLoading;
   final String? error;
   final String? name;
@@ -11,6 +12,7 @@ class OnboardingState {
 
   const OnboardingState({
     this.isFirstLaunch = true,
+    this.hasCheckedFirstLaunch = false,
     this.isLoading = false,
     this.error,
     this.name,
@@ -21,6 +23,7 @@ class OnboardingState {
 
   OnboardingState copyWith({
     bool? isFirstLaunch,
+    bool? hasCheckedFirstLaunch,
     bool? isLoading,
     String? error,
     String? name,
@@ -30,6 +33,7 @@ class OnboardingState {
   }) {
     return OnboardingState(
       isFirstLaunch: isFirstLaunch ?? this.isFirstLaunch,
+      hasCheckedFirstLaunch: hasCheckedFirstLaunch ?? this.hasCheckedFirstLaunch,
       isLoading: isLoading ?? this.isLoading,
       error: error ?? this.error,
       name: name ?? this.name,

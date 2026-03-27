@@ -30,26 +30,34 @@ class OnboardingNotifier extends AutoDisposeNotifier<OnboardingState> {
       final appDefaults = await _appDefaultsService.gettAppDefault();
       state = state.copyWith(
         isFirstLaunch: appDefaults?.isAppOpenedFirstTime ?? true,
+        hasCheckedFirstLaunch: true,
         isLoading: false,
       );
     } catch (e) {
       state = state.copyWith(
+        hasCheckedFirstLaunch: true,
         isLoading: false,
         error: e.toString(),
       );
     }
   }
 
+  Future<void> markOnboardingCompleted() async {
+    final updatedDefaults = AppDefaults(isAppOpenedFirstTime: false);
+    await _appDefaultsService.saveAppDefaults(updatedDefaults);
+    state = state.copyWith(
+      isFirstLaunch: false,
+      hasCheckedFirstLaunch: true,
+      isLoading: false,
+      error: null,
+    );
+  }
+
   Future<void> completeOnboarding(BuildContext context) async {
     state = state.copyWith(isLoading: true, error: null);
 
     try {
-      final updatedDefaults = AppDefaults(isAppOpenedFirstTime: false);
-      await _appDefaultsService.saveAppDefaults(updatedDefaults);
-      state = state.copyWith(
-        isFirstLaunch: false,
-        isLoading: false,
-      );
+      await markOnboardingCompleted();
 
       if (!context.mounted) return;
 
