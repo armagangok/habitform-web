@@ -19,101 +19,139 @@ import 'core/helpers/notifications/notification_helper.dart';
 import 'core/helpers/notifications/timezone.dart';
 import 'core/theme/providers/theme_provider.dart';
 import 'features/auth/providers/auth_provider.dart';
-import 'services/analytics_service.dart';
-import 'services/crashlytics_service.dart';
 import 'features/habit_category/provider/habit_category_provider.dart';
 import 'features/home/provider/home_provider.dart';
 import 'features/home/views/pages/home_page.dart';
 import 'features/onboarding/pages/onboarding_welcome_page.dart';
 import 'features/purchase/providers/purchase_provider.dart';
 import 'firebase_options.dart';
+import 'services/analytics_service.dart';
+import 'services/crashlytics_service.dart';
 import 'services/habit_service/habit_service_interface.dart';
 import 'services/habit_service/local_habit_service.dart';
 
 void main() {
-  runZonedGuarded(_bootstrap, (error, stack) {
-    CrashlyticsService.recordError(error, stack, fatal: true);
-  });
+  runZonedGuarded(
+    () async => await _bootstrap(),
+    (e, s) {
+      LogHelper.shared.errorPrint('Bootstrap error: $e', e, s);
+      CrashlyticsService.recordError(e, s, fatal: true);
+    },
+  );
 }
 
 Future<void> _bootstrap() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-
-  FlutterError.onError = (details) {
-    FlutterError.presentError(details);
-    CrashlyticsService.recordError(
-      details.exception,
-      details.stack,
-      reason: details.exceptionAsString(),
+  try {
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
     );
-  };
 
-  PlatformDispatcher.instance.onError = (error, stack) {
-    CrashlyticsService.recordError(error, stack, fatal: true);
-    return true;
-  };
+    FlutterError.onError = (details) {
+      FlutterError.presentError(details);
+      CrashlyticsService.recordError(
+        details.exception,
+        details.stack,
+        reason: details.exceptionAsString(),
+      );
+    };
 
-  // Lock orientation to portrait only for all platforms
-  await SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitUp,
-    DeviceOrientation.portraitDown,
-    // DeviceOrientation.landscapeLeft,
-    // DeviceOrientation.landscapeRight,
-  ]);
+    PlatformDispatcher.instance.onError = (error, stack) {
+      CrashlyticsService.recordError(error, stack, fatal: true);
+      return true;
+    };
 
-  await EasyLocalization.ensureInitialized();
-  await HiveHelper.shared.initializeHive();
+    // Lock orientation to portrait only for all platforms
+    await SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+      // DeviceOrientation.landscapeLeft,
+      // DeviceOrientation.landscapeRight,
+    ]);
 
-  await dotenv.load(fileName: ".env");
+    await EasyLocalization.ensureInitialized();
+    await HiveHelper.shared.initializeHive();
+    await dotenv.load(fileName: ".env");
 
-  // Initialize notification plugin
-  await NotificationHelper.shared.initializeNotificationPlugin;
+    // Initialize notification plugin
+    await NotificationHelper.shared.initializeNotificationPlugin;
 
-  // Configure RevenueCat SDK
-  await PurchaseService.configureSDK();
+    // Configure RevenueCat SDK
+    await PurchaseService.configureSDK();
 
-  // Otomatik restore işlemini kaldırdık
-  // Kullanıcı restore işlemini manuel olarak başlatmalı
+    // Otomatik restore islemini kaldirdik
+    // Kullanici restore islemini manuel olarak baslatmali
+    await TimeZoneHelper.initializeTimeZone();
+    await AppDefaultsService().initializeAppDefaults();
 
-  await TimeZoneHelper.initializeTimeZone();
-  await AppDefaultsService().initializeAppDefaults();
+    // Migrate existing habits: copy reminderTime to completionTime if available
+    await LocalHabitService.instance.migrateCompletionTimeFromReminders();
 
-  // Migrate existing habits: copy reminderTime to completionTime if available
-  await LocalHabitService.instance.migrateCompletionTimeFromReminders();
+    // Initialize app lifecycle service for smart notifications
+    AppLifecycleService.shared.initialize();
 
-  // Initialize app lifecycle service for smart notifications
-  AppLifecycleService.shared.initialize();
+    // Initialize widget sync service for iOS widgets
+    await WidgetSyncService().initialize();
 
-  // Initialize widget sync service for iOS widgets
-  await WidgetSyncService().initialize();
+    // Setup habit category providers
+    final habitCategoryOverrides = await setupHabitCategoryProviders();
 
-  // Setup habit category providers
-  final habitCategoryOverrides = await setupHabitCategoryProviders();
-
-  runApp(
-    ProviderScope(
-      overrides: [...habitCategoryOverrides],
-      child: EasyLocalization(
-        supportedLocales: const [
-          Locale('en', 'US'),
-          Locale('fr', 'FR'),
-          Locale('tr', 'TR'),
-          Locale('zh', 'Hans'),
-          Locale('it', 'IT'),
-          Locale('ar', 'SA'),
-          Locale('ja', 'JP'),
-          Locale('fi', 'FI'),
-          Locale('es', 'ES'),
-        ],
-        path: 'assets/translations',
-        fallbackLocale: const Locale('en', 'US'),
-        child: const MyApp(),
+    runApp(
+      ProviderScope(
+        overrides: [...habitCategoryOverrides],
+        child: EasyLocalization(
+          supportedLocales: const [
+            Locale('en', 'US'),
+            Locale('fr', 'FR'),
+            Locale('tr', 'TR'),
+            Locale('zh', 'Hans'),
+            Locale('it', 'IT'),
+            Locale('ar', 'SA'),
+            Locale('ja', 'JP'),
+            Locale('fi', 'FI'),
+            Locale('es', 'ES'),
+          ],
+          path: 'assets/translations',
+          fallbackLocale: const Locale('en', 'US'),
+          child: const MyApp(),
+        ),
       ),
-    ),
-  );
+    );
+  } catch (error, stack) {
+    CrashlyticsService.recordError(
+      error,
+      stack,
+      fatal: true,
+      reason: 'bootstrap_failed_before_run_app',
+    );
+    runApp(BootstrapErrorApp(errorMessage: error.toString()));
+  }
+}
+
+class BootstrapErrorApp extends StatelessWidget {
+  const BootstrapErrorApp({required this.errorMessage, super.key});
+
+  final String errorMessage;
+
+  @override
+  Widget build(BuildContext context) {
+    return CupertinoApp(
+      debugShowCheckedModeBanner: false,
+      home: CupertinoPageScaffold(
+        child: SafeArea(
+          child: Center(
+            child: Padding(
+              padding: const EdgeInsets.all(24),
+              child: Text(
+                'App failed to initialize.\n$errorMessage',
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 }
 
 class MyApp extends ConsumerStatefulWidget {

@@ -31,3 +31,17 @@
 # Google Sign-In / Credential Manager
 -keep class com.google.android.libraries.identity.googleid.** { *; }
 -keep class androidx.credentials.** { *; }
+
+# Firebase + Play Services startup paths (protect reflection/service loading)
+-keep class com.google.firebase.** { *; }
+-keep class com.google.android.gms.** { *; }
+-dontwarn com.google.firebase.**
+-dontwarn com.google.android.gms.**
+
+# RevenueCat + BillingClient classes can be loaded dynamically
+-keep class com.revenuecat.** { *; }
+-keep class com.android.billingclient.** { *; }
+-dontwarn com.revenuecat.**
+
+# Keep app classes referenced via manifests/reflection
+-keep class com.appsweat.habitrise.** { *; }
