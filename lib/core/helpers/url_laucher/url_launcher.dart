@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -39,10 +37,10 @@ class UrlLauncherHelper {
   }
 
   static Future<void> goToAppMarketPage() async {
-    if (Platform.isAndroid || Platform.isIOS) {
-      final appId = Platform.isAndroid ? "com.appsweat.pomodoro_app" : '6657948266';
+    if (appIsAndroid || appIsIOS) {
+      final appId = appIsAndroid ? "com.appsweat.pomodoro_app" : '6657948266';
       final url = Uri.parse(
-        Platform.isAndroid ? "market://details?id=$appId" : "https://apps.apple.com/app/id$appId",
+        appIsAndroid ? "market://details?id=$appId" : "https://apps.apple.com/app/id$appId",
       );
       await launchUrl(
         url,
@@ -52,7 +50,7 @@ class UrlLauncherHelper {
   }
 
   static Future<void> openPrivacyPolicy() async {
-    if (Platform.isAndroid || Platform.isIOS) {
+    if (appIsWeb || appIsAndroid || appIsIOS) {
       await launchUrl(
         Uri.parse(_privacyPolicyLink),
         mode: LaunchMode.externalApplication,
@@ -61,7 +59,7 @@ class UrlLauncherHelper {
   }
 
   static Future<void> openTermsOfUse() async {
-    if (Platform.isAndroid || Platform.isIOS) {
+    if (appIsWeb || appIsAndroid || appIsIOS) {
       await launchUrl(
         Uri.parse(_termsOfUseLink),
         mode: LaunchMode.externalApplication,

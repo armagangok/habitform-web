@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../../purchase/providers/purchase_provider.dart';
 import '../models/account_action_state.dart';
@@ -29,10 +30,10 @@ class AccountActionsNotifier extends StateNotifier<AccountActionState> {
     }
   }
 
-  Future<void> updateProfilePhoto(String filePath) async {
+  Future<void> updateProfilePhoto(XFile file) async {
     state = state.copyWith(status: AccountActionStatus.loading, errorMessage: null);
     try {
-      await _authService.updateProfilePhoto(filePath);
+      await _authService.updateProfilePhoto(file);
       state = state.copyWith(status: AccountActionStatus.success);
     } catch (e) {
       state = state.copyWith(

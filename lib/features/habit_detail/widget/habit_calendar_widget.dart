@@ -16,8 +16,7 @@ class HabitCalendarWidget extends ConsumerWidget {
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       sizeStyle: CupertinoButtonSize.small,
       onPressed: () {
-        showCupertinoSheet(
-          enableDrag: false,
+        showAppModalSheet(
           context: context,
           builder: (context) => HabitCalendarCompletionSheet(habit: currentHabit!),
         );

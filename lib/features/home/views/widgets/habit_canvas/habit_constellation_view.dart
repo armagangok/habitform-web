@@ -627,8 +627,7 @@ class _HabitConstellationViewState extends ConsumerState<HabitConstellationView>
     ref.read(habitDetailProvider.notifier).initHabit(fullHabit);
     // Show sheet - HabitDetailPage will also watch, keeping provider alive
     if (mounted) {
-      showCupertinoSheet(
-        enableDrag: false,
+      showAppModalSheet(
         context: context,
         builder: (contextFromSheet) => const HabitDetailPage(),
       );

@@ -46,34 +46,38 @@ class _HomePageState extends ConsumerState<HomePage> {
     // 4. Show Alert
     if (!mounted) return;
 
-    showCupertinoDialog(
+    showAppAlertDialog(
       context: context,
-      builder: (context) => CupertinoAlertDialog(
-        title: Text(isLoggedOut ? context.tr(LocaleKeys.auth_pro_login_alert_title) : context.tr(LocaleKeys.auth_cloud_sync_pro_title)),
-        content: Text(isLoggedOut ? context.tr(LocaleKeys.auth_pro_login_alert_message) : context.tr(LocaleKeys.auth_cloud_sync_pro_message)),
-        actions: [
-          CupertinoDialogAction(
-            onPressed: () => Navigator.pop(context),
-            child: Text(context.tr(LocaleKeys.common_later)),
-          ),
-          CupertinoDialogAction(
-            isDefaultAction: true,
-            onPressed: () {
-              Navigator.pop(context);
-              if (isLoggedOut) {
-                showCupertinoSheet(
-                  enableDrag: true,
-                  context: context,
-                  builder: (contextFromSheet) => const MyAccountPage(isFromHome: true),
-                );
-              } else {
-                ref.read(purchaseProvider.notifier).presentPaywall(isFromOnboarding: false);
-              }
-            },
-            child: Text(isLoggedOut ? context.tr(LocaleKeys.auth_pro_login_alert_action) : context.tr(LocaleKeys.auth_cloud_sync_pro_cta)),
-          ),
-        ],
+      title: Text(
+        isLoggedOut ? context.tr(LocaleKeys.auth_pro_login_alert_title) : context.tr(LocaleKeys.auth_cloud_sync_pro_title),
+        style: context.titleMedium.copyWith(fontWeight: FontWeight.w600),
       ),
+      content: Text(
+        isLoggedOut ? context.tr(LocaleKeys.auth_pro_login_alert_message) : context.tr(LocaleKeys.auth_cloud_sync_pro_message),
+        style: context.bodyMedium,
+      ),
+      actions: [
+        appAlertTextButton(
+          context: context,
+          label: context.tr(LocaleKeys.common_later),
+          onPressed: () => Navigator.pop(context),
+        ),
+        appAlertTextButton(
+          context: context,
+          label: isLoggedOut ? context.tr(LocaleKeys.auth_pro_login_alert_action) : context.tr(LocaleKeys.auth_cloud_sync_pro_cta),
+          onPressed: () {
+            Navigator.pop(context);
+            if (isLoggedOut) {
+              showAppModalSheet(
+                context: context,
+                builder: (contextFromSheet) => const MyAccountPage(isFromHome: true),
+              );
+            } else {
+              ref.read(purchaseProvider.notifier).presentPaywall(isFromOnboarding: false);
+            }
+          },
+        ),
+      ],
     );
   }
 
@@ -156,8 +160,7 @@ class _HomePageState extends ConsumerState<HomePage> {
             // Settings button
             CircularActionButton(
               onPressed: () {
-                showCupertinoSheet(
-                  enableDrag: false,
+                showAppModalSheet(
                   context: context,
                   builder: (contextFromSheet) => const SettingsPage(),
                 );
@@ -214,8 +217,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                 else
                   CircularActionButton(
                     onPressed: () {
-                      showCupertinoSheet(
-                        enableDrag: true,
+                      showAppModalSheet(
                         context: context,
                         builder: (contextFromSheet) => const MyAccountPage(isFromHome: true),
                       );
@@ -231,8 +233,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                 // Statistics button
                 CircularActionButton(
                   onPressed: () {
-                    showCupertinoSheet(
-                      enableDrag: false,
+                    showAppModalSheet(
                       context: context,
                       builder: (contextFromSheet) => const HabitProbabilityPage(),
                     );
@@ -303,14 +304,19 @@ class _HomePageState extends ConsumerState<HomePage> {
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 20),
-              CupertinoButton.filled(
-                borderRadius: BorderRadius.circular(100),
-                onPressed: () {
-                  _openCreateHabitPage(context);
-                },
+              FilledButton(
+                onPressed: () => _openCreateHabitPage(context),
+                style: FilledButton.styleFrom(
+                  backgroundColor: context.primary,
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  minimumSize: Size.zero,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
+                ),
                 child: Text(
                   context.tr(LocaleKeys.create_habit_create_habit),
-                  style: context.titleLarge.copyWith(
+                  style: context.titleMedium.copyWith(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
                   ),
@@ -363,9 +369,9 @@ class _HomePageState extends ConsumerState<HomePage> {
   }
 
   Future<dynamic> _openCreateHabitPage(BuildContext context) {
-    return showCupertinoSheet(
-      enableDrag: false,
+    return showAppModalSheet(
       context: context,
+      maxWidth: 720,
       builder: (contextFromSheet) {
         return const CreateHabitPage();
       },

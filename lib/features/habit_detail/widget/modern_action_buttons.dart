@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '/core/core.dart';
 import '/core/helpers/notifications/notification_helper.dart';
 import '/models/models.dart';
-import '/services/app_lifecycle_service.dart';
 import '../../home/provider/home_provider.dart';
 import '../../reminder/service/reminder_service.dart';
 import '../../share_habit/share_habit_page.dart';
@@ -43,8 +42,7 @@ class ActionButtons extends ConsumerWidget {
                     label: LocaleKeys.habit_detail_calendar.tr(),
                     color: Color(currentHabit.colorCode),
                     onPressed: () {
-                      showCupertinoSheet(
-                        enableDrag: false,
+                      showAppModalSheet(
                         context: context,
                         builder: (context) => HabitCalendarCompletionSheet(habit: currentHabit),
                       );
@@ -55,7 +53,7 @@ class ActionButtons extends ConsumerWidget {
                     label: LocaleKeys.habit_detail_share.tr(),
                     color: Color(currentHabit.colorCode),
                     onPressed: () {
-                      showCupertinoSheet(
+                      showAppModalSheet(
                         context: context,
                         builder: (context) => ShareHabitPage(habit: currentHabit),
                       );
@@ -77,82 +75,81 @@ class ActionButtons extends ConsumerWidget {
   }
 
   void _showArchiveConfirmationDialog(BuildContext context, Habit habit, WidgetRef ref) {
-    showCupertinoDialog(
+    showAppAlertDialog(
       context: context,
-      builder: (context) => CupertinoAlertDialog(
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Icon(CupertinoIcons.archivebox, color: CupertinoColors.systemIndigo),
-            const SizedBox(width: 8),
-            Text(LocaleKeys.habit_detail_archive_title.tr()),
-          ],
-        ),
-        content: Column(
-          children: [
-            const SizedBox(height: 8),
-            Text(
-              LocaleKeys.habit_detail_archive_confirmation.tr().replaceAll('{{habitName}}', habit.habitName),
+      title: Row(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Icon(CupertinoIcons.archivebox, color: CupertinoColors.systemIndigo),
+          const SizedBox(width: 8),
+          Flexible(
+            child: Text(
+              LocaleKeys.habit_detail_archive_title.tr(),
+              style: context.titleMedium.copyWith(fontWeight: FontWeight.w600),
             ),
-            const SizedBox(height: 8),
-            Text(
-              LocaleKeys.habit_detail_archive_info.tr(),
-            ),
-          ],
-        ),
-        actions: [
-          CupertinoDialogAction(
-            isDefaultAction: true,
-            onPressed: () => Navigator.pop(context),
-            child: Text(LocaleKeys.common_cancel.tr()),
-          ),
-          CupertinoDialogAction(
-            isDestructiveAction: false,
-            onPressed: () async {
-              LogHelper.shared.debugPrint('🔄 ARCHIVE PROCESS STARTED for habit: ${habit.habitName} (ID: ${habit.id})');
-
-              Navigator.pop(context);
-
-              LogHelper.shared.debugPrint('📱 Step 1: Notifying app lifecycle service that archiving is starting');
-              // Notify app lifecycle service that archiving is starting
-              AppLifecycleService.shared.notifyArchivingStarted();
-
-              LogHelper.shared.debugPrint('🔍 Step 2: Analyzing notification IDs before cancellation');
-              // Debug: Analyze notification IDs before cancellation
-              if (habit.reminderModel != null) {
-                LogHelper.shared.debugPrint('📋 Habit has reminder model: ${habit.reminderModel}');
-                await NotificationHelper.shared.debugNotificationIdsForHabit(
-                  habit.habitName,
-                  habit.reminderModel!.id,
-                  habit.reminderModel!.days,
-                );
-              } else {
-                LogHelper.shared.debugPrint('❌ Habit has NO reminder model');
-              }
-
-              LogHelper.shared.debugPrint('🚫 Step 3: Cancelling notifications BEFORE archiving the habit');
-              // Cancel notifications BEFORE archiving the habit
-              if (habit.reminderModel != null) {
-                LogHelper.shared.debugPrint('🔄 Calling ReminderService.cancelAllReminderNotifications...');
-                await ReminderService.cancelAllReminderNotifications(habit.reminderModel);
-                LogHelper.shared.debugPrint('✅ Notifications cancelled for habit being archived: ${habit.id}');
-              } else {
-                LogHelper.shared.debugPrint('⏭️ Skipping notification cancellation - no reminder model');
-              }
-
-              LogHelper.shared.debugPrint('📦 Step 4: Calling homeProvider.archiveHabit...');
-              await ref.read(homeProvider.notifier).archiveHabit(habit);
-              LogHelper.shared.debugPrint('✅ HomeProvider.archiveHabit completed');
-
-              LogHelper.shared.debugPrint('🔙 Step 5: Navigating back');
-              navigator.pop();
-
-              LogHelper.shared.debugPrint('🎉 ARCHIVE PROCESS COMPLETED for habit: ${habit.habitName}');
-            },
-            child: Text(LocaleKeys.habit_detail_archive_title.tr()),
           ),
         ],
       ),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const SizedBox(height: 8),
+          Text(
+            LocaleKeys.habit_detail_archive_confirmation.tr().replaceAll('{{habitName}}', habit.habitName),
+            style: context.bodyMedium,
+          ),
+          const SizedBox(height: 8),
+          Text(
+            LocaleKeys.habit_detail_archive_info.tr(),
+            style: context.bodySmall,
+          ),
+        ],
+      ),
+      actions: [
+        appAlertTextButton(
+          context: context,
+          label: LocaleKeys.common_cancel.tr(),
+          onPressed: () => Navigator.pop(context),
+        ),
+        appAlertTextButton(
+          context: context,
+          label: LocaleKeys.habit_detail_archive_title.tr(),
+          onPressed: () async {
+            LogHelper.shared.debugPrint('🔄 ARCHIVE PROCESS STARTED for habit: ${habit.habitName} (ID: ${habit.id})');
+
+            Navigator.pop(context);
+
+            if (habit.reminderModel != null) {
+              LogHelper.shared.debugPrint('📋 Habit has reminder model: ${habit.reminderModel}');
+              await NotificationHelper.shared.debugNotificationIdsForHabit(
+                habit.habitName,
+                habit.reminderModel!.id,
+                habit.reminderModel!.days,
+              );
+            } else {
+              LogHelper.shared.debugPrint('❌ Habit has NO reminder model');
+            }
+
+            if (habit.reminderModel != null) {
+              LogHelper.shared.debugPrint('🔄 Calling ReminderService.cancelAllReminderNotifications...');
+              await ReminderService.cancelAllReminderNotifications(habit.reminderModel);
+              LogHelper.shared.debugPrint('✅ Notifications cancelled for habit being archived: ${habit.id}');
+            } else {
+              LogHelper.shared.debugPrint('⏭️ Skipping notification cancellation - no reminder model');
+            }
+
+            LogHelper.shared.debugPrint('📦 Step 4: Calling homeProvider.archiveHabit...');
+            await ref.read(homeProvider.notifier).archiveHabit(habit);
+            LogHelper.shared.debugPrint('✅ HomeProvider.archiveHabit completed');
+
+            navigator.pop();
+
+            LogHelper.shared.debugPrint('🎉 ARCHIVE PROCESS COMPLETED for habit: ${habit.habitName}');
+          },
+        ),
+      ],
     );
   }
 }
@@ -176,21 +173,19 @@ class PrimaryActionButton extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        CupertinoButton.filled(
-          color: context.primaryContrastingColor,
-          sizeStyle: CupertinoButtonSize.medium,
+        FilledButton(
           onPressed: onPressed,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(
-                icon,
-                size: 18,
-                color: context.primaryContrastingColor.withValues(alpha: 1),
-              ),
-            ],
+          style: FilledButton.styleFrom(
+            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+            minimumSize: const Size(48, 48),
+            padding: const EdgeInsets.all(12),
+            backgroundColor: color,
+            foregroundColor: _contrastOn(color),
+            shape: const CircleBorder(),
           ),
+          child: Icon(icon, size: 18, color: _contrastOn(color)),
         ),
+        const SizedBox(height: 4),
         FittedBox(
           child: Text(
             label,
@@ -204,5 +199,10 @@ class PrimaryActionButton extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  static Color _contrastOn(Color background) {
+    final luminance = background.computeLuminance();
+    return luminance > 0.5 ? Colors.black87 : Colors.white;
   }
 }

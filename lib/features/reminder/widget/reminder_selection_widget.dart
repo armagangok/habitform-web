@@ -144,8 +144,7 @@ class _ReminderSelectionWidgetState extends ConsumerState<ReminderSelectionWidge
             switch (permissionStatus) {
               case PermissionStatus.granted:
                 if (context.mounted) {
-                  await showCupertinoSheet(
-                    enableDrag: false,
+                  await showAppModalSheet(
                     context: context,
                     builder: (contextFromSheet) => const ReminderPage(),
                   );

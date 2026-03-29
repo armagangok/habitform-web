@@ -89,8 +89,7 @@ class HabitHeatmapCard extends ConsumerWidget {
 
                 return;
               }
-              showCupertinoSheet(
-                enableDrag: false,
+              showAppModalSheet(
                 context: context,
                 builder: (context) => HabitCalendarCompletionSheet(habit: habit),
               );

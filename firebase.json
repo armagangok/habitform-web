@@ -27,7 +27,8 @@
           "projectId": "habitriseapp",
           "configurations": {
             "android": "1:639576600772:android:3464a2014f5eb0af031991",
-            "ios": "1:639576600772:ios:7c58b8594127f12c031991"
+            "ios": "1:639576600772:ios:7c58b8594127f12c031991",
+            "web": "1:639576600772:web:c899c846bb878140031991"
           }
         }
       }

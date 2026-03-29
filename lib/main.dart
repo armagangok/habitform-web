@@ -1,8 +1,7 @@
 import 'dart:async';
+import 'dart:ui';
 
 import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -12,10 +11,8 @@ import '/features/habit_category/provider/provider_setup.dart';
 import '/features/onboarding/providers/onboarding_provider.dart';
 import '/features/purchase/services/purchase_service.dart';
 import '/services/app_default.dart';
-import '/services/app_lifecycle_service.dart';
 import '/services/widget_sync_service.dart';
 import 'core/constants/debug_constants.dart';
-import 'core/helpers/notifications/notification_helper.dart';
 import 'core/helpers/notifications/timezone.dart';
 import 'core/theme/providers/theme_provider.dart';
 import 'features/auth/providers/auth_provider.dart';
@@ -61,23 +58,9 @@ Future<void> _bootstrap() async {
       return true;
     };
 
-    // Lock orientation to portrait only for all platforms
-    await SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.portraitDown,
-      // DeviceOrientation.landscapeLeft,
-      // DeviceOrientation.landscapeRight,
-    ]);
-
     await EasyLocalization.ensureInitialized();
     await HiveHelper.shared.initializeHive();
     await dotenv.load(fileName: ".env");
-
-    // Initialize notification plugin
-    await NotificationHelper.shared.initializeNotificationPlugin;
-
-    // Configure RevenueCat SDK
-    await PurchaseService.configureSDK();
 
     // Otomatik restore islemini kaldirdik
     // Kullanici restore islemini manuel olarak baslatmali
@@ -87,8 +70,8 @@ Future<void> _bootstrap() async {
     // Migrate existing habits: copy reminderTime to completionTime if available
     await LocalHabitService.instance.migrateCompletionTimeFromReminders();
 
-    // Initialize app lifecycle service for smart notifications
-    AppLifecycleService.shared.initialize();
+    // // Initialize app lifecycle service for smart notifications
+    // AppLifecycleService.shared.initialize();
 
     // Initialize widget sync service for iOS widgets
     await WidgetSyncService().initialize();
@@ -118,20 +101,27 @@ Future<void> _bootstrap() async {
       ),
     );
   } catch (error, stack) {
+    LogHelper.shared.errorPrint('Bootstrap error: $error', error, stack);
     CrashlyticsService.recordError(
       error,
       stack,
       fatal: true,
       reason: 'bootstrap_failed_before_run_app',
     );
-    runApp(BootstrapErrorApp(errorMessage: error.toString()));
+    runApp(
+      BootstrapErrorApp(
+        errorMessage: error.toString(),
+        stackTrace: stack,
+      ),
+    );
   }
 }
 
 class BootstrapErrorApp extends StatelessWidget {
-  const BootstrapErrorApp({required this.errorMessage, super.key});
+  const BootstrapErrorApp({required this.errorMessage, required this.stackTrace, super.key});
 
   final String errorMessage;
+  final StackTrace stackTrace;
 
   @override
   Widget build(BuildContext context) {
@@ -142,9 +132,20 @@ class BootstrapErrorApp extends StatelessWidget {
           child: Center(
             child: Padding(
               padding: const EdgeInsets.all(24),
-              child: Text(
-                'App failed to initialize.\n$errorMessage',
-                textAlign: TextAlign.center,
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Text(
+                      'App failed to initialize.\n$errorMessage',
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 16),
+                    Text(
+                      'Stack trace:\n$stackTrace',
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

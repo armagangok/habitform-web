@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/services.dart';
+
 import '../core/core.dart';
 import '../models/habit/habit_extension.dart';
 
@@ -29,7 +30,7 @@ class WidgetMethodChannelService {
 
   /// Setup method channel handlers
   void _setupMethodChannel() {
-    if (Platform.isIOS) {
+    if (appIsIOS) {
       _channel.setMethodCallHandler((call) async {
         switch (call.method) {
           case 'completeHabit':
@@ -189,7 +190,7 @@ class WidgetMethodChannelService {
     }
 
     try {
-      if (Platform.isIOS) {
+      if (appIsIOS) {
         // Use Method Channel to get the correct App Group container path from iOS
         final result = await _channel.invokeMethod('getAppGroupContainerPath');
         if (result != null) {
@@ -210,7 +211,7 @@ class WidgetMethodChannelService {
 
   /// Called by main app to update widget data
   Future<void> updateWidgetData(List<Habit> habits, {bool isProMember = false, bool forceUpdate = false}) async {
-    if (!Platform.isIOS) return;
+    if (!appIsIOS) return;
 
     final methodChannelStart = DateTime.now();
     LogHelper.shared.debugPrint('📡 [PERF] WidgetMethodChannelService: Starting updateWidgetData at ${methodChannelStart.millisecondsSinceEpoch}');

@@ -1,5 +1,4 @@
-import 'dart:io';
-
+import '/core/helpers/platform/platform_info.dart';
 import '/features/reminder/models/days/days_enum.dart';
 import '/features/reminder/models/reminder/reminder_model.dart';
 import 'smart_notification_manager.dart';
@@ -28,15 +27,15 @@ class NotificationUtils {
   /// Check if the notification count would exceed platform limits
   bool wouldExceedLimit(List<ReminderModel> reminders) {
     final total = calculateTotalNotifications(reminders);
-    final platformLimit = Platform.isIOS ? SmartNotificationManager.maxNotifications : SmartNotificationManager.androidMaxNotifications;
+    final platformLimit = appIsIOS ? SmartNotificationManager.maxNotifications : SmartNotificationManager.androidMaxNotifications;
     return total > platformLimit;
   }
 
   /// Get a user-friendly message about notification limits
   String getNotificationLimitMessage(List<ReminderModel> reminders) {
     final total = calculateTotalNotifications(reminders);
-    final platformLimit = Platform.isIOS ? SmartNotificationManager.maxNotifications : SmartNotificationManager.androidMaxNotifications;
-    final platformName = Platform.isIOS ? 'iOS' : 'Android';
+    final platformLimit = appIsIOS ? SmartNotificationManager.maxNotifications : SmartNotificationManager.androidMaxNotifications;
+    final platformName = appIsIOS ? 'iOS' : 'Android';
 
     if (total <= platformLimit) {
       return 'All $total notifications will be scheduled successfully.';
@@ -50,7 +49,7 @@ class NotificationUtils {
   /// Get notification usage statistics
   NotificationUsageStats getNotificationUsageStats(List<ReminderModel> reminders) {
     final total = calculateTotalNotifications(reminders);
-    final platformLimit = Platform.isIOS ? SmartNotificationManager.maxNotifications : SmartNotificationManager.androidMaxNotifications;
+    final platformLimit = appIsIOS ? SmartNotificationManager.maxNotifications : SmartNotificationManager.androidMaxNotifications;
     final percentage = (total / platformLimit * 100).round();
 
     return NotificationUsageStats(

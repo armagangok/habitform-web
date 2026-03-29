@@ -1,20 +1,19 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-
+import 'package:flutter/services.dart';
 import '../../../core/widgets/flushbar_widget.dart';
-import '../providers/purchase_provider.dart';
 
 class CopyHelper {
   const CopyHelper._();
   static const shared = CopyHelper._();
 
   Future<void> copyRCId(BuildContext context) async {
-    final customerInfo = ProviderScope.containerOf(context).read(purchaseProvider).value?.customerInfo;
-
-    if (customerInfo?.originalAppUserId != null) {
-      AppFlushbar.shared.successFlushbar(
-        "Your customer ID copied successfully\nID:${customerInfo?.originalAppUserId}",
-      );
+    final uid = FirebaseAuth.instance.currentUser?.uid;
+    if (uid == null || uid.isEmpty) {
+      AppFlushbar.shared.warningFlushbar('Account ID is not available');
+      return;
     }
+    await Clipboard.setData(ClipboardData(text: uid));
+    AppFlushbar.shared.successFlushbar('Account ID copied\nID: $uid');
   }
 }

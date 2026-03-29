@@ -46,7 +46,7 @@ mixin _$Habit {
   List<String> get categoryIds => throw _privateConstructorUsedError;
   @HiveField(12)
   HabitDifficulty get difficulty => throw _privateConstructorUsedError;
-  @HiveField(13)
+  @HiveField(13, defaultValue: 1.0)
   double get rewardFactor => throw _privateConstructorUsedError;
   @TimestampConverter()
   @HiveField(14)
@@ -86,7 +86,7 @@ abstract class $HabitCopyWith<$Res> {
       @HiveField(10) HabitStatus status,
       @HiveField(11, defaultValue: []) List<String> categoryIds,
       @HiveField(12) HabitDifficulty difficulty,
-      @HiveField(13) double rewardFactor,
+      @HiveField(13, defaultValue: 1.0) double rewardFactor,
       @TimestampConverter() @HiveField(14) DateTime? completionTime,
       @HiveField(15) SyncStatus syncStatus,
       @TimestampConverter() @HiveField(16) DateTime? updatedAt,
@@ -229,7 +229,7 @@ abstract class _$$HabitImplCopyWith<$Res> implements $HabitCopyWith<$Res> {
       @HiveField(10) HabitStatus status,
       @HiveField(11, defaultValue: []) List<String> categoryIds,
       @HiveField(12) HabitDifficulty difficulty,
-      @HiveField(13) double rewardFactor,
+      @HiveField(13, defaultValue: 1.0) double rewardFactor,
       @TimestampConverter() @HiveField(14) DateTime? completionTime,
       @HiveField(15) SyncStatus syncStatus,
       @TimestampConverter() @HiveField(16) DateTime? updatedAt,
@@ -368,7 +368,7 @@ class _$HabitImpl extends _Habit {
       @HiveField(11, defaultValue: [])
       final List<String> categoryIds = const [],
       @HiveField(12) this.difficulty = HabitDifficulty.moderate,
-      @HiveField(13) this.rewardFactor = 1.0,
+      @HiveField(13, defaultValue: 1.0) this.rewardFactor = 1.0,
       @TimestampConverter() @HiveField(14) this.completionTime,
       @HiveField(15) this.syncStatus = SyncStatus.synced,
       @TimestampConverter() @HiveField(16) this.updatedAt,
@@ -440,7 +440,7 @@ class _$HabitImpl extends _Habit {
   final HabitDifficulty difficulty;
   @override
   @JsonKey()
-  @HiveField(13)
+  @HiveField(13, defaultValue: 1.0)
   final double rewardFactor;
   @override
   @TimestampConverter()
@@ -571,7 +571,7 @@ abstract class _Habit extends Habit {
           @HiveField(10) final HabitStatus status,
           @HiveField(11, defaultValue: []) final List<String> categoryIds,
           @HiveField(12) final HabitDifficulty difficulty,
-          @HiveField(13) final double rewardFactor,
+          @HiveField(13, defaultValue: 1.0) final double rewardFactor,
           @TimestampConverter() @HiveField(14) final DateTime? completionTime,
           @HiveField(15) final SyncStatus syncStatus,
           @TimestampConverter() @HiveField(16) final DateTime? updatedAt,
@@ -621,7 +621,7 @@ abstract class _Habit extends Habit {
   @HiveField(12)
   HabitDifficulty get difficulty;
   @override
-  @HiveField(13)
+  @HiveField(13, defaultValue: 1.0)
   double get rewardFactor;
   @override
   @TimestampConverter()

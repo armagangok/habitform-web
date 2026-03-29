@@ -34,7 +34,7 @@ class _IconPickerPageState extends ConsumerState<EmojiPickerPage> {
   }
 
   void _showEmojiPicker(BuildContext context) {
-    showCupertinoSheet(
+    showAppModalSheet(
       context: context,
       builder: (context) => CupertinoPageScaffold(
         navigationBar: CupertinoNavigationBar(

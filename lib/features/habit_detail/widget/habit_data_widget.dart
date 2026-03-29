@@ -82,8 +82,7 @@ class _HabitDataWidgetState extends ConsumerState<HabitDataWidget> {
   Widget build(BuildContext context) {
     return CustomButton(
       onPressed: () {
-        showCupertinoSheet(
-          enableDrag: false,
+        showAppModalSheet(
           context: context,
           builder: (context) => HabitCalendarCompletionSheet(habit: widget.habit),
         );

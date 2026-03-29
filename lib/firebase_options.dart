@@ -16,10 +16,7 @@ import 'package:flutter/foundation.dart' show defaultTargetPlatform, kIsWeb, Tar
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      throw UnsupportedError(
-        'DefaultFirebaseOptions have not been configured for web - '
-        'you can reconfigure this by running the FlutterFire CLI again.',
-      );
+      return web;
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -65,4 +62,15 @@ class DefaultFirebaseOptions {
     iosClientId: '639576600772-756spufiegn8pg83mjokb32kt5b92tlj.apps.googleusercontent.com',
     iosBundleId: 'com.appsweat.habitrise',
   );
+
+  static const FirebaseOptions web = FirebaseOptions(
+    apiKey: 'AIzaSyCW5hj7cFvn5XOqjz6xfozxtWYkDyYjRtg',
+    appId: '1:639576600772:web:c899c846bb878140031991',
+    messagingSenderId: '639576600772',
+    projectId: 'habitriseapp',
+    authDomain: 'habitriseapp.firebaseapp.com',
+    storageBucket: 'habitriseapp.firebasestorage.app',
+    measurementId: 'G-7P806ZDWW7',
+  );
+
 }

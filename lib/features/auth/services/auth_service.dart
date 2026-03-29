@@ -1,10 +1,8 @@
-import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:google_sign_in/google_sign_in.dart' as auth;
+import 'package:image_picker/image_picker.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 import '../../../core/helpers/hive/hive_helper.dart';
@@ -19,12 +17,6 @@ class AuthService {
     app: Firebase.app(),
     databaseId: 'habitformdatabase',
   );
-
-  // The web client ID from google-services.json (client_type 3)
-  static const String _webClientId = '639576600772-338vkhnauvtpekpmq6ik2nmopu0i1lrs.apps.googleusercontent.com';
-
-  // Singleton Google Sign-In instance (v7+ API)
-  static auth.GoogleSignIn get _googleSignIn => auth.GoogleSignIn.instance;
 
   Stream<User?> get authStateChanges => _auth.userChanges();
 
@@ -56,34 +48,23 @@ class AuthService {
     return credential;
   }
 
+  /// Google provider for Firebase Auth web popup.
+  GoogleAuthProvider _firebaseGoogleProvider() {
+    final provider = GoogleAuthProvider();
+    provider.addScope('email');
+    provider.addScope('profile');
+    return provider;
+  }
+
   Future<UserCredential?> signInWithGoogle() async {
     try {
-      final credential = await _getGoogleCredential();
-      if (credential == null) return null;
-
-      final userCredential = await _auth.signInWithCredential(credential);
+      final userCredential = await _auth.signInWithPopup(_firebaseGoogleProvider());
       await _updateUserData(userCredential.user);
       return userCredential;
     } catch (e) {
       LogHelper.shared.debugPrint('❌ Google Sign-In Error: $e');
       rethrow;
     }
-  }
-
-  Future<AuthCredential?> _getGoogleCredential() async {
-    // Ensure GoogleSignIn is initialized with serverClientId on Android
-    await _googleSignIn.initialize(
-      serverClientId: Platform.isAndroid ? _webClientId : null,
-    );
-
-    final googleUser = await _googleSignIn.authenticate();
-
-    final googleAuth = googleUser.authentication;
-    final clientAuth = await googleUser.authorizationClient.authorizeScopes(<String>['email', 'profile']);
-    return GoogleAuthProvider.credential(
-      idToken: googleAuth.idToken,
-      accessToken: clientAuth.accessToken,
-    );
   }
 
   Future<UserCredential?> signInWithApple() async {
@@ -118,7 +99,6 @@ class AuthService {
     try {
       await HiveHelper.shared.clearAllLocalData();
       await _auth.signOut();
-      await _googleSignIn.signOut(); // Ensure Google sign-out as well
     } catch (e) {
       LogHelper.shared.debugPrint('❌ Error during sign out: $e');
       rethrow;
@@ -150,11 +130,8 @@ class AuthService {
     final user = _auth.currentUser;
     if (user == null) throw FirebaseAuthException(code: 'no-user', message: 'No user logged in');
 
-    final credential = await _getGoogleCredential();
-    if (credential != null) {
-      await user.linkWithCredential(credential);
-      await _updateUserData(user);
-    }
+    final userCredential = await user.linkWithPopup(_firebaseGoogleProvider());
+    await _updateUserData(userCredential.user);
   }
 
   Future<void> linkWithApple() async {
@@ -183,13 +160,17 @@ class AuthService {
     await _updateUserData(_auth.currentUser);
   }
 
-  Future<void> updateProfilePhoto(String filePath) async {
+  Future<void> updateProfilePhoto(XFile file) async {
     final user = _auth.currentUser;
     if (user == null) throw FirebaseAuthException(code: 'no-user', message: 'No user logged in');
 
     // 1. Upload to Firebase Storage
     final storageRef = FirebaseStorage.instance.ref().child('user_photos').child('${user.uid}.jpg');
-    final uploadTask = await storageRef.putFile(File(filePath));
+    final bytes = await file.readAsBytes();
+    final uploadTask = await storageRef.putData(
+      bytes,
+      SettableMetadata(contentType: 'image/jpeg'),
+    );
     final downloadUrl = await uploadTask.ref.getDownloadURL();
 
     // 2. Update Auth Profile

@@ -31,7 +31,7 @@ class _AccountProfileSectionState extends ConsumerState<AccountProfileSection> {
 
   Future<void> _showChangeNameSheet() async {
     _nameController.text = widget.user.displayName ?? '';
-    await showCupertinoSheet<void>(
+    await showAppModalSheet<void>(
       context: context,
       builder: (ctx) => _ChangeNameSheetBody(nameController: _nameController),
     );

@@ -8,7 +8,6 @@ import '/features/reminder/service/reminder_service.dart';
 import '/models/completion_entry/completion_entry.dart';
 import '/models/habit/habit_model.dart';
 import '/models/habit/habit_summary.dart';
-import '/services/app_lifecycle_service.dart';
 import '/services/habit_service/habit_service_interface.dart';
 import '/services/widget_sync_service.dart';
 import 'home_state.dart';
@@ -172,9 +171,9 @@ class HomeNotifier extends AsyncNotifier<HomeState> {
     state = await AsyncValue.guard(() async {
       LogHelper.shared.debugPrint('🏠 Step 1: Setting state to loading');
 
-      LogHelper.shared.debugPrint('🏠 Step 2: Notifying app lifecycle service (backup)');
-      // Notify app lifecycle service that archiving is starting (backup)
-      AppLifecycleService.shared.notifyArchivingStarted();
+      // LogHelper.shared.debugPrint('🏠 Step 2: Notifying app lifecycle service (backup)');
+      // // Notify app lifecycle service that archiving is starting (backup)
+      // AppLifecycleService.shared.notifyArchivingStarted();
 
       LogHelper.shared.debugPrint('🏠 Step 3: Backup notification cancellation');
       // Cancel notifications before archiving (backup in case UI doesn't do it)

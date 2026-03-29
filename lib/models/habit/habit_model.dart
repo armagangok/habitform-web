@@ -28,7 +28,7 @@ class Habit extends HiveObject with _$Habit {
     @Default(HabitStatus.active) @HiveField(10) HabitStatus status,
     @Default([]) @HiveField(11, defaultValue: []) List<String> categoryIds,
     @Default(HabitDifficulty.moderate) @HiveField(12) HabitDifficulty difficulty,
-    @Default(1.0) @HiveField(13) double rewardFactor,
+    @Default(1.0) @HiveField(13, defaultValue: 1.0) double rewardFactor,
     @TimestampConverter() @HiveField(14) DateTime? completionTime,
     @Default(SyncStatus.synced) @HiveField(15) SyncStatus syncStatus,
     @TimestampConverter() @HiveField(16) DateTime? updatedAt,

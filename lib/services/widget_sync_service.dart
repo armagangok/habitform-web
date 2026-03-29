@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -19,7 +18,14 @@ class WidgetSyncService {
   factory WidgetSyncService() => _instance;
   WidgetSyncService._internal();
 
-  final WidgetMethodChannelService _methodChannelService = WidgetMethodChannelService();
+  /// Only created on iOS; never on web (avoids [dart:io] / method-channel bootstrap issues).
+  WidgetMethodChannelService? _methodChannelService;
+
+  WidgetMethodChannelService? get _iosWidgetChannel {
+    if (!appIsIOS) return null;
+    return _methodChannelService ??= WidgetMethodChannelService();
+  }
+
   final HabitService _habitService = LocalHabitService.instance;
 
   Timer? _debounceTimer;
@@ -47,8 +53,10 @@ class WidgetSyncService {
 
   /// Initialize the sync service
   Future<void> initialize() async {
-    if (_isInitialized || !Platform.isIOS) {
-      LogHelper.shared.debugPrint('WidgetSyncService: ${_isInitialized ? "Already initialized" : "Not iOS platform"}');
+    if (_isInitialized || !appIsIOS) {
+      LogHelper.shared.debugPrint(
+        'WidgetSyncService: ${_isInitialized ? "Already initialized" : "Not iOS platform"}',
+      );
 
       return;
     }
@@ -70,8 +78,10 @@ class WidgetSyncService {
 
   /// Check for completion updates from widgets (called when needed, not periodically)
   Future<void> checkForWidgetUpdates() async {
+    final channel = _iosWidgetChannel;
+    if (channel == null) return;
     try {
-      final updates = await _methodChannelService.checkForCompletionUpdates();
+      final updates = await channel.checkForCompletionUpdates();
 
       for (final update in updates) {
         await _processWidgetUpdate(update);
@@ -109,7 +119,7 @@ class WidgetSyncService {
 
   /// Update widget data when habits change in the main app (with debouncing)
   Future<void> updateWidgetData(List<Habit> habits) async {
-    if (!Platform.isIOS || !_isInitialized) {
+    if (!appIsIOS || !_isInitialized) {
       LogHelper.shared.debugPrint('Widget sync not initialized or not iOS platform');
       return;
     }
@@ -131,6 +141,8 @@ class WidgetSyncService {
   /// habits-equal cache are both bypassed, ensuring fresh data is always written.
   Future<void> _performWidgetDataUpdate(List<Habit>? habits, {bool forceUpdate = false}) async {
     if (habits == null) return;
+    final channel = _iosWidgetChannel;
+    if (channel == null) return;
 
     final widgetUpdateStart = DateTime.now();
     LogHelper.shared.debugPrint('📱 [PERF] Starting widget data update at ${widgetUpdateStart.millisecondsSinceEpoch}');
@@ -172,7 +184,7 @@ class WidgetSyncService {
     try {
       // Update widget data using the method channel service
       final methodChannelStart = DateTime.now();
-      await _methodChannelService.updateWidgetData(habits, isProMember: isProMember, forceUpdate: forceUpdate);
+      await channel.updateWidgetData(habits, isProMember: isProMember, forceUpdate: forceUpdate);
       final methodChannelEnd = DateTime.now();
       LogHelper.shared.debugPrint('📡 [PERF] Method channel update completed in ${methodChannelEnd.difference(methodChannelStart).inMilliseconds}ms');
 
@@ -192,7 +204,7 @@ class WidgetSyncService {
 
   /// Handle habit completion from widget (called by App Intents)
   Future<void> handleWidgetHabitCompletion(String habitId, DateTime date) async {
-    if (!Platform.isIOS) return;
+    if (!appIsIOS) return;
 
     try {
       // Create completion entry
@@ -218,7 +230,7 @@ class WidgetSyncService {
 
   /// Handle habit completion update from widget (called by App Intents)
   Future<void> handleWidgetHabitCompletionUpdate(String habitId, DateTime date, bool isCompleted, int count) async {
-    if (!Platform.isIOS) return;
+    if (!appIsIOS) return;
 
     try {
       // Create completion entry
@@ -282,6 +294,7 @@ class WidgetSyncService {
   /// Force widget update with current Pro status — bypasses the debounce/throttle.
   /// Use this when you specifically need fresh data pushed (e.g., on app resume).
   Future<void> forceWidgetUpdate() async {
+    if (!appIsIOS) return;
     try {
       LogHelper.shared.debugPrint('🔄 Force updating widgets...');
 

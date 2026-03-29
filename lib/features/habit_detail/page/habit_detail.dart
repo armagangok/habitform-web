@@ -246,8 +246,7 @@ class _HabitDetailPageState extends ConsumerState<HabitDetailPage> {
                 backgroundColor: iconBg,
                 onPressed: () {
                   ref.watch(editHabitProvider.notifier).initHabit(habit);
-                  showCupertinoSheet(
-                    enableDrag: false,
+                  showAppModalSheet(
                     context: context,
                     builder: (context) => EditHabitPage(habit: habit),
                   );

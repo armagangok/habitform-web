@@ -29,7 +29,7 @@ class ShareHabitButton extends StatelessWidget {
         // Add a small delay to ensure scroll completes before showing the sheet
         Future.delayed(const Duration(milliseconds: 100), () {
           if (!context.mounted) return;
-          showCupertinoSheet(
+          showAppModalSheet(
             context: context,
             builder: (context) => ShareHabitPage(habit: habit),
           );

@@ -814,6 +814,8 @@ abstract class  LocaleKeys {
   static const subscription_unlimitiedCustomizationDescription = 'subscription.unlimitiedCustomizationDescription';
   static const subscription_unlimitiedHabits = 'subscription.unlimitiedHabits';
   static const subscription_unlimitiedHabitsDescription = 'subscription.unlimitiedHabitsDescription';
+  static const subscription_webContinueFreeTier = 'subscription.webContinueFreeTier';
+  static const subscription_webPurchaseOnMobile = 'subscription.webPurchaseOnMobile';
   static const subscription_unsupportedFeature = 'subscription.unsupportedFeature';
   static const subscription_upcomingFeatures = 'subscription.upcomingFeatures';
   static const subscription_upcomingFeaturesDescription = 'subscription.upcomingFeaturesDescription';

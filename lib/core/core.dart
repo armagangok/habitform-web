@@ -23,3 +23,4 @@ export './providers/locale_provider.dart';
 export './services/translation_service.dart';
 export 'widgets/custom_section.dart';
 export 'widgets/sheet_header.dart';
+export 'widgets/web/app_overlays.dart';

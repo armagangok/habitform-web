@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'dart:math';
 import 'dart:ui' as ui;
 
@@ -115,7 +114,7 @@ class _OnboardingAppFeaturesPageState extends State<OnboardingAppFeaturesPage> w
     ];
 
     // Android'de home_widget özelliğini filtrele
-    if (Platform.isAndroid) {
+    if (appIsAndroid) {
       return features.where((feature) => feature.identifier != 'home_widget').toList();
     }
 

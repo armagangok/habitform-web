@@ -116,16 +116,18 @@ class _CustomButtonState extends State<CustomButton> with SingleTickerProviderSt
         },
         child: Padding(
           padding: widget.padding ?? EdgeInsets.zero,
-          child: DefaultTextStyle(
-            style: TextStyle(
-              color: widget.foregroundColor,
-              fontWeight: FontWeight.bold,
-            ),
-            child: IconTheme(
-              data: IconThemeData(
+          child: IntrinsicWidth(
+            child: DefaultTextStyle(
+              style: TextStyle(
                 color: widget.foregroundColor,
+                fontWeight: FontWeight.bold,
               ),
-              child: widget.child,
+              child: IconTheme(
+                data: IconThemeData(
+                  color: widget.foregroundColor,
+                ),
+                child: widget.child,
+              ),
             ),
           ),
         ),

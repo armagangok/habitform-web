@@ -1,3 +1,4 @@
+export './platform/platform_info.dart';
 export './hive/constants/hive_boxes.dart';
 export './hive/constants/hive_keys.dart';
 export './hive/hive_helper.dart';

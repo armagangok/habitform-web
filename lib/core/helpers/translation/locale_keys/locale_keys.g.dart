@@ -410,6 +410,8 @@ abstract class LocaleKeys {
   static const subscription_invalidCredentials = 'subscription.invalidCredentials';
   static const subscription_invalidReceipt = 'subscription.invalidReceipt';
   static const subscription_storeProblem = 'subscription.storeProblem';
+  static const subscription_webContinueFreeTier = 'subscription.webContinueFreeTier';
+  static const subscription_webPurchaseOnMobile = 'subscription.webPurchaseOnMobile';
   static const subscription_unsupportedFeature = 'subscription.unsupportedFeature';
   static const subscription_invalidUserID = 'subscription.invalidUserID';
   static const subscription_operationInProgress = 'subscription.operationInProgress';

@@ -1,8 +1,7 @@
-import 'dart:io';
-
 import 'package:flutter/services.dart';
 
 import '/core/core.dart';
+import '/core/helpers/platform/platform_info.dart';
 
 /// Android-specific notification optimizations
 class AndroidNotificationOptimizer {
@@ -13,7 +12,7 @@ class AndroidNotificationOptimizer {
 
   /// Check if battery optimization is enabled for the app
   Future<bool> isBatteryOptimizationEnabled() async {
-    if (!Platform.isAndroid) return false;
+    if (!appIsAndroid) return false;
 
     try {
       final bool isOptimized = await _channel.invokeMethod('isBatteryOptimized');
@@ -26,7 +25,7 @@ class AndroidNotificationOptimizer {
 
   /// Request to disable battery optimization
   Future<bool> requestDisableBatteryOptimization() async {
-    if (!Platform.isAndroid) return true;
+    if (!appIsAndroid) return true;
 
     try {
       final bool success = await _channel.invokeMethod('requestDisableBatteryOptimization');
@@ -39,7 +38,7 @@ class AndroidNotificationOptimizer {
 
   /// Check if notifications are enabled for the app
   Future<bool> areNotificationsEnabled() async {
-    if (!Platform.isAndroid) return true;
+    if (!appIsAndroid) return true;
 
     try {
       final bool enabled = await _channel.invokeMethod('areNotificationsEnabled');

@@ -3,7 +3,6 @@ import 'dart:io';
 
 import 'package:csv/csv.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:uuid/uuid.dart';
 
@@ -17,6 +16,7 @@ import '../../services/habit_service/habit_service_interface.dart';
 import '../reminder/models/days/days_enum.dart';
 import '../reminder/models/multiple_reminder/multiple_reminder_model.dart';
 import '../reminder/models/reminder/reminder_model.dart';
+import 'csv_web_download_stub.dart' if (dart.library.html) 'csv_web_download_web.dart' as csv_web;
 
 class CSVService {
   CSVService._();
@@ -140,25 +140,10 @@ class CSVService {
       final filename = 'HabitForm_export_$formattedDate.csv';
       debugPrint('Generated file name: $filename');
 
-      // Dosyayı Documents klasörüne kaydet
-      final directory = await getApplicationDocumentsDirectory();
-      final filePath = '${directory.path}/$filename';
-      final file = File(filePath);
-      await file.writeAsString(csv);
-
+      csv_web.downloadCsvInBrowser(filename, csv);
       stopwatch.stop();
-      debugPrint('File saved to: $filePath');
-      debugPrint('Export completed in ${stopwatch.elapsedMilliseconds}ms');
-
-      // Kaydedilen dosyayı paylaş
-      final xFile = XFile(filePath);
-      await Share.shareXFiles(
-        [xFile],
-        subject: LocaleKeys.csv_service_export_subject.tr(),
-        sharePositionOrigin: const Rect.fromLTWH(0, 0, 100, 100), // iOS için gerekli
-      );
-
-      return filePath;
+      debugPrint('Web CSV download triggered in ${stopwatch.elapsedMilliseconds}ms');
+      return filename;
     } catch (e) {
       debugPrint('Error exporting habits: $e');
       rethrow;
@@ -199,59 +184,28 @@ class CSVService {
         return 0;
       }
 
-      String csvContent;
+      final picked = result.files.first;
+      final lowerName = picked.name.toLowerCase();
+      debugPrint('Selected file name: $lowerName');
+      if (!lowerName.endsWith('.csv')) {
+        debugPrint('Selected file is not a CSV file');
+        throw Exception(LocaleKeys.csv_service_please_select_csv_file.tr());
+      }
 
-      if (Platform.isIOS) {
-        // iOS specific handling
-        final bytes = result.files.first.bytes;
-        if (bytes == null) {
-          debugPrint('Could not read file bytes');
-          throw Exception(LocaleKeys.csv_service_could_not_read_file.tr());
-        }
-
-        // Dosya adını kontrol et
-        final fileName = result.files.first.name.toLowerCase();
-        debugPrint('Selected file name: $fileName');
-
-        // CSV dosyası değilse uyarı ver
-        if (!fileName.endsWith('.csv')) {
-          debugPrint('Selected file is not a CSV file');
-          throw Exception(LocaleKeys.csv_service_please_select_csv_file.tr());
-        }
-
-        csvContent = String.fromCharCodes(bytes);
-
-        // Debug information
-        debugPrint('iOS CSV file size: ${bytes.length} bytes');
-        if (bytes.isNotEmpty) {
-          debugPrint('iOS CSV file content (first 100 chars): ${csvContent.substring(0, csvContent.length > 100 ? 100 : csvContent.length)}');
-        } else {
-          debugPrint('iOS CSV file is empty');
-        }
-      } else {
-        // Android and other platforms
-        final filePath = result.files.single.path;
-        if (filePath == null) {
-          debugPrint('Could not get file path');
-          throw Exception('Could not get file path');
-        }
-
-        // Dosya adını kontrol et
-        final fileName = result.files.first.name.toLowerCase();
-        debugPrint('Selected file name: $fileName');
-
-        // CSV dosyası değilse uyarı ver
-        if (!fileName.endsWith('.csv')) {
-          debugPrint('Selected file is not a CSV file');
-          throw Exception(LocaleKeys.csv_service_please_select_csv_file.tr());
-        }
-
-        final file = File(filePath);
+      final String csvContent;
+      if (picked.bytes != null) {
+        csvContent = utf8.decode(picked.bytes!, allowMalformed: true);
+        debugPrint('CSV from bytes, length: ${csvContent.length}');
+      } else if (picked.path != null) {
+        final file = File(picked.path!);
         csvContent = await file.readAsString();
-        debugPrint('Android CSV file size: ${csvContent.length} chars');
-        if (csvContent.isNotEmpty) {
-          debugPrint('Android CSV file content (first 100 chars): ${csvContent.substring(0, csvContent.length > 100 ? 100 : csvContent.length)}');
-        }
+        debugPrint('CSV from path, length: ${csvContent.length}');
+      } else {
+        debugPrint('Could not read file bytes or path');
+        throw Exception(LocaleKeys.csv_service_could_not_read_file.tr());
+      }
+      if (csvContent.isNotEmpty) {
+        debugPrint('CSV preview: ${csvContent.substring(0, csvContent.length > 100 ? 100 : csvContent.length)}');
       }
 
       // Check if content is empty

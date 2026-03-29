@@ -71,7 +71,7 @@ class MyAccountPage extends ConsumerWidget {
     if (pickedFile == null) return;
 
     try {
-      await ref.read(accountActionsProvider.notifier).updateProfilePhoto(pickedFile.path);
+      await ref.read(accountActionsProvider.notifier).updateProfilePhoto(pickedFile);
       AppFlushbar.shared.successFlushbar(LocaleKeys.auth_profile_photo_updated.tr());
     } catch (e) {
       AppFlushbar.shared.errorFlushbar(e.toString());

@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '/core/core.dart';
@@ -148,7 +146,7 @@ class ProFeaturesPage extends ConsumerWidget {
       ),
     ];
 
-    if (!Platform.isAndroid) {
+    if (!appIsAndroid) {
       items.add(
         const _ProFeatureItem(
           titleKey: 'onboarding.app_features.features.home_widget.title',

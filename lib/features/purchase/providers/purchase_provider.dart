@@ -1,19 +1,14 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:purchases_ui_flutter/purchases_ui_flutter.dart';
 
 import '../../../core/constants/debug_constants.dart';
 import '../../../core/core.dart';
-import '../../../models/revenue_cat_device_record/revenue_cat_device_record.dart';
 import '../../../models/user_defaults/user_defaults.dart';
-import '../../../services/analytics_service.dart';
-import '../../../services/device_metadata_service.dart';
 import '../../../services/sync_service.dart';
 import '../models/paywall_state.dart';
-import '../purchase.dart';
 
-/// Main paywall provider that handles subscription state
+/// Subscription state for the web app: Firestore + local cache only (no store SDK).
 final purchaseProvider = AsyncNotifierProvider<PurchaseNotifier, PaywallState>(() {
   return PurchaseNotifier();
 });
@@ -26,70 +21,17 @@ class PurchaseNotifier extends AsyncNotifier<PaywallState> {
     state = const AsyncValue.loading();
 
     try {
-      // Debug modunda abonelik durumunu override et
       if (KDebug.purchaseDebugMode) {
         LogHelper.shared.debugPrint('Running in purchase debug mode');
-        // Mevcut UserDefaults'ı al ve güncelle
         final currentDefaults = await _getUserDefaults() ?? UserDefaults();
         await _saveUserDefaults(currentDefaults.copyWith(isPro: true));
-
-        // Debug modunda bile API çağrıları yaparak UI için gerekli verileri al
-        try {
-          final customerInfo = await Purchases.getCustomerInfo();
-          final offerings = await Purchases.getOfferings();
-
-          return PaywallState(
-            isSubscriptionActive: true, // Debug modunda aboneliği aktif olarak zorla
-            customerInfo: customerInfo,
-            offerings: offerings,
-          );
-        } catch (e) {
-          // API çağrıları başarısız olursa sadece aktif abonelik ile devam et
-          LogHelper.shared.debugPrint('Failed to get RevenueCat data in debug mode: $e');
-          return const PaywallState(
-            isSubscriptionActive: true, // Debug modunda aboneliği aktif olarak zorla
-          );
-        }
+        return const PaywallState(isSubscriptionActive: true);
       }
 
-      // Skip Firestore overwrite here: RevenueCat is the source of truth for "isPro".
-      // Only keep this if you want a local-only fallback before RevenueCat starts up,
-      // but RevenueCat is usually fast enough and more accurate.
-      /*
-      if (FirebaseAuth.instance.currentUser != null) {
-        final userData = await SyncService().getUserSubscription();
-        if (userData != null) {
-          final isProFromFirestore = userData['isSubscribed'] as bool? ?? false;
-          if (isProFromFirestore) {
-            final currentDefaults = await _getUserDefaults() ?? UserDefaults();
-            await _saveUserDefaults(currentDefaults.copyWith(isPro: true));
-          }
-        }
-      }
-      */
-
-      // Önce mevcut müşteri bilgilerini al
-      final customerInfo = await Purchases.getCustomerInfo();
-      final offerings = await Purchases.getOfferings();
-
-      // Abonelik durumunu kontrol et
-      final isActive = customerInfo.entitlements.active.isNotEmpty;
-
-      // Mevcut UserDefaults'ı al ve güncelle
-      final currentDefaults = await _getUserDefaults() ?? UserDefaults();
-      await _saveUserDefaults(currentDefaults.copyWith(isPro: isActive));
-
-      await _syncSubscriptionToFirestore(customerInfo);
-
-      return PaywallState(
-        offerings: offerings,
-        customerInfo: customerInfo,
-        isSubscriptionActive: isActive,
-      );
+      return await _paywallStateFromRemoteOrCache();
     } catch (e) {
       LogHelper.shared.debugPrint('Error initializing purchase state: $e');
 
-      // Hata durumunda Firestore'dan veya UserDefaults'dan pro durumunu kontrol et
       var isPro = (await _getUserDefaults())?.isPro ?? false;
       if (!isPro && FirebaseAuth.instance.currentUser != null) {
         final userData = await SyncService().getUserSubscription();
@@ -102,30 +44,22 @@ class PurchaseNotifier extends AsyncNotifier<PaywallState> {
         }
       }
 
-      final previousState = state.valueOrNull;
-      return PaywallState(
-        isSubscriptionActive: isPro,
-        offerings: previousState?.offerings,
-        customerInfo: previousState?.customerInfo,
-      );
+      return PaywallState(isSubscriptionActive: isPro);
     }
   }
 
-  /// UserDefaults'dan kullanıcı ayarlarını al
   Future<UserDefaults?> _getUserDefaults() async {
     try {
-      final userDefaults = _hiveHelper.getData<UserDefaults>(
+      return _hiveHelper.getData<UserDefaults>(
         HiveBoxes.userDefaultsBox,
         HiveKeys.userDefaultsKey,
       );
-      return userDefaults;
     } catch (e) {
       LogHelper.shared.debugPrint('Error getting user defaults: $e');
       return null;
     }
   }
 
-  /// Kullanıcı ayarlarını kaydet
   Future<void> _saveUserDefaults(UserDefaults userDefaults) async {
     try {
       await _hiveHelper.putData(
@@ -138,316 +72,114 @@ class PurchaseNotifier extends AsyncNotifier<PaywallState> {
     }
   }
 
-  /// Writes current subscription state from RevenueCat to Firestore (merge). No-op in debug mode or when not logged in.
-  Future<void> _syncSubscriptionToFirestore(CustomerInfo customerInfo) async {
-    if (KDebug.purchaseDebugMode) return;
-    try {
-      if (FirebaseAuth.instance.currentUser == null) return;
-
-      final isActive = customerInfo.entitlements.active.isNotEmpty;
-      final entitlement = customerInfo.entitlements.all[entitlementID];
-      final productId = entitlement?.productIdentifier;
-      final expirationDate = entitlement?.expirationDate;
-      await SyncService().updateUserSubscription(
-        isActive,
-        subscriptionProductId: productId,
-        subscriptionExpirationDate: expirationDate,
-      );
-
-      if (!isActive) return;
-
-      final currentAppUserId = await Purchases.appUserID;
-      final metadata = await DeviceMetadataService.collect();
-      final installId = await InstallIdHelper.getOrCreate();
-      await SyncService().mergeRevenueCatDeviceSnapshot(
-        installId: installId,
-        record: RevenueCatDeviceRecord(
-          currentAppUserId: currentAppUserId,
-          originalAppUserId: customerInfo.originalAppUserId,
-          platform: metadata.platform,
-          deviceModel: metadata.deviceModel,
-          appVersion: metadata.appVersion,
-        ),
-      );
-    } catch (e) {
-      LogHelper.shared.debugPrint('Error syncing subscription to Firestore: $e');
+  Future<PaywallState> _paywallStateFromRemoteOrCache() async {
+    var isPro = (await _getUserDefaults())?.isPro ?? false;
+    if (!isPro && FirebaseAuth.instance.currentUser != null) {
+      final userData = await SyncService().getUserSubscription();
+      if (userData != null) {
+        isPro = userData['isSubscribed'] as bool? ?? false;
+        if (isPro) {
+          final currentDefaults = await _getUserDefaults() ?? UserDefaults();
+          await _saveUserDefaults(currentDefaults.copyWith(isPro: true));
+        }
+      }
     }
+    return PaywallState(isSubscriptionActive: isPro);
   }
 
-  /// Checks and updates the current subscription status
   Future<void> checkSubscriptionStatus() async {
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(() async {
-      // Debug modunda abonelik durumunu override et
       if (KDebug.purchaseDebugMode) {
-        LogHelper.shared.debugPrint('Checking subscription status in debug mode');
-
-        // Mevcut UserDefaults'ı al ve güncelle
         final currentDefaults = await _getUserDefaults() ?? UserDefaults();
         await _saveUserDefaults(currentDefaults.copyWith(isPro: true));
-
-        // Önceki state'ten değerleri koru
-        final previousState = state.valueOrNull;
-        return PaywallState(
-          isSubscriptionActive: true, // Debug modunda aboneliği aktif olarak zorla
-          offerings: previousState?.offerings,
-          customerInfo: previousState?.customerInfo,
-        );
+        return const PaywallState(isSubscriptionActive: true);
       }
-
-      try {
-        final customerInfo = await Purchases.getCustomerInfo();
-        final offerings = await Purchases.getOfferings();
-
-        // Abonelik durumunu kontrol et
-        final isActive = customerInfo.entitlements.active.isNotEmpty;
-
-        // Mevcut UserDefaults'ı al ve güncelle
-        final currentDefaults = await _getUserDefaults() ?? UserDefaults();
-        await _saveUserDefaults(currentDefaults.copyWith(isPro: isActive));
-
-        await _syncSubscriptionToFirestore(customerInfo);
-
-        return PaywallState(
-          isSubscriptionActive: isActive,
-          customerInfo: customerInfo,
-          offerings: offerings,
-        );
-      } catch (e) {
-        LogHelper.shared.debugPrint('Error checking subscription status: $e');
-
-        // Hata durumunda UserDefaults'dan pro durumunu kontrol et
-        final userDefaults = await _getUserDefaults();
-
-        // Önceki state'ten değerleri koru
-        final previousState = state.valueOrNull;
-        return PaywallState(
-          isSubscriptionActive: userDefaults?.isPro ?? false,
-          offerings: previousState?.offerings,
-          customerInfo: previousState?.customerInfo,
-        );
-      }
+      return _paywallStateFromRemoteOrCache();
     });
   }
 
-  /// Attempts to purchase a package
-  Future<void> purchasePackage(Package package, bool isFromOnboarding, {bool isFromSettings = false}) async {
-    // Mevcut state'i güvenli bir şekilde al
-    final currentState = state.valueOrNull;
-    if (currentState == null) return;
-
-    // State'i güncelle
-    state = AsyncValue.data(currentState.copyWith(isPurchasing: true));
-
-    await Future.delayed(const Duration(seconds: 3));
-
-    try {
-      final customerInfo = await Purchases.purchasePackage(package);
-      final isActive = customerInfo.entitlements.active.isNotEmpty;
-
-      // Mevcut UserDefaults'ı al ve güncelle
-      final currentDefaults = await _getUserDefaults() ?? UserDefaults();
-      await _saveUserDefaults(currentDefaults.copyWith(isPro: isActive));
-
-      await _syncSubscriptionToFirestore(customerInfo);
-
-      // Önce state'i güncelle
-      state = AsyncValue.data(
-        currentState.copyWith(
-          isPurchasing: false,
-          isPurchaseCompleted: true,
-          customerInfo: customerInfo,
-          isSubscriptionActive: isActive,
-        ),
-      );
-
-      // Sonra navigator işlemlerini yap
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (isFromOnboarding) {
-          navigator.navigateAndClear(path: KRoute.homePage);
-        } else if (isFromSettings) {
-          navigator.navigateAndClear(path: KRoute.homePage);
-        } else {
-          navigator.pop();
-        }
-        AppFlushbar.shared.successFlushbar(LocaleKeys.subscription_purchaseSuccessful.tr());
-      });
-    } on PlatformException catch (e) {
-      LogHelper.shared.debugPrint('Platform exception during purchase: ${e.message}');
-      // Güncel state'i tekrar kontrol et
-      final updatedState = state.valueOrNull;
-      if (updatedState != null) {
-        state = AsyncValue.data(
-          updatedState.copyWith(
-            isPurchasing: false,
-          ),
-        );
-      }
-      AppFlushbar.shared.errorFlushbar(RevenueCatHelper.getMessageFromException(e));
-    } catch (e) {
-      // Diğer tüm hataları genel olarak işle
-      LogHelper.shared.debugPrint('Unexpected error during purchase: $e');
-      // Güncel state'i tekrar kontrol et
-      final updatedState = state.valueOrNull;
-      if (updatedState != null) {
-        state = AsyncValue.data(
-          updatedState.copyWith(
-            isPurchasing: false,
-          ),
-        );
-      }
-      AppFlushbar.shared.errorFlushbar("An unexpected error occurred during purchase");
-    }
-  }
-
-  /// Attempts to restore previous purchases
-  Future<void> restorePurchases(bool isFromOnboarding, {bool isFromSettings = false}) async {
-    // Mevcut state'i güvenli bir şekilde al
-    final currentState = state.valueOrNull;
-    if (currentState == null) return;
-
-    // State'i güncelle
-    state = AsyncValue.data(currentState.copyWith(isRestoring: true));
-
-    try {
-      final customerInfo = await Purchases.restorePurchases();
-      final isActive = customerInfo.entitlements.active.isNotEmpty;
-
-      // Mevcut UserDefaults'ı al ve güncelle
-      final currentDefaults = await _getUserDefaults() ?? UserDefaults();
-      await _saveUserDefaults(currentDefaults.copyWith(isPro: isActive));
-
-      await _syncSubscriptionToFirestore(customerInfo);
-
-      // Önce state'i güncelle
-      state = AsyncValue.data(
-        currentState.copyWith(
-          isRestoring: false,
-          isRestoreSuccess: true,
-          customerInfo: customerInfo,
-          isSubscriptionActive: isActive,
-        ),
-      );
-
-      // Sonra navigator işlemlerini yap
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (isFromOnboarding && isActive) {
-          navigator.navigateAndClear(path: KRoute.homePage);
-        } else if (isFromSettings && isActive) {
-          navigator.navigateAndClear(path: KRoute.homePage);
-        } else {
-          navigator.pop();
-        }
-        AppFlushbar.shared.successFlushbar(LocaleKeys.subscription_restoreSuccessful.tr());
-      });
-    } on PlatformException catch (e) {
-      LogHelper.shared.debugPrint('Platform exception during restore: ${e.message}');
-      // Güncel state'i tekrar kontrol et
-      final updatedState = state.valueOrNull;
-      if (updatedState != null) {
-        state = AsyncValue.data(
-          updatedState.copyWith(
-            isRestoring: false,
-            isRestoreSuccess: false,
-          ),
-        );
-      }
-      AppFlushbar.shared.errorFlushbar(RevenueCatHelper.getMessageFromException(e));
-    } catch (e) {
-      // Diğer tüm hataları genel olarak işle
-      LogHelper.shared.debugPrint('Unexpected error during restore: $e');
-      // Güncel state'i tekrar kontrol et
-      final updatedState = state.valueOrNull;
-      if (updatedState != null) {
-        state = AsyncValue.data(
-          updatedState.copyWith(
-            isRestoring: false,
-            isRestoreSuccess: false,
-          ),
-        );
-      }
-      AppFlushbar.shared.errorFlushbar("An unexpected error occurred during restore");
-    }
-  }
-
-  /// Gets the current active package if any
-  Package? getActivePackage() {
-    final offerings = state.valueOrNull?.offerings;
-    if (offerings == null) return null;
-
-    // Try to get current subscription package
-    final currentPackage = offerings.current?.monthly ?? offerings.current?.annual;
-    return currentPackage;
-  }
-
-  /// Presents the RevenueCat paywall via RevenueCatUI.presentPaywall (modal).
-  /// Handles result: refreshes subscription state, shows flushbars, and navigates to home when from onboarding.
   Future<void> presentPaywall({
     required bool isFromOnboarding,
     bool isFromSettings = false,
-    Offering? offering,
   }) async {
-    final result = await PurchaseService.presentPaywall(offering: offering);
     await checkSubscriptionStatus();
-
-    switch (result) {
-      case PaywallResult.purchased:
-        AnalyticsService.logPaywallConverted(plan: offering?.identifier ?? 'unknown');
-        AppFlushbar.shared.successFlushbar(LocaleKeys.subscription_purchaseSuccessful.tr());
-        break;
-      case PaywallResult.restored:
-        AppFlushbar.shared.successFlushbar(LocaleKeys.subscription_restoreSuccessful.tr());
-        break;
-      case PaywallResult.cancelled:
-      case PaywallResult.notPresented:
-        break;
-      case PaywallResult.error:
-        AppFlushbar.shared.errorFlushbar(LocaleKeys.errors_try_again.tr());
-        break;
-    }
-
-    // After a successful purchase or restore with an active entitlement,
-    // close the current paywall container (or go home) similarly to manual flows.
     final isActive = state.valueOrNull?.isSubscriptionActive ?? false;
-    if (isActive && (result == PaywallResult.purchased || result == PaywallResult.restored)) {
-      if (isFromOnboarding || isFromSettings) {
+
+    if (isFromOnboarding) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
         navigator.navigateAndClear(path: KRoute.homePage);
-      } else {
-        navigator.pop();
+      });
+      if (!isActive) {
+        AppFlushbar.shared.successFlushbar(LocaleKeys.subscription_webContinueFreeTier.tr());
       }
       return;
     }
 
-    // Fallback: if we're coming from onboarding but subscription is not active,
-    // keep existing behavior and still navigate to home.
+    if (isFromSettings) {
+      if (!isActive) {
+        AppFlushbar.shared.successFlushbar(LocaleKeys.subscription_webPurchaseOnMobile.tr());
+      }
+      return;
+    }
+
+    if (!isActive) {
+      AppFlushbar.shared.successFlushbar(LocaleKeys.subscription_webPurchaseOnMobile.tr());
+    }
+    navigator.pop();
+  }
+
+  Future<void> presentCustomerCenter() async {
+    await checkSubscriptionStatus();
+    AppFlushbar.shared.successFlushbar(LocaleKeys.subscription_webPurchaseOnMobile.tr());
+  }
+
+  Future<void> restorePurchases(bool isFromOnboarding, {bool isFromSettings = false}) async {
+    final previous = state.valueOrNull;
+    if (previous == null) return;
+
+    state = AsyncValue.data(previous.copyWith(isRestoring: true));
+
+    await checkSubscriptionStatus();
+
+    final next = state.valueOrNull;
+    final isActive = next?.isSubscriptionActive ?? false;
+    if (next != null) {
+      state = AsyncValue.data(next.copyWith(isRestoring: false, isRestoreSuccess: isActive));
+    }
+
     if (isFromOnboarding) {
-      navigator.navigateAndClear(path: KRoute.homePage);
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        navigator.navigateAndClear(path: KRoute.homePage);
+      });
+      AppFlushbar.shared.successFlushbar(
+        isActive ? LocaleKeys.subscription_restoreSuccessful.tr() : LocaleKeys.subscription_webContinueFreeTier.tr(),
+      );
+      return;
+    }
+
+    AppFlushbar.shared.successFlushbar(
+      isActive ? LocaleKeys.subscription_restoreSuccessful.tr() : LocaleKeys.subscription_webPurchaseOnMobile.tr(),
+    );
+    if (isFromSettings && isActive) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        navigator.navigateAndClear(path: KRoute.homePage);
+      });
     }
   }
 
-  /// Presents the RevenueCat Customer Center UI.
-  Future<void> presentCustomerCenter() async {
-    await PurchaseService.presentCustomerCenter();
-    await checkSubscriptionStatus();
-  }
-
-  /// Copies the customer ID to clipboard and shows a success message
   Future<void> copyCustomerId() async {
     try {
-      final customerInfo = state.valueOrNull?.customerInfo;
-      if (customerInfo?.originalAppUserId != null) {
-        await Clipboard.setData(ClipboardData(text: customerInfo!.originalAppUserId));
-        AppFlushbar.shared.successFlushbar(
-          "Your customer ID copied successfully\nID:${customerInfo.originalAppUserId}",
-        );
-        LogHelper.shared.debugPrint('Customer ID copied to clipboard: ${customerInfo.originalAppUserId}');
+      final uid = FirebaseAuth.instance.currentUser?.uid;
+      if (uid != null && uid.isNotEmpty) {
+        await Clipboard.setData(ClipboardData(text: uid));
+        AppFlushbar.shared.successFlushbar('Account ID copied\nID: $uid');
       } else {
-        LogHelper.shared.debugPrint('Cannot copy customer ID: Customer info or ID is null');
-        AppFlushbar.shared.warningFlushbar("Customer ID is not available");
+        AppFlushbar.shared.warningFlushbar('Account ID is not available');
       }
     } catch (e) {
-      LogHelper.shared.debugPrint('Error copying customer ID: $e');
-      AppFlushbar.shared.errorFlushbar("Failed to copy customer ID");
+      LogHelper.shared.debugPrint('Error copying account ID: $e');
+      AppFlushbar.shared.errorFlushbar('Failed to copy account ID');
     }
   }
 }

@@ -1,10 +1,10 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:timezone/timezone.dart' as tz;
 
+import '/core/helpers/platform/platform_info.dart';
 import '/features/reminder/models/reminder/reminder_model.dart';
 import '../../../features/reminder/models/days/days_enum.dart';
 import '../../core.dart';
@@ -308,7 +308,10 @@ final class NotificationHelper {
   }
 
   Future<PermissionStatus> requestNotificationPermission() async {
-    if (Platform.isIOS) {
+    if (appIsWeb) {
+      return PermissionStatus.denied;
+    }
+    if (appIsIOS) {
       final iosPlugin = _notificationPlugin.resolvePlatformSpecificImplementation<IOSFlutterLocalNotificationsPlugin>();
       final permissionStatus = await Permission.notification.status;
 

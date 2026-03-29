@@ -32,7 +32,7 @@ class _AccountSecuritySectionState extends ConsumerState<AccountSecuritySection>
 
   Future<void> _showChangeEmailSheet() async {
     _emailController.text = '';
-    await showCupertinoSheet<void>(
+    await showAppModalSheet<void>(
       context: context,
       builder: (ctx) => GestureDetector(
         onTap: context.hideKeyboard,
@@ -93,7 +93,7 @@ class _AccountSecuritySectionState extends ConsumerState<AccountSecuritySection>
     _currentPasswordController.clear();
     _newPasswordController.clear();
     _confirmPasswordController.clear();
-    await showCupertinoSheet<void>(
+    await showAppModalSheet<void>(
       context: context,
       builder: (ctx) => GestureDetector(
         onTap: context.hideKeyboard,

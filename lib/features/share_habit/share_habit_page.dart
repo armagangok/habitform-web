@@ -1,4 +1,4 @@
-import 'dart:io';
+import 'dart:io' show File;
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path_provider/path_provider.dart';
@@ -65,12 +65,22 @@ class _ShareHabitPageState extends ConsumerState<ShareHabitPage> {
         throw Exception('Failed to capture screenshot');
       }
 
-      final tempDir = await getTemporaryDirectory();
-      final file = await File('${tempDir.path}/habit.png').create();
-      await file.writeAsBytes(imageFile);
+      final XFile xFile;
+      if (appIsWeb) {
+        xFile = XFile.fromData(
+          imageFile,
+          name: 'habit.png',
+          mimeType: 'image/png',
+        );
+      } else {
+        final tempDir = await getTemporaryDirectory();
+        final file = await File('${tempDir.path}/habit.png').create();
+        await file.writeAsBytes(imageFile);
+        xFile = XFile(file.path);
+      }
 
       await Share.shareXFiles(
-        [XFile(file.path)],
+        [xFile],
         text: 'Check out my habit progress!',
         sharePositionOrigin: _shareOriginFor(_imageShareButtonKey),
       );

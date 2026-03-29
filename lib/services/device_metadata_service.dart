@@ -1,12 +1,10 @@
-import 'dart:io';
-
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/services.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 import '/core/helpers/logger/logger.dart';
 
-/// Lightweight device + app build info for Firestore (RevenueCat device rows).
+/// Browser + app metadata for optional analytics / sync payloads.
 final class DeviceMetadataService {
   const DeviceMetadataService._();
 
@@ -16,24 +14,16 @@ final class DeviceMetadataService {
     final appVersion = await _readAppVersion();
 
     try {
-      if (Platform.isIOS) {
-        final ios = await _deviceInfo.iosInfo;
-        final deviceModel = '${ios.name} ${ios.model} (${ios.utsname.machine})';
-        return (platform: 'ios', deviceModel: deviceModel, appVersion: appVersion);
-      }
-      if (Platform.isAndroid) {
-        final android = await _deviceInfo.androidInfo;
-        final deviceModel = '${android.manufacturer} ${android.model}';
-        return (platform: 'android', deviceModel: deviceModel, appVersion: appVersion);
-      }
+      final webInfo = await _deviceInfo.webBrowserInfo;
+      final deviceModel = webInfo.userAgent ?? 'web';
+      return (platform: 'web', deviceModel: deviceModel, appVersion: appVersion);
     } catch (e) {
-      LogHelper.shared.debugPrint('⚠️ DeviceMetadataService: device info failed: $e');
+      LogHelper.shared.debugPrint('⚠️ DeviceMetadataService: web browser info failed: $e');
     }
 
-    return (platform: Platform.operatingSystem, deviceModel: 'unknown', appVersion: appVersion);
+    return (platform: 'web', deviceModel: 'unknown', appVersion: appVersion);
   }
 
-  /// [PackageInfo] can throw [MissingPluginException] after hot restart until a full rebuild registers the plugin.
   static Future<String> _readAppVersion() async {
     try {
       final packageInfo = await PackageInfo.fromPlatform();
